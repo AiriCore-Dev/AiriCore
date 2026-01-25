@@ -16,7 +16,7 @@ airi_help = on_fullmatch(("help","帮助"),priority=99)
 async def main(bot: Bot, ev: MessageEvent):
     msg = []
     
-    text = "Momoi Airi 使用帮助\n⚙️ AiriCoreᵀᴹ v2.4.1"
+    text = "Momoi Airi 使用帮助\n⚙️ AiriCoreᵀᴹ v2.4.2"
     msg.append({
         "type": "node",
         "data": {
@@ -34,7 +34,7 @@ PJSK综合查询 By NagiHina\n\
     msg.append({
         "type": "node",
         "data": {
-            "name": "Momoi Airi",
+            "name": "音游类综合查询",
             "uin": bot.self_id,
             "content":text
             }
@@ -53,12 +53,27 @@ PJSK综合查询 By NagiHina\n\
     msg.append({
         "type": "node",
         "data": {
-            "name": "Momoi Airi",
+            "name": "战舰世界综合查询",
             "uin": bot.self_id,
             "content":text
             }
         })
-        
+ 
+    text = "\
+----- MC服管 -----\n\n\
+- Airi_MCRcon:\n\
+Airi方可梦MC服务器管理插件 By Makino.S\n\
+（此插件为<伊号公馆>群专属）\n\
+*发送指令 /help 查看帮助"
+    msg.append({
+        "type": "node",
+        "data": {
+            "name": "MC服管",
+            "uin": bot.self_id,
+            "content":text
+            }
+        })
+ 
     text = "\
 ----- 娱乐功能 -----\n\n\
 - Momoi Airi Collection:\n\
@@ -66,8 +81,11 @@ PJSK综合查询 By NagiHina\n\
 *常用指令：签到\n\
 *发送 签到帮助 查看帮助\n\n\
 - Momoi Airi Wish Bottle:\n\
-爱莉心愿瓶（漂流瓶plus） By Makino.S\n\
+Airi心愿瓶（漂流瓶plus） By Makino.S\n\
 *发送 心愿瓶帮助 查看帮助\n\n\
+- Momoi Airi Turtle Soup:\n\
+Airi海龟汤 By Makino.S\n\
+*发送 海龟汤 查看帮助\n\n\
 - 今日运势:\n\
 测测你的今日运势\n\
 *指令：jrys、今日运势\n\n\
@@ -105,7 +123,7 @@ emoji合成\n\
     msg.append({
         "type": "node",
         "data": {
-            "name": "Momoi Airi",
+            "name": "娱乐功能",
             "uin": bot.self_id,
             "content":text
             }
@@ -138,6 +156,9 @@ emoji合成\n\
 ----- 基础插件 -----\n\n\
 - analysis-bilibili:\n\
 B站视频解析 By mengshouer\n\n\
+- Airi-LLM:\n\
+Airi智能体 By Makino.S\n\
+*Airi会随机回复群内消息\n\n\
 - Airi-Status:\n\
 显示爱莉服务器状态 By Makino.S\n\
 *发送 状态 显示\n\n\
@@ -153,17 +174,6 @@ B站视频解析 By mengshouer\n\n\
             }
         })
         
-# (备注：如果使用 help 指令触发帮助消息，会额外跳出unibot的帮助信息，请注意区分)\n\
-# (查天气插件因为兼容性问题暂时弃用)"
-    # msg.append({
-        # "type": "node",
-    # text = "\
-        # "data": {
-            # "name": "Momoi Airi",
-            # "uin": bot.self_id,
-            # "content":text
-            # }
-        # })
         
     text = MessageSegment.text("\
 ===== 机器人原型介绍 =====\n\
@@ -174,7 +184,64 @@ Momoi Airi 桃井爱莉\n\
     msg.append({
         "type": "node",
         "data": {
-            "name": "Momoi Airi",
+            "name": "机器人原型介绍",
+            "uin": bot.self_id,
+            "content": text+image
+            }
+        })
+        
+    text = MessageSegment.text("\
+✨ Airi Cobblemon Server\n\
+山河入画，萌兽为俦；静养初心，闲游忘忧\n\
+这是一个基于整合包《去吧！方可梦大师》的Minecraft服务器，尽情和方块宝可梦游玩，成为最强训练家吧！\n\
+整合包下载&服务器地址加群：740774974")
+    img = await localpath_to_base64(os.path.join(os.path.dirname(__file__), 'airicob.jpeg'))
+    image = MessageSegment.image(img)
+    msg.append({
+        "type": "node",
+        "data": {
+            "name": "广告位",
+            "uin": bot.self_id,
+            "content": text+image
+            }
+        })
+        
+    text = MessageSegment.text("\
+Bot官群：\n\
+*一群：1030569383\n\
+*二群：808085026")
+    msg.append({
+        "type": "node",
+        "data": {
+            "name": "广告位",
+            "uin": bot.self_id,
+            "content": text
+            }
+        })
+    
+    text = MessageSegment.text("\
+🛠️ AiriCore部分核心代码开源\n\
+https://github.com/Tenma-Saki/AiriCore")
+    img = await localpath_to_base64(os.path.join(os.path.dirname(__file__), 'airocore.png'))
+    image = MessageSegment.image(img)
+    msg.append({
+        "type": "node",
+        "data": {
+            "name": "广告位",
+            "uin": bot.self_id,
+            "content": text+image
+            }
+        })
+        
+    text = MessageSegment.text("\
+🕹️️ 如何搭建属于自己的Airi：\n\
+https://www.airi.asia ")
+    img = await localpath_to_base64(os.path.join(os.path.dirname(__file__), 'airiasia.jpg'))
+    image = MessageSegment.image(img)
+    msg.append({
+        "type": "node",
+        "data": {
+            "name": "广告位",
             "uin": bot.self_id,
             "content": text+image
             }

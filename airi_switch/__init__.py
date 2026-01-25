@@ -58,15 +58,15 @@ async def format_qq_data(data_list):
 
 reloader = require('nonebot_plugin_reboot').Reloader
 timing = require("nonebot_plugin_apscheduler").scheduler
-timing.add_job(reloader.reload, "cron", hour=23, minute=55, misfire_grace_time=3600, coalesce=True)
+#timing.add_job(reloader.reload, "cron", hour=23, minute=55, misfire_grace_time=3600, coalesce=True)
 
 driver = get_driver()
 @driver.on_bot_connect
 async def remind(bot: Bot):
     try:
-        user_nick = await bot.get_group_member_info(group_id=XXXXXXXXXXXXXX, user_id=bot.self_id)
+        user_nick = await bot.get_group_member_info(group_id=XXXXXXXXXXXXX, user_id=bot.self_id)
         user_nick = (user_nick.get("card") or user_nick.get("nickname") or user_id)
-        await bot.send_private_msg(user_id=XXXXXXXXXXXXXX, message=f'{user_nick} 已上线！')
+        await bot.send_private_msg(user_id=XXXXXXXXXXXX, message=f'{user_nick} 已上线！')
     except:
         return
 

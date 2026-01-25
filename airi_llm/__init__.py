@@ -65,7 +65,7 @@ airi_llm = on_message(priority=50,block=False)
 async def passive_speaking(gruop_id, mode=1):
     if mode:
         await asyncio.sleep(random.randint(60,7200))
-    role_setup_1 = role_setup+"\n\n【以下是上下文，供参考，格式为时间: 发言人: 发言内容】\n"+'\n'.join(memory_group[gruop_id])+"\n\n现在的时间是："+str(int(time.time()))+"\n现在轮到你主动发言，请结合上下文内容以及最后发言的时间，选择：1、继续之前的话题；2、新开一个大家都感兴趣的话题。请发言。"
+    role_setup_1 = role_setup+"\n\n【以下是上下文，供参考，格式为时间: 发言人: 发言内容】\n"+'\n'.join(memory_group[gruop_id])+"\n\n现在的时间是："+str(int(time.time()))+"\n现在轮到你主动发言，请充分参考并结合上下文内容以及发言的时间，继续之前的话题。"
     msg_list = await call_llm(role_setup_1, "")
     if not len(msg_list[0]): return
     
