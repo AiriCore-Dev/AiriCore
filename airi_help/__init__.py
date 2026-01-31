@@ -4,16 +4,13 @@ from nonebot import on_fullmatch
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 
-async def localpath_to_base64(pth):
+def localpath_to_base64(pth):
     fil = open(pth,"rb")
     byt = fil.read()
     fil.close()
     return "base64://" + base64.b64encode(byt).decode() 
 
-airi_help = on_fullmatch(("help","帮助"),priority=99)
-
-@airi_help.handle()
-async def main(bot: Bot, ev: MessageEvent):
+if 1:
     msg = []
     
     text = "Momoi Airi 使用帮助\n⚙️ AiriCoreᵀᴹ v2.4.2"
@@ -21,7 +18,7 @@ async def main(bot: Bot, ev: MessageEvent):
         "type": "node",
         "data": {
             "name": "Momoi Airi",
-            "uin": bot.self_id,
+            "uin": 0,
             "content":text
             }
         })  
@@ -35,7 +32,7 @@ PJSK综合查询 By NagiHina\n\
         "type": "node",
         "data": {
             "name": "音游类综合查询",
-            "uin": bot.self_id,
+            "uin": 0,
             "content":text
             }
         })
@@ -54,7 +51,7 @@ PJSK综合查询 By NagiHina\n\
         "type": "node",
         "data": {
             "name": "战舰世界综合查询",
-            "uin": bot.self_id,
+            "uin": 0,
             "content":text
             }
         })
@@ -69,7 +66,7 @@ Airi方可梦MC服务器管理插件 By Makino.S\n\
         "type": "node",
         "data": {
             "name": "MC服管",
-            "uin": bot.self_id,
+            "uin": 0,
             "content":text
             }
         })
@@ -124,7 +121,7 @@ emoji合成\n\
         "type": "node",
         "data": {
             "name": "娱乐功能",
-            "uin": bot.self_id,
+            "uin": 0,
             "content":text
             }
         })
@@ -147,7 +144,7 @@ emoji合成\n\
         "type": "node",
         "data": {
             "name": "Momoi Airi",
-            "uin": bot.self_id,
+            "uin": 0,
             "content":text
             }
         })
@@ -169,7 +166,7 @@ Airi智能体 By Makino.S\n\
         "type": "node",
         "data": {
             "name": "Momoi Airi",
-            "uin": bot.self_id,
+            "uin": 0,
             "content":text
             }
         })
@@ -179,13 +176,13 @@ Airi智能体 By Makino.S\n\
 ===== 机器人原型介绍 =====\n\
 Momoi Airi 桃井爱莉\n\
 桃井爱莉（桃井 愛莉，ももい あいり）是《世界计划 彩色舞台 feat. 初音未来》（Project SEKAI, PJSK）及其衍生作品的登场角色。代表色为 #ffaacc。")
-    img = await localpath_to_base64(os.path.join(os.path.dirname(__file__), 'airi.png'))
+    img = localpath_to_base64(os.path.join(os.path.dirname(__file__), 'airi.png'))
     image = MessageSegment.image(img)
     msg.append({
         "type": "node",
         "data": {
             "name": "机器人原型介绍",
-            "uin": bot.self_id,
+            "uin": 0,
             "content": text+image
             }
         })
@@ -195,13 +192,13 @@ Momoi Airi 桃井爱莉\n\
 山河入画，萌兽为俦；静养初心，闲游忘忧\n\
 这是一个基于整合包《去吧！方可梦大师》的Minecraft服务器，尽情和方块宝可梦游玩，成为最强训练家吧！\n\
 整合包下载&服务器地址加群：740774974")
-    img = await localpath_to_base64(os.path.join(os.path.dirname(__file__), 'airicob.jpeg'))
+    img = localpath_to_base64(os.path.join(os.path.dirname(__file__), 'airicob.jpeg'))
     image = MessageSegment.image(img)
     msg.append({
         "type": "node",
         "data": {
             "name": "广告位",
-            "uin": bot.self_id,
+            "uin": 0,
             "content": text+image
             }
         })
@@ -214,7 +211,7 @@ Bot官群：\n\
         "type": "node",
         "data": {
             "name": "广告位",
-            "uin": bot.self_id,
+            "uin": 0,
             "content": text
             }
         })
@@ -222,13 +219,13 @@ Bot官群：\n\
     text = MessageSegment.text("\
 🛠️ AiriCore部分核心代码开源\n\
 https://github.com/Tenma-Saki/AiriCore")
-    img = await localpath_to_base64(os.path.join(os.path.dirname(__file__), 'airocore.png'))
+    img = localpath_to_base64(os.path.join(os.path.dirname(__file__), 'airocore.png'))
     image = MessageSegment.image(img)
     msg.append({
         "type": "node",
         "data": {
             "name": "广告位",
-            "uin": bot.self_id,
+            "uin": 0,
             "content": text+image
             }
         })
@@ -236,17 +233,24 @@ https://github.com/Tenma-Saki/AiriCore")
     text = MessageSegment.text("\
 🕹️️ 如何搭建属于自己的Airi：\n\
 https://www.airi.asia ")
-    img = await localpath_to_base64(os.path.join(os.path.dirname(__file__), 'airiasia.jpg'))
+    img = localpath_to_base64(os.path.join(os.path.dirname(__file__), 'airiasia.jpg'))
     image = MessageSegment.image(img)
     msg.append({
         "type": "node",
         "data": {
             "name": "广告位",
-            "uin": bot.self_id,
+            "uin": 0,
             "content": text+image
             }
         })
-    
+
+
+airi_help = on_fullmatch(("help","帮助"),priority=99)
+@airi_help.handle()
+async def main(bot: Bot, ev: MessageEvent):
+    global msg
+    for i in range(len(msg)):
+        msg[i]["data"]["uin"] = bot.self_id
     if isinstance(ev, GroupMessageEvent):
         await bot.send_group_forward_msg(
             group_id=ev.group_id,
