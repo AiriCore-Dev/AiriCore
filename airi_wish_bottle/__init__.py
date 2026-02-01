@@ -47,8 +47,8 @@ async def email_login():
     try:
         server.connect()
     except:
-        server = smtplib.SMTP_SSL("XXXXXXXXXXXXXXXXXXXXXXXXX")
-        server.login('XXXXXXXXXXXXXXXXXXXXXX', 'XXXXXXXXXXXXXXXXXXXXXXX')
+        server = smtplib.SMTP_SSL("")
+        server.login('', '')
         server.close()
 
 @driver.on_startup
@@ -64,14 +64,14 @@ async def save_to_json():
     json.dump(data, open(os.path.join(os.path.dirname(__file__), 'data.json'),'w', encoding="utf-8"), ensure_ascii=False)
     if len(email_list):
         try:
-            sev = smtplib.SMTP_SSL("XXXXXXXXXXXXXXXXXXXXXX")
-            sev.login('XXXXXXXXXXXXXXXX', 'XXXXXXXXXXXXXXXXXXXXXXXXX')
+            sev = smtplib.SMTP_SSL("")
+            sev.login('', '')
             for mail in email_list:
                 msg = MIMEText(mail[2], 'plain', 'utf-8')
-                msg['From'] = f"{Header('XXXXXXXXXXXXXXXX', 'utf-8')} <XXXXXXXXXXXXXXXX>"
+                msg['From'] = f"{Header('', 'utf-8')} <>"
                 msg['To'] = Header(mail[0])
                 msg['Subject'] = Header(mail[1])
-                sev.sendmail('XXXXXXXXXXXXXXXXXXXXXX', mail[0], msg.as_string())
+                sev.sendmail('', mail[0], msg.as_string())
             sev.quit()
             del sev
             email_list = []
@@ -121,8 +121,8 @@ def add_bottle(unique_id, owner=-1, owner_id=-1, content=-1, comments=-1, times=
     try:
         bottle_tmp = data['bottles'][unique_id]
     except:
-        if owner==-1: owner = 'XXXXXXXXXXXXXXXXXXXXXX'
-        if owner_id==-1: owner_id = 'XXXXXXXXXXXXXXXX'
+        if owner==-1: owner = ''
+        if owner_id==-1: owner_id = ''
         if content==-1: content = ''
         if comments==-1: comments = []
         if times==-1: times = 0
@@ -208,7 +208,7 @@ async def _(bot: Bot, ev: MessageEvent):
     if iswj:
         unique_id = await generate_unique_id(src[1])
         data['pending_bottles'][unique_id] = {"owner":user_nick,"owner_id":user_id,"content":src[1],"comments":[],"times":0}
-        await bot.send_private_msg(user_id=XXXXXXXXXXXXXXXX,message=f'📛 心愿瓶审核：{unique_id}\n{src[1]}')
+        await bot.send_private_msg(user_id=0,message=f'📛 心愿瓶审核：{unique_id}\n{src[1]}')
         await rxyp.finish('❌ 未通过机器审核，请等待人工审核。人工审核结果将会以邮件形式告知。', reply_message = True)
     else:
         unique_id = await generate_unique_id(src[1])
@@ -303,7 +303,7 @@ async def _(bot: Bot, ev: MessageEvent):
         uqid = await generate_unique_id(comment)
         comment_unique_id = str(time.time()) + '_' + uqid
         data['pending_comment'][comment_unique_id]={"comment_to":unique_id,"from":user_nick+'_'+user_id,"content":comment}
-        await bot.send_private_msg(user_id=XXXXXXXXXXXXXXXX,message=f'📛 评论审核：{unique_id}\n{comment}')
+        await bot.send_private_msg(user_id=0,message=f'📛 评论审核：{unique_id}\n{comment}')
         await rxyp.finish('❌ 未通过机器审核，请等待人工审核。人工审核结果将会以邮件形式告知。', reply_message = True)
     else:
         data['bottles'][unique_id]['comments'].append(comment)
@@ -470,7 +470,7 @@ async def _(bot: Bot, ev: MessageEvent):
     comment = " ".join(src[2:])
     jb_unique_id = str(time.time()) + '_' + unique_id
     data['pending_jb'][jb_unique_id] = {'jbr':f'{user_nick}_{user_id}','unique_id':unique_id,'comment':comment}
-    await bot.send_private_msg(user_id=XXXXXXXXXXXXXXXX,message=f'📛 举报审核：{jb_unique_id}')
+    await bot.send_private_msg(user_id=0,message=f'📛 举报审核：{jb_unique_id}')
     await jxyp.finish(f'💬 您的举报已收到，请等待核实......', reply_message = True)
 
 @bottlehelp.handle()

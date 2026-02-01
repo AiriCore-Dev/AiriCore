@@ -18,7 +18,7 @@ async def query_tmxx_status_func(bot: Bot, ev: MessageEvent):
 
     tmxx_is_mentioned = 0
     
-    keywords = ['tmxx','[CQ:at,qq=864623174]',"小溪"]
+    keywords = []
     for keyword in keywords:
         if keyword in msg:
             tmxx_is_mentioned = 1
@@ -45,5 +45,5 @@ async def query_tmxx_status_func(bot: Bot, ev: MessageEvent):
             for gr in gr_list:
                 gr_name[bot.self_id][gr["group_id"]] = gr["group_name"]
                 
-        mesg = '📣 新消息提醒\n🕗 {}\n👨‍ {}({})\n📀 {}({})\n📩 {}'.format(str(cur_time)[:-7], user_nick, qq_id, gr_name[bot.self_id][int(gruop_id)], gruop_id, msg.replace('[CQ:at,qq=864623174]','@田麻小溪'))
+        mesg = '📣 新消息提醒\n🕗 {}\n👨‍ {}({})\n📀 {}({})\n📩 {}'.format(str(cur_time)[:-7], user_nick, qq_id, gr_name[bot.self_id][int(gruop_id)], gruop_id, msg.replace('[CQ:at,qq=]','@'))
         await bot.send_private_msg(user_id=864623174,message=mesg)

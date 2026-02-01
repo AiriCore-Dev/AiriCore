@@ -32,19 +32,19 @@ theme_extension = {}
 hidden_stickers = [17,13,37,20,100]
 game_ans = [0,'','','']
 
-qiandao = on_fullmatch('签到',priority=99,block=True)
-qiandaohelp = on_fullmatch(('签到帮助','收藏帮助'),priority=99,block=True)
-xinxi = on_fullmatch('收藏信息',priority=99,block=True)
-shoucang = on_startswith('查看收藏',priority=99,block=True)
-chouka = on_startswith('收藏抽卡',priority=99,block=True)
-yincang17 = on_fullmatch('给我隐藏收藏品',priority=99,rule=to_me(),block=True)
-transcation = on_regex(r'转给.+\d+[个]?积分',priority=99,rule=to_me(),block=True)
-reborn = on_startswith('重生',priority=99,rule=to_me(),block=True)
-theme_manage = on_startswith('收藏主题',priority=99,block=True)
-daily_challenge = on_fullmatch(('每日挑战','今日挑战'),priority=99,block=True)
-flag_submit = on_regex(r'flag{.+}',priority=99,rule=to_me(),block=True)
-buy_tip = on_fullmatch('购买提示',priority=99,block=True)
-jrys = on_fullmatch(('jrys','今日运势','运势'),priority=99,block=True)
+qiandao = on_fullmatch('签到',priority=10,block=True)
+qiandaohelp = on_fullmatch(('签到帮助','收藏帮助'),priority=10,block=True)
+xinxi = on_fullmatch('收藏信息',priority=10,block=True)
+shoucang = on_startswith('查看收藏',priority=10,block=True)
+chouka = on_startswith('收藏抽卡',priority=10,block=True)
+yincang17 = on_fullmatch('给我隐藏收藏品',priority=10,rule=to_me(),block=True)
+transcation = on_regex(r'转给.+\d+[个]?积分',priority=10,rule=to_me(),block=True)
+reborn = on_startswith('重生',priority=10,rule=to_me(),block=True)
+theme_manage = on_startswith('收藏主题',priority=10,block=True)
+daily_challenge = on_fullmatch(('每日挑战','今日挑战'),priority=10,block=True)
+flag_submit = on_regex(r'flag{.+}',priority=10,rule=to_me(),block=True)
+buy_tip = on_fullmatch('购买提示',priority=10,block=True)
+jrys = on_fullmatch(('jrys','今日运势','运势'),priority=10,block=True)
 
 @driver.on_startup
 async def load_json():

@@ -25,8 +25,8 @@ from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 driver = get_driver()
 timing = require("nonebot_plugin_apscheduler").scheduler
 data = {}
-mcr = MCRcon("127.0.0.1", "XXXXXXXXXX")
-server_path = 'XXXXXXXXXXX'
+mcr = MCRcon("127.0.0.1", "")
+server_path = ""
 
 bote = 0  
 op_list = []

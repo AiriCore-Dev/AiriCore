@@ -100,13 +100,13 @@ with open(os.path.join(os.path.dirname(__file__), 'utils', 'turtle_soup.json'),'
 #--------------------
     
 client = AsyncOpenAI(
-    api_key="XXXXXXXXXXXXXXXXXXXXX",
-    base_url="XXXXXXXXXXXXXXXXXXXXX"
+    api_key="",
+    base_url=""
 )
 
 async def call_llm(prompt, input, deepseek):
     completion = await client.chat.completions.create(
-        model="XXXXXXXXXXXXXXXXXXXXXXXXXX",
+        model="",
         messages=[
             {
                 "role": "system",

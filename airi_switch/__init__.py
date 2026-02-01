@@ -64,9 +64,9 @@ driver = get_driver()
 @driver.on_bot_connect
 async def remind(bot: Bot):
     try:
-        user_nick = await bot.get_group_member_info(group_id=XXXXXXXXXXXXX, user_id=bot.self_id)
+        user_nick = await bot.get_group_member_info(group_id=, user_id=bot.self_id)
         user_nick = (user_nick.get("card") or user_nick.get("nickname") or user_id)
-        await bot.send_private_msg(user_id=XXXXXXXXXXXX, message=f'{user_nick} 已上线！')
+        await bot.send_private_msg(user_id=, message=f'{user_nick} 已上线！')
     except:
         return
 
