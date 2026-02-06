@@ -106,19 +106,19 @@ def draw() -> bytes:
 
         content.text(
             (352, 1378),
-            f"Apple M4 Max",
+            f"Apple M1",
             font=adlam_fnt,
             fill=details_color,
         )
         content.text(
             (352, 1431),
-            "macOS Tahoe 26.2",
+            "macOS Big Sur",
             font=adlam_fnt,
             fill=details_color,
         )
         content.text(
             (352, 1484),
-            "AiriCore 2.4.2",
+            "AiriCore 2.4.3",
             font=adlam_fnt,
             fill=details_color,
         )

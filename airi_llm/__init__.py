@@ -2,6 +2,7 @@ import os
 import re
 import json
 import time
+import string
 import random
 import base64
 import asyncio
@@ -30,40 +31,46 @@ client = AsyncOpenAI(
 whitelist_group_list = []
 whitelist_bot_list = []
 superusers = []
+memory_max_capability_group = 300
+
 group_is_tamed = {}
 passive_speaking_group_is_tamed = {}
+last_speak_time_group = {}
+negative_speaking_tokens_group = {}
 emoji_dir = os.path.join(os.path.dirname(__file__), 'emoji')
 emoji_list = [os.path.join(emoji_dir, x) for x in os.listdir(emoji_dir)]
-
+puncts = r"，。！？；：～"
+mpattern = re.compile(rf"[^{puncts}]+[{puncts}]")
 memory_group = {}
 
-memory_max_capability_group = 200
-
 async def call_llm(role_setup, input_words):
-    completion = await client.chat.completions.create(
-        model="",
-        messages=[
-            {
-                "role": "system",
-                "content": role_setup
-            },
-            {
-                "role": "user",
-                "content": input_words
+    try:
+        completion = await client.chat.completions.create(
+            model="",
+            messages=[
+                {
+                    "role": "system",
+                    "content": role_setup
+                },
+                {
+                    "role": "user",
+                    "content": input_words
+                }
+            ],
+            max_completion_tokens=100,
+            temperature=0.77,
+            top_p=1.0,
+            stream=False,
+            stop=None,
+            frequency_penalty=0.1,
+            presence_penalty=0.1,
+            extra_body={
+                "thinking": {"type": "disabled"}
             }
-        ],
-        max_completion_tokens=3000,
-        temperature=0.8,
-        top_p=1.0,
-        stream=False,
-        stop=None,
-        frequency_penalty=0.1,
-        presence_penalty=0.1,
-        extra_body={
-            "thinking": {"type": "disabled"}
-        }
-    ) 
-    return json.loads(completion.model_dump_json())["choices"][0]["message"]["content"].split('。')
+        ) 
+        return json.loads(completion.model_dump_json())["choices"][0]["message"]["content"]
+    except:
+        return ""
 
 async def generate_random_emoji():
     with open(random.choice(emoji_list), 'rb') as f:
@@ -82,35 +89,86 @@ async def save_memory(gruop_id, speaker, content):
 airi_llm = on_message(priority=50,block=False)
 
 async def passive_speaking(gruop_id, mode=1):
+    global passive_speaking_group_is_tamed, last_speak_time_group, negative_speaking_tokens_group
     try:
-        if passive_speaking_group_is_tamed[gruop_id]:
+        if mode and passive_speaking_group_is_tamed[gruop_id]:
             return
     except:
         pass
-    passive_speaking_group_is_tamed[gruop_id] = 1
+    if mode: passive_speaking_group_is_tamed[gruop_id] = 1
     
     if mode:
-        await asyncio.sleep(random.randint(60,7200))
+        await asyncio.sleep(random.randint(301,7200))
+    try:    
+        if mode and time.time()-last_speak_time_group[gruop_id]<300:
+            passive_speaking_group_is_tamed[gruop_id] = 0
+            return
+    except:
+        pass
+    last_speak_time_group[gruop_id] = time.time()
+    if not negative_speaking_tokens_group[gruop_id]: negative_speaking_tokens_group[gruop_id] = 30
     role_setup_1 = role_setup
-    msg_list = await call_llm(role_setup_1, +"【以下是上下文，供参考，格式为 发言人: 发言内容】\n"+'\n'.join(memory_group[gruop_id])+"\n\n现在轮到你主动发言，请充分参考并结合上下文内容，继续之前的话题，发表自己的看法。")
-    if not len(msg_list[0]): return
+    msg_list = await call_llm(role_setup_1, "【以下是上下文，供参考，格式为 发言人: 发言内容】\n"+'\n'.join(memory_group[gruop_id])+"\n\n现在轮到你主动发言，请充分参考并结合上下文内容，继续之前的话题，发表自己的看法。")
+    msg_list = re.sub(r"[(（].+?[)）]", "", msg_list)
     
     await save_memory(gruop_id, "(你)", '，'.join(msg_list))
     
-    if random.randint(1,5) == 1:
+    await send_message(msg_list, 0)
+    
+    if mode: passive_speaking_group_is_tamed[gruop_id] = 0
+
+async def send_message(msg_list, need_reply):
+    msg_list = msg_list + "。"
+    if random.randint(1,2) == 1:
+        msg_list = mpattern.findall(msg_list)
+    else:
+        msg_list = [msg_list]
+    if not len(msg_list):
+        return
+    is_single = 1
+    for msgid in range(len(msg_list)):
+        if msg_list[msgid][-1] in ["，","。"]:
+            msg_list[msgid] = msg_list[msgid][:-1]
+        if len(msg_list[msgid])!=1:
+            is_single = 0
+    if is_single:
+        msg_list = ["！".join(msg_list)+"！"]
+    await asyncio.sleep(random.randint(0,5) if len(msg_list)!=1 else random.randint(3,8))
+    if random.randint(1,10) == 1:
         sticker = await generate_random_emoji()
         await airi_llm.send(sticker)
-        await asyncio.sleep(random.randint(1,5))        
+        await asyncio.sleep(random.randint(3,10))
     for msgid in range(len(msg_list)):
         if len(msg_list[msgid]):
-            await airi_llm.send(msg_list[msgid])
-        need_reply = 0
-        await asyncio.sleep(random.randint(3,5) if msgid != len(msg_list)-1 else random.randint(1,2))
+            if msg_list[msgid][-1] in ["，","。"]:
+                msg_list[msgid] = msg_list[msgid][:-1]
+            await airi_llm.send(msg_list[msgid], reply_message=True if need_reply else False)
+            need_reply = 0
+            await asyncio.sleep(random.randint(5,10) if msgid != len(msg_list)-1 else random.randint(1,2))
     if random.randint(1,5) == 1:
         sticker = await generate_random_emoji()
         await airi_llm.send(sticker)
-    
-    passive_speaking_group_is_tamed[gruop_id] = 0
+    return need_reply
+
+async def pending_need_speak(bot, ev, gruop_id, user_id):
+    global negative_speaking_tokens_group
+    if user_id in superusers and str(ev.message).startswith('.'):
+        return True
+    try:
+        if negative_speaking_tokens_group[gruop_id] and (
+            'airi' in str(ev.message).lower() or
+            '爱莉' in str(ev.message) or
+            bot.self_id in str(ev) or
+            str(ev.message).startswith('.') or
+            str(ev.reply.sender.user_id) == bot.self_id
+        ):
+            negative_speaking_tokens_group[gruop_id] += 1
+            return True
+    except:
+        pass
+    if random.randint(1,200) == 1:
+        return True
+    return False    
 
 @airi_llm.handle()
 async def _(bot: Bot, ev: MessageEvent): 
@@ -130,11 +188,18 @@ async def _(bot: Bot, ev: MessageEvent):
         '''
         if bot.self_id not in whitelist_bot_list: return
         
+        try:
+            negative_speaking_tokens_group[gruop_id] -= 3
+            if negative_speaking_tokens_group[gruop_id]<0:
+                negative_speaking_tokens_group[gruop_id] = 0
+        except:
+            negative_speaking_tokens_group[gruop_id] = 0
+        
         user_nick = await bot.get_group_member_info(group_id=gruop_id, user_id=user_id)
         user_nick = (user_nick.get("nickname") or user_nick.get("card") or user_id)
         
         input_words = str(ev.message).strip()
-        input_words = re.sub(r"\[CQ:image.*?\]", "[图片]", input_words)
+        input_words = re.sub(r"\[CQ:image.*?\]", "", input_words)
         rematch = list(re.finditer(r'\[CQ:at,qq=(\d+)\]', input_words))
         if rematch:
             replace_map = {}
@@ -148,17 +213,16 @@ async def _(bot: Bot, ev: MessageEvent):
                 input_words = input_words.replace(old, new)
         
         await save_memory(gruop_id, user_nick, input_words)
+        last_speak_time_group[gruop_id] = time.time()
         
-        if random.randint(1,500) == 1:
+        if random.randint(1,150) == 1:
             await passive_speaking(gruop_id, 1)
 
-        try:
-            if user_id in superusers and input_words.startswith("."):
-                input_words = input_words[1:]
-            else:
-                assert(not random.randint(0,149))
-        except:
-            return
+        need_speak = await pending_need_speak(bot, ev, gruop_id, user_id)
+        if not need_speak: return
+        
+        if input_words.startswith('.'):
+            input_words = input_words[1:]
         
         need_reply = random.randint(0,10)//10
         try:
@@ -172,27 +236,17 @@ async def _(bot: Bot, ev: MessageEvent):
                 group_is_tamed[gruop_id] = 0
         group_is_tamed[gruop_id] = 1
         
+        if not negative_speaking_tokens_group[gruop_id]: negative_speaking_tokens_group[gruop_id] = 30
         role_setup_1 = role_setup
         msg_list = await call_llm(role_setup_1, "【以下是上下文，供参考，格式为时间: 发言人: 发言内容】\n"+'\n'.join(memory_group[gruop_id])+"\n\n当前发言人的名字："+user_nick+"\n发言内容："+input_words)
-        if not len(msg_list[0]): return
+        msg_list = re.sub(r"[(（].+?[)）]", "", msg_list)
         
         await save_memory(gruop_id, "(你)", '，'.join(msg_list))
         
-        if random.randint(1,5) == 1:
-            sticker = await generate_random_emoji()
-            await airi_llm.send(sticker)
-        for msgid in range(len(msg_list)):
-            if len(msg_list[msgid]):
-                await airi_llm.send(msg_list[msgid], reply_message=True if need_reply else False)
-                need_reply = 0
-                await asyncio.sleep(random.randint(3,5) if msgid != len(msg_list)-1 else random.randint(1,2))
-        if random.randint(1,5) == 1:
-            sticker = await generate_random_emoji()
-            await airi_llm.send(sticker)
-        
+        need_reply = await send_message(msg_list, need_reply)
+       
     except Exception as err:
-        print(err)
-        #await airi_llm.send(str(err), reply_message=True)
+        #print(err)
+        await airi_llm.send(traceback.format_exc(), reply_message=True)
 
     group_is_tamed[gruop_id] = 0
-    
