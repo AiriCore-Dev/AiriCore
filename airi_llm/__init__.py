@@ -2,6 +2,7 @@ import os
 import re
 import json
 import time
+import httpx
 import string
 import random
 import base64
@@ -43,10 +44,61 @@ puncts = r"，。！？；：～"
 mpattern = re.compile(rf"[^{puncts}]+[{puncts}]")
 memory_group = {}
 
-async def call_llm(role_setup, input_words):
+async def get_image_base64_list(message):
+    base64_results = []
+
+    # 使用 httpx 异步客户端处理网络图片
+    async with httpx.AsyncClient() as client:
+        for seg in message:
+            # 仅处理 image 类型的消息段
+            if seg.type != "image":
+                continue
+
+            # 获取图片文件标识 (file 字段)
+            file_str: str = seg.data.get("url", "")
+
+            try:
+                # 1. 直接是 Base64 格式 (base64://...)
+                if file_str.startswith("base64://"):
+                    b64_data = file_str[len("base64://"):]
+                    base64_results.append(b64_data)
+
+                # 2. 网络图片 URL (http:// 或 https://)
+                elif file_str.startswith(("http://", "https://")):
+                    resp = await client.get(file_str, timeout=10)
+                    resp.raise_for_status()  # 检查请求是否成功
+                    img_bytes = resp.content
+                    b64_data = base64.b64encode(img_bytes).decode("utf-8")
+                    base64_results.append(b64_data)
+
+                # 3. 本地文件路径 (file://...)
+                elif file_str.startswith("file://"):
+                    file_path = file_str[len("file://"):]
+                    if os.path.exists(file_path):
+                        with open(file_path, "rb") as f:
+                            img_bytes = f.read()
+                            b64_data = base64.b64encode(img_bytes).decode("utf-8")
+                            base64_results.append(b64_data)
+
+            except Exception as e:
+                logger.warning(f"处理图片失败: {str(e)}")
+
+    return base64_results
+
+async def call_llm(role_setup, input_words, gruop_id, img_b64_list):
+    global memory_group
+    content = [{"type": "text", "text": input_words}]
+    if img_b64_list:
+        for img_b64 in img_b64_list:
+            content.append({
+                "type": "image_url",
+                "image_url": {
+                    "url": f"data:image/jpeg;base64,{img_b64}"
+                }
+            })
     try:
         completion = await client.chat.completions.create(
-            model="",
+            model="gpt-5.2",
             messages=[
                 {
                     "role": "system",
@@ -54,11 +106,11 @@ async def call_llm(role_setup, input_words):
                 },
                 {
                     "role": "user",
-                    "content": input_words
+                    "content": content
                 }
             ],
-            max_completion_tokens=100,
-            temperature=0.77,
+            max_completion_tokens=1024,
+            temperature=0.8,
             top_p=1.0,
             stream=False,
             stop=None,
@@ -68,8 +120,9 @@ async def call_llm(role_setup, input_words):
                 "thinking": {"type": "disabled"}
             }
         ) 
-        return json.loads(completion.model_dump_json())["choices"][0]["message"]["content"]
+        return json.loads(completion.model_dump_json())["choices"][0]["message"]["content"].strip()
     except:
+        memory_group[gruop_id] = memory_group[gruop_id][:-10]
         return ""
 
 async def generate_random_emoji():
@@ -108,7 +161,8 @@ async def passive_speaking(gruop_id, mode=1):
     last_speak_time_group[gruop_id] = time.time()
     if not negative_speaking_tokens_group[gruop_id]: negative_speaking_tokens_group[gruop_id] = 30
     role_setup_1 = role_setup
-    msg_list = await call_llm(role_setup_1, "【以下是上下文，供参考，格式为 发言人: 发言内容】\n"+'\n'.join(memory_group[gruop_id])+"\n\n现在轮到你主动发言，请充分参考并结合上下文内容，继续之前的话题，发表自己的看法。")
+    msg_list = await call_llm(role_setup_1, "【以下是上下文，供参考，格式为 发言人: 发言内容】\n"+'\n'.join(memory_group[gruop_id])+"\n\n现在轮到你主动发言，请充分参考并结合上下文内容，继续之前的话题，发表自己的看法。", gruop_id, [])
+    if not len(msg_list): return
     msg_list = re.sub(r"[(（].+?[)）]", "", msg_list)
     
     await save_memory(gruop_id, "(你)", '，'.join(msg_list))
@@ -119,27 +173,31 @@ async def passive_speaking(gruop_id, mode=1):
 
 async def send_message(msg_list, need_reply):
     msg_list = msg_list + "。"
-    if random.randint(1,2) == 1:
+    if random.randint(1,3) > 1:
         msg_list = mpattern.findall(msg_list)
     else:
         msg_list = [msg_list]
     if not len(msg_list):
         return
     is_single = 1
-    for msgid in range(len(msg_list)):
-        if msg_list[msgid][-1] in ["，","。"]:
-            msg_list[msgid] = msg_list[msgid][:-1]
-        if len(msg_list[msgid])!=1:
-            is_single = 0
-    if is_single:
-        msg_list = ["！".join(msg_list)+"！"]
+    if len(msg_list)>2:
+        for msgid in range(len(msg_list)):
+            if msg_list[msgid][-1] in ["，","。"]:
+                msg_list[msgid] = msg_list[msgid][:-1]
+            if msgid!=len(msg_laist)-1 and len(msg_list[msgid])!=1:
+                is_single = 0
+        if is_single:
+            msg_list = ["！".join(msg_list)+"！"]
     await asyncio.sleep(random.randint(0,5) if len(msg_list)!=1 else random.randint(3,8))
     if random.randint(1,10) == 1:
         sticker = await generate_random_emoji()
         await airi_llm.send(sticker)
         await asyncio.sleep(random.randint(3,10))
     for msgid in range(len(msg_list)):
+        msg_list[msgid] = msg_list[msgid].strip()
         if len(msg_list[msgid]):
+            if msg_list[msgid][-1] in ["，","。"]:
+                msg_list[msgid] = msg_list[msgid][:-1]
             if msg_list[msgid][-1] in ["，","。"]:
                 msg_list[msgid] = msg_list[msgid][:-1]
             await airi_llm.send(msg_list[msgid], reply_message=True if need_reply else False)
@@ -155,12 +213,18 @@ async def pending_need_speak(bot, ev, gruop_id, user_id):
     if user_id in superusers and str(ev.message).startswith('.'):
         return True
     try:
+        atmp = ev.reply
+    except:
+        is_reply = 0
+    else:
+        is_reply = 1
+    try:
         if negative_speaking_tokens_group[gruop_id] and (
             'airi' in str(ev.message).lower() or
             '爱莉' in str(ev.message) or
             bot.self_id in str(ev) or
             str(ev.message).startswith('.') or
-            str(ev.reply.sender.user_id) == bot.self_id
+            (is_reply and str(ev.reply.sender.user_id) == bot.self_id)
         ):
             negative_speaking_tokens_group[gruop_id] += 1
             return True
@@ -184,7 +248,7 @@ async def _(bot: Bot, ev: MessageEvent):
             gruop_id = None
             
         '''
-        if gruop_id not in whitelist_group_list: return
+        if gruop_id != None and gruop_id not in whitelist_group_list: return
         '''
         if bot.self_id not in whitelist_bot_list: return
         
@@ -194,12 +258,15 @@ async def _(bot: Bot, ev: MessageEvent):
                 negative_speaking_tokens_group[gruop_id] = 0
         except:
             negative_speaking_tokens_group[gruop_id] = 0
-        
+        '''
         user_nick = await bot.get_group_member_info(group_id=gruop_id, user_id=user_id)
         user_nick = (user_nick.get("nickname") or user_nick.get("card") or user_id)
+        '''
+        user_nick = ev.sender.card or ev.sender.nickname
+        
         
         input_words = str(ev.message).strip()
-        input_words = re.sub(r"\[CQ:image.*?\]", "", input_words)
+        #if not len(input_words): return
         rematch = list(re.finditer(r'\[CQ:at,qq=(\d+)\]', input_words))
         if rematch:
             replace_map = {}
@@ -211,8 +278,11 @@ async def _(bot: Bot, ev: MessageEvent):
                 replace_map[cqat_str] = f' @{user_nick_tmp} '
             for old, new in replace_map.items():
                 input_words = input_words.replace(old, new)
-        
-        await save_memory(gruop_id, user_nick, input_words)
+        input_words = re.sub(r"\[CQ:.*?\]", "", input_words)
+
+        input_words = input_words.strip()
+        if len(input_words):
+            await save_memory(gruop_id, user_nick, input_words)
         last_speak_time_group[gruop_id] = time.time()
         
         if random.randint(1,150) == 1:
@@ -220,6 +290,8 @@ async def _(bot: Bot, ev: MessageEvent):
 
         need_speak = await pending_need_speak(bot, ev, gruop_id, user_id)
         if not need_speak: return
+        
+        img_b64_list = await get_image_base64_list(ev.get_message())
         
         if input_words.startswith('.'):
             input_words = input_words[1:]
@@ -234,11 +306,12 @@ async def _(bot: Bot, ev: MessageEvent):
             await asyncio.sleep(3)
             if random.randint(1,20) == 1:
                 group_is_tamed[gruop_id] = 0
-        group_is_tamed[gruop_id] = 1
+        group_is_tamed[gruop_id] = 0
         
         if not negative_speaking_tokens_group[gruop_id]: negative_speaking_tokens_group[gruop_id] = 30
         role_setup_1 = role_setup
-        msg_list = await call_llm(role_setup_1, "【以下是上下文，供参考，格式为时间: 发言人: 发言内容】\n"+'\n'.join(memory_group[gruop_id])+"\n\n当前发言人的名字："+user_nick+"\n发言内容："+input_words)
+        msg_list = await call_llm(role_setup_1, "【以下是上下文，供参考，格式为时间: 发言人: 发言内容】\n"+'\n'.join(memory_group[gruop_id])+"\n\n当前发言人的名字："+user_nick+"\n发言内容："+input_words, gruop_id, img_b64_list)
+        if not len(msg_list): return
         msg_list = re.sub(r"[(（].+?[)）]", "", msg_list)
         
         await save_memory(gruop_id, "(你)", '，'.join(msg_list))
@@ -246,7 +319,9 @@ async def _(bot: Bot, ev: MessageEvent):
         need_reply = await send_message(msg_list, need_reply)
        
     except Exception as err:
-        #print(err)
-        await airi_llm.send(traceback.format_exc(), reply_message=True)
+        print(err)
+        #await airi_llm.send(traceback.format_exc(), reply_message=True)
+        return
 
     group_is_tamed[gruop_id] = 0
+

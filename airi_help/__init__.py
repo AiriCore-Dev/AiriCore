@@ -12,7 +12,7 @@ def localpath_to_base64(pth):
 
 msg = []
 
-text = "Momoi Airi 使用帮助\n⚙️ AiriCoreᵀᴹ v2.4.3"
+text = "Momoi Airi 使用帮助\n⚙️ AiriCoreᵀᴹ v2.4.4"
 msg.append({
     "type": "node",
     "data": {

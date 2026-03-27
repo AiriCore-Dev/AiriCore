@@ -118,7 +118,7 @@ def draw() -> bytes:
         )
         content.text(
             (352, 1484),
-            "AiriCore 2.4.3",
+            "AiriCore 2.4.4",
             font=adlam_fnt,
             fill=details_color,
         )
