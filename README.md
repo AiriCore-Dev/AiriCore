@@ -1,5 +1,5 @@
 ![AiriCore](https://raw.githubusercontent.com/Tenma-Saki/AiriCore/refs/heads/main/1768319031403.png)
-# AiriCore v2.4.3
+# AiriCore v2.4.4
 ### 该仓库为 Momoi Airi qqbot 的核心组件代码
 - airi_blacklist
 黑/白名单服务，作用于用户/群组
