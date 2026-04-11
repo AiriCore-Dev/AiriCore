@@ -25,8 +25,8 @@ from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 driver = get_driver()
 timing = require("nonebot_plugin_apscheduler").scheduler
 data = {}
-mcr = MCRcon("127.0.0.1", "k2sG#^Y1asZRcQ3")
-server_path = '/root/airi/airicob5'
+mcr = MCRcon("127.0.0.1", "")
+server_path = ''
 
 bote = 0  
 op_list = ["864623174"]
@@ -207,7 +207,7 @@ async def check_alive():
     except:
         try:
             mcr.disconnect()
-            mcr = MCRcon("127.0.0.1", "k2sG#^Y1asZRcQ3")
+            mcr = MCRcon("127.0.0.1", "")
             mcr.connect()
         except:
             pass

@@ -48,8 +48,8 @@ async def email_login():
     try:
         server.connect()
     except:
-        server = smtplib.SMTP_SSL("gz-smtp.qcloudmail.com")
-        server.login('airi@airi.asia', 'k2sG#^Y1asZRcQ3')
+        server = smtplib.SMTP_SSL("")
+        server.login('', '')
         server.close()
 
 @driver.on_startup
@@ -65,8 +65,8 @@ async def save_to_json():
     json.dump(data, open(os.path.join(os.path.dirname(__file__), 'data.json'),'w', encoding="utf-8"), ensure_ascii=False)
     if len(email_list):
         try:
-            sev = smtplib.SMTP_SSL("gz-smtp.qcloudmail.com")
-            sev.login('airi@airi.asia', 'k2sG#^Y1asZRcQ3')
+            sev = smtplib.SMTP_SSL("")
+            sev.login('', '3')
             for mail in email_list:
                 msg = MIMEText(mail[2], 'plain', 'utf-8')
                 msg['From'] = f"{Header('Momoi Airi', 'utf-8')} <airi@airi.asia>"

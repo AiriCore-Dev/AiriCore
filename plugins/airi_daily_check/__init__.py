@@ -54,7 +54,7 @@ async def load_json():
     data = json.loads(open(os.path.join(os.path.dirname(__file__), 'data.json'),'r').read())
     try:
         assert(0)
-        data_tmp = pickle.loads(bz2.decompress(base64.b64decode(requests.get('https://textdb.online/AiriSavenAzKoHueDZkZFPhvFww0gHiv',timeout=10).text.replace('#','+'))))
+        data_tmp = pickle.loads(bz2.decompress(base64.b64decode(requests.get('https://textdb.online/AiriSave',timeout=10).text.replace('#','+'))))
         if data_tmp['attr']['time'] > data['attr']['time']:
             data = data_tmp
         del data_tmp
@@ -95,7 +95,7 @@ async def save_to_json():
     gc.collect()
     try:
         assert(0)
-        requests.post('https://api.textdb.online/update', data={'key':'AiriSavenAzKoHueDZkZFPhvFww0gHiv', 'value':base64.b64encode(bz2.compress(pickle.dumps(data))).decode().replace('+','#')},timeout=10)
+        requests.post('https://api.textdb.online/update', data={'key':'AiriSave', 'value':base64.b64encode(bz2.compress(pickle.dumps(data))).decode().replace('+','#')},timeout=10)
     except:
         pass
  
