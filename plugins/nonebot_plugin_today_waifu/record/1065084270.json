@@ -1,0 +1,14 @@
+{
+  "limit_times": 2,
+  "allow_change_waifu": true,
+  "2026-04-01": {
+    "246844592": {
+      "waifu_id": 2854214528,
+      "times": 0
+    },
+    "3607738059": {
+      "waifu_id": 246844592,
+      "times": 0
+    }
+  }
+}

@@ -1,0 +1,135 @@
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     EE198B319D8B2020C06FFE1E696DEBC3
+>Error Name:   JSONDecodeError
+>Error File:   /root/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/func/wws_recent.py
+>Error Params: [2023289249, 'asia', 'cn', 'pvp', '20251002', '20251003', 1, False, None]
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/func/wws_recent.py", line 47, in get_data
+    res = await call_api.call_api(
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     BCD028F700C3ED3F25CF2886488AB78E
+>Error Name:   JSONDecodeError
+>Error File:   /root/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/func/wws_recent.py
+>Error Params: [2028035436, 'asia', 'cn', 'pvp', '20251002', '20251003', 1, False, None]
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/func/wws_recent.py", line 47, in get_data
+    res = await call_api.call_api(
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     1D2BE81C62C76C740C74BB2FFF9EC28A
+>Error Name:   JSONDecodeError
+>Error File:   /root/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/func/wws_recent.py
+>Error Params: [2030781307, 'asia', 'cn', 'rank', '20251002', '20251003', 1, False, None]
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/func/wws_recent.py", line 47, in get_data
+    res = await call_api.call_api(
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     87EE518B156D5CBCF10B49B9E54FC177
+>Error Name:   JSONDecodeError
+>Error File:   /root/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/func/wws_ship.py
+>Error Params: [2030781307, 'asia', 'cn', '4178523952', 1, False, None]
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/func/wws_ship.py", line 43, in get_data
+    res = await call_api.call_api(
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     164FD5C4213079B16A79B006DEF86F74
+>Error Name:   JSONDecodeError
+>Error File:   /root/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/func/wws_ship.py
+>Error Params: [2044363768, 'asia', 'cn', '4179506640', 1, False, None]
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/func/wws_ship.py", line 43, in get_data
+    res = await call_api.call_api(
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------

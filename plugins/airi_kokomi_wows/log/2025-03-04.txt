@@ -1,0 +1,1539 @@
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     D161A057C51DCB01E73BB122797C4918
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '454962217']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     E1E76DE66C1BB609BFA5D04C83CEBEDE
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/func/wws_recent.py
+>Error Params: [2020782434, 'asia', 'cn', 'pvp', '20250302', '20250304', 1, False, None]
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/func/wws_recent.py", line 47, in get_data
+    res = await call_api.call_api(
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     A4F8D5FC4A30F2B007C0DEBEF5B86DEA
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/func/wws_recent.py
+>Error Params: [2035657860, 'asia', 'cn', 'pvp', '20250303', '20250304', 1, False, None]
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/func/wws_recent.py", line 47, in get_data
+    res = await call_api.call_api(
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     62CD42990AEAB691017B290DB6B9DCFD
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1300559358']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     62CD42990AEAB691017B290DB6B9DCFD
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1300559358']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     62CD42990AEAB691017B290DB6B9DCFD
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1300559358']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     BA384F1D4F818DE36BEC068FCA19C08D
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1300559358']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     BA384F1D4F818DE36BEC068FCA19C08D
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1300559358']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     847B72D1BAB2837E7653CF7AC1BD65D2
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1300559358']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     94C2693D82C2A0FF27558B8D32E26FE8
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '2960974625']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     94C2693D82C2A0FF27558B8D32E26FE8
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '2960974625']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     94C2693D82C2A0FF27558B8D32E26FE8
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/search_ship_name.py
+>Error Params: ['cn', '刻耳柏洛斯']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/search_ship_name.py", line 27, in search_ship_name
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     AEBDB620A4ADE5EA1707F95CB6818FF9
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '2727204516']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     19A1CD3654BE26B38D9E4A2E3835E249
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/search_ship_name.py
+>Error Params: ['cn', '刻耳柏洛斯']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/search_ship_name.py", line 27, in search_ship_name
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     287154ABCC7842057700102D8F65BEF3
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '2489856518']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     287154ABCC7842057700102D8F65BEF3
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '2489856518']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     CAC8E81B76FB6880420006CBC22723ED
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/search_user.py
+>Error Params: ['eu', 'yunokurenai']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/search_user.py", line 18, in search_user
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     5028F62E4985571273DB1E2287A8E00B
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '2489856518']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     F0064FC362DE908899E6AF699B57E147
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '2489856518']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     F0064FC362DE908899E6AF699B57E147
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '2489856518']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     F0064FC362DE908899E6AF699B57E147
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '2489856518']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     BD0C3BD871E47B5DD39D8258AD0FA4B2
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/search_ship_name.py
+>Error Params: ['cn', '安纳波利斯']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/search_ship_name.py", line 27, in search_ship_name
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     6E398B5BCEC44F3C25A6830B96F33FDF
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '2489856518']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     6E398B5BCEC44F3C25A6830B96F33FDF
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '2489856518']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     6E398B5BCEC44F3C25A6830B96F33FDF
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '2489856518']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     C22A7074823CF0C639CE8A8ACDFBA99D
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/search_user.py
+>Error Params: ['eu', 'yunokurenai']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/search_user.py", line 18, in search_user
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     3400C0D60DCD4BD1BCC189E173142A50
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '3318462740']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     7038C8015F514907999D3E28E0A3F2F7
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/search_ship_name.py
+>Error Params: ['cn', '埃尔宾']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/search_ship_name.py", line 27, in search_ship_name
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     76CE83C07B914E458CF4F81A19C3375A
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1162960007']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     76CE83C07B914E458CF4F81A19C3375A
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1162960007']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     ED82243B46E47B8E13D3448C57CFABA2
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '3353362463']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     98C03BFA5032DDCD7A80979B28580177
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/func/wws_recent.py
+>Error Params: [2022992001, 'asia', 'cn', 'rank', '20250303', '20250304', 1, False, None]
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/func/wws_recent.py", line 47, in get_data
+    res = await call_api.call_api(
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     06FC40BB6D0ECDD99843D8D6E949B1A2
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1162960007']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     06FC40BB6D0ECDD99843D8D6E949B1A2
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1162960007']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     06FC40BB6D0ECDD99843D8D6E949B1A2
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1162960007']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     AC53E115DC0B18CE722937081C57D682
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1162960007']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     933AD0D1D2BA26C3BD7E1B3910716877
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1162960007']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     2B4A32E33828AE78DFE7B8549DA41B9B
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1162960007']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     45A9391A49750DEA0D5F486B724FC548
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1162960007']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     45A9391A49750DEA0D5F486B724FC548
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1162960007']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     17CE92E9F24C5E590874575E64EB3B07
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1162960007']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     1F5A8CEE5085C44DEFDAED206DD1CF0F
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '3353362463']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     6DAC74671E7DAE8CC8E3EBF8A798702F
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/func/wws_ship.py
+>Error Params: [2043495101, 'asia', 'cn', '4181702608', 1, False, None]
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/func/wws_ship.py", line 43, in get_data
+    res = await call_api.call_api(
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     CDB5DA4BF62821BC3A92AE6866B0FC14
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1162960007']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     2CA71D37BC8606C63B92559B265D8B23
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '2397124817']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     677F606C32CC68823841B79FAF1ED8B1
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '2397124817']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     677F606C32CC68823841B79FAF1ED8B1
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '2397124817']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     2D4D3E5FF4B01001431AA4338DC20F9B
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1162960007']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     2D4D3E5FF4B01001431AA4338DC20F9B
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1162960007']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     2D4D3E5FF4B01001431AA4338DC20F9B
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1162960007']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     2C7E265930F6330B30E63B380C4098F0
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1162960007']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     2C7E265930F6330B30E63B380C4098F0
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1162960007']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     2C7E265930F6330B30E63B380C4098F0
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1162960007']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     453BC4A67201B45DD988BE1C17F2599F
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '1162960007']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     6A222DC39EE7B312A3338AD71A8C9AEE
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '3353362463']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     6A222DC39EE7B312A3338AD71A8C9AEE
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '3353362463']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     6A222DC39EE7B312A3338AD71A8C9AEE
+>Error Name:   JSONDecodeError
+>Error File:   /root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py
+>Error Params: ['qq_bot', '3353362463']
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/get_bind.py", line 19, in get_bind_data
+    res = await call_api(
+          ^^^^^^^^^^^^^^^
+  File "/root/桌面/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/scripts/call_api.py", line 39, in call_api
+    result = res.json()
+             ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/httpx/_models.py", line 756, in json
+    return jsonlib.loads(self.text, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-------------------------------------------------------------------------------------------------------------

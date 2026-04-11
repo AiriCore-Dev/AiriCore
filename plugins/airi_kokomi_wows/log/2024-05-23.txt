@@ -1,0 +1,60 @@
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     8627D94D354BC3DA0ECADB629DFB494D
+>Error Name:   IndexError
+>Error File:   D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_recents.py
+>Error Params: [2027765865, 'asia', 'cn', False, None]
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_recents.py", line 40, in get_data
+    'ac': parameter[5]
+          ~~~~~~~~~^^^
+IndexError: list index out of range
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     1CE593951BC768A0EADCDA338BDC5802
+>Error Name:   error
+>Error File:   D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_recents.py
+>Error Params: [2027765865, 'asia', 'cn', 1, False, None]
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_recents.py", line 54, in get_data
+    res_img = get_png(
+              ^^^^^^^^
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_recents.py", line 100, in get_png
+    res_img = cv2.vconcat([res_img, list_img])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cv2.error: OpenCV(4.8.1) D:\a\opencv-python\opencv-python\opencv\modules\core\src\matrix_operations.cpp:112: error: (-215:Assertion failed) src[i].dims <= 2 && src[i].cols == src[0].cols && src[i].type() == src[0].type() in function 'cv::vconcat'
+
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     0F7FE1339B276CBF4BF5EAFB2FC60656
+>Error Name:   error
+>Error File:   D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_recents.py
+>Error Params: [2027765865, 'asia', 'cn', 1, False, None]
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_recents.py", line 54, in get_data
+    res_img = get_png(
+              ^^^^^^^^
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_recents.py", line 100, in get_png
+    res_img = cv2.vconcat([res_img, list_img])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cv2.error: OpenCV(4.8.1) D:\a\opencv-python\opencv-python\opencv\modules\core\src\matrix_operations.cpp:112: error: (-215:Assertion failed) src[i].dims <= 2 && src[i].cols == src[0].cols && src[i].type() == src[0].type() in function 'cv::vconcat'
+
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     20E59260FDC6F2DA8B69717001D2953A
+>Error Name:   IndexError
+>Error File:   D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\select_func_cn.py
+>Error Params: []
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\select_func_cn.py", line 64, in main
+    msg[0] in help_list and
+    ~~~^^^
+IndexError: list index out of range
+
+-------------------------------------------------------------------------------------------------------------

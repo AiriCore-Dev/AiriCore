@@ -1,0 +1,13 @@
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     59F7E791C13330E07DB8F80E12A828DA
+>Error Name:   IndexError
+>Error File:   /root/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/select_func_cn.py
+>Error Params: []
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/select_func_cn.py", line 309, in main
+    msg[2] in rank_list and
+    ~~~^^^
+IndexError: list index out of range
+
+-------------------------------------------------------------------------------------------------------------

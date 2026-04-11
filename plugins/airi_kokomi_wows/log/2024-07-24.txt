@@ -1,0 +1,59 @@
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     E273F2877C1829683A3C3A641D84E731
+>Error Name:   IndexError
+>Error File:   D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\select_func_cn.py
+>Error Params: []
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\select_func_cn.py", line 1615, in main
+    clanid = clanid['data'][0]['clan_id']
+             ~~~~~~~~~~~~~~^^^
+IndexError: list index out of range
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     4BEBE6757508551AC90C880EC1DAA7A3
+>Error Name:   IndexError
+>Error File:   D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\select_func_cn.py
+>Error Params: []
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\select_func_cn.py", line 1615, in main
+    clanid = clanid['data'][0]['clan_id']
+             ~~~~~~~~~~~~~~^^^
+IndexError: list index out of range
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     D8A669A683F7BA80402BC2F6740F5CE8
+>Error Name:   IndexError
+>Error File:   D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\select_func_cn.py
+>Error Params: []
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\select_func_cn.py", line 1615, in main
+    clanid = clanid['data'][0]['clan_id']
+             ~~~~~~~~~~~~~~^^^
+IndexError: list index out of range
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     38378A1743BAD8102F5C1C8AC0971788
+>Error Name:   OSError
+>Error File:   D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_recent.py
+>Error Params: [2038331579, 'asia', 'cn', 'pvp', '20240723', '20240724', 1, False, None]
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_recent.py", line 56, in get_data
+    res_img = get_png(
+              ^^^^^^^^
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_recent.py", line 418, in get_png
+    ship_png = ship_preview_jpg.crop(
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\a\HikariBot\HikariBot\HikariBot\pyenv\Lib\site-packages\PIL\Image.py", line 1229, in crop
+    self.load()
+  File "D:\a\HikariBot\HikariBot\HikariBot\pyenv\Lib\site-packages\PIL\ImageFile.py", line 266, in load
+    raise OSError(msg)
+OSError: image file is truncated (87 bytes not processed)
+
+-------------------------------------------------------------------------------------------------------------

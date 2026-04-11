@@ -1,0 +1,143 @@
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     F0AE40A5A0B2710BD70D104389F398D6
+>Error Name:   error
+>Error File:   D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_info.py
+>Error Params: [2025622800, 'asia', 'cn', 1, False, None]
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_info.py", line 51, in get_data
+    res_img = get_png(
+              ^^^^^^^^
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_info.py", line 550, in get_png
+    achievement_png = cv2.resize(achievement_png, None, fx=1.4, fy=1.4)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cv2.error: OpenCV(4.8.1) D:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\resize.cpp:4062: error: (-215:Assertion failed) !ssize.empty() in function 'cv::resize'
+
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     97F827BD399C6BA0C2E036716F648B4F
+>Error Name:   AttributeError
+>Error File:   D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sx.py
+>Error Params: [2027765865, 'asia', 'cn', False, None, 1]
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sx.py", line 51, in get_data
+    res_img = get_png(
+              ^^^^^^^^
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sx.py", line 262, in get_png
+    res_img = dog_tag.dog_tag_2(
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'src.plugins.nonebot_plugin_kokomi_v400_airicus.scripts.dog_tag' has no attribute 'dog_tag_2'
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     A5E1F42E8A7DA06A2C240341C1CDDEE4
+>Error Name:   AttributeError
+>Error File:   D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sx.py
+>Error Params: [2027765865, 'asia', 'cn', False, None, 1]
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sx.py", line 51, in get_data
+    res_img = get_png(
+              ^^^^^^^^
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sx.py", line 275, in get_png
+    res_img = dog_tag.dog_tag(res_img, aid, server, result['dog_tag'])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\scripts\dog_tag.py", line 70, in dog_tag
+    img = Picture.merge_img(img, symbol, y1, y2, x1, x2)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\data_source.py", line 223, in merge_img
+    if jpg_img.shape[2] == 3:
+       ^^^^^^^^^^^^^
+  File "D:\a\HikariBot\HikariBot\HikariBot\pyenv\Lib\site-packages\PIL\Image.py", line 528, in __getattr__
+    raise AttributeError(name)
+AttributeError: shape
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     BF48DEE2BBE7AC5F4BAE8D08F675EE45
+>Error Name:   NameError
+>Error File:   D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sx.py
+>Error Params: [2027765865, 'asia', 'cn', False, None, 1]
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sx.py", line 51, in get_data
+    res_img = get_png(
+              ^^^^^^^^
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sx.py", line 100, in get_png
+    res_img = cv2.imread(res_img_path, cv2.IMREAD_UNCHANGED)
+              ^^^
+NameError: name 'cv2' is not defined
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     C752130139DCE758277CA4C0C2CE49ED
+>Error Name:   KeyError
+>Error File:   D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sx.py
+>Error Params: [2027765865, 'asia', 'cn', False, None, 1]
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sx.py", line 52, in get_data
+    res_img = get_png(
+              ^^^^^^^^
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sx.py", line 386, in get_png
+    fontStyle = fonts.data[2][110]
+                ~~~~~~~~~~~~~^^^^^
+KeyError: 110
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     166D71F1E918DED151728ACE92B6EB3E
+>Error Name:   KeyError
+>Error File:   D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sx.py
+>Error Params: [2024817093, 'asia', 'cn', False, None, 1]
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sx.py", line 52, in get_data
+    res_img = get_png(
+              ^^^^^^^^
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sx.py", line 386, in get_png
+    fontStyle = fonts.data[2][110]
+                ~~~~~~~~~~~~~^^^^^
+KeyError: 110
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     A40996B68235E3F3536D2BFFE670640D
+>Error Name:   KeyError
+>Error File:   D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sx.py
+>Error Params: [566172134, 'eu', 'cn', False, None, 1]
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sx.py", line 52, in get_data
+    res_img = get_png(
+              ^^^^^^^^
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sx.py", line 386, in get_png
+    fontStyle = fonts.data[2][110]
+                ~~~~~~~~~~~~~^^^^^
+KeyError: 110
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     51A3D3556C666B247F28233B83BA3246
+>Error Name:   AttributeError
+>Error File:   D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sx.py
+>Error Params: [2027765865, 'asia', 'cn', False, None, 1]
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sx.py", line 52, in get_data
+    res_img = get_png(
+              ^^^^^^^^
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sx.py", line 598, in get_png
+    res_img = Picture.add_box(box_list, res_img)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\data_source.py", line 188, in add_box
+    img = ImageDraw.ImageDraw(res_img)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\a\HikariBot\HikariBot\HikariBot\pyenv\Lib\site-packages\PIL\ImageDraw.py", line 62, in __init__
+    im.load()
+    ^^^^^^^
+AttributeError: 'numpy.ndarray' object has no attribute 'load'
+
+-------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,13 @@
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     1A39EA3062AF482ADC654BC51489811E
+>Error Name:   IndexError
+>Error File:   D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\select_func_cn.py
+>Error Params: []
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\select_func_cn.py", line 309, in main
+    msg[2] in rank_list and
+    ~~~^^^
+IndexError: list index out of range
+
+-------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,71 @@
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     BF700EE7EF05CD24D62864A1D8432595
+>Error Name:   error
+>Error File:   D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_info.py
+>Error Params: [2021991872, 'asia', 'cn', 1, False, None]
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_info.py", line 51, in get_data
+    res_img = get_png(
+              ^^^^^^^^
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_info.py", line 550, in get_png
+    achievement_png = cv2.resize(achievement_png, None, fx=1.4, fy=1.4)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cv2.error: OpenCV(4.8.1) D:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\resize.cpp:4062: error: (-215:Assertion failed) !ssize.empty() in function 'cv::resize'
+
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     5B0AD114F5525402DF71827347343884
+>Error Name:   NotADirectoryError
+>Error File:   D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_basic.py
+>Error Params: [2027765865, 'asia', 'cn', 1, False, None]
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\scripts\dog_tag.py", line 48, in dog_tag
+    assert(os.path.ispath(custom_png_path))
+           ^^^^^^^^^^^^^^
+AttributeError: module 'ntpath' has no attribute 'ispath'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_basic.py", line 51, in get_data
+    res_img = get_png(
+              ^^^^^^^^
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_basic.py", line 200, in get_png
+    res_img = dog_tag.dog_tag(res_img, aid, server, result['dog_tag'])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\scripts\dog_tag.py", line 50, in dog_tag
+    custom_png_path = os.path.join(custom_png_path, random.choice(os.listdir(custom_png_path)))
+                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+NotADirectoryError: [WinError 267] 目录名称无效。: 'D:\\airi_test\\src\\plugins\\nonebot_plugin_kokomi_v400_airicus\\png\\dog_tag_custom\\2027765865.png'
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     107B97B550A1B322AB83FA30486987A1
+>Error Name:   FileNotFoundError
+>Error File:   D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_ship.py
+>Error Params: [2020972735, 'asia', 'cn', '3560912592', 1, False, None]
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\scripts\dog_tag.py", line 48, in dog_tag
+    assert(os.path.ispath(custom_png_path))
+           ^^^^^^^^^^^^^^
+AttributeError: module 'ntpath' has no attribute 'ispath'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_ship.py", line 52, in get_data
+    res_img = get_png(
+              ^^^^^^^^
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_ship.py", line 242, in get_png
+    res_img = dog_tag.dog_tag(res_img, aid, server, result['dog_tag'])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\scripts\dog_tag.py", line 50, in dog_tag
+    custom_png_path = os.path.join(custom_png_path, random.choice(os.listdir(custom_png_path)))
+                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [WinError 3] 系统找不到指定的路径。: 'D:\\airi_test\\src\\plugins\\nonebot_plugin_kokomi_v400_airicus\\png\\dog_tag_custom\\2020972735.png'
+
+-------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,13 @@
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     A2D8DDA69BC2FA45C715A04FE147CDE3
+>Error Name:   UnboundLocalError
+>Error File:   D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\select_func_cn.py
+>Error Params: []
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\select_func_cn.py", line 945, in main
+    server=server,
+           ^^^^^^
+UnboundLocalError: cannot access local variable 'date_num' where it is not associated with a value
+
+-------------------------------------------------------------------------------------------------------------

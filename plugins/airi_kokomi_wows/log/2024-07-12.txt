@@ -1,0 +1,17 @@
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     CE2B593F63D3D71722A779891BA9EAC3
+>Error Name:   error
+>Error File:   D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_info.py
+>Error Params: [2028424954, 'asia', 'cn', 1, False, None]
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_info.py", line 51, in get_data
+    res_img = get_png(
+              ^^^^^^^^
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_info.py", line 550, in get_png
+    achievement_png = cv2.resize(achievement_png, None, fx=1.4, fy=1.4)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cv2.error: OpenCV(4.8.1) D:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\resize.cpp:4062: error: (-215:Assertion failed) !ssize.empty() in function 'cv::resize'
+
+
+-------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,22 @@
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     81D08ABCAAD079D12EFCB6AC970E8301
+>Error Name:   MemoryError
+>Error File:   D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_recent.py
+>Error Params: [2032176811, 'asia', 'cn', 'pvp', '20240815', '20240816', 1, False, None]
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_recent.py", line 56, in get_data
+    res_img = get_png(
+              ^^^^^^^^
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_recent.py", line 410, in get_png
+    ship_preview_jpg = Image.open(ship_preview_jpg_path).convert('RGBA')
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\a\HikariBot\HikariBot\HikariBot\pyenv\Lib\site-packages\PIL\Image.py", line 945, in convert
+    return self.copy()
+           ^^^^^^^^^^^
+  File "D:\a\HikariBot\HikariBot\HikariBot\pyenv\Lib\site-packages\PIL\Image.py", line 1202, in copy
+    return self._new(self.im.copy())
+                     ^^^^^^^^^^^^^^
+MemoryError
+
+-------------------------------------------------------------------------------------------------------------

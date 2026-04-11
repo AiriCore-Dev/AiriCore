@@ -1,0 +1,17 @@
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     BE018E809C375CD62885CDB6CF797343
+>Error Name:   error
+>Error File:   D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_info.py
+>Error Params: [2025027002, 'asia', 'cn', 1, False, None]
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_info.py", line 51, in get_data
+    res_img = get_png(
+              ^^^^^^^^
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_info.py", line 550, in get_png
+    achievement_png = cv2.resize(achievement_png, None, fx=1.4, fy=1.4)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cv2.error: OpenCV(4.8.1) D:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\resize.cpp:4062: error: (-215:Assertion failed) !ssize.empty() in function 'cv::resize'
+
+
+-------------------------------------------------------------------------------------------------------------

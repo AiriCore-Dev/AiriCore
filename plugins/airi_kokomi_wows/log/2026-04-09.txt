@@ -1,0 +1,16 @@
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     D7D25D9B8716458B220C0C4028ECF32E
+>Error Name:   KeyError
+>Error File:   /root/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/func/wws_sd.py
+>Error Params: [2022045337, 'asia', 'cn', False, None]
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/func/wws_sd.py", line 53, in get_data
+    res_img = get_png(
+              ^^^^^^^^
+  File "/root/airi/airi/src/plugins/nonebot_plugin_kokomi_v400_airicus/func/wws_sd.py", line 312, in get_png
+    ship_tier = ship_id_dict[ship_id]['ship_tier']
+                ~~~~~~~~~~~~^^^^^^^^^
+KeyError: '3760175056'
+
+-------------------------------------------------------------------------------------------------------------

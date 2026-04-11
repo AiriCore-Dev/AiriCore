@@ -1,0 +1,26 @@
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     32DC3C32F0CBEA475DDBF25E71019330
+>Error Name:   IndexError
+>Error File:   D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\select_func_cn.py
+>Error Params: []
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\select_func_cn.py", line 1547, in main
+    clanid = clanid['data'][0]['clan_id']
+             ~~~~~~~~~~~~~~^^^
+IndexError: list index out of range
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     3601C08814A6DDBD89311ADE17438254
+>Error Name:   IndexError
+>Error File:   D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\select_func_cn.py
+>Error Params: []
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\select_func_cn.py", line 1547, in main
+    clanid = clanid['data'][0]['clan_id']
+             ~~~~~~~~~~~~~~^^^
+IndexError: list index out of range
+
+-------------------------------------------------------------------------------------------------------------

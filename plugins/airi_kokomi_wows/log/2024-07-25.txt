@@ -1,0 +1,67 @@
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     F22D5B1A74A10DD566DA069F19315F7D
+>Error Name:   IndexError
+>Error File:   D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\select_func_cn.py
+>Error Params: []
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\select_func_cn.py", line 1615, in main
+    clanid = clanid['data'][0]['clan_id']
+             ~~~~~~~~~~~~~~^^^
+IndexError: list index out of range
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     831F95680EB77E5A0E0370832B076225
+>Error Name:   NameError
+>Error File:   D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\select_func_cn.py
+>Error Params: []
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\select_func_cn.py", line 659, in main
+    pic_num
+NameError: name 'pic_num' is not defined
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     4A088C4B511D40105E889F09C9D16454
+>Error Name:   IndexError
+>Error File:   D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sd.py
+>Error Params: [2027765865, 'asia', 'cn', False, None]
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sd.py", line 57, in get_data
+    pic_num=parameter[5]
+            ~~~~~~~~~^^^
+IndexError: list index out of range
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     A3E530F2866234C53CD72256F9CF916F
+>Error Name:   TypeError
+>Error File:   D:\vx_nonebot2\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sd.py
+>Error Params: [2027765865, 'asia', 'cn', False, None]
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\vx_nonebot2\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sd.py", line 52, in get_data
+    res_img = get_png(
+              ^^^^^^^^
+  File "D:\vx_nonebot2\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_sd.py", line 260, in get_png
+    res_img = dog_tag.dog_tag(
+              ^^^^^^^^^^^^^^^^
+TypeError: dog_tag() got an unexpected keyword argument 'cid'
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     8136B7AD7A7AF99A661858FF344C6311
+>Error Name:   IndexError
+>Error File:   D:\vx_nonebot2\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_info.py
+>Error Params: [2044683018, 'asia', 'cn', False, None]
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\vx_nonebot2\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_info.py", line 37, in get_data
+    'ac': parameter[5]
+          ~~~~~~~~~^^^
+IndexError: list index out of range
+
+-------------------------------------------------------------------------------------------------------------

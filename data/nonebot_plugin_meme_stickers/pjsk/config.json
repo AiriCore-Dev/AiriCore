@@ -1,0 +1,9 @@
+{
+  "update_source": {
+    "type": "github",
+    "owner": "lgc-NB2Dev",
+    "repo": "meme-stickers-hub",
+    "path": "pjsk",
+    "branch": "main"
+  }
+}

@@ -1,0 +1,39 @@
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     58C079AC448F7C4FBCEF1FF4D76DAF98
+>Error Name:   NameError
+>Error File:   D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\scripts\search_ship_name.py
+>Error Params: ['cn', '7234']
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\scripts\search_ship_name.py", line 14, in search_ship_name
+    for i in ship_side:
+             ^^^^^^^^^
+NameError: name 'ship_side' is not defined
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     249C121CC481FF94191F0365C5996199
+>Error Name:   NameError
+>Error File:   D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\scripts\search_ship_name.py
+>Error Params: ['cn', '7234']
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\scripts\search_ship_name.py", line 15, in search_ship_name
+    for i in ship_side:
+             ^^^^^^^^^
+NameError: name 'ship_side' is not defined
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     F88C155C67D20BB22B1324B7CD2368A3
+>Error Name:   TypeError
+>Error File:   D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\select_func_cn.py
+>Error Params: []
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\airi_test\src\plugins\nonebot_plugin_kokomi_v400_airicus\select_func_cn.py", line 559, in main
+    shipid['status'] != 'ok' or
+    ~~~~~~^^^^^^^^^^
+TypeError: string indices must be integers, not 'str'
+
+-------------------------------------------------------------------------------------------------------------

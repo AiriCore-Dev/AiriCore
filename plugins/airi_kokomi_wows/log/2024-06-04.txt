@@ -1,0 +1,13 @@
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     A5ADE6B94B47281C99E08F29AE249B72
+>Error Name:   NameError
+>Error File:   D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\select_func_en.py
+>Error Params: []
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\select_func_en.py", line 293, in main
+    if i in recent_list: break
+            ^^^^^^^^^^^
+NameError: name 'recent_list' is not defined
+
+-------------------------------------------------------------------------------------------------------------

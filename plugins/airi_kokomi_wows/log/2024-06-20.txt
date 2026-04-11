@@ -1,0 +1,90 @@
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     660EB35D2CD23350CCF29E7630065048
+>Error Name:   OSError
+>Error File:   D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_help.py
+>Error Params: ['en']
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\pyenv\Lib\site-packages\PIL\JpegImagePlugin.py", line 640, in _save
+    rawmode = RAWMODE[im.mode]
+              ~~~~~~~^^^^^^^^^
+KeyError: 'RGBA'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_help.py", line 35, in get_data
+    result['img'] = Picture.return_img(img=res_img)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\data_source.py", line 140, in return_img
+    return func(img)
+           ^^^^^^^^^
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\data_source.py", line 144, in img_to_b64
+    pic.save(buf, format="JPEG", quality=95)
+  File "D:\a\HikariBot\HikariBot\HikariBot\pyenv\Lib\site-packages\PIL\Image.py", line 2432, in save
+    save_handler(self, fp, filename)
+  File "D:\a\HikariBot\HikariBot\HikariBot\pyenv\Lib\site-packages\PIL\JpegImagePlugin.py", line 643, in _save
+    raise OSError(msg) from e
+OSError: cannot write mode RGBA as JPEG
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     B7895C9F72ADBBBC0266F14088625E2C
+>Error Name:   OSError
+>Error File:   D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_help.py
+>Error Params: ['en']
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\pyenv\Lib\site-packages\PIL\JpegImagePlugin.py", line 640, in _save
+    rawmode = RAWMODE[im.mode]
+              ~~~~~~~^^^^^^^^^
+KeyError: 'RGBA'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_help.py", line 35, in get_data
+    result['img'] = Picture.return_img(img=res_img)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\data_source.py", line 140, in return_img
+    return func(img)
+           ^^^^^^^^^
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\data_source.py", line 144, in img_to_b64
+    pic.save(buf, format="JPEG", quality=95)
+  File "D:\a\HikariBot\HikariBot\HikariBot\pyenv\Lib\site-packages\PIL\Image.py", line 2432, in save
+    save_handler(self, fp, filename)
+  File "D:\a\HikariBot\HikariBot\HikariBot\pyenv\Lib\site-packages\PIL\JpegImagePlugin.py", line 643, in _save
+    raise OSError(msg) from e
+OSError: cannot write mode RGBA as JPEG
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     7D55493F9027C32CA40AF5F04EAFDC2A
+>Error Name:   OSError
+>Error File:   D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_help.py
+>Error Params: ['en']
+>Error Info: 
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\pyenv\Lib\site-packages\PIL\JpegImagePlugin.py", line 640, in _save
+    rawmode = RAWMODE[im.mode]
+              ~~~~~~~^^^^^^^^^
+KeyError: 'RGBA'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\func\wws_help.py", line 35, in get_data
+    result['img'] = Picture.return_img(img=res_img)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\data_source.py", line 140, in return_img
+    return func(img)
+           ^^^^^^^^^
+  File "D:\a\HikariBot\HikariBot\HikariBot\src\plugins\nonebot_plugin_kokomi_v400_airicus\data_source.py", line 144, in img_to_b64
+    pic.save(buf, format="JPEG", quality=95)
+  File "D:\a\HikariBot\HikariBot\HikariBot\pyenv\Lib\site-packages\PIL\Image.py", line 2432, in save
+    save_handler(self, fp, filename)
+  File "D:\a\HikariBot\HikariBot\HikariBot\pyenv\Lib\site-packages\PIL\JpegImagePlugin.py", line 643, in _save
+    raise OSError(msg) from e
+OSError: cannot write mode RGBA as JPEG
+
+-------------------------------------------------------------------------------------------------------------
