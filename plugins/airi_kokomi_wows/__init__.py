@@ -31,7 +31,7 @@ import json
 from openai import AsyncOpenAI
 
 client = AsyncOpenAI(
-    api_key="sk-c8hddt5pd43l14mp5gfpsjdjkw5q5d2btuk7vwxaycwznqsd",
+    api_key="",
     base_url="https://api.xiaomimimo.com/v1"
 )
 
