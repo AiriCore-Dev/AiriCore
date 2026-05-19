@@ -175,23 +175,6 @@ def sync_bottle():
     gc.collect()
 
 def send_email(dest, subject, text):
-    '''
-    try:
-        #server.login('airi@airi.asia', 'k2sG#^Y1asZRcQ3')
-        msg = MIMEText(text, 'plain', 'utf-8')
-        msg['From'] = f"{Header(alias, 'utf-8')} <airi@airi.asia>"
-        msg['To'] = Header(dest)
-        msg['Subject'] = Header(subject)
-        #server.sendmail('airi@airi.asia', dest, msg.as_string())
-        sev = smtplib.SMTP_SSL("gz-smtp.qcloudmail.com")
-        sev.login('airi@airi.asia', 'k2sG#^Y1asZRcQ3')
-        sev.sendmail('airi@airi.asia', dest, msg.as_string())
-        sev.quit()
-        del sev
-        #server.close()
-    except Exception as expt:
-        return str(expt)
-    '''
     global email_list
     email_list.append([dest, subject, text])
 
