@@ -4,8 +4,8 @@
   "description": "Arcaea stickers",
   "default_config": {
     "commands": [
-      "arcaea",
-      "arc"
+      "arcaeabq",
+      "arcbq"
     ]
   },
   "default_sticker_params": {

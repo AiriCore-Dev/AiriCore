@@ -1,0 +1,26 @@
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     8B25BB4D981DDE8FE594BE226AF2C55B
+>Error Name:   IndexError
+>Error File:   /root/airi/airicore/plugins/airi_kokomi_wows/select_func_cn.py
+>Error Params: []
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/airi/airicore/plugins/airi_kokomi_wows/select_func_cn.py", line 1289, in main
+    msg[4] in recent_list
+    ~~~^^^
+IndexError: list index out of range
+
+-------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+>Track ID:     21C2A9F9525FD5230B9B2453CB8B46E0
+>Error Name:   IndexError
+>Error File:   /root/airi/airicore/plugins/airi_kokomi_wows/select_func_cn.py
+>Error Params: []
+>Error Info: 
+Traceback (most recent call last):
+  File "/root/airi/airicore/plugins/airi_kokomi_wows/select_func_cn.py", line 1289, in main
+    msg[4] in recent_list
+    ~~~^^^
+IndexError: list index out of range
+
+-------------------------------------------------------------------------------------------------------------

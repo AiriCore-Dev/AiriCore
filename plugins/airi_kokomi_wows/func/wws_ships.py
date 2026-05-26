@@ -431,7 +431,7 @@ def get_png(
                 ((0+360*x), (0+80*y), (360+360*x), (80+80*y)))
             res_img.paste(ship_png, (97, y0-10+90*i), mask = ship_png.split()[3])
         else:
-            w = Picture.x_coord(ship_index, fontStyle)
+            w = Picture.x_coord(ship_data['ship_info']['ship_name'][:6], fontStyle)
             text_list.append(
                 Text_Data(
                     xy=(285-w/2+x0, y0+90*i+4),
@@ -573,5 +573,6 @@ def get_png(
 
 
             
+
 
 

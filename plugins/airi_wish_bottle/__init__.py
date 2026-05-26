@@ -6,6 +6,8 @@ import time
 import math
 import base64
 import random
+import shutil
+import pickle
 import hashlib
 import nonebot
 import requests
@@ -23,6 +25,7 @@ from email.header import Header
 
 timings = require("nonebot_plugin_apscheduler").scheduler
 driver = get_driver()
+unified_password = getattr(driver.config, "unified_password", "")
 data = {}
 email_list = []
 
@@ -48,25 +51,30 @@ async def email_login():
     try:
         server.connect()
     except:
-        server = smtplib.SMTP_SSL("")
-        server.login('', '')
+        server = smtplib.SMTP_SSL("gz-smtp.qcloudmail.com")
+        server.login('airi@airi.asia', unified_password)
         server.close()
 
 @driver.on_startup
 async def load_json():
     global data
     #await email_login()
-    data = json.load(open(os.path.join(os.path.dirname(__file__), 'data.json'),'r'))
+    try:
+        with open(os.path.join('data', 'airi_wish_bottle', 'data.pk'),'rb') as f:
+            data = pickle.load(f)
+    except:
+        os.makedirs(os.path.join('data', 'airi_wish_bottle'))
     gc.collect()
 
 @driver.on_shutdown
 async def save_to_json():
     global data, email_list
-    json.dump(data, open(os.path.join(os.path.dirname(__file__), 'data.json'),'w', encoding="utf-8"), ensure_ascii=False)
+    with open(os.path.join('data', 'airi_wish_bottle', 'data.pk'),'wb') as f:
+        pickle.dump(data, f)
     if len(email_list):
         try:
-            sev = smtplib.SMTP_SSL("")
-            sev.login('', '3')
+            sev = smtplib.SMTP_SSL("gz-smtp.qcloudmail.com")
+            sev.login('airi@airi.asia', unified_password)
             for mail in email_list:
                 msg = MIMEText(mail[2], 'plain', 'utf-8')
                 msg['From'] = f"{Header('Momoi Airi', 'utf-8')} <airi@airi.asia>"
@@ -87,8 +95,7 @@ async def daily_clear():
 
 async def save_data_backup():
     await save_to_json()
-    json_dir = os.path.join(os.path.dirname(__file__), "data.json")
-    os.system("cp "+json_dir+" "+json_dir+".bak")
+    shutil.copyfile(os.path.join('data', 'airi_wish_bottle', 'data.pk'),os.path.join('data', 'airi_wish_bottle', 'data.pk.bak'))
 
 timings.add_job(daily_clear, "cron", hour=0, misfire_grace_time=3600, coalesce=True)
 timings.add_job(save_data_backup, "cron", hour=23, minute=50, misfire_grace_time=3600, coalesce=True)

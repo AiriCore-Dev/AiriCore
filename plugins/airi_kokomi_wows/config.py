@@ -6,7 +6,7 @@ class Plugin_Config:
     API_PASSWORD = '123456'
 
     CN_START_WITH = 'wws'
-    EN_START_WITH = '~'
+    EN_START_WITH = ''
     VERSON = 'v4 Airi Cust. Ver.'
     REQUEST_TIMEOUT = 30
     RETURN_PIC_TYPE = 'base64'

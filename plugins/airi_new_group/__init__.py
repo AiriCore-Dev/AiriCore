@@ -2,9 +2,10 @@ import os
 import base64
 import asyncio
 import nonebot
-from nonebot import on_notice, on_fullmatch
+from nonebot import on_notice, on_command
 from nonebot.permission import SUPERUSER
-from nonebot.adapters.onebot.v11 import GroupIncreaseNoticeEvent
+from nonebot.params import CommandArg
+from nonebot.adapters.onebot.v11 import GroupIncreaseNoticeEvent, Message
 from nonebot.adapters.onebot.v11.bot import Bot, MessageSegment
 
 def localpath_to_base64(pth):
@@ -25,12 +26,13 @@ bot主联系邮箱：saki@saki.ln.cn
 
 try:
     img = localpath_to_base64(os.path.join(os.path.dirname(__file__), 'airi.jpg'))
+    duang = localpath_to_base64(os.path.join(os.path.dirname(__file__), 'duang.wav'))
     msg = MessageSegment.text(intro) + MessageSegment.image(img)
 except Exception as e:
     print(f"警告：图片加载失败 - {e}")
     msg = MessageSegment.text(intro) 
 
-bot_whitelist = ["2745762139", "1330248395", "535071478","3357763830"]
+bot_whitelist = ["2745762139", "1330248395", "535071478"]
 
 group_increase = on_notice(priority=5, block=False)
 
@@ -53,6 +55,7 @@ async def handle_group_increase(bot: Bot, event: GroupIncreaseNoticeEvent):
                     target_bots.append(botq)
             
             if bot_id in bot_whitelist or not len(target_bots):
+                await bot.send_group_msg(group_id=group_id, message=MessageSegment.record(duang))
                 await bot.send_group_msg(group_id=group_id, message=msg)
             else:
                 await bot.send_group_msg(group_id=group_id, message=f"该群已存在AiriCore分布式账号（{', '.join(target_bots)}），即将退群")
@@ -61,15 +64,19 @@ async def handle_group_increase(bot: Bot, event: GroupIncreaseNoticeEvent):
     except Exception as e:
         print(f"处理入群事件时发生错误：{str(e)}")
 
-airi_full_group = on_fullmatch('airifullgroup', priority=5, block=True, permission=SUPERUSER)
+# 修改为 on_command 并添加参数解析
+airi_full_group = on_command('airifullgroup', priority=5, block=True, permission=SUPERUSER)
 
 @airi_full_group.handle()
-async def _(bot: Bot):  
-    for bot_instance in nonebot.get_bots().values():    
+async def _(bot: Bot, arg: Message = CommandArg()):
+    # 根据是否有参数决定发送内容
+    target_msg = arg if arg else msg
+    
+    for bot_instance in nonebot.get_bots().values():
         gr_list = await bot_instance.get_group_list()
         for gr in gr_list:
             try:
-                await bot_instance.send_group_msg(group_id=gr["group_id"], message=msg)
-                await asyncio.sleep(0.5)  
+                await bot_instance.send_group_msg(group_id=gr["group_id"], message=target_msg)
+                await asyncio.sleep(2)
             except Exception as e:
                 print(f"发送群消息失败（群{gr['group_id']}）：{e}")

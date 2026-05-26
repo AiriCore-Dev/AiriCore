@@ -1,6 +1,6 @@
 import os
 import base64
-from nonebot import on_fullmatch
+from nonebot import on_fullmatch, get_driver
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 
@@ -10,10 +10,13 @@ def localpath_to_base64(pth):
     fil.close()
     return "base64://" + base64.b64encode(byt).decode() 
 
+driver = get_driver()
+airicore_version = getattr(driver.config, "airicore_version", "")
+
 if 1:
     msg = []
     
-    text = "Momoi Airi 使用帮助\n⚙️ AiriCore v26.4"
+    text = f"Momoi Airi 使用帮助\n⚙️ {airicore_version}"
     msg.append({
         "type": "node",
         "data": {
@@ -51,22 +54,22 @@ PJSK综合查询 By NagiHina\n\
             "content":text
             }
         })
- 
+    
     text = "\
------ MC服管 -----\n\n\
+----- Minecraft -----\n\n\
 - Airi_MCRcon:\n\
-Airi方可梦MC服务器管理插件 By Makino.S\n\
-（此插件为<伊号公馆>群专属）\n\
+Airi Cobblemon Sever 服管 By Makino.S\n\
+（该功能仅对部分群聊开放）\n\
 *发送指令 /help 查看帮助"
     msg.append({
         "type": "node",
         "data": {
-            "name": "MC服管",
+            "name": "Minecraft",
             "uin": 0,
             "content":text
             }
         })
- 
+    
     text = "\
 ----- 娱乐功能 -----\n\n\
 - Momoi Airi Collection:\n\
@@ -99,7 +102,7 @@ Airi海龟汤 By Makino.S\n\
 *发送 表情包制作 查看帮助\n\n\
 - meme-stickers:\n\
 PJSK&Arcaea 贴纸制作 By lgc-NB2Dev\n\
-*发送 pjsk 或者 arc 查看说明\n\n\
+*发送 pjskbq 或者 arcbq 查看说明\n\n\
 - emojimix:\n\
 emoji合成\n\
 *指令：任意emoji+任意emoji\n\
@@ -179,7 +182,7 @@ Momoi Airi 桃井爱莉\n\
             "content": text+image
             }
         })
-        
+            
     text = MessageSegment.text("\
 ✨ Airi Cobblemon Server\n\
 山河入画，萌兽为俦；静养初心，闲游忘忧\n\
@@ -195,7 +198,7 @@ Momoi Airi 桃井爱莉\n\
             "content": text+image
             }
         })
-        
+            
     text = MessageSegment.text("\
 Bot使用群：\n\
 * 一群：1030569383\n\

@@ -70,7 +70,7 @@ class ConfigModel(BaseModel):
     req_concurrency: int = 8
     req_timeout: int = 5
 
-    auto_update: bool = True
+    auto_update: bool = False
     force_update: bool = False
 
     prompt_retries: int = 3

@@ -8,6 +8,8 @@ import mcrcon
 import random
 import psutil
 import nbtlib
+import shutil
+import pickle
 import aiohttp
 import asyncio
 import nonebot
@@ -23,10 +25,11 @@ from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 
 driver = get_driver()
+unified_password = getattr(driver.config, "unified_password", "")
 timing = require("nonebot_plugin_apscheduler").scheduler
 data = {}
-mcr = MCRcon("127.0.0.1", "")
-server_path = ''
+mcr = MCRcon("127.0.0.1", unified_password)
+server_path = '/root/airi/airicob5'
 
 bote = 0  
 op_list = ["864623174"]
@@ -192,13 +195,16 @@ async def generate_pokemon_bag(player_name):
 
 async def load_json():
     global data
-    with open(os.path.join(os.path.dirname(__file__), 'data.json'), 'r') as f:
-        data = json.load(f)
+    try:
+        with open(os.path.join('data', 'airi_mcrcon', 'data.pk'),'rb') as f:
+            data = pickle.load(f)
+    except:
+        os.makedirs(os.path.join('data', 'airi_mcrcon'))
         
 async def save_json():
     global data
-    with open(os.path.join(os.path.dirname(__file__), 'data.json'), 'w') as f:
-        json.dump(data, f)
+    with open(os.path.join('data', 'airi_mcrcon', 'data.pk'),'wb') as f:
+        pickle.dump(data, f)
 
 async def check_alive():
     global mcr
@@ -207,7 +213,7 @@ async def check_alive():
     except:
         try:
             mcr.disconnect()
-            mcr = MCRcon("127.0.0.1", "")
+            mcr = MCRcon("127.0.0.1", unified_password)
             mcr.connect()
         except:
             pass
@@ -317,10 +323,11 @@ async def _(bot: Bot, ev: MessageEvent):
 /seed ：查看地图种子
 /list ：查看在线玩家
 /banlist ：查看封神榜
-/tps @群友 ：将自己传送到你@群友的位置
+/tpa @群友 ：将自己传送到你@群友的位置
 /locate ：定位结构
 /playerspawn ：站立不动三秒后将自己传送回出生点（中途移动中断）
-/pokebag ：查看自己背包内的宝可梦'''
+/pokebag ：查看自己背包内的宝可梦
+/pokebag @群友 ：查看群友背包内的宝可梦'''
         await rcon_handle.finish(res.strip())
     await check_alive()
     if src.startswith('auth'):
@@ -423,18 +430,30 @@ async def _(bot: Bot, ev: MessageEvent):
             res = mcr.command(f'execute at {data[user_id]["username"]} run {src}')
         except Exception as err:
             res = f"{str(err)}"
-    elif src == "pokebag":
+    elif src.startswith('pokebag'):
         try:
+            src = src[7:].strip()
+            if not len(src):
+                src = user_id
+            elif not (src.startswith('[CQ:at,qq=') and src.endswith(']')):
+                raise ValueError("指令用法：/pokebag 或 /pokebag @群友")
+            else:
+                #[CQ:at,qq=xxxxx]
+                src = src[10:-1].strip()
             try:
-                data[user_id]
+                int(src)
             except:
-                raise ValueError("你还未绑定游戏账户")
-            res = await generate_pokemon_bag(data[user_id]["username"])
+                raise ValueError("指令用法：/pokebag 或 /pokebag @群友")
+            try:
+                data[src]
+            except:
+                raise ValueError("指定的用户未绑定游戏账户")
+            res = await generate_pokemon_bag(data[src]["username"])
             await rcon_handle.send(MessageSegment.image(res), reply_message=True)
             return
         except Exception as err:
             res = f"{str(err)}"
-    elif src.startswith('tps'):
+    elif src.startswith('tpa'):
         try:
             try:
                 data[user_id]
@@ -442,13 +461,13 @@ async def _(bot: Bot, ev: MessageEvent):
                 raise ValueError("你还未绑定游戏账户")
             src = src[3:].strip()
             if not len(src) or not (src.startswith('[CQ:at,qq=') and src.endswith(']')):
-                raise ValueError("指令用法：/tps @群友")
+                raise ValueError("指令用法：/tpa @群友")
             #[CQ:at,qq=xxxxx]
             src = src[10:-1].strip()
             try:
                 int(src)
             except:
-                raise ValueError("指令用法：/tps @群友")
+                raise ValueError("指令用法：/tpa @群友")
             try:
                 data[src]
             except:

@@ -8,5 +8,5 @@ haruki_help = on_command("pjskhelp", priority=99)
 async def main(bot: Bot, ev: MessageEvent):
     message = MessageSegment.text("\
 Haruki帮助文档：\n\
-https://docs.shiromiku.moe/")
+https://neo.haruki.seiunx.com")
     await haruki_help.send(message)

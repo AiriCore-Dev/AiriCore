@@ -4,7 +4,7 @@
   "description": "Project Sekai stickers",
   "default_config": {
     "commands": [
-      "pjsk"
+      "pjskbq"
     ]
   },
   "default_sticker_params": {

@@ -28,6 +28,7 @@ from nonebot.adapters.onebot.v11 import (
 
 # ===================== 配置常量 =====================
 # 日志配置
+driver = get_driver()
 logger = logging.getLogger("airi_llm")
 logger.setLevel(logging.INFO)
 handler = logging.StreamHandler()
@@ -36,9 +37,9 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 # 白名单配置
-WHITELIST_GROUP = {}
-WHITELIST_BOT = {}
-SUPERUSERS = {}
+WHITELIST_GROUP = {"657965723", "740774974", "466470972", "823217376", "808085026", "1030569383", "609034568"}
+WHITELIST_BOT = {"1330248395", "535071478", "2745762139", "1264177306","3357763830"}
+SUPERUSERS = {"864623174", "3630532026"}
 
 # 内存/发言配置
 MEMORY_MAX_CAPACITY_GROUP = 300  # 群记忆最大存储数量
@@ -51,9 +52,9 @@ EMOJI_RANDOM_PROB = 1 / 10  # 发送表情概率
 FINAL_EMOJI_PROB = 1 / 5  # 结尾发送表情概率
 
 # LLM调用配置
-LLM_MODEL = "doubao-seed-1-8-251228"
+LLM_MODEL = getattr(driver.config, "llm_model", "")
 LLM_MAX_TOKENS = 1024
-LLM_TEMPERATURE = 1.0
+LLM_TEMPERATURE = 0.9
 LLM_TOP_P = 1.0
 LLM_FREQ_PENALTY = 0.1
 LLM_PRESENCE_PENALTY = 0.1
@@ -104,9 +105,10 @@ airi_state.flush_prompt()
 airi_state.init_emoji_list()
 
 # ===================== LLM客户端初始化 =====================
+
 client = AsyncOpenAI(
-    api_key="",
-    base_url=""
+    api_key = getattr(driver.config, "llm_api_key", ""),
+    base_url = getattr(driver.config, "llm_base_url", "")
 )
 
 # ===================== 工具函数（单一职责） =====================
@@ -160,12 +162,13 @@ async def call_llm(
     """
     # 构造消息内容
     content = [{"type": "text", "text": user_input}]
+    '''
     for img_b64 in img_b64_list:
         content.append({
             "type": "image_url",
             "image_url": {"url": f"data:image/jpeg;base64,{img_b64}"}
         })
-
+    '''
     try:
         completion = await client.chat.completions.create(
             model=LLM_MODEL,
@@ -180,7 +183,16 @@ async def call_llm(
             stop=None,
             frequency_penalty=LLM_FREQ_PENALTY,
             presence_penalty=LLM_PRESENCE_PENALTY,
-            extra_body={"thinking": {"type": "disabled"}}
+            extra_body={"thinking": {"type": "disabled"}},
+            tools=[
+                {
+                    "type": "web_search",
+                    "max_keyword": 3,
+                    "force_search": False,
+                    "limit": 1
+                }
+            ],
+            tool_choice="auto"
         )
         # 解析回复
         reply = json.loads(completion.model_dump_json())

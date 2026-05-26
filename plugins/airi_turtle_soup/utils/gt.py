@@ -1,11 +1,6 @@
 import json
 import time
 from openai import OpenAI
- 
-client = OpenAI(
-    api_key="sk-c8hddt5pd43l14mp5gfpsjdjkw5q5d2btuk7vwxaycwznqsd",
-    base_url="https://api.xiaomimimo.com/v1"
-)
 
 with open('generate_tips.txt', 'r', encoding='utf-8') as f:
     generate_tips = f.read()

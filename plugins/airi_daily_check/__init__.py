@@ -7,6 +7,7 @@ import time
 import math
 import hmac
 import httpx
+import shutil
 import pickle
 import base64
 import random
@@ -51,15 +52,12 @@ jrys = on_fullmatch(('jrys','今日运势','运势'),priority=10,block=True)
 async def load_json():
     global data, game_ans
     game_ans = [0,'','','']
-    data = json.loads(open(os.path.join(os.path.dirname(__file__), 'data.json'),'r').read())
+    #data = json.loads(open(os.path.join(os.path.dirname(__file__), 'data.json'),'r').read())
     try:
-        assert(0)
-        data_tmp = pickle.loads(bz2.decompress(base64.b64decode(requests.get('https://textdb.online/AiriSave',timeout=10).text.replace('#','+'))))
-        if data_tmp['attr']['time'] > data['attr']['time']:
-            data = data_tmp
-        del data_tmp
+        with open(os.path.join('data', 'airi_daily_check', 'data.pk'),'rb') as f:
+            data = pickle.load(f)
     except:
-        pass
+        os.makedirs(os.path.join('data', 'airi_daily_check'))
     cur = 0
     sdk_data = open(os.path.join(os.path.dirname(__file__), 'utils', 'sudoku', 'sudoku.txt'),'r').read().split()
     for i in range(1,4):
@@ -91,13 +89,10 @@ async def download_url(url: str) -> bytes:
 async def save_to_json():
     global data
     data['attr']['time'] = int(time.time())
-    open(os.path.join(os.path.dirname(__file__), 'data.json'),'w').write(json.dumps(data))
+    #open(os.path.join(os.path.dirname(__file__), 'data.json'),'w').write(json.dumps(data))
+    with open(os.path.join('data', 'airi_daily_check', 'data.pk'),'wb') as f:
+        pickle.dump(data, f)    
     gc.collect()
-    try:
-        assert(0)
-        requests.post('https://api.textdb.online/update', data={'key':'AiriSave', 'value':base64.b64encode(bz2.compress(pickle.dumps(data))).decode().replace('+','#')},timeout=10)
-    except:
-        pass
  
 async def daily_clear():
     global data
@@ -119,10 +114,10 @@ async def reset_daily_challenge():
             proc.communicate(timeout=10)
         except:
             proc.kill()
-            os.system('pkill -9 sdk')
+            os.system('pkill -9 sudoku')
             continue
         else:
-            os.system('pkill -9 sdk')
+            os.system('pkill -9 sudoku')
             break
     sdk_data = open(os.path.join(os.path.dirname(__file__), 'utils', 'sudoku', 'game.txt'),'r').read().split()
     game_data = [0,sdk_data[:81],sdk_data[84:165],sdk_data[168:249]]
@@ -150,8 +145,7 @@ async def reset_daily_challenge():
 
 async def save_data_backup():
     await save_to_json()
-    json_dir = os.path.join(os.path.dirname(__file__), "data.json")
-    os.system("cp "+json_dir+" "+json_dir+".bak")
+    shutil.copyfile(os.path.join('data', 'airi_daily_check', 'data.pk'),os.path.join('data', 'airi_daily_check', 'data.pk.bak'))
 
 timings.add_job(daily_clear, "cron", hour=0, misfire_grace_time=3600, coalesce=True)
 timings.add_job(save_data_backup, "cron", hour=23, minute=50, misfire_grace_time=3600, coalesce=True)
@@ -386,7 +380,7 @@ async def _(bot: Bot, ev: MessageEvent):
  -今日挑战：完成游戏获取积分！\n\
  -购买提示：花费500积分购买随机一条有关隐藏收藏品的提示信息\n\n\
 （*以下指令需要@机器人*）\n\
- -@爱莉 转给@...X个积分（X为数字）：转账给你@的人\n不支持转至未注册账户的人，单日转出限额50积分，手续费10%（向上取整）\n\
+ -@爱莉 转给@...X个积分（X为数字）：转账给你@的人\n不支持转至未注册账户的人，单日转出限额200积分，手续费10%（向上取整）\n\
  -@爱莉 重生：重开存档\n\n\
  （更多功能实装中）'
     msg.append({"type": "node", "data": {"name": "指令列表", "uin": bot.self_id, "content": res}})
@@ -469,7 +463,7 @@ async def _(bot: Bot, ev: MessageEvent):
     backg.paste(avater, (435,192), mask=avater_mask.split()[3])
     draw.text(xy=(200-draw.textlength((tmpdraw:=str(data[user_id]["credits"])),font_louxing)//2, 426), text=tmpdraw, fill=(0, 0, 0), font=font_louxing)
     draw.text(xy=(520-draw.textlength((tmpdraw:=str(data[user_id]["checked_days"])),font_louxing)//2, 426), text=tmpdraw, fill=(0, 0, 0), font=font_louxing)
-    draw.text(xy=(900-draw.textlength((tmpdraw:=str(50-data[user_id]["receive_transfer_daily"])),font_louxing)//2, 426), text=tmpdraw, fill=(0, 0, 0), font=font_louxing)
+    draw.text(xy=(900-draw.textlength((tmpdraw:=str(200-data[user_id]["receive_transfer_daily"])),font_louxing)//2, 426), text=tmpdraw, fill=(0, 0, 0), font=font_louxing)
     draw.text(xy=(1220-draw.textlength((tmpdraw:=str(data[user_id]["reborn_times"])),font_louxing)//2, 426), text=tmpdraw, fill=(0, 0, 0), font=font_louxing)
     font_louxing = ImageFont.truetype(font=os.path.join(os.path.dirname(__file__), 'utils', 'louxing.ttf'), size=48)
     draw.text(xy=(1046-draw.textlength((tmpdraw:=str(data[user_id]["theme"])),font_louxing)//2, 266), text=tmpdraw, fill=(0, 0, 0), font=font_louxing)
@@ -775,8 +769,8 @@ async def _(bot: Bot, ev: MessageEvent):
     taxs = math.ceil(transfer_num * 1.0 / 10)
     if transfer_num + taxs > data[user_id]['credits']:
         await transcation.finish('❌ 你的积分余额不足！\n现有积分：{}\n需要积分(含税)：{}'.format(data[user_id]['credits'],transfer_num + taxs), reply_message = True)
-    if transfer_num + data[user_id]['receive_transfer_daily'] > 50:
-        await transcation.finish('❌ 已超出今日转出限额！\n账户转出限额：50积分/天\n今日已转出：{}'.format(data[user_id]['receive_transfer_daily']), reply_message = True)
+    if transfer_num + data[user_id]['receive_transfer_daily'] > 200:
+        await transcation.finish('❌ 已超出今日转出限额！\n账户转出限额：200积分/天\n今日已转出：{}'.format(data[user_id]['receive_transfer_daily']), reply_message = True)
     data[user_id]['receive_transfer_daily'] += transfer_num
     data[user_id]['credits'] -= transfer_num + taxs
     data[transfer_id]['credits'] += transfer_num

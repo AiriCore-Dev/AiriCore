@@ -11,6 +11,7 @@ import nonebot
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 from nonebot.config import Config as BotConfig
 from nonebot import __version__ as __nb_version__
+from nonebot import get_driver
 
 from .model import get_status_info
 from .utils import truncate_string
@@ -32,6 +33,8 @@ from .color import (
 )
 
 #bot_config = get_plugin_config(BotConfig)
+driver = get_driver()
+airicore_version = getattr(driver.config, "airicore_version", "")
 
 system = platform.uname()
 #nickname = list(bot_config.nickname)[0] if bot_config.nickname else "unknown"
@@ -226,7 +229,7 @@ def draw() -> bytes:
 
         cpu, ram, swap, disk = get_status_info()
 
-        cpu_info = f"{cpu.usage}% - {cpu.freq}Ghz [18 cores]"
+        cpu_info = f"{cpu.usage}% - {cpu.freq}Ghz [14 cores]"
         ram_info = f"{ram.usage} / {ram.total} GB"
         swap_info = f"{swap.usage} / {swap.total} GB"
         disk_info = f"{disk.usage} / {disk.total} GB"
@@ -291,11 +294,7 @@ def draw() -> bytes:
 
         # 5. 将抗锯齿后的图形合并回主画布
         img = Image.alpha_composite(img, temp_img_resized)
-        # -------------------------------------------------------------------------
-        # 【修改结束】
-        # -------------------------------------------------------------------------
-
-        # 继续绘制文字等其他元素 (这些不需要超采样，或者已经很平滑了)
+        
         content = ImageDraw.Draw(img)
         content.text((155, 595), nickname, font=baotu_fnt, fill=nickname_color)
         content.text((303, 772), cpu_info, font=spicy_fnt, fill=cpu_color)
@@ -305,19 +304,19 @@ def draw() -> bytes:
 
         content.text(
             (352, 1378),
-            f"Apple M5 Pro",
+            f"Apple M4 Pro",
             font=adlam_fnt,
             fill=details_color,
         )
         content.text(
             (352, 1431),
-            "macOS Tahoe 26.4.1",
+            "Darwin 25.5.0 arm64",
             font=adlam_fnt,
             fill=details_color,
         )
         content.text(
             (352, 1484),
-            "AiriCore v26.4",
+            f"{airicore_version}",
             font=adlam_fnt,
             fill=details_color,
         )
@@ -338,6 +337,7 @@ def draw() -> bytes:
         img_bytes = byte_io.getvalue()
 
         return img_bytes
+
 
 
 

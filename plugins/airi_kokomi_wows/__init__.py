@@ -28,11 +28,14 @@ from .command_select import select_funtion
 from .kokomi_chs import *
 import os
 import json
+import nonebot
 from openai import AsyncOpenAI
 
+driver = nonebot.get_driver()
+
 client = AsyncOpenAI(
-    api_key="",
-    base_url="https://api.xiaomimimo.com/v1"
+    api_key = getattr(driver.config, "llm_api_key", ""),
+    base_url = getattr(driver.config, "llm_base_url", "")
 )
 
 with open(os.path.join(os.path.dirname(__file__), 'kokomi_setup.txt'),'r',encoding='utf-8') as f:
@@ -41,7 +44,7 @@ with open(os.path.join(os.path.dirname(__file__), 'kokomi_setup.txt'),'r',encodi
 async def kokomi_llm(input_words): 
     try:    
         completion = await client.chat.completions.create(
-            model="mimo-v2-flash",
+            model = getattr(driver.config, "llm_model", ""),
             messages=[
                 {
                     "role": "system",
@@ -97,10 +100,13 @@ async def main(bot: Bot, ev: MessageEvent):
                     return
             msg = str(ev.message).lower()
             # Kokomi_LLM
+            need_apply_llm = 0
             if msg.startswith("船长"):
                 msg = await kokomi_llm(msg[2:])
                 if msg[0]:
+                    need_apply_llm = 1
                     msg = msg[1]
+                    llm_msg = msg + "\n"
                 else:
                     await wws_bot.finish(msg[1])
             # 国服id带空格的特殊处理
@@ -184,11 +190,12 @@ async def main(bot: Bot, ev: MessageEvent):
                 platform_data={}
             )
             # 发送文字消息
+            msg_res = MessageSegment.text(llm_msg if need_apply_llm else "")
             if fun['type'] == 'msg':
-                await wws_bot.send(fun['msg'],reply_message = True)
+                await wws_bot.send(msg_res + MessageSegment.text(fun['msg']),reply_message = True)
             # 发送图片消息
             elif fun['type'] == 'img':
-                await wws_bot.send(MessageSegment.image(fun['img']),reply_message = True)
+                await wws_bot.send(msg_res + MessageSegment.image(fun['img']),reply_message = True)
             return
         except ActionFailed:
             return False

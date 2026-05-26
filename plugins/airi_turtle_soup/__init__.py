@@ -2,6 +2,8 @@ import os
 import json
 import time
 import random
+import shutil
+import pickle
 import nonebot
 import traceback
 from openai import AsyncOpenAI
@@ -65,12 +67,17 @@ force_end = on_startswith('结束海龟汤',priority=5,block=True)
 @driver.on_startup
 async def load_json():
     global data
-    data = json.load(open(os.path.join(os.path.dirname(__file__), 'data.json'),'r'))
+    try:
+        with open(os.path.join('data', 'airi_turtle_soup', 'data.pk'),'rb') as f:
+            data = pickle.load(f)
+    except:
+        os.makedirs(os.path.join('data', 'airi_turtle_soup'))
 
 @driver.on_shutdown
 async def save_to_json():
     global data
-    json.dump(data, open(os.path.join(os.path.dirname(__file__), 'data.json'),'w', encoding="utf-8"), ensure_ascii=False)
+    with open(os.path.join('data', 'airi_turtle_soup', 'data.pk'),'wb') as f:
+        pickle.dump(data, f)
  
 async def daily_clear():
     global data
@@ -80,8 +87,7 @@ async def daily_clear():
 
 async def save_data_backup():
     await save_to_json()
-    json_dir = os.path.join(os.path.dirname(__file__), "data.json")
-    os.system("cp "+json_dir+" "+json_dir+".bak")
+    shutil.copyfile(os.path.join('data', 'airi_turtle_soup', 'data.pk'),os.path.join('data', 'airi_turtle_soup', 'data.pk.bak'))
 
 timings.add_job(daily_clear, "cron", hour=0, misfire_grace_time=3600, coalesce=True)
 timings.add_job(save_data_backup, "cron", hour=23, minute=50, misfire_grace_time=3600, coalesce=True)
@@ -101,13 +107,13 @@ with open(os.path.join(os.path.dirname(__file__), 'utils', 'turtle_soup.json'),'
 #--------------------
     
 client = AsyncOpenAI(
-    api_key="sk-c8hddt5pd43l14mp5gfpsjdjkw5q5d2btuk7vwxaycwznqsd",
-    base_url="https://api.xiaomimimo.com/v1"
+    api_key = getattr(driver.config, "llm_api_key", ""),
+    base_url = getattr(driver.config, "llm_base_url", "")
 )
 
 async def call_llm(prompt, input, deepseek):
     completion = await client.chat.completions.create(
-        model="mimo-v2-flash",
+        model = getattr(driver.config, "llm_model", ""),
         messages=[
             {
                 "role": "system",
@@ -192,9 +198,6 @@ async def generate_help_message(bot):
 一个人也能玩的海龟汤推理故事\n\
 海龟汤中虽然会告诉你故事结局，\n但也许会好奇“为什么会这样啊？”……'
     msg.append({"type": "node", "data": {"name": "Momoi Airi Turtle Soup", "uin": bot.self_id, "content": res}})
-
-    res = '该插件为v0.0.1元初版，所有功能都在测试中，如有bug请反馈至saki@saki.ln.cn'
-    msg.append({"type": "node", "data": {"name": "小提示", "uin": bot.self_id, "content": res}})
 
     res = '\
 📒 指令列表：\n\
