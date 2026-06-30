@@ -38,13 +38,13 @@ client = AsyncOpenAI(
     base_url = getattr(driver.config, "llm_base_url", "")
 )
 
-with open(os.path.join(os.path.dirname(__file__), 'kokomi_setup.txt'),'r',encoding='utf-8') as f:
+with open(os.path.join(os.path.dirname(__file__), 'kokomi_NL2C.md'),'r',encoding='utf-8') as f:
     role_setup = f.read()
 
 async def kokomi_llm(input_words): 
     try:    
         completion = await client.chat.completions.create(
-            model = getattr(driver.config, "llm_model", ""),
+            model = getattr(driver.config, "other_llm_model", ""),
             messages=[
                 {
                     "role": "system",

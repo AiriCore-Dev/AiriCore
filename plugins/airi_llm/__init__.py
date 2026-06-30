@@ -7,7 +7,9 @@ import random
 import base64
 import asyncio
 import logging
+import datetime
 import traceback
+from utils.totp_2fa import totp_verify
 from typing import List, Dict, Optional, Any
 from openai import AsyncOpenAI
 from nonebot import (
@@ -42,26 +44,27 @@ WHITELIST_BOT = {"1330248395", "535071478", "2745762139", "1264177306","33577638
 SUPERUSERS = {"864623174", "3630532026"}
 
 # 内存/发言配置
-MEMORY_MAX_CAPACITY_GROUP = 300  # 群记忆最大存储数量
+MEMORY_MAX_CAPACITY_GROUP = 200  # 群记忆最大存储数量
 PASSIVE_SPEAK_DELAY_RANGE = (301, 7200)  # 被动发言延迟范围（秒）
-NEGATIVE_SPEAK_TOKENS_INIT = 30  # 发言令牌初始值
+NEGATIVE_SPEAK_TOKENS_INIT = 50  # 发言令牌初始值
 NEGATIVE_SPEAK_TOKENS_DEDUCT = 3  # 每次消息扣除令牌数
-RANDOM_SPEAK_PROBABILITY = 1 / 200  # 随机发言概率
+RANDOM_SPEAK_PROBABILITY = 1 / 150  # 随机发言概率
 PASSIVE_SPEAK_TRIGGER_PROB = 1 / 150  # 被动发言触发概率
 EMOJI_RANDOM_PROB = 1 / 10  # 发送表情概率
 FINAL_EMOJI_PROB = 1 / 5  # 结尾发送表情概率
 
 # LLM调用配置
-LLM_MODEL = getattr(driver.config, "llm_model", "")
-LLM_MAX_TOKENS = 1024
-LLM_TEMPERATURE = 0.9
-LLM_TOP_P = 1.0
-LLM_FREQ_PENALTY = 0.1
-LLM_PRESENCE_PENALTY = 0.1
+LLM_MODEL = getattr(driver.config, "chat_llm_model", "")
+LLM_MAX_TOKENS = 8000
+LLM_TEMPERATURE = 1.0
+LLM_TOP_P = 0.9
+LLM_FREQ_PENALTY = 0.3
+LLM_PRESENCE_PENALTY = 0.2
+_2fa_key = getattr(driver.config, "_2fa_key", "")
 
 # 路径配置
 PROJECT_DIR = os.path.dirname(__file__)
-ROLE_SETUP_FILE = os.path.join(PROJECT_DIR, "airi_setup.txt")
+ROLE_SETUP_FILE = os.path.join(PROJECT_DIR, "airi_prompt_v2.md")
 EMOJI_DIR = os.path.join(PROJECT_DIR, "emoji")
 
 # ===================== 状态管理（替代全局变量，更可控） =====================
@@ -162,13 +165,13 @@ async def call_llm(
     """
     # 构造消息内容
     content = [{"type": "text", "text": user_input}]
-    '''
+    
     for img_b64 in img_b64_list:
         content.append({
             "type": "image_url",
             "image_url": {"url": f"data:image/jpeg;base64,{img_b64}"}
         })
-    '''
+    
     try:
         completion = await client.chat.completions.create(
             model=LLM_MODEL,
@@ -183,16 +186,16 @@ async def call_llm(
             stop=None,
             frequency_penalty=LLM_FREQ_PENALTY,
             presence_penalty=LLM_PRESENCE_PENALTY,
-            extra_body={"thinking": {"type": "disabled"}},
-            tools=[
-                {
-                    "type": "web_search",
-                    "max_keyword": 3,
-                    "force_search": False,
-                    "limit": 1
-                }
-            ],
-            tool_choice="auto"
+#            extra_body={"thinking": {"type": "disabled"}}
+#            tools=[
+#                {
+#                    "type": "web_search",
+#                    "max_keyword": 3,
+#                    "force_search": False,
+#                    "limit": 1
+#                }
+#            ],
+#            tool_choice="auto"
         )
         # 解析回复
         reply = json.loads(completion.model_dump_json())
@@ -282,7 +285,7 @@ async def should_speak(bot: Bot, ev: MessageEvent, group_id: str, user_id: str) 
             (hasattr(ev, 'reply') and ev.reply and str(ev.reply.sender.user_id) == bot.self_id)
         ]
         if any(trigger_conditions):
-            airi_state.negative_speaking_tokens[group_id] = tokens + 1
+            airi_state.negative_speaking_tokens[group_id] = tokens + 2
             return True
     # 随机触发
     if random.random() < RANDOM_SPEAK_PROBABILITY:
@@ -298,7 +301,7 @@ async def send_llm_reply(msg_content: str, need_reply: int) -> int:
     """
     # 处理标点符号分割
     punct_pattern = re.compile(r"[，。！？；：～]+")
-    if random.randint(1, 5) > 1:
+    if random.randint(1, 8) > 1:
         msg_segments = punct_pattern.split(msg_content)
     else:
         msg_segments = [msg_content]
@@ -350,7 +353,7 @@ async def send_llm_reply(msg_content: str, need_reply: int) -> int:
 
     return need_reply
 
-async def passive_speaking(group_id: str, mode: int = 1) -> None:
+async def passive_speaking(bot: Bot, group_id: str, mode: int = 1) -> None:
     """
     被动发言逻辑（主动插话）
     :param group_id: 群ID
@@ -359,9 +362,10 @@ async def passive_speaking(group_id: str, mode: int = 1) -> None:
     # 检查是否被驯服（避免重复发言）
     if mode and airi_state.passive_speaking_group_tamed.get(group_id, 0):
         return
+   
     if mode:
         airi_state.passive_speaking_group_tamed[group_id] = 1
-
+   
     # 模式1添加随机延迟
     if mode:
         await asyncio.sleep(random.randint(*PASSIVE_SPEAK_DELAY_RANGE))
@@ -381,8 +385,9 @@ async def passive_speaking(group_id: str, mode: int = 1) -> None:
     # 调用LLM生成主动发言内容
     memory_context = "\n".join(airi_state.memory_group.get(group_id, []))
     prompt = (
-        f"【以下是上下文，供参考，格式为 发言人: 发言内容】\n{memory_context}\n\n"
-        "现在轮到你主动发言，请充分参考并结合上下文内容，继续之前的话题，发表自己的看法。"
+        f"【以下是上下文，供参考，格式为 发言人(账号ID): 发言内容】\n{memory_context}\n\n"
+        f"当前时间：{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        "现在轮到你主动发言。"
     )
     reply = await call_llm(airi_state.role_setup, prompt, group_id, [])
     if not reply:
@@ -391,9 +396,12 @@ async def passive_speaking(group_id: str, mode: int = 1) -> None:
     # 清理回复内容
     reply = re.sub(r"[(（].+?[)）]", "", reply)
     # 保存记忆
-    await save_group_memory(group_id, "(你)", reply)
+    await save_group_memory(group_id, f"(你)({bot.self_id})", reply)
     # 发送消息
-    await send_llm_reply(reply, 0)
+    try:
+        await send_llm_reply(reply, 0)
+    except:
+        pass
 
     # 解除驯服
     if mode:
@@ -441,14 +449,14 @@ async def handle_airi_llm(bot: Bot, ev: MessageEvent):
 
         # 保存用户发言到记忆
         if input_text:
-            await save_group_memory(group_id, user_nick, input_text)
+            await save_group_memory(group_id, user_nick+f"({ev.user_id})", input_text)
         # 更新最后发言时间
         if group_id:
             airi_state.last_speak_time_group[group_id] = time.time()
 
         # 随机触发被动发言
         if group_id and random.random() < PASSIVE_SPEAK_TRIGGER_PROB:
-            asyncio.create_task(passive_speaking(group_id, 1))
+            asyncio.create_task(passive_speaking(bot, group_id, 1))
 
         # 判断是否需要回复
         need_speak = await should_speak(bot, ev, group_id, user_id)
@@ -468,9 +476,11 @@ async def handle_airi_llm(bot: Bot, ev: MessageEvent):
         need_reply = 1 if random.randint(0, 10) >= 10 else 0
         while airi_state.group_is_tamed[group_id]:
             need_reply = 1
-            await asyncio.sleep(3)
+            await asyncio.sleep(5)
+            '''
             if random.randint(1, 20) == 1:
                 airi_state.group_is_tamed[group_id] = 0
+            '''
 
         # 初始化发言令牌
         if airi_state.negative_speaking_tokens.get(group_id, 0) == 0:
@@ -479,8 +489,9 @@ async def handle_airi_llm(bot: Bot, ev: MessageEvent):
         # 构造LLM输入
         memory_context = "\n".join(airi_state.memory_group.get(group_id, []))
         llm_input = (
-            f"【以下是上下文，供参考，格式为时间: 发言人: 发言内容】\n{memory_context}\n\n"
-            f"当前发言人的名字：{user_nick}\n发言内容：{input_text}"
+            f"【以下是上下文，供参考，格式为时间: 发言人(账号ID): 发言内容】\n{memory_context}\n\n"
+            f"当前时间：{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+            f"现在轮到你发言。"
         )
         # 调用LLM
         llm_reply = await call_llm(airi_state.role_setup, llm_input, group_id, img_b64_list)
@@ -490,10 +501,17 @@ async def handle_airi_llm(bot: Bot, ev: MessageEvent):
         # 清理回复内容
         llm_reply = re.sub(r"[(（].+?[)）]", "", llm_reply)
         # 保存机器人回复到记忆
-        await save_group_memory(group_id, "(你)", llm_reply)
+        await save_group_memory(group_id, f"(你)({bot.self_id})", llm_reply)
 
+        # 已被占用
+        if group_id:
+            airi_state.group_is_tamed[group_id] = 1
+            
         # 发送回复
-        await send_llm_reply(llm_reply, need_reply)
+        try:
+            await send_llm_reply(llm_reply, need_reply)
+        except:
+            pass
 
         # 解除群驯服状态
         if group_id:
@@ -516,7 +534,14 @@ async def handle_superuser_debug(bot: Bot, ev: MessageEvent):
             group_id = None
 
         # 提取调试指令
-        cmd = ev.get_plaintext()[6:].lstrip()
+        src = ev.get_plaintext()[6:].strip()
+        while (tmpa := src.replace("  "," ")) != src:
+            src = tmpa
+        user_2fa_digit = src[:6]
+        if not totp_verify(_2fa_key, user_2fa_digit):
+            await superuser_debug.send('2fa verification failed')
+            return
+        cmd = src[6:].strip()
         # 执行指令（支持await）
         if cmd.startswith('await '):
             try:

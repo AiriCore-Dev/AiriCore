@@ -6,6 +6,7 @@ import shutil
 import pickle
 import nonebot
 import traceback
+from utils.totp_2fa import totp_verify
 from openai import AsyncOpenAI
 from nonebot import get_driver, on_startswith, require
 from nonebot.rule import to_me
@@ -50,6 +51,7 @@ difficulty = {
     "困难": [10, 5],
     "大师": [5, 3]
 }
+_2fa_key = getattr(driver.config, "_2fa_key", "")
 
 #--------------------
 
@@ -72,6 +74,7 @@ async def load_json():
             data = pickle.load(f)
     except:
         os.makedirs(os.path.join('data', 'airi_turtle_soup'))
+        await save_to_json()
 
 @driver.on_shutdown
 async def save_to_json():
@@ -113,7 +116,7 @@ client = AsyncOpenAI(
 
 async def call_llm(prompt, input, deepseek):
     completion = await client.chat.completions.create(
-        model = getattr(driver.config, "llm_model", ""),
+        model = getattr(driver.config, "other_llm_model", ""),
         messages=[
             {
                 "role": "system",
@@ -229,7 +232,7 @@ async def generate_help_message(bot):
   ◆每个群单日最多可进行{}场游戏'.format(max_player_query_trial, max_player_truth_trial, max_group_trial, min_turtle_minutes, max_group_turtle_perday)
     msg.append({"type": "node", "data": {"name": "说明", "uin": bot.self_id, "content": res}})
     
-    msg.append({"type": "node", "data": {"name": "版权信息", "uin": bot.self_id, "content": 'Powered By airi_turtle_soup\nAuthor：Makino.S'}})
+    msg.append({"type": "node", "data": {"name": "版权信息", "uin": bot.self_id, "content": 'Powered By AiriCore Dev.'}})
     return msg
 
 async def end_game(mode, gruop_id, bot, user_id, user_nick):
@@ -455,9 +458,14 @@ async def _(bot: Bot, ev: MessageEvent):
     else:
         user_id = session_id
         gruop_id = None
-    src = ev.get_plaintext()[7:]
-    user_nick = await bot.get_group_member_info(group_id=gruop_id, user_id=user_id)
-    user_nick = (user_nick.get("nickname") or user_nick.get("card") or user_id)
+    src = ev.get_plaintext()[6:].strip()
+    while (tmpa := src.replace("  "," ")) != src:
+        src = tmpa
+    user_2fa_digit = src[:6]
+    if not totp_verify(_2fa_key, user_2fa_digit):
+        await superuser_debug.finish('2fa verification failed')
+    src = src[6:].strip()
+    user_nick = ev.sender.card or ev.sender.nickname
     if src == 'reset':
         await daily_clear()
         res = '刷新一天：命令执行成功'

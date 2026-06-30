@@ -20,6 +20,7 @@ ngg = on_startswith("你过关", priority=99)
 cgdz = on_startswith("闯关弟子注意", priority=99)
 ncddl = on_startswith("你从丹东来", priority=99)
 erika = on_startswith("erika", priority=99)
+nkddw = on_startswith("大哥", priority=99)
 
 @dklmt.handle()
 async def _(bot: Bot, ev: MessageEvent):
@@ -72,5 +73,14 @@ async def _(bot: Bot, ev: MessageEvent):
     if time.time() - last_notice > reply_interval:
         last_notice = time.time()
         msg = await localpath_to_base64('erika.mp3')
+        message = MessageSegment.record(msg)
+        await erika.send(message)
+
+@nkddw.handle()
+async def _(bot: Bot, ev: MessageEvent):
+    global last_notice
+    if time.time() - last_notice > reply_interval:
+        last_notice = time.time()
+        msg = await localpath_to_base64('nkddw.mp3')
         message = MessageSegment.record(msg)
         await erika.send(message)

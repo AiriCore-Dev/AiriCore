@@ -2,11 +2,15 @@ import os
 import base64
 import asyncio
 import nonebot
-from nonebot import on_notice, on_command
+from utils.totp_2fa import totp_verify	
+from nonebot import on_notice, on_command, get_driver
 from nonebot.permission import SUPERUSER
 from nonebot.params import CommandArg
 from nonebot.adapters.onebot.v11 import GroupIncreaseNoticeEvent, Message
 from nonebot.adapters.onebot.v11.bot import Bot, MessageSegment
+
+driver = get_driver()
+_2fa_key = getattr(driver.config, "_2fa_key", "")
 
 def localpath_to_base64(pth):
     if not os.path.exists(pth):
@@ -16,11 +20,11 @@ def localpath_to_base64(pth):
     return "base64://" + base64.b64encode(byt).decode() 
 
 intro = """Lovely！Fairy！Momoi Airi！
-Momoi Airi 爱莉萝卜是一款基于AiriCore的高性能群聊bot，人物原型取自手游Project SEKAI。
-airi提供PJSK查卡功能，签到、漂流瓶等娱乐功能，更多功能请发送 help 查看。
-bot一群：1030569383
-bot二群：808085026
-airi是完全公益的，不接受任何形式的收费和赞助。如果你遇到收费拉群、索要赞助等情况，请联系bot主举报！
+本Bot是一款基于 AiriCore 的高性能QQ群Bot，功能请发送 help 查看。
+Bot一群：1030569383
+Bot二群：808085026
+Bot官网：www.airi.asia
+本Bot是完全公益的，不接受任何形式的收费和赞助。如果你遇到收费拉群、索要赞助等情况，请联系bot主举报！
 bot主联系邮箱：saki@saki.ln.cn
 """
 
@@ -64,13 +68,27 @@ async def handle_group_increase(bot: Bot, event: GroupIncreaseNoticeEvent):
     except Exception as e:
         print(f"处理入群事件时发生错误：{str(e)}")
 
-# 修改为 on_command 并添加参数解析
+
 airi_full_group = on_command('airifullgroup', priority=5, block=True, permission=SUPERUSER)
 
 @airi_full_group.handle()
 async def _(bot: Bot, arg: Message = CommandArg()):
-    # 根据是否有参数决定发送内容
-    target_msg = arg if arg else msg
+    # 解析参数：第一个词为2fa码，剩余为消息内容
+    args = arg.extract_plain_text().strip().split(maxsplit=1)
+
+
+    digit = args[0].strip()
+    if len(args) < 2:
+        msg_content = ""
+    else:
+        msg_content = args[1].strip()
+    
+    # 2FA 验证
+    if not totp_verify(_2fa_key, digit):
+        await airi_full_group.finish("2fa verification failed")
+    
+    # 构造消息
+    target_msg = Message(msg_content) if len(msg_content) else msg
     
     for bot_instance in nonebot.get_bots().values():
         gr_list = await bot_instance.get_group_list()

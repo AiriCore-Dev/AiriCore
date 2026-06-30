@@ -13,6 +13,7 @@ import nonebot
 import requests
 import datetime
 from io import BytesIO
+from utils.totp_2fa import totp_verify
 from nonebot import get_driver, on_regex, on_startswith, on_fullmatch, require
 from nonebot.rule import to_me
 from nonebot.permission import SUPERUSER
@@ -26,6 +27,7 @@ from email.header import Header
 timings = require("nonebot_plugin_apscheduler").scheduler
 driver = get_driver()
 unified_password = getattr(driver.config, "unified_password", "")
+_2fa_key = getattr(driver.config, "_2fa_key", "")
 data = {}
 email_list = []
 
@@ -64,7 +66,7 @@ async def load_json():
             data = pickle.load(f)
     except:
         os.makedirs(os.path.join('data', 'airi_wish_bottle'))
-    gc.collect()
+        await save_to_json()
 
 @driver.on_shutdown
 async def save_to_json():
@@ -537,7 +539,7 @@ async def _(bot: Bot, ev: MessageEvent):
 有本事的话，用你的技术力去争夺属于你的唯一编号吧。'
     msg.append({"type": "node", "data": {"name": "心愿瓶编号的生成算法", "uin": bot.self_id, "content": res}})
 
-    msg.append({"type": "node", "data": {"name": "版权信息", "uin": bot.self_id, "content": 'Powered By airi_wish_bottle\nAuthor：Makino.S'}})     
+    msg.append({"type": "node", "data": {"name": "版权信息", "uin": bot.self_id, "content": 'Powered By AiriCore Dev.'}})     
     await bot.send_group_forward_msg(group_id=ev.group_id, messages=msg)
     del msg, res
     gc.collect()
@@ -553,9 +555,14 @@ async def _(bot: Bot, ev: MessageEvent):
     else:
         user_id = session_id
         gruop_id = None
-    src = ev.get_plaintext()[7:]
-    user_nick = await bot.get_group_member_info(group_id=gruop_id, user_id=user_id)
-    user_nick = (user_nick.get("nickname") or user_nick.get("card") or user_id)
+    src = ev.get_plaintext()[6:].strip()
+    while (tmpa := src.replace("  "," ")) != src:
+        src = tmpa
+    user_2fa_digit = src[:6]
+    if not totp_verify(_2fa_key, user_2fa_digit):
+        await superuser_debug.finish('2fa verification failed')
+    src = src[6:].strip()
+    user_nick = ev.sender.card or ev.sender.nickname
     if src == 'reset':
         await daily_clear()
         res = '刷新一天：命令执行成功'
