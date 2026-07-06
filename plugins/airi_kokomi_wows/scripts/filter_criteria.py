@@ -203,79 +203,8 @@ class Message_EN:
         'DIV2':'pvp_div2',
         'DIV3':'pvp_div3'
     }
-class Message_JA:
-    tier_dict = {
-        'T11': 11,
-        'T10': 10,
-        'T9': 9,
-        'T8': 8,
-        'T7': 7,
-        'T6': 6,
-        'T5': 5,
-        'T4': 4,
-        'T3': 3,
-        'T2': 2,
-        'T1': 1,
-        '11': 11,
-        '10': 10,
-        '9': 9,
-        '8': 8,
-        '7': 7,
-        '6': 6,
-        '5': 5,
-        '4': 4,
-        '3': 3,
-        '2': 2,
-        '1': 1,
-        'XI': 11,
-        'X': 10,
-        'IX': 9,
-        'VIII': 8,
-        'VII': 7,
-        'VI': 6,
-        'V': 5,
-        'IV': 4,
-        'III': 3,
-        'II': 2,
-        'I': 1
-    }
-    type_dict = {
-        'CV': 'AirCarrier',
-        'BB': 'Battleship',
-        'CA': 'Cruiser',
-        'CL': 'Cruiser',
-        'DD': 'Destroyer',
-        'SS': 'Submarine',
-        'AIRCARRIER': 'AirCarrier',
-        'BATTLESHIP': 'Battleship',
-        'CRUISER': 'Cruiser',
-        'DESTORYER': 'Destroyer',
-        'SUBMARINE': 'Submarine',
-        'SUB': 'Submarine'
-    }
-    nation_dict = {
-        'USA': 'usa',
-        'AMERICA': 'usa',
-        'JAPAN': 'japan',
-        'EUROPE': 'europe',
-        'FRANCE': 'france',
-        'GERMANY': 'germany',
-        'UK': 'uk',
-        'PANASIA': 'pan_asia',
-        'USSR': 'ussr',
-        'RUSSIA': 'ussr',
-        'ITALY': 'italy',
-        'NETHERLANDS': 'netherlands',
-        'PANAMERICA': 'pan_america',
-        'PANUSA': 'pan_america',
-        'COMMONWEALTH': 'commonwealth',
-        'SPAIN': 'spain'
-    }
-    battle_dict = {
-        'SOLO':'pvp_solo',
-        'DIV2':'pvp_div2',
-        'DIV3':'pvp_div3'
-    }
+# JA 与 EN 的四个词典完全一致，直接复用 Message_EN
+Message_JA = Message_EN
 
 def main(
     lang: str,
@@ -305,26 +234,18 @@ def main(
             tier = message.tier_dict[msg]
             if tier not in ship_tier:
                 ship_tier.append(tier)
-            else:
-                pass
         elif msg in message.type_dict:
             type = message.type_dict[msg]
             if type not in ship_type:
                 ship_type.append(type)
-            else:
-                pass
         elif msg in message.nation_dict:
             nation = message.nation_dict[msg]
             if nation not in ship_nation:
                 ship_nation.append(nation)
-            else:
-                pass
         elif msg in message.battle_dict:
             battle = message.battle_dict[msg]
             if battle not in battle_type:
                 battle_type.append(battle)
-            else:
-                pass
         else:
             return None
     return (

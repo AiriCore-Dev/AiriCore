@@ -333,11 +333,11 @@ async def check_all_achiv(user_id, bot: Bot, ev: MessageEvent):
             break
     data[user_id]['need_reborn'] = 1
     if j == 106:
-        msg = MessageSegment.text('\n✅ 恭喜你完成了全收藏！\n爱莉给你比一个心哦！')
+        msg = MessageSegment.text('\n✅ 恭喜你完成了全收藏！\nAiri给你比一个心哦！')
     elif acquire_sticker(user_id, j):
         new_sticker = await generate_new_sticker(j, user_id)
         msg = MessageSegment.text(
-            '\n✅ 恭喜你集齐了1-100号收藏品！\n爱莉给你比一个心哦！\n📦 获得第{}号创世收藏品\n🎉是NEW，好耶！🎉\n'.format(j)
+            '\n✅ 恭喜你集齐了1-100号收藏品！\nAiri给你比一个心哦！\n📦 获得第{}号创世收藏品\n🎉是NEW，好耶！🎉\n'.format(j)
         ) + MessageSegment.image(new_sticker)
         if j < 105:
             msg += f"\n长路漫漫……离真正的全收藏还差{105 - j}轮轮回！"
@@ -371,7 +371,7 @@ async def _(bot: Bot, ev: MessageEvent):
     if user_id not in data:
         once_reg = 1
         data[user_id] = new_account()
-        res += '欢迎来到爱莉的收藏世界！\n☑️ 发送指令 签到帮助 查看所有功能哦！\n\n'
+        res += '欢迎来到Airi的收藏世界！\n☑️ 发送指令 签到帮助 查看所有功能哦！\n\n'
 
     if not data[user_id]['check_times_daily']:
         data[user_id]['checked_days'] += 1
@@ -466,8 +466,8 @@ async def _(bot: Bot, ev: MessageEvent):
  -今日挑战：完成游戏获取积分！\n\
  -购买提示：花费500积分购买随机一条有关隐藏收藏品的提示信息\n\n\
 （*以下指令需要@机器人*）\n\
- -@爱莉 转给@...X个积分（X为数字）：转账给你@的人\n不支持转至未注册账户的人，单日转出限额200积分，手续费10%（向上取整）\n\
- -@爱莉 重生：重开存档\n\n\
+ -@Airi 转给@...X个积分（X为数字）：转账给你@的人\n不支持转至未注册账户的人，单日转出限额200积分，手续费10%（向上取整）\n\
+ -@Airi 重生：重开存档\n\n\
  （更多功能实装中）'
 
     gameplay = '☑️ 游戏玩法：\n\
@@ -789,7 +789,7 @@ async def _(bot: Bot, ev: MessageEvent):
     data[transfer_id]['credits'] += transfer_num
     user_nick = await bot.get_group_member_info(group_id=group_id, user_id=transfer_id)
     user_nick = (user_nick.get("nickname") or user_nick.get("card") or transfer_id)
-    await transcation.send('✅ 交易成功！\n你已向{}转出了{}积分\n爱莉从中收取了{}点手续费(10%)\n剩余积分：{}'.format(user_nick, transfer_num, taxs, data[user_id]['credits']), reply_message=True)
+    await transcation.send('✅ 交易成功！\n你已向{}转出了{}积分\nAiri从中收取了{}点手续费(10%)\n剩余积分：{}'.format(user_nick, transfer_num, taxs, data[user_id]['credits']), reply_message=True)
 
     if data[transfer_id]['credits'] >= 2000 and acquire_sticker(transfer_id, 20):
         new_sticker = await generate_new_sticker(20, transfer_id)

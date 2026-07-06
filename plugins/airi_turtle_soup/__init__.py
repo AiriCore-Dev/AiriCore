@@ -134,9 +134,6 @@ async def call_llm(prompt, input, deepseek):
         stop=None,
         frequency_penalty=0,
         presence_penalty=0.1,
-        extra_body={
-            "thinking": {"type": "enabled" if deepseek else "disabled"}
-        }
     )
     return json.loads(completion.model_dump_json())["choices"][0]["message"]["content"]
 

@@ -7,8 +7,17 @@ from .. import (
     Text_Data
 )
 from .. import plugin_path
+
+# 各语言错误卡片 4 行文本坐标（cn 与 en/ja 不同；en 与 ja 相同）
+_ERROR_XY = {
+    'cn': [(797, 820), (890, 876), (890, 930), (890, 985)],
+    'en': [(815, 820), (930, 876), (891, 930), (1010, 985)],
+    'ja': [(815, 820), (930, 876), (891, 930), (1010, 985)],
+}
+
+
 def main(
-    result:dict, 
+    result:dict,
     lang: str
 ) -> dict:
     if result['message'] in ['NETWORK FAILURE','NETWORK TIMEOUT']:
@@ -27,159 +36,34 @@ def main(
             result['track_id'],
             Plugin_Config.VERSON
         ]
-    func_dict = {
-        'cn': get_png_cn,
-        'en': get_png_en,
-        'ja': get_png_ja
-    }
-    func = func_dict[lang]
-    res_img = func(
+    res_img = get_png(
+        lang=lang,
         error_type=error_type,
         error_data=error_data
     )
     result = {
-        'status': 'ok', 
-        'message': 'SUCCESS', 
+        'status': 'ok',
+        'message': 'SUCCESS',
         'img': None
     }
     result['img'] = Picture.return_img(img=res_img)
 
     return result
 
-def get_png_ja(error_type:str,error_data:list):
+def get_png(lang:str,error_type:str,error_data:list):
     text_list = []
-    png_path = os.path.join(plugin_path, 'png', 'bg_ja', 'background', f'kokomi_{error_type}.png')
+    png_path = os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', f'kokomi_{error_type}.png')
     res_img = cv2.imread(png_path, cv2.IMREAD_UNCHANGED)
-    text_list.append(
-        Text_Data(
-            xy=(815, 820),
-            text=error_data[0],
-            fill=(75,75,75),
-            font_index=1,
-            font_size=45
+    for xy, text in zip(_ERROR_XY[lang], error_data):
+        text_list.append(
+            Text_Data(
+                xy=xy,
+                text=text,
+                fill=(75,75,75),
+                font_index=1,
+                font_size=45
+            )
         )
-    )
-    text_list.append(
-        Text_Data(
-            xy=(930, 876),
-            text=error_data[1],
-            fill=(75,75,75),
-            font_index=1,
-            font_size=45
-        )
-    )
-    text_list.append(
-        Text_Data(
-            xy=(891, 930),
-            text=error_data[2],
-            fill=(75,75,75),
-            font_index=1,
-            font_size=45
-        )
-    )
-    text_list.append(
-        Text_Data(
-            xy=(1010, 985),
-            text=error_data[3],
-            fill=(75,75,75),
-            font_index=1,
-            font_size=45
-        )
-    )
-    res_img = Picture.cv2_to_pil(
-        res_img=res_img
-    )
-    res_img = Picture.add_text(text_list, res_img)
-    res_img = res_img.resize((1480, 630))
-    return res_img
-
-def get_png_en(error_type:str,error_data:list):
-    text_list = []
-    png_path = os.path.join(plugin_path, 'png', 'bg_en', 'background', f'kokomi_{error_type}.png')
-    res_img = cv2.imread(png_path, cv2.IMREAD_UNCHANGED)
-    text_list.append(
-        Text_Data(
-            xy=(815, 820),
-            text=error_data[0],
-            fill=(75,75,75),
-            font_index=1,
-            font_size=45
-        )
-    )
-    text_list.append(
-        Text_Data(
-            xy=(930, 876),
-            text=error_data[1],
-            fill=(75,75,75),
-            font_index=1,
-            font_size=45
-        )
-    )
-    text_list.append(
-        Text_Data(
-            xy=(891, 930),
-            text=error_data[2],
-            fill=(75,75,75),
-            font_index=1,
-            font_size=45
-        )
-    )
-    text_list.append(
-        Text_Data(
-            xy=(1010, 985),
-            text=error_data[3],
-            fill=(75,75,75),
-            font_index=1,
-            font_size=45
-        )
-    )
-    res_img = Picture.cv2_to_pil(
-        res_img=res_img
-    )
-    res_img = Picture.add_text(text_list, res_img)
-    res_img = res_img.resize((1480, 630))
-    return res_img
-
-def get_png_cn(error_type:str,error_data:list):
-    text_list = []
-    png_path = os.path.join(plugin_path, 'png', 'bg_cn', 'background', f'kokomi_{error_type}.png')
-    res_img = cv2.imread(png_path, cv2.IMREAD_UNCHANGED)
-    text_list.append(
-        Text_Data(
-            xy=(797, 820),
-            text=error_data[0],
-            fill=(75,75,75),
-            font_index=1,
-            font_size=45
-        )
-    )
-    text_list.append(
-        Text_Data(
-            xy=(890, 876),
-            text=error_data[1],
-            fill=(75,75,75),
-            font_index=1,
-            font_size=45
-        )
-    )
-    text_list.append(
-        Text_Data(
-            xy=(890, 930),
-            text=error_data[2],
-            fill=(75,75,75),
-            font_index=1,
-            font_size=45
-        )
-    )
-    text_list.append(
-        Text_Data(
-            xy=(890, 985),
-            text=error_data[3],
-            fill=(75,75,75),
-            font_index=1,
-            font_size=45
-        )
-    )
     res_img = Picture.cv2_to_pil(
         res_img=res_img
     )

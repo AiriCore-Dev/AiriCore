@@ -77,13 +77,13 @@ def save_group_record(gid: str, record: dict) -> None:
 async def construct_change_waifu_msg(member_info: dict, new_waifu_id: int, bot_id: int, times: int,
                                      limit_times: int) -> Message:
     if new_waifu_id == -1:
-        return Message(f'\n渣男，爱莉把你老婆没收了！')
+        return Message(f'\n渣男，Airi把你老婆没收了！')
     member_name = (member_info.get("card") or member_info.get("nickname") or new_waifu_id)
     img = await download_avatar(str(new_waifu_id))
     if new_waifu_id == bot_id:
         return MessageSegment.text(
-            f'\n你今天的老婆是爱莉哦~'
-            f'\n千万不要把爱莉换掉哦~（斜眼笑）') + MessageSegment.image(
+            f'\n你今天的老婆是Airi哦~'
+            f'\n千万不要把Airi换掉哦~（斜眼笑）') + MessageSegment.image(
             img)
     msg = MessageSegment.text('')
     return msg + MessageSegment.text(f'\n你今天的老婆是：') + MessageSegment.image(img) + MessageSegment.text(
@@ -95,14 +95,14 @@ async def construct_waifu_msg(member_info: dict, waifu_id: int, bot_id: int, is_
     构造发送信息
     """
     if waifu_id == -1:
-        return Message(f'\n渣男，爱莉把你老婆没收了！')
+        return Message(f'\n渣男，Airi把你老婆没收了！')
     member_name = (member_info.get("card") or member_info.get("nickname") or waifu_id)
     img = await download_avatar(str(waifu_id))
     if waifu_id == bot_id:
         if is_first:
-            return MessageSegment.text(f'\n你今天的老婆是爱莉哦~\n打卡啦摩托！\n') + MessageSegment.image(img)
+            return MessageSegment.text(f'\n你今天的老婆是Airi哦~\n打卡啦摩托！\n') + MessageSegment.image(img)
         else:
-            return MessageSegment.text(f'\n你今天的老婆是爱莉哦，不可以再有别人了呢~\n开始sj👀👀👀') + MessageSegment.image(img)
+            return MessageSegment.text(f'\n你今天的老婆是Airi哦，不可以再有别人了呢~\n开始石见👀👀👀') + MessageSegment.image(img)
 
     if is_first:
         return MessageSegment.text(f'\n你今天的老婆是：') + MessageSegment.image(img) + MessageSegment.text(

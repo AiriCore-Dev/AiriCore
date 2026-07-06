@@ -54,7 +54,7 @@ PJSK综合查询 By NagiHina
         "战舰世界综合查询",
         """----- 战舰世界综合查询 -----
 
-- airi_kokomi_wows:
+- Airi_Kokomi_WoWS:
 战舰世界水表查询 By Maoyu，AiriCore Dev.
 * 使用 wws 触发
 * 发送 wws help 查看帮助""",
@@ -107,7 +107,11 @@ Airi海龟汤 By AiriCore Dev.
 今天吃什么 By Cvandia
 * 常用指令: 今天吃什么，今天喝什么
 
-- Airi_choice:
+- Airi_Netease_Music:
+网易云点歌 By AiriCore Dev.
+* 指令：点歌 歌曲名
+
+- Airi_Choice:
 随机挑选插件 By AiriCore Dev.
 * 发送 choicehelp 查看帮助
 
@@ -124,7 +128,7 @@ emoji合成
 * 指令：任意emoji+任意emoji
 (需为系统自带的emoji而不是qq的emoji)
 
-- airi_roll: 
+- Airi_Roll: 
 抽取随机数 By AiriCore Dev.
 * 发送 roll help 查看帮助
 
@@ -136,9 +140,18 @@ emoji合成
 扫雷游戏 By MeetWq
 * 发送 扫雷帮助 查看帮助
 
-- Airi_attrwhich:
+- Airi_Attrwhich:
 英文缩写查询 By AiriCore Dev.
 * 指令：xxx是什么""",
+    ),
+    make_node(
+        "B站订阅",
+        """----- B站订阅 -----
+
+- Airi_Bilibili_Post:
+B站动态&直播推送 By AiriCore Dev.
+（订阅/取消订阅需群管理权限）
+* 发送 bili帮助 查看帮助""",
     ),
     make_node(
         "棋类游戏",
@@ -152,7 +165,7 @@ emoji合成
 
 - cchess:
 中国象棋
-* 开局指令：@爱莉 象棋人机lvX(1-8) 或 @爱莉 象棋对战（人打人）
+* 开局指令：@Airi 象棋人机lvX(1-8) 或 @Airi 象棋对战（人打人）
 * 常用指令：炮二平五（中文格式），b2e2（坐标格式），结束下棋，显示棋盘，
 悔棋（人机模式可无限悔棋；对战模式只能撤销自己上一手下的棋）
 （在PvP模式下，由游戏发起人与第一个响应游戏的人组成先后手，其他人无法参与）""",
@@ -171,7 +184,7 @@ Airi智能体 By AiriCore Dev.
 * 引用一条合并转发消息并发送 packpic 指令，压缩打包其中所有的图片
 
 - Airi-Status:
-显示爱莉服务器状态 By AiriCore Dev.
+显示AiriCore服务器状态 By AiriCore Dev.
 * 发送 状态 显示
 
 - Airi-Help:
@@ -203,7 +216,8 @@ Momoi Airi 桃井爱莉
         MessageSegment.text(
             """Bot使用群：
 * 一群：1030569383
-* 二群：808085026"""
+* 二群：808085026
+* Dev群：1051523491"""
         ),
     ),
     make_node(

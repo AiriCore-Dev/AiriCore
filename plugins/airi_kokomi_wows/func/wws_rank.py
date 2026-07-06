@@ -1,3 +1,4 @@
+from ._base import program_error
 import os
 import cv2
 import gc
@@ -8,7 +9,6 @@ from .. import (
     Box_Data,
     call_api,
     dog_tag,
-    write_error,
     fonts,
     plugin_path
 )
@@ -60,23 +60,9 @@ async def get_data(
         }
         result['img'] = Picture.return_img(img=res_img)
         del res_img
-        gc.collect()
         return result
     except Exception as e:
-        import traceback
-        error_info = traceback.format_exc()
-        track_id = write_error(
-            error_file=__file__,
-            error_params=parameter,
-            error_name=str(type(e).__name__),
-            error_info=error_info
-        )
-        return {
-            'status': 'error', 
-            'message': 'PROGRAM ERROR', 
-            'error':f'{str(type(e).__name__)}', 
-            'track_id': f'{track_id}'
-        }
+        return program_error(e, __file__, parameter)
     finally:
         gc.collect()
 
@@ -477,7 +463,6 @@ def get_png(
     res_img = Picture.add_box(box_list, res_img)
     res_img = Picture.add_text(text_list, res_img)
     res_img = res_img.crop((0, 0, 2428, png_len))
-    #res_img = res_img.resize((1214, int(png_len/2)))
     return res_img
 
 

@@ -1,7 +1,7 @@
 import re
 from .scripts import (
     get_bind,
-    wws_lang,
+    default_lang,
     wws_error,
     wws_message
 )
@@ -46,7 +46,7 @@ class select_funtion:
                 bind_data['status'] == 'ok' and 
                 bind_data['message'] == 'NO BIND DATA'
             ):
-                default_lang = wws_lang.get_default_lang(
+                lang = default_lang.get_default_lang(
                     platform=platform,
                     platform_id=platform_id,
                     channel_id=channel_id
@@ -54,7 +54,6 @@ class select_funtion:
                 aid=None
                 server=None
                 use_pr=True
-                lang=default_lang
                 use_ac=False
                 ac=None
             elif (

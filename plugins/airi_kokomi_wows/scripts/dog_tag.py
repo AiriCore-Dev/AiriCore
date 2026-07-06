@@ -1,7 +1,6 @@
 import os
 import cv2
 import random
-from nonebot import logger
 from ..data_source import (
     Plugin_Config,
     Picture,
@@ -64,7 +63,6 @@ def dog_tag(
     if  Plugin_Config.SHOW_SPECIAL_TAG is True and os.path.exists(special_png_path):
         symbol = cv2.imread(special_png_path, cv2.IMREAD_UNCHANGED)
         x1 = 98
-        x2 = 129
         x2 = x1 + symbol.shape[1]
         y2 = y1 + symbol.shape[0]
         img = Picture.merge_img(img, symbol, y1, y2, x1, x2)

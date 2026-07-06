@@ -43,7 +43,7 @@ async def main(bot: Bot, ev: MessageEvent):
         times += 1
         max_word = random.choice(max_word_tmp)
         res[max_word] += 1  
-    output = '爱莉在 '
+    output = 'Airi在 '
     for i in param: output += i + '，'
     output = output[:-1]
     output += ' 这{}个选项中随机抽了{}次\n以下是每个选项随到的次数：\n'.format(len(param), times)
@@ -88,14 +88,14 @@ async def main(bot: Bot, ev: MessageEvent):
         times += 1
         max_word = random.choice(max_word_tmp)
         res[max_word] += 1  
-    output = '爱莉在 '
+    output = 'Airi在 '
     for i in param: output += i + '，'
     output = output[:-1]
     output += ' 这{}个选项中随机抽了{}次\n以下是每个选项随到的次数：\n'.format(len(param), times)
     for i in param: 
         output += i + '：' + str(res[i]) + '次\n'
     if detailed:
-        output += '\n根据少数服从多数的原则，爱莉建议你选择{}'.format(max_word)
+        output += '\n根据少数服从多数的原则，Airi建议你选择{}'.format(max_word)
     else:
         output = '{}'.format(max_word)
     del res, param, times, max_word, max_word_tmp
@@ -104,4 +104,4 @@ async def main(bot: Bot, ev: MessageEvent):
     
 @airi_choice_help.handle()
 async def main(bot: Bot, ev: MessageEvent):
-    await airi_choice_help.finish('⚜️ 用法：\n\n☑️ @爱莉 A还是B（还是C……）（可无限续杯）：从罗列的元素中随机挑出一个\n\n☑️ 上述命令后面加参数“(空格)/详细”：显示详细的抽取过程', reply_message = True)
+    await airi_choice_help.finish('⚜️ 用法：\n\n☑️ @Airi A还是B（还是C……）（可无限续杯）：从罗列的元素中随机挑出一个\n\n☑️ 上述命令后面加参数“(空格)/详细”：显示详细的抽取过程', reply_message = True)

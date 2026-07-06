@@ -4,6 +4,7 @@ from nonebot.adapters.onebot.v11 import Message
 from nonebot.params import T_State
 from nonebot.plugin import on_endswith
 from nonebot.adapters.onebot.v11 import Bot,Event
+from nonebot.rule import to_me
 
 async def get_sx(word):
     url = "https://lab.magiconch.com/api/nbnhhsh/guess"
@@ -22,7 +23,7 @@ async def get_sx(word):
             return msg if msg else []
 
 
-sx = on_endswith("是什么")
+sx = on_endswith("是什么", rule=to_me())
 
 
 @sx.handle()
@@ -30,6 +31,8 @@ async def _(bot: Bot,event: Event):
     msg = str(event.get_message())[:-3]
     data = await get_sx(msg)
     result = ""
+    if not data:
+        await sx.finish(message=f"没有找到缩写 {msg} 的意思呢～")
     try:
         data = data[0]
         name = data['name']
@@ -49,4 +52,5 @@ async def _(bot: Bot,event: Event):
     except KeyError:
         #await sx.finish(message=f"出错啦")
         return
+
 

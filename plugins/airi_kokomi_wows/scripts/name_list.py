@@ -1,12 +1,9 @@
 import os
-import time
 import cv2
-from PIL import Image
 import gc
 from .wws_error import main as create_error_card
 from .wws_message import main as return_message
 from .. import (
-    Plugin_Config,
     Picture,
     Game_Data,
     Text_Data,

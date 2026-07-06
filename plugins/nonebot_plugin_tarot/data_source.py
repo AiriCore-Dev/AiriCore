@@ -174,7 +174,7 @@ class Tarot:
             card_info_list = self._random_cards(all_cards, theme, 1)
 
         # 3. Get the text and image
-        flag, body = await self._get_text_and_image(theme, card_info_list[0])
+        flag, body = await self._get_text_and_image(theme, card_info_list[0], 1)
 
         return body
     
