@@ -29,5 +29,10 @@ status = on_fullmatch(("status","状态"), block=True)
 
 @status.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    await status.finish(MessageSegment.image("base64://" + base64.b64encode(draw()).decode()))
+    try:
+        login_info = await bot.get_login_info()
+        nickname = login_info.get("nickname") or "Momoi Airi"
+    except Exception:
+        nickname = "Momoi Airi"
+    await status.finish(MessageSegment.image("base64://" + base64.b64encode(draw(nickname)).decode()))
     

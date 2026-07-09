@@ -16,6 +16,7 @@ import json
 from datetime import datetime, timezone, timedelta
 
 from . import counter
+from . import cache
 from .charts import draw_pies_vstack, draw_summary, render_bot_cell, draw_grid
 
 async def decimal_to_quaternary(decimal_num):
@@ -119,15 +120,26 @@ async def _download_url(url: str) -> bytes:
 
 
 async def _user_avatar(uid: str) -> bytes:
+    cached = cache.get("user_avatar", uid, ttl=cache.TTL_AVATAR)
+    if cached:
+        return cached
     url = f"http://q1.qlogo.cn/g?b=qq&nk={uid}&s=640"
     data = await _download_url(url)
     if not data or hashlib.md5(data).hexdigest() == _DEFAULT_AVATAR_MD5:
         data = await _download_url(f"http://q1.qlogo.cn/g?b=qq&nk={uid}&s=100")
+    if data:
+        cache.put("user_avatar", uid, data)
     return data
 
 
 async def _group_avatar(gid: str) -> bytes:
-    return await _download_url(f"http://p.qlogo.cn/gh/{gid}/{gid}/640")
+    cached = cache.get("group_avatar", gid, ttl=cache.TTL_AVATAR)
+    if cached:
+        return cached
+    data = await _download_url(f"http://p.qlogo.cn/gh/{gid}/{gid}/640")
+    if data:
+        cache.put("group_avatar", gid, data)
+    return data
 
 
 async def _prefetch_avatars(user_ids, group_ids) -> dict:
@@ -143,11 +155,19 @@ async def _prefetch_avatars(user_ids, group_ids) -> dict:
 
 
 async def _bot_nick(bot: Bot, self_id: str) -> str:
+    cached = cache.get("bot_name", self_id, ttl=cache.TTL_NAME)
+    if cached:
+        return cached
     try:
         info = await bot.get_stranger_info(user_id=int(self_id))
-        return info.get("nickname") or info.get("nick") or self_id
+        nick = info.get("nickname") or info.get("nick")
+        if nick:
+            cache.put("bot_name", self_id, nick)
+            return nick
     except Exception:
-        return self_id
+        pass
+    # 拿不到就退回旧缓存(不判过期),再退回 self_id
+    return cache.get("bot_name", self_id) or self_id
 
 
 async def _group_labeler(bot: Bot, sessions):
@@ -157,11 +177,19 @@ async def _group_labeler(bot: Bot, sessions):
     for sid in sessions:
         if sid == counter.PRIVATE_KEY:
             continue
+        cached = cache.get("group_name", sid, ttl=cache.TTL_NAME)
+        if cached:
+            names[sid] = cached
+            continue
         try:
             info = await bot.get_group_info(group_id=int(sid))
-            names[sid] = info.get("group_name") or ""
+            gname = info.get("group_name") or ""
+            if gname:
+                cache.put("group_name", sid, gname)
+            # 群名拿不到时退回旧缓存(不判过期),仍拿不到给空串
+            names[sid] = gname or cache.get("group_name", sid) or ""
         except Exception:
-            names[sid] = ""
+            names[sid] = cache.get("group_name", sid) or ""
 
     def label_of(sid):
         if sid == counter.PRIVATE_KEY:
@@ -225,6 +253,7 @@ async def _(bot: Bot, ev: MessageEvent):
         groups = set(data.get('recv', {})) | set(data.get('sent', {}))
         avatars = await _prefetch_avatars([], groups)
         pie = await _bot_pies(bot, arg, data, avatars)
+        cache.flush()
         msg = Message(f'📊 {nick}({arg}) · {today}\n') + _img_seg(pie)
         await bot.send_group_msg(group_id=ev.group_id, message=msg)
         return
@@ -256,6 +285,7 @@ async def _(bot: Bot, ev: MessageEvent):
     grid = draw_grid(cells, cols=4)
     summary = draw_summary(bot_totals)
 
+    cache.flush()
     await airi_analysis.finish(_img_seg(grid)+_img_seg(summary), reply_message=True)
 
 

@@ -11,7 +11,7 @@ swap_color: tuple[int, int, int, int] = (251, 170, 147, 255)
 disk_color: tuple[int, int, int, int] = (198, 198, 198, 255)
 transparent_color: tuple[int, int, int, int] = (0, 0, 0, 0)
 details_color: tuple[int, int, int, int] = (198, 198, 198, 255)
-nickname_color: tuple[int, int, int, int] = (255, 170, 221, 255)
+nickname_color: tuple[int, int, int, int] = (255, 170, 204, 255)
 
 
 def get_color(color: Color) -> tuple[int, int, int, int]:

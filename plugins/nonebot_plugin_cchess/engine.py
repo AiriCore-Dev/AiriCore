@@ -1,5 +1,6 @@
 import asyncio
 import re
+import sys
 from pathlib import Path
 
 from .move import Move
@@ -17,8 +18,15 @@ class UCCIEngine:
     async def open(self):
         if not self.engine_path.exists():
             raise EngineError("找不到UCCI引擎！")
+        # `.py` 引擎（纯 Python 实现）用当前解释器启动，保证跨平台；
+        # 其它文件按原生可执行程序启动。
+        if self.engine_path.suffix == ".py":
+            program, *args = sys.executable, str(self.engine_path)
+        else:
+            program, args = str(self.engine_path), []
         self._process = await asyncio.create_subprocess_exec(
-            program=str(self.engine_path),
+            program,
+            *args,
             stdin=asyncio.subprocess.PIPE,
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,

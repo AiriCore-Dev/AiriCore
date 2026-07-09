@@ -1,1 +1,17 @@
-**/.DS_Store
+# Python
+*.pyc
+__pycache__/
+record/
+
+# Django/Database
+*.pk
+*.sqlite3
+*.bak
+*.zip
+*.log
+*.pem
+*.key
+*.txt
+
+# macOS
+.DS_Store

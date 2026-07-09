@@ -9,6 +9,7 @@ from nonebot import get_driver
 from nonebot.adapters.onebot.v11 import MessageSegment, Message
 
 from .config import Config
+from . import cache
 
 driver = get_driver()
 global_config = nonebot.get_driver().config
@@ -28,6 +29,14 @@ async def today_waifu_init() -> None:
         record_dir.mkdir(parents=True, exist_ok=True)
     for file in record_dir.glob('*.json'):
         TodayWaifuRecord[file.stem] = load_json(file)
+
+
+@driver.on_shutdown
+async def today_waifu_shutdown() -> None:
+    """
+    退出前将头像缓存落盘
+    """
+    cache.flush()
 
 
 def save_json(data, json_file_path: Union[str, Path]) -> None:
@@ -114,13 +123,18 @@ async def construct_waifu_msg(member_info: dict, waifu_id: int, bot_id: int, is_
 
 async def download_avatar(uid: str) -> bytes:
     """
-    根据 qq号 获取头像
+    根据 qq号 获取头像，带 3 天缓存
     """
+    cached = cache.get_avatar(uid)
+    if cached is not None:
+        return cached
     url = f"http://q1.qlogo.cn/g?b=qq&nk={uid}&s=640"
     data = await download_url(url)
     if not data or hashlib.md5(data).hexdigest() == "acef72340ac0e914090bd35799f5594e":
         url = f"http://q1.qlogo.cn/g?b=qq&nk={uid}&s=100"
         data = await download_url(url)
+    if data:
+        cache.put_avatar(uid, data)
     return data
 
 

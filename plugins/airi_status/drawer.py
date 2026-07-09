@@ -37,12 +37,152 @@ driver = get_driver()
 airicore_version = getattr(driver.config, "airicore_version", "")
 
 system = platform.uname()
-#nickname = list(bot_config.nickname)[0] if bot_config.nickname else "unknown"
-nickname = "Momoi Airi"
+
+# 真实服务器信息（cpuinfo 较慢，模块加载时取一次即可）
+_real_cpu_model = cpuinfo.get_cpu_info().get("brand_raw", "") or platform.processor() or "Unknown CPU"
+_real_os_info = f"{system.system} {system.release} {system.machine}"
+
+
+def _resolve(config_key: str, real_value: str) -> str:
+    """配置项非空则用配置值替换，为空则回退到真实信息"""
+    value = getattr(driver.config, config_key, "")
+    value = str(value).strip() if value is not None else ""
+    return value if value else real_value
 
 adlam_fnt = ImageFont.truetype(str(adlam_font_path), 36)
 spicy_fnt = ImageFont.truetype(str(spicy_font_path), 38)
 baotu_fnt = ImageFont.truetype(str(baotu_font_path), 64)
+_nick_size = 75
+# 中文昵称用支持 CJK 的 baotu.ttf，非中文继续用 baotu_fnt(ADLaMDisplay)
+_baotu_cjk_font_path = Path(__file__).parent / "resources" / "fonts" / "baotu.ttf"
+baotu_cjk_fnt = ImageFont.truetype(str(_baotu_cjk_font_path), _nick_size)
+
+
+def _has_cjk(text: str) -> bool:
+    """判断字符串是否包含中文（CJK 统一表意文字）"""
+    return any("一" <= ch <= "鿿" or "㐀" <= ch <= "䶿" for ch in text)
+
+
+# ---------------------------------------------------------------------------
+# 跨平台字体回退（font fallback）
+#
+# PIL 不会自动回退：字库里没有的字形（如 ✶ U+2736）会渲染成豆腐块。
+# 这里逐字符检测覆盖，缺失的字符用系统里带该字形的字体单独渲染，
+# 其余字符仍用原字体，互不影响。生产在 Linux，故候选路径覆盖多系统。
+# ---------------------------------------------------------------------------
+
+# 系统符号/CJK 回退字体候选（按优先级；只挑存在的加载）。
+# 可用 .env 的 status_fallback_fonts 追加自定义路径（逗号分隔，优先级最高）。
+_FALLBACK_FONT_CANDIDATES = [
+    # Linux 常见
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+    "/usr/share/fonts/truetype/noto/NotoSansSymbols2-Regular.ttf",
+    "/usr/share/fonts/truetype/noto/NotoSansSymbols-Regular.ttf",
+    "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
+    "/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc",
+    "/usr/share/fonts/truetype/wqy/wqy-microhei.ttc",
+    "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",
+    "/usr/share/fonts/truetype/arphic/uming.ttc",
+    "/usr/share/fonts/google-noto/NotoSansSymbols2-Regular.ttf",
+    "/usr/share/fonts/google-noto-cjk/NotoSansCJK-Regular.ttc",
+    # macOS 常见
+    "/System/Library/Fonts/Supplemental/Arial Unicode.ttf",
+    "/System/Library/Fonts/Apple Symbols.ttf",
+    "/System/Library/Fonts/ZapfDingbats.ttf",
+    "/System/Library/Fonts/Menlo.ttc",
+    # Windows 常见
+    "C:/Windows/Fonts/seguisym.ttf",
+    "C:/Windows/Fonts/arialuni.ttf",
+    "C:/Windows/Fonts/arial.ttf",
+]
+
+
+def _load_fallback_fonts(size: int) -> list[ImageFont.FreeTypeFont]:
+    """加载存在的回退字体（配置项路径优先）。"""
+    fonts: list[ImageFont.FreeTypeFont] = []
+    custom = getattr(driver.config, "status_fallback_fonts", "") or ""
+    custom_paths = [p.strip() for p in str(custom).split(",") if p.strip()]
+    for path in custom_paths + _FALLBACK_FONT_CANDIDATES:
+        try:
+            if os.path.exists(path):
+                fonts.append(ImageFont.truetype(path, size))
+        except Exception:
+            continue
+    return fonts
+
+
+# 昵称尺寸下的回退字体，模块加载时构建一次
+_fallback_fnts = _load_fallback_fonts(_nick_size)
+
+# 每个字体的 .notdef（豆腐块）签名缓存，用于判断字形是否缺失
+_notdef_cache: dict[int, bytes | None] = {}
+# (font id, char) -> 是否有真实字形
+_glyph_cache: dict[tuple[int, str], bool] = {}
+
+
+def _render_char_bytes(font: ImageFont.FreeTypeFont, ch: str) -> bytes | None:
+    """把单字符渲染到位图并返回像素字节，失败返回 None。"""
+    try:
+        mask = font.getmask(ch, mode="L")
+        if mask is None:
+            return None
+        return Image.frombytes("L", mask.size, bytes(mask)).tobytes()
+    except Exception:
+        return None
+
+
+def _notdef_signature(font: ImageFont.FreeTypeFont) -> bytes | None:
+    """取该字体 .notdef 字形的像素签名（用一个几乎不可能有字形的码位）。"""
+    fid = id(font)
+    if fid not in _notdef_cache:
+        _notdef_cache[fid] = _render_char_bytes(font, "￿")
+    return _notdef_cache[fid]
+
+
+def _has_glyph(font: ImageFont.FreeTypeFont, ch: str) -> bool:
+    """字体是否真的有该字符的字形（区别于渲染成豆腐块）。"""
+    key = (id(font), ch)
+    if key in _glyph_cache:
+        return _glyph_cache[key]
+    if ch in (" ", "\t"):
+        _glyph_cache[key] = True
+        return True
+    rendered = _render_char_bytes(font, ch)
+    if rendered is None:
+        result = False
+    else:
+        notdef = _notdef_signature(font)
+        # 与 .notdef 位图相同 → 无字形；空白位图也视为无字形
+        result = rendered != notdef and any(rendered)
+    _glyph_cache[key] = result
+    return result
+
+
+def _font_for_char(base_font: ImageFont.FreeTypeFont, ch: str) -> ImageFont.FreeTypeFont:
+    """优先用 base_font，缺字形则在回退字体里找第一个能渲染的。"""
+    if _has_glyph(base_font, ch):
+        return base_font
+    for fnt in _fallback_fnts:
+        if _has_glyph(fnt, ch):
+            return fnt
+    return base_font  # 都没有，退回 base（渲染成豆腐块，至少不崩）
+
+
+def _draw_text_fallback(
+    draw: ImageDraw.ImageDraw,
+    xy: tuple[int, int],
+    text: str,
+    base_font: ImageFont.FreeTypeFont,
+    fill,
+) -> float:
+    """逐字符渲染，缺字形的字符用回退字体单独画。返回文本总宽度。"""
+    x, y = xy
+    start_x = x
+    for ch in text:
+        fnt = _font_for_char(base_font, ch)
+        draw.text((x, y), ch, font=fnt, fill=fill)
+        x += fnt.getlength(ch)
+    return x - start_x
 
 class LiquidGlass:
     def __init__(
@@ -197,8 +337,11 @@ class LiquidGlass:
         
         return result.convert("RGB")
 
-def draw() -> bytes:
+def draw(nickname: str = "Momoi Airi") -> bytes:
     """绘图"""
+
+    # 配置项非空则替换昵称，为空则使用传入的 bot QQ 昵称
+    nickname = _resolve("status_nickname", nickname or "Momoi Airi")
 
     loaded_plugins = nonebot.get_loaded_plugins()
     
@@ -229,7 +372,8 @@ def draw() -> bytes:
 
         cpu, ram, swap, disk = get_status_info()
 
-        cpu_info = f"{cpu.usage}% - {cpu.freq}Ghz [14 cores]"
+        cpu_cores = _resolve("status_cpu_cores", str(cpu.core))
+        cpu_info = f"{cpu.usage}% - {cpu.freq}Ghz [{cpu_cores} cores]"
         ram_info = f"{ram.usage} / {ram.total} GB"
         swap_info = f"{swap.usage} / {swap.total} GB"
         disk_info = f"{disk.usage} / {disk.total} GB"
@@ -296,21 +440,29 @@ def draw() -> bytes:
         img = Image.alpha_composite(img, temp_img_resized)
         
         content = ImageDraw.Draw(img)
-        content.text((155, 595), nickname, font=baotu_fnt, fill=nickname_color)
+        nick_fnt = baotu_cjk_fnt if _has_cjk(nickname) else baotu_fnt
+        nick_y = 595 + (5 if _has_cjk(nickname) else 0)
+        # 逐字符渲染：base 字体缺字形的字符（如 ✶）自动用系统回退字体
+        nickname_length = _draw_text_fallback(
+            content, (155, nick_y), nickname, nick_fnt, nickname_color
+        )
         content.text((303, 772), cpu_info, font=spicy_fnt, fill=cpu_color)
         content.text((303, 927), ram_info, font=spicy_fnt, fill=ram_color)
         content.text((303, 1081), swap_info, font=spicy_fnt, fill=swap_color)
         content.text((303, 1235), disk_info, font=spicy_fnt, fill=disk_color)
 
+        cpu_model = _resolve("status_cpu_model", _real_cpu_model)
+        os_info = _resolve("status_os_info", _real_os_info)
+
         content.text(
             (352, 1378),
-            f"Apple M4 Pro",
+            cpu_model,
             font=adlam_fnt,
             fill=details_color,
         )
         content.text(
             (352, 1431),
-            "Darwin 25.5.0 arm64",
+            os_info,
             font=adlam_fnt,
             fill=details_color,
         )
@@ -327,7 +479,6 @@ def draw() -> bytes:
             fill=details_color,
         )
 
-        nickname_length = baotu_fnt.getlength(nickname)
         img.paste(marker, (155 + int(nickname_length) + 60, 605), marker)
 
         base = Image.alpha_composite(base, mask_img)

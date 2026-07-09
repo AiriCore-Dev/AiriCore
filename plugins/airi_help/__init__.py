@@ -34,13 +34,14 @@ def make_node(name: str, content) -> dict:
         },
     }
 
+version_png = image_segment("version", f"{airicore_version}.jpg")
 
 # 合并转发的全部分区：增删某一节点只需增删对应的 make_node(...) 即可
 msg = [
     make_node(
         "Momoi Airi",
         f"Momoi Airi 使用帮助\n⚙️ {airicore_version}"
-        + image_segment("version", f"{airicore_version}.jpg"),
+        + version_png,
     ),
     make_node(
         "音游类综合查询",
@@ -144,15 +145,15 @@ emoji合成
 英文缩写查询 By AiriCore Dev.
 * 指令：xxx是什么""",
     ),
-    make_node(
-        "B站订阅",
-        """----- B站订阅 -----
-
-- Airi_Bilibili_Post:
-B站动态&直播推送 By AiriCore Dev.
-（订阅/取消订阅需群管理权限）
-* 发送 bili帮助 查看帮助""",
-    ),
+#    make_node(
+#        "B站订阅",
+#        """----- B站订阅 -----
+#
+#- Airi_Bilibili_Post:
+#B站动态&直播推送 By AiriCore Dev.
+#（订阅/取消订阅需群管理权限）
+#* 发送 bili帮助 查看帮助""",
+#    ),
     make_node(
         "棋类游戏",
         """----- 棋类游戏 -----
