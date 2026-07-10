@@ -36,7 +36,7 @@ async def check_weijinci(text):
                 {"role": "system", "content": weijinci_prompt},
                 {"role": "user", "content": text},
             ],
-            max_completion_tokens=10,
+            max_completion_tokens=4096,
             temperature=0.1,
             top_p=0.1,
             stream=False,

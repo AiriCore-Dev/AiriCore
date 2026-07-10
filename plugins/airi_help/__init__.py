@@ -143,7 +143,7 @@ emoji合成
 
 - Airi_Attrwhich:
 英文缩写查询 By AiriCore Dev.
-* 指令：xxx是什么""",
+* 指令：@Airi xxx是什么""",
     ),
 #    make_node(
 #        "B站订阅",

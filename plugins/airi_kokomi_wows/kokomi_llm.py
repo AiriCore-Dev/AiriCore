@@ -27,7 +27,7 @@ async def kokomi_llm(input_words):
                     "content": input_words
                 }
             ],
-            max_completion_tokens=1024,
+            max_completion_tokens=4096,
             temperature=0,
             top_p=1,
             stream=False,
