@@ -1,15 +1,18 @@
 import asyncio
+import base64
 import random
 from io import BytesIO
 from pathlib import Path
 from typing import Dict, List, Tuple, Union
 
+import nonebot
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import (GroupMessageEvent, MessageEvent,
                                                PrivateMessageEvent)
 from nonebot.matcher import Matcher
 from PIL import Image
 
+from . import cache
 from .config import EventNotSupport, ResourceError, get_tarot, tarot_config
 
 try:
@@ -228,24 +231,10 @@ class Tarot:
         for p in img_dir.glob(_name + ".*"):
             img_name = p.name
 
-        if img_name == "":
-            if theme in tarot_config.tarot_official_themes:
-                data = await get_tarot(theme, _type, _name)
-                if data is None:
-                    return False, MessageSegment.text("图片下载出错，请重试或将资源部署本地……")
-
-                img: Image.Image = Image.open(BytesIO(data))
-            else:
-                # In user's theme, then raise ResourceError
-                raise ResourceError(
-                    f"Tarot image {theme}/{_type}/{_name} doesn't exist! Make sure the type {_type} is complete.")
-        else:
-            img: Image.Image = Image.open(img_dir / img_name)
-
         # 3. Choose up or down
         name_cn: str = card_info.get("name_cn")
-        if random.random() < 0.5:
-            # 正位
+        is_reversed: bool = random.random() >= 0.5
+        if not is_reversed:
             meaning: str = card_info.get("meaning").get("up")
             if flag: msg = MessageSegment.text(f"「{name_cn}正位」「{meaning}」\n")
             else: msg = MessageSegment.text(f"「{name_cn}正位」\n")
@@ -253,12 +242,34 @@ class Tarot:
             meaning: str = card_info.get("meaning").get("down")
             if flag: msg = MessageSegment.text(f"「{name_cn}逆位」「{meaning}」\n")
             else: msg = MessageSegment.text(f"「{name_cn}逆位」\n")
-            img = img.rotate(180)
 
-        buf = BytesIO()
-        img.save(buf, format='png')
+        if img_name == "":
+            if theme in tarot_config.tarot_official_themes:
+                data = await get_tarot(theme, _type, _name)
+                if data is None:
+                    return False, MessageSegment.text("图片下载出错，请重试或将资源部署本地……")
 
-        return True, msg + MessageSegment.image(buf)
+                img: Image.Image = Image.open(BytesIO(data))
+                if is_reversed:
+                    img = img.rotate(180)
+                buf = BytesIO()
+                img.save(buf, format='png')
+                img_b64 = "base64://" + base64.b64encode(buf.getvalue()).decode()
+            else:
+                # In user's theme, then raise ResourceError
+                raise ResourceError(
+                    f"Tarot image {theme}/{_type}/{_name} doesn't exist! Make sure the type {_type} is complete.")
+        else:
+            img_b64 = cache.get_card_b64(img_dir / img_name, is_reversed)
+            if img_b64 is None:
+                return False, MessageSegment.text("图片读取出错，请检查本地资源……")
+
+        return True, msg + MessageSegment.image(img_b64)
 
 
 tarot_manager = Tarot()
+
+
+@nonebot.get_driver().on_shutdown
+async def _tarot_cache_flush() -> None:
+    cache.flush()

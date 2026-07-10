@@ -13,6 +13,7 @@ record/
 *.pem
 *.key
 *.txt
+*.psd
 
 # macOS
 .DS_Store

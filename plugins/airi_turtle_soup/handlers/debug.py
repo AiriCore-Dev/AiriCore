@@ -1,47 +1,13 @@
-import os
-import gc
-import re
-import json
-import time
-import math
-import base64
-import random
-import shutil
-import pickle
-import hashlib
-import nonebot
-import requests
-import datetime
-from io import BytesIO
 from utils.totp_2fa import totp_verify
-from nonebot import get_driver, on_regex, on_startswith, on_fullmatch, require
-from nonebot.rule import to_me
-from nonebot.permission import SUPERUSER
-from nonebot.log import logger
-from nonebot.adapters.onebot.v11 import Bot, MessageSegment
-from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
-import smtplib
-from email.mime.text import MIMEText
-from email.header import Header
-
-from .base.state import driver, unified_password, _2fa_key, data, email_list
-from .base import state
-from .base.matchers import *
-from .base.helpers import *
-from .base.persistence import (
-    email_login,
-    load_json,
-    save_to_json,
-    daily_clear,
-    save_data_backup,
-    timings,
-)
-from . import handlers
-
+from nonebot.adapters.onebot.v11 import Bot
+from nonebot.adapters.onebot.v11.event import MessageEvent
+from ..base.matchers import superuser_debug
+from ..base.constants import _2fa_key
+from ..base import state
+from ..base.persistence import daily_clear, save_to_json, save_data_backup, load_json
 
 @superuser_debug.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    global data
     session_id = str(ev.get_session_id())
     if 'group' in session_id:
         split_id = session_id.split("_")
@@ -51,7 +17,7 @@ async def _(bot: Bot, ev: MessageEvent):
         user_id = session_id
         gruop_id = None
     src = ev.get_plaintext()[6:].strip()
-    while (tmpa := src.replace("  "," ")) != src:
+    while (tmpa := src.replace("  ", " ")) != src:
         src = tmpa
     user_2fa_digit = src[:6]
     if not totp_verify(_2fa_key, user_2fa_digit):
@@ -78,9 +44,6 @@ async def _(bot: Bot, ev: MessageEvent):
             res = '出错了: ' + repr(err)
         else:
             res = '命令执行成功' if not res else str(res)
-    elif src == 'email':
-        await email_login()
-        res = '登录邮箱：命令执行成功'
     else:
         try:
             try: res = eval(src)
@@ -89,4 +52,4 @@ async def _(bot: Bot, ev: MessageEvent):
             res = '出错了: ' + repr(err)
         else:
             res = '命令执行成功' if not res else str(res)
-    await superuser_debug.finish(res, reply_message = True)
+    await superuser_debug.finish(res, reply_message=True)

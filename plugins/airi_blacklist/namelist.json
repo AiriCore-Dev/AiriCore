@@ -1,1 +1,1 @@
-{"type": "blacklist", "blacklist": ["2404781093"], "whitelist": []}
+{"type": "blacklist", "user_blacklist": ["2404781093"], "user_whitelist": [], "group_blacklist": [], "group_whitelist": [], "bot_blacklist": [], "bot_whitelist": []}

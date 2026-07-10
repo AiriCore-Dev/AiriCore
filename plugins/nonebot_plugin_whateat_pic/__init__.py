@@ -25,11 +25,17 @@ except Exception:
     logger.warning("未安装定时插件依赖")
 from pathlib import Path
 from .check_pass import check_cd, check_max
+from . import cache
 import os
 import re
 import nonebot
 from httpx import AsyncClient
-import random, base64
+import random
+
+
+@nonebot.get_driver().on_shutdown
+async def _flush_cache():
+    cache.flush()
 
 __plugin_meta__ = PluginMetadata(
     name="今天吃喝什么呢",
@@ -94,8 +100,30 @@ img_drink_path = Path(os.path.join(os.path.dirname(__file__), "drink_pic"))
 all_file_drink_name = os.listdir(str(img_drink_path))
 
 # 载入bot名字
-Bot_NICKNAME = list(nonebot.get_driver().config.nickname)
-Bot_NICKNAME = Bot_NICKNAME[0] if Bot_NICKNAME else "脑积水"
+DEFAULT_NICKNAME = Config.parse_obj(nonebot.get_driver().config.dict()).bot_nickname
+bot_nicknames = {}
+
+
+def get_nickname(bot: Bot = None) -> str:
+    if bot is None:
+        return DEFAULT_NICKNAME
+    return bot_nicknames.get(bot.self_id, DEFAULT_NICKNAME)
+
+
+@nonebot.get_driver().on_bot_connect
+async def _load_bot_nickname(bot: Bot):
+    try:
+        info = await bot.get_login_info()
+        nickname = info.get("nickname")
+        if nickname:
+            bot_nicknames[bot.self_id] = nickname
+    except Exception as e:
+        logger.warning(f"whateat_pic get_login_info failed: {repr(e)}")
+
+
+@nonebot.get_driver().on_bot_disconnect
+async def _drop_bot_nickname(bot: Bot):
+    bot_nicknames.pop(bot.self_id, None)
 
 
 @del_dish.handle()
@@ -118,6 +146,7 @@ async def del_(state: T_State, name: Message = Arg()):
         os.remove(img)
     except OSError:
         await del_dish.finish(f"不存在该{state['type']}，请检查下菜单再重试吧")
+    cache.invalidate(img)
     await del_dish.send(f"已成功删除{state['type']}:{name}", at_sender=True)
 
 
@@ -160,7 +189,7 @@ async def handle(state: T_State, img: Message = Arg()):
 
 
 @view_dish.handle()
-async def got_name(matcher: Matcher, state: T_State, args:Tuple[Any,...] = RegexGroup()):
+async def got_name(bot: Bot, matcher: Matcher, state: T_State, args:Tuple[Any,...] = RegexGroup()):
     # 设置下一步got的arg
     if args[1] in ["菜单", "菜品"]:
         state["type"] = "吃的"
@@ -170,17 +199,22 @@ async def got_name(matcher: Matcher, state: T_State, args:Tuple[Any,...] = Regex
     # 设置下一步got的arg
     if args[2]:
         matcher.set_arg("name", args[2])
+    else:
+        await view_dish.send(f"请告诉{get_nickname(bot)}具体菜名或者饮品名吧")
 
 
-@view_dish.got("name", prompt=f"请告诉{Bot_NICKNAME}具体菜名或者饮品名吧")
+@view_dish.got("name")
 async def handle(state: T_State, name: Message = Arg()):
     if state["type"] == "吃的":
         img = img_eat_path / (str(name) + ".jpg")
     elif state["type"] == "喝的":
         img = img_drink_path / (str(name) + ".jpg")
 
+    base64_str = cache.get_b64(img)
+    if base64_str is None:
+        await view_dish.finish("没有找到你所说的，请检查一下菜单吧", at_sender=True)
     try:
-        await view_dish.send(MessageSegment.image(img))
+        await view_dish.send(MessageSegment.image(base64_str))
     except ActionFailed:
         await view_dish.finish("没有找到你所说的，请检查一下菜单吧", at_sender=True)
 
@@ -196,17 +230,17 @@ async def handle(bot: Bot, event: MessageEvent, args:Tuple[Any,...] = RegexGroup
         all_name = all_file_drink_name
 
     # 合并转发
-    msg_list = [f"{Bot_NICKNAME}查询到的{args[1]}如下"]
+    msg_list = [f"{get_nickname(bot)}查询到的{args[1]}如下"]
     N = 0
     for name in all_name:
-        N += 1
         img = path / name
-        with open(img, "rb") as im:
-            img_bytes = im.read()
-        base64_str = "base64://" + base64.b64encode(img_bytes).decode()
+        base64_str = cache.get_b64(img)
+        if base64_str is None:
+            continue
+        N += 1
         name = re.sub(".jpg", "", name)
         msg_list.append(f"{N}.{name}\n{MessageSegment.image(base64_str)}")
-    await send_forward_msg(bot, event, Bot_NICKNAME, bot.self_id, msg_list)
+    await send_forward_msg(bot, event, get_nickname(bot), bot.self_id, msg_list)
 
 
 # 初始化内置时间的last_time
@@ -216,7 +250,7 @@ user_count = {}
 
 
 @what_drink.handle()
-async def wtd(msg: MessageEvent):
+async def wtd(bot: Bot, msg: MessageEvent):
     global time, user_count
     check_result, remain_time, new_last_time = check_cd(time)
     if not check_result:
@@ -225,14 +259,14 @@ async def wtd(msg: MessageEvent):
     else:
         is_max, user_count = check_max(msg, user_count)
         if is_max:
-            await what_drink.finish(random.choice(max_msg), at_sender=True)
+            await what_drink.finish(random.choice(get_max_msg(get_nickname(bot))), at_sender=True)
         time = new_last_time
         img_name = random.choice(all_file_drink_name)
         img = img_drink_path / img_name
-        with open(img, "rb") as im:
-            img_bytes = im.read()
-        base64_str = "base64://" + base64.b64encode(img_bytes).decode()
-        msg = f"{Bot_NICKNAME}建议你喝: \n⭐{img.stem}⭐\n" + MessageSegment.image(base64_str)
+        base64_str = cache.get_b64(img)
+        if base64_str is None:
+            await what_drink.finish("出错啦！没有找到好喝的~")
+        msg = f"\n{get_nickname(bot)}建议你喝: \n⭐{img.stem}⭐\n" + MessageSegment.image(base64_str)
         try:
             await what_drink.send(msg, at_sender=True)
         except ActionFailed:
@@ -240,7 +274,7 @@ async def wtd(msg: MessageEvent):
 
 
 @what_eat.handle()
-async def wte(msg: MessageEvent):
+async def wte(bot: Bot, msg: MessageEvent):
     global time, user_count
     check_result, remain_time, new_last_time = check_cd(time)
     if not check_result:
@@ -249,14 +283,14 @@ async def wte(msg: MessageEvent):
     else:
         is_max, user_count = check_max(msg, user_count)
         if is_max:
-            await what_eat.finish(random.choice(max_msg), at_sender=True)
+            await what_eat.finish(random.choice(get_max_msg(get_nickname(bot))), at_sender=True)
         time = new_last_time
         img_name = random.choice(all_file_eat_name)
         img = img_eat_path / img_name
-        with open(img, "rb") as im:
-            img_bytes = im.read()
-        base64_str = "base64://" + base64.b64encode(img_bytes).decode()
-        msg = f"{Bot_NICKNAME}建议你吃: \n⭐{img.stem}⭐\n" + MessageSegment.image(base64_str)
+        base64_str = cache.get_b64(img)
+        if base64_str is None:
+            await what_eat.finish("出错啦！没有找到好吃的~")
+        msg = f"\n{get_nickname(bot)}建议你吃: \n⭐{img.stem}⭐\n" + MessageSegment.image(base64_str)
         try:
             await what_eat.send(msg, at_sender=True)
         except ActionFailed:
@@ -286,13 +320,14 @@ except ActionFailed as e:
 
 
 # 上限回复消息
-max_msg = (
-    "你今天吃的够多了！不许再吃了(´-ωก`)",
-    "吃吃吃，就知道吃，你都吃饱了！明天再来(▼皿▼#)",
-    "(*｀へ´*)你猜我会不会再给你发好吃的图片",
-    f"没得吃的了，{Bot_NICKNAME}的食物都被你这坏蛋吃光了！",
-    "你在等我给你发好吃的？做梦哦！你都吃那么多了，不许再吃了！ヽ(≧Д≦)ノ",
-)
+def get_max_msg(nickname):
+    return (
+        "你今天吃的够多了！不许再吃了(´-ωก`)",
+        "吃吃吃，就知道吃，你都吃饱了！明天再来(▼皿▼#)",
+        "(*｀へ´*)你猜我会不会再给你发好吃的图片",
+        f"没得吃的了，{nickname}的食物都被你这坏蛋吃光了！",
+        "你在等我给你发好吃的？做梦哦！你都吃那么多了，不许再吃了！ヽ(≧Д≦)ノ",
+    )
 
 
 # 调用合并转发api函数

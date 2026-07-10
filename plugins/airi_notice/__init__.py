@@ -1,11 +1,14 @@
 import datetime
 import nonebot
-from nonebot import on_message
+from nonebot import on_message, get_driver
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import MessageEvent
 
 BLACKLIST = []
 gr_name = {}
+
+driver = get_driver()
+notification_account = getattr(driver.config, "notification_account", "3630532026")
 
 query_tmxx_status = on_message(priority=1,block=False)
 
@@ -18,8 +21,8 @@ async def query_tmxx_status_func(bot: Bot, ev: MessageEvent):
         msg = str(ev.message)
 
         tmxx_is_mentioned = 0
-        
-        keywords = ['tmxx','[CQ:at,qq=864623174]',"小溪"]
+
+        keywords = ['tmxx',f'[CQ:at,qq={notification_account}]',"小溪"]
         for keyword in keywords:
             if keyword in msg:
                 tmxx_is_mentioned = 1
@@ -46,7 +49,7 @@ async def query_tmxx_status_func(bot: Bot, ev: MessageEvent):
                 for gr in gr_list:
                     gr_name[bot.self_id][gr["group_id"]] = gr["group_name"]
                     
-            mesg = '📣 新消息提醒\n🕗 {}\n👨‍ {}({})\n📀 {}({})\n📩 {}'.format(str(cur_time)[:-7], user_nick, qq_id, gr_name[bot.self_id][int(gruop_id)], gruop_id, msg.replace('[CQ:at,qq=864623174]','@田麻小溪'))
-            await bot.send_private_msg(user_id=864623174,message=mesg)
+            mesg = '📣 新消息提醒\n🕗 {}\n👨‍ {}({})\n📀 {}({})\n📩 {}'.format(str(cur_time)[:-7], user_nick, qq_id, gr_name[bot.self_id][int(gruop_id)], gruop_id, msg.replace(f'[CQ:at,qq={notification_account}]','@田麻小溪'))
+            await bot.send_private_msg(user_id=int(notification_account),message=mesg)
     except:
         pass
