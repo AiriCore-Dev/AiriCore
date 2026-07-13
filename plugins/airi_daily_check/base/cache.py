@@ -150,11 +150,15 @@ def get_or_build(namespace: str, key, build, stat_path=None) -> Any:
         if cached is not None:
             return cached
         entry = _persist.get(namespace, {}).get(key)
-        version = _version_of(stat_path)
-        if entry is not None and entry["v"] == version:
-            blob = entry["blob"]
+        if stat_path is None:
+            version = entry["v"] if entry is not None else ""
+            blob = entry["blob"] if entry is not None else None
         else:
-            blob = None
+            version = _version_of(stat_path)
+            if entry is not None and entry["v"] == version:
+                blob = entry["blob"]
+            else:
+                blob = None
     if blob is not None:
         value = _decode(blob)
         if value is not None:

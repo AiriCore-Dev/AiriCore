@@ -72,7 +72,7 @@ EMOJI_MOOD_SOFTNESS = 0.25
 REPLY_MENTION_PROB = 0.1
 
 PROJECT_DIR = os.path.dirname(__file__)
-ROLE_SETUP_FILE = os.path.join(PROJECT_DIR, "airi_prompt_v2.md")
+ROLE_SETUP_FILE = os.path.join(PROJECT_DIR, "airi_prompt_v3.md")
 EMOJI_DIR = os.path.join(PROJECT_DIR, "emoji")
 EMOJI_MOOD_FILE = os.path.join(PROJECT_DIR, "emoji_moods.json")
 

@@ -5,11 +5,11 @@ from openai import AsyncOpenAI
 from .constants import bot_nick, llm_api_key, llm_base_url, other_llm_model
 from . import state
 
-with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'utils', 'generate_turtle_soup_prompt.txt'), 'r', encoding='utf-8') as f:
+with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'utils', 'generate_turtle_soup_prompt.md'), 'r', encoding='utf-8') as f:
     generate_turtle_soup_prompt = f.read()
-with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'utils', 'turtle_soup_question_prompt.txt'), 'r', encoding='utf-8') as f:
+with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'utils', 'turtle_soup_question_prompt.md'), 'r', encoding='utf-8') as f:
     turtle_soup_question_prompt = f.read()
-with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'utils', 'turtle_soup_truth_prompt.txt'), 'r', encoding='utf-8') as f:
+with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'utils', 'turtle_soup_truth_prompt.md'), 'r', encoding='utf-8') as f:
     turtle_soup_truth_prompt = f.read()
 with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'utils', 'turtle_soup.json'), 'r', encoding='utf-8') as f:
     turtle_soup = json.load(f)

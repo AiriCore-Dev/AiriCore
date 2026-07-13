@@ -84,7 +84,7 @@ async def localpath_to_base64(pth):
             byt = fil.read()
         return "base64://" + base64.b64encode(byt).decode()
 
-    return cache.get_or_build("localpath_b64", pth, _build, stat_path=pth)
+    return cache.get_or_build("localpath_b64", pth, _build)
 
 
 async def acquire_jrys(user_id):
@@ -126,7 +126,6 @@ async def make_250px_cached(path, mode=0):
     return cache.get_or_build(
         "sticker_250", (path, mode),
         lambda: _make_250px_kernel(Image.open(path).convert('RGBA'), mode),
-        stat_path=path,
     )
 
 
@@ -150,7 +149,6 @@ async def generate_new_sticker(x, user_id, mode=0):
     stk = await get_sticker(x, user_id)
     return cache.get_or_build(
         "new_sticker", (stk, mode), lambda: _build_new_sticker(stk, mode),
-        stat_path=stk,
     )
 
 
