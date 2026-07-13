@@ -225,7 +225,7 @@ Momoi Airi 桃井爱莉
         "广告位",
         MessageSegment.text(
             """🛠️ AiriCore代码开源
-https://github.com/Tenma-Saki/AiriCore"""
+https://github.com/AiriCore-Dev/AiriCore"""
         )
         + image_segment("airocore.png"),
     ),
