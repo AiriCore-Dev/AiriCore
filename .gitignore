@@ -8,12 +8,12 @@ record/
 *.pk
 *.sqlite3
 *.bak
-*.zip
 *.log
 *.pem
 *.key
 *.txt
 *.psd
+*.zip
 
 # macOS
 .DS_Store
