@@ -30,7 +30,7 @@ async def load_json():
         state.data.clear()
         state.data.update(loaded)
     except:
-        os.makedirs(os.path.join('data', 'airi_wish_bottle'))
+        os.makedirs(os.path.join('data', 'airi_wish_bottle'), exist_ok=True)
         await save_to_json()
 
 

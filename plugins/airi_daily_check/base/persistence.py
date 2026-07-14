@@ -33,7 +33,7 @@ async def load_json():
         state.data.clear()
         state.data.update(loaded)
     except:
-        os.makedirs(DATA_DIR)
+        os.makedirs(DATA_DIR, exist_ok=True)
         await save_to_json()
     _restore_or_reset_challenge()
     gc.collect()

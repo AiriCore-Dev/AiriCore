@@ -222,7 +222,7 @@ async def load_json():
         with open(os.path.join('data', 'airi_mcrcon', 'data.pk'), 'rb') as f:
             data = pickle.load(f)
     except Exception:
-        os.makedirs(os.path.join('data', 'airi_mcrcon'))
+        os.makedirs(os.path.join('data', 'airi_mcrcon'), exist_ok=True)
         await save_json()
 
 

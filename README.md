@@ -28,7 +28,7 @@
 3. 将 memes.zip 解压到环境 site-packages/meme-generator/memes/。
 4. 安装字体 data/nonebot_plugin_meme_stickers/_shared/YurukaFangTang.ttf。
 5. `cp .env.prod_example .env.prod` 并按需修改配置。
-6. 根目录启动：`./launch.sh`（Windows 为 `launch.bat`）。
+6. 根目录启动：Linux 用 `./launch_linux.sh`，macOS 用 `./launch_macos.sh`，Windows 用 `launch_windows.bat`。
 
 入口 airi.py 会包装 bot.py 并在崩溃后自动重启。OneBot 客户端默认连接 ws://127.0.0.1:15100/onebot/v11/ws。
 
