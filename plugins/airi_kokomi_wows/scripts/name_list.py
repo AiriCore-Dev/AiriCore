@@ -1,5 +1,4 @@
 import os
-import cv2
 import gc
 from .wws_error import main as create_error_card
 from .wws_message import main as return_message
@@ -31,15 +30,14 @@ async def main(
 async def get_data(
     parameter: list,
 ) -> dict:
-    # [lang data]
     try:
         res_img = get_png(
             result=parameter[1],
             lang=parameter[0]
         )
         result = {
-            'status': 'ok', 
-            'message': 'SUCCESS', 
+            'status': 'ok',
+            'message': 'SUCCESS',
             'img': None
         }
         result['img'] = Picture.return_img(img=res_img)
@@ -56,9 +54,9 @@ async def get_data(
             error_info=error_info
         )
         return {
-            'status': 'error', 
-            'message': 'PROGRAM ERROR', 
-            'error':f'{str(type(e).__name__)}', 
+            'status': 'error',
+            'message': 'PROGRAM ERROR',
+            'error':f'{str(type(e).__name__)}',
             'track_id': f'{track_id}'
         }
     finally:
@@ -71,11 +69,11 @@ def get_png(
 ) -> str:
     text_list = []
     box_list = []
-    res_img = cv2.imread(os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', 'wws_ships_info2.png'), cv2.IMREAD_UNCHANGED)
+    res_img = Picture.imread(os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', 'wws_ships_info2.png'))
     list_png_len = int(len(result) / 50) + 1
-    list_img = cv2.imread(os.path.join(plugin_path, 'png', 'list', '80_50_2.png'), cv2.IMREAD_UNCHANGED)
+    list_img = Picture.imread(os.path.join(plugin_path, 'png', 'list', '80_50_2.png'))
     for i in range(list_png_len):
-        res_img = cv2.vconcat([res_img, list_img])
+        res_img = Picture.vconcat([res_img, list_img])
     i = 0
     fontStyle = fonts.data[1][50]
     for ship_data in result:

@@ -37,7 +37,6 @@ async def main(bot: Bot, ev: MessageEvent):
     while 1:
         try:
             session_id = str(ev.get_session_id())
-            # 判断消息类型，私聊/群聊
             if 'group' in session_id:
                 split_id = session_id.split('_')
                 qq_id = split_id[2]
@@ -45,14 +44,12 @@ async def main(bot: Bot, ev: MessageEvent):
             else:
                 qq_id = session_id
                 gruop_id = None
-            # 黑名单
             if qq_id in Plugin_Config.BLACKLIST_USER:
                 await wws_bot.finish("数据请求异常，请稍后再试。", reply_message = True)
             if gruop_id:
                 if gruop_id in Plugin_Config.BLACKLIST:
                     return
             msg = str(ev.message).lower()
-            # Kokomi_LLM
             need_apply_llm = 0
             if msg.startswith("船长"):
                 msg = await kokomi_llm(msg[2:])
@@ -63,7 +60,6 @@ async def main(bot: Bot, ev: MessageEvent):
                 else:
                     await wws_bot.send(msg[1], reply_message=True)
                     return
-            # 解析快捷指令 -> 分发用 split_msg
             action, payload = parse_to_command(msg)
             if action == 'stop':
                 return
@@ -80,11 +76,9 @@ async def main(bot: Bot, ev: MessageEvent):
                 channel_id='123456',
                 platform_data={}
             )
-            # 发送文字消息
             msg_res = MessageSegment.text(llm_msg if need_apply_llm else "")
             if fun['type'] == 'msg':
                 await wws_bot.send(msg_res + MessageSegment.text(fun['msg']),reply_message = True)
-            # 发送图片消息
             elif fun['type'] == 'img':
                 await wws_bot.send(msg_res + MessageSegment.image(fun['img']),reply_message = True)
             return

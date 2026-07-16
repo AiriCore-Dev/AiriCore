@@ -15,7 +15,6 @@ async def main(
 async def get_data(
     parameter: list,
 ) -> dict:
-    # [aid server lang method class]
     try:
         if parameter[3] == 'recent':
             path = '/r1/enable-recent/'
@@ -43,6 +42,6 @@ async def get_data(
         gc.collect()
 
 
-            
+
 
 

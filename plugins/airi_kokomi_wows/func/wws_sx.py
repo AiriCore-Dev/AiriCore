@@ -1,7 +1,6 @@
 from ._base import program_error
 import os
 import gc
-import cv2
 import json
 from PIL import Image
 from .. import (
@@ -27,7 +26,6 @@ async def main(
 async def get_data(
     parameter: list,
 ) -> dict:
-    # [aid server lang use_ac ac pic]
     try:
         path = '/b/sx-data/'
         params = {
@@ -45,7 +43,7 @@ async def get_data(
             path=path
         )
         if (
-            res['status'] != 'ok' or 
+            res['status'] != 'ok' or
             res['message'] != 'SUCCESS'
         ):
             return res
@@ -57,8 +55,8 @@ async def get_data(
             pic_num=1
         )
         result = {
-            'status': 'ok', 
-            'message': 'SUCCESS', 
+            'status': 'ok',
+            'message': 'SUCCESS',
             'img': None
         }
         result['img'] = Picture.return_img(img=res_img)
@@ -83,8 +81,7 @@ def get_png(
         res_img_path = os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', 'wws_sx_lesta.png')
     else:
         res_img_path = os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', 'wws_sx_wg.png')
-    #res_img = Image.open(res_img_path)
-    res_img = cv2.imread(res_img_path, cv2.IMREAD_UNCHANGED)
+    res_img = Picture.imread(res_img_path)
     text_list.append(
         Text_Data(
             xy=(172, 161),
@@ -344,7 +341,7 @@ def get_png(
         all_card = 0
         all_coal = 0
         all_steel = 0
-        
+
         coal_dict = {
             '5': 700,
             '6': 750,

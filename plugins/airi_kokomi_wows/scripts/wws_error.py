@@ -1,5 +1,4 @@
 import os
-import cv2
 import time
 from .. import (
     Plugin_Config,
@@ -8,7 +7,6 @@ from .. import (
 )
 from .. import plugin_path
 
-# 各语言错误卡片 4 行文本坐标（cn 与 en/ja 不同；en 与 ja 相同）
 _ERROR_XY = {
     'cn': [(797, 820), (890, 876), (890, 930), (890, 985)],
     'en': [(815, 820), (930, 876), (891, 930), (1010, 985)],
@@ -53,7 +51,7 @@ def main(
 def get_png(lang:str,error_type:str,error_data:list):
     text_list = []
     png_path = os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', f'kokomi_{error_type}.png')
-    res_img = cv2.imread(png_path, cv2.IMREAD_UNCHANGED)
+    res_img = Picture.imread(png_path)
     for xy, text in zip(_ERROR_XY[lang], error_data):
         text_list.append(
             Text_Data(

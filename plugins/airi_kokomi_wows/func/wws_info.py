@@ -1,7 +1,6 @@
 from ._base import program_error
 import os
 import time
-import cv2
 import gc
 from .. import (
     Plugin_Config,
@@ -25,7 +24,6 @@ async def main(
 async def get_data(
     parameter: list,
 ) -> dict:
-    # [aid server lang user_pr use_ac ac]
     try:
         path = '/b/info-data/'
         params = {
@@ -44,7 +42,7 @@ async def get_data(
             path=path
         )
         if (
-            res['status'] != 'ok' or 
+            res['status'] != 'ok' or
             res['message'] != 'SUCCESS'
         ):
             return res
@@ -55,8 +53,8 @@ async def get_data(
             lang=parameter[2]
         )
         result = {
-            'status': 'ok', 
-            'message': 'SUCCESS', 
+            'status': 'ok',
+            'message': 'SUCCESS',
             'img': None
         }
         result['img'] = Picture.return_img(img=res_img)
@@ -76,8 +74,8 @@ def get_png(
 ) -> str:
     text_list = []
     box_list = []
-    res_img = cv2.imread(os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', 'wws_info.png'), cv2.IMREAD_UNCHANGED)
-    res_img = cv2.resize(res_img, None, fx=0.8, fy=0.8)
+    res_img = Picture.imread(os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', 'wws_info.png'))
+    res_img = Picture.resize(res_img, 0.8, 0.8)
     fontStyle = fonts.data[1][100]
     if result['data']['clans']['clan_tag'] == 'None':
         tag = '[]'
@@ -481,9 +479,9 @@ def get_png(
         y = int(i / 4)
         achievement_png_path = os.path.join(
             plugin_path, 'png', 'achievement', '{}.png'.format(index['name']))
-        achievement_png = cv2.imread(
-            achievement_png_path, cv2.IMREAD_UNCHANGED)
-        achievement_png = cv2.resize(achievement_png, None, fx=1.4, fy=1.4)
+        achievement_png = Picture.imread(
+            achievement_png_path)
+        achievement_png = Picture.resize(achievement_png, 1.4, 1.4)
         x1 = 2991+200*x
         y1 = 473+140*y
         x2 = x1 + achievement_png.shape[1]
@@ -506,9 +504,9 @@ def get_png(
         y = int(i / 4)
         achievement_png_path = os.path.join(
             plugin_path, 'png', 'achievement_plus', '{}.png'.format(index['name']))
-        achievement_png = cv2.imread(
-            achievement_png_path, cv2.IMREAD_UNCHANGED)
-        achievement_png = cv2.resize(achievement_png, None, fx=1.4, fy=1.4)
+        achievement_png = Picture.imread(
+            achievement_png_path)
+        achievement_png = Picture.resize(achievement_png, 1.4, 1.4)
         x1 = 2991+200*x
         y1 = 1394-160+135*y
         x2 = x1 + achievement_png.shape[1]
@@ -531,9 +529,9 @@ def get_png(
         y = int(i / 4)
         achievement_png_path = os.path.join(
             plugin_path, 'png', 'achievement_plus', '{}.png'.format(index['name']))
-        achievement_png = cv2.imread(
-            achievement_png_path, cv2.IMREAD_UNCHANGED)
-        achievement_png = cv2.resize(achievement_png, None, fx=1.4, fy=1.4)
+        achievement_png = Picture.imread(
+            achievement_png_path)
+        achievement_png = Picture.resize(achievement_png, 1.4, 1.4)
         x1 = 2991+200*x
         y1 = 1596-160+135*y
         x2 = x1 + achievement_png.shape[1]
@@ -551,7 +549,6 @@ def get_png(
                 )
             )
         i += 1
-    # 图表
     max_num = 0
     for tier, num in result['data']['ship_tier'].items():
         if num == {}:
@@ -593,9 +590,9 @@ def get_png(
     res_img = Picture.add_box(box_list, res_img)
     res_img = Picture.add_text(text_list, res_img)
     return res_img
-    
 
 
-            
+
+
 
 

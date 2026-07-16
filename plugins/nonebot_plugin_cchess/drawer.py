@@ -2,8 +2,9 @@ from io import BytesIO
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from PIL import Image
 from PIL.Image import Resampling
+
+from utils.asset_cache import get_image, get_image_copy
 
 if TYPE_CHECKING:
     from .board import Board
@@ -15,8 +16,8 @@ def draw_board(board: "Board", sameside: bool = True) -> BytesIO:
     pieces = board._board
     side = board.moveside if sameside else not board.moveside
     bg_name = "board_red.png" if side else "board_black.png"
-    bg = Image.open(img_dir / bg_name)
-    mark = Image.open(img_dir / "mark.png")
+    bg = get_image_copy(img_dir / bg_name)
+    mark = get_image(img_dir / "mark.png")
 
     last_move = board.last_move
     from_pos = last_move.from_pos
@@ -44,10 +45,10 @@ def draw_board(board: "Board", sameside: bool = True) -> BytesIO:
                 continue
 
             img_name = piece.symbol.lower() + ("_red" if piece.color else "_black")
-            img = Image.open(img_dir / f"{img_name}.png")
+            img = get_image(img_dir / f"{img_name}.png")
             bg.paste(img, (x, y), mask=img)
 
     output = BytesIO()
-    bg = bg.convert("RGBA").resize((775, 975), Resampling.LANCZOS)
+    bg = bg.resize((775, 975), Resampling.LANCZOS)
     bg.save(output, format="png")
     return output

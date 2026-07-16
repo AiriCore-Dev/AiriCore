@@ -59,15 +59,12 @@ class Pos:
         return hash(self.ucci())
 
     def ucci(self) -> str:
-        """转为 UCCI 格式的坐标"""
         return f"{chr(ord('a') + self.y)}{self.x}"
 
     def iccs(self) -> str:
-        """转为 ICCS 格式的坐标"""
         return f"{chr(ord('A') + self.y)}{self.x}"
 
     def valid(self) -> bool:
-        """判断坐标是否在范围内"""
         return 0 <= self.x <= 9 and 0 <= self.y <= 8
 
 
@@ -81,18 +78,15 @@ class Move:
 
     @classmethod
     def null(cls) -> "Move":
-        """无移动"""
         return cls(Pos(0, 0), Pos(0, 0))
 
     def ucci(self) -> str:
-        """转为 UCCI 格式的移动"""
         if self.from_pos == self.to_pos:
             return "0000"
         return f"{self.from_pos.ucci()}{self.to_pos.ucci()}"
 
     @classmethod
     def from_ucci(cls, ucci: str) -> "Move":
-        """解析 UCCI 格式的移动"""
         if ucci == "0000":
             return cls.null()
         elif len(ucci) != 4:
@@ -104,12 +98,10 @@ class Move:
             return cls(cls.parse_coord(ucci[0:2]), cls.parse_coord(ucci[2:4]))
 
     def iccs(self) -> str:
-        """转为 ICCS 格式的移动"""
         return f"{self.from_pos.iccs()}-{self.to_pos.iccs()}"
 
     @classmethod
     def from_iccs(cls, iccs: str) -> "Move":
-        """解析 ICCS 格式的移动"""
         if len(iccs) != 5 or iccs[2] != "-":
             raise ValueError(f"ICCS字符串不合法：{iccs}")
         else:
@@ -132,7 +124,6 @@ class Move:
         return Pos(int(coord[1]), ord(coord[0]) - ord("a"))
 
     def chinese(self, board: "Board") -> str:
-        """转为中文格式的移动"""
 
         piece = board.get_piece_at(self.from_pos)
         if not piece:
@@ -196,7 +187,6 @@ class Move:
 
     @classmethod
     def from_chinese(cls, board: "Board", move_str: str) -> "Move":
-        """解析中文格式的移动"""
 
         if len(move_str) != 4:
             raise ValueError(f"记谱字符串长度不符：{move_str}")
@@ -238,7 +228,6 @@ class Move:
         def find_piece(
             col: int, piece_type: PieceType, count: int = 1, min_count: int = 1
         ) -> Optional[Pos]:
-            """找到某一纵线上第n个某种类型的棋子"""
             col -= 1
             if board.moveside:
                 col = 8 - col

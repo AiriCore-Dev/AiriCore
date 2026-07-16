@@ -76,10 +76,18 @@ ROLE_SETUP_FILE = os.path.join(PROJECT_DIR, "airi_prompt_v3.md")
 EMOJI_DIR = os.path.join(PROJECT_DIR, "emoji")
 EMOJI_MOOD_FILE = os.path.join(PROJECT_DIR, "emoji_moods.json")
 
+CHAR_NAME = (getattr(driver.config, "airi_char_name", "") or "").strip() or "爱莉"
+_raw_aliases = getattr(driver.config, "airi_char_aliases", None)
+if isinstance(_raw_aliases, str):
+    _raw_aliases = [a.strip() for a in _raw_aliases.split(",")]
+CHAR_ALIASES = [a.strip().lower() for a in (_raw_aliases or ["airi", "爱莉"]) if a and a.strip()]
+
 
 class AiriState:
     def __init__(self):
         self.role_setup: str = ""
+        self.char_name: str = CHAR_NAME
+        self.char_aliases: List[str] = CHAR_ALIASES
         self.emoji_list: List[str] = []
         self.emoji_moods: Dict[str, float] = {}
 
@@ -167,8 +175,13 @@ async def _extraction_job() -> None:
     await memory.extraction(airi_state)
 
 
+async def _cleanup_job() -> None:
+    await memory.cleanup_inactive_data(airi_state)
+
+
 timings.add_job(_flush_job, "interval", minutes=2, misfire_grace_time=600, coalesce=True)
 timings.add_job(_extraction_job, "interval", minutes=30, misfire_grace_time=600, coalesce=True)
+timings.add_job(_cleanup_job, "interval", hours=6, misfire_grace_time=600, coalesce=True)
 
 
 async def get_image_base64_list(message: Any) -> List[str]:
@@ -275,9 +288,9 @@ async def decide_speak(bot: Bot, ev: MessageEvent, group_id: str, user_id: str) 
     tokens = airi_state.negative_speaking_tokens.get(group_id, 0)
     msg_raw = str(ev)
     msg_text = str(ev.message)
+    msg_lower = msg_text.lower()
     addressed = any([
-        "airi" in msg_text.lower(),
-        "爱莉" in msg_text,
+        any(alias in msg_lower for alias in CHAR_ALIASES),
         bot.self_id in msg_raw,
         msg_text.startswith("."),
         (hasattr(ev, "reply") and ev.reply and str(ev.reply.sender.user_id) == bot.self_id),
@@ -413,7 +426,7 @@ async def passive_speaking(bot: Bot, group_id: str, mode: int = 1) -> None:
         logger.error(f"主动插话失败: {e}")
     finally:
         if mode:
-            airi_state.passive_speaking_group_tamed[group_id] = 0
+            airi_state.passive_speaking_group_tamed.pop(group_id, None)
 
 
 airi_llm = on_message(priority=50, block=False)
@@ -489,6 +502,8 @@ async def handle_airi_llm(bot: Bot, ev: MessageEvent):
 
         asyncio.create_task(memory.maybe_distill(airi_state, group_id))
         asyncio.create_task(memory.maybe_refresh_mood(airi_state, group_id))
+        asyncio.create_task(memory.maybe_refresh_speaking_style(airi_state, group_id))
+        asyncio.create_task(memory.maybe_refresh_bot_mood(airi_state, group_id))
 
         if not await decide_speak(bot, ev, group_id, user_id):
             return

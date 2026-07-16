@@ -117,7 +117,6 @@ async def _create_json(model, messages, use_response_format):
         text = (msg.get("content") or "").strip()
         finish = choice.get("finish_reason")
         if not text:
-            # 思维模型可能把内容放在 reasoning_content，或因 max_tokens 截断
             reasoning = (msg.get("reasoning_content") or "").strip()
             if reasoning:
                 logger.info("content 为空，改用 reasoning_content 解析")
@@ -239,4 +238,36 @@ async def classify_image_emotions(img_b64_list: List[str]) -> List[Optional[floa
     if len(out) < n:
         out += [None] * (n - len(out))
     return out[:n]
+
+
+async def analyze_speaking_style(convo_text: str) -> Optional[str]:
+    if not convo_text.strip():
+        return None
+    system_prompt = (
+        "你是群聊风格分析器。分析这个群成员们的说话习惯，"
+        "提炼他们的用词特点、语气风格、常用口头禅或梗、标点习惯等，"
+        "用简短的描述总结（不超过100字），只描述风格特征，不要评价好坏。"
+        '严格返回 JSON：{"style": "风格描述"}。只返回 JSON。'
+    )
+    result = await call_llm_json(system_prompt, f"【群聊记录】\n{convo_text}")
+    if isinstance(result, dict):
+        style = str(result.get("style", "")).strip()
+        return style if style else None
+    return None
+
+
+async def analyze_bot_mood(convo_text: str, char_name: str = "角色") -> Optional[float]:
+    if not convo_text.strip():
+        return None
+    system_prompt = (
+        f"你是{char_name}的心情分析器。阅读最近的对话（表格中'你'就是{char_name}自己），"
+        f"根据上下文判断{char_name}此刻应该是什么心情：被夸奖、被关心、聊得开心就偏正面；"
+        "被忽视、被怼、话题无聊、氛围冷清就偏负面；正常聊天是中性。"
+        '严格返回 JSON：{"mood": 数值}，数值范围 -1 到 1，'
+        "-1=很不高兴/无聊/冷淡，0=平常心，1=开心/有活力。只返回 JSON。"
+    )
+    result = await call_llm_json(system_prompt, f"【最近对话】\n{convo_text}")
+    if isinstance(result, dict):
+        return _clamp_valence(result.get("mood"))
+    return None
 

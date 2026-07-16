@@ -27,7 +27,6 @@ class CPUInfo:
 
 @dataclass
 class RAMInfo:
-    """RAM 信息（单位：GB）"""
 
     total: float
     """RAM 总量"""
@@ -44,7 +43,6 @@ class RAMInfo:
 
 @dataclass
 class SwapMemory:
-    """Swap 信息（单位：GB）"""
 
     total: float
     """Swap 总量"""
@@ -61,7 +59,6 @@ class SwapMemory:
 
 @dataclass
 class DiskInfo:
-    """硬盘信息"""
 
     total: float
     """硬盘总量"""
@@ -77,7 +74,6 @@ class DiskInfo:
 
 
 def get_status_info() -> tuple[CPUInfo, RAMInfo, SwapMemory, DiskInfo]:
-    """获取 `CPU` `RAM` `SWAP` `DISK` 信息"""
     cpu_info = CPUInfo.get_cpu_info()
     ram_info = RAMInfo.get_ram_info()
     swap_info = SwapMemory.get_swap_info()

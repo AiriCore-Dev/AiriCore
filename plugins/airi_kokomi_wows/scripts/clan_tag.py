@@ -1,5 +1,4 @@
 import os
-import cv2
 from ..data_source import (
     Picture,
     Text_Data,
@@ -18,11 +17,11 @@ def clan_tag(
         return img
     if response['stage'] == {}:
         cvc_png_path = os.path.join(plugin_path, 'png', 'clan', '{}-{}-normal.png'.format(
-            response['league'], 
+            response['league'],
             response['division'])
         )
-        cvc_png = cv2.imread(cvc_png_path, cv2.IMREAD_UNCHANGED)
-        cvc_png = cv2.resize(cvc_png, None, fx=0.824, fy=0.824)
+        cvc_png = Picture.imread(cvc_png_path)
+        cvc_png = Picture.resize(cvc_png, 0.824, 0.824)
         x2 = x1 + cvc_png.shape[1]
         y2 = y1 + cvc_png.shape[0]
         img = Picture.merge_img(img, cvc_png, y1, y2, x1, x2)
@@ -41,22 +40,22 @@ def clan_tag(
         return img, text_list
     else:
         cvc_png_path = os.path.join(plugin_path, 'png', 'clan', '{}-{}-{}.png'.format(
-            response['league'], 
+            response['league'],
             response['division'],
             response['stage']['type']
             )
         )
-        cvc_png = cv2.imread(cvc_png_path, cv2.IMREAD_UNCHANGED)
-        cvc_png = cv2.resize(cvc_png, None, fx=0.824, fy=0.824)
+        cvc_png = Picture.imread(cvc_png_path)
+        cvc_png = Picture.resize(cvc_png, 0.824, 0.824)
         x2 = x1 + cvc_png.shape[1]
         y2 = y1 + cvc_png.shape[0]
         img = Picture.merge_img(img, cvc_png, y1, y2, x1, x2)
         victory_png_path = os.path.join(plugin_path, 'png', 'clan', 'victory.png')
         defeat_png_path = os.path.join(plugin_path, 'png', 'clan', 'defeat.png')
-        victory_png = cv2.imread(victory_png_path, cv2.IMREAD_UNCHANGED)
-        victory_png = cv2.resize(victory_png, None, fx=0.824, fy=0.824)
-        defeat_png = cv2.imread(defeat_png_path, cv2.IMREAD_UNCHANGED)
-        defeat_png = cv2.resize(defeat_png, None, fx=0.824, fy=0.824)
+        victory_png = Picture.imread(victory_png_path)
+        victory_png = Picture.resize(victory_png, 0.824, 0.824)
+        defeat_png = Picture.imread(defeat_png_path)
+        defeat_png = Picture.resize(defeat_png, 0.824, 0.824)
         i = 0
         for index in response['stage']['progress']:
             if index == 'victory':

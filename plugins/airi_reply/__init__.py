@@ -1,15 +1,13 @@
 import os
 import time
-import base64
 from nonebot import on_fullmatch, on_startswith
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import MessageEvent
 
+from utils.asset_cache import get_b64
+
 async def localpath_to_base64(pth):
-    pth = os.path.join(os.path.dirname(__file__), pth)
-    with open(pth,"rb") as fil:
-        byt = fil.read()
-    return "base64://" + base64.b64encode(byt).decode() 
+    return get_b64(os.path.join(os.path.dirname(__file__), pth))
 
 last_notice = 0
 reply_interval = 60
@@ -23,9 +21,9 @@ async def _(bot: Bot, ev: MessageEvent):
     if time.time() - last_notice > reply_interval:
         last_notice = time.time()
         msg = await localpath_to_base64('dklmt.wav')
-        message = MessageSegment.record(msg)   
+        message = MessageSegment.record(msg)
         await dklmt.send(message)
-    
+
 @wdh.handle()
 async def _(bot: Bot, ev: MessageEvent):
     global last_notice

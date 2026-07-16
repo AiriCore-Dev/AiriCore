@@ -1,7 +1,6 @@
 from ._base import program_error
 import os
 from PIL import Image
-import cv2
 import gc
 from .. import (
     Plugin_Config,
@@ -25,7 +24,6 @@ async def main(
 async def get_data(
     parameter: list,
 ) -> dict:
-    # [clan_id server lang]
     try:
         path = '/b/clan-basic-data/'
         params = {
@@ -38,7 +36,7 @@ async def get_data(
             path=path
         )
         if (
-            res['status'] != 'ok' or 
+            res['status'] != 'ok' or
             res['message'] != 'SUCCESS'
         ):
             return res
@@ -49,8 +47,8 @@ async def get_data(
             lang=parameter[2]
         )
         result = {
-            'status': 'ok', 
-            'message': 'SUCCESS', 
+            'status': 'ok',
+            'message': 'SUCCESS',
             'img': None
         }
         result['img'] = Picture.return_img(img=res_img)
@@ -70,11 +68,11 @@ def get_png(
 ) -> str:
     text_list = []
     box_list = []
-    res_img = cv2.imread(os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', 'wws_clan.png'), cv2.IMREAD_UNCHANGED)
+    res_img = Picture.imread(os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', 'wws_clan.png'))
     list_png_len = int(len(result['data']['members']) / 50) + 1
-    list_img = cv2.imread(os.path.join(plugin_path, 'png', 'list', '60_50.png'), cv2.IMREAD_UNCHANGED)
+    list_img = Picture.imread(os.path.join(plugin_path, 'png', 'list', '60_50.png'))
     for i in range(list_png_len):
-        res_img = cv2.vconcat([res_img, list_img])
+        res_img = Picture.vconcat([res_img, list_img])
     text_list.append(
         Text_Data(
             xy=(172, 161),
@@ -155,7 +153,7 @@ def get_png(
                 )
             )
         cw_png_path = os.path.join(plugin_path, 'png', f'cw', '{}.png'.format(min_id))
-        cw_png = cv2.imread(cw_png_path, cv2.IMREAD_UNCHANGED)
+        cw_png = Picture.imread(cw_png_path)
         x1 = 97
         y1 = 1560
         x2 = x1 + cw_png.shape[1]
@@ -274,10 +272,10 @@ def get_png(
                                 font_index=1,
                                 font_size=25
                             )
-                        ) 
+                        )
                         j += 1
             else:
-                if build_data['level_data'] != None: 
+                if build_data['level_data'] != None:
                     building1 = build_data['level_data'][0]
                     building2 = build_data['level_data'][1]
                     text_list.append(

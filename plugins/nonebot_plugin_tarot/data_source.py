@@ -38,25 +38,9 @@ def chain_reply(bot: Bot,
 
 
 def pick_theme() -> str:
-    '''
-        Random choose a theme from the union of local & official themes
-    '''
-    '''
-    sub_themes_dir: List[str] = [
-        f.name for f in tarot_config.tarot_path.iterdir() if f.is_dir()]
-
-    if len(sub_themes_dir) > 0:
-        return random.choice(list(set(sub_themes_dir).union(tarot_config.tarot_official_themes)))
-
-    return random.choice(tarot_config.tarot_official_themes)
-    '''
     return "BilibiliTarot"
 
 def pick_sub_types(theme: str) -> List[str]:
-    '''
-        Random choose a sub type of the "theme".
-        If it is in official themes, all the sub types are available.
-    '''
     all_sub_types: List[str] = ["MajorArcana",
                                 "Cups", "Pentacles", "Sowrds", "Wands"]
 
@@ -78,14 +62,6 @@ class Tarot:
         self.is_chain_reply: bool = tarot_config.chain_reply
 
     async def divine(self, bot: Bot, matcher: Matcher, event: MessageEvent, f_name) -> None:
-        '''
-            General tarot devination.
-            1. Choose a theme
-            2. Open tarot.json and Random choose a formation
-            3. Get the devined cards list and their text
-            4. Generate message (or chain reply if enabled)
-        '''
-        # 1. Pick a theme randomly
         session_id = str(event.get_session_id())
         if 'group' in session_id:
             split_id = session_id.split('_')
@@ -95,15 +71,14 @@ class Tarot:
             user_id = session_id
             gruop_id = None
         user_nick = await bot.get_group_member_info(group_id=gruop_id, user_id=user_id)
-        user_nick = (user_nick.get("card") or user_nick.get("nickname") or user_id)    
-         
+        user_nick = (user_nick.get("card") or user_nick.get("nickname") or user_id)
+
         theme: str = pick_theme()
 
         with open(self.tarot_json, 'r', encoding='utf-8') as f:
             content = json.load(f)
             all_cards = content.get("cards")
             all_formations = content.get("formations")
-            #formation_name = random.choice(list(all_formations)) if not len(f_name) else f_name
             formation_name = f_name
             if formation_name[-2:] != '牌阵': formation_name += '牌阵'
             if formation_name not in list(all_formations):
@@ -117,20 +92,16 @@ class Tarot:
         if formation_name != '无牌阵': await matcher.send(f"启用{formation_name}，正在洗牌中", reply_message = True)
         else: await matcher.send("正在洗牌中", reply_message = True)
         '''
-        # 2. Get cards of "cards_num"
         cards_num: int = formation.get("cards_num")
         cards_info_list = self._random_cards(all_cards, theme, cards_num)
 
-        # 3. Get the text of representations
         is_cut: bool = formation.get("is_cut")
         representations: List[Union[str, List[str]]] = random.choice(
             formation.get("representations"))
 
-        # 4. Genrate message
         chain = []
         chain = chain_reply(bot, chain, MessageSegment.text(f"{user_nick}的{formation_name}"))
         for i in range(cards_num):
-            # Select the #i tarot
             if is_cut and i == cards_num - 1:
                 if formation_name == '无牌阵': msg_header = MessageSegment.text(f"切牌\n")
                 else: msg_header = MessageSegment.text(f"切牌「{representations[i]}」\n")
@@ -154,7 +125,6 @@ class Tarot:
                 else:
                     if i < cards_num - 1:
                         await matcher.send(msg_header + msg_body)
-                        #await asyncio.sleep(1)  # In case of frequency sending
                     else:
                         await matcher.finish(msg_header + msg_body)
             else:
@@ -164,28 +134,18 @@ class Tarot:
             await bot.send_group_forward_msg(group_id=event.group_id, messages=chain)
 
     async def onetime_divine(self) -> MessageSegment:
-        '''
-            One-time divination.
-        '''
-        # 1. Pick a theme randomly
         theme: str = pick_theme()
 
-        # 2. Get one card ONLY
         with open(self.tarot_json, 'r', encoding='utf-8') as f:
             content = json.load(f)
             all_cards = content.get("cards")
             card_info_list = self._random_cards(all_cards, theme, 1)
 
-        # 3. Get the text and image
         flag, body = await self._get_text_and_image(theme, card_info_list[0], 1)
 
         return body
-    
+
     def switch_chain_reply(self, new_state: bool) -> None:
-        '''
-            开启/关闭全局群聊转发模式
-        '''
-        #self.is_chain_reply = new_state
         return
 
     def _random_cards(self,
@@ -193,9 +153,6 @@ class Tarot:
                       theme: str,
                       num: int = 1
                       ) -> List[Dict[str, Union[str, Dict[str, str]]]]:
-        '''
-            Iterate the sub directory, get the subset of cards
-        '''
         theme = "BilibiliTarot"
         sub_types: List[str] = pick_sub_types(theme)
 
@@ -206,7 +163,6 @@ class Tarot:
             k: v for k, v in all_cards.items() if v.get("type") in sub_types
         }
 
-        # 2. Random sample the cards according to the num
         cards_index: List[str] = random.sample(list(subset), num)
         cards_info: List[Dict[str, Union[str, Dict[str, str]]]] = [
             v for k, v in subset.items() if k in cards_index]
@@ -219,19 +175,14 @@ class Tarot:
                                                   Union[str, Dict[str, str]]],
                                   flag
                                   ) -> Tuple[bool, MessageSegment]:
-        '''
-            Get a tarot image & text arrcording to the "card_info"
-        '''
         _type: str = card_info.get("type")
         _name: str = card_info.get("pic")
         img_name: str = ""
         img_dir: Path = tarot_config.tarot_path / theme / _type
 
-        # Consider the suffix of pictures
         for p in img_dir.glob(_name + ".*"):
             img_name = p.name
 
-        # 3. Choose up or down
         name_cn: str = card_info.get("name_cn")
         is_reversed: bool = random.random() >= 0.5
         if not is_reversed:
@@ -256,7 +207,6 @@ class Tarot:
                 img.save(buf, format='png')
                 img_b64 = "base64://" + base64.b64encode(buf.getvalue()).decode()
             else:
-                # In user's theme, then raise ResourceError
                 raise ResourceError(
                     f"Tarot image {theme}/{_type}/{_name} doesn't exist! Make sure the type {_type} is complete.")
         else:

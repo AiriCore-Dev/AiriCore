@@ -31,18 +31,18 @@ from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 
 from utils.totp_2fa import totp_verify
 
-from .base import cache            # noqa: F401
+from .base import cache
 
 from .base import state
 from .base.state import data, theme_extension, game_ans
-from .base.constants import *     # noqa: F401,F403
-from .base.matchers import *      # noqa: F401,F403
-from .base.helpers import *       # noqa: F401,F403
+from .base.constants import *
+from .base.matchers import *
+from .base.helpers import *
 from .base.persistence import (
     load_json, save_to_json, daily_clear,
     reset_daily_challenge, save_data_backup, timings,
 )
-from . import handlers            # noqa: F401
+from . import handlers
 
 driver = get_driver()
 _2fa_key = getattr(driver.config, "_2fa_key", "")

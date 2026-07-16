@@ -27,7 +27,7 @@ from ..utils.file_source import FileSource
 T = TypeVar("T")
 
 
-def validate_not_falsy(v: T) -> T:  # noqa: ARG001
+def validate_not_falsy(v: T) -> T:
     if not v:
         raise ValueError("value cannot be empty")
     return v
@@ -113,7 +113,7 @@ class StickerGridParams(BaseModel):
     sticker_size_fixed: Optional[tuple[int, int]] = None
 
     @model_validator(mode="after")
-    def _validate_rows_cols(cls, values: dict[str, Any]) -> dict[str, Any]:  # noqa: N805
+    def _validate_rows_cols(cls, values: dict[str, Any]) -> dict[str, Any]:
         rows_exists = "rows" in values
         cols_exists = "cols" in values
         if rows_exists and not cols_exists:
@@ -159,7 +159,7 @@ class StickerGridSetting(BaseModel):
     resolved_stickers_params: dict[str, StickerGridParams] = {}
 
     @model_validator(mode="after")
-    def _validate_resolve_overrides(cls, values: dict[str, Any]) -> dict[str, Any]:  # noqa: N805
+    def _validate_resolve_overrides(cls, values: dict[str, Any]) -> dict[str, Any]:
         default_params: StickerGridParams = (
             values.get("default_params") or StickerGridParams()
         )
@@ -264,11 +264,11 @@ class StickerPackManifest(BaseModel):
         return find_sticker(self.resolved_stickers, query)
 
     @field_validator("name")
-    def _validate_not_falsy(cls, v: str) -> str:  # noqa: N805
+    def _validate_not_falsy(cls, v: str) -> str:
         return validate_not_falsy(v)
 
     @model_validator(mode="after")
-    def _validate_resolve_stickers(cls, values: dict[str, Any]) -> dict[str, Any]:  # noqa: N805
+    def _validate_resolve_stickers(cls, values: dict[str, Any]) -> dict[str, Any]:
         stickers: Optional[list[StickerInfoOptionalParams]] = values.get("stickers")
         if not stickers:
             raise ValueError("Stickers cannot be empty")

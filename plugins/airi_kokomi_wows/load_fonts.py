@@ -21,8 +21,8 @@ class Load_Fonts:
         for font_index, font_data in self.fonts_dict.items():
             for font_data_index in font_data:
                 res[font_index][font_data_index] = ImageFont.truetype(
-                    font=fonts_path_dict[font_index], 
-                    size=font_data_index, 
+                    font=fonts_path_dict[font_index],
+                    size=font_data_index,
                     encoding="utf-8"
                 )
         return res

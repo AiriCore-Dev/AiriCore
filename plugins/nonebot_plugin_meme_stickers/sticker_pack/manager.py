@@ -75,7 +75,6 @@ class StickerPackManager:
         if not self.base_path.exists():
             logger.info("Data dir not exist, skip load")
             return op_info
-            # self.base_path.mkdir(parents=True)
 
         logger.info("Reloading packs")
         slugs = (
@@ -161,7 +160,6 @@ class StickerPackManager:
                 op_info.succeed.append(OpIt(pack))
                 return res
 
-        # restrict install concurrency **counted by packs**
         sem = nullcontext() if req_kw.get("sem") else create_req_sem()
 
         async def with_sem_install(info: HubStickerPackInfo):
@@ -210,7 +208,6 @@ async def update_packs(
                 op_info.skipped.append(OpIt(p, "无须更新"))
             return r
 
-    # restrict update concurrency **counted by packs**
     sem = nullcontext() if req_kw.get("sem") else create_req_sem()
 
     async def with_sem_update(p: StickerPack):

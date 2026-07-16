@@ -5,7 +5,6 @@ async def get_bind_data(
     platform:str,
     uid:str
 ) -> dict:
-    # [platform uid]
     parameter = [platform,uid]
     return await safe_call(
         error_file=__file__,

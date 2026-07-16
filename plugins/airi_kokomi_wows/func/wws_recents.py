@@ -1,8 +1,8 @@
 from ._base import program_error
 import os
-import cv2
 import time
 from PIL import Image
+from utils import asset_cache
 import gc
 from .. import (
     Plugin_Config,
@@ -28,7 +28,6 @@ async def main(
 async def get_data(
     parameter: list,
 ) -> dict:
-    # [aid server lang user_pr use_ac ac]
     try:
         path = '/r2/recents-data/'
         params = {
@@ -47,7 +46,7 @@ async def get_data(
             path=path
         )
         if (
-            res['status'] != 'ok' or 
+            res['status'] != 'ok' or
             res['message'] != 'SUCCESS'
         ):
             return res
@@ -58,8 +57,8 @@ async def get_data(
             lang=parameter[2]
         )
         result = {
-            'status': 'ok', 
-            'message': 'SUCCESS', 
+            'status': 'ok',
+            'message': 'SUCCESS',
             'img': None
         }
         result['img'] = Picture.return_img(img=res_img)
@@ -79,11 +78,11 @@ def get_png(
 ) -> str:
     text_list = []
     box_list = []
-    res_img = cv2.imread(os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', 'wws_recents.png'), cv2.IMREAD_UNCHANGED)
+    res_img = Picture.imread(os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', 'wws_recents.png'))
     list_png_len = int(result['data']['data_num'] / 50) + 1
-    list_img = cv2.imread(os.path.join(plugin_path, 'png', 'list', '80_50.png'), cv2.IMREAD_UNCHANGED)
+    list_img = Picture.imread(os.path.join(plugin_path, 'png', 'list', '80_50.png'))
     for i in range(list_png_len):
-        res_img = cv2.vconcat([res_img, list_img])
+        res_img = Picture.vconcat([res_img, list_img])
     text_list.append(
         Text_Data(
             xy=(172, 161),
@@ -120,7 +119,7 @@ def get_png(
             )
         )
         creat_time = time.strftime(
-            "%Y-%m-%d", 
+            "%Y-%m-%d",
             time.localtime(result['data']['user']['created_at'])
         )
         text_list.append(
@@ -143,7 +142,7 @@ def get_png(
             )
         )
         creat_time = time.strftime(
-            "%Y-%m-%d", 
+            "%Y-%m-%d",
             time.localtime(result['data']['user']['created_at'])
         )
         text_list.append(
@@ -166,7 +165,7 @@ def get_png(
             )
         )
         creat_time = time.strftime(
-            "%Y-%m-%d", 
+            "%Y-%m-%d",
             time.localtime(result['data']['user']['created_at'])
         )
         text_list.append(
@@ -181,7 +180,7 @@ def get_png(
     battle_type = result['data']['pr']['battle_type']
     pr_png = result['data']['pr']['avg_pr_index']
     pr_png_path = os.path.join(plugin_path, 'png', f'bg_{lang}', 'pr', '{}.png'.format(pr_png))
-    pr_png = cv2.imread(pr_png_path, cv2.IMREAD_UNCHANGED)
+    pr_png = Picture.imread(pr_png_path)
     x1 = 132
     y1 = 627
     x2 = x1 + pr_png.shape[1]
@@ -392,7 +391,7 @@ def get_png(
     y0 = 1930
     ship_preview_data = Game_Data.load_ship_preview_data(lang)
     ship_preview_jpg_path = os.path.join(plugin_path,'png',f'bg_{lang}',f'ship_preview_{lang}.png')
-    ship_preview_jpg = Image.open(ship_preview_jpg_path).convert('RGBA')
+    ship_preview_jpg = asset_cache.get_image(ship_preview_jpg_path)
     for ship_data in result['data']['recents']:
         fontStyle = fonts.data[1][50]
         ship_index = ship_data['ship_info']['ship_index']
@@ -588,7 +587,7 @@ def get_png(
     return res_img
 
 
-            
+
 
 
 

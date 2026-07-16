@@ -3,23 +3,14 @@ from .kokomi_chs import trigger_list
 
 
 def parse_to_command(msg: str):
-    """把（经 LLM 处理后的）消息字符串解析成分发用的 split_msg。
-
-    与原 __init__.py 内联逻辑逐分支等价。返回 (action, payload)：
-    - ('dispatch', split_msg): 交给 select_funtion 分发
-    - ('stop', None):          静默结束（对应原来的裸 return）
-    - ('reply', text):         回复一条文本后结束（对应原来的 bot.send + return）
-    """
-    # 国服id带空格的特殊处理
     if 'wws bind cn ' in msg or 'wws bind 国服 ' in msg:
         split_msg = ['wws', 'bind', 'cn', msg[12:]]
     else:
-        split_msg = msg.split()  # 按空格分隔消息
+        split_msg = msg.split()
     if Plugin_Config.EN_START_WITH == split_msg[0]:
         del split_msg[0]
     if Plugin_Config.EN_START_WITH == split_msg[0][0]:
         split_msg[0] = split_msg[0].replace(Plugin_Config.EN_START_WITH,'')
-    # 快捷指令
     if split_msg[0][:6] == 'recent' and split_msg[0] != 'recents':
         if len(split_msg) == 1:
                 if split_msg[0] == 'recent':
@@ -75,7 +66,6 @@ def parse_to_command(msg: str):
             split_msg = ['wws', 'me', 'recents']
         else:
             return ('stop', None)
-    # 消息 -> 函数
     if len(split_msg) > 1 and (split_msg[0]+' ' in trigger_list):
         split_msg[0] = 'wws'
     return ('dispatch', split_msg)

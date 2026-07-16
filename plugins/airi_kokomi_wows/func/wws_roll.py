@@ -17,7 +17,6 @@ async def main(
 async def get_data(
     parameter: list,
 ) -> dict:
-    # [lang ship_type ship_tier ship_nation]
     try:
         path = '/p/ships-info/'
         params = {
@@ -36,7 +35,7 @@ async def get_data(
             path=path
         )
         if (
-            res['status'] != 'ok' or 
+            res['status'] != 'ok' or
             res['message'] != 'SUCCESS'
         ):
             return res
@@ -48,7 +47,7 @@ async def get_data(
             ship_nation=[] if parameter[3] == '' else str(parameter[3]).split(',')
         )
         result = {
-            'status': 'info', 
+            'status': 'info',
             'message': res_img
         }
         del res_img
@@ -77,6 +76,6 @@ def get_png(
     return res_img
 
 
-            
+
 
 

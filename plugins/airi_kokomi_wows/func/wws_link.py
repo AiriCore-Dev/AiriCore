@@ -15,7 +15,6 @@ async def main(
 async def get_data(
     parameter: list,
 ) -> dict:
-    # [platform uid aid server user_pr lang]
     try:
         path = '/b/add-bind/'
         params = {
@@ -32,7 +31,7 @@ async def get_data(
             method='post'
         )
         if (
-            res['status'] != 'ok' or 
+            res['status'] != 'ok' or
             res['message'] != 'SUCCESS'
         ):
             return res

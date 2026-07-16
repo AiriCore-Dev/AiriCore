@@ -1,7 +1,6 @@
 from ._base import program_error
 import os
 import time
-import cv2
 import gc
 from .. import (
     Plugin_Config,
@@ -25,7 +24,6 @@ async def main(
 async def get_data(
     parameter: list,
 ) -> dict:
-    # [aid server lang user_pr use_ac ac]
     try:
         path = '/b/pvp-data/'
         params = {
@@ -44,7 +42,7 @@ async def get_data(
             path=path
         )
         if (
-            res['status'] != 'ok' or 
+            res['status'] != 'ok' or
             res['message'] != 'SUCCESS'
         ):
             return res
@@ -55,8 +53,8 @@ async def get_data(
             lang=parameter[2]
         )
         result = {
-            'status': 'ok', 
-            'message': 'SUCCESS', 
+            'status': 'ok',
+            'message': 'SUCCESS',
             'img': None
         }
         result['img'] = Picture.return_img(img=res_img)
@@ -76,7 +74,7 @@ def get_png(
 ) -> str:
     text_list = []
     box_list = []
-    res_img = cv2.imread(os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', 'wws_me.png'), cv2.IMREAD_UNCHANGED)
+    res_img = Picture.imread(os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', 'wws_me.png'))
     text_list.append(
         Text_Data(
             xy=(172, 161),
@@ -112,7 +110,7 @@ def get_png(
             )
         )
         creat_time = time.strftime(
-            "%Y-%m-%d", 
+            "%Y-%m-%d",
             time.localtime(result['data']['user']['created_at'])
         )
         text_list.append(
@@ -135,7 +133,7 @@ def get_png(
             )
         )
         creat_time = time.strftime(
-            "%Y-%m-%d", 
+            "%Y-%m-%d",
             time.localtime(result['data']['user']['created_at'])
         )
         text_list.append(
@@ -158,7 +156,7 @@ def get_png(
             )
         )
         creat_time = time.strftime(
-            "%Y-%m-%d", 
+            "%Y-%m-%d",
             time.localtime(result['data']['user']['created_at'])
         )
         text_list.append(
@@ -172,7 +170,7 @@ def get_png(
         )
     pr_png = result['data']['pr']['avg_pr_index']
     pr_png_path = os.path.join(plugin_path, 'png', f'bg_{lang}', 'pr', '{}.png'.format(pr_png))
-    pr_png = cv2.imread(pr_png_path, cv2.IMREAD_UNCHANGED)
+    pr_png = Picture.imread(pr_png_path)
     x1 = 132
     y1 = 627
     x2 = x1 + pr_png.shape[1]
@@ -490,6 +488,6 @@ def get_png(
     return res_img
 
 
-            
+
 
 

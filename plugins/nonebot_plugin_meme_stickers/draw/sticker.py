@@ -32,7 +32,6 @@ def make_sticker_picture(
     font_size: float,
     font_style: skia.FontStyle,
     font_families: list[str],
-    # line_height: float = 1,  # 有点麻烦，要手动分行处理，不想做了
     auto_resize: bool = False,
     debug: bool = False,
 ) -> skia.Picture:
@@ -58,7 +57,6 @@ def make_sticker_picture(
             resized_height,
         )
         if debug:
-            # base image (blue)
             canvas.drawRect(image_rect, make_stroke_paint(0xFF0000FF, 2))
         canvas.drawImageRect(
             base_image,
@@ -121,14 +119,12 @@ def make_sticker_picture(
     if auto_resize:
         bx, by, bw, bh = calc_text_rotated_xywh()
 
-        # resize
         if bw > width or bh > height:
             ratio = min(width / bw, height / bh)
             font_size = font_size * ratio
             fg_paragraph = make_fg_paragraph()
             bx, by, bw, bh = calc_text_rotated_xywh()
 
-        # prevent overflow
         if bx < 0:
             text_x += -bx
         if by < 0:
@@ -146,14 +142,12 @@ def make_sticker_picture(
         stroke_paragraph = None
 
     if debug:
-        # bounding box (red)
         with skia.AutoCanvasRestore(canvas):
             canvas.drawRect(
                 skia.Rect.MakeXYWH(*calc_text_rotated_xywh()),
                 make_stroke_paint(0xFFFF0000, 2),
             )
 
-        # text box (green)
         with skia.AutoCanvasRestore(canvas):
             canvas.translate(text_x, text_y)
             canvas.rotate(text_rotate_degrees)

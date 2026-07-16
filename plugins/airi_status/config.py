@@ -1,5 +1,4 @@
 from pydantic import Field, BaseModel
-#from nonebot.plugin import get_plugin_config
 
 
 class ScopedConfig(BaseModel):

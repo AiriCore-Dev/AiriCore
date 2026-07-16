@@ -17,20 +17,21 @@ from datetime import datetime, timezone, timedelta
 
 from . import counter
 from . import cache
+from . import ram_inspector
 from .charts import draw_pies_vstack, draw_summary, render_bot_cell, draw_grid
 
 async def decimal_to_quaternary(decimal_num):
     if decimal_num == 0:
-        return "0"    
+        return "0"
     quaternary = ""
     num = decimal_num
     while num > 0:
         remainder = num % 4
         quaternary = str(remainder) + quaternary
-        num = num // 4    
+        num = num // 4
     return quaternary[::-1]
 
-async def format_qq_data(data_list):   
+async def format_qq_data(data_list):
     UTC_PLUS_8 = timezone(timedelta(hours=8))
     msg = []
     for user,bot in data_list:
@@ -64,16 +65,13 @@ async def format_qq_data(data_list):
         await bot.get_version_info()
         direct_delay = (time.time() - start_time) * 1000
 
-        #output_lines.append(f"-注册时间：{reg_time}")
         output_lines.append(f"-QQ等级：{qq_level} {qq_level_str2[::-1]}".strip())
         output_lines.append(f"-是否为VIP及VIP等级：{vip_info}")
         output_lines.append(f"-连接延迟：{direct_delay:.2f}ms")
         msg.append({"type": "node", "data": {"name": nickname, "uin": qq_number, "content": '\n'.join(output_lines)}})
     return msg
 
-#reloader = require('nonebot_plugin_reboot').Reloader
 timing = require("nonebot_plugin_apscheduler").scheduler
-#timing.add_job(reloader.reload, "cron", hour=23, minute=55, misfire_grace_time=3600, coalesce=True)
 
 driver = get_driver()
 @driver.on_bot_connect
@@ -102,7 +100,6 @@ def _img_seg(png: bytes):
     return MessageSegment.image("base64://" + base64.b64encode(png).decode())
 
 
-# QQ 默认头像的 md5,命中说明拿到的是占位图,降清晰度重试
 _DEFAULT_AVATAR_MD5 = "acef72340ac0e914090bd35799f5594e"
 
 
@@ -143,7 +140,6 @@ async def _group_avatar(gid: str) -> bytes:
 
 
 async def _prefetch_avatars(user_ids, group_ids) -> dict:
-    """并发下载用户+群头像,返回 {id: bytes}(私聊/失败为空 bytes)。"""
     ids = [u for u in dict.fromkeys(user_ids) if u]
     gids = [g for g in dict.fromkeys(group_ids) if g and g != counter.PRIVATE_KEY]
     tasks = [_user_avatar(u) for u in ids] + [_group_avatar(g) for g in gids]
@@ -166,13 +162,10 @@ async def _bot_nick(bot: Bot, self_id: str) -> str:
             return nick
     except Exception:
         pass
-    # 拿不到就退回旧缓存(不判过期),再退回 self_id
     return cache.get("bot_name", self_id) or self_id
 
 
 async def _group_labeler(bot: Bot, sessions):
-    """预取本次涉及的群名,返回 label_of(会话id)->(第一行, 第二行)。
-    群:第一行群名(写不下由绘图层省略),第二行'（群号）：数字'灰字;私聊只有一行。"""
     names = {}
     for sid in sessions:
         if sid == counter.PRIVATE_KEY:
@@ -186,7 +179,6 @@ async def _group_labeler(bot: Bot, sessions):
             gname = info.get("group_name") or ""
             if gname:
                 cache.put("group_name", sid, gname)
-            # 群名拿不到时退回旧缓存(不判过期),仍拿不到给空串
             names[sid] = gname or cache.get("group_name", sid) or ""
         except Exception:
             names[sid] = cache.get("group_name", sid) or ""
@@ -201,7 +193,6 @@ async def _group_labeler(bot: Bot, sessions):
 
 
 async def _bot_pies(bot: Bot, self_id: str, data: dict, avatars: dict = None) -> bytes:
-    """给一个 bot 生成收/发上下拼接的单张饼图 png(带参分支用)。"""
     avatars = avatars or {}
     recv = data.get("recv", {})
     sent = data.get("sent", {})
@@ -217,7 +208,6 @@ async def _bot_pies(bot: Bot, self_id: str, data: dict, avatars: dict = None) ->
 
 
 async def _bot_cell(bot: Bot, self_id: str, nick: str, data: dict, avatars: dict = None):
-    """给一个 bot 生成网格单元格 Image(顶部昵称+头像 + 收/发饼图)。"""
     avatars = avatars or {}
     recv = data.get("recv", {})
     sent = data.get("sent", {})
@@ -244,7 +234,6 @@ async def _(bot: Bot, ev: MessageEvent):
     stats = counter.get_stats()
     today = datetime.now(timezone(timedelta(hours=8))).strftime('%Y-%m-%d')
 
-    # 带参:只发指定 bot 的收/发饼图,直接发送
     if arg:
         data = stats.get(arg)
         if not data:
@@ -258,12 +247,10 @@ async def _(bot: Bot, ev: MessageEvent):
         await bot.send_group_msg(group_id=ev.group_id, message=msg)
         return
 
-    # 无参: 2张图 —— ①所有 bot 图表拼成网格(每行4个) ②跨 bot 汇总总表
     if not stats:
         await airi_analysis.finish(f'今日({today})暂无收发统计')
 
     bots = nonebot.get_bots()
-    # 预下载所有涉及的 bot 头像 + 群头像(去重并发)
     all_groups = set()
     for data in stats.values():
         all_groups |= set(data.get('recv', {})) | set(data.get('sent', {}))
@@ -272,7 +259,7 @@ async def _(bot: Bot, ev: MessageEvent):
     bot_totals = []
     cells = []
     for self_id, data in stats.items():
-        cur = bots.get(self_id, bot)  # 优先用对应 bot 拿群名,离线则借当前 bot
+        cur = bots.get(self_id, bot)
         nick = await _bot_nick(cur, self_id)
         recv_total = sum(data.get('recv', {}).values())
         sent_total = sum(data.get('sent', {}).values())
@@ -297,8 +284,6 @@ REBOOT_CMD = (
 airi_force_reboot = on_fullmatch('force-reboot', priority=5, block=True, permission=SUPERUSER)
 @airi_force_reboot.handle()
 async def _(bot: Bot, ev: PrivateMessageEvent):
-    # Detach fully from the python parent process: start_new_session puts the child
-    # in its own session/process group so it survives when this process is killed.
     subprocess.Popen(
         REBOOT_CMD,
         shell=True,
@@ -314,8 +299,6 @@ async def _(bot: Bot, ev: PrivateMessageEvent):
 airi_reboot = on_fullmatch('reboot', priority=5, block=True, permission=SUPERUSER)
 @airi_reboot.handle()
 async def _(bot: Bot, ev: PrivateMessageEvent):
-    # Send Ctrl+C (\003) to the airicore screen session so it can shut down
-    # gracefully; the launch script / process manager handles the restart.
     subprocess.Popen(
         ['/usr/bin/screen', '-S', 'airicore', '-X', 'stuff', '\003'],
         stdin=subprocess.DEVNULL,
@@ -324,3 +307,71 @@ async def _(bot: Bot, ev: PrivateMessageEvent):
         start_new_session=True,
         close_fds=True,
     )
+
+
+def _format_bytes(b: int) -> str:
+    if b < 1024:
+        return f"{b}B"
+    kb = b / 1024
+    if kb < 1024:
+        return f"{kb:.1f}KB"
+    mb = kb / 1024
+    if mb < 1024:
+        return f"{mb:.1f}MB"
+    gb = mb / 1024
+    return f"{gb:.2f}GB"
+
+
+def _ram_node(bot_id: str, name: str, content: str) -> dict:
+    return {"type": "node", "data": {"name": name, "uin": bot_id, "content": content}}
+
+
+airi_ram = on_fullmatch('airiram', priority=5, block=True, permission=SUPERUSER)
+@airi_ram.handle()
+async def _(bot: Bot, ev: MessageEvent):
+    if not isinstance(ev, GroupMessageEvent):
+        await airi_ram.finish('请在群里使用 airiram')
+
+    process_mem, mode, inspections = ram_inspector.inspect_all()
+    bot_id = str(bot.self_id)
+
+    mode_desc = {
+        "ram": "全驻留内存，最快，内存占用最高",
+        "balanced": "仅缓存高频文件，平衡模式",
+        "disk": "完全停用缓存，每次读盘，内存最小",
+    }
+
+    total_disk = sum(i["disk_bytes"] for i in inspections)
+    total_ram = sum(i["ram_bytes"] for i in inspections)
+
+    overview = ["=== 概览 ==="]
+    if process_mem > 0:
+        overview.append(f"Bot 进程内存占用: {_format_bytes(process_mem)}")
+    else:
+        overview.append("Bot 进程内存占用: 无法获取 (需安装 psutil)")
+    overview.append(f"当前缓存模式: {mode}")
+    if mode in mode_desc:
+        overview.append(mode_desc[mode])
+    overview.append("")
+    overview.append(f"磁盘缓存合计: {_format_bytes(total_disk)}")
+    overview.append(f"内存缓存合计: {_format_bytes(total_ram)}")
+    if mode == "disk":
+        overview.append("注: disk 模式下内存缓存已停用")
+
+    nodes = [_ram_node(bot_id, "概览", "\n".join(overview))]
+
+    for info in inspections:
+        lines = [f"=== {info['name']} ==="]
+        lines.append(f"磁盘: {_format_bytes(info['disk_bytes'])}")
+        lines.append(f"内存: {_format_bytes(info['ram_bytes'])}")
+        if info.get("error"):
+            lines.append(f"读取失败: {info['error']}")
+        elif info["details"]:
+            lines.append("缓存明细:")
+            for d in info["details"]:
+                lines.append(f"  - {d}")
+        else:
+            lines.append("缓存明细: 暂无缓存内容")
+        nodes.append(_ram_node(bot_id, info["name"], "\n".join(lines)))
+
+    await bot.send_group_forward_msg(group_id=ev.group_id, messages=nodes, _timeout=120)

@@ -198,7 +198,7 @@ class Game:
             .where(
                 GameRecord.session_id == session_id,
                 GameRecord.name == cls.name,
-                GameRecord.is_game_over == False,  # noqa
+                GameRecord.is_game_over == False,
             )
             .order_by(GameRecord.update_time.desc())
         )

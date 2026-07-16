@@ -35,4 +35,5 @@ def new_account():
         "theme": "airi_momo",
         "daily_challenge": [0, 0, 0, 0],
         'jrys': 0,
+        'last_check_time': 0,
     }

@@ -27,6 +27,7 @@ async def _(bot: Bot, ev: MessageEvent):
         state.data[user_id] = new_account()
         res += '欢迎来到Airi的收藏世界！\n☑️ 发送指令 签到帮助 查看所有功能哦！\n\n'
 
+    state.data[user_id]['last_check_time'] = datetime.datetime.now().timestamp()
     if not state.data[user_id]['check_times_daily']:
         state.data[user_id]['checked_days'] += 1
         state.data[user_id]['check_times_daily'] += 1

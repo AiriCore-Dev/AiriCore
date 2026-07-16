@@ -4,22 +4,22 @@ from typing_extensions import TypeAlias
 
 SkiaTextAlignType: TypeAlias = Literal[
     "center", "end", "justify", "left", "right", "start",
-]  # fmt: skip
+]
 SkiaFontStyleType: TypeAlias = Literal["bold", "bold_italic", "italic", "normal"]
 SkiaEncodedImageFormatType: TypeAlias = Literal["jpeg", "png", "webp"]
 RGBAColorTuple: TypeAlias = tuple[int, int, int, int]
 TRBLPaddingTuple: TypeAlias = tuple[float, float, float, float]
 StickerGridPaddingType: TypeAlias = Union[
-    float,  # t r b l
-    tuple[float],  # (t r b l)
-    tuple[float, float],  # (t b, l r)
-    tuple[float, float, float, float],  # (t, r, b, l)
+    float,
+    tuple[float],
+    tuple[float, float],
+    tuple[float, float, float, float],
 ]
 XYGapTuple: TypeAlias = tuple[float, float]
 StickerGridGapType: TypeAlias = Union[
-    float,  # x and y
-    tuple[float],  # (x and y)
-    tuple[float, float],  # (x, y)
+    float,
+    tuple[float],
+    tuple[float, float],
 ]
 
 NAME = "Meme Stickers"

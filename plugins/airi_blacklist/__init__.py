@@ -38,6 +38,11 @@ namelist = (
 
 block_stats = defaultdict(lambda: {"last_time": None, "count": 0})
 stats_lock = asyncio.Lock()
+stats_last_date = None
+
+
+def get_today_date() -> str:
+    return datetime.now().strftime("%Y-%m-%d")
 
 
 def get_today_log_file() -> Path:
@@ -68,7 +73,12 @@ async def save_block_log():
 
 
 async def log_block_attempt(category: str, target_type: str, identifier: str, action: str):
+    global stats_last_date
     async with stats_lock:
+        today = get_today_date()
+        if stats_last_date is not None and stats_last_date != today:
+            block_stats.clear()
+        stats_last_date = today
         key = f"{category}{target_type} {identifier} {action}"
         block_stats[key]["last_time"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         block_stats[key]["count"] += 1

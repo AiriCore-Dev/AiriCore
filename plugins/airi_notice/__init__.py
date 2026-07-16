@@ -16,7 +16,7 @@ query_tmxx_status = on_message(priority=1,block=False)
 async def query_tmxx_status_func(bot: Bot, ev: MessageEvent):
     try:
         global BLACKLIST, gr_name
-        
+
         if (len(str(ev.get_session_id()).split('_')) != 1) and str(ev.get_session_id()).split('_')[1] in BLACKLIST: return
         msg = str(ev.message)
 
@@ -40,7 +40,7 @@ async def query_tmxx_status_func(bot: Bot, ev: MessageEvent):
 
             user_nick = await bot.get_group_member_info(group_id=gruop_id, user_id=qq_id)
             user_nick = (user_nick.get("card") or user_nick.get("nickname") or qq_id)
-            
+
             try:
                 gr_name[bot.self_id]
             except:
@@ -48,7 +48,7 @@ async def query_tmxx_status_func(bot: Bot, ev: MessageEvent):
                 gr_list = await bot.get_group_list()
                 for gr in gr_list:
                     gr_name[bot.self_id][gr["group_id"]] = gr["group_name"]
-                    
+
             mesg = '📣 新消息提醒\n🕗 {}\n👨‍ {}({})\n📀 {}({})\n📩 {}'.format(str(cur_time)[:-7], user_nick, qq_id, gr_name[bot.self_id][int(gruop_id)], gruop_id, msg.replace(f'[CQ:at,qq={notification_account}]','@田麻小溪'))
             await bot.send_private_msg(user_id=int(notification_account),message=mesg)
     except:

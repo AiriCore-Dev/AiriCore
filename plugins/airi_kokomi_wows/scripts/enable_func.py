@@ -4,7 +4,6 @@ from ._api_helper import safe_call
 async def enable_recent(
     parameter:list
 ) -> dict:
-    # [method aid server recent_class]
     aid = parameter[0]
     server = parameter[1]
     recent_class = parameter[2]
@@ -25,7 +24,6 @@ async def enable_recent(
 async def enable_recents(
     parameter:list
 ) -> dict:
-    # [method aid server recents_class]
     aid = parameter[0]
     server = parameter[1]
     recents_class = parameter[2]

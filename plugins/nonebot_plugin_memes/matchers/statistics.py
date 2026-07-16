@@ -75,7 +75,7 @@ def wrapper(
 
 
 pattern_my = r"(?P<my>我的)"
-pattern_type = r"(?P<type>日|24小时|1天|本日|今日|周|一周|7天|本周|月|30天|本月|月度|年|一年|本年|年度)"  # noqa E501
+pattern_type = r"(?P<type>日|24小时|1天|本日|今日|周|一周|7天|本周|月|30天|本月|月度|年|一年|本年|年度)"
 pattern_global = r"(?P<global>全局)"
 pattern_cmd = r"表情(?:调用|使用)统计"
 

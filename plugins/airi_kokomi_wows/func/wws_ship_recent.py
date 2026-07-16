@@ -1,7 +1,6 @@
 from ._base import program_error
 import os
 import time
-import cv2
 import gc
 from .. import (
     Plugin_Config,
@@ -27,7 +26,6 @@ async def main(
 async def get_data(
     parameter: list,
 ) -> dict:
-    # [aid server lang ship_id start_date end_date user_pr use_ac ac]
     try:
         path = '/r1/ship-recent-data/'
         params = {
@@ -49,7 +47,7 @@ async def get_data(
             path=path
         )
         if (
-            res['status'] != 'ok' or 
+            res['status'] != 'ok' or
             res['message'] != 'SUCCESS'
         ):
             return res
@@ -60,8 +58,8 @@ async def get_data(
             lang=parameter[2]
         )
         result = {
-            'status': 'ok', 
-            'message': 'SUCCESS', 
+            'status': 'ok',
+            'message': 'SUCCESS',
             'img': None
         }
         result['img'] = Picture.return_img(img=res_img)
@@ -81,11 +79,11 @@ def get_png(
 ) -> str:
     text_list = []
     box_list = []
-    res_img = cv2.imread(os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', 'wws_shiprecent.png'), cv2.IMREAD_UNCHANGED)
+    res_img = Picture.imread(os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', 'wws_shiprecent.png'))
     list_png_len = int(result['data']['data_num'] / 50) + 1
-    list_img = cv2.imread(os.path.join(plugin_path, 'png', 'list', '80_50.png'), cv2.IMREAD_UNCHANGED)
+    list_img = Picture.imread(os.path.join(plugin_path, 'png', 'list', '80_50.png'))
     for i in range(list_png_len):
-        res_img = cv2.vconcat([res_img, list_img])
+        res_img = Picture.vconcat([res_img, list_img])
     text_list.append(
         Text_Data(
             xy=(172, 161),
@@ -121,7 +119,7 @@ def get_png(
             )
         )
         creat_time = time.strftime(
-            "%Y-%m-%d", 
+            "%Y-%m-%d",
             time.localtime(result['data']['user']['created_at'])
         )
         text_list.append(
@@ -144,7 +142,7 @@ def get_png(
             )
         )
         creat_time = time.strftime(
-            "%Y-%m-%d", 
+            "%Y-%m-%d",
             time.localtime(result['data']['user']['created_at'])
         )
         text_list.append(
@@ -188,14 +186,14 @@ def get_png(
         )
     )
 
-    nation_png = cv2.imread(nation_png_path, cv2.IMREAD_UNCHANGED)
-    nation_png = cv2.resize(nation_png, None, fx=2, fy=2)
+    nation_png = Picture.imread(nation_png_path)
+    nation_png = Picture.resize(nation_png, 2, 2)
     x1 = int(1214-all_len/2)
     y1 = 580
     x2 = x1 + nation_png.shape[1]
     y2 = y1 + nation_png.shape[0]
     res_img = Picture.merge_img(res_img, nation_png, y1, y2, x1, x2)
-    type_png = cv2.imread(type_png_path, cv2.IMREAD_UNCHANGED)
+    type_png = Picture.imread(type_png_path)
     x1 = int(1214-all_len/2+180)
     y1 = 593
     x2 = x1 + type_png.shape[1]
@@ -203,7 +201,7 @@ def get_png(
     res_img = Picture.merge_img(res_img, type_png, y1, y2, x1, x2)
     pr_png = result['data']['pr']['avg_pr_index']
     pr_png_path = os.path.join(plugin_path, 'png', f'bg_{lang}', 'pr', '{}.png'.format(pr_png))
-    pr_png = cv2.imread(pr_png_path, cv2.IMREAD_UNCHANGED)
+    pr_png = Picture.imread(pr_png_path)
     x1 = 132
     y1 = 757
     x2 = x1 + pr_png.shape[1]
@@ -584,6 +582,6 @@ def get_png(
     return res_img
 
 
-            
+
 
 

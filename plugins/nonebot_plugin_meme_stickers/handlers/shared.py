@@ -32,7 +32,6 @@ m_cls = on_alconna(
     skip_for_unmatch=False,
     auto_send_output=True,
     use_cmd_start=True,
-    # use_cmd_sep=True,
 )
 
 EXIT_COMMANDS = ("0", "e", "exit", "q", "quit", "取消", "退出")
@@ -85,7 +84,7 @@ async def sticker_pack_select(include_unavailable: bool = False) -> StickerPack:
     if not packs:
         await UniMessage("当前无可用贴纸包").finish()
 
-    async with exception_notify("图片绘制失败"):  # fmt: skip
+    async with exception_notify("图片绘制失败"):
         pack_list_img = save_image(
             draw_sticker_grid_from_packs(packs),
             skia.kJPEG,
@@ -202,7 +201,6 @@ async def category_and_sticker_select(pack: StickerPack) -> StickerInfo:
             await UniMessage("未找到对应分类，请重新发送").send()
 
     async def select_sticker(category: str) -> Optional[StickerInfo]:
-        """category select requested when return None"""
 
         category_params = pack.manifest.sticker_grid.resolved_stickers_params
         grid_params = category_params.get(

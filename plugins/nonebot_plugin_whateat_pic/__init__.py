@@ -91,15 +91,12 @@ del_dish = on_regex(
     permission=SUPERUSER,
 )
 
-# 今天吃什么路径
 img_eat_path = Path(os.path.join(os.path.dirname(__file__), "eat_pic"))
 all_file_eat_name = os.listdir(str(img_eat_path))
 
-# 今天喝什么路径
 img_drink_path = Path(os.path.join(os.path.dirname(__file__), "drink_pic"))
 all_file_drink_name = os.listdir(str(img_drink_path))
 
-# 载入bot名字
 DEFAULT_NICKNAME = Config.parse_obj(nonebot.get_driver().config.dict()).bot_nickname
 bot_nicknames = {}
 
@@ -190,13 +187,11 @@ async def handle(state: T_State, img: Message = Arg()):
 
 @view_dish.handle()
 async def got_name(bot: Bot, matcher: Matcher, state: T_State, args:Tuple[Any,...] = RegexGroup()):
-    # 设置下一步got的arg
     if args[1] in ["菜单", "菜品"]:
         state["type"] = "吃的"
     elif args[1] in ["饮料", "饮品"]:
         state["type"] = "喝的"
 
-    # 设置下一步got的arg
     if args[2]:
         matcher.set_arg("name", args[2])
     else:
@@ -221,7 +216,6 @@ async def handle(state: T_State, name: Message = Arg()):
 
 @view_all_dishes.handle()
 async def handle(bot: Bot, event: MessageEvent, args:Tuple[Any,...] = RegexGroup()):
-    # 设置下一步got的arg
     if args[1] in ["菜单", "菜品"]:
         path = img_eat_path
         all_name = all_file_eat_name
@@ -229,7 +223,6 @@ async def handle(bot: Bot, event: MessageEvent, args:Tuple[Any,...] = RegexGroup
         path = img_drink_path
         all_name = all_file_drink_name
 
-    # 合并转发
     msg_list = [f"{get_nickname(bot)}查询到的{args[1]}如下"]
     N = 0
     for name in all_name:
@@ -243,9 +236,7 @@ async def handle(bot: Bot, event: MessageEvent, args:Tuple[Any,...] = RegexGroup
     await send_forward_msg(bot, event, get_nickname(bot), bot.self_id, msg_list)
 
 
-# 初始化内置时间的last_time
 time = 0
-# 用户数据
 user_count = {}
 
 
@@ -297,17 +288,10 @@ async def wte(bot: Bot, msg: MessageEvent):
             await what_eat.finish("出错啦！没有找到好吃的~")
 
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~分割区~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# 诶嘿你发现了宝藏>.<
-# 这里啥也没有，嘿嘿
-# 有机会再在这里写点东西吧，嘿嘿
-# 简单更新下meta,想重构下cd的代码的(因为有轮子，不想重复造轮子)
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~分割区~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-# 每日0点重置用户数据
+
+
 def reset_user_count():
     global user_count
     user_count = {}
@@ -319,7 +303,6 @@ except ActionFailed as e:
     logger.warning(f"定时任务添加失败，{repr(e)}")
 
 
-# 上限回复消息
 def get_max_msg(nickname):
     return (
         "你今天吃的够多了！不许再吃了(´-ωก`)",
@@ -330,7 +313,6 @@ def get_max_msg(nickname):
     )
 
 
-# 调用合并转发api函数
 async def send_forward_msg(
     bot: Bot,
     event: MessageEvent,

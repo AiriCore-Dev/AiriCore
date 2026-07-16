@@ -78,7 +78,6 @@ def draw_sticker_grid(
 
         def draw_one(p: StickerParams):
             if debug:
-                # sticker taken space (magenta)
                 canvas.drawRect(
                     skia.Rect.MakeWH(max_w, max_h),
                     make_stroke_paint(0xFFFF00FF, 2),
@@ -102,7 +101,6 @@ def draw_sticker_grid(
             with skia.AutoCanvasRestore(canvas):
                 canvas.translate(x_offset, y_offset)
                 if debug:
-                    # sticker actual space (yellow)
                     canvas.drawRect(
                         skia.Rect.MakeWH(rw, rh),
                         make_stroke_paint(0xFFFFFF00, 2),

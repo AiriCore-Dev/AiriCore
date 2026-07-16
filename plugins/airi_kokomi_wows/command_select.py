@@ -9,7 +9,7 @@ from .config import Plugin_Config
 from .select_func_cn import main as main_cn
 from .select_func_en import main as main_en
 from .kokomi_chs import *
-    
+
 class select_funtion:
     async def main(
         msg:list,
@@ -20,30 +20,26 @@ class select_funtion:
         channel_id:str,
         platform_data:dict
     ):
-    
-        # @
+
         tot = 0
         while 1:
             if len(msg) > 1:
                 if (
-                    # qqgroup
                     msg[1].startswith('[cq:at,qq=') and
                     msg[1].endswith(']')
                 ) or (
-                    # qqguild
                     msg[1].startswith('<@!') and
                     msg[1].endswith('>')
-                ): 
+                ):
                     user_id = (re.findall(r'\d+', msg[1]))[0]
                     msg[1] = 'me'
-         
-            # 获取用户绑定信息
+
             bind_data = await get_bind.get_bind_data(
                 platform=platform,
                 uid=user_id
             )
             if (
-                bind_data['status'] == 'ok' and 
+                bind_data['status'] == 'ok' and
                 bind_data['message'] == 'NO BIND DATA'
             ):
                 lang = default_lang.get_default_lang(
@@ -57,7 +53,7 @@ class select_funtion:
                 use_ac=False
                 ac=None
             elif (
-                bind_data['status'] != 'ok' or 
+                bind_data['status'] != 'ok' or
                 bind_data['message'] != 'SUCCESS'
             ):
                 return select_funtion.return_data(
@@ -72,7 +68,6 @@ class select_funtion:
                 use_ac=False
                 ac=None
 
-            # 爱莉你自己特判
             if '你自己' in msg:
                 aid='2051054400'
                 server='asia'
@@ -80,14 +75,13 @@ class select_funtion:
                 lang='cn'
                 use_ac=False
                 ac=None
-            
-            # 处理消息
+
             if lang == 'ja' or lang == 'jp':
                 lang == 'cn'
             '''
             if lang == 'cn':
                 if msg[0] == Plugin_Config.CN_START_WITH:
-                    del msg[0]  
+                    del msg[0]
             if lang == 'en':
                 if Plugin_Config.EN_START_WITH == msg[0]:
                     del msg[0]
@@ -104,8 +98,7 @@ class select_funtion:
                 del msg[0]
             if lang == 'en' and msg[0] in me_list and len(msg)>1:
                 del msg[0]
-            
-            # 将
+
             if lang == 'cn':
                 select_result = await main_cn(
                     msg=msg,
@@ -153,7 +146,7 @@ class select_funtion:
                     result=result,
                     lang=lang
                 )
-        
+
     def return_data(
         result:dict,
         lang:str
@@ -184,7 +177,7 @@ class select_funtion:
                 'msg': None,
                 'img': return_img['img']
             }
-    
 
 
-        
+
+

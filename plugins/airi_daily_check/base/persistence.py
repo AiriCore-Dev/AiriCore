@@ -32,11 +32,19 @@ async def load_json():
             loaded = pickle.load(f)
         state.data.clear()
         state.data.update(loaded)
+        _backfill_last_check_time()
     except:
         os.makedirs(DATA_DIR, exist_ok=True)
         await save_to_json()
     _restore_or_reset_challenge()
     gc.collect()
+
+
+def _backfill_last_check_time():
+    now_ts = datetime.datetime.now().timestamp()
+    for uid in state.data.keys():
+        if 'last_check_time' not in state.data[uid]:
+            state.data[uid]['last_check_time'] = now_ts
 
 
 def _restore_or_reset_challenge():
@@ -63,15 +71,49 @@ async def save_to_json():
     gc.collect()
 
 
+def _has_savedata(user_data):
+    if user_data.get('collections'):
+        return True
+    if user_data.get('credits', 0) > 0:
+        return True
+    if user_data.get('checked_days', 0) > 0:
+        return True
+    if user_data.get('reborn_times', 0) > 0:
+        return True
+    if user_data.get('theme', 'airi_momo') != 'airi_momo':
+        return True
+    return False
+
+
 async def daily_clear():
     should_clear = bool(nonebot.get_bots())
-    for i in state.data.keys():
-        if not state.data[i]['check_times_daily'] and should_clear:
-            state.data[i]['checked_days'] = 0
-        state.data[i]['check_times_daily'] = 0
-        state.data[i]['receive_transfer_daily'] = 0
-        state.data[i]['daily_challenge'] = [0, 0, 0, 0]
-        state.data[i]['jrys'] = 0
+    now = datetime.datetime.now()
+    inactive_cutoff = (now - datetime.timedelta(days=90)).timestamp()
+
+    to_remove = []
+    for uid in state.data.keys():
+        user_data = state.data[uid]
+        if not user_data['check_times_daily'] and should_clear:
+            user_data['checked_days'] = 0
+        user_data['check_times_daily'] = 0
+        user_data['receive_transfer_daily'] = 0
+        user_data['daily_challenge'] = [0, 0, 0, 0]
+        user_data['jrys'] = 0
+
+        last_check = user_data.get('last_check_time')
+        if (
+            last_check is not None
+            and last_check < inactive_cutoff
+            and not _has_savedata(user_data)
+        ):
+            to_remove.append(uid)
+
+    for uid in to_remove:
+        state.data.pop(uid, None)
+
+    if to_remove:
+        nonebot.logger.info(f"airi_daily_check: 清理 {len(to_remove)} 个90天不活跃的空账号（无存档数据）")
+
     await save_to_json()
 
 

@@ -133,19 +133,16 @@ def calc_rotated_bounding_box_xywh(
 ) -> tuple[float, float, float, float]:
     x, y, w, h = text_xywh
 
-    # 计算原始矩形的四个顶点
     points = [
-        (x, y),  # 左上角
-        (x + w, y),  # 右上角
-        (x + w, y + h),  # 右下角
-        (x, y + h),  # 左下角
+        (x, y),
+        (x + w, y),
+        (x + w, y + h),
+        (x, y + h),
     ]
 
-    # 旋转顶点
     cx, cy = rotate_center
     rotated_points = [rotate_point(*p, cx, cy, rotate_degrees) for p in points]
 
-    # 计算旋转后边界框的边界
     x_values = [rx for rx, ry in rotated_points]
     y_values = [ry for rx, ry in rotated_points]
 
@@ -154,7 +151,6 @@ def calc_rotated_bounding_box_xywh(
     min_y = min(y_values)
     max_y = max(y_values)
 
-    # 计算旋转后边界框的 (x, y, w, h)
     rotated_x = min_x
     rotated_y = min_y
     rotated_w = max_x - min_x
@@ -169,7 +165,6 @@ def get_resize_contain_ratio_size_offset(
     target_w: float,
     target_h: float,
 ) -> tuple[float, float, float, float, float]:
-    """Returns: (ratio, resized_w, resized_h, offset_x, offset_y)"""
 
     ratio = min(target_w / original_w, target_h / original_h)
     resized_w = original_w * ratio
@@ -185,7 +180,6 @@ def get_resize_cover_ratio_and_offset(
     target_w: float,
     target_h: float,
 ) -> tuple[float, float, float]:
-    """Returns: (ratio, offset_x, offset_y)"""
 
     ratio = max(target_w / original_w, target_h / original_h)
     resized_w = original_w * ratio
@@ -237,7 +231,7 @@ def get_black_n_white_filter_paint() -> skia.Paint:
         0.2126, 0.7152, 0.0722, 0, 0,
         0.2126, 0.7152, 0.0722, 0, 0,
         0,      0,      0,      1, 0,
-    ])  # fmt: skip
+    ])
     paint = skia.Paint()
     paint.setColorFilter(color_filter)
     return paint

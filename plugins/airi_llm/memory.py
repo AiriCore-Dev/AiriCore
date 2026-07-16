@@ -37,6 +37,20 @@ MOOD_MIN_ENTRIES = 4
 MOOD_ANALYZE_ENTRIES = 15
 MOOD_EMA_ALPHA = 0.5
 
+STYLE_TTL_SECS = 1800
+STYLE_MIN_ENTRIES = 20
+STYLE_ANALYZE_ENTRIES = 40
+STYLE_MAX_CHARS = 100
+
+BOT_MOOD_TTL_SECS = 300
+BOT_MOOD_MIN_ENTRIES = 3
+BOT_MOOD_ANALYZE_ENTRIES = 10
+BOT_MOOD_EMA_ALPHA = 0.4
+
+INACTIVE_GROUP_TTL_DAYS = 90
+INACTIVE_USER_TTL_DAYS = 180
+MAX_LOCK_DICT_SIZE = 500
+
 SCHEMA_VERSION = 1
 
 
@@ -61,6 +75,10 @@ class GroupContext:
     last_activity_ts: float = 0.0
     mood: float = 0.0
     mood_updated_at: float = 0.0
+    speaking_style: str = ""
+    style_updated_at: float = 0.0
+    bot_mood: float = 0.0
+    bot_mood_updated_at: float = 0.0
 
     def __post_init__(self):
         if not isinstance(self.entries, deque) or self.entries.maxlen != RAW_CONTEXT_MAX:
@@ -199,6 +217,8 @@ async def save_all(state: Any) -> None:
     except Exception as e:
         logger.warning(f"保存长期记忆失败: {e}")
 
+    await cleanup_inactive_data(state)
+
 
 def get_ctx(state: Any, gid: str) -> GroupContext:
     ctx = state.group_ctx.get(gid)
@@ -269,11 +289,42 @@ def render_context(state: Any, gid: str) -> str:
     if ctx.rolling_summary:
         parts.append(f"【较早对话概要】\n{ctx.rolling_summary}")
 
+    if ctx.speaking_style:
+        parts.append(
+            "【这个群的说话风格】\n" + ctx.speaking_style +
+            "\n（轻度贴合这个群的用词和语气，但不要刻意模仿或丢掉你自己的性格）"
+        )
+
+    bot_mood_desc = _bot_mood_desc(ctx.bot_mood)
+    if bot_mood_desc:
+        parts.append(
+            "【你现在的心情】\n" + bot_mood_desc +
+            "\n（让心情自然影响你的语气和回话的松紧，不要直接说出或描写自己的心情）"
+        )
+
     if entries:
         parts.append("【最近的群聊】\n" + _entries_table(entries))
 
     parts.append(f"当前时间：{_now_str()}。现在轮到你发言。")
     return "\n\n".join(parts)
+
+
+def _bot_mood_desc(mood: float) -> str:
+    if mood is None:
+        return ""
+    if mood >= 0.6:
+        return "心情很好，轻快、想接话、带点小雀跃"
+    if mood >= 0.2:
+        return "心情不错，放松、愿意搭话"
+    if mood > -0.2:
+        return "心情平平，正常状态"
+    if mood > -0.6:
+        return "有点提不起劲，回得更懒更短，兴致一般"
+    return "情绪偏低，话少、冷淡、不太想接话"
+
+
+def _char_name(state: Any) -> str:
+    return getattr(state, "char_name", "角色")
 
 
 def _render_entries_plain(entries: List[ContextEntry]) -> str:
@@ -342,12 +393,59 @@ async def maybe_refresh_mood(state: Any, gid: str) -> None:
     state.dirty.add(gid)
 
 
+async def maybe_refresh_speaking_style(state: Any, gid: str) -> None:
+    ctx = get_ctx(state, gid)
+    now = time.time()
+    if now - ctx.style_updated_at < STYLE_TTL_SECS:
+        return
+    if len(ctx.entries) < STYLE_MIN_ENTRIES:
+        return
+    ctx.style_updated_at = now
+
+    lock = _get_bg_lock(state, gid)
+    if lock.locked():
+        return
+    async with lock:
+        recent = list(ctx.entries)[-STYLE_ANALYZE_ENTRIES:]
+        user_entries = [e for e in recent if not e.is_self]
+        if len(user_entries) < STYLE_MIN_ENTRIES // 2:
+            return
+        convo = _render_entries_plain(user_entries)
+        style = await llm_client.analyze_speaking_style(convo)
+        if style:
+            ctx.speaking_style = style[:STYLE_MAX_CHARS]
+            state.dirty.add(gid)
+            logger.info(f"群 {gid} 说话风格已刷新")
+
+
+async def maybe_refresh_bot_mood(state: Any, gid: str) -> None:
+    ctx = get_ctx(state, gid)
+    now = time.time()
+    if now - ctx.bot_mood_updated_at < BOT_MOOD_TTL_SECS:
+        return
+    if len(ctx.entries) < BOT_MOOD_MIN_ENTRIES:
+        return
+    ctx.bot_mood_updated_at = now
+
+    recent = list(ctx.entries)[-BOT_MOOD_ANALYZE_ENTRIES:]
+    convo = _render_entries_plain(recent)
+    val = await llm_client.analyze_bot_mood(convo, _char_name(state))
+    if val is None:
+        return
+    ctx.bot_mood = round(BOT_MOOD_EMA_ALPHA * val + (1 - BOT_MOOD_EMA_ALPHA) * ctx.bot_mood, 3)
+    state.dirty.add(gid)
+
+
 def _get_lock(state: Any, gid: str) -> asyncio.Lock:
     locks = state.locks
     lock = locks.get(gid)
     if lock is None:
         lock = asyncio.Lock()
         locks[gid] = lock
+        if len(locks) > MAX_LOCK_DICT_SIZE:
+            to_remove = [k for k, v in locks.items() if not v.locked()][:len(locks) - MAX_LOCK_DICT_SIZE]
+            for k in to_remove:
+                locks.pop(k, None)
     return lock
 
 
@@ -357,7 +455,65 @@ def _get_bg_lock(state: Any, gid: str) -> asyncio.Lock:
     if lock is None:
         lock = asyncio.Lock()
         locks[gid] = lock
+        if len(locks) > MAX_LOCK_DICT_SIZE:
+            to_remove = [k for k, v in locks.items() if not v.locked()][:len(locks) - MAX_LOCK_DICT_SIZE]
+            for k in to_remove:
+                locks.pop(k, None)
     return lock
+
+
+async def cleanup_inactive_data(state: Any) -> None:
+    now = time.time()
+    inactive_group_cutoff = now - INACTIVE_GROUP_TTL_DAYS * 86400
+    inactive_user_cutoff = now - INACTIVE_USER_TTL_DAYS * 86400
+
+    removed_groups = 0
+    for gid in list(state.group_ctx.keys()):
+        ctx = state.group_ctx[gid]
+        if ctx.last_activity_ts < inactive_group_cutoff:
+            state.group_ctx.pop(gid, None)
+            removed_groups += 1
+            try:
+                path = os.path.join(GROUP_DIR, f"{gid}.pk")
+                if os.path.exists(path):
+                    os.remove(path)
+            except Exception:
+                pass
+
+    removed_users = 0
+    for uid in list(state.long_term.users.keys()):
+        umem = state.long_term.users[uid]
+        if umem.updated_at < inactive_user_cutoff:
+            state.long_term.users.pop(uid, None)
+            removed_users += 1
+
+    removed_group_mems = 0
+    for gid in list(state.long_term.groups.keys()):
+        gmem = state.long_term.groups[gid]
+        if gmem.updated_at < inactive_group_cutoff:
+            state.long_term.groups.pop(gid, None)
+            removed_group_mems += 1
+
+    live_gids = set(state.group_ctx.keys())
+    for attr in ("passive_speaking_group_tamed", "last_speak_time_group", "negative_speaking_tokens"):
+        d = getattr(state, attr, None)
+        if not isinstance(d, dict):
+            continue
+        for gid in [g for g in d.keys() if g not in live_gids]:
+            d.pop(gid, None)
+
+    for attr in ("locks", "bg_locks"):
+        d = getattr(state, attr, None)
+        if not isinstance(d, dict):
+            continue
+        for gid in [g for g in d.keys() if g not in live_gids and not d[g].locked()]:
+            d.pop(gid, None)
+
+    if removed_groups or removed_users or removed_group_mems:
+        logger.info(
+            f"内存清理：移除 {removed_groups} 个不活跃群上下文、"
+            f"{removed_users} 个不活跃用户印象、{removed_group_mems} 个不活跃群印象"
+        )
 
 
 async def extraction(state: Any) -> None:
@@ -416,8 +572,9 @@ async def _extract_one_group(state: Any, gid: str, ctx: GroupContext) -> None:
     for uid in top:
         umem = state.long_term.users.get(uid) or UserMemory(user_id=uid)
         user_lines = _render_entries_plain([e for e in entries if e.user_id == uid])
+        char_name = _char_name(state)
         u_sys = (
-            "你是桃井爱莉，在维护你对一个群友的印象。结合【已有印象】和【他最近的发言】，"
+            f"你是{char_name}，在维护你对一个群友的印象。结合【已有印象】和【他最近的发言】，"
             f"更新你对这个人的印象（性格、喜好、和你的关系），不超过{USER_MEMORY_MAX_CHARS}字，"
             "用第二人称或直呼其名。没有新信息就原样返回已有印象。"
             '严格返回 JSON：{"notes": "印象文本"}'

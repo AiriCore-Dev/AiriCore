@@ -70,7 +70,6 @@ noneprompt==0.1.11
 nonestorage==0.1.0
 numpy==2.4.4
 openai==2.31.0
-opencv-python-headless==4.13.0.92
 packaging==26.0
 pil-utils==0.2.2
 pillow==10.4.0

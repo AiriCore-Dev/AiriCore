@@ -15,11 +15,9 @@ packpic = on_command("packpic", block=True)
 
 @packpic.handle()
 async def handle_packpic(bot: Bot, event: GroupMessageEvent):
-    # 1. 必须是引用（回复）某条消息
     if event.reply is None:
         await packpic.finish("请引用一条合并转发消息后再使用 packpic。")
 
-    # 2. 从被引用的消息里找出 forward 段，拿到合并转发 id
     forward_id = None
     for seg in event.reply.message:
         if seg.type == "forward":
@@ -29,7 +27,6 @@ async def handle_packpic(bot: Bot, event: GroupMessageEvent):
     if forward_id is None:
         await packpic.finish("引用的消息不是合并转发消息。")
 
-    # 3. 递归提取所有图片 / 图片表情的 url
     try:
         forward = await bot.get_forward_msg(id=forward_id)
     except ActionFailed as e:
@@ -39,13 +36,11 @@ async def handle_packpic(bot: Bot, event: GroupMessageEvent):
     urls: list[str] = []
     await _extract_images(bot, forward.get("messages", []), urls)
 
-    # 去重并保持顺序
     urls = list(dict.fromkeys(urls))
 
     if not urls:
         await packpic.finish("没有在合并转发消息里找到图片。")
 
-    # 4. 并发下载到内存
     async with httpx.AsyncClient(
         timeout=30,
         follow_redirects=True,
@@ -67,10 +62,8 @@ async def handle_packpic(bot: Bot, event: GroupMessageEvent):
     if not images:
         await packpic.finish("所有图片都下载失败了。")
 
-    # 5. 在内存中打包成 zip
     zip_bytes = _make_zip(images)
 
-    # 6. 通过 base64 上传到群（不落地本地文件）
     b64 = base64.b64encode(zip_bytes).decode()
     filename = f"pack_{datetime.now():%Y%m%d_%H%M%S}.zip"
     try:
@@ -89,9 +82,7 @@ async def handle_packpic(bot: Bot, event: GroupMessageEvent):
 
 
 async def _extract_images(bot: Bot, messages: list, collected: list[str]) -> None:
-    """递归遍历合并转发节点，收集图片 / 图片表情的 url。"""
     for node in messages:
-        # 不同协议端字段名可能是 content 或 message
         content = node.get("content") or node.get("message") or []
         for seg in content:
             seg_type = seg.get("type") if isinstance(seg, dict) else seg.type
@@ -99,12 +90,10 @@ async def _extract_images(bot: Bot, messages: list, collected: list[str]) -> Non
             seg_data = seg_data or {}
 
             if seg_type in ("image", "mface"):
-                # image：普通图片；mface：商城图片表情
                 url = seg_data.get("url") or seg_data.get("file")
                 if url and str(url).startswith(("http://", "https://")):
                     collected.append(url)
             elif seg_type == "forward":
-                # 嵌套的合并转发，继续展开
                 nested_id = seg_data.get("id")
                 if nested_id:
                     try:
@@ -123,7 +112,6 @@ async def _download(client: httpx.AsyncClient, url: str) -> bytes:
 
 
 def _guess_ext(data: bytes) -> str:
-    """根据文件头判断扩展名。"""
     if data[:8] == b"\x89PNG\r\n\x1a\n":
         return "png"
     if data[:3] == b"\xff\xd8\xff":

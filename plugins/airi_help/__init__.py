@@ -18,13 +18,11 @@ def localpath_to_base64(path: str) -> str:
 
 
 def image_segment(*path_parts: str) -> MessageSegment:
-    """根据相对于插件目录的路径片段生成图片消息段。"""
     full_path = os.path.join(PLUGIN_DIR, *path_parts)
     return MessageSegment.image(localpath_to_base64(full_path))
 
 
 def make_node(name: str, content) -> dict:
-    """构造一个合并转发节点。"""
     return {
         "type": "node",
         "data": {
@@ -36,7 +34,6 @@ def make_node(name: str, content) -> dict:
 
 version_png = image_segment("version", f"{airicore_version}.jpg")
 
-# 合并转发的全部分区：增删某一节点只需增删对应的 make_node(...) 即可
 msg = [
     make_node(
         "Momoi Airi",
@@ -49,7 +46,11 @@ msg = [
 
 - HarukiBot:
 PJSK综合查询 By NagiHina
-* 发送指令 pjskhelp 查看帮助""",
+* 发送指令 pjskhelp 查看帮助
+
+- ena_pjsk_score:
+烤倍率/pt计算器 By 咖啡不甜
+* 指令：计算倍率，单人pt，协力pt，挑战pt""",
     ),
     make_node(
         "战舰世界综合查询",
@@ -129,13 +130,9 @@ emoji合成
 * 指令：任意emoji+任意emoji
 (需为系统自带的emoji而不是qq的emoji)
 
-- Airi_Roll: 
+- Airi_Roll:
 抽取随机数 By AiriCore Dev.
 * 发送 roll help 查看帮助
-
-- ena_pjsk_score: 
-烤倍率/pt计算器 By 咖啡不甜
-* 指令：计算倍率，单人pt，协力pt，挑战pt
 
 - Minesweeper:
 扫雷游戏 By MeetWq
@@ -145,15 +142,6 @@ emoji合成
 英文缩写查询 By AiriCore Dev.
 * 指令：@Airi xxx是什么""",
     ),
-#    make_node(
-#        "B站订阅",
-#        """----- B站订阅 -----
-#
-#- Airi_Bilibili_Post:
-#B站动态&直播推送 By AiriCore Dev.
-#（订阅/取消订阅需群管理权限）
-#* 发送 bili帮助 查看帮助""",
-#    ),
     make_node(
         "棋类游戏",
         """----- 棋类游戏 -----
@@ -195,23 +183,12 @@ Airi智能体 By AiriCore Dev.
     make_node(
         "机器人原型介绍",
         MessageSegment.text(
-            """===== 机器人原型介绍 =====
+            """===== 原型介绍 =====
 Momoi Airi 桃井爱莉
 桃井爱莉（桃井 愛莉，ももい あいり）是《世界计划 彩色舞台 feat. 初音未来》（Project SEKAI, PJSK）及其衍生作品的登场角色。代表色为 #ffaacc。"""
         )
         + image_segment("airi.png"),
     ),
-    # ----- 已停用的广告位（Airi Cobblemon Server）-----
-    # make_node(
-    #     "广告位",
-    #     MessageSegment.text(
-    #         """✨ Airi Cobblemon Server
-    # 山河入画，萌兽为俦；静养初心，闲游忘忧
-    # 这是一个基于整合包《去吧！方可梦大师》的Minecraft服务器，尽情和方块宝可梦游玩，成为最强训练家吧！
-    # 整合包下载&服务器地址加群：740774974"""
-    #     )
-    #     + image_segment("airicob.jpeg"),
-    # ),
     make_node(
         "广告位",
         MessageSegment.text(

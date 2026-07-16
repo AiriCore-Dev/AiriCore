@@ -9,6 +9,8 @@ from typing import Optional
 from nonebot.log import logger
 from PIL import Image
 
+from utils.cache_mode import is_disk
+
 _DATA_DIR = Path(__file__).resolve().parents[2] / "data" / "nonebot_plugin_tarot"
 _CACHE_FILE = _DATA_DIR / "cache.pk"
 
@@ -27,6 +29,9 @@ def _ensure_loaded() -> None:
     if _persist_loaded:
         return
     _persist_loaded = True
+    if is_disk():
+        _persist = {}
+        return
     if _CACHE_FILE.is_file():
         try:
             with open(_CACHE_FILE, "rb") as f:
@@ -39,6 +44,8 @@ def _ensure_loaded() -> None:
 
 def _flush(force: bool = False) -> None:
     global _last_flush, _dirty
+    if is_disk():
+        return
     now = time.time()
     if not force and (not _dirty or now - _last_flush < _FLUSH_INTERVAL):
         return
@@ -87,6 +94,8 @@ def get_card_b64(path, reversed_: bool) -> Optional[str]:
     if sig is None:
         return None
     key = f"{path}\x00{int(reversed_)}"
+    if is_disk():
+        return _encode(path, reversed_)
     with _lock:
         _ensure_loaded()
         card = _persist.setdefault("card", {})

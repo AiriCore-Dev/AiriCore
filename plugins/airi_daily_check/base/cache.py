@@ -10,6 +10,8 @@ from typing import Any, Optional
 from PIL import Image, ImageFont
 from nonebot.log import logger
 
+from utils.cache_mode import is_disk, is_ram
+
 TTL_AVATAR = 7 * 24 * 3600
 
 _DATA_DIR = Path(__file__).resolve().parents[3] / "data" / "airi_daily_check"
@@ -66,6 +68,9 @@ def _ensure_loaded() -> None:
     if _persist_loaded:
         return
     _persist_loaded = True
+    if is_disk():
+        _persist = {}
+        return
     if _CACHE_FILE.is_file():
         try:
             with open(_CACHE_FILE, "rb") as f:
@@ -78,6 +83,8 @@ def _ensure_loaded() -> None:
 
 def _flush(force: bool = False) -> None:
     global _last_flush, _dirty
+    if is_disk():
+        return
     now = time.time()
     if not force and (not _dirty or now - _last_flush < _FLUSH_INTERVAL):
         return
@@ -109,6 +116,8 @@ def _version_of(stat_path) -> str:
 
 
 def get(namespace: str, key: str, ttl: Optional[float] = None) -> Any:
+    if is_disk():
+        return None
     k = (namespace, str(key))
     with _lock:
         _ensure_loaded()
@@ -130,6 +139,8 @@ def get(namespace: str, key: str, ttl: Optional[float] = None) -> Any:
 
 def put(namespace: str, key: str, value: Any) -> None:
     global _dirty
+    if is_disk():
+        return
     blob = _encode(value)
     if blob is None:
         return
@@ -143,6 +154,8 @@ def put(namespace: str, key: str, value: Any) -> None:
 
 def get_or_build(namespace: str, key, build, stat_path=None) -> Any:
     global _dirty
+    if is_disk():
+        return build()
     dkey = (namespace, key)
     with _lock:
         _ensure_loaded()
@@ -177,6 +190,8 @@ def get_or_build(namespace: str, key, build, stat_path=None) -> Any:
 
 
 def get_image(path: str) -> Image.Image:
+    if is_disk():
+        return Image.open(path).convert("RGBA")
     with _lock:
         img = _images.get(path)
         if img is not None:
@@ -186,8 +201,9 @@ def get_image(path: str) -> Image.Image:
     with _lock:
         _images[path] = img
         _images.move_to_end(path)
-        while len(_images) > _MAX_IMAGES:
-            _images.popitem(last=False)
+        if not is_ram():
+            while len(_images) > _MAX_IMAGES:
+                _images.popitem(last=False)
     return img
 
 
@@ -196,6 +212,8 @@ def get_image_copy(path: str) -> Image.Image:
 
 
 def get_font(path: str, size: int):
+    if is_disk():
+        return ImageFont.truetype(font=path, size=size)
     key = (path, size)
     with _lock:
         f = _fonts.get(key)

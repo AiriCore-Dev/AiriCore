@@ -321,7 +321,6 @@ def create_handler(meme: Meme, shortcut: Optional[MemeShortcut] = None) -> T_Han
         info = meme.info
         params = info.params
 
-        # 当所需图片数为 2 且已指定图片数为 1 时，使用发送者的头像作为第一张图
         if params.min_images == 2 and len(images) == 1:
             user = session.user
             if (member := session.member) and member.nick:
@@ -329,7 +328,6 @@ def create_handler(meme: Meme, shortcut: Optional[MemeShortcut] = None) -> T_Han
             if image_url := user.avatar:
                 images.insert(0, Image(name=user_name(user), url=image_url))
 
-        # 当所需图片数为 1 且没有已指定图片时，使用发送者的头像
         if memes_config.memes_use_sender_when_no_image and (
             params.min_images == 1 and len(images) == 0
         ):
@@ -339,7 +337,6 @@ def create_handler(meme: Meme, shortcut: Optional[MemeShortcut] = None) -> T_Han
             if image_url := user.avatar:
                 images.append(Image(name=user_name(user), url=image_url))
 
-        # 当所需文字数 > 0 且没有输入文字时，使用默认文字
         if memes_config.memes_use_default_when_no_text and (
             params.min_texts > 0 and len(texts) == 0
         ):

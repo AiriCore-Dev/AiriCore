@@ -91,7 +91,7 @@ async def _(
     packs = pack_manager.packs if q_all.result else pack_manager.available_packs
     if not packs:
         await UniMessage("当前无可用贴纸包").finish()
-    async with exception_notify("图片绘制失败"):  # fmt: skip
+    async with exception_notify("图片绘制失败"):
         pic = save_image(
             draw_sticker_grid_from_packs(packs),
             skia.kJPEG,

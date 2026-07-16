@@ -1,6 +1,5 @@
 from ._base import program_error
 import os
-import cv2
 import gc
 from .. import (
     Plugin_Config,
@@ -23,7 +22,6 @@ async def main(
 async def get_data(
     parameter: list,
 ) -> dict:
-    # [aid server lang platform user_id user_pr]
     try:
         path = '/b/user-data/'
         params = {
@@ -35,7 +33,7 @@ async def get_data(
             path=path
         )
         if (
-            res['status'] != 'ok' or 
+            res['status'] != 'ok' or
             res['message'] != 'SUCCESS'
         ):
             return res
@@ -49,8 +47,8 @@ async def get_data(
             platform_id=parameter[4]
         )
         result = {
-            'status': 'ok', 
-            'message': 'SUCCESS', 
+            'status': 'ok',
+            'message': 'SUCCESS',
             'img': None
         }
         result['img'] = Picture.return_img(img=res_img)
@@ -73,8 +71,8 @@ def get_png(
 ) -> str:
     text_list = []
     box_list = []
-    res_img = cv2.imread(os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', 'wws_bind.png'), cv2.IMREAD_UNCHANGED)
-    
+    res_img = Picture.imread(os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', 'wws_bind.png'))
+
     fontStyle = fonts.data[1][55]
     w = Picture.x_coord(platform.upper(), fontStyle)
     text_list.append(
@@ -132,7 +130,7 @@ def get_png(
                 font_size=55
             )
         )
-    
+
     w = Picture.x_coord(str(aid), fontStyle)
     text_list.append(
         Text_Data(
@@ -263,9 +261,9 @@ def get_png(
             )
         )
     on_png_path = os.path.join(plugin_path, 'png', 'list', 'on.png')
-    on_png = cv2.imread(on_png_path, cv2.IMREAD_UNCHANGED)
+    on_png = Picture.imread(on_png_path)
     off_png_path = os.path.join(plugin_path, 'png', 'list', 'off.png')
-    off_png = cv2.imread(off_png_path, cv2.IMREAD_UNCHANGED)
+    off_png = Picture.imread(off_png_path)
     if use_pr == True:
         x1 = 1430
         y1 = 817
@@ -323,6 +321,6 @@ def get_png(
     return res_img
 
 
-            
+
 
 

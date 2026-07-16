@@ -1,6 +1,5 @@
 from ._base import program_error
 import os
-import cv2
 import gc
 from .. import (
     Plugin_Config,
@@ -24,7 +23,6 @@ async def main(
 async def get_data(
     parameter: list,
 ) -> dict:
-    # [lang ship_type ship_tier ship_nation]
     try:
         path = '/p/ships-info/'
         params = {
@@ -43,7 +41,7 @@ async def get_data(
             path=path
         )
         if (
-            res['status'] != 'ok' or 
+            res['status'] != 'ok' or
             res['message'] != 'SUCCESS'
         ):
             return res
@@ -55,8 +53,8 @@ async def get_data(
             ship_nation=[] if parameter[3] == '' else str(parameter[3]).split(',')
         )
         result = {
-            'status': 'ok', 
-            'message': 'SUCCESS', 
+            'status': 'ok',
+            'message': 'SUCCESS',
             'img': None
         }
         result['img'] = Picture.return_img(img=res_img)
@@ -77,12 +75,12 @@ def get_png(
 ) -> str:
     text_list = []
     box_list = []
-    res_img = cv2.imread(os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', 'wws_ships_info.png'), cv2.IMREAD_UNCHANGED)
+    res_img = Picture.imread(os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', 'wws_ships_info.png'))
     list_png_len = int(result['data']['data_num'] / 50) + 1
-    list_img = cv2.imread(os.path.join(plugin_path, 'png', 'list', '80_50_2.png'), cv2.IMREAD_UNCHANGED)
+    list_img = Picture.imread(os.path.join(plugin_path, 'png', 'list', '80_50_2.png'))
     for i in range(list_png_len):
-        res_img = cv2.vconcat([res_img, list_img])
-    
+        res_img = Picture.vconcat([res_img, list_img])
+
     fontStyle = fonts.data[1][55]
     filter_tier = str(ship_tier)
     filter_type = str(ship_type)
@@ -223,6 +221,6 @@ def get_png(
     return res_img
 
 
-            
+
 
 

@@ -1,6 +1,4 @@
-"""运行状态"""
 
-#from nonebot import require
 import base64
 from nonebot.rule import Rule
 from nonebot.permission import SUPERUSER
@@ -35,4 +33,4 @@ async def _(bot: Bot, ev: MessageEvent):
     except Exception:
         nickname = "Momoi Airi"
     await status.finish(MessageSegment.image("base64://" + base64.b64encode(draw(nickname)).decode()))
-    
+

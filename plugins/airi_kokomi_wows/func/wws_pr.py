@@ -15,7 +15,6 @@ async def main(
 async def get_data(
     parameter: list,
 ) -> dict:
-    # [platform user_id lang user_pr]
     try:
         path = '/b/change-pr/'
         params = {
@@ -35,6 +34,6 @@ async def get_data(
         gc.collect()
 
 
-            
+
 
 

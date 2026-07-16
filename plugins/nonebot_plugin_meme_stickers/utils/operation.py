@@ -36,7 +36,7 @@ class OpValFormatterDeco(TypeDecoCollector[T, OpValFormatter[T]]):
         self,
         key: type[T2],
     ) -> Callable[[OpValFormatter[T2]], OpValFormatter[T2]]:
-        return super().__call__(key)  # type: ignore
+        return super().__call__(key)
 
 
 op_val_formatter = OpValFormatterDeco[Any]()

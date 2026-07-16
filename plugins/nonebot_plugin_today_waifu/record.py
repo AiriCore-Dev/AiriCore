@@ -21,10 +21,6 @@ TodayWaifuRecord = {}
 
 @driver.on_startup
 async def today_waifu_init() -> None:
-    """
-    在驱动加载时初始化记录(Record)
-    将 ./record 文件夹内json文件读入内存
-    """
     if not record_dir.exists():
         record_dir.mkdir(parents=True, exist_ok=True)
     for file in record_dir.glob('*.json'):
@@ -33,9 +29,6 @@ async def today_waifu_init() -> None:
 
 @driver.on_shutdown
 async def today_waifu_shutdown() -> None:
-    """
-    退出前将头像缓存落盘
-    """
     cache.flush()
 
 
@@ -51,9 +44,6 @@ def load_json(json_file_path: Union[str, Path]) -> Any:
 
 
 def clear_group_record(gid: str) -> None:
-    """
-    清空群号为 gid 在内存中与本地的记录(record)
-    """
     if gid not in TodayWaifuRecord:
         return
     TodayWaifuRecord[gid].clear()
@@ -61,10 +51,6 @@ def clear_group_record(gid: str) -> None:
 
 
 def get_group_record(gid: str) -> dict:
-    """
-    获取群组记录字典对象
-    优先从内存中获取，若内存中不存在则尝试从记录文件夹查找本地文件，若本地文件不存在则新建空文件 并返回相应对象
-    """
     if gid in TodayWaifuRecord:
         return TodayWaifuRecord[gid]
     filename = record_dir / f'{gid}.json'
@@ -76,9 +62,6 @@ def get_group_record(gid: str) -> dict:
 
 
 def save_group_record(gid: str, record: dict) -> None:
-    """
-    保存群组记录到本地json文件
-    """
     record_file_path = record_dir / f'{gid}.json'
     save_json(record, record_file_path)
 
@@ -100,9 +83,6 @@ async def construct_change_waifu_msg(member_info: dict, new_waifu_id: int, bot_i
 
 
 async def construct_waifu_msg(member_info: dict, waifu_id: int, bot_id: int, is_first: bool) -> Message:
-    """
-    构造发送信息
-    """
     if waifu_id == -1:
         return Message(f'\n渣男，Airi把你老婆没收了！')
     member_name = (member_info.get("card") or member_info.get("nickname") or waifu_id)
@@ -122,9 +102,6 @@ async def construct_waifu_msg(member_info: dict, waifu_id: int, bot_id: int, is_
 
 
 async def download_avatar(uid: str) -> bytes:
-    """
-    根据 qq号 获取头像，带 3 天缓存
-    """
     cached = cache.get_avatar(uid)
     if cached is not None:
         return cached

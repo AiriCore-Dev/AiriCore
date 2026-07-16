@@ -98,7 +98,6 @@ async def with_cli(cli: Optional[AsyncClient] = None):
 
 @asynccontextmanager
 async def with_kw_cli(kw: ReqKwargs):
-    # if no cli provided, create a temp one and manage it
     cli = kw.get("cli")
     if cli:
         yield
@@ -115,7 +114,6 @@ async def with_kw_cli(kw: ReqKwargs):
 
 @asynccontextmanager
 async def with_kw_sem(kw: ReqKwargs):
-    # if sem not in kw, create one
     sem = kw.get("sem")
     if not sem:
         sem = create_req_sem()

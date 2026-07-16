@@ -22,14 +22,13 @@ async def main(
 async def get_data(
     parameter: list,
 ) -> dict:
-    # [lang]
     try:
         res_img = get_png(
             lang=parameter[0]
         )
         result = {
-            'status': 'ok', 
-            'message': 'SUCCESS', 
+            'status': 'ok',
+            'message': 'SUCCESS',
             'img': None
         }
         result['img'] = Picture.return_img(img=res_img)

@@ -50,7 +50,6 @@ async def _(bot: Bot,event: Event):
             await sx.finish(message=name + "：" + result)
         await sx.finish(message=f"没有找到缩写 {msg} 的意思呢～")
     except KeyError:
-        #await sx.finish(message=f"出错啦")
         return
 
 

@@ -1,6 +1,5 @@
 from ._base import program_error
 import os
-import cv2
 import gc
 from .. import (
     Plugin_Config,
@@ -22,7 +21,6 @@ async def main(
 async def get_data(
     parameter: list,
 ) -> dict:
-    # [lang]
     try:
         path = '/p/online-player/'
         params = {
@@ -32,7 +30,7 @@ async def get_data(
             path=path
         )
         if (
-            res['status'] != 'ok' or 
+            res['status'] != 'ok' or
             res['message'] != 'SUCCESS'
         ):
             return res
@@ -41,8 +39,8 @@ async def get_data(
             lang=parameter[0]
         )
         result = {
-            'status': 'ok', 
-            'message': 'SUCCESS', 
+            'status': 'ok',
+            'message': 'SUCCESS',
             'img': None
         }
         result['img'] = Picture.return_img(img=res_img)
@@ -60,7 +58,7 @@ def get_png(
 ) -> str:
     text_list = []
     box_list = []
-    res_img = cv2.imread(os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', 'wws_online.png'), cv2.IMREAD_UNCHANGED)
+    res_img = Picture.imread(os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', 'wws_online.png'))
     all_user = '{:,}'.format(result['data']['all']['online_players']).replace(',', ' ')
     text_list.append(
         Text_Data(
@@ -116,6 +114,6 @@ def get_png(
     return res_img
 
 
-            
+
 
 

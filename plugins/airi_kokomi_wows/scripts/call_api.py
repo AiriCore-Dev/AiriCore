@@ -25,13 +25,13 @@ async def call_api(
         async with httpx.AsyncClient() as client:
             if method == 'get':
                 res = await client.get(
-                    url=url, 
+                    url=url,
                     headers=headers,
                     timeout=Plugin_Config.REQUEST_TIMEOUT
                 )
             elif method == 'post':
                 res = await client.post(
-                    url=url, 
+                    url=url,
                     headers=headers,
                     timeout=Plugin_Config.REQUEST_TIMEOUT
                 )
@@ -41,17 +41,17 @@ async def call_api(
             return result
         else:
             return {
-                'status': 'error', 
-                'message': 'NETWORK FAILURE', 
+                'status': 'error',
+                'message': 'NETWORK FAILURE',
                 'error': f'Request code:{res.status_code}'
             }
     except (
-        TimeoutException, 
-        ConnectTimeout, 
+        TimeoutException,
+        ConnectTimeout,
         ReadTimeout
     ):
         return {
-            'status': 'error', 
-            'message': 'NETWORK TIMEOUT', 
+            'status': 'error',
+            'message': 'NETWORK TIMEOUT',
             'error': 'Request Timeout'
         }

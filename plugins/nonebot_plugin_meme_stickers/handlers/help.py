@@ -10,7 +10,6 @@ from ..draw.tools import (
 from .shared import alc, m_cls
 
 
-# fallback help
 @m_cls.assign("$main")
 async def _():
     img = save_image(

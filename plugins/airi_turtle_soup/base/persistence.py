@@ -1,4 +1,5 @@
 import os
+import time
 import pickle
 import shutil
 from nonebot import get_driver, require
@@ -6,6 +7,8 @@ from . import state
 
 driver = get_driver()
 timings = require("nonebot_plugin_apscheduler").scheduler
+
+STALE_TURTLE_SECS = 24 * 3600
 
 @driver.on_startup
 async def load_json():
@@ -22,8 +25,25 @@ async def save_to_json():
         pickle.dump(state.data, f)
 
 async def daily_clear():
-    for i in state.data['group']:
-        state.data['group'][i]['times'] = 0
+    now = int(time.time())
+    stale_cutoff = now - STALE_TURTLE_SECS
+
+    if 'group' in state.data:
+        stale_groups = []
+        for gid in state.data['group']:
+            group_data = state.data['group'][gid]
+            group_data['times'] = 0
+
+            if 'turtle' in group_data:
+                create_time = group_data['turtle'].get('create_time', now)
+                if create_time < stale_cutoff:
+                    del group_data['turtle']
+                    stale_groups.append(gid)
+
+        if stale_groups:
+            from nonebot import logger
+            logger.info(f"airi_turtle_soup: 清理 {len(stale_groups)} 个超过24小时未完成的游戏")
+
     await save_to_json()
 
 async def save_data_backup():

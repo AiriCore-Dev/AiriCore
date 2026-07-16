@@ -64,7 +64,6 @@ class StickerPack:
 
     @property
     def updating_flag_file_exists(self) -> bool:
-        """Files downloaded, doing file ops in pack folder"""
         return (self.base_path / UPDATING_FLAG_FILENAME).exists()
 
     @property
@@ -73,7 +72,6 @@ class StickerPack:
 
     @property
     def ref_outdated(self) -> bool:
-        """If this pack's ref is outdated, anything shouldn't use this instance"""
         return self._ref_outdated
 
     @property
@@ -100,7 +98,6 @@ class StickerPack:
         return None
 
     def set_ref_outdated(self, notify: bool = True):
-        """Set this will tell related pack manager (if there is) to unload it"""
         self._ref_outdated = True
         if notify:
             self.call_callbacks()
@@ -142,10 +139,6 @@ class StickerPack:
 
     @property
     def merged_config(self) -> StickerPackConfig:
-        """
-        remember to call `save_config` or `update_config` after modified config,
-        merged_config cache will clear after these operations
-        """
         if not self._cached_merged_config:
             self._cached_merged_config = StickerPackConfig(
                 **deep_merge(

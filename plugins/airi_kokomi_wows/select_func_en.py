@@ -56,7 +56,6 @@ async def main(
     try:
         params_error_msg = {'status':'ok','message':'PARAMS ERROR'}
         func_not_found_msg = {'status':'ok','message':'FUNC NOT FOUND'}
-        # /help
         if (
             len(msg) == 1 and
             msg[0] in ['help']
@@ -69,7 +68,6 @@ async def main(
                     lang
                 ]
             }
-        # /link
         if (
             len(msg) == 3 and
             msg[0] in ['link']
@@ -82,7 +80,7 @@ async def main(
                 nickname=msg[2]
             )
             if (
-                nickname['status'] != 'ok' or 
+                nickname['status'] != 'ok' or
                 nickname['message'] != 'SUCCESS'
             ):
                 return nickname
@@ -102,7 +100,6 @@ async def main(
             }
         if aid == None:
             return {'status':'ok','message':'NO BIND DATA'}
-        # /me
         if (
             len(msg) == 1 and
             msg[0] in ['me']
@@ -120,7 +117,6 @@ async def main(
                     ac
                 ]
             }
-        # /rank
         if (
             len(msg) == 1 and
             msg[0] in ['rank']
@@ -138,7 +134,6 @@ async def main(
                     ac
                 ]
             }
-        # /bind
         if (
             len(msg) == 1 and
             msg[0] in ['bind']
@@ -156,7 +151,6 @@ async def main(
                     use_pr
                 ]
             }
-        # /set pr
         if (
             len(msg) == 3 and
             msg[0] in ['set'] and
@@ -174,7 +168,6 @@ async def main(
                     True if msg[2] == 'on' else False
                 ]
             }
-        # /set lang
         if (
             len(msg) == 3 and
             msg[0] in ['set'] and
@@ -191,7 +184,6 @@ async def main(
                     msg[2]
                 ]
             }
-        # /set recent/recents on
         if (
             len(msg) == 3 and
             msg[0] in ['set'] and
@@ -222,7 +214,6 @@ async def main(
                         1
                     ]
                 }
-        # /rank season
         if (
             len(msg) == 2 and
             msg[0] in ['rank'] and
@@ -247,7 +238,6 @@ async def main(
                     ac
                 ]
             }
-        # /oper 
         if (
             len(msg) == 1 and
             msg[0] in ['oper']
@@ -264,7 +254,6 @@ async def main(
                     ac
                 ]
             }
-        # /cw
         if (
             msg[0] in ['cw']
         ):
@@ -280,7 +269,6 @@ async def main(
                     ac
                 ]
             }
-        # /ship
         if (
             len(msg) >= 2 and
             msg[0] in ['ship']
@@ -298,7 +286,7 @@ async def main(
                 shipname=ship_name
             )
             if (
-                shipid['status'] != 'ok' or 
+                shipid['status'] != 'ok' or
                 shipid['message'] != 'SUCCESS'
             ):
                 return shipid
@@ -329,7 +317,6 @@ async def main(
                     ac
                 ]
             }
-        # /ships
         if (
             len(msg) >= 2 and
             msg[0] in ['ships']
@@ -361,7 +348,6 @@ async def main(
                     ac
                 ]
             }
-        # /recent
         if (
             len(msg) <= 2 and
             msg[0] in ['recent']
@@ -473,7 +459,6 @@ async def main(
                     ac
                 ]
             }
-        # /ship recent
         if (
             len(msg) <= 4 and
             msg[0] in ['ship'] and
@@ -485,7 +470,7 @@ async def main(
                 shipname=ship_name
             )
             if (
-                shipid['status'] != 'ok' or 
+                shipid['status'] != 'ok' or
                 shipid['message'] != 'SUCCESS'
             ):
                 return shipid
@@ -553,7 +538,6 @@ async def main(
                     ac
                 ]
             }
-        # /ship rank
         if (
             len(msg) == 3 and
             msg[0] in ['ship'] and
@@ -565,7 +549,7 @@ async def main(
                 shipname=ship_name
             )
             if (
-                shipid['status'] != 'ok' or 
+                shipid['status'] != 'ok' or
                 shipid['message'] != 'SUCCESS'
             ):
                 return shipid
@@ -595,7 +579,6 @@ async def main(
                     ac
                 ]
             }
-        # /server ship rank
         if (
             len(msg) == 4 and
             Message.server_dict.get(msg[0],None) != None and
@@ -611,7 +594,7 @@ async def main(
                 shipname=ship_name
             )
             if (
-                shipid['status'] != 'ok' or 
+                shipid['status'] != 'ok' or
                 shipid['message'] != 'SUCCESS'
             ):
                 return shipid
@@ -637,8 +620,7 @@ async def main(
                     lang,
                     shipid
                 ]
-            }  
-        # /online
+            }
         if (
             msg[0] in ['online']
         ):
@@ -650,7 +632,6 @@ async def main(
                     lang
                 ]
             }
-        # /clan season
         if (
             len(msg) == 2 and
             msg[0] in ['clan'] and
@@ -661,7 +642,7 @@ async def main(
                 server=server
             )
             if (
-                clanid['status'] != 'ok' or 
+                clanid['status'] != 'ok' or
                 clanid['message'] != 'SUCCESS'
             ):
                 return clanid
@@ -684,7 +665,6 @@ async def main(
                     cvc_season
                 ]
             }
-        # /clan history
         if (
             len(msg) == 2 and
             msg[0] in ['clan'] and
@@ -695,7 +675,7 @@ async def main(
                 server=server
             )
             if (
-                clanid['status'] != 'ok' or 
+                clanid['status'] != 'ok' or
                 clanid['message'] != 'SUCCESS'
             ):
                 return clanid
@@ -712,7 +692,6 @@ async def main(
                     lang
                 ]
             }
-        # /clan
         if (
             len(msg) == 1 and
             msg[0] in ['clan']
@@ -722,7 +701,7 @@ async def main(
                 server=server
             )
             if (
-                clanid['status'] != 'ok' or 
+                clanid['status'] != 'ok' or
                 clanid['message'] != 'SUCCESS'
             ):
                 return clanid
@@ -750,8 +729,8 @@ async def main(
             error_info=error_info
         )
         return {
-            'status': 'error', 
-            'message': 'PROGRAM ERROR', 
-            'error':f'{str(type(e).__name__)}', 
+            'status': 'error',
+            'message': 'PROGRAM ERROR',
+            'error':f'{str(type(e).__name__)}',
             'track_id': f'{track_id}'
         }

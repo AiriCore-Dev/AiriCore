@@ -203,7 +203,6 @@ class Message_EN:
         'DIV2':'pvp_div2',
         'DIV3':'pvp_div3'
     }
-# JA 与 EN 的四个词典完全一致，直接复用 Message_EN
 Message_JA = Message_EN
 
 def main(
@@ -270,4 +269,3 @@ def list_to_str(
                 break
             data_str = str(data_str) + f',{data[i+1]}'
         return data_str
-        

@@ -18,8 +18,6 @@ class UCCIEngine:
     async def open(self):
         if not self.engine_path.exists():
             raise EngineError("找不到UCCI引擎！")
-        # `.py` 引擎（纯 Python 实现）用当前解释器启动，保证跨平台；
-        # 其它文件按原生可执行程序启动。
         if self.engine_path.suffix == ".py":
             program, *args = sys.executable, str(self.engine_path)
         else:
@@ -68,11 +66,6 @@ class UCCIEngine:
         self.send_line("quit")
 
     async def bestmove(self, position: str, time: int = 500, depth: int = 10) -> Move:
-        """根据当前状态获取下一步最佳着法
-        * `position`: 设置棋盘局面的字符串，形式为 `position fen <FEN> moves <MOVES>`
-        * `time`: 限定搜索时间，单位为毫秒
-        * `depth`: 限定搜索深度
-        """
         self.send_line(position)
         self.send_line(f"go time {time} depth {depth}")
         lines = await self.read_lines("bestmove")

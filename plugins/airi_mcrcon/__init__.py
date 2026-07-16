@@ -42,10 +42,8 @@ BASE_DIR = os.path.dirname(__file__)
 FONT_PATH = os.path.join(BASE_DIR, "utils", "font.ttf")
 
 
-# ---------- 通用辅助 ----------
 
 def parse_session(ev):
-    """解析事件来源，返回 (user_id, group_id)。"""
     session_id = str(ev.get_session_id())
     if 'group' in session_id:
         _, group_id, user_id = session_id.split("_")
@@ -54,14 +52,12 @@ def parse_session(ev):
 
 
 def require_account(uid, msg="你还未绑定游戏账户"):
-    """获取已绑定账户信息，未绑定则抛出 ValueError。"""
     if uid not in data:
         raise ValueError(msg)
     return data[uid]
 
 
 def parse_at_qq(raw, usage):
-    """解析 [CQ:at,qq=xxxxx]，返回 QQ 号字符串，格式错误抛出 ValueError。"""
     if not (raw.startswith('[CQ:at,qq=') and raw.endswith(']')):
         raise ValueError(usage)
     qq = raw[10:-1].strip()
@@ -72,7 +68,6 @@ def parse_at_qq(raw, usage):
     return qq
 
 
-# ---------- 图片生成 ----------
 
 async def generate_minecraft_head(username):
     uuid_url = f"https://api.mojang.com/users/profiles/minecraft/{username}"
@@ -116,7 +111,6 @@ async def create_pokemon_card(pokemon_list):
         try:
             level_text = f"lvl.{pokemon['level']}"
             font = ImageFont.truetype(FONT_PATH, 36)
-            # 黑色描边 + 白色正文
             for dx, dy in [(-1, -1), (1, 1), (1, -1), (-1, 1)]:
                 draw.text((10 + dx, 270 + dy), level_text, font=font, fill="black")
             draw.text((10, 270), level_text, font=font, fill="white")
@@ -214,7 +208,6 @@ async def generate_pokemon_bag(player_name):
     return 'base64://' + base64.b64encode(byt.getvalue()).decode()
 
 
-# ---------- 数据持久化 ----------
 
 async def load_json():
     global data
@@ -231,7 +224,6 @@ async def save_json():
         pickle.dump(data, f)
 
 
-# ---------- RCON 维护与定时任务 ----------
 
 async def check_alive():
     global mcr
@@ -290,7 +282,6 @@ async def timestamp_to_datetime(timestamp):
     return datetime.fromtimestamp(timestamp).strftime("%Y-%m-%d %H:%M:%S")
 
 
-# ---------- 生命周期 ----------
 
 @driver.on_startup
 async def _():
@@ -309,11 +300,10 @@ async def _():
         pass
 
 
-# ---------- 指令处理 ----------
 
 HELP_TEXT = '''支持的指令：
 /connect ：连接指令服务器
-/help ：查看这条信息 
+/help ：查看这条信息
 /auth 你的mc玩家名 ：绑定账号
 （进入服务器前必须）
 /unauth ：解绑
@@ -341,7 +331,6 @@ async def _(bot: Bot, ev: MessageEvent):
     src = str(ev.message)[1:].strip().replace('&#91;', '[').replace('&#93;', ']')
     is_op = user_id in op_list
 
-    # 这些指令不需要 check_alive，提前返回
     if src == 'connect':
         try:
             mcr.connect()

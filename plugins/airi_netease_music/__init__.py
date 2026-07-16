@@ -10,7 +10,6 @@ from nonebot.adapters.onebot.v11.event import MessageEvent
 require("nonebot_plugin_waiter")
 from nonebot_plugin_waiter import waiter
 
-# 网易云音乐相关接口
 SEARCH_API = "https://music.163.com/api/search/get/web"
 OUTER_URL = "https://music.163.com/song/media/outer/url?id={sid}.mp3"
 HEADERS = {
@@ -20,14 +19,13 @@ HEADERS = {
     ),
     "Referer": "https://music.163.com",
 }
-TOP_N = 5           # 搜索结果展示条数
-SELECT_TIMEOUT = 60  # 选择超时（秒）
+TOP_N = 5
+SELECT_TIMEOUT = 60
 
 netease_music = on_command("点歌", priority=50, block=True)
 
 
 async def search_songs(keyword: str):
-    """搜索网易云音乐，返回前 TOP_N 条结果。"""
     params = {"s": keyword, "type": 1, "offset": 0, "limit": TOP_N}
     async with httpx.AsyncClient(timeout=15, headers=HEADERS) as client:
         resp = await client.get(SEARCH_API, params=params)
@@ -37,11 +35,9 @@ async def search_songs(keyword: str):
 
 
 async def fetch_audio_b64(sid: int):
-    """下载标清音频并返回 base64 字符串；不可用时返回 None。"""
     url = OUTER_URL.format(sid=sid)
     async with httpx.AsyncClient(timeout=30, headers=HEADERS, follow_redirects=True) as client:
         resp = await client.get(url)
-    # 版权受限会 302 到 music.163.com/404
     if resp.status_code != 200 or "audio" not in resp.headers.get("content-type", ""):
         return None
     return base64.b64encode(resp.content).decode()
@@ -86,10 +82,8 @@ async def handle_netease_music(bot: Bot, ev: MessageEvent, arg: Message = Comman
     song = songs[int(resp) - 1]
     sid = song["id"]
 
-    # 先发音乐卡片
     await netease_music.send(MessageSegment.music("163", sid))
 
-    # 再发音频语音（base64 传递，禁止本地路径）
     try:
         audio_b64 = await fetch_audio_b64(sid)
     except Exception:

@@ -13,14 +13,6 @@ async def safe_call(
     method: str = 'get',
     check_status: bool = True
 ) -> dict:
-    """统一封装 scripts 层 API 调用的 try/except/finally 样板。
-
-    与原各文件逐行等价：
-    - check_status=True 时，status!=ok 或 message!=SUCCESS 直接返回原始响应；
-    - 异常时调 write_error 写日志并返回 PROGRAM ERROR；
-    - finally 始终 gc.collect()。
-    error_file 由调用方传入自身 __file__，保证错误日志归属不变。
-    """
     try:
         res = await call_api(
             params=params,

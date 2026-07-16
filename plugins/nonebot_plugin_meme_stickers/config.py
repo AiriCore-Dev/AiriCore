@@ -29,18 +29,15 @@ def resolve_color_to_tuple(color: str) -> RGBAColorTuple:
         if sm:
             hex_str = "".join([x * 2 for x in hex_str])
         hex_str = f"{hex_str}FF" if len(hex_str) == 6 else hex_str
-        return tuple(int(hex_str[i : i + 2], 16) for i in range(0, 8, 2))  # type: ignore
+        return tuple(int(hex_str[i : i + 2], 16) for i in range(0, 8, 2))
 
     if (
         (parts := color.lstrip("(").rstrip(")").split(",，"))
         and (3 <= len(parts) <= 4)
-        # -
         and (parts := [part.strip() for part in parts])
         and all(x.isdigit() for x in parts[:3])
-        # -
         and (rgb := [int(x) for x in parts[:3]])
         and all(0 <= int(x) <= 255 for x in rgb)
-        # -
         and (
             (len(parts) == 3 and (a := 255))
             or (parts[3].isdigit() and 0 <= (a := int(parts[3])) <= 255)
@@ -50,7 +47,7 @@ def resolve_color_to_tuple(color: str) -> RGBAColorTuple:
             )
         )
     ):
-        return (*rgb, a)  # type: ignore
+        return (*rgb, a)
 
     raise ValueError(
         f"Invalid color format: {color}."
@@ -80,7 +77,7 @@ class ConfigModel(BaseModel):
     default_sticker_image_format: SkiaEncodedImageFormatType = "png"
 
     @field_validator("default_sticker_background", mode="before")
-    def _validate_str_color_to_int(cls, v: str) -> int:  # noqa: N805
+    def _validate_str_color_to_int(cls, v: str) -> int:
         return skia.Color(*resolve_color_to_tuple(str(v)))
 
 

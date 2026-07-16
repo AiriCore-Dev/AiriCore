@@ -5,7 +5,6 @@ async def get_clan_data(
     aid:str,
     server:str
 ) -> dict:
-    # [aid server]
     parameter = [aid,server]
     return await safe_call(
         error_file=__file__,

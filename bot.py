@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import time
 import threading
 from pathlib import Path
@@ -18,15 +16,15 @@ config = driver.config
 config.nb2_path = Path(__file__).parent
 
 LOG_DIR = Path("logs")
-FLUSH_INTERVAL = 30 * 60      # 半小时落盘一次
-RETENTION_DAYS = 7            # 日志保留 7 天
+FLUSH_INTERVAL = 30 * 60
+RETENTION_DAYS = 7
+MAX_BUFFER_SIZE = 10000
 
 
 class BufferedLogSink:
-    """把日志先缓存在内存，定时或关闭时再统一写入文件。"""
 
     def __init__(self, name, flush_interval=FLUSH_INTERVAL):
-        self.name = name                  # error / info / warning
+        self.name = name
         self.flush_interval = flush_interval
         self.buffer = []
         self.lock = threading.Lock()
@@ -35,24 +33,26 @@ class BufferedLogSink:
         self._schedule()
 
     def __call__(self, message):
-        # message 是 loguru 已格式化好的字符串（含换行）
         with self.lock:
             self.buffer.append(str(message))
+            if len(self.buffer) >= MAX_BUFFER_SIZE:
+                self._flush_unlocked()
 
     def flush(self):
         with self.lock:
-            if not self.buffer:
-                return
-            chunk = "".join(self.buffer)
-            self.buffer.clear()
-        # 按天分文件，文件名形如 info_2026-06-19.log
+            self._flush_unlocked()
+
+    def _flush_unlocked(self):
+        if not self.buffer:
+            return
+        chunk = "".join(self.buffer)
+        self.buffer.clear()
         path = LOG_DIR / f"{self.name}_{datetime.now():%Y-%m-%d}.log"
         with open(path, "a", encoding="utf-8") as f:
             f.write(chunk)
         self._cleanup()
 
     def _cleanup(self):
-        """删除超过保留期的旧日志。"""
         cutoff = time.time() - RETENTION_DAYS * 86400
         for old in LOG_DIR.glob(f"{self.name}_*.log"):
             if old.stat().st_mtime < cutoff:
@@ -73,7 +73,6 @@ class BufferedLogSink:
         self.flush()
 
 
-# 注册三个级别的缓冲 sink
 _sinks = []
 for level in ("ERROR", "INFO", "WARNING"):
     sink = BufferedLogSink(level.lower())
@@ -83,7 +82,6 @@ for level in ("ERROR", "INFO", "WARNING"):
 
 @driver.on_shutdown
 async def _flush_logs_on_shutdown():
-    # nonebot 关闭时把内存里剩余的日志全部落盘
     for sink in _sinks:
         sink.close()
 

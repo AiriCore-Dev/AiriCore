@@ -3,7 +3,6 @@ import os
 import time
 import gc
 import json
-import cv2
 from .. import (
     Plugin_Config,
     Picture,
@@ -27,7 +26,6 @@ async def main(
 async def get_data(
     parameter: list,
 ) -> dict:
-    # [aid server lang use_ac ac pic]
     try:
         path = '/b/sd-data/'
         params = {
@@ -46,7 +44,7 @@ async def get_data(
             path=path
         )
         if (
-            res['status'] != 'ok' or 
+            res['status'] != 'ok' or
             res['message'] != 'SUCCESS'
         ):
             return res
@@ -58,8 +56,8 @@ async def get_data(
             pic_num=1
         )
         result = {
-            'status': 'ok', 
-            'message': 'SUCCESS', 
+            'status': 'ok',
+            'message': 'SUCCESS',
             'img': None
         }
         result['img'] = Picture.return_img(img=res_img)
@@ -80,8 +78,8 @@ def get_png(
 ) -> str:
     text_list = []
     box_list = []
-    res_img = cv2.imread(os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', 'wws_sd.png'), cv2.IMREAD_UNCHANGED)
-    
+    res_img = Picture.imread(os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', 'wws_sd.png'))
+
     text_list.append(
         Text_Data(
             xy=(172, 161),
@@ -246,10 +244,10 @@ def get_png(
             pass
         else:
             res_img = dog_tag.dog_tag(
-                img=res_img, 
-                aid=aid, 
+                img=res_img,
+                aid=aid,
                 cid=result['data']['clans'].get('clan_id',None),
-                server=server, 
+                server=server,
                 response=result['dog_tag']
             )
     '''

@@ -1,7 +1,6 @@
 import base64
 import os
 import json
-import cv2
 import numpy as np
 import time
 from PIL import Image, ImageFont, ImageDraw
@@ -9,13 +8,14 @@ from io import BytesIO
 from .config import Plugin_Config
 from .load_fonts import fonts
 from .path import plugin_path
+from . import cache
 
 class Authorization:
     def get_authorization() -> str:
         api_token = Authorization.get_token()
         authorization = f'{Plugin_Config.API_TYPE} {api_token}'
         return authorization
-    
+
     def get_token() -> str:
         return Plugin_Config.API_USERNAME + Plugin_Config.API_PASSWORD
 
@@ -113,7 +113,7 @@ class Game_Data:
         json_data = json.load(file_json)
         file_json.close()
         return json_data
-    
+
     def load_ship_preview_data(lang:str):
         file_path = os.path.join(plugin_path, 'json', f'ship_preview_{lang}.json')
         file_json = open(file_path, "r", encoding="utf-8")
@@ -129,7 +129,7 @@ class Picture:
         g = int(hex_color[3:5], 16)
         b = int(hex_color[5:7], 16)
         return (r, g, b)
-    
+
     def return_img(img: Image.Image) -> str:
         func_dict = {
             'base64': Picture.img_to_b64,
@@ -142,7 +142,6 @@ class Picture:
         buf = BytesIO()
         pic=pic.convert('RGB')
         pic.save(buf, format="JPEG", quality=95)
-        #pic.save(buf, format="PNG")
         base64_str = base64.b64encode(buf.getbuffer()).decode()
         return "base64://" + base64_str
 
@@ -156,27 +155,53 @@ class Picture:
             pic.save(file_name)
             return file_name
 
-    
+
     def cv2_to_pil(res_img):
         if (
             isinstance(
-                res_img, 
+                res_img,
                 np.ndarray
             )
         ):
-            res_img = Image.fromarray(
-                cv2.cvtColor(
-                    res_img, 
-                    cv2.COLOR_BGR2RGB
-                    )
-                )
-            return res_img
-    
+            if res_img.ndim == 3 and res_img.shape[2] == 4:
+                rgb = res_img[:, :, [2, 1, 0, 3]]
+                return Image.fromarray(rgb, mode='RGBA')
+            elif res_img.ndim == 3 and res_img.shape[2] == 3:
+                rgb = res_img[:, :, ::-1]
+                return Image.fromarray(rgb, mode='RGB')
+            else:
+                return Image.fromarray(res_img)
+
+    def imread(path):
+        return cache.get_array(path)
+
+    def resize(img, fx, fy):
+        h, w = img.shape[0], img.shape[1]
+        new_w = int(round(w * fx))
+        new_h = int(round(h * fy))
+        if img.ndim == 3 and img.shape[2] == 4:
+            pil_img = Image.fromarray(img[:, :, [2, 1, 0, 3]], mode='RGBA')
+            resized = pil_img.resize((new_w, new_h), Image.BILINEAR)
+            arr = np.array(resized)
+            return arr[:, :, [2, 1, 0, 3]].copy()
+        elif img.ndim == 3 and img.shape[2] == 3:
+            pil_img = Image.fromarray(img[:, :, ::-1], mode='RGB')
+            resized = pil_img.resize((new_w, new_h), Image.BILINEAR)
+            arr = np.array(resized)
+            return arr[:, :, ::-1].copy()
+        else:
+            pil_img = Image.fromarray(img)
+            resized = pil_img.resize((new_w, new_h), Image.BILINEAR)
+            return np.array(resized).copy()
+
+    def vconcat(img_list):
+        return np.concatenate(img_list, axis=0)
+
+
     def x_coord(in_str: str, font: ImageFont.FreeTypeFont) -> float:
-        # x = font.getsize(in_str)[0]
         x = font.getlength(in_str)
         return x
-    
+
     def formate_str(in_str: str, str_len, max_len):
         if str_len <= max_len:
             return in_str
@@ -210,13 +235,11 @@ class Picture:
                 font=fontStyle
             )
         return res_img
-    
+
     def add_alpha_channel(img):
-        b_channel, g_channel, r_channel = cv2.split(img)
         alpha_channel = np.ones(
-            b_channel.shape, dtype=b_channel.dtype) * 255
-        img_new = cv2.merge(
-            (b_channel, g_channel, r_channel, alpha_channel))
+            (img.shape[0], img.shape[1]), dtype=img.dtype) * 255
+        img_new = np.dstack((img[:, :, 0], img[:, :, 1], img[:, :, 2], alpha_channel))
         return img_new
 
 
@@ -248,7 +271,7 @@ class Picture:
                 (alpha_jpg*jpg_img[y1:y2, x1:x2, c]) + (alpha_png*png_img[yy1:yy2, xx1:xx2, c])
             )
         return jpg_img
-    
+
 class Message:
     server_dict = {
         'asia': 'asia',

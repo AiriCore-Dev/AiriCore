@@ -32,7 +32,7 @@ from .shared import (
 
 alc.subcommand(
     "generate",
-    Args(  # not using Optional to avoid subcommand match
+    Args(
         Arg("pack?", str, notice="贴纸包 ID / 代号 / 名称"),
         Arg("sticker?", str, notice="贴纸 ID / 名称"),
         Arg("text?", str, notice="贴纸文本"),
@@ -131,11 +131,9 @@ async def prompt_sticker_text() -> str:
 @m_cls.dispatch("~generate").handle()
 async def _(
     m: AlconnaMatcher,
-    # args
     q_pack: Query[Optional[str]] = Query("~pack", None),
     q_sticker: Query[Optional[str]] = Query("~sticker", None),
     q_text: Query[Optional[str]] = Query("~text", None),
-    # opts with args
     q_x: Query[Optional[str]] = Query("~x.x", None),
     q_y: Query[Optional[str]] = Query("~y.y", None),
     q_align: Query[Optional[str]] = Query("~align.align", None),
@@ -150,7 +148,6 @@ async def _(
     q_font_style: Query[Optional[str]] = Query("~font_style.font_style", None),
     q_image_format: Query[Optional[str]] = Query("~image_format.image_format", None),
     q_background: Query[Optional[str]] = Query("~background.background", default=None),
-    # opts without args
     q_auto_resize: Query[Optional[bool]] = Query("~auto-resize.value", None),
     q_no_auto_resize: Query[Optional[bool]] = Query("~no-auto-resize.value", None),
     q_debug: Query[bool] = Query("~debug.value", default=False),
@@ -257,6 +254,4 @@ async def _(
         image_format,
     )
     msg = UniMessage.image(raw=img)
-    # if q_debug.result:
-    #     msg += f"auto_resize = {auto_resize}"
     await msg.finish()

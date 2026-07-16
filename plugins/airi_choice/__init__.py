@@ -23,7 +23,6 @@ async def main(bot: Bot, ev: MessageEvent):
             break
     if random.randint(0,1): param.append('都是')
     if random.randint(0,1): param.append('都不是')
-    #await airi_choice.finish(str(param))
     times = random.randint(2, len(param)*2)
     res = {}
     for i in param: res[i] = 0
@@ -42,12 +41,12 @@ async def main(bot: Bot, ev: MessageEvent):
     else:
         times += 1
         max_word = random.choice(max_word_tmp)
-        res[max_word] += 1  
+        res[max_word] += 1
     output = 'Airi在 '
     for i in param: output += i + '，'
     output = output[:-1]
     output += ' 这{}个选项中随机抽了{}次\n以下是每个选项随到的次数：\n'.format(len(param), times)
-    for i in param: 
+    for i in param:
         output += i + '：' + str(res[i]) + '次\n'
     if detailed:
         output += f'\n根据少数服从多数的原则，{name1}{"是"+max_word if max_word not in ["都是","都不是"] else max_word}'
@@ -56,7 +55,7 @@ async def main(bot: Bot, ev: MessageEvent):
     del res, param, times, max_word, max_word_tmp
     gc.collect()
     await airi_choice_p1.finish(output, reply_message = True)
-    
+
 @airi_choice.handle()
 async def main(bot: Bot, ev: MessageEvent):
     param = list(set(ev.get_plaintext().split("还是")))
@@ -68,7 +67,6 @@ async def main(bot: Bot, ev: MessageEvent):
             break
     if random.randint(0,1): param.append('都要')
     if random.randint(0,1): param.append('都不要')
-    #await airi_choice.finish(str(param))
     times = random.randint(2, len(param)*2)
     res = {}
     for i in param: res[i] = 0
@@ -87,12 +85,12 @@ async def main(bot: Bot, ev: MessageEvent):
     else:
         times += 1
         max_word = random.choice(max_word_tmp)
-        res[max_word] += 1  
+        res[max_word] += 1
     output = 'Airi在 '
     for i in param: output += i + '，'
     output = output[:-1]
     output += ' 这{}个选项中随机抽了{}次\n以下是每个选项随到的次数：\n'.format(len(param), times)
-    for i in param: 
+    for i in param:
         output += i + '：' + str(res[i]) + '次\n'
     if detailed:
         output += '\n根据少数服从多数的原则，Airi建议你选择{}'.format(max_word)
@@ -101,7 +99,7 @@ async def main(bot: Bot, ev: MessageEvent):
     del res, param, times, max_word, max_word_tmp
     gc.collect()
     await airi_choice.finish(output, reply_message = True)
-    
+
 @airi_choice_help.handle()
 async def main(bot: Bot, ev: MessageEvent):
     await airi_choice_help.finish('⚜️ 用法：\n\n☑️ @Airi A还是B（还是C……）（可无限续杯）：从罗列的元素中随机挑出一个\n\n☑️ 上述命令后面加参数“(空格)/详细”：显示详细的抽取过程', reply_message = True)

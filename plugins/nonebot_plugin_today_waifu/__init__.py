@@ -65,10 +65,8 @@ if today_waifu_superuser_opt:
 else:
     permission_opt = SUPERUSER | GROUP_OWNER | GROUP_ADMIN
 
-# 正则匹配插件名与别名的字符串
 PatternStr = '|'.join([__plugin_name__, ] + plugin_aliases)
 
-# 响应器主体
 today_waifu = on_regex(
     pattern=rf'^\s*({PatternStr})\s*$',
     flags=re.S,
@@ -77,7 +75,6 @@ today_waifu = on_regex(
     block=True,
 )
 
-# 刷新所在群全部记录
 today_waifu_refresh = on_regex(
     rf"^\s*(刷新|重置)(?P<name>{PatternStr})\s*$",
     permission=SUPERUSER,
@@ -85,7 +82,6 @@ today_waifu_refresh = on_regex(
     block=True
 )
 
-# 换老婆
 today_waifu_change = on_regex(
     pattern=r'^\s*(换老婆|hlp)\s*$',
     flags=re.S,
@@ -94,7 +90,6 @@ today_waifu_change = on_regex(
     block=True,
 )
 
-# 设置所在群换老婆最大次数
 today_waifu_set_limit_times = on_regex(
     pattern=rf"^\s*设置换老婆次数\s*(?P<times>\d+)\s*$",
     permission=permission_opt,
@@ -113,7 +108,7 @@ today_waifu_set_allow_change = on_regex(
 @today_waifu_set_allow_change.handle()
 async def _(event: GroupMessageEvent, val: Dict[str, Any] = RegexDict()):
     gid = str(event.group_id)
-    group_record: Dict[str, Union[bool, Dict[str, Dict[str, int]]]] = get_group_record(gid)  # 获取本群记录字典
+    group_record: Dict[str, Union[bool, Dict[str, Dict[str, int]]]] = get_group_record(gid)
     val: str = val.get('val', '').strip()
     if val == '开启换老婆':
         group_record['allow_change_waifu'] = True
@@ -134,7 +129,7 @@ async def _(event: GroupMessageEvent, times: Dict[str, Any] = RegexDict()):
         await today_waifu_set_limit_times.finish('换老婆次数应为整数')
         return
     gid = str(event.group_id)
-    group_record: Dict[str, Union[int, Dict[str, Dict[str, int]]]] = get_group_record(gid)  # 获取本群记录字典
+    group_record: Dict[str, Union[int, Dict[str, Dict[str, int]]]] = get_group_record(gid)
     group_record['limit_times'] = limit_times_num
     save_group_record(gid, group_record)
     await today_waifu_set_limit_times.finish(f'已将本群换老婆次数设置为{limit_times_num}次')
@@ -145,14 +140,14 @@ async def _(bot: Bot, event: GroupMessageEvent):
     gid = str(event.group_id)
     uid = str(event.user_id)
     today = str(datetime.date.today())
-    group_record: Dict[str, Union[int, bool, Dict[str, Dict[str, int]]]] = get_group_record(gid)  # 获取本群记录字典
+    group_record: Dict[str, Union[int, bool, Dict[str, Dict[str, int]]]] = get_group_record(gid)
     limit_times: int = group_record.setdefault('limit_times', default_limit_times)
     allow_change_waifu: bool = group_record.setdefault('allow_change_waifu', default_allow_change_waifu)
     if today not in group_record.keys() or uid not in group_record[today].keys():
         await today_waifu_change.finish('换老婆前请先娶个老婆哦，渣男', at_sender=True)
     if not allow_change_waifu:
         await today_waifu_change.finish('请专一的对待自己的老婆哦', at_sender=True)
-    group_today_record: Dict[str, Dict[str, int]] = group_record[today]  # 获取本群今日字典
+    group_today_record: Dict[str, Dict[str, int]] = group_record[today]
     old_waifu_id: int = group_today_record[uid].get('waifu_id', 1234567)
     old_times: int = group_today_record[uid].setdefault('times', 0)
     if old_times >= limit_times or old_waifu_id == int(bot.self_id):
@@ -166,7 +161,6 @@ async def _(bot: Bot, event: GroupMessageEvent):
         if id_set:
             new_waifu_id: int = random.choice(list(id_set))
         else:
-            # 如果剩余群员列表为空，默认机器人作为老婆
             new_waifu_id: int = int(bot.self_id)
     group_today_record[uid] = {
         'waifu_id': new_waifu_id,
@@ -176,7 +170,6 @@ async def _(bot: Bot, event: GroupMessageEvent):
     try:
         member_info = await bot.get_group_member_info(group_id=gid, user_id=new_waifu_id)
     except ActionFailed:
-        # 群员已经退群情况
         member_info = {}
     message: Message = await construct_change_waifu_msg(member_info, new_waifu_id, int(bot.self_id), old_times,
                                                         limit_times)
@@ -203,26 +196,23 @@ async def _(bot: Bot, event: GroupMessageEvent):
     gid = str(event.group_id)
     uid = str(event.user_id)
     today = str(datetime.date.today())
-    group_record: Dict[str, Union[int, bool, Dict[str, Dict[str, int]]]] = get_group_record(gid)  # 获取本群记录字典
+    group_record: Dict[str, Union[int, bool, Dict[str, Dict[str, int]]]] = get_group_record(gid)
     limit_times: int = group_record.setdefault('limit_times', default_limit_times)
     allow_change_waifu: bool = group_record.setdefault('allow_change_waifu', default_allow_change_waifu)
-    save = False  # 保存标记，是否将记录写入到本地文件
-    is_first: bool  # 是否已经存在老婆标记
-    waifu_id: int  # 老婆id
+    save = False
+    is_first: bool
+    waifu_id: int
     if today not in group_record.keys():
-        # 如果不存在今天的记录，清空本群记录字典，并添加今天的记录，保存标记置为真
         group_record.clear()
         group_record['limit_times'] = limit_times
         group_record['allow_change_waifu'] = allow_change_waifu
         group_record[today] = {}
         save = True
-    group_today_record: Dict[str, Dict[str, int]] = group_record[today]  # 获取本群今日字典
+    group_today_record: Dict[str, Dict[str, int]] = group_record[today]
     if uid in group_today_record.keys():
-        # 如果用户在今天已经有老婆记录，记录已经存在老婆 同时 记录老婆id
         waifu_id: int = group_today_record[uid].get('waifu_id', 1234567)
         is_first = False
     else:
-        # 如果用户在今天无老婆记录，随机从群友中抓取一位作为老婆，同时保证别人的老婆不会被抓（NTR禁止）
         all_member: list = await bot.get_group_member_list(group_id=gid)
         id_set: Set[int] = set(i['user_id'] for i in all_member) - set(
             i['waifu_id'] for i in group_today_record.values()) - ban_id
@@ -230,7 +220,6 @@ async def _(bot: Bot, event: GroupMessageEvent):
         if id_set:
             waifu_id: int = random.choice(list(id_set))
         else:
-            # 如果剩余群员列表为空，默认机器人作为老婆
             waifu_id: int = int(bot.self_id)
         group_today_record[uid] = {
             'waifu_id': waifu_id,
@@ -243,7 +232,6 @@ async def _(bot: Bot, event: GroupMessageEvent):
     try:
         member_info = await bot.get_group_member_info(group_id=gid, user_id=waifu_id)
     except ActionFailed:
-        # 群员已经退群情况
         member_info = {}
     message: Message = await construct_waifu_msg(member_info, waifu_id, int(bot.self_id), is_first)
     await today_waifu.finish(message, at_sender=True)

@@ -48,7 +48,6 @@ def collect_local_files(path: Path) -> list[str]:
         (path / x)
         for x in {
             MANIFEST_FILENAME,
-            # CHECKSUM_FILENAME,  # we don't save this in local
             CONFIG_FILENAME,
         }
     }
@@ -86,27 +85,19 @@ async def update_sticker_pack(
 
     logger.debug(f"Collecting files need to update for pack `{slug}`")
 
-    # collect files should be downloaded
     local_files = (
         set(collect_local_files(pack_path)) if pack_path.exists() else set[str]()
     )
     remote_files = set(collect_manifest_files(manifest))
 
-    # 1. files that are not exist in local pack folder
     files_should_download = remote_files - local_files
 
-    # 2. files not in local pack folder, but remote exists. (shared files)
-    #    if these files exist in local, remove them from files_should_download
     exist_files_not_in_pack_dir = {
         x for x in files_should_download if (pack_path / x).exists()
     }
     files_should_download -= exist_files_not_in_pack_dir
 
-    # 3. files both exists in local and remote,
-    #    but checksum not match, or not exist in remote checksum
     file_both_exist = (
-        # avoid editing local_files set
-        # to avoid accidentally remove shared files using by other packs in next step
         {*local_files, *exist_files_not_in_pack_dir} & remote_files
     )
     if checksum:
@@ -160,7 +151,6 @@ async def update_sticker_pack(
             shutil.move(src_p, dst_p)
 
     def after_ops():
-        # collect files should remove from local
         files_should_remove = local_files - remote_files
         if files_should_remove:
             logger.info(
@@ -169,7 +159,6 @@ async def update_sticker_pack(
             for path in files_should_remove:
                 (pack_path / path).unlink()
 
-        # remove empty folders
         empty_folders = tuple(
             p for p in pack_path.rglob("*") if p.is_dir() and not any(p.iterdir())
         )

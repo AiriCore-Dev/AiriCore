@@ -15,13 +15,13 @@ class Plugin_Config:
     SHOW_SPECIAL_TAG = True
     SHOW_CUSTOM_TAG = True
     LOCAL_TIME_ZONE = 8
-    
+
     BOT_PLATFORM = 'qq_bot'
     BOT_INFO = {
         'en':f'',
         'cn':f''
     }
     BOT_AUTHOR = 'Powered by Maoyu, Customized By Makino.S'
-    
+
     BLACKLIST = ['189294253',"590946848"]
     BLACKLIST_USER = []

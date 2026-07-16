@@ -46,16 +46,15 @@ class MineSweeper:
     def __init__(self, row: int, column: int, mine_num: int, skin_name: str = "winxp"):
         self.row = row
         self.column = column
-        self.mine_num = mine_num  # 地雷数
-        self.start_time = time.time()  # 游戏开始时间
-        self.state: GameState = GameState.PREPARE  # 游戏状态
+        self.mine_num = mine_num
+        self.start_time = time.time()
+        self.state: GameState = GameState.PREPARE
         self.tiles = [[Tile() for _ in range(column)] for _ in range(row)]
 
-        self.skin = load_skin(row, column, skin_name)  # 皮肤
-        self.scale: int = 4  # 缩放倍数
+        self.skin = load_skin(row, column, skin_name)
+        self.scale: int = 4
 
     def set_mines(self):
-        # 设置地雷
         count = 0
         while count < self.mine_num:
             i = random.randint(0, self.row - 1)
@@ -66,7 +65,6 @@ class MineSweeper:
             tile.is_mine = True
             count += 1
 
-        # 计算数字
         for i in range(self.row):
             for j in range(self.column):
                 self.tiles[i][j].count = self.count_around(i, j)

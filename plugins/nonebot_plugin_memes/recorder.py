@@ -19,7 +19,6 @@ from .utils import remove_timezone
 
 
 class MemeGenerationRecord(Model):
-    """表情调用记录"""
 
     __tablename__ = "nonebot_plugin_memes_memegenerationrecord_v2"
     __table_args__ = {"extend_existing": True}

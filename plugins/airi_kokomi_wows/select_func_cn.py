@@ -63,7 +63,6 @@ async def main(
     try:
         params_error_msg = {'status':'ok','message':'PARAMS ERROR'}
         func_not_found_msg = {'status':'ok','message':'FUNC NOT FOUND'}
-        # wws help
         if (
             msg[0] in help_list and
             len(msg) == 1
@@ -76,7 +75,6 @@ async def main(
                     lang
                 ]
             }
-        # wws names
         if (
             msg[0] in naming_list and
             len(msg) == 1
@@ -89,7 +87,6 @@ async def main(
                     lang
                 ]
             }
-        # wws bind server xxx
         if (
             msg[0] in set_list and
             len(msg) >= 3
@@ -102,7 +99,7 @@ async def main(
                 nickname=msg[2]
             )
             if (
-                nickname['status'] != 'ok' or 
+                nickname['status'] != 'ok' or
                 nickname['message'] != 'SUCCESS'
             ):
                 return nickname
@@ -120,7 +117,6 @@ async def main(
                     lang
                 ]
             }
-        # wws server set xxx
         if (
             len(msg) >= 3 and
             msg[1] in set_list
@@ -133,7 +129,7 @@ async def main(
                 nickname=msg[2]
             )
             if (
-                nickname['status'] != 'ok' or 
+                nickname['status'] != 'ok' or
                 nickname['message'] != 'SUCCESS'
             ):
                 return nickname
@@ -153,7 +149,6 @@ async def main(
             }
         if aid == None:
             return {'status':'ok','message':'NO BIND DATA'}
-        # wws me
         if (
             msg[0] in me_list and
             len(msg) == 1
@@ -181,7 +176,7 @@ async def main(
                 nickname=msg[1]
             )
             if (
-                nickname['status'] != 'ok' or 
+                nickname['status'] != 'ok' or
                 nickname['message'] != 'SUCCESS'
             ):
                 return nickname
@@ -199,7 +194,6 @@ async def main(
                     ac
                 ]
             }
-        # wws me bind
         if (
             len(msg) == 2 and
             msg[0] in me_list and
@@ -218,7 +212,6 @@ async def main(
                     use_pr
                 ]
             }
-        # wws pr
         if (
             len(msg) == 2 and
             msg[0] in pr_list and
@@ -235,7 +228,6 @@ async def main(
                     True if msg[1] in ['on','开'] else False
                 ]
             }
-        # wws lang
         if (
             len(msg) == 2 and
             msg[0] in lang_list and
@@ -255,7 +247,6 @@ async def main(
                     msg[1]
                 ]
             }
-        # wws recent\recents on
         if (
             len(msg) == 2 and
             (msg[0] in recent_list or msg[0] in recents_list) and
@@ -285,7 +276,6 @@ async def main(
                         1
                     ]
                 }
-        # wws me rank
         if (
             msg[0] in me_list and
             msg[1] in rank_list and
@@ -315,7 +305,7 @@ async def main(
                 nickname=msg[1]
             )
             if (
-                nickname['status'] != 'ok' or 
+                nickname['status'] != 'ok' or
                 nickname['message'] != 'SUCCESS'
             ):
                 return nickname
@@ -333,7 +323,6 @@ async def main(
                     ac
                 ]
             }
-        # wws me rank season
         if (
             len(msg) == 3 and
             msg[0] in me_list and
@@ -372,7 +361,7 @@ async def main(
                 nickname=msg[1]
             )
             if (
-                nickname['status'] != 'ok' or 
+                nickname['status'] != 'ok' or
                 nickname['message'] != 'SUCCESS'
             ):
                 return nickname
@@ -396,7 +385,6 @@ async def main(
                     ac
                 ]
             }
-        # wws me sx
         if (
             len(msg) == 2 and
             msg[0] in me_list and
@@ -426,7 +414,7 @@ async def main(
                 nickname=msg[1]
             )
             if (
-                nickname['status'] != 'ok' or 
+                nickname['status'] != 'ok' or
                 nickname['message'] != 'SUCCESS'
             ):
                 return nickname
@@ -444,7 +432,6 @@ async def main(
                     1
                 ]
             }
-        # wws me info
         if (
             msg[0] in me_list and
             msg[1] in ['info'] and
@@ -474,7 +461,7 @@ async def main(
                 nickname=msg[1]
             )
             if (
-                nickname['status'] != 'ok' or 
+                nickname['status'] != 'ok' or
                 nickname['message'] != 'SUCCESS'
             ):
                 return nickname
@@ -492,7 +479,6 @@ async def main(
                     ac
                 ]
             }
-        # wws me oper 
         if (
             msg[0] in me_list and
             msg[1] in oper_list and
@@ -521,7 +507,7 @@ async def main(
                 nickname=msg[1]
             )
             if (
-                nickname['status'] != 'ok' or 
+                nickname['status'] != 'ok' or
                 nickname['message'] != 'SUCCESS'
             ):
                 return nickname
@@ -538,7 +524,6 @@ async def main(
                     ac
                 ]
             }
-        # wws me cw
         if (
             msg[0] in me_list and
             msg[1] in cw_list and
@@ -567,7 +552,7 @@ async def main(
                 nickname=msg[1]
             )
             if (
-                nickname['status'] != 'ok' or 
+                nickname['status'] != 'ok' or
                 nickname['message'] != 'SUCCESS'
             ):
                 return nickname
@@ -584,7 +569,6 @@ async def main(
                     ac
                 ]
             }
-        # wws me ship
         if (
             msg[0] in me_list and
             msg[1] in ship_list and
@@ -605,7 +589,7 @@ async def main(
                 shipname=ship_name
             )
             if (
-                shipid['status'] != 'ok' or 
+                shipid['status'] != 'ok' or
                 shipid['message'] != 'SUCCESS'
             ):
                 return shipid
@@ -647,7 +631,7 @@ async def main(
                 nickname=msg[1]
             )
             if (
-                nickname['status'] != 'ok' or 
+                nickname['status'] != 'ok' or
                 nickname['message'] != 'SUCCESS'
             ):
                 return nickname
@@ -658,7 +642,7 @@ async def main(
                 shipname=ship_name
             )
             if (
-                shipid['status'] != 'ok' or 
+                shipid['status'] != 'ok' or
                 shipid['message'] != 'SUCCESS'
             ):
                 return shipid
@@ -689,7 +673,6 @@ async def main(
                     ac
                 ]
             }
-        # wws me sd
         if (
             len(msg) == 2 and
             msg[0] in me_list and
@@ -718,7 +701,7 @@ async def main(
                 nickname=msg[1]
             )
             if (
-                nickname['status'] != 'ok' or 
+                nickname['status'] != 'ok' or
                 nickname['message'] != 'SUCCESS'
             ):
                 return nickname
@@ -735,7 +718,6 @@ async def main(
                     ac
                 ]
             }
-        # wws search
         if (
             len(msg) >= 2 and
             msg[0] in search_list
@@ -757,7 +739,6 @@ async def main(
                     filter_data[4]
                 ]
             }
-        # wws roll
         if (
             len(msg) >= 1 and
             msg[0] in roll_list
@@ -785,7 +766,6 @@ async def main(
                     filter_data[4]
                 ]
             }
-        # wws stats ship
         if (
             len(msg) == 3 and
             msg[0] in status_list and
@@ -797,7 +777,7 @@ async def main(
                 shipname=ship_name
             )
             if (
-                shipid['status'] != 'ok' or 
+                shipid['status'] != 'ok' or
                 shipid['message'] != 'SUCCESS'
             ):
                 return shipid
@@ -823,7 +803,6 @@ async def main(
                     shipid
                 ]
             }
-        # wws status 
         if (
             len(msg) >= 2 and
             msg[0] in status_list
@@ -870,7 +849,6 @@ async def main(
                     filter_data[4]
                 ]
             }
-        # wws me ships
         if (
             msg[0] in me_list and
             msg[1] in ships_list and
@@ -914,7 +892,7 @@ async def main(
                 nickname=msg[1]
             )
             if (
-                nickname['status'] != 'ok' or 
+                nickname['status'] != 'ok' or
                 nickname['message'] != 'SUCCESS'
             ):
                 return nickname
@@ -946,7 +924,6 @@ async def main(
                     ac
                 ]
             }
-        # wws me recent
         if (
             len(msg) <= 3 and
             msg[0] in me_list and
@@ -1014,7 +991,7 @@ async def main(
                 nickname=msg[1]
             )
             if (
-                nickname['status'] != 'ok' or 
+                nickname['status'] != 'ok' or
                 nickname['message'] != 'SUCCESS'
             ):
                 return nickname
@@ -1139,7 +1116,7 @@ async def main(
                 nickname=msg[1]
             )
             if (
-                nickname['status'] != 'ok' or 
+                nickname['status'] != 'ok' or
                 nickname['message'] != 'SUCCESS'
             ):
                 return nickname
@@ -1195,7 +1172,6 @@ async def main(
                     ac
                 ]
             }
-        # wws me ship recent
         if (
             msg[0] in me_list and
             msg[1] in ship_list and
@@ -1214,7 +1190,7 @@ async def main(
                 shipname=ship_name
             )
             if (
-                shipid['status'] != 'ok' or 
+                shipid['status'] != 'ok' or
                 shipid['message'] != 'SUCCESS'
             ):
                 return shipid
@@ -1294,7 +1270,7 @@ async def main(
                 nickname=msg[1]
             )
             if (
-                nickname['status'] != 'ok' or 
+                nickname['status'] != 'ok' or
                 nickname['message'] != 'SUCCESS'
             ):
                 return nickname
@@ -1305,7 +1281,7 @@ async def main(
                 shipname=ship_name
             )
             if (
-                shipid['status'] != 'ok' or 
+                shipid['status'] != 'ok' or
                 shipid['message'] != 'SUCCESS'
             ):
                 return shipid
@@ -1373,7 +1349,6 @@ async def main(
                     ac
                 ]
             }
-        # wws me ship rank
         if (
             len(msg) == 4 and
             msg[0] in me_list and
@@ -1386,7 +1361,7 @@ async def main(
                 shipname=ship_name
             )
             if (
-                shipid['status'] != 'ok' or 
+                shipid['status'] != 'ok' or
                 shipid['message'] != 'SUCCESS'
             ):
                 return shipid
@@ -1428,7 +1403,7 @@ async def main(
                 nickname=msg[1]
             )
             if (
-                nickname['status'] != 'ok' or 
+                nickname['status'] != 'ok' or
                 nickname['message'] != 'SUCCESS'
             ):
                 return nickname
@@ -1439,7 +1414,7 @@ async def main(
                 shipname=ship_name
             )
             if (
-                shipid['status'] != 'ok' or 
+                shipid['status'] != 'ok' or
                 shipid['message'] != 'SUCCESS'
             ):
                 return shipid
@@ -1469,7 +1444,6 @@ async def main(
                     ac
                 ]
             }
-        # wws server ship rank
         if (
             len(msg) == 4 and
             Message.server_dict.get(msg[0],None) != None and
@@ -1485,7 +1459,7 @@ async def main(
                 shipname=ship_name
             )
             if (
-                shipid['status'] != 'ok' or 
+                shipid['status'] != 'ok' or
                 shipid['message'] != 'SUCCESS'
             ):
                 return shipid
@@ -1511,8 +1485,7 @@ async def main(
                     lang,
                     shipid
                 ]
-            }  
-        # wws online
+            }
         if (
             msg[0] in online_list
         ):
@@ -1524,7 +1497,6 @@ async def main(
                     lang
                 ]
             }
-        # wws me clan season
         if (
             len(msg) == 3 and
             msg[0] in me_list and
@@ -1536,7 +1508,7 @@ async def main(
                 server=server
             )
             if (
-                clanid['status'] != 'ok' or 
+                clanid['status'] != 'ok' or
                 clanid['message'] != 'SUCCESS'
             ):
                 return clanid
@@ -1577,7 +1549,7 @@ async def main(
                 clan_tag=clan_name
             )
             if (
-                clanid['status'] != 'ok' or 
+                clanid['status'] != 'ok' or
                 clanid['message'] != 'SUCCESS'
             ):
                 return clanid
@@ -1598,7 +1570,6 @@ async def main(
                     cvc_season
                 ]
             }
-        # wws me clan history
         if (
             len(msg) == 3 and
             msg[0] in me_list and
@@ -1610,14 +1581,14 @@ async def main(
                 server=server
             )
             if (
-                clanid['status'] != 'ok' or 
+                clanid['status'] != 'ok' or
                 clanid['message'] != 'SUCCESS'
             ):
                 return clanid
             if clanid['data']['cid'] == None:
                 return {'status':'ok','message':'NOT IN CLAN'}
             clanid = clanid['data']['cid']
-            
+
             return {
                 'status':'ok',
                 'message':'SUCCESS',
@@ -1646,7 +1617,7 @@ async def main(
                 clan_tag=clan_name
             )
             if (
-                clanid['status'] != 'ok' or 
+                clanid['status'] != 'ok' or
                 clanid['message'] != 'SUCCESS'
             ):
                 return clanid
@@ -1661,7 +1632,6 @@ async def main(
                     lang
                 ]
             }
-        # wws me clan
         if (
             len(msg) == 2 and
             msg[0] in me_list and
@@ -1672,7 +1642,7 @@ async def main(
                 server=server
             )
             if (
-                clanid['status'] != 'ok' or 
+                clanid['status'] != 'ok' or
                 clanid['message'] != 'SUCCESS'
             ):
                 return clanid
@@ -1706,7 +1676,7 @@ async def main(
                 clan_tag=clan_name
             )
             if (
-                clanid['status'] != 'ok' or 
+                clanid['status'] != 'ok' or
                 clanid['message'] != 'SUCCESS'
             ):
                 return clanid
@@ -1724,7 +1694,6 @@ async def main(
                     lang
                 ]
             }
-        # wws me recents
         if (
             len(msg) == 2 and
             msg[0] in me_list and
@@ -1754,7 +1723,7 @@ async def main(
                 nickname=msg[1]
             )
             if (
-                nickname['status'] != 'ok' or 
+                nickname['status'] != 'ok' or
                 nickname['message'] != 'SUCCESS'
             ):
                 return nickname
@@ -1772,7 +1741,6 @@ async def main(
                     ac
                 ]
             }
-        # wws me 周/月/年报
         if (
             len(msg) == 2 and
             msg[0] in me_list and
@@ -1790,8 +1758,8 @@ async def main(
             error_info=error_info
         )
         return {
-            'status': 'error', 
-            'message': 'PROGRAM ERROR', 
-            'error':f'{str(type(e).__name__)}', 
+            'status': 'error',
+            'message': 'PROGRAM ERROR',
+            'error':f'{str(type(e).__name__)}',
             'track_id': f'{track_id}'
         }

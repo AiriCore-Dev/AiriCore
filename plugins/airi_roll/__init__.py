@@ -7,7 +7,6 @@ airi_roll = on_command("roll", priority=99)
 
 @airi_roll.handle()
 async def main(bot: Bot, ev: MessageEvent):
-    #await airi_roll.finish('11',reply_message = True)
     msg = str(ev.message).split()
     if len(msg) == 1:
         res = str(randint(1,100))
@@ -22,4 +21,3 @@ async def main(bot: Bot, ev: MessageEvent):
     else:
         res ="用法：\nroll: 抽1-100随机数字\nroll x y: 抽x-y之间随机数字"
     await airi_roll.finish(res,reply_message = True)
-    #await airi_roll.finish('11',reply_message = True)

@@ -274,8 +274,8 @@ async def _(
             msgs.append(f"位置 {position} 已经被挖开了，不能标记")
 
     await (Text("\n".join(msgs)) + Image(raw=await run_sync(game.draw)())).send()
-    
+
 @minesweeper_help.handle()
 async def _(matcher: Matcher):
     await matcher.finish(help_msg)
-    
+

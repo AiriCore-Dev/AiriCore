@@ -78,7 +78,7 @@ if ($existing) {
     $arch = $env:PROCESSOR_ARCHITECTURE
     if ($arch -eq "ARM64") {
         Write-Host "==> 检测到 Windows ARM64, 强制创建 win-64 (x64) 环境"
-        Write-Host "    (opencv/playwright/aiohttp 等无 win-arm64 轮子, x64 经系统模拟运行, 兼容性最佳)"
+        Write-Host "    (playwright/aiohttp 等无 win-arm64 轮子, x64 经系统模拟运行, 兼容性最佳)"
     }
     Write-Host "==> 接受 conda 默认 channel 服务条款 (旧版本无此命令则忽略)"
     foreach ($ch in @(
