@@ -122,5 +122,5 @@ def sync_bottle():
     gc.collect()
 
 
-def send_email(dest, subject, text):
-    state.email_list.append([dest, subject, text])
+def send_email(dest, subject, text, html_body=None):
+    state.email_list.append([dest, subject, text, html_body])

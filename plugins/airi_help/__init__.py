@@ -71,8 +71,8 @@ Airi Cobblemon Sever 服管 By AiriCore Dev.
 * 发送指令 /help 查看帮助""",
     ),
     make_node(
-        "娱乐功能",
-        """----- 娱乐功能 -----
+        "娱乐插件",
+        """----- 娱乐插件 -----
 
 - Momoi Airi Collection:
 签到+收藏小游戏 By AiriCore Dev.
@@ -93,7 +93,7 @@ Airi心愿瓶（漂流瓶plus） By AiriCore Dev.
 Airi海龟汤 By AiriCore Dev.
 * 发送 海龟汤 查看帮助
 
-- 今日运势:
+- jrys:
 测测你的今日运势
 * 指令：jrys、今日运势
 
@@ -101,13 +101,21 @@ Airi海龟汤 By AiriCore Dev.
 塔罗牌占卜 By MinatoAquaCrews
 * 使用指令 占卜 触发
 
-- 今日老婆:
+- today-waifu:
 随即抓取群友做老婆 By glamorgan9826
 * 指令: jrlp、今日老婆
 
 - whateat-pic:
 今天吃什么 By Cvandia
 * 常用指令: 今天吃什么，今天喝什么
+
+- Minesweeper:
+扫雷游戏 By MeetWq
+* 发送 扫雷帮助 查看帮助""",
+    ),
+    make_node(
+        "功能插件",
+        """----- 功能插件 -----
 
 - Airi_Netease_Music:
 网易云点歌 By AiriCore Dev.
@@ -116,6 +124,18 @@ Airi海龟汤 By AiriCore Dev.
 - Airi_Choice:
 随机挑选插件 By AiriCore Dev.
 * 发送 choicehelp 查看帮助
+
+- Airi_Roll:
+抽取随机数 By AiriCore Dev.
+* 发送 roll help 查看帮助
+
+- Airi_Attrwhich:
+英文缩写查询 By AiriCore Dev.
+* 指令：@Airi xxx是什么
+
+- Airi-PackPic:
+打包图片 By AiriCore Dev.
+* 引用一条合并转发消息并发送 packpic 指令，压缩打包其中所有的图片
 
 - Memes:
 表情包制作 By MeetWq
@@ -128,36 +148,22 @@ PJSK&Arcaea 贴纸制作 By lgc-NB2Dev
 - emojimix:
 emoji合成
 * 指令：任意emoji+任意emoji
-(需为系统自带的emoji而不是qq的emoji)
-
-- Airi_Roll:
-抽取随机数 By AiriCore Dev.
-* 发送 roll help 查看帮助
-
-- Minesweeper:
-扫雷游戏 By MeetWq
-* 发送 扫雷帮助 查看帮助
-
-- Airi_Attrwhich:
-英文缩写查询 By AiriCore Dev.
-* 指令：@Airi xxx是什么""",
+(需为系统自带的emoji而不是qq的emoji)""",
     ),
     make_node(
-        "棋类游戏",
-        """----- 棋类游戏 -----
+        "棋类插件",
+        """----- 棋类插件 -----
 
 - chess:
-五子棋，黑白棋，围棋
+五子棋，黑白棋，围棋（PvP only）
 * 开局指令：五子棋，黑白棋，围棋
 * 常用指令：落子 坐标，悔棋，跳过回合，结束下棋，显示棋盘
-（由游戏发起人与第一个响应游戏的人组成先后手，其他人无法参与）
 
 - cchess:
-中国象棋
-* 开局指令：@Airi 象棋人机lvX(1-8) 或 @Airi 象棋对战（人打人）
-* 常用指令：炮二平五（中文格式），b2e2（坐标格式），结束下棋，显示棋盘，
-悔棋（人机模式可无限悔棋；对战模式只能撤销自己上一手下的棋）
-（在PvP模式下，由游戏发起人与第一个响应游戏的人组成先后手，其他人无法参与）""",
+中国象棋（PvE & PvP）
+* 开局指令：@Airi 象棋人机lvX，@Airi 象棋对战
+* 落子指令：炮二平五（中文格式），b2e2（坐标格式）
+* 其他指令：结束下棋，显示棋盘，悔棋""",
     ),
     make_node(
         "基础插件",
@@ -168,10 +174,6 @@ Airi智能体 By AiriCore Dev.
 * Airi会随机回复群内消息
 （该功能仅对直营姬开放）
 
-- Airi-PackPic:
-打包图片 By AiriCore Dev.
-* 引用一条合并转发消息并发送 packpic 指令，压缩打包其中所有的图片
-
 - Airi-Status:
 显示AiriCore服务器状态 By AiriCore Dev.
 * 发送 状态 显示
@@ -180,21 +182,28 @@ Airi智能体 By AiriCore Dev.
 显示此消息 By AiriCore Dev.
 * 发送 帮助，help 显示""",
     ),
+#    make_node(
+#        "机器人原型介绍",
+#        MessageSegment.text(
+#            """===== 原型介绍 =====
+#Momoi Airi 桃井爱莉
+#桃井爱莉（桃井 愛莉，ももい あいり）是《世界计划 彩色舞台 feat. 初音未来》（Project SEKAI, PJSK）及其衍生作品的登场角色。代表色为 #ffaacc。"""
+#        )
+#        + image_segment("airi.png"),
+#    ),
     make_node(
-        "机器人原型介绍",
+        "广告位",
         MessageSegment.text(
-            """===== 原型介绍 =====
-Momoi Airi 桃井爱莉
-桃井爱莉（桃井 愛莉，ももい あいり）是《世界计划 彩色舞台 feat. 初音未来》（Project SEKAI, PJSK）及其衍生作品的登场角色。代表色为 #ffaacc。"""
+            """🕹️️ AiriCore官方网站：
+https://www.airi.asia """
         )
-        + image_segment("airi.png"),
+        + image_segment("airiasia.jpg"),
     ),
     make_node(
         "广告位",
         MessageSegment.text(
-            """Bot使用群：
-* 一群：1030569383
-* 二群：808085026
+            """* Bot一群：1030569383
+* Bot二群：808085026
 * Dev群：1051523491"""
         ),
     ),
@@ -205,14 +214,6 @@ Momoi Airi 桃井爱莉
 https://github.com/AiriCore-Dev/AiriCore"""
         )
         + image_segment("airocore.png"),
-    ),
-    make_node(
-        "广告位",
-        MessageSegment.text(
-            """🕹️️ AiriCore官方网站：
-https://www.airi.asia """
-        )
-        + image_segment("airiasia.jpg"),
     ),
 ]
 

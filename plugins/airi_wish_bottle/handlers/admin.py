@@ -4,6 +4,7 @@ from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 from ..base import state
 from ..base.matchers import btshenhe, plshenhe, jbshenhe, pdbt, pdpl, pdjb, superuser_debug
 from ..base.helpers import generate_unique_id, send_email, nxcr
+from ..base.email_template import render_bottle_result, render_comment_result, render_report_result
 
 
 @pdbt.handle()
@@ -61,11 +62,13 @@ async def _(bot: Bot, ev: MessageEvent):
             except:
                 state.data['collections'][state.data["pending_bottles"][unique_id]['owner_id']] = []
             state.data['collections'][state.data["pending_bottles"][unique_id]['owner_id']].append(unique_id)
-            send_email(f'{state.data["bottles"][unique_id]["owner_id"]}@qq.com', f'您的心愿瓶{unique_id}已通过审核', f'尊敬的{state.data["bottles"][unique_id]["owner"]}：\n    您的心愿瓶“{state.data["bottles"][unique_id]["content"][:20]+("......" if len(state.data["bottles"][unique_id]["content"])>20 else "")}”已通过人工审核，编号为 {unique_id} ，感谢使用Airi心愿瓶。\n\n此致，\nAiriCore Dev.')
+            subj, plain, html_body = render_bottle_result(state.data["bottles"][unique_id]["owner"], state.data["bottles"][unique_id]["content"], unique_id, True)
+            send_email(f'{state.data["bottles"][unique_id]["owner_id"]}@qq.com', subj, plain, html_body)
             del state.data["pending_bottles"][unique_id]
     elif src[0] == 'btreject' and unique_id == 'all':
         for unique_id in state.data['pending_bottles'].keys():
-            send_email(f'{state.data["pending_bottles"][unique_id]["owner_id"]}@qq.com', f'您的心愿瓶{unique_id}未通过审核', f'尊敬的{state.data["pending_bottles"][unique_id]["owner"]}：\n    您的心愿瓶“{state.data["pending_bottles"][unique_id]["content"][:20]+("......" if len(state.data["pending_bottles"][unique_id]["content"])>20 else "")}”未通过人工审核。如果对审核结果有异议，可于收到该邮件发送邮件至saki@saki.ln.cn申请复核。\n\n此致，\nAiriCore Dev.')
+            subj, plain, html_body = render_bottle_result(state.data["pending_bottles"][unique_id]["owner"], state.data["pending_bottles"][unique_id]["content"], unique_id, False)
+            send_email(f'{state.data["pending_bottles"][unique_id]["owner_id"]}@qq.com', subj, plain, html_body)
         state.data["pending_bottles"] = {}
     elif unique_id not in state.data["pending_bottles"].keys():
         await jxyp.finish(f'编号为{unique_id}的心愿瓶不存在！', reply_message=True)
@@ -86,10 +89,12 @@ async def _(bot: Bot, ev: MessageEvent):
         except:
             state.data['collections'][state.data["pending_bottles"][unique_id]['owner_id']] = []
         state.data['collections'][state.data["pending_bottles"][unique_id]['owner_id']].append(unique_id)
-        send_email(f'{state.data["bottles"][unique_id]["owner_id"]}@qq.com', f'您的心愿瓶{unique_id}已通过审核', f'尊敬的{state.data["bottles"][unique_id]["owner"]}：\n    您的心愿瓶“{state.data["bottles"][unique_id]["content"][:20]+("......" if len(state.data["bottles"][unique_id]["content"])>20 else "")}”已通过人工审核，编号为 {unique_id} ，感谢使用Airi心愿瓶。\n\n此致，\nAiriCore Dev.')
+        subj, plain, html_body = render_bottle_result(state.data["bottles"][unique_id]["owner"], state.data["bottles"][unique_id]["content"], unique_id, True)
+        send_email(f'{state.data["bottles"][unique_id]["owner_id"]}@qq.com', subj, plain, html_body)
         del state.data["pending_bottles"][unique_id]
     elif src[0] == 'btreject':
-        send_email(f'{state.data["pending_bottles"][unique_id]["owner_id"]}@qq.com', f'您的心愿瓶{unique_id}未通过审核', f'尊敬的{state.data["pending_bottles"][unique_id]["owner"]}：\n    您的心愿瓶“{state.data["pending_bottles"][unique_id]["content"][:20]+("......" if len(state.data["pending_bottles"][unique_id]["content"])>20 else "")}”未通过人工审核。如果对审核结果有异议，可于收到该邮件三日内发送邮件至saki@saki.ln.cn申请复核。\n\n此致，\nAiriCore Dev.')
+        subj, plain, html_body = render_bottle_result(state.data["pending_bottles"][unique_id]["owner"], state.data["pending_bottles"][unique_id]["content"], unique_id, False)
+        send_email(f'{state.data["pending_bottles"][unique_id]["owner_id"]}@qq.com', subj, plain, html_body)
         del state.data["pending_bottles"][unique_id]
     await jxyp.finish('操作成功', reply_message=True)
 
@@ -108,11 +113,13 @@ async def _(bot: Bot, ev: MessageEvent):
             state.data['bottles'][state.data["pending_comment"][unique_id]["comment_to"]]['comments'].append(state.data["pending_comment"][unique_id]["content"])
             if len(state.data['bottles'][state.data["pending_comment"][unique_id]["comment_to"]]['comments']) > 30:
                 state.data['bottles'][state.data["pending_comment"][unique_id]["comment_to"]]['comments'].pop(0)
-            send_email(f'{state.data["pending_comment"][unique_id]["from"].split("_")[1]}@qq.com', f'您的评论{unique_id[-8:]}已通过审核', f'尊敬的{state.data["pending_comment"][unique_id]["from"].split("_")[0]}：\n    您的评论“{state.data["pending_comment"][unique_id]["content"]}”已通过人工审核，感谢使用Airi心愿瓶。\n\n此致，\nAiriCore Dev.')
+            subj, plain, html_body = render_comment_result(state.data["pending_comment"][unique_id]["from"].split("_")[0], state.data["pending_comment"][unique_id]["content"], unique_id[-8:], True)
+            send_email(f'{state.data["pending_comment"][unique_id]["from"].split("_")[1]}@qq.com', subj, plain, html_body)
             del state.data["pending_comment"][unique_id]
     elif src[0] == 'plreject' and unique_id == 'all':
         for unique_id in state.data["pending_comment"].keys():
-            send_email(f'{state.data["pending_comment"][unique_id]["from"].split("_")[1]}@qq.com', f'您的评论{unique_id[-8:]}未通过审核', f'尊敬的{state.data["pending_comment"][unique_id]["from"].split("_")[0]}：\n    您的评论“{state.data["pending_comment"][unique_id]["content"]}”未通过人工审核。如果对审核结果有异议，可于收到该邮件三日内发送邮件至saki@saki.ln.cn申请复核。\n\n此致，\nAiriCore Dev.')
+            subj, plain, html_body = render_comment_result(state.data["pending_comment"][unique_id]["from"].split("_")[0], state.data["pending_comment"][unique_id]["content"], unique_id[-8:], False)
+            send_email(f'{state.data["pending_comment"][unique_id]["from"].split("_")[1]}@qq.com', subj, plain, html_body)
         state.data["pending_comment"] = {}
     elif unique_id not in state.data["pending_comment"].keys():
         await jxyp.finish(f'编号错误', reply_message=True)
@@ -120,10 +127,12 @@ async def _(bot: Bot, ev: MessageEvent):
         state.data['bottles'][state.data["pending_comment"][unique_id]["comment_to"]]['comments'].append(state.data["pending_comment"][unique_id]["content"])
         if len(state.data['bottles'][state.data["pending_comment"][unique_id]["comment_to"]]['comments']) > 30:
             state.data['bottles'][state.data["pending_comment"][unique_id]["comment_to"]]['comments'].pop(0)
-        send_email(f'{state.data["pending_comment"][unique_id]["from"].split("_")[1]}@qq.com', f'您的评论{unique_id[-8:]}已通过审核', f'尊敬的{state.data["pending_comment"][unique_id]["from"].split("_")[0]}：\n    您的评论“{state.data["pending_comment"][unique_id]["content"]}”已通过人工审核，感谢使用Airi心愿瓶。\n\n此致，\nAiriCore Dev.')
+        subj, plain, html_body = render_comment_result(state.data["pending_comment"][unique_id]["from"].split("_")[0], state.data["pending_comment"][unique_id]["content"], unique_id[-8:], True)
+        send_email(f'{state.data["pending_comment"][unique_id]["from"].split("_")[1]}@qq.com', subj, plain, html_body)
         del state.data["pending_comment"][unique_id]
     elif src[0] == 'plreject':
-        send_email(f'{state.data["pending_comment"][unique_id]["from"].split("_")[1]}@qq.com', f'您的评论{unique_id[-8:]}未通过审核', f'尊敬的{state.data["pending_comment"][unique_id]["from"].split("_")[0]}：\n    您的评论“{state.data["pending_comment"][unique_id]["content"]}”未通过人工审核。如果对审核结果有异议，可于收到该邮件三日内发送邮件至saki@saki.ln.cn申请复核。\n\n此致，\nAiriCore Dev.')
+        subj, plain, html_body = render_comment_result(state.data["pending_comment"][unique_id]["from"].split("_")[0], state.data["pending_comment"][unique_id]["content"], unique_id[-8:], False)
+        send_email(f'{state.data["pending_comment"][unique_id]["from"].split("_")[1]}@qq.com', subj, plain, html_body)
         del state.data["pending_comment"][unique_id]
     await jxyp.finish('操作成功', reply_message=True)
 
@@ -139,18 +148,22 @@ async def _(bot: Bot, ev: MessageEvent):
     if src[0] == 'jbapprove' and unique_id == 'all':
         pd_jb = list(state.data["pending_jb"].keys())
         for unique_id in pd_jb:
-            send_email(f'{state.data["pending_jb"][unique_id]["jbr"].split("_")[1]}@qq.com', f'您的举报{unique_id[-8:]}已通过审核', f'尊敬的{state.data["pending_jb"][unique_id]["jbr"].split("_")[0]}：\n    您举报的编号为 {state.data["pending_jb"][unique_id]["unique_id"]} 的心愿瓶经核实，违规情况成立，目前开发团队已依规处理该心愿瓶。感谢您为AiriCore做出的贡献。\n    凭该邮件可申领自定义编号心愿瓶一个，请联系saki@saki.ln.cn。\n\n此致，\nAiriCore Dev.')
+            subj, plain, html_body = render_report_result(state.data["pending_jb"][unique_id]["jbr"].split("_")[0], unique_id[-8:], state.data["pending_jb"][unique_id]["unique_id"], True)
+            send_email(f'{state.data["pending_jb"][unique_id]["jbr"].split("_")[1]}@qq.com', subj, plain, html_body)
             del state.data["pending_jb"][unique_id]
     elif src[0] == 'jbreject' and unique_id == 'all':
         for unique_id in state.data["pending_jb"].keys():
-            send_email(f'{state.data["pending_jb"][unique_id]["jbr"].split("_")[1]}@qq.com', f'您的举报{unique_id[-8:]}未通过审核', f'尊敬的{state.data["pending_jb"][unique_id]["jbr"].split("_")[0]}：\n    您举报的编号为 {state.data["pending_jb"][unique_id]["unique_id"]} 的心愿瓶经核实，未发现违规情况，请谅解。如果对审核结果有异议，可于收到该邮件三日内发送邮件至saki@saki.ln.cn申请复核。\n\n此致，\nAiriCore Dev.')
+            subj, plain, html_body = render_report_result(state.data["pending_jb"][unique_id]["jbr"].split("_")[0], unique_id[-8:], state.data["pending_jb"][unique_id]["unique_id"], False)
+            send_email(f'{state.data["pending_jb"][unique_id]["jbr"].split("_")[1]}@qq.com', subj, plain, html_body)
         state.data["pending_jb"] = {}
     elif unique_id not in state.data["pending_jb"].keys():
         await jxyp.finish(f'编号错误', reply_message=True)
     elif src[0] == 'jbapprove':
-        send_email(f'{state.data["pending_jb"][unique_id]["jbr"].split("_")[1]}@qq.com', f'您的举报{unique_id[-8:]}已通过审核', f'尊敬的{state.data["pending_jb"][unique_id]["jbr"].split("_")[0]}：\n    您举报的编号为 {state.data["pending_jb"][unique_id]["unique_id"]} 的心愿瓶经核实，违规情况成立，目前开发团队已依规处理该心愿瓶。感谢您为AiriCore做出的贡献。\n    凭该邮件可申领自定义编号心愿瓶一个，请联系saki@saki.ln.cn。\n\n此致，\nAiriCore Dev.')
+        subj, plain, html_body = render_report_result(state.data["pending_jb"][unique_id]["jbr"].split("_")[0], unique_id[-8:], state.data["pending_jb"][unique_id]["unique_id"], True)
+        send_email(f'{state.data["pending_jb"][unique_id]["jbr"].split("_")[1]}@qq.com', subj, plain, html_body)
         del state.data["pending_jb"][unique_id]
     elif src[0] == 'jbreject':
-        send_email(f'{state.data["pending_jb"][unique_id]["jbr"].split("_")[1]}@qq.com', f'您的举报{unique_id[-8:]}未通过审核', f'尊敬的{state.data["pending_jb"][unique_id]["jbr"].split("_")[0]}：\n    您举报的编号为 {state.data["pending_jb"][unique_id]["unique_id"]} 的心愿瓶经核实，未发现违规情况，请谅解。如果对审核结果有异议，可于收到该邮件三日内发送邮件至saki@saki.ln.cn申请复核。\n\n此致，\nAiriCore Dev.')
+        subj, plain, html_body = render_report_result(state.data["pending_jb"][unique_id]["jbr"].split("_")[0], unique_id[-8:], state.data["pending_jb"][unique_id]["unique_id"], False)
+        send_email(f'{state.data["pending_jb"][unique_id]["jbr"].split("_")[1]}@qq.com', subj, plain, html_body)
         del state.data["pending_jb"][unique_id]
     await jxyp.finish('操作成功', reply_message=True)

@@ -34,6 +34,7 @@ from .base.persistence import (
     save_to_json,
     daily_clear,
     save_data_backup,
+    flush_email_queue,
     timings,
 )
 from . import handlers
@@ -81,6 +82,8 @@ async def _(bot: Bot, ev: MessageEvent):
     elif src == 'email':
         await email_login()
         res = '登录邮箱：命令执行成功'
+    elif src == 'sendemail':
+        res = await flush_email_queue()
     else:
         try:
             try: res = eval(src)

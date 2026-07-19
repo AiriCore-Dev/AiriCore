@@ -98,6 +98,18 @@ def _sorted_items(counts: Dict[str, int]) -> List[Tuple[str, int]]:
     return sorted(counts.items(), key=lambda kv: kv[1], reverse=True)
 
 
+def _stamp_date(img: Image.Image, text: str, margin: int = 24) -> None:
+    if not text:
+        return
+    d = ImageDraw.Draw(img)
+    f = _font(26)
+    tw = int(d.textlength(text, font=f))
+    th = 26
+    x = img.width - margin - tw
+    y = img.height - margin - th
+    d.text((x, y), text, font=f, fill=_SUB)
+
+
 def _paste_avatar(img: Image.Image, avatar, xy: Tuple[int, int], size: int) -> None:
     if not avatar:
         return
@@ -129,8 +141,10 @@ def _stack_pies(top_pie, bottom_pie, label_of=None, avatar_of=None) -> Image.Ima
 
 def draw_pies_vstack(top_pie: Tuple[str, Dict[str, int]],
                      bottom_pie: Tuple[str, Dict[str, int]],
-                     label_of=None, avatar_of=None) -> bytes:
-    return _encode(_stack_pies(top_pie, bottom_pie, label_of, avatar_of))
+                     label_of=None, avatar_of=None, date_text: str = "") -> bytes:
+    canvas = _stack_pies(top_pie, bottom_pie, label_of, avatar_of)
+    _stamp_date(canvas, date_text)
+    return _encode(canvas)
 
 
 def render_bot_cell(header: str, top_pie, bottom_pie, label_of=None, avatar_of=None,
@@ -152,13 +166,14 @@ def render_bot_cell(header: str, top_pie, bottom_pie, label_of=None, avatar_of=N
     return cell
 
 
-def draw_grid(cells: List[Image.Image], cols: int = 4) -> bytes:
+def draw_grid(cells: List[Image.Image], cols: int = 4, date_text: str = "") -> bytes:
     if not cells:
         img = Image.new("RGB", (400, 200), _BG)
         d = ImageDraw.Draw(img)
         msg = "今日暂无数据"
         f = _font(40)
         d.text(((400 - int(f.getlength(msg))) // 2, 80), msg, font=f, fill=_SUB)
+        _stamp_date(img, date_text)
         return _encode(img)
 
     gap = 20
@@ -180,6 +195,7 @@ def draw_grid(cells: List[Image.Image], cols: int = 4) -> bytes:
             canvas.paste(c, (x, y))
             x += cw + gap
         y += row_h[r] + gap
+    _stamp_date(canvas, date_text)
     return _encode(canvas)
 
 
@@ -275,7 +291,7 @@ def _render_pie(title: str, counts: Dict[str, int], label_of=None, avatar_of=Non
     return img
 
 
-def draw_summary(bot_totals: List[Tuple]) -> bytes:
+def draw_summary(bot_totals: List[Tuple], date_text: str = "") -> bytes:
     W = 1040
     top = 110
     left = 340
@@ -324,4 +340,5 @@ def draw_summary(bot_totals: List[Tuple]) -> bytes:
             d.text((left + max(w, 2) + 12, by + 2), str(val), font=f_val, fill=_SUB)
         y += group_h
 
+    _stamp_date(img, date_text)
     return _encode(img)

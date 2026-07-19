@@ -3,6 +3,8 @@
 __pycache__/
 record/
 .env.prod
+CLAUDE.md
+sdk_diff*
 
 # Django/Database
 *.pk

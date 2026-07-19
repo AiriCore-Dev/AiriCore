@@ -1,4 +1,5 @@
 import os
+import re
 import base64
 import time
 import hashlib
@@ -192,7 +193,7 @@ async def _group_labeler(bot: Bot, sessions):
     return label_of
 
 
-async def _bot_pies(bot: Bot, self_id: str, data: dict, avatars: dict = None) -> bytes:
+async def _bot_pies(bot: Bot, self_id: str, data: dict, avatars: dict = None, date_text: str = "") -> bytes:
     avatars = avatars or {}
     recv = data.get("recv", {})
     sent = data.get("sent", {})
@@ -204,6 +205,7 @@ async def _bot_pies(bot: Bot, self_id: str, data: dict, avatars: dict = None) ->
         (f"发 · 共 {sent_total} 条", sent),
         label_of=label_of,
         avatar_of=lambda sid: avatars.get(sid),
+        date_text=date_text,
     )
 
 
@@ -231,24 +233,37 @@ async def _(bot: Bot, ev: MessageEvent):
         await airi_analysis.finish('请在群里使用 airianalysis')
 
     arg = ev.get_plaintext().removeprefix('airianalysis').strip()
-    stats = counter.get_stats()
     today = datetime.now(timezone(timedelta(hours=8))).strftime('%Y-%m-%d')
 
-    if arg:
-        data = stats.get(arg)
+    day = today
+    bot_id = ''
+    for tok in arg.split():
+        if re.fullmatch(r'\d{4}-\d{2}-\d{2}', tok):
+            day = tok
+        elif tok:
+            bot_id = tok
+
+    stats = counter.get_stats(day)
+
+    if bot_id:
+        data = stats.get(bot_id)
         if not data:
-            await airi_analysis.finish(f'今日({today})没有 bot {arg} 的收发记录')
-        nick = await _bot_nick(bot, arg)
+            days = counter.get_available_days()
+            tip = f'\n可用日期：{"、".join(days)}' if days else ''
+            await airi_analysis.finish(f'{day} 没有 bot {bot_id} 的收发记录{tip}')
+        nick = await _bot_nick(bot, bot_id)
         groups = set(data.get('recv', {})) | set(data.get('sent', {}))
         avatars = await _prefetch_avatars([], groups)
-        pie = await _bot_pies(bot, arg, data, avatars)
+        pie = await _bot_pies(bot, bot_id, data, avatars, date_text=day)
         cache.flush()
-        msg = Message(f'📊 {nick}({arg}) · {today}\n') + _img_seg(pie)
+        msg = Message(f'📊 {nick}({bot_id}) · {day}\n') + _img_seg(pie)
         await bot.send_group_msg(group_id=ev.group_id, message=msg)
         return
 
     if not stats:
-        await airi_analysis.finish(f'今日({today})暂无收发统计')
+        days = counter.get_available_days()
+        tip = f'\n可用日期：{"、".join(days)}' if days else ''
+        await airi_analysis.finish(f'{day} 暂无收发统计{tip}')
 
     bots = nonebot.get_bots()
     all_groups = set()
@@ -269,8 +284,8 @@ async def _(bot: Bot, ev: MessageEvent):
         except Exception as e:
             logger.opt(colors=True).warning(f'<y>airianalysis 生成 {self_id} 单元格失败: {e}</y>')
 
-    grid = draw_grid(cells, cols=4)
-    summary = draw_summary(bot_totals)
+    grid = draw_grid(cells, cols=4, date_text=day)
+    summary = draw_summary(bot_totals, date_text=day)
 
     cache.flush()
     await airi_analysis.finish(_img_seg(grid)+_img_seg(summary), reply_message=True)
