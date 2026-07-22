@@ -192,6 +192,16 @@ Airi智能体 By AiriCore Dev.
 #        + image_segment("airi.png"),
 #    ),
     make_node(
+        "使用时间限制",
+        """=== 🔕 使用时间限制 ===
+
+直营姬休息时间：
+23:00 - 次日6:00
+期间无法使用插件功能
+
+请合理分配睡眠时间，保持健康作息""",
+    ),
+    make_node(
         "广告位",
         MessageSegment.text(
             """🕹️️ AiriCore官方网站：
@@ -203,8 +213,7 @@ https://www.airi.asia """
         "广告位",
         MessageSegment.text(
             """* Bot一群：1030569383
-* Bot二群：808085026
-* Dev群：1051523491"""
+* Bot二群：808085026"""
         ),
     ),
     make_node(

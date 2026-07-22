@@ -6,7 +6,7 @@ from utils.totp_2fa import totp_verify
 
 from ..base import state
 from ..base.matchers import airimarket, airimarketlist, airimarkettest, airimarketcancel, airimarketboost, airimarketsdebug
-from ..base.helpers import list_articles, get_all_users, parse_article, make_token
+from ..base.helpers import list_articles, get_all_users, parse_article, make_token, parse_market_args
 from ..base.persistence import save_data
 from ..base.email_template import render_marketing_email
 
@@ -18,9 +18,10 @@ async def handle_airimarket(bot: Bot, ev: MessageEvent):
     if len(parts) < 2:
         articles = list_articles()
         tip = "可用文章：\n" + "\n".join(articles) if articles else "暂无可用文章"
-        await airimarket.finish(f"用法：airimarket [文章名称]\n{tip}")
+        await airimarket.finish(f"用法：airimarket [文章名称] [--group g1,g2] [--bot b1,b2]\n{tip}")
 
-    article_name = parts[1].strip()
+    article_name, group_ids, bot_ids = parse_market_args(parts[1])
+
     articles = list_articles()
     if article_name not in articles:
         tip = "可用文章：\n" + "\n".join(articles) if articles else "暂无可用文章"
@@ -42,7 +43,7 @@ async def handle_airimarket(bot: Bot, ev: MessageEvent):
         await airimarket.finish(f"文章解析失败：{e}")
 
     bots = list(nonebot.get_bots().values())
-    all_users = await get_all_users(bots)
+    all_users = await get_all_users(bots, group_ids=group_ids, bot_ids=bot_ids)
     unsubscribed = set(state.data.get("unsubscribed", []))
     already_sent = set(state.data.get("article_sent", {}).get(article_name, []))
     targets = sorted(all_users - unsubscribed - already_sent)
@@ -61,10 +62,18 @@ async def handle_airimarket(bot: Bot, ev: MessageEvent):
     }
     await save_data()
 
+    filter_notes = []
+    if bot_ids:
+        filter_notes.append(f"Bot 过滤：{', '.join(sorted(bot_ids))}")
+    if group_ids:
+        filter_notes.append(f"群组过滤：{', '.join(sorted(group_ids))}")
+    filter_line = ("\n" + "\n".join(filter_notes)) if filter_notes else ""
+
     await airimarket.finish(
         f"推送任务已创建：{article_name}\n"
         f"标题：{article_info['title']}\n"
-        f"目标用户：{len(targets)} 人（已排除 {len(unsubscribed)} 人退订、{len(already_sent)} 人已发过）\n"
+        f"目标用户：{len(targets)} 人（已排除 {len(unsubscribed)} 人退订、{len(already_sent)} 人已发过）"
+        f"{filter_line}\n"
         f"每日上限：{state.market_daily_limit} 封\n"
         f"发送时段：{state.market_send_start_hour}:00 - {state.market_send_end_hour}:00"
     )

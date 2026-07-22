@@ -139,14 +139,11 @@ async def _(bot: Bot, ev: MessageEvent):
 将你需要的图片发送至上述邮箱并备注即可！\n\
 （支持多张，生成图片时随机挑选）'
 
-    rest_notice = '🔕 每天的22:00-6:00(+1)为休息时间，休息时间内无法使用插件，请合理分配睡眠时间，保持健康作息。'
-
     msg = [
         node("Momoi Airi Collection", '⚜️ Momoi Airi Collection\n一款签到 + 收藏的娱乐插件'),
         node("指令列表", cmd_list),
         node("游戏玩法", gameplay),
         node("定制说明", custom),
-        node("时间限制", rest_notice),
         node("版权信息", 'Powered By AiriCore Dev.'),
     ]
     await bot.send_group_forward_msg(group_id=ev.group_id, messages=msg)

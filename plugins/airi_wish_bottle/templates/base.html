@@ -9,60 +9,56 @@
   <title>{{TITLE}}</title>
   <!--[if mso]>
   <style type="text/css">
-    body, table, td, a { font-family: Arial, sans-serif !important; }
+    body, table, td, a { font-family: 'Helvetica Neue', Arial, sans-serif !important; }
   </style>
   <![endif]-->
   <style type="text/css">
-    body { margin: 0; padding: 0; width: 100% !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; background-color: #fdf2f7; }
-    table { border-collapse: collapse !important; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
-    img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; display: block; }
-    a { text-decoration: none; }
+    body { margin:0; padding:0; width:100% !important; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; background-color:#fff5f8; }
+    table { border-collapse:collapse !important; mso-table-lspace:0pt; mso-table-rspace:0pt; }
+    img { border:0; height:auto; line-height:100%; outline:none; text-decoration:none; -ms-interpolation-mode:bicubic; display:block; }
+    a { text-decoration:none; }
 
     @media (prefers-color-scheme: dark) {
-      body, .email-bg { background-color: #1a1a1a !important; }
-      .email-card { background-color: #2b2b33 !important; border-color: #4a4a52 !important; }
-      .content-bg { background-color: #2b2b33 !important; }
-      h1, .h1 { color: #ffffff !important; }
-      p { color: #e0e0e0 !important; }
-      .text-primary { color: #ffffff !important; }
-      .text-secondary { color: #e0e0e0 !important; }
-      .text-tertiary { color: #c0c0c8 !important; }
-      .text-muted { color: #999999 !important; }
-      .bg-badge { background-color: #4a3a42 !important; }
-      .bg-card { background-color: #3a3a42 !important; }
-      .divider { background-color: #4a4a52 !important; }
-      .footer-bg { background-color: #232329 !important; }
+      body, .email-bg { background-color:#000000 !important; }
+      .email-card { background-color:#1c1c1e !important; }
+      .header-cell { background-color:#1c1c1e !important; border-bottom-color:#2c2c2e !important; }
+      .content-bg { background-color:#1c1c1e !important; }
+      .brand-name { color:#f5f5f7 !important; }
+      .brand-sub { color:#636366 !important; }
+      .footer-bg { background-color:#111111 !important; }
+      .footer-line { color:#636366 !important; }
+      .footer-note { color:#48484a !important; }
     }
 
     @media screen and (max-width: 600px) {
-      .container { width: 100% !important; }
-      .px { padding-left: 24px !important; padding-right: 24px !important; }
-      .h1 { font-size: 24px !important; line-height: 32px !important; }
+      .container { width:100% !important; }
+      .px { padding-left:24px !important; padding-right:24px !important; }
+      .h1 { font-size:22px !important; line-height:28px !important; }
     }
   </style>
 </head>
-<body style="margin:0; padding:0; background-color:#fdf2f7;">
+<body style="margin:0; padding:0; background-color:#f5f5f7;">
 
-  <div style="display:none; max-height:0; overflow:hidden; mso-hide:all; font-size:1px; line-height:1px; color:#fdf2f7;">
+  <div style="display:none; max-height:0; overflow:hidden; mso-hide:all; font-size:1px; line-height:1px; color:#f5f5f7;">
     {{PREHEADER}}
   </div>
 
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="email-bg" style="background-color:#fdf2f7;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="email-bg" style="background-color:#fff5f8;">
     <tr>
-      <td align="center" style="padding:32px 16px;">
+      <td align="center" style="padding:40px 16px;">
 
-        <table role="presentation" class="container email-card" width="600" cellpadding="0" cellspacing="0" style="width:600px; max-width:600px; background-color:#ffffff; border-radius:16px; overflow:hidden; box-shadow:0 8px 24px rgba(232,93,154,0.12); border:1px solid #fbdceb;">
+        <table role="presentation" class="container email-card" width="600" cellpadding="0" cellspacing="0" style="width:600px; max-width:600px; background-color:#ffffff; border-radius:18px; overflow:hidden; box-shadow:0 2px 16px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.05); border-top:3px solid #ffaacc;">
 
           <tr>
-            <td style="background-color:#ffaacc; background-image:linear-gradient(135deg, #ffaacc 0%, #ff7fb3 100%); padding:36px 40px;">
+            <td class="header-cell" style="background-color:#ffffff; padding:28px 48px 24px 48px; border-bottom:1px solid #f2f2f7;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
-                  <td width="56" valign="middle" style="width:56px;">
-                    <img src="https://www.airi.asia/assets/images/icon.avif" width="52" height="52" alt="AiriCore" style="width:52px; height:52px; border-radius:12px; background-color:#ffffff;" />
+                  <td width="38" valign="middle" style="width:38px;">
+                    <img src="https://www.airi.asia/assets/images/icon.avif" width="36" height="36" alt="AiriCore" style="width:36px; height:36px; border-radius:9px;" />
                   </td>
-                  <td valign="middle" style="padding-left:16px;">
-                    <div style="font-family:'Segoe UI', Arial, sans-serif; font-size:22px; font-weight:700; color:#ffffff; letter-spacing:0.5px;">AiriCore</div>
-                    <div style="font-family:'Segoe UI', Arial, sans-serif; font-size:13px; color:#fff0f6; padding-top:3px;">High-performance QQ Bot Framework</div>
+                  <td valign="middle" style="padding-left:12px;">
+                    <div class="brand-name" style="font-family:-apple-system,'Helvetica Neue',Arial,sans-serif; font-size:17px; font-weight:700; letter-spacing:-0.02em; color:#1d1d1f; line-height:1.2;">AiriCore Service</div>
+                    <div class="brand-sub" style="font-family:-apple-system,'Helvetica Neue',Arial,sans-serif; font-size:12px; color:#86868b; letter-spacing:0.01em; padding-top:3px; line-height:1.2;">A High-performance QQ Bot Framework</div>
                   </td>
                 </tr>
               </table>
@@ -72,18 +68,15 @@
           {{CONTENT}}
 
           <tr>
-            <td class="footer-bg" style="background-color:#fbf5f9; padding:28px 40px; margin-top:24px;">
+            <td class="footer-bg" style="background-color:#fdf0f5; padding:24px 48px;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td align="center">
-                    <div class="text-secondary" style="font-family:'Segoe UI', Arial, sans-serif; font-size:13px; font-weight:700; color:#55555f;">AiriCore Dev.</div>
-                    <div class="text-muted" style="font-family:'Segoe UI', Arial, sans-serif; font-size:12px; color:#9a9aa4; padding-top:6px; line-height:20px;">
-                      官网 <a href="https://www.airi.asia" target="_blank" style="color:#e85d9a;">www.airi.asia</a>
-                      &nbsp;|&nbsp;
-                      开源仓库 <a href="https://github.com/AiriCore-Dev/AiriCore" target="_blank" style="color:#e85d9a;">GitHub</a>
+                    <div class="footer-line" style="font-family:-apple-system,'Helvetica Neue',Arial,sans-serif; font-size:12px; color:#86868b; line-height:20px;">
+                      AiriCore &nbsp;&middot;&nbsp; 主页: airi.asia &nbsp;&middot;&nbsp; 开源仓库: github.com/AiriCore-Dev/AiriCore
                     </div>
-                    <div style="font-family:'Segoe UI', Arial, sans-serif; font-size:11px; color:#c0c0c8; padding-top:14px; line-height:18px;">
-                      本邮件由 AiriCore Dev. 自动发送，请勿直接回复
+                    <div class="footer-note" style="font-family:-apple-system,'Helvetica Neue',Arial,sans-serif; font-size:11px; color:#aeaeb2; padding-top:8px; line-height:18px;">
+                      本邮件由 AiriCore 自动发送，请勿直接回复
                     </div>
                   </td>
                 </tr>

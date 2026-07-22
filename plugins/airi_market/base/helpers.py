@@ -99,22 +99,46 @@ def verify_token(token):
     return None
 
 
-async def get_all_users(bots):
+def parse_market_args(arg_text):
+    group_ids = None
+    bot_ids = None
+    tokens = re.split(r'\s+--', arg_text)
+    article_name = tokens[0].strip()
+    for token in tokens[1:]:
+        m = re.match(r'^(group|bot)\s+([\d,]+)', token.strip())
+        if m:
+            flag, val = m.group(1), m.group(2)
+            ids = {v for v in val.split(',') if v.isdigit()}
+            if not ids:
+                continue
+            if flag == 'group':
+                group_ids = (group_ids or set()) | ids
+            else:
+                bot_ids = (bot_ids or set()) | ids
+    return article_name, group_ids, bot_ids
+
+
+async def get_all_users(bots, group_ids=None, bot_ids=None):
     users = set()
     for bot in bots:
+        if bot_ids is not None and str(bot.self_id) not in bot_ids:
+            continue
         try:
             groups = await bot.get_group_list()
-            for group in groups:
-                try:
-                    members = await bot.get_group_member_list(group_id=group["group_id"])
-                    for m in members:
-                        uid = str(m["user_id"])
-                        if uid != str(bot.self_id):
-                            users.add(uid)
-                except Exception:
-                    pass
         except Exception:
-            pass
+            continue
+        for group in groups:
+            gid = str(group["group_id"])
+            if group_ids is not None and gid not in group_ids:
+                continue
+            try:
+                members = await bot.get_group_member_list(group_id=group["group_id"])
+                for m in members:
+                    uid = str(m["user_id"])
+                    if uid != str(bot.self_id):
+                        users.add(uid)
+            except Exception:
+                pass
     return users
 
 

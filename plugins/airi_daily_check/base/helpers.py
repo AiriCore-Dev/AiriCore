@@ -24,26 +24,12 @@ def parse_session(ev: MessageEvent):
 
 
 async def resting_guard(reply_message: bool = True) -> bool:
-    notice = await check_anytime()
-    if not notice:
-        return False
-    if random.randint(1, 3) == 1:
-        await qiandao.finish(notice, reply_message=reply_message)
-    return True
+    return False
 
 
 async def ensure_registered(matcher, user_id):
     if user_id not in state.data:
         await matcher.finish(NOT_REGISTERED_TIP, reply_message=True)
-
-
-async def check_anytime():
-    hour = datetime.datetime.now().hour
-    if hour > 21:
-        return "慢慢长夜，该睡觉啦～（哈啊）\n祝你做一个美好的梦！\n明天早上6点之后再来找我吧！晚安！"
-    elif hour < 6:
-        return "Zzz......\n（airi似乎正在睡觉）\n旁边有一张字条：\n熬夜伤身体，请一定要早睡！\n闹钟上的定时：6:00 AM"
-    return ""
 
 
 async def download_avatar(uid: str) -> bytes:

@@ -9,6 +9,7 @@ from dataclasses import dataclass, field, fields, MISSING
 from typing import Any, Deque, Dict, List, Optional, Set
 
 from . import llm_client
+from .knowledge import KnowledgeEntry
 
 logger = logging.getLogger("airi_llm")
 
@@ -42,10 +43,25 @@ STYLE_MIN_ENTRIES = 20
 STYLE_ANALYZE_ENTRIES = 40
 STYLE_MAX_CHARS = 100
 
-BOT_MOOD_TTL_SECS = 300
-BOT_MOOD_MIN_ENTRIES = 3
-BOT_MOOD_ANALYZE_ENTRIES = 10
+BOT_STATE_TTL_SECS = 240
+BOT_STATE_MIN_ENTRIES = 3
+BOT_STATE_ANALYZE_ENTRIES = 10
 BOT_MOOD_EMA_ALPHA = 0.4
+BOT_AROUSAL_EMA_ALPHA = 0.4
+
+MOOD_TOPIC_TTL_SECS = 300
+MOOD_TOPIC_MIN_ENTRIES = 5
+MOOD_TOPIC_ANALYZE_ENTRIES = 15
+
+AFFINITY_MAX = 2.0
+AFFINITY_MIN = -1.0
+AFFINITY_DECAY_DAYS = 14
+AFFINITY_DECAY_PER_DAY = 0.04
+
+PENDING_CALLBACK_TTL_SECS = 86400 * 3
+PENDING_CALLBACK_MAX_PER_USER = 3
+PENDING_CALLBACK_TRIGGER_PROB = 0.30
+PENDING_CALLBACK_MIN_LINES = 3
 
 INACTIVE_GROUP_TTL_DAYS = 90
 INACTIVE_USER_TTL_DAYS = 180
@@ -64,6 +80,13 @@ class ContextEntry:
 
 
 @dataclass
+class PendingCallback:
+    user_id: str
+    snippet: str
+    created_at: float
+
+
+@dataclass
 class GroupContext:
     entries: Deque[ContextEntry] = field(
         default_factory=lambda: deque(maxlen=RAW_CONTEXT_MAX)
@@ -74,11 +97,17 @@ class GroupContext:
     entries_since_extraction: int = 0
     last_activity_ts: float = 0.0
     mood: float = 0.0
-    mood_updated_at: float = 0.0
+    mood_topic_updated_at: float = 0.0
     speaking_style: str = ""
     style_updated_at: float = 0.0
     bot_mood: float = 0.0
-    bot_mood_updated_at: float = 0.0
+    bot_arousal: float = 0.0
+    bot_state_updated_at: float = 0.0
+    active_topic: str = ""
+    pending_callbacks: List[PendingCallback] = field(default_factory=list)
+    knowledge: List[KnowledgeEntry] = field(default_factory=list)
+    knowledge_updated_at: float = 0.0
+    knowledge_entry_count: int = 0
 
     def __post_init__(self):
         if not isinstance(self.entries, deque) or self.entries.maxlen != RAW_CONTEXT_MAX:
@@ -89,8 +118,11 @@ class GroupContext:
 class UserMemory:
     user_id: str
     nickname: str = ""
+    group_alias: str = ""
     notes: str = ""
     updated_at: float = 0.0
+    affinity: float = 0.0
+    affinity_updated_at: float = 0.0
 
 
 @dataclass
@@ -259,7 +291,12 @@ def _entries_table(entries: List[ContextEntry]) -> str:
     return header + "\n" + "\n".join(rows)
 
 
-def render_context(state: Any, gid: str) -> str:
+def render_context(
+    state: Any,
+    gid: str,
+    callback_snippet: Optional[str] = None,
+    knowledge_snippets: Optional[List[str]] = None,
+) -> str:
     ctx = get_ctx(state, gid)
     entries = list(ctx.entries)
     parts: List[str] = []
@@ -280,14 +317,32 @@ def render_context(state: Any, gid: str) -> str:
     mem_lines: List[str] = []
     for uid in present:
         umem = state.long_term.users.get(uid)
+        sys_name = (umem.nickname if umem else None) or uid
+        alias = (umem.group_alias if umem else "") or ""
+        if alias and alias != sys_name:
+            display_name = f"{alias}（{sys_name}）"
+        else:
+            display_name = sys_name
+        line_parts = []
         if umem and umem.notes:
-            name = umem.nickname or uid
-            mem_lines.append(f"{name}: {umem.notes}")
+            line_parts.append(umem.notes)
+        if umem:
+            aff_tag = _affinity_tag(umem.affinity)
+            if aff_tag:
+                line_parts.append(f"（{aff_tag}）")
+        if line_parts:
+            mem_lines.append(f"{display_name}: {''.join(line_parts)}")
     if mem_lines:
         parts.append("【你对在场成员的印象】\n" + "\n".join(mem_lines))
 
     if ctx.rolling_summary:
         parts.append(f"【较早对话概要】\n{ctx.rolling_summary}")
+
+    if ctx.active_topic:
+        parts.append(
+            f"【当前话题】\n群里正{ctx.active_topic}"
+            "\n（你可以顺着这个话题聊，也可以自然地转移话题）"
+        )
 
     if ctx.speaking_style:
         parts.append(
@@ -296,16 +351,43 @@ def render_context(state: Any, gid: str) -> str:
         )
 
     bot_mood_desc = _bot_mood_desc(ctx.bot_mood)
+    arousal_desc = _arousal_desc(ctx.bot_arousal)
+    state_parts = []
     if bot_mood_desc:
+        state_parts.append(bot_mood_desc)
+    if arousal_desc:
+        state_parts.append(arousal_desc)
+    if state_parts:
         parts.append(
-            "【你现在的心情】\n" + bot_mood_desc +
-            "\n（让心情自然影响你的语气和回话的松紧，不要直接说出或描写自己的心情）"
+            "【你现在的状态】\n" + "；".join(state_parts) +
+            "\n（让状态自然影响你的语气、回话长短和积极度，不要直接说出来）"
+        )
+
+    if callback_snippet:
+        parts.append(
+            f"【你忽然想起一件事】\n{callback_snippet}"
+            "\n（如果时机合适，可以自然地提起这件事，不要生硬插入）"
+        )
+
+    if knowledge_snippets:
+        parts.append(
+            "【相关背景知识】\n" + "\n".join(f"- {s}" for s in knowledge_snippets) +
+            "\n（这是你掌握的相关信息，回答时可以自然利用，不必完整引用）"
         )
 
     if entries:
         parts.append("【最近的群聊】\n" + _entries_table(entries))
 
-    parts.append(f"当前时间：{_now_str()}。现在轮到你发言。")
+    directive_parts = [f"当前时间：{_now_str()}。"]
+    ctx_ref = get_ctx(state, gid) if state else None
+    time_hint = _time_state_hint()
+    length_hint = _length_hint(ctx_ref.bot_arousal if ctx_ref else 0.0)
+    if time_hint:
+        directive_parts.append(time_hint + "。")
+    if length_hint:
+        directive_parts.append(length_hint + "。")
+    directive_parts.append("现在轮到你发言。")
+    parts.append("".join(directive_parts))
     return "\n\n".join(parts)
 
 
@@ -317,10 +399,66 @@ def _bot_mood_desc(mood: float) -> str:
     if mood >= 0.2:
         return "心情不错，放松、愿意搭话"
     if mood > -0.2:
-        return "心情平平，正常状态"
+        return ""
     if mood > -0.6:
         return "有点提不起劲，回得更懒更短，兴致一般"
     return "情绪偏低，话少、冷淡、不太想接话"
+
+
+def _arousal_desc(arousal: float) -> str:
+    if arousal is None:
+        return ""
+    if arousal >= 0.6:
+        return "精力充沛、话很多、反应快"
+    if arousal >= 0.2:
+        return "状态不错，比较活跃"
+    if arousal > -0.2:
+        return ""
+    if arousal > -0.6:
+        return "有点懒懒的，回复偏短"
+    return "很疲，能不说就不说，说也只说关键词"
+
+
+def _affinity_tag(affinity: float) -> str:
+    if affinity is None:
+        return ""
+    if affinity >= 1.5:
+        return "关系很好，信任感高"
+    if affinity >= 0.8:
+        return "比较熟，有好感"
+    if affinity >= 0.3:
+        return "印象不错"
+    if affinity <= -0.6:
+        return "有些反感，不太想搭理"
+    if affinity <= -0.3:
+        return "有点不对付"
+    return ""
+
+
+def _time_state_hint() -> str:
+    from datetime import datetime
+    h = datetime.now(CST).hour
+    if 2 <= h < 6:
+        return "现在深夜困极了，极不想开口"
+    if 6 <= h < 9:
+        return "刚睡醒，还有些迷糊"
+    if 12 <= h < 14:
+        return "饭后有点犯困，回复偏懒"
+    if 22 <= h or h < 2:
+        return "夜深了，话少一些"
+    return ""
+
+
+def _length_hint(arousal: float) -> str:
+    if arousal is None:
+        arousal = 0.0
+    if arousal <= -0.5:
+        return "现在没什么精力，只说最关键的，一两句即可"
+    if arousal <= -0.2:
+        return "状态一般，回复简短一点"
+    if arousal >= 0.6:
+        return ""
+    return ""
 
 
 def _char_name(state: Any) -> str:
@@ -375,21 +513,25 @@ async def maybe_distill(state: Any, gid: str) -> None:
         logger.info(f"群 {gid} 已蒸馏 {len(old)} 条为滚动概要")
 
 
-async def maybe_refresh_mood(state: Any, gid: str) -> None:
+async def maybe_refresh_mood_and_topic(state: Any, gid: str) -> None:
     ctx = get_ctx(state, gid)
     now = time.time()
-    if now - ctx.mood_updated_at < MOOD_TTL_SECS:
+    if now - ctx.mood_topic_updated_at < MOOD_TOPIC_TTL_SECS:
         return
-    if len(ctx.entries) < MOOD_MIN_ENTRIES:
+    if len(ctx.entries) < MOOD_TOPIC_MIN_ENTRIES:
         return
-    ctx.mood_updated_at = now
+    ctx.mood_topic_updated_at = now
 
-    recent = list(ctx.entries)[-MOOD_ANALYZE_ENTRIES:]
+    recent = list(ctx.entries)[-MOOD_TOPIC_ANALYZE_ENTRIES:]
     convo = _render_entries_plain(recent)
-    val = await llm_client.analyze_group_mood(convo)
-    if val is None:
+    result = await llm_client.analyze_mood_and_topic(convo)
+    if result is None:
         return
-    ctx.mood = round(MOOD_EMA_ALPHA * val + (1 - MOOD_EMA_ALPHA) * ctx.mood, 3)
+    mood_val = result.get("mood")
+    if mood_val is not None:
+        ctx.mood = round(MOOD_EMA_ALPHA * mood_val + (1 - MOOD_EMA_ALPHA) * ctx.mood, 3)
+    topic = str(result.get("topic", "")).strip()
+    ctx.active_topic = topic
     state.dirty.add(gid)
 
 
@@ -418,22 +560,60 @@ async def maybe_refresh_speaking_style(state: Any, gid: str) -> None:
             logger.info(f"群 {gid} 说话风格已刷新")
 
 
-async def maybe_refresh_bot_mood(state: Any, gid: str) -> None:
+async def maybe_refresh_bot_state(state: Any, gid: str) -> None:
     ctx = get_ctx(state, gid)
     now = time.time()
-    if now - ctx.bot_mood_updated_at < BOT_MOOD_TTL_SECS:
+    if now - ctx.bot_state_updated_at < BOT_STATE_TTL_SECS:
         return
-    if len(ctx.entries) < BOT_MOOD_MIN_ENTRIES:
+    if len(ctx.entries) < BOT_STATE_MIN_ENTRIES:
         return
-    ctx.bot_mood_updated_at = now
+    ctx.bot_state_updated_at = now
 
-    recent = list(ctx.entries)[-BOT_MOOD_ANALYZE_ENTRIES:]
+    recent = list(ctx.entries)[-BOT_STATE_ANALYZE_ENTRIES:]
     convo = _render_entries_plain(recent)
-    val = await llm_client.analyze_bot_mood(convo, _char_name(state))
-    if val is None:
+    result = await llm_client.analyze_bot_state(convo, _char_name(state))
+    if result is None:
         return
-    ctx.bot_mood = round(BOT_MOOD_EMA_ALPHA * val + (1 - BOT_MOOD_EMA_ALPHA) * ctx.bot_mood, 3)
+    mood_val = result.get("mood")
+    arousal_val = result.get("arousal")
+    if mood_val is not None:
+        ctx.bot_mood = round(BOT_MOOD_EMA_ALPHA * mood_val + (1 - BOT_MOOD_EMA_ALPHA) * ctx.bot_mood, 3)
+    if arousal_val is not None:
+        ctx.bot_arousal = round(BOT_AROUSAL_EMA_ALPHA * arousal_val + (1 - BOT_AROUSAL_EMA_ALPHA) * ctx.bot_arousal, 3)
     state.dirty.add(gid)
+
+
+def pop_pending_callback(state: Any, gid: str, user_id: str) -> Optional[str]:
+    import random as _random
+    ctx = get_ctx(state, gid)
+    now = time.time()
+    ctx.pending_callbacks = [
+        cb for cb in ctx.pending_callbacks
+        if now - cb.created_at < PENDING_CALLBACK_TTL_SECS
+    ]
+    candidates = [cb for cb in ctx.pending_callbacks if cb.user_id == user_id]
+    if not candidates:
+        return None
+    if _random.random() >= PENDING_CALLBACK_TRIGGER_PROB:
+        return None
+    chosen = _random.choice(candidates)
+    ctx.pending_callbacks = [cb for cb in ctx.pending_callbacks if cb is not chosen]
+    state.dirty.add(gid)
+    return chosen.snippet
+
+
+def _decay_affinity(umem: "UserMemory") -> None:
+    now = time.time()
+    if umem.affinity_updated_at <= 0:
+        return
+    days_elapsed = (now - umem.affinity_updated_at) / 86400
+    if days_elapsed < 1:
+        return
+    decay = AFFINITY_DECAY_PER_DAY * days_elapsed
+    if umem.affinity > 0:
+        umem.affinity = max(0.0, umem.affinity - decay)
+    elif umem.affinity < 0:
+        umem.affinity = min(0.0, umem.affinity + decay)
 
 
 def _get_lock(state: Any, gid: str) -> asyncio.Lock:
@@ -571,24 +751,65 @@ async def _extract_one_group(state: Any, gid: str, ctx: GroupContext) -> None:
 
     for uid in top:
         umem = state.long_term.users.get(uid) or UserMemory(user_id=uid)
-        user_lines = _render_entries_plain([e for e in entries if e.user_id == uid])
+        user_entries = [e for e in entries if e.user_id == uid]
+        user_lines = _render_entries_plain(user_entries)
         char_name = _char_name(state)
-        u_sys = (
-            f"你是{char_name}，在维护你对一个群友的印象。结合【已有印象】和【他最近的发言】，"
-            f"更新你对这个人的印象（性格、喜好、和你的关系），不超过{USER_MEMORY_MAX_CHARS}字，"
-            "用第二人称或直呼其名。没有新信息就原样返回已有印象。"
-            '严格返回 JSON：{"notes": "印象文本"}'
+        user_display = f"{names.get(uid, uid)}({uid})"
+
+        _decay_affinity(umem)
+        u_res = await llm_client.analyze_user_full(
+            user_lines=user_lines,
+            full_convo=convo,
+            user_display=user_display,
+            existing_notes=umem.notes,
+            existing_alias=umem.group_alias,
+            char_name=char_name,
         )
-        u_user = (
-            f"【这个人】{names.get(uid, uid)}({uid})\n"
-            f"【已有印象】\n{umem.notes or '（无）'}\n\n"
-            f"【他最近的发言】\n{user_lines}"
-        )
-        u_res = await llm_client.call_llm_json(u_sys, u_user)
-        if isinstance(u_res, dict):
-            notes = str(u_res.get("notes", "")).strip()
-            if notes:
-                umem.notes = notes[:USER_MEMORY_MAX_CHARS]
-                umem.nickname = names.get(uid, umem.nickname)
-                umem.updated_at = time.time()
-                state.long_term.users[uid] = umem
+        if not isinstance(u_res, dict):
+            continue
+
+        notes = str(u_res.get("notes", "")).strip()
+        alias = str(u_res.get("alias", "")).strip()
+        if notes:
+            umem.notes = notes[:USER_MEMORY_MAX_CHARS]
+        if alias and alias != names.get(uid, uid):
+            umem.group_alias = alias[:20]
+        umem.nickname = names.get(uid, umem.nickname)
+        umem.updated_at = time.time()
+
+        try:
+            aff_delta = float(u_res.get("affinity_delta", 0))
+            aff_delta = max(-0.5, min(0.5, aff_delta))
+            umem.affinity = round(
+                max(AFFINITY_MIN, min(AFFINITY_MAX, umem.affinity + aff_delta)), 3
+            )
+            umem.affinity_updated_at = time.time()
+        except (TypeError, ValueError):
+            pass
+
+        callback = str(u_res.get("callback", "")).strip()
+        if callback and len(user_entries) >= PENDING_CALLBACK_MIN_LINES:
+            ctx = get_ctx(state, gid)
+            ctx.pending_callbacks = [
+                cb for cb in ctx.pending_callbacks if cb.user_id != uid or cb.snippet != callback
+            ]
+            ctx.pending_callbacks.append(PendingCallback(
+                user_id=uid, snippet=callback, created_at=time.time()
+            ))
+            if len(ctx.pending_callbacks) > PENDING_CALLBACK_MAX_PER_USER * 10:
+                ctx.pending_callbacks = ctx.pending_callbacks[-PENDING_CALLBACK_MAX_PER_USER * 10:]
+
+        state.long_term.users[uid] = umem
+        state.dirty.add(gid)
+
+
+async def maybe_extract_knowledge(state: Any, gid: str) -> None:
+    from . import knowledge as kb
+    ctx = get_ctx(state, gid)
+    await kb.extract_and_update(ctx, gid, state)
+
+
+async def retrieve_knowledge(state: Any, gid: str, message_text: str) -> List[str]:
+    from . import knowledge as kb
+    ctx = get_ctx(state, gid)
+    return await kb.retrieve_for_reply(ctx, gid, state, message_text)

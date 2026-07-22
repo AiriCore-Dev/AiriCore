@@ -175,24 +175,8 @@ async def _(bot: Bot, event: GroupMessageEvent):
                                                         limit_times)
     await today_waifu_change.finish(message, at_sender=True)
 
-async def check_anytime():
-    nows = datetime.datetime.now()
-    hour = nows.hour
-    if hour>21:
-        return "慢慢长夜，该睡觉啦～（哈啊）\n祝你做一个美好的梦！\n明天早上6点之后再来找我吧！晚安！"
-    elif hour<6:
-        return "Zzz......\n（airi似乎正在睡觉）\n旁边有一张字条：\n熬夜伤身体，请一定要早睡！\n闹钟上的定时：6:00 AM"
-    else:
-        return ""
-
 @today_waifu.handle()
 async def _(bot: Bot, event: GroupMessageEvent):
-    check_anytiming = await check_anytime()
-    if len(check_anytiming):
-        if random.randint(1,3) == 1:
-            await today_waifu.finish(check_anytiming, reply_message=True)
-        else:
-            return
     gid = str(event.group_id)
     uid = str(event.user_id)
     today = str(datetime.date.today())

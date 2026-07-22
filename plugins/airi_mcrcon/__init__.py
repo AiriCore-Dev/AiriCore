@@ -27,11 +27,11 @@ from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 
 driver = get_driver()
-unified_password = getattr(driver.config, "unified_password", "")
+rcon_password = getattr(driver.config, "rcon_password", "")
 _2fa_key = getattr(driver.config, "_2fa_key", "")
 timing = require("nonebot_plugin_apscheduler").scheduler
 data = {}
-mcr = MCRcon("127.0.0.1", unified_password)
+mcr = MCRcon("127.0.0.1", rcon_password)
 server_path = '/root/airi/airicob5'
 
 bote = 0
@@ -232,7 +232,7 @@ async def check_alive():
     except Exception:
         try:
             mcr.disconnect()
-            mcr = MCRcon("127.0.0.1", unified_password)
+            mcr = MCRcon("127.0.0.1", rcon_password)
             mcr.connect()
         except Exception:
             pass

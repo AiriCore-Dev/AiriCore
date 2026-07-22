@@ -24,7 +24,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.header import Header
 
-from .base.state import driver, unified_password, _2fa_key, data, email_list
+from .base.state import driver, _2fa_key, data, email_list
 from .base import state
 from .base.matchers import *
 from .base.helpers import *

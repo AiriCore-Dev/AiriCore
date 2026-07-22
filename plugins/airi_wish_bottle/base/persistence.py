@@ -8,7 +8,7 @@ from email.header import Header
 from nonebot import require
 
 from . import state
-from .state import driver, unified_password, email_smtp_host, email_smtp_user, email_smtp_password, email_from_name, email_from_address
+from .state import driver, email_smtp_host, email_smtp_user, email_smtp_password, email_from_name, email_from_address
 
 timings = require("nonebot_plugin_apscheduler").scheduler
 

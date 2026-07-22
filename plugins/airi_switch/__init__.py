@@ -19,6 +19,7 @@ from datetime import datetime, timezone, timedelta
 from . import counter
 from . import cache
 from . import ram_inspector
+from . import curfew
 from .charts import draw_pies_vstack, draw_summary, render_bot_cell, draw_grid
 
 async def decimal_to_quaternary(decimal_num):

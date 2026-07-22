@@ -40,15 +40,13 @@ if not logger.handlers:
 
 timings = require("nonebot_plugin_apscheduler").scheduler
 
-WHITELIST_GROUP = {"657965723", "740774974", "466470972", "823217376", "808085026", "1030569383", "609034568"}
-WHITELIST_BOT = {"1330248395", "535071478", "2745762139", "1264177306", "3357763830"}
-SUPERUSERS = {"864623174", "3630532026"}
+SUPERUSERS = set(str(uid) for uid in driver.config.superusers)
 
 NEGATIVE_SPEAK_TOKENS_INIT = 50
 NEGATIVE_SPEAK_TOKENS_DEDUCT = 3
 ADDRESSED_TOKENS_BONUS = 2
 
-BASE_SPEAK_PROB = 1 / 150
+BASE_SPEAK_PROB = 1 / 100
 ADDRESSED_PROB = 0.9
 HARD_COOLDOWN_SECS = 25
 MOMENTUM_WINDOW_SECS = 150
@@ -57,8 +55,6 @@ TRAFFIC_WINDOW_SECS = 90
 TRAFFIC_REF_MSGS = 6
 TRAFFIC_MULT_CAP = 2.0
 MAX_UNADDRESSED_PROB = 0.15
-NIGHT_DAMP_MULT = 0.3
-NIGHT_START, NIGHT_END = 22, 6
 
 PASSIVE_SPEAK_DELAY_RANGE = (301, 7200)
 PASSIVE_SPEAK_TRIGGER_PROB = 1 / 150
@@ -71,6 +67,17 @@ EMOJI_MOOD_SOFTNESS = 0.25
 
 REPLY_MENTION_PROB = 0.1
 
+MISSED_MENTION_SAVE_PROB = 0.45
+MISSED_MENTION_MIN_DELAY = 480
+MISSED_MENTION_MAX_DELAY = 2400
+MISSED_MENTION_EXPIRY = 4 * 3600
+MISSED_MENTION_MAX_PER_GROUP = 2
+
+TYPING_CHARS_PER_SEC_BASE = 4.5
+TYPING_CHARS_PER_SEC_JITTER = 1.5
+TYPING_MAX_SECS = 14.0
+TYPING_MIN_SECS = 1.2
+
 PROJECT_DIR = os.path.dirname(__file__)
 ROLE_SETUP_FILE = os.path.join(PROJECT_DIR, "airi_prompt_v3.md")
 EMOJI_DIR = os.path.join(PROJECT_DIR, "emoji")
@@ -81,6 +88,11 @@ _raw_aliases = getattr(driver.config, "airi_char_aliases", None)
 if isinstance(_raw_aliases, str):
     _raw_aliases = [a.strip() for a in _raw_aliases.split(",")]
 CHAR_ALIASES = [a.strip().lower() for a in (_raw_aliases or ["airi", "爱莉"]) if a and a.strip()]
+
+_raw_whitelist_bot = getattr(driver.config, "airi_llm_whitelist_bot", None)
+if isinstance(_raw_whitelist_bot, str):
+    _raw_whitelist_bot = [b.strip() for b in _raw_whitelist_bot.split(",")]
+WHITELIST_BOT = set(_raw_whitelist_bot) if _raw_whitelist_bot else set()
 
 
 class AiriState:
@@ -100,6 +112,7 @@ class AiriState:
         self.passive_speaking_group_tamed: Dict[str, int] = {}
         self.last_speak_time_group: Dict[str, float] = {}
         self.negative_speaking_tokens: Dict[str, int] = {}
+        self.missed_mentions: list = []
 
     def flush_prompt(self) -> str:
         try:
@@ -270,7 +283,66 @@ async def build_message_content(bot: Bot, ev: MessageEvent, group_id: str) -> st
 
 def _is_night() -> bool:
     h = time.localtime().tm_hour
-    return h >= NIGHT_START or h < NIGHT_END
+    return h >= 22 or h < 6
+
+
+def _time_prob_mult() -> float:
+    h = time.localtime().tm_hour
+    if 2 <= h < 6:
+        return 0.08
+    if 6 <= h < 9:
+        return 0.55
+    if 9 <= h < 12:
+        return 1.2
+    if 12 <= h < 14:
+        return 0.75
+    if 14 <= h < 18:
+        return 1.0
+    if 18 <= h < 22:
+        return 1.1
+    return 0.28
+
+
+def _time_state_hint() -> str:
+    h = time.localtime().tm_hour
+    if 2 <= h < 6:
+        return "现在深夜，困到极点，极不想说话"
+    if 6 <= h < 9:
+        return "刚睡醒，还没完全清醒，有些迷糊"
+    if 12 <= h < 14:
+        return "吃完饭有些犯困，回复比较懒"
+    if 22 <= h or h < 2:
+        return "夜深了，有点困，话少"
+    return ""
+
+
+def _maybe_save_missed_mention(state: Any, gid: str, uid: str, snippet: str) -> None:
+    if random.random() >= MISSED_MENTION_SAVE_PROB:
+        return
+    existing = [m for m in state.missed_mentions if m["gid"] == gid]
+    if len(existing) >= MISSED_MENTION_MAX_PER_GROUP:
+        return
+    delay = random.randint(MISSED_MENTION_MIN_DELAY, MISSED_MENTION_MAX_DELAY)
+    state.missed_mentions.append({
+        "gid": gid,
+        "uid": uid,
+        "snippet": snippet[:100],
+        "reply_after": time.time() + delay,
+        "created_at": time.time(),
+    })
+
+
+def _pop_due_missed_mention(state: Any, gid: str) -> Optional[dict]:
+    now = time.time()
+    state.missed_mentions = [
+        m for m in state.missed_mentions
+        if now - m["created_at"] < MISSED_MENTION_EXPIRY
+    ]
+    for m in list(state.missed_mentions):
+        if m["gid"] == gid and m["reply_after"] <= now:
+            state.missed_mentions.remove(m)
+            return m
+    return None
 
 
 def _recent_traffic(group_id: str) -> int:
@@ -302,7 +374,10 @@ async def decide_speak(bot: Bot, ev: MessageEvent, group_id: str, user_id: str) 
 
     if addressed and tokens > 0:
         airi_state.negative_speaking_tokens[group_id] = tokens + ADDRESSED_TOKENS_BONUS
-        return random.random() < ADDRESSED_PROB
+        umem = airi_state.long_term.users.get(user_id)
+        affinity = umem.affinity if umem else 0.0
+        prob = min(ADDRESSED_PROB + max(0.0, affinity) * 0.08, 0.98)
+        return random.random() < prob
 
     if since_last < HARD_COOLDOWN_SECS:
         return False
@@ -316,8 +391,9 @@ async def decide_speak(bot: Bot, ev: MessageEvent, group_id: str, user_id: str) 
     ctx = airi_state.group_ctx.get(group_id)
     mood = ctx.mood if ctx else 0.0
     p *= max(0.0, min(1.0 + mood, 2.0))
-    if _is_night():
-        p *= NIGHT_DAMP_MULT
+    arousal = ctx.bot_arousal if ctx else 0.0
+    p *= max(0.3, min(1.0 + arousal, 1.8))
+    p *= _time_prob_mult()
 
     p = min(p, MAX_UNADDRESSED_PROB)
     return random.random() < p
@@ -372,7 +448,13 @@ async def send_llm_reply(msg_content: str, need_reply: int) -> int:
         if seg:
             await airi_llm.send(seg, reply_message=bool(need_reply))
             need_reply = 0
-            sleep_time = random.randint(4, 8) if idx != len(msg_segments) - 1 else random.randint(1, 2)
+            if idx != len(msg_segments) - 1:
+                chars = len(seg)
+                cps = TYPING_CHARS_PER_SEC_BASE + random.uniform(-TYPING_CHARS_PER_SEC_JITTER, TYPING_CHARS_PER_SEC_JITTER)
+                sleep_time = max(TYPING_MIN_SECS, min(chars / max(cps, 0.5), TYPING_MAX_SECS))
+                sleep_time += random.uniform(0.3, 1.5)
+            else:
+                sleep_time = random.uniform(0.8, 2.0)
             await asyncio.sleep(sleep_time)
 
     if send_tail:
@@ -501,11 +583,27 @@ async def handle_airi_llm(bot: Bot, ev: MessageEvent):
             asyncio.create_task(passive_speaking(bot, group_id, 1))
 
         asyncio.create_task(memory.maybe_distill(airi_state, group_id))
-        asyncio.create_task(memory.maybe_refresh_mood(airi_state, group_id))
+        asyncio.create_task(memory.maybe_refresh_mood_and_topic(airi_state, group_id))
         asyncio.create_task(memory.maybe_refresh_speaking_style(airi_state, group_id))
-        asyncio.create_task(memory.maybe_refresh_bot_mood(airi_state, group_id))
+        asyncio.create_task(memory.maybe_refresh_bot_state(airi_state, group_id))
+        asyncio.create_task(memory.maybe_extract_knowledge(airi_state, group_id))
 
-        if not await decide_speak(bot, ev, group_id, user_id):
+        msg_raw = str(ev)
+        msg_text = str(ev.message)
+        msg_lower = msg_text.lower()
+        was_addressed = any([
+            any(alias in msg_lower for alias in CHAR_ALIASES),
+            bot.self_id in msg_raw,
+            msg_text.startswith("."),
+            (hasattr(ev, "reply") and ev.reply and str(ev.reply.sender.user_id) == bot.self_id),
+        ])
+
+        due_mention = _pop_due_missed_mention(airi_state, group_id)
+        force_speak = due_mention is not None
+
+        if not force_speak and not await decide_speak(bot, ev, group_id, user_id):
+            if was_addressed and content:
+                _maybe_save_missed_mention(airi_state, group_id, user_id, content)
             return
 
         img_b64_list = await get_image_base64_list(ev.get_message())
@@ -519,7 +617,15 @@ async def handle_airi_llm(bot: Bot, ev: MessageEvent):
 
             need_reply = 1 if random.random() < REPLY_MENTION_PROB else 0
 
-            llm_input = memory.render_context(airi_state, group_id)
+            if due_mention:
+                callback_snippet = (
+                    f"你刚想起来，{due_mention['uid']} 之前说过：「{due_mention['snippet']}」，"
+                    "感觉可以自然地回应一下这件事"
+                )
+            else:
+                callback_snippet = memory.pop_pending_callback(airi_state, group_id, user_id)
+            knowledge_snippets = await memory.retrieve_knowledge(airi_state, group_id, content or "")
+            llm_input = memory.render_context(airi_state, group_id, callback_snippet, knowledge_snippets)
             llm_reply = await call_llm(airi_state.role_setup, llm_input, img_b64_list)
             if not llm_reply:
                 return
