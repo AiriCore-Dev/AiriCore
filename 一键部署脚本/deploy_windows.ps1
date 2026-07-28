@@ -157,17 +157,21 @@ if (Test-Path $fontSrc) {
     Write-Host "    未找到字体源文件, 跳过: $fontSrc"
 }
 
-Write-Host "==> 准备 .env.prod 配置文件"
+Write-Host "==> 准备 .env.prod 配置文件 (交互式向导)"
 $envProd = Join-Path $ProjectDir ".env.prod"
-if (Test-Path $envProd) {
-    Write-Host "    .env.prod 已存在, 保持不变"
-} else {
+$setupEnv = Join-Path $ScriptDir "_setup_env.py"
+try {
+    & python $setupEnv $ProjectDir
+} catch {
+    Write-Host "    配置向导异常退出: $_"
+}
+if (-not (Test-Path $envProd)) {
     Copy-Item -Path (Join-Path $ProjectDir ".env.prod_example") -Destination $envProd -Force
-    Write-Host "    已从示例创建 .env.prod (启动前请先修改)"
+    Write-Host "    已回退为直接复制示例文件, 启动前请手动编辑 .env.prod"
 }
 
-Write-Host "==> 准备自签名 SSL 证书 (bot.py 会加载 .\ssl\)"
-$sslDir = Join-Path $ProjectDir "ssl"
+Write-Host "==> 准备自签名 SSL 证书 (bot.py 会加载 .\utils\ssl\)"
+$sslDir = Join-Path $ProjectDir "utils\ssl"
 $keyFile = Join-Path $sslDir "privkey.key"
 $pemFile = Join-Path $sslDir "fullchain.pem"
 if ((Test-Path $keyFile) -and (Test-Path $pemFile)) {
@@ -185,7 +189,7 @@ if ((Test-Path $keyFile) -and (Test-Path $pemFile)) {
     if ((Test-Path $keyFile) -and (Test-Path $pemFile) -and ((Get-Item $pemFile).Length -gt 0)) {
         Write-Host "    已在 $sslDir 生成自签名证书"
     } else {
-        Write-Host "    警告: 证书生成失败! bot.py 需要 .\ssl\privkey.key 与 .\ssl\fullchain.pem,"
+        Write-Host "    警告: 证书生成失败! bot.py 需要 .\utils\ssl\privkey.key 与 .\utils\ssl\fullchain.pem,"
         Write-Host "    请手动提供, 或修改 bot.py 去掉 ssl_keyfile/ssl_certfile 参数, 否则无法启动。"
     }
 }
@@ -224,7 +228,7 @@ if (Test-Path $srcBat) {
 } else {
     Write-Host "    警告: 未找到 launch_windows.bat 或 launch.bat"
 }
-foreach ($f in @("launch_linux.sh", "launch_macos.sh", "launch.sh")) {
+foreach ($f in @("launch_linux.sh", "launch_macos.sh", "launch_macos.command", "launch.sh", "launch.command")) {
     $p = Join-Path $ProjectDir $f
     if (Test-Path $p) {
         Remove-Item -Force $p
@@ -234,5 +238,6 @@ foreach ($f in @("launch_linux.sh", "launch_macos.sh", "launch.sh")) {
 
 Write-Host ""
 Write-Host "==> 部署完成。后续步骤:"
-Write-Host "    1. 编辑 .env.prod (SUPERUSERS, ONEBOT_ACCESS_TOKEN, LLM 密钥 等)"
-Write-Host "    2. 启动: launch.bat"
+Write-Host "    1. 启动: launch.bat"
+Write-Host "    2. 想改配置: 重跑向导 python 一键部署脚本\_setup_env.py"
+Write-Host "       或直接编辑 .env.prod"

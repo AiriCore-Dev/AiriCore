@@ -82,11 +82,11 @@ pip install -r requirements.txt
 cp .env.prod_example .env.prod
 ```
 
-6. Settle the launch script: on Linux rename `launch_linux.sh` to `launch.sh`, on macOS rename `launch_macos.sh` to `launch.sh`, on Windows rename `launch_windows.bat` to `launch.bat`, then delete the launch scripts for the other systems.
+6. Settle the launch script: on Linux rename `launch_linux.sh` to `launch.sh`, on macOS rename `launch_macos.command` to `launch.command`, on Windows rename `launch_windows.bat` to `launch.bat`, then delete the launch scripts for the other systems.
 
-7. Start from the project root: `./launch.sh` on Linux / macOS, `launch.bat` on Windows.
+7. Start from the project root: `./launch.sh` on Linux, `./launch.command` on macOS (double-clicking it in Finder works too), `launch.bat` on Windows.
 
-The entry point airi.py wraps bot.py and restarts it automatically after a crash. OneBot clients connect to ws://127.0.0.1:15100/onebot/v11/ws by default.
+The entry point bot.py supervises itself and restarts automatically after a crash. OneBot clients connect to ws://127.0.0.1:15100/onebot/v11/ws by default.
 
 > [!NOTE]
 >
@@ -113,7 +113,7 @@ The entry point airi.py wraps bot.py and restarts it automatically after a crash
 
 #### TLS
 
-bot.py loads certificates from `./ssl/` by default; adjust it yourself if you do not need HTTPS.
+bot.py loads certificates from `./utils/ssl/` by default; adjust it yourself if you do not need HTTPS.
 
 ### License
 

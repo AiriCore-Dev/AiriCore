@@ -138,16 +138,19 @@ else
     echo "    未找到字体源文件, 跳过: $FONT_SRC"
 fi
 
-echo "==> 准备 .env.prod 配置文件"
-if [ -f "$PROJECT_DIR/.env.prod" ]; then
-    echo "    .env.prod 已存在, 保持不变"
+echo "==> 准备 .env.prod 配置文件 (交互式向导)"
+if command -v python >/dev/null 2>&1; then
+    PY_BIN="python"
 else
-    cp "$PROJECT_DIR/.env.prod_example" "$PROJECT_DIR/.env.prod"
-    echo "    已从示例创建 .env.prod (启动前请先修改)"
+    PY_BIN="python3"
 fi
+"$PY_BIN" "$SCRIPT_DIR/_setup_env.py" "$PROJECT_DIR" || {
+    echo "    配置向导异常退出, 回退为直接复制示例文件"
+    [ -f "$PROJECT_DIR/.env.prod" ] || cp "$PROJECT_DIR/.env.prod_example" "$PROJECT_DIR/.env.prod"
+}
 
-echo "==> 准备自签名 SSL 证书 (bot.py 会加载 ./ssl/)"
-SSL_DIR="$PROJECT_DIR/ssl"
+echo "==> 准备自签名 SSL 证书 (bot.py 会加载 ./utils/ssl/)"
+SSL_DIR="$PROJECT_DIR/utils/ssl"
 if [ -f "$SSL_DIR/privkey.key" ] && [ -f "$SSL_DIR/fullchain.pem" ]; then
     echo "    SSL 证书已存在, 保持不变"
 else
@@ -160,11 +163,11 @@ else
             && [ -s "$SSL_DIR/privkey.key" ] && [ -s "$SSL_DIR/fullchain.pem" ]; then
             echo "    已在 $SSL_DIR 生成自签名证书"
         else
-            echo "    警告: openssl 生成证书失败! bot.py 需要 ./ssl/privkey.key 与 ./ssl/fullchain.pem,"
+            echo "    警告: openssl 生成证书失败! bot.py 需要 ./utils/ssl/privkey.key 与 ./utils/ssl/fullchain.pem,"
             echo "    请手动生成, 或修改 bot.py 去掉 ssl_keyfile/ssl_certfile 参数, 否则无法启动。"
         fi
     else
-        echo "    未找到 openssl; 请手动提供 ./ssl/privkey.key 与 ./ssl/fullchain.pem,"
+        echo "    未找到 openssl; 请手动提供 ./utils/ssl/privkey.key 与 ./utils/ssl/fullchain.pem,"
         echo "    或修改 bot.py 去掉 ssl_keyfile/ssl_certfile 参数。"
     fi
 fi
@@ -187,16 +190,19 @@ then :; else
 fi
 
 echo "==> 整理启动脚本"
-if [ -f "$PROJECT_DIR/launch_macos.sh" ]; then
-    mv -f "$PROJECT_DIR/launch_macos.sh" "$PROJECT_DIR/launch.sh"
-    echo "    launch_macos.sh -> launch.sh"
+if [ -f "$PROJECT_DIR/launch_macos.command" ]; then
+    mv -f "$PROJECT_DIR/launch_macos.command" "$PROJECT_DIR/launch.command"
+    echo "    launch_macos.command -> launch.command"
+elif [ -f "$PROJECT_DIR/launch.command" ]; then
+    echo "    launch.command 已存在, 跳过重命名"
 elif [ -f "$PROJECT_DIR/launch.sh" ]; then
-    echo "    launch.sh 已存在, 跳过重命名"
+    mv -f "$PROJECT_DIR/launch.sh" "$PROJECT_DIR/launch.command"
+    echo "    launch.sh (旧版本遗留) -> launch.command"
 else
-    echo "    警告: 未找到 launch_macos.sh 或 launch.sh"
+    echo "    警告: 未找到 launch_macos.command 或 launch.command"
 fi
-chmod +x "$PROJECT_DIR/launch.sh" 2>/dev/null || true
-for f in launch_linux.sh launch_windows.bat launch.bat; do
+chmod +x "$PROJECT_DIR/launch.command" 2>/dev/null || true
+for f in launch_linux.sh launch_windows.bat launch.bat launch.sh launch_macos.sh; do
     if [ -e "$PROJECT_DIR/$f" ]; then
         rm -f "$PROJECT_DIR/$f"
         echo "    已删除 $f"
@@ -205,5 +211,6 @@ done
 
 echo ""
 echo "==> 部署完成。后续步骤:"
-echo "    1. 编辑 .env.prod (SUPERUSERS, ONEBOT_ACCESS_TOKEN, LLM 密钥 等)"
-echo "    2. 启动: ./launch.sh"
+echo "    1. 启动: ./launch.command (或在 Finder 里双击 launch.command)"
+echo "    2. 想改配置: 重跑向导 python 一键部署脚本/_setup_env.py"
+echo "       或直接编辑 .env.prod"

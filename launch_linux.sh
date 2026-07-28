@@ -40,4 +40,4 @@ fi
 conda activate "$ENV_NAME"
 
 echo "==> 启动 AiriCore (崩溃后会自动重启, 按 Ctrl+C 退出)"
-python airi.py
+python bot.py

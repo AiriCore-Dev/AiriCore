@@ -46,5 +46,5 @@ if %errorlevel% neq 0 (
 )
 
 echo ==> 启动 AiriCore (崩溃后自动重启)
-python airi.py
+python bot.py
 pause

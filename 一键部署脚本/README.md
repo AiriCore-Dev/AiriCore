@@ -15,14 +15,34 @@ Full automation of the flow described in [手动部署教程.md](手动部署教
 3. Install `requirements.txt` and the Playwright Chromium runtime (on Linux, also Chromium's system dependencies).
 4. Join the split archives `memes.zip.001` / `memes.zip.002` and extract them into the `meme_generator` package directory.
 5. Install the font `YurukaFangTang.ttf` system-wide (on Windows, per current user, no administrator needed).
-6. Copy `.env.prod` from `.env.prod_example` if absent; leave it untouched if present.
-7. Generate a self-signed certificate in `./ssl/` if absent; leave it untouched if present.
+6. Launch the interactive `.env.prod` setup wizard `_setup_env.py`, which builds the config through a guided Q&A. If a config already exists, it asks first and leaves it untouched when you decline.
+7. Generate a self-signed certificate in `./utils/ssl/` if absent; leave it untouched if present.
 8. Create the `logs/` and `data/` runtime directories, then run a final core-dependency self-check.
-9. Settle the launch script: rename the one matching the current system to a unified name (`launch.sh` on Linux / macOS, `launch.bat` on Windows) and delete the launch scripts for the other systems.
+9. Settle the launch script: rename the one matching the current system to a unified name (`launch.sh` on Linux, `launch.command` on macOS, `launch.bat` on Windows) and delete the launch scripts for the other systems.
 
 > [!NOTE]
 >
 > Every step is idempotent; re-running never overwrites an existing environment, `.env.prod` or certificate.
+
+### The setup wizard `_setup_env.py`
+
+Step 6 drops you into the wizard, which fills in `.env.prod` through plain-language questions. No knowledge of the config format required.
+
+- Every item comes with a plain explanation, a filled-in example, and what happens if you leave it blank
+- Type `?` and press Enter for the long explanation (where to generate an SMTP auth code, where to copy a model name from, and so on)
+- Press Enter to accept the default; type `q` to quit at any time without touching a single file
+- QQ numbers, ports, URLs, email addresses and hour values are validated on the spot, so typos surface immediately instead of at startup
+- The Minecraft, email and marketing blocks are optional; one y/n question decides whether they get asked at all
+- A confirmation table is printed at the end with secrets masked; nothing is written until you confirm, and an existing `.env.prod` is backed up to `.env.prod.bak.<timestamp>`
+- It also makes sure the root `.env` contains `ENVIRONMENT=prod`
+
+Run it on its own (to change the config after deployment):
+
+```
+python 一键部署脚本/_setup_env.py
+```
+
+In non-interactive environments (CI, `nohup`, pipes) it skips the questions and falls back to copying `.env.prod_example`. You can also pass `--no-interactive` explicitly.
 
 ### How to run on each system
 
@@ -41,8 +61,10 @@ bash deploy_linux.sh
 - macOS
 
 ```
-bash deploy_macos.sh
+bash deploy_macos.command
 ```
+
+  You can also just double-click `deploy_macos.command` in Finder.
 
 > [!WARNING]
 >
@@ -52,13 +74,13 @@ bash deploy_macos.sh
 
 ### After deployment
 
-1. Edit `.env.prod` in the project root. At minimum fill in `SUPERUSERS`, `ONEBOT_ACCESS_TOKEN`, `nickname`, and the three LLM keys `llm_api_key` / `llm_base_url` / `chat_llm_model`.
+1. The wizard already walked you through the config during deployment. To change anything, re-run `python 一键部署脚本/_setup_env.py`, or edit `.env.prod` in the project root by hand. At minimum you need `SUPERUSERS`, `ONEBOT_ACCESS_TOKEN`, `nickname`, and the three LLM keys `llm_api_key` / `llm_base_url` / `chat_llm_model`.
 2. Point your OneBot v11 client (NapCat / Lagrange, etc.) at the bot. It listens on `HOST=0.0.0.0` `PORT=15100` by default with the WebSocket route `/ws`; since TLS is enabled, use `wss://` on the client.
-3. Start from the project root: `./launch.sh` on Linux / macOS, `launch.bat` on Windows (the deploy script already renamed your system's launch script to that name). `airi.py` wraps `bot.py` and restarts it after a crash; press Ctrl+C to exit.
+3. Start from the project root: `./launch.sh` on Linux, `./launch.command` on macOS (double-clicking it in Finder works too), `launch.bat` on Windows (the deploy script already renamed your system's launch script to that name). `bot.py` supervises itself and restarts after a crash; press Ctrl+C to exit.
 
 ### Listening ports
 
-Besides the main port, two plugins each start their own HTTPS service. Both reuse the same certificate pair under `./ssl/` and fall back to HTTP when it is missing. There is no need to open a port for a feature you do not use.
+Besides the main port, two plugins each start their own HTTPS service. Both reuse the same certificate pair under `./utils/ssl/` and fall back to HTTP when it is missing. There is no need to open a port for a feature you do not use.
 
 | Port | Source | Config key |
 |---|---|---|
@@ -81,6 +103,6 @@ Besides the main port, two plugins each start their own HTTPS service. Both reus
 
 ### Notes
 
-- The generated certificate is self-signed. To serve HTTPS publicly, replace `./ssl/privkey.key` and `./ssl/fullchain.pem` with real ones. To drop TLS entirely, remove the `ssl_keyfile` / `ssl_certfile` arguments in `bot.py` and switch the client to `ws://`.
+- The generated certificate is self-signed. To serve HTTPS publicly, replace `./utils/ssl/privkey.key` and `./utils/ssl/fullchain.pem` with real ones. To drop TLS entirely, remove the `ssl_keyfile` / `ssl_certfile` arguments in `bot.py` and switch the client to `ws://`.
 - On Windows the font is registered under the current user's Fonts registry key, so administrator rights are not required.
 - All four downloads (Miniconda, conda channel, pip, Playwright) try a China mirror first and fall back to the official source automatically.

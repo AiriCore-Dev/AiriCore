@@ -7,6 +7,15 @@ import threading
 from pathlib import Path
 from datetime import datetime
 
+CHILD_ARG = "--airicore-child"
+
+if __name__ == "__main__" and CHILD_ARG not in sys.argv:
+    _self = os.path.abspath(__file__)
+    while 1:
+        os.system(f'"{sys.executable}" "{_self}" {CHILD_ARG}')
+        print("Restarting...")
+        time.sleep(2)
+
 for _stream in (sys.stdout, sys.stderr):
     try:
         _stream.reconfigure(encoding="utf-8", errors="replace")
@@ -423,6 +432,6 @@ if __name__ == "__main__":
     nonebot.load_plugins("plugins")
     nonebot.run(
         app="__mp_main__:app",
-        ssl_keyfile="./ssl/privkey.key",
-        ssl_certfile="./ssl/fullchain.pem",
+        ssl_keyfile="./utils/ssl/privkey.key",
+        ssl_certfile="./utils/ssl/fullchain.pem",
     )

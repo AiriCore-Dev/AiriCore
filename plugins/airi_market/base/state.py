@@ -19,8 +19,8 @@ _ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.p
 
 POSTS_DIR = os.path.join(_PLUGIN_DIR, "posts")
 TEMPLATES_DIR = os.path.join(_PLUGIN_DIR, "templates")
-SSL_CERT = os.path.join(_ROOT_DIR, "ssl", "fullchain.pem")
-SSL_KEY = os.path.join(_ROOT_DIR, "ssl", "privkey.key")
+SSL_CERT = os.path.join(_ROOT_DIR, "utils", "ssl", "fullchain.pem")
+SSL_KEY = os.path.join(_ROOT_DIR, "utils", "ssl", "privkey.key")
 
 data = {
     "unsubscribed": [],

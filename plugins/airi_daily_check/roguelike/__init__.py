@@ -62,8 +62,8 @@ async def _start_api():
     config = driver.config
     auth.init_secret(getattr(config, "web_token_key", ""))
     port = int(getattr(config, "web_api_port", 22319))
-    ssl_keyfile = getattr(config, "web_ssl_keyfile", "./ssl/privkey.key")
-    ssl_certfile = getattr(config, "web_ssl_certfile", "./ssl/fullchain.pem")
+    ssl_keyfile = getattr(config, "web_ssl_keyfile", "./utils/ssl/privkey.key")
+    ssl_certfile = getattr(config, "web_ssl_certfile", "./utils/ssl/fullchain.pem")
     allow_plain = bool(getattr(config, "web_allow_insecure_http", False))
 
     use_tls = bool(ssl_keyfile) and bool(ssl_certfile) \

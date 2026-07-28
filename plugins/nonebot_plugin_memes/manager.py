@@ -1,17 +1,20 @@
+import pickle
+import threading
+from dataclasses import dataclass, field
 from enum import IntEnum
 from pathlib import Path
 from typing import Any, Optional
 
-import yaml
 from meme_generator import Meme, get_memes, search_memes
-from nonebot.compat import PYDANTIC_V2, model_dump, type_validate_python
+from nonebot import get_driver
 from nonebot.log import logger
-from nonebot_plugin_localstore import get_config_file
-from pydantic import BaseModel
 
 from .config import memes_config
 
-config_path = get_config_file("nonebot_plugin_memes", "meme_manager.yml")
+_DATA_DIR = Path(__file__).resolve().parents[2] / "data" / "nonebot_plugin_memes"
+_CONFIG_FILE = _DATA_DIR / "manager.pk"
+
+driver = get_driver()
 
 
 class MemeMode(IntEnum):
@@ -19,26 +22,36 @@ class MemeMode(IntEnum):
     WHITE = 1
 
 
-class MemeConfig(BaseModel):
+@dataclass
+class MemeConfig:
     mode: MemeMode = MemeMode.BLACK
-    white_list: list[str] = []
-    black_list: list[str] = []
+    white_list: list[str] = field(default_factory=list)
+    black_list: list[str] = field(default_factory=list)
 
-    if PYDANTIC_V2:
-        from pydantic import field_serializer
 
-        @field_serializer("mode")
-        def get_eunm_value(self, v: MemeMode, info) -> int:
-            return v.value
-    else:
+def _to_raw(config: MemeConfig) -> dict[str, Any]:
+    return {
+        "mode": int(config.mode),
+        "white_list": list(config.white_list),
+        "black_list": list(config.black_list),
+    }
 
-        class Config:
-            use_enum_values = True
+
+def _from_raw(raw: Any) -> MemeConfig:
+    if not isinstance(raw, dict):
+        raise ValueError("表情配置格式错误")
+    return MemeConfig(
+        mode=MemeMode(int(raw.get("mode", 0))),
+        white_list=[str(x) for x in (raw.get("white_list") or [])],
+        black_list=[str(x) for x in (raw.get("black_list") or [])],
+    )
 
 
 class MemeManager:
-    def __init__(self, path: Path = config_path):
+    def __init__(self, path: Path = _CONFIG_FILE):
         self.__path = path
+        self.__lock = threading.Lock()
+        self.__dirty = False
         self.__meme_config: dict[str, MemeConfig] = {}
         self.__meme_dict = {
             meme.key: meme
@@ -49,7 +62,6 @@ class MemeManager:
         }
         self.__meme_names: dict[str, list[Meme]] = {}
         self.__load()
-        self.__dump()
         self.__refresh_names()
 
     def get_meme(self, meme_key: str) -> Optional[Meme]:
@@ -64,7 +76,7 @@ class MemeManager:
             config.black_list.append(user_id)
         if config.mode == MemeMode.WHITE and user_id in config.white_list:
             config.white_list.remove(user_id)
-        self.__dump()
+        self.__mark_dirty()
 
     def unblock(self, user_id: str, meme_key: str):
         config = self.__meme_config[meme_key]
@@ -72,12 +84,12 @@ class MemeManager:
             config.white_list.append(user_id)
         if config.mode == MemeMode.BLACK and user_id in config.black_list:
             config.black_list.remove(user_id)
-        self.__dump()
+        self.__mark_dirty()
 
     def change_mode(self, mode: MemeMode, meme_key: str):
         config = self.__meme_config[meme_key]
         config.mode = mode
-        self.__dump()
+        self.__mark_dirty()
 
     def find(self, meme_name: str) -> list[Meme]:
         meme_name = meme_name.lower()
@@ -104,34 +116,56 @@ class MemeManager:
             return False
         return False
 
-    def __load(self):
+    def __mark_dirty(self) -> None:
+        with self.__lock:
+            self.__dirty = True
+            self.__dump()
+
+    def flush(self) -> None:
+        with self.__lock:
+            self.__dump()
+
+    def __load(self) -> None:
         raw_list: dict[str, Any] = {}
-        if self.__path.exists():
-            with self.__path.open("r", encoding="utf-8") as f:
-                try:
-                    raw_list = yaml.safe_load(f)
-                except Exception:
-                    logger.warning("表情列表解析失败，将重新生成")
+        if self.__path.is_file():
+            try:
+                with self.__path.open("rb") as f:
+                    loaded = pickle.load(f)
+                if isinstance(loaded, dict):
+                    raw_list = loaded
+                else:
+                    logger.opt(colors=True).warning("<y>表情列表格式错误，将重新生成</y>")
+            except Exception as e:
+                logger.opt(colors=True).warning(f"<y>表情列表读取失败，将重新生成: {e}</y>")
+        meme_list: dict[str, MemeConfig] = {}
         try:
-            meme_list = {
-                name: type_validate_python(MemeConfig, config)
-                for name, config in raw_list.items()
-            }
-        except Exception:
-            meme_list = {}
-            logger.warning("表情列表解析失败，将重新生成")
+            meme_list = {name: _from_raw(config) for name, config in raw_list.items()}
+        except Exception as e:
+            logger.opt(colors=True).warning(f"<y>表情列表解析失败，将重新生成: {e}</y>")
         self.__meme_config = {
             meme_key: MemeConfig() for meme_key in self.__meme_dict.keys()
         }
         self.__meme_config.update(meme_list)
+        if set(self.__meme_config) != set(meme_list):
+            with self.__lock:
+                self.__dirty = True
+                self.__dump()
 
-    def __dump(self):
-        self.__path.parent.mkdir(parents=True, exist_ok=True)
+    def __dump(self) -> None:
+        if not self.__dirty:
+            return
         meme_list = {
-            name: model_dump(config) for name, config in self.__meme_config.items()
+            name: _to_raw(config) for name, config in self.__meme_config.items()
         }
-        with self.__path.open("w", encoding="utf-8") as f:
-            yaml.dump(meme_list, f, allow_unicode=True)
+        try:
+            self.__path.parent.mkdir(parents=True, exist_ok=True)
+            tmp = self.__path.with_suffix(".pk.tmp")
+            with tmp.open("wb") as f:
+                pickle.dump(meme_list, f)
+            tmp.replace(self.__path)
+            self.__dirty = False
+        except Exception as e:
+            logger.opt(colors=True).warning(f"<y>表情列表写入失败: {e}</y>")
 
     def __refresh_names(self):
         self.__meme_names = {}
@@ -151,3 +185,8 @@ class MemeManager:
 
 
 meme_manager = MemeManager()
+
+
+@driver.on_shutdown
+async def _memes_manager_shutdown() -> None:
+    meme_manager.flush()

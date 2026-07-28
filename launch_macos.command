@@ -25,7 +25,7 @@ find_conda() {
 }
 
 if ! find_conda; then
-    echo "错误: 未找到 conda。请先运行 一键部署脚本/deploy_macos.sh 完成部署。"
+    echo "错误: 未找到 conda。请先运行 一键部署脚本/deploy_macos.command 完成部署。"
     exit 1
 fi
 
@@ -33,11 +33,11 @@ fi
 source "$CONDA_SH"
 
 if ! conda env list | awk '{print $1}' | grep -qx "$ENV_NAME"; then
-    echo "错误: 未找到 conda 环境 '$ENV_NAME'。请先运行 一键部署脚本/deploy_macos.sh 完成部署。"
+    echo "错误: 未找到 conda 环境 '$ENV_NAME'。请先运行 一键部署脚本/deploy_macos.command 完成部署。"
     exit 1
 fi
 
 conda activate "$ENV_NAME"
 
 echo "==> 启动 AiriCore (崩溃后会自动重启, 按 Ctrl+C 退出)"
-python airi.py
+python bot.py

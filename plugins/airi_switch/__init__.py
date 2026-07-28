@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 import base64
 import shutil
 import time
@@ -319,9 +320,18 @@ SCREEN_SESSION = str(getattr(driver.config, 'reboot_screen_session', '') or 'air
 AIRICORE_DIR = str(getattr(driver.config, 'reboot_workdir', '') or os.getcwd())
 BASH_BIN = shutil.which('bash') or '/bin/bash'
 
+def _launch_script() -> str:
+    for name in ('launch.command', 'launch.sh'):
+        if os.path.isfile(os.path.join(AIRICORE_DIR, name)):
+            return name
+    return 'launch.command' if sys.platform == 'darwin' else 'launch.sh'
+
+
+LAUNCH_SCRIPT = _launch_script()
+
 REBOOT_CMD = (
     f'{SCREEN_BIN} -S {SCREEN_SESSION} -X quit; '
-    f'{BASH_BIN} -c "cd {AIRICORE_DIR} && {SCREEN_BIN} -dmS {SCREEN_SESSION} ./launch.sh"'
+    f'{BASH_BIN} -c "cd {AIRICORE_DIR} && {SCREEN_BIN} -dmS {SCREEN_SESSION} ./{LAUNCH_SCRIPT}"'
 )
 
 

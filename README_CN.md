@@ -82,11 +82,11 @@ pip install -r requirements.txt
 cp .env.prod_example .env.prod
 ```
 
-6. 整理启动脚本：Linux 把 `launch_linux.sh` 改名为 `launch.sh`，macOS 把 `launch_macos.sh` 改名为 `launch.sh`，Windows 把 `launch_windows.bat` 改名为 `launch.bat`，并删除其余系统的启动脚本。
+6. 整理启动脚本：Linux 把 `launch_linux.sh` 改名为 `launch.sh`，macOS 把 `launch_macos.command` 改名为 `launch.command`，Windows 把 `launch_windows.bat` 改名为 `launch.bat`，并删除其余系统的启动脚本。
 
-7. 根目录启动：Linux / macOS 用 `./launch.sh`，Windows 用 `launch.bat`。
+7. 根目录启动：Linux 用 `./launch.sh`，macOS 用 `./launch.command`（也可在 Finder 里双击），Windows 用 `launch.bat`。
 
-入口 airi.py 会包装 bot.py 并在崩溃后自动重启。OneBot 客户端默认连接 ws://127.0.0.1:15100/onebot/v11/ws。
+入口 bot.py 自带守护进程，崩溃后会自动重启。OneBot 客户端默认连接 ws://127.0.0.1:15100/onebot/v11/ws。
 
 > [!NOTE]
 >
@@ -113,7 +113,7 @@ cp .env.prod_example .env.prod
 
 #### TLS
 
-bot.py 默认加载 ./ssl/ 下证书，若无需 HTTPS 请自行调整。
+bot.py 默认加载 ./utils/ssl/ 下证书，若无需 HTTPS 请自行调整。
 
 ### 许可证
 
