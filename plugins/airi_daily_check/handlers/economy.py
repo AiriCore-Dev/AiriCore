@@ -1,5 +1,4 @@
 import re
-import gc
 import math
 import random
 
@@ -7,40 +6,46 @@ from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import MessageEvent
 
 from ..base import state
-from ..base.constants import SECRET_MESSAGES
+from ..base.constants import SECRET_MESSAGES, TRANSFER_DAILY_MAX
 from ..base.matchers import transcation, reborn, buy_tip
 from ..base.helpers import (
-    parse_session, resting_guard, ensure_registered,
+    parse_session, ensure_registered,
     generate_new_sticker, acquire_sticker, check_all_achiv,
 )
 
 
 @transcation.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    if await resting_guard():
-        return
     user_id, group_id = parse_session(ev)
     src = str(ev.message)
     await ensure_registered(transcation, user_id)
 
     try:
         cq_code = re.findall(r'\[CQ:at,qq=\d+.*\]', src)[0]
-        transfer_id = re.findall('\d+', cq_code)[0]
+        transfer_id = re.findall(r'\d+', cq_code)[0]
         transfer_num = re.findall(r'[-]?\d+[个]?积分', src)[0]
         transfer_num = transfer_num[:-2] if transfer_num[:-2].isdigit() else transfer_num[:-3]
         transfer_num = int(transfer_num)
         assert transfer_num > 0
     except:
-        await transcation.finish('❌ 指令格式不正确！\n单笔转账需在1到50积分之间', reply_message=True)
+        await transcation.finish(
+            '❌ 指令格式不正确！\n用法：转账 @某人 xx积分（每天累计上限 {} 积分）'.format(
+                TRANSFER_DAILY_MAX
+            ),
+            reply_message=True,
+        )
 
+    if transfer_id == user_id:
+        await transcation.finish('❌ 不能给自己转账', reply_message=True)
     if transfer_id not in state.data:
         await transcation.finish('❌ 收款方未注册账号', reply_message=True)
 
     taxs = math.ceil(transfer_num * 1.0 / 10)
     if transfer_num + taxs > state.data[user_id]['credits']:
         await transcation.finish('❌ 你的积分余额不足！\n现有积分：{}\n需要积分(含税)：{}'.format(state.data[user_id]['credits'], transfer_num + taxs), reply_message=True)
-    if transfer_num + state.data[user_id]['receive_transfer_daily'] > 200:
-        await transcation.finish('❌ 已超出今日转出限额！\n账户转出限额：200积分/天\n今日已转出：{}'.format(state.data[user_id]['receive_transfer_daily']), reply_message=True)
+    sent_today = state.data[user_id]['receive_transfer_daily']
+    if transfer_num + sent_today > TRANSFER_DAILY_MAX:
+        await transcation.finish('❌ 已超出今日转出限额！\n账户转出限额：{}积分/天\n今日已转出：{}'.format(TRANSFER_DAILY_MAX, sent_today), reply_message=True)
 
     state.data[user_id]['receive_transfer_daily'] += transfer_num
     state.data[user_id]['credits'] -= transfer_num + taxs
@@ -55,13 +60,10 @@ async def _(bot: Bot, ev: MessageEvent):
             + MessageSegment.text('\n⭐ 隐藏成就解锁！\n🎖️ 积分达到2000：解锁隐藏收藏品20！\n🎉是NEW，好耶！🎉\n') \
             + MessageSegment.image(new_sticker)
         await transcation.send(msg)
-    gc.collect()
 
 
 @reborn.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    if await resting_guard():
-        return
     user_id, group_id = parse_session(ev)
     src = str(ev.message)
     await ensure_registered(reborn, user_id)
@@ -102,8 +104,6 @@ async def _(bot: Bot, ev: MessageEvent):
 
 @buy_tip.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    if await resting_guard():
-        return
     user_id, group_id = parse_session(ev)
     await ensure_registered(buy_tip, user_id)
 

@@ -1,18 +1,52 @@
 import os
 import json
+import re
 import time
+
+from nonebot import logger
 from openai import AsyncOpenAI
-from .constants import bot_nick, llm_api_key, llm_base_url, other_llm_model
+from utils import llm_fallback
+from .constants import bot_nick, llm_api_key, llm_base_url
 from . import state
 
-with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'utils', 'generate_turtle_soup_prompt.md'), 'r', encoding='utf-8') as f:
-    generate_turtle_soup_prompt = f.read()
-with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'utils', 'turtle_soup_question_prompt.md'), 'r', encoding='utf-8') as f:
-    turtle_soup_question_prompt = f.read()
-with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'utils', 'turtle_soup_truth_prompt.md'), 'r', encoding='utf-8') as f:
-    turtle_soup_truth_prompt = f.read()
-with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'utils', 'turtle_soup.json'), 'r', encoding='utf-8') as f:
-    turtle_soup = json.load(f)
+_UTILS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'utils')
+_CQ_RE = re.compile(r"\[CQ:[^\]]*\]")
+
+
+def strip_cq(text: str) -> str:
+    text = _CQ_RE.sub("", str(text or ""))
+    text = (text.replace("&#91;", "[").replace("&#93;", "]")
+                .replace("&#44;", ",").replace("&amp;", "&"))
+    return _CQ_RE.sub("", text).strip()
+
+
+def _read_text(name: str) -> str:
+    path = os.path.join(_UTILS_DIR, name)
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            return f.read()
+    except Exception as e:
+        logger.error(f"airi_turtle_soup 读取 {name} 失败，该功能将不可用: {e}")
+        return ""
+
+
+def _read_json(name: str):
+    path = os.path.join(_UTILS_DIR, name)
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            loaded = json.load(f)
+        if not isinstance(loaded, list):
+            raise ValueError("题库应为列表")
+        return loaded
+    except Exception as e:
+        logger.error(f"airi_turtle_soup 读取题库 {name} 失败，海龟汤将不可用: {e}")
+        return []
+
+
+generate_turtle_soup_prompt = _read_text('generate_turtle_soup_prompt.md')
+turtle_soup_question_prompt = _read_text('turtle_soup_question_prompt.md')
+turtle_soup_truth_prompt = _read_text('turtle_soup_truth_prompt.md')
+turtle_soup = _read_json('turtle_soup.json')
 
 client = AsyncOpenAI(
     api_key=llm_api_key,
@@ -20,9 +54,9 @@ client = AsyncOpenAI(
 )
 
 async def call_llm(prompt, input, deepseek):
-    completion = await client.chat.completions.create(
-        model=other_llm_model,
-        messages=[
+    return await llm_fallback.call_with_fallback(
+        client,
+        [
             {
                 "role": "system",
                 "content": prompt
@@ -32,13 +66,13 @@ async def call_llm(prompt, input, deepseek):
                 "content": input
             }
         ],
+        tag="turtle_soup",
         max_completion_tokens=4096,
         temperature=0.1,
         top_p=0.3,
         stream=False,
         stop=None,
     )
-    return json.loads(completion.model_dump_json())["choices"][0]["message"]["content"]
 
 async def check_data_existance(gruop_id, user_id):
     try:
@@ -134,17 +168,46 @@ async def generate_help_message(bot, max_player_query_trial, max_player_truth_tr
     msg.append({"type": "node", "data": {"name": "版权信息", "uin": bot.self_id, "content": 'Powered By AiriCore Dev.'}})
     return msg
 
+def get_soup(soup_id):
+    if isinstance(soup_id, int) and 0 <= soup_id < len(turtle_soup):
+        return turtle_soup[soup_id]
+    return None
+
+
 async def end_game(mode, gruop_id, bot, user_id, user_nick, max_group_trial, matcher):
+    turtle = state.data.get('group', {}).get(gruop_id, {}).get('turtle')
+    if turtle is None:
+        return
+    soup_id = turtle.get('soup_id')
+    soup = get_soup(soup_id)
+
     if mode == "trial_off":
         msg = f'❌ 总轮询次数已超过{max_group_trial}次，游戏结束！\n太失败了，怎么这么久都没猜出来……'
     elif mode == "victory":
-        msg = f"🧩 PURE MEMORY\n恭喜{user_nick}完成最后一块记忆拼图\n\n【汤底】\n{turtle_soup[state.data['group'][gruop_id]['turtle']['soup_id']]['truth']}"
-        if state.data['group'][gruop_id]['turtle']['soup_id'] not in state.data['group'][gruop_id]['has_played']:
-            state.data['group'][gruop_id]['has_played'].append(state.data['group'][gruop_id]['turtle']['soup_id'])
+        truth_text = soup['truth'] if soup else '（题库已变动，无法取到本题汤底）'
+        msg = f"🧩 PURE MEMORY\n恭喜{user_nick}完成最后一块记忆拼图\n\n【汤底】\n{truth_text}"
+        played = state.data['group'][gruop_id].setdefault('has_played', [])
+        if soup_id not in played:
+            played.append(soup_id)
     elif mode == "break":
-        msg = f'🚫 发起者终止了本次游戏'
+        msg = '🚫 发起者终止了本次游戏'
+    else:
+        msg = '游戏结束'
+
     history_msg = await construct_turtle_soup_history(bot.self_id, bot_nick, msg)
-    state.data['group'][gruop_id]['turtle']['history'].append(history_msg)
+    turtle.setdefault('history', []).append(history_msg)
     await matcher.send(f'{msg}\n\n以下是历史记录：')
-    await bot.send_group_forward_msg(group_id=gruop_id, messages=state.data['group'][gruop_id]['turtle']['history'])
-    del state.data['group'][gruop_id]['turtle']
+    try:
+        await bot.send_group_forward_msg(group_id=gruop_id, messages=turtle['history'])
+    except Exception as e:
+        logger.warning(f"海龟汤历史记录发送失败: {e}")
+    state.data['group'][gruop_id].pop('turtle', None)
+    await _persist()
+
+
+async def _persist():
+    try:
+        from . import persistence
+        await persistence.save_to_json()
+    except Exception as e:
+        logger.warning(f"海龟汤存档失败: {e}")

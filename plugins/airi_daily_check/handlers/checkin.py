@@ -5,10 +5,12 @@ from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import MessageEvent
 
 from ..base import state
-from ..base.constants import hidden_stickers, SECRET_MESSAGES, new_account
+from ..base.constants import (
+    hidden_stickers, SECRET_MESSAGES, new_account, TRANSFER_DAILY_MAX,
+)
 from ..base.matchers import qiandao, qiandaohelp, jrys
 from ..base.helpers import (
-    parse_session, resting_guard, ensure_registered,
+    parse_session, ensure_registered,
     acquire_jrys, get_sticker, generate_new_sticker, acquire_sticker,
     unlock_segment, check_all_achiv, localpath_to_base64,
 )
@@ -16,8 +18,6 @@ from ..base.helpers import (
 
 @qiandao.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    if await resting_guard():
-        return
     res = '\n'
     user_id, group_id = parse_session(ev)
 
@@ -80,8 +80,9 @@ async def _(bot: Bot, ev: MessageEvent):
             msg += MessageSegment.text('\n\n' + random.choice(SECRET_MESSAGES))
     else:
         res += '❌ 重复签到{}次！\n'.format(state.data[user_id]['check_times_daily'])
-        state.data[user_id]['credits'] -= (random_credit := random.randint(10, 20))
-        res += '⛔ 已扣除 {} 积分\n📥 当前拥有 {} 积分'.format(random_credit, state.data[user_id]['credits'])
+        penalty = min(random.randint(10, 20), max(0, state.data[user_id]['credits']))
+        state.data[user_id]['credits'] -= penalty
+        res += '⛔ 已扣除 {} 积分\n📥 当前拥有 {} 积分'.format(penalty, state.data[user_id]['credits'])
         msg = MessageSegment.text(res)
 
         if state.data[user_id]['check_times_daily'] == 1 and acquire_sticker(user_id, 13):
@@ -121,9 +122,9 @@ async def _(bot: Bot, ev: MessageEvent):
  -今日挑战：完成游戏获取积分！\n\
  -购买提示：花费500积分购买随机一条有关隐藏收藏品的提示信息\n\n\
 （*以下指令需要@机器人*）\n\
- -@Airi 转给@...X个积分（X为数字）：转账给你@的人\n不支持转至未注册账户的人，单日转出限额200积分，手续费10%（向上取整）\n\
+ -@Airi 转给@...X个积分（X为数字）：转账给你@的人\n不支持转至未注册账户的人，单日转出限额{}积分，手续费10%（向上取整）\n\
  -@Airi 重生：重开存档\n\n\
- （更多功能实装中）'
+ （更多功能实装中）'.format(TRANSFER_DAILY_MAX)
 
     gameplay = '☑️ 游戏玩法：\n\
 每天签到可以获得积分、资料卡点赞以及随机一个收藏品。\n\
@@ -151,8 +152,6 @@ async def _(bot: Bot, ev: MessageEvent):
 
 @jrys.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    if await resting_guard():
-        return
     user_id, group_id = parse_session(ev)
     await ensure_registered(jrys, user_id)
 

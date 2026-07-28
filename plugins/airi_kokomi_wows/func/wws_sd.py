@@ -268,9 +268,8 @@ def get_png(
         )
     )
     json_path = os.path.join(plugin_path,'json',f'sd_reward_2024_wg.json')
-    temp = open(json_path, "r", encoding="utf-8")
-    sd_reward = json.load(temp)
-    temp.close()
+    with open(json_path, "r", encoding="utf-8") as temp:
+        sd_reward = json.load(temp)
     reward_list = {
         'list1':{
             '1':[],

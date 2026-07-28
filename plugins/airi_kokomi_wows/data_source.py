@@ -109,16 +109,14 @@ class Game_Data:
             file_path = os.path.join(plugin_path, 'json', 'dog_tags_lesta.json')
         else:
             file_path = os.path.join(plugin_path, 'json', 'dog_tags_wg.json')
-        file_json = open(file_path, "r", encoding="utf-8")
-        json_data = json.load(file_json)
-        file_json.close()
+        with open(file_path, "r", encoding="utf-8") as file_json:
+            json_data = json.load(file_json)
         return json_data
 
     def load_ship_preview_data(lang:str):
         file_path = os.path.join(plugin_path, 'json', f'ship_preview_{lang}.json')
-        file_json = open(file_path, "r", encoding="utf-8")
-        json_data = json.load(file_json)
-        file_json.close()
+        with open(file_path, "r", encoding="utf-8") as file_json:
+            json_data = json.load(file_json)
         return json_data
 
 

@@ -3,10 +3,12 @@ import re
 import hmac
 import hashlib
 import base64
+import secrets
 from pathlib import Path
 
 import yaml
 import markdown as md_lib
+from nonebot import logger
 
 from . import state
 from . import cache as _cache
@@ -77,21 +79,35 @@ def list_articles():
     ]
 
 
+_MAC_LEN = 32
+
+
+def _token_secret() -> bytes:
+    secret = state.data.get("token_secret") or ""
+    if not secret:
+        secret = secrets.token_hex(32)
+        state.data["token_secret"] = secret
+        logger.warning("airi_market token_secret 缺失，已即时生成新的随机密钥")
+    return str(secret).encode()
+
+
 def make_token(qq):
-    secret = state.data.get("token_secret", "fallback").encode()
-    mac = hmac.new(secret, str(qq).encode(), hashlib.sha256).digest()[:8]
-    payload = mac + str(qq).encode()
+    qq_b = str(qq).encode()
+    mac = hmac.new(_token_secret(), qq_b, hashlib.sha256).digest()[:_MAC_LEN]
+    payload = mac + qq_b
     return base64.urlsafe_b64encode(payload).decode().rstrip("=")
 
 
 def verify_token(token):
     try:
-        padded = token + "=" * (4 - len(token) % 4)
+        token = str(token or "")
+        padded = token + "=" * (-len(token) % 4)
         payload = base64.urlsafe_b64decode(padded)
-        mac = payload[:8]
-        qq = payload[8:].decode()
-        secret = state.data.get("token_secret", "fallback").encode()
-        expected = hmac.new(secret, qq.encode(), hashlib.sha256).digest()[:8]
+        if len(payload) <= _MAC_LEN:
+            return None
+        mac = payload[:_MAC_LEN]
+        qq = payload[_MAC_LEN:].decode()
+        expected = hmac.new(_token_secret(), qq.encode(), hashlib.sha256).digest()[:_MAC_LEN]
         if hmac.compare_digest(mac, expected):
             return qq
     except Exception:

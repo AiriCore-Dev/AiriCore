@@ -17,4 +17,3 @@ difficulty = {
 _2fa_key = getattr(driver.config, "_2fa_key", "")
 llm_api_key = getattr(driver.config, "llm_api_key", "")
 llm_base_url = getattr(driver.config, "llm_base_url", "")
-other_llm_model = getattr(driver.config, "other_llm_model", "")

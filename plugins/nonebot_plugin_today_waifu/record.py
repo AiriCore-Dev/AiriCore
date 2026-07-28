@@ -1,69 +1,117 @@
-import json
+import time
+import pickle
 import hashlib
-from typing import Union, Any
+import threading
 from pathlib import Path
 
 import httpx
-import nonebot
 from nonebot import get_driver
+from nonebot.log import logger
 from nonebot.adapters.onebot.v11 import MessageSegment, Message
 
-from .config import Config
 from . import cache
 
 driver = get_driver()
-global_config = nonebot.get_driver().config
-waifu_config: Config = Config.parse_obj(global_config.dict())
-record_dir: Path = waifu_config.today_waifu_record_dir
 
-TodayWaifuRecord = {}
+_DATA_DIR = Path(__file__).resolve().parents[2] / "data" / "nonebot_plugin_today_waifu"
+_RECORD_FILE = _DATA_DIR / "record.pk"
+_FLUSH_INTERVAL = 3.0
+
+_lock = threading.Lock()
+_persist: dict = {}
+_persist_loaded = False
+_last_flush = 0.0
+_dirty = False
+
+
+def _ensure_loaded() -> None:
+    global _persist, _persist_loaded
+    if _persist_loaded:
+        return
+    _persist_loaded = True
+    if _RECORD_FILE.is_file():
+        try:
+            with open(_RECORD_FILE, "rb") as f:
+                _persist = pickle.load(f)
+            return
+        except Exception as e:
+            logger.opt(colors=True).warning(f"<y>today_waifu record.pk 读取失败，已重置: {e}</y>")
+    _persist = {}
+
+
+def _flush_record(force: bool = False) -> None:
+    global _last_flush, _dirty
+    now = time.time()
+    if not force and (not _dirty or now - _last_flush < _FLUSH_INTERVAL):
+        return
+    try:
+        _DATA_DIR.mkdir(parents=True, exist_ok=True)
+        tmp = _RECORD_FILE.with_suffix(".pk.tmp")
+        with open(tmp, "wb") as f:
+            pickle.dump(_persist, f)
+        tmp.replace(_RECORD_FILE)
+        _last_flush = now
+        _dirty = False
+    except Exception as e:
+        logger.opt(colors=True).warning(f"<y>today_waifu record.pk 写入失败: {e}</y>")
+
+
+def flush_record() -> None:
+    with _lock:
+        _flush_record(force=True)
 
 
 @driver.on_startup
 async def today_waifu_init() -> None:
-    if not record_dir.exists():
-        record_dir.mkdir(parents=True, exist_ok=True)
-    for file in record_dir.glob('*.json'):
-        TodayWaifuRecord[file.stem] = load_json(file)
+    with _lock:
+        _ensure_loaded()
 
 
 @driver.on_shutdown
 async def today_waifu_shutdown() -> None:
+    flush_record()
     cache.flush()
 
 
-def save_json(data, json_file_path: Union[str, Path]) -> None:
-    with open(json_file_path, 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, sort_keys=False, indent=2)
-
-
-def load_json(json_file_path: Union[str, Path]) -> Any:
-    with open(json_file_path, 'r', encoding='utf-8') as f:
-        data = json.load(f)
-    return data
-
-
-def clear_group_record(gid: str) -> None:
-    if gid not in TodayWaifuRecord:
-        return
-    TodayWaifuRecord[gid].clear()
-    save_group_record(gid, TodayWaifuRecord[gid])
-
-
 def get_group_record(gid: str) -> dict:
-    if gid in TodayWaifuRecord:
-        return TodayWaifuRecord[gid]
-    filename = record_dir / f'{gid}.json'
-    if not filename.exists():
-        save_json({}, filename)
-    record = load_json(filename)
-    TodayWaifuRecord[gid] = record
-    return record
+    with _lock:
+        _ensure_loaded()
+        return _persist.setdefault(gid, {})
 
 
 def save_group_record(gid: str, record: dict) -> None:
-    record_file_path = record_dir / f'{gid}.json'
-    save_json(record, record_file_path)
+    global _dirty
+    with _lock:
+        _ensure_loaded()
+        _persist[gid] = record
+        _dirty = True
+        _flush_record()
+
+
+def clear_group_record(gid: str) -> None:
+    global _dirty
+    with _lock:
+        _ensure_loaded()
+        _persist.pop(gid, None)
+        _dirty = True
+        _flush_record()
+
+
+async def construct_force_waifu_msg(member_info: dict, waifu_id: int, bot_id: int) -> Message:
+    member_name = (member_info.get("card") or member_info.get("nickname") or waifu_id)
+    img = await download_avatar(str(waifu_id))
+    if waifu_id == bot_id:
+        return MessageSegment.text(f'\n你强娶了Airi？！Airi不依！') + MessageSegment.image(img)
+    return (
+        MessageSegment.text(f'\n强娶成功！你今天的老婆是：')
+        + MessageSegment.image(img)
+        + MessageSegment.text(f'{member_name}\n不过今天不能再换老婆了哦~')
+    )
+
+
+async def construct_force_waifu_taken_msg(member_info: dict, owner_uid: str) -> Message:
+    owner_name = (member_info.get("card") or member_info.get("nickname") or owner_uid)
+    return Message(f'\nTa已经是 {owner_name} 的老婆了，抢不走的！')
 
 
 async def construct_change_waifu_msg(member_info: dict, new_waifu_id: int, bot_id: int, times: int,

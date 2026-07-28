@@ -65,19 +65,39 @@ def _load() -> None:
 def _flush(force: bool = False) -> None:
     global _last_flush, _dirty
     now = time.time()
-    if not force and (not _dirty or now - _last_flush < _FLUSH_INTERVAL):
-        return
-    try:
+    with _lock:
+        if not force and (not _dirty or now - _last_flush < _FLUSH_INTERVAL):
+            return
         _prune_old_days()
+        snapshot = copy.deepcopy(_stats)
+        _last_flush = now
+        _dirty = False
+    try:
         _DATA_DIR.mkdir(parents=True, exist_ok=True)
         tmp = _STATS_FILE.with_suffix(".pk.tmp")
         with open(tmp, "wb") as f:
-            pickle.dump(_stats, f)
+            pickle.dump(snapshot, f)
         tmp.replace(_STATS_FILE)
-        _last_flush = now
-        _dirty = False
     except Exception as e:
+        with _lock:
+            _dirty = True
         logger.opt(colors=True).warning(f"<y>airi_switch 统计文件写入失败: {e}</y>")
+
+
+def flush() -> None:
+    _flush(force=True)
+
+
+def _writer_loop() -> None:
+    while True:
+        time.sleep(_FLUSH_INTERVAL)
+        try:
+            _flush()
+        except Exception:
+            continue
+
+
+_writer_thread = threading.Thread(target=_writer_loop, daemon=True, name="airi_switch_counter")
 
 
 def _bump(bot_id: str, direction: str, session: str) -> None:
@@ -88,7 +108,6 @@ def _bump(bot_id: str, direction: str, session: str) -> None:
         bucket = bot.setdefault(direction, {})
         bucket[session] = bucket.get(session, 0) + 1
         _dirty = True
-        _flush()
 
 
 def get_stats(day: str = "") -> Dict[str, Any]:
@@ -101,7 +120,24 @@ def get_available_days() -> list:
         return sorted(_stats.keys())
 
 
+def preload(max_bytes: int = 0):
+    with _lock:
+        if not _stats:
+            _load()
+        return len(_stats), 0
+
+
 _load()
+_writer_thread.start()
+
+try:
+    from nonebot import get_driver as _get_driver
+
+    @_get_driver().on_shutdown
+    async def _flush_on_shutdown():
+        _flush(force=True)
+except Exception:
+    pass
 
 
 @event_preprocessor

@@ -15,7 +15,7 @@ withdraw = on_fullmatch(
 @withdraw.handle()
 async def handle_withdraw(bot: Bot, event: MessageEvent):
     if event.reply is None:
-        return
+        await withdraw.finish("请引用一条需要撤回的消息后再发「撤回」。")
 
     try:
         await bot.delete_msg(message_id=event.reply.message_id)

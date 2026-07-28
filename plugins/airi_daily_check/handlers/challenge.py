@@ -9,15 +9,13 @@ from ..base import state
 from ..base.constants import DIFFICULTY, CREDIT_BY_DIFF, asset
 from ..base.matchers import daily_challenge, flag_submit
 from ..base.helpers import (
-    parse_session, resting_guard, ensure_registered,
+    parse_session, ensure_registered,
     acquire_sticker, unlock_segment, localpath_to_base64,
 )
 
 
 @daily_challenge.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    if await resting_guard(reply_message=False):
-        return
     nows = datetime.datetime.now()
     res = MessageSegment.text('㊙️ 快来挑战今日份数独题目吧！\n{}年{}月{}日\n'.format(nows.year, nows.month, nows.day))
     for i in range(1, 4):
@@ -31,15 +29,19 @@ async def _(bot: Bot, ev: MessageEvent):
 
 @flag_submit.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    if await resting_guard():
-        return
     user_id, group_id = parse_session(ev)
     src = str(ev.message).strip()[5:-1]
     await ensure_registered(flag_submit, user_id)
 
+    if not any(str(state.game_ans[i] or '').strip() for i in range(1, 4)):
+        await flag_submit.finish('⛔ 今日挑战还未生成，请稍后再试', reply_message=True)
+
     for i in range(1, 4):
-        hash_res = hmac.new(user_id.encode(), state.game_ans[i].encode(), hashlib.md5).hexdigest()
-        if src == hash_res:
+        answer = str(state.game_ans[i] or '').strip()
+        if not answer:
+            continue
+        hash_res = hmac.new(user_id.encode(), answer.encode(), hashlib.md5).hexdigest()
+        if hmac.compare_digest(src, hash_res):
             if not state.data[user_id]['daily_challenge'][i]:
                 state.data[user_id]['credits'] += CREDIT_BY_DIFF[i]
                 state.data[user_id]['daily_challenge'][i] = 1

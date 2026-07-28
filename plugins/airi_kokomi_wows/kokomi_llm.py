@@ -1,7 +1,8 @@
 import os
-import json
 import nonebot
 from openai import AsyncOpenAI
+
+from utils import llm_fallback
 
 driver = nonebot.get_driver()
 
@@ -13,11 +14,18 @@ client = AsyncOpenAI(
 with open(os.path.join(os.path.dirname(__file__), 'kokomi_NL2C.md'),'r',encoding='utf-8') as f:
     role_setup = f.read()
 
+def _parse_nl2c(text):
+    msg_list = text.split(':')
+    if len(msg_list) != 2:
+        raise ValueError("服务器繁忙，请稍后再试")
+    return [int(msg_list[0]), msg_list[1]]
+
+
 async def kokomi_llm(input_words):
     try:
-        completion = await client.chat.completions.create(
-            model = getattr(driver.config, "other_llm_model", ""),
-            messages=[
+        return await llm_fallback.call_with_fallback(
+            client,
+            [
                 {
                     "role": "system",
                     "content": role_setup
@@ -27,6 +35,8 @@ async def kokomi_llm(input_words):
                     "content": input_words
                 }
             ],
+            tag="kokomi_nl2c",
+            validate=_parse_nl2c,
             max_completion_tokens=4096,
             temperature=0,
             top_p=1,
@@ -35,12 +45,5 @@ async def kokomi_llm(input_words):
             frequency_penalty=0,
             presence_penalty=0,
         )
-
-        msg_list = json.loads(completion.model_dump_json())["choices"][0]["message"]["content"].split(':')
-        if len(msg_list) == 2:
-            msg_list = [int(msg_list[0]),msg_list[1]]
-            return msg_list
-        else:
-            raise ValueError("服务器繁忙，请稍后再试")
     except Exception as err:
-        return [0,str(err)]
+        return [0, str(err)]

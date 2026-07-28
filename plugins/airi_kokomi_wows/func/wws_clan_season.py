@@ -1,7 +1,7 @@
 from ._base import program_error
 import os
-from PIL import Image
 import gc
+from utils import asset_cache
 from .. import (
     Plugin_Config,
     Picture,
@@ -199,7 +199,7 @@ def get_png(
         'Midshipman': 5
     }
     clan_role_png_path = os.path.join(plugin_path,'png',f'bg_{lang}',f'clan_role.png')
-    clan_role_png = Image.open(clan_role_png_path)
+    clan_role_png = asset_cache.get_image(clan_role_png_path)
     i = 0
     fontStyle = fonts.data[1][35]
     for temp_data in result['data']['members']:

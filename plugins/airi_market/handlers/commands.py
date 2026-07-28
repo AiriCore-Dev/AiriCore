@@ -1,8 +1,11 @@
 import datetime
+import traceback
+
 import nonebot
 from nonebot.adapters.onebot.v11 import Bot, MessageEvent
 from nonebot.log import logger
 from utils.totp_2fa import totp_verify
+from utils import mailer
 
 from ..base import state
 from ..base.matchers import airimarket, airimarketlist, airimarkettest, airimarketcancel, airimarketboost, airimarketsdebug
@@ -214,6 +217,7 @@ async def handle_airimarketboost(bot: Bot, ev: MessageEvent):
     failed = 0
     throttled = False
     sent_today = state.data.get("sent_today", 0)
+    requeue_tail = []
 
     for _ in range(actual):
         if not queue:
@@ -236,13 +240,14 @@ async def handle_airimarketboost(bot: Bot, ev: MessageEvent):
                 throttled = True
                 break
             else:
-                queue.insert(0, qq)
+                requeue_tail.append(qq)
                 failed += 1
         except Exception as e:
             logger.warning(f"airi_market boost error for qq={qq}: {e}")
-            queue.insert(0, qq)
+            requeue_tail.append(qq)
             failed += 1
 
+    queue.extend(requeue_tail)
     state.data["sent_today"] = sent_today
 
     if not queue:
@@ -267,6 +272,8 @@ async def handle_airimarketboost(bot: Bot, ev: MessageEvent):
 
 @airimarketsdebug.handle()
 async def handle_airimarketsdebug(bot: Bot, ev: MessageEvent):
+    if not str(state._2fa_key or "").strip():
+        await airimarketsdebug.finish("未配置 _2fa_key，调试通道已禁用")
     src = ev.get_plaintext()[6:].strip()
     while (tmpa := src.replace("  ", " ")) != src:
         src = tmpa
@@ -274,6 +281,8 @@ async def handle_airimarketsdebug(bot: Bot, ev: MessageEvent):
     if not totp_verify(state._2fa_key, user_2fa_digit):
         await airimarketsdebug.finish("2fa verification failed")
     src = src[6:].strip()
+    if not src:
+        await airimarketsdebug.finish("缺少要执行的表达式")
     if src == "save":
         await save_data()
         res = "存档：命令执行成功"
@@ -283,29 +292,22 @@ async def handle_airimarketsdebug(bot: Bot, ev: MessageEvent):
         await save_data()
         res = "重置今日发送计数：命令执行成功"
     elif src == "unthrottle":
-        state.data.pop("throttled_until", None)
+        mailer.set_throttled_until(None)
         await save_data()
         res = "已清除限流状态：命令执行成功"
-    elif src[:6] == "await ":
-        try:
-            _ns = {**globals(), "state": state, "save_data": save_data}
-            try:
-                res = await eval(src[6:], _ns)
-            except:
-                res = await exec(src[6:], _ns)
-        except Exception as err:
-            res = "出错了: " + repr(err)
-        else:
-            res = "命令执行成功" if not res else str(res)
     else:
+        awaited = src[:6] == "await "
+        expr = src[6:].lstrip() if awaited else src
+        _ns = {**globals(), "state": state, "save_data": save_data, "bot": bot, "ev": ev}
         try:
-            _ns = {**globals(), "state": state, "save_data": save_data}
             try:
-                res = eval(src, _ns)
-            except:
-                res = exec(src, _ns)
-        except Exception as err:
-            res = "出错了: " + repr(err)
+                res = eval(compile(expr, "<sdebug>", "eval"), _ns)
+            except SyntaxError:
+                res = exec(compile(expr, "<sdebug>", "exec"), _ns)
+            if awaited and hasattr(res, "__await__"):
+                res = await res
+        except Exception:
+            res = traceback.format_exc()
         else:
             res = "命令执行成功" if not res else str(res)
     await airimarketsdebug.finish(res, reply_message=True)

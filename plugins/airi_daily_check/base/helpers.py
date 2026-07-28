@@ -1,4 +1,5 @@
 import base64
+import os
 import random
 import hashlib
 import datetime
@@ -6,6 +7,7 @@ from io import BytesIO
 
 import httpx
 from PIL import Image
+from nonebot import logger
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import MessageEvent
 
@@ -21,10 +23,6 @@ def parse_session(ev: MessageEvent):
         parts = session_id.split('_')
         return parts[2], parts[1]
     return session_id, None
-
-
-async def resting_guard(reply_message: bool = True) -> bool:
-    return False
 
 
 async def ensure_registered(matcher, user_id):
@@ -47,7 +45,7 @@ async def download_avatar(uid: str) -> bytes:
 
 
 async def download_url(url: str) -> bytes:
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=15) as client:
         for i in range(3):
             try:
                 resp = await client.get(url)
@@ -55,7 +53,12 @@ async def download_url(url: str) -> bytes:
                     continue
                 return resp.content
             except Exception as e:
-                print(f"Error downloading {url}, retry {i}/3: {str(e)}")
+                logger.warning(f"下载失败 {url}，第 {i + 1}/3 次重试: {e}")
+    return b""
+
+
+def fallback_avatar():
+    return cache.get_image_copy(asset('utils', 'airi.png')).resize((200, 200))
 
 
 def image_to_base64(img) -> str:
@@ -70,7 +73,7 @@ async def localpath_to_base64(pth):
             byt = fil.read()
         return "base64://" + base64.b64encode(byt).decode()
 
-    return cache.get_or_build("localpath_b64", pth, _build)
+    return cache.get_or_build("localpath_b64", pth, _build, stat_path=pth)
 
 
 async def acquire_jrys(user_id):
@@ -80,9 +83,18 @@ async def acquire_jrys(user_id):
 
 
 async def get_sticker(x, user_id, mode=1):
+    return get_sticker_sync(x, user_id, mode)
+
+
+def get_sticker_sync(x, user_id, mode=1):
     theme = state.data[user_id]['theme']
     if theme not in state.theme_extension:
-        state.theme_extension[theme] = open(asset('stickers', theme, 'extension')).read()
+        try:
+            with open(asset('stickers', theme, 'extension'), encoding='utf-8') as f:
+                state.theme_extension[theme] = f.read().strip()
+        except OSError as e:
+            logger.warning(f"收藏主题 {theme} 缺少 extension 文件，回退 png: {e}")
+            state.theme_extension[theme] = 'png'
     return asset('stickers', theme, '{}.{}'.format(x, state.theme_extension[theme]))
 
 
@@ -108,19 +120,57 @@ async def make_250px(img, mode=0):
     return _make_250px_kernel(img, mode)
 
 
-async def make_250px_cached(path, mode=0):
+def make_250px_cached_sync(path, mode=0):
     return cache.get_or_build(
         "sticker_250", (path, mode),
-        lambda: _make_250px_kernel(Image.open(path).convert('RGBA'), mode),
+        lambda: _make_250px_kernel(cache.get_image(path), mode),
     )
+
+
+async def make_250px_cached(path, mode=0):
+    return make_250px_cached_sync(path, mode)
+
+
+IMAGE_EXTS = ('.png', '.jpg', '.jpeg', '.webp', '.bmp')
+
+
+def list_images(dir_path):
+    try:
+        names = sorted(os.listdir(dir_path))
+    except OSError:
+        return []
+    out = []
+    for name in names:
+        full = os.path.join(dir_path, name)
+        if os.path.isfile(full) and name.lower().endswith(IMAGE_EXTS):
+            out.append(full)
+    return out
+
+
+def pick_random_image(dir_path, fallback=None):
+    files = list_images(dir_path)
+    if files:
+        return random.choice(files)
+    if fallback and os.path.isfile(fallback):
+        logger.warning(f"目录 {dir_path} 内无可用图片，已回退默认图")
+        return fallback
+    raise FileNotFoundError(f"目录内没有可用图片: {dir_path}")
+
+
+def list_subdirs(dir_path):
+    try:
+        names = sorted(os.listdir(dir_path))
+    except OSError:
+        return []
+    return [n for n in names if os.path.isdir(os.path.join(dir_path, n))]
 
 
 def _build_new_sticker(stk, mode):
     new_mask = cache.get_image(asset('utils', 'new.png'))
     if mode:
-        meme, _ = _make_250px_kernel(Image.open(stk).convert('RGBA'), 1)
+        meme, _ = _make_250px_kernel(cache.get_image(stk), 1)
     else:
-        meme = Image.open(stk).convert('RGBA')
+        meme = cache.get_image_copy(stk)
     if meme.size[0] / meme.size[1] > new_mask.size[0] / new_mask.size[1]:
         new_mask = new_mask.resize((meme.size[1] // 2 * new_mask.size[0] // new_mask.size[1], meme.size[1] // 2))
     else:
@@ -131,11 +181,15 @@ def _build_new_sticker(stk, mode):
     return image_to_base64(meme.convert('RGB'))
 
 
-async def generate_new_sticker(x, user_id, mode=0):
-    stk = await get_sticker(x, user_id)
+def generate_new_sticker_sync(x, user_id, mode=0):
+    stk = get_sticker_sync(x, user_id)
     return cache.get_or_build(
         "new_sticker", (stk, mode), lambda: _build_new_sticker(stk, mode),
     )
+
+
+async def generate_new_sticker(x, user_id, mode=0):
+    return generate_new_sticker_sync(x, user_id, mode)
 
 
 def acquire_sticker(user_id, x):
@@ -155,13 +209,11 @@ async def check_all_achiv(user_id, bot: Bot, ev: MessageEvent):
         return
     if any(i not in state.data[user_id]['collections'] for i in range(1, 101)):
         return
-    for j in range(101, 107):
-        if j not in state.data[user_id]['collections']:
-            break
+    missing = [j for j in range(101, 107) if j not in state.data[user_id]['collections']]
     state.data[user_id]['need_reborn'] = 1
-    if j == 106:
+    if not missing:
         msg = MessageSegment.text('\n✅ 恭喜你完成了全收藏！\nAiri给你比一个心哦！')
-    elif acquire_sticker(user_id, j):
+    elif acquire_sticker(user_id, (j := missing[0])):
         new_sticker = await generate_new_sticker(j, user_id)
         msg = MessageSegment.text(
             '\n✅ 恭喜你集齐了1-100号收藏品！\nAiri给你比一个心哦！\n📦 获得第{}号创世收藏品\n🎉是NEW，好耶！🎉\n'.format(j)

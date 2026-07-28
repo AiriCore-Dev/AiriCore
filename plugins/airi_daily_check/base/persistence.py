@@ -1,12 +1,14 @@
+import asyncio
 import os
 import gc
 import shutil
 import pickle
+import tempfile
 import datetime
 
 import nonebot
-from nonebot import get_driver, require
-from PIL import Image, ImageDraw, ImageFont
+from nonebot import get_driver, logger, require
+from PIL import ImageDraw
 
 from . import state
 from . import cache
@@ -17,26 +19,61 @@ timings = require("nonebot_plugin_apscheduler").scheduler
 driver = get_driver()
 
 CHALLENGE_FILE = os.path.join(DATA_DIR, 'challenge.pk')
+_save_lock = asyncio.Lock()
+_load_failed = False
 
 
 def _today_str():
     nows = datetime.datetime.now()
-    return '{}-{}-{}'.format(nows.year, nows.month, nows.day)
+    return '{:04d}-{:02d}-{:02d}'.format(nows.year, nows.month, nows.day)
+
+
+def _try_load(path):
+    with open(path, 'rb') as f:
+        loaded = pickle.load(f)
+    if not isinstance(loaded, dict):
+        raise ValueError('存档结构异常')
+    return loaded
 
 
 @driver.on_startup
 async def load_json():
+    global _load_failed
     state.game_ans[:] = [0, '', '', '']
-    try:
-        with open(DATA_FILE, 'rb') as f:
-            loaded = pickle.load(f)
+    os.makedirs(DATA_DIR, exist_ok=True)
+
+    loaded = None
+    if os.path.exists(DATA_FILE):
+        try:
+            loaded = _try_load(DATA_FILE)
+        except Exception as e:
+            logger.error(f"airi_daily_check 存档读取失败: {e}")
+            bak = DATA_FILE + '.bak'
+            if os.path.exists(bak):
+                try:
+                    loaded = _try_load(bak)
+                    logger.warning("airi_daily_check 已从 .bak 备份恢复存档")
+                except Exception as e2:
+                    logger.error(f"airi_daily_check 备份也无法读取: {e2}")
+            if loaded is None:
+                try:
+                    os.replace(DATA_FILE, DATA_FILE + '.corrupt')
+                    logger.error(
+                        "airi_daily_check 坏档已改名为 data.pk.corrupt，"
+                        "本次运行不会写入存档以避免数据丢失，请人工处理后重启"
+                    )
+                except OSError:
+                    pass
+                _load_failed = True
+
+    if loaded is not None:
         state.data.clear()
         state.data.update(loaded)
         _backfill_last_check_time()
-    except:
-        os.makedirs(DATA_DIR, exist_ok=True)
+    elif not _load_failed:
         await save_to_json()
-    _restore_or_reset_challenge()
+
+    await asyncio.to_thread(_restore_or_reset_challenge)
     gc.collect()
 
 
@@ -63,12 +100,34 @@ def _restore_or_reset_challenge():
     reset_daily_challenge()
 
 
+def _atomic_dump(path, obj):
+    os.makedirs(os.path.dirname(path) or '.', exist_ok=True)
+    fd, tmp = tempfile.mkstemp(dir=os.path.dirname(path) or '.', prefix='.tmp-', suffix='.pk')
+    try:
+        with os.fdopen(fd, 'wb') as f:
+            pickle.dump(obj, f)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp, path)
+    except Exception:
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
+        raise
+
+
 @driver.on_shutdown
 async def save_to_json():
-    with open(DATA_FILE, 'wb') as f:
-        pickle.dump(state.data, f)
-    cache.flush()
-    gc.collect()
+    if _load_failed:
+        logger.warning("airi_daily_check 存档读取失败过，已跳过写入以保护数据")
+        return
+    async with _save_lock:
+        try:
+            _atomic_dump(DATA_FILE, state.data)
+        except Exception as e:
+            logger.error(f"airi_daily_check 存档写入失败: {e}")
+        cache.flush()
 
 
 def _has_savedata(user_data):
@@ -112,7 +171,7 @@ async def daily_clear():
         state.data.pop(uid, None)
 
     if to_remove:
-        nonebot.logger.info(f"airi_daily_check: 清理 {len(to_remove)} 个90天不活跃的空账号（无存档数据）")
+        logger.info(f"airi_daily_check: 清理 {len(to_remove)} 个90天不活跃的空账号（无存档数据）")
 
     await save_to_json()
 
@@ -121,40 +180,44 @@ def reset_daily_challenge():
     puzzles, answers = sudoku.generate_daily()
     state.game_ans[:] = answers
 
-    font = ImageFont.truetype(font=asset('utils', 'font.ttc'), size=60)
+    font = cache.get_font(asset('utils', 'font.ttc'), 60)
     nows = datetime.datetime.now()
     nows = '{}-{}-{}'.format(nows.year, nows.month, nows.day)
-    num_imgs = {}
     for i in range(1, 4):
-        sdk_bg = Image.open(asset('utils', 'sudoku', f'sdk_bg_{i}.png')).convert('RGBA')
+        sdk_bg = cache.get_image_copy(asset('utils', 'sudoku', f'sdk_bg_{i}.png'))
         board = puzzles[i]
         for j in range(81):
             digit = board[j]
             if digit:
                 x1 = 155 + j % 9 * 150
                 y1 = 155 + j // 9 * 150
-                numj = num_imgs.get(digit)
-                if numj is None:
-                    numj = Image.open(asset('utils', 'sudoku', f'{digit}.png')).convert('RGBA')
-                    num_imgs[digit] = numj
+                numj = cache.get_image(asset('utils', 'sudoku', f'{digit}.png'))
                 sdk_bg.paste(numj, (x1, y1), mask=numj.split()[3])
         draw = ImageDraw.Draw(sdk_bg)
         draw.text(xy=(50, 1560), text=nows, fill=(0, 0, 0), font=font)
         sdk_bg.convert('RGB').save(asset('utils', 'sudoku', f'sdk_diff_{i}.jpg'), format='JPEG', quality=95)
 
     try:
-        with open(CHALLENGE_FILE, 'wb') as f:
-            pickle.dump({'date': _today_str(), 'answers': list(state.game_ans)}, f)
-    except:
-        pass
+        _atomic_dump(CHALLENGE_FILE, {'date': _today_str(), 'answers': list(state.game_ans)})
+    except Exception as e:
+        logger.warning(f"airi_daily_check 每日挑战存档写入失败: {e}")
 
 
 async def save_data_backup():
     await save_to_json()
-    shutil.copyfile(DATA_FILE, DATA_FILE + '.bak')
+    if _load_failed:
+        return
+    try:
+        shutil.copyfile(DATA_FILE, DATA_FILE + '.bak')
+    except Exception as e:
+        logger.warning(f"airi_daily_check 存档备份失败: {e}")
 
 
-timings.add_job(daily_clear, "cron", hour=0, misfire_grace_time=3600, coalesce=True)
+async def midnight_job():
+    await daily_clear()
+    await asyncio.to_thread(reset_daily_challenge)
+
+
+timings.add_job(midnight_job, "cron", hour=0, misfire_grace_time=3600, coalesce=True)
 timings.add_job(save_data_backup, "cron", hour=23, minute=50, misfire_grace_time=3600, coalesce=True)
-timings.add_job(reset_daily_challenge, "cron", hour=0, misfire_grace_time=3600, coalesce=True)
 timings.add_job(save_to_json, "interval", minutes=5, misfire_grace_time=3600, coalesce=True)

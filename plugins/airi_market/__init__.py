@@ -11,9 +11,17 @@ from .base.persistence import load_data, on_shutdown, save_data, timings, _send_
 from . import handlers
 
 
+_invite_enabled = bool(getattr(state.driver.config, "market_invite_new_bots", False))
+_bg_tasks = set()
+
+
 @state.driver.on_bot_connect
 async def _on_bot_connect(bot: Bot):
-    asyncio.create_task(_send_invite_if_new(bot))
+    if not _invite_enabled:
+        return
+    task = asyncio.create_task(_send_invite_if_new(bot))
+    _bg_tasks.add(task)
+    task.add_done_callback(_bg_tasks.discard)
 
 
 async def _send_invite_if_new(bot: Bot):
@@ -31,11 +39,11 @@ async def _send_invite_if_new(bot: Bot):
     with open(invite_path, "r", encoding="utf-8") as f:
         html_body = f.read()
 
-    subject = "诚邀您加入 AiriCore 开发者交流群"
+    subject = "诚邀您加入 AiriCore 分布式交流群"
     plain = (
-        "诚邀您加入 AiriCore 开发者交流群。\n\n"
+        "诚邀您加入 AiriCore 分布式交流群。\n\n"
         "您的 Bot 已成功连接到 AiriCore 框架。\n"
-        "加入开发交流群：https://qm.qq.com/q/34GPhJ30nC\n\n"
+        "加入开发交流群：https://qm.qq.com/q/VqLLwAzxOS\n\n"
         "此致，\nAiriCore Dev."
     )
     dest = f"{bot_qq}@qq.com"

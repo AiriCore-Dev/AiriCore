@@ -20,17 +20,56 @@ _CACHE_FILE = _DATA_DIR / "cache.pk"
 _FLUSH_INTERVAL = 3.0
 
 _MAX_IMAGES = 64
+_MAX_DECODED = 256
+_MAX_PERSIST_PER_NS = 600
+_NS_TTL = {"avatar": TTL_AVATAR}
+_DEFAULT_NS_TTL = 7 * 24 * 3600
+_PURGE_INTERVAL = 300.0
 
 _lock = threading.Lock()
 
 _persist: dict = {}
-_decoded: dict = {}
+_decoded: "OrderedDict[tuple, Any]" = OrderedDict()
 _persist_loaded = False
 _last_flush = 0.0
+_last_purge = 0.0
 _dirty = False
 
 _images: "OrderedDict[str, Image.Image]" = OrderedDict()
 _fonts: dict = {}
+
+
+def _touch_decoded(dkey, value) -> None:
+    _decoded[dkey] = value
+    _decoded.move_to_end(dkey)
+    if not is_ram():
+        while len(_decoded) > _MAX_DECODED:
+            _decoded.popitem(last=False)
+
+
+def _purge_unlocked(force: bool = False) -> None:
+    global _last_purge, _dirty
+    now = time.time()
+    if not force and now - _last_purge < _PURGE_INTERVAL:
+        return
+    _last_purge = now
+    for namespace, bucket in list(_persist.items()):
+        if not isinstance(bucket, dict):
+            continue
+        ttl = _NS_TTL.get(namespace, _DEFAULT_NS_TTL)
+        for key in [
+            k for k, v in bucket.items()
+            if not isinstance(v, dict) or now - v.get("ts", 0) > ttl
+        ]:
+            bucket.pop(key, None)
+            _decoded.pop((namespace, key), None)
+            _dirty = True
+        if len(bucket) > _MAX_PERSIST_PER_NS:
+            ordered = sorted(bucket.items(), key=lambda kv: kv[1].get("ts", 0))
+            for key, _ in ordered[: len(bucket) - _MAX_PERSIST_PER_NS]:
+                bucket.pop(key, None)
+                _decoded.pop((namespace, key), None)
+                _dirty = True
 
 
 def _encode(value) -> Optional[bytes]:
@@ -88,6 +127,7 @@ def _flush(force: bool = False) -> None:
     now = time.time()
     if not force and (not _dirty or now - _last_flush < _FLUSH_INTERVAL):
         return
+    _purge_unlocked(force=force)
     try:
         _DATA_DIR.mkdir(parents=True, exist_ok=True)
         tmp = _CACHE_FILE.with_suffix(".pk.tmp")
@@ -121,19 +161,23 @@ def get(namespace: str, key: str, ttl: Optional[float] = None) -> Any:
     k = (namespace, str(key))
     with _lock:
         _ensure_loaded()
-        entry = _persist.get(namespace, {}).get(str(key))
+        bucket = _persist.get(namespace, {})
+        entry = bucket.get(str(key))
         if entry is None:
             return None
         if ttl is not None and time.time() - entry["ts"] > ttl:
+            bucket.pop(str(key), None)
+            _decoded.pop(k, None)
             return None
         cached = _decoded.get(k)
         if cached is not None:
+            _decoded.move_to_end(k)
             return cached
         blob = entry["blob"]
     value = _decode(blob)
     if value is not None:
         with _lock:
-            _decoded[k] = value
+            _touch_decoded(k, value)
     return value
 
 
@@ -147,7 +191,7 @@ def put(namespace: str, key: str, value: Any) -> None:
     with _lock:
         _ensure_loaded()
         _persist.setdefault(namespace, {})[str(key)] = {"v": "", "ts": time.time(), "blob": blob}
-        _decoded[(namespace, str(key))] = value
+        _touch_decoded((namespace, str(key)), value)
         _dirty = True
         _flush()
 
@@ -157,36 +201,90 @@ def get_or_build(namespace: str, key, build, stat_path=None) -> Any:
     if is_disk():
         return build()
     dkey = (namespace, key)
+    version = "" if stat_path is None else _version_of(stat_path)
     with _lock:
         _ensure_loaded()
-        cached = _decoded.get(dkey)
-        if cached is not None:
-            return cached
         entry = _persist.get(namespace, {}).get(key)
-        if stat_path is None:
-            version = entry["v"] if entry is not None else ""
-            blob = entry["blob"] if entry is not None else None
+        stale = stat_path is not None and (entry is None or entry["v"] != version)
+        if stale:
+            _decoded.pop(dkey, None)
+            blob = None
         else:
-            version = _version_of(stat_path)
-            if entry is not None and entry["v"] == version:
-                blob = entry["blob"]
-            else:
-                blob = None
+            cached = _decoded.get(dkey)
+            if cached is not None:
+                _decoded.move_to_end(dkey)
+                return cached
+            if stat_path is None:
+                version = entry["v"] if entry is not None else ""
+            blob = entry["blob"] if entry is not None else None
     if blob is not None:
         value = _decode(blob)
         if value is not None:
             with _lock:
-                _decoded[dkey] = value
+                _touch_decoded(dkey, value)
             return value
     value = build()
     blob = _encode(value)
     with _lock:
-        _decoded[dkey] = value
+        _touch_decoded(dkey, value)
         if blob is not None:
             _persist.setdefault(namespace, {})[key] = {"v": version, "ts": time.time(), "blob": blob}
             _dirty = True
             _flush()
     return value
+
+
+def _value_bytes(value) -> int:
+    if isinstance(value, (bytes, bytearray, str)):
+        return len(value)
+    if isinstance(value, Image.Image):
+        try:
+            w, h = value.size
+            return w * h * len(value.mode)
+        except Exception:
+            return 0
+    if isinstance(value, tuple) and value:
+        return sum(_value_bytes(v) for v in value)
+    return 0
+
+
+def preload(max_bytes: int = 0):
+    if is_disk():
+        return 0, 0
+    with _lock:
+        _ensure_loaded()
+        _purge_unlocked(force=True)
+        pending = []
+        for namespace, bucket in _persist.items():
+            if not isinstance(bucket, dict):
+                continue
+            for key, entry in bucket.items():
+                if not isinstance(entry, dict):
+                    continue
+                blob = entry.get("blob")
+                if blob is None:
+                    continue
+                dkey = (namespace, key)
+                if dkey in _decoded:
+                    continue
+                pending.append((dkey, blob))
+
+    items = 0
+    used = 0
+    for dkey, blob in pending:
+        if max_bytes > 0 and used >= max_bytes:
+            break
+        try:
+            value = _decode(blob)
+        except Exception:
+            continue
+        if value is None:
+            continue
+        with _lock:
+            _touch_decoded(dkey, value)
+        items += 1
+        used += _value_bytes(value)
+    return items, used
 
 
 def get_image(path: str) -> Image.Image:

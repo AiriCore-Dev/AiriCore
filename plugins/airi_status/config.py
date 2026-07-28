@@ -12,4 +12,19 @@ class Config(BaseModel):
     status: ScopedConfig = Field(default_factory=ScopedConfig)
     """Kawaii Status Config"""
 
-config: ScopedConfig = ScopedConfig()
+
+def _load() -> ScopedConfig:
+    try:
+        import nonebot
+
+        raw = getattr(nonebot.get_driver().config, "status", None)
+        if isinstance(raw, ScopedConfig):
+            return raw
+        if isinstance(raw, dict):
+            return ScopedConfig(**raw)
+    except Exception:
+        pass
+    return ScopedConfig()
+
+
+config: ScopedConfig = _load()

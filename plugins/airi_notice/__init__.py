@@ -1,55 +1,53 @@
 import datetime
-import nonebot
-from nonebot import on_message, get_driver
-from nonebot.adapters.onebot.v11 import Bot, MessageSegment
-from nonebot.adapters.onebot.v11.event import MessageEvent
+from nonebot import on_message, get_driver, logger
+from nonebot.adapters.onebot.v11 import Bot
+from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 
-BLACKLIST = []
 gr_name = {}
 
 driver = get_driver()
-notification_account = getattr(driver.config, "notification_account", "3630532026")
+notification_account = str(getattr(driver.config, "notification_account", "") or "").strip()
 
-query_tmxx_status = on_message(priority=1,block=False)
+query_tmxx_status = on_message(priority=1, block=False)
+
+
+async def _group_name(bot: Bot, group_id: int) -> str:
+    cache = gr_name.setdefault(bot.self_id, {})
+    if group_id in cache:
+        return cache[group_id]
+    try:
+        info = await bot.get_group_info(group_id=group_id)
+        name = info.get("group_name") or str(group_id)
+    except Exception:
+        name = str(group_id)
+    cache[group_id] = name
+    return name
+
 
 @query_tmxx_status.handle()
 async def query_tmxx_status_func(bot: Bot, ev: MessageEvent):
+    if not notification_account:
+        return
+    msg = str(ev.message)
+    keywords = ['tmxx',f'[CQ:at,qq={notification_account}]',"田麻小溪","葡萄柚"]
+    if not any(k in msg for k in keywords):
+        return
+    if not isinstance(ev, GroupMessageEvent):
+        return
     try:
-        global BLACKLIST, gr_name
-
-        if (len(str(ev.get_session_id()).split('_')) != 1) and str(ev.get_session_id()).split('_')[1] in BLACKLIST: return
-        msg = str(ev.message)
-
-        tmxx_is_mentioned = 0
-
-        keywords = ['tmxx',f'[CQ:at,qq={notification_account}]',"小溪"]
-        for keyword in keywords:
-            if keyword in msg:
-                tmxx_is_mentioned = 1
-                break
-        if tmxx_is_mentioned:
-            cur_time = datetime.datetime.now()
-            session_id = str(ev.get_session_id())
-            if 'group' in session_id:
-                split_id = session_id.split('_')
-                qq_id = split_id[2]
-                gruop_id = split_id[1]
-            else:
-                qq_id = session_id
-                gruop_id = None
-
-            user_nick = await bot.get_group_member_info(group_id=gruop_id, user_id=qq_id)
-            user_nick = (user_nick.get("card") or user_nick.get("nickname") or qq_id)
-
-            try:
-                gr_name[bot.self_id]
-            except:
-                gr_name[bot.self_id] = {}
-                gr_list = await bot.get_group_list()
-                for gr in gr_list:
-                    gr_name[bot.self_id][gr["group_id"]] = gr["group_name"]
-
-            mesg = '📣 新消息提醒\n🕗 {}\n👨‍ {}({})\n📀 {}({})\n📩 {}'.format(str(cur_time)[:-7], user_nick, qq_id, gr_name[bot.self_id][int(gruop_id)], gruop_id, msg.replace(f'[CQ:at,qq={notification_account}]','@田麻小溪'))
-            await bot.send_private_msg(user_id=int(notification_account),message=mesg)
-    except:
-        pass
+        cur_time = datetime.datetime.now()
+        qq_id = str(ev.user_id)
+        group_id = int(ev.group_id)
+        try:
+            user_nick = await bot.get_group_member_info(group_id=group_id, user_id=int(qq_id))
+            user_nick = user_nick.get("card") or user_nick.get("nickname") or qq_id
+        except Exception:
+            user_nick = qq_id
+        group_name = await _group_name(bot, group_id)
+        body = msg.replace(f"[CQ:at,qq={notification_account}]", "@葡萄柚🍇")
+        mesg = "新消息提醒\n时间: {}\n发送者: {}({})\n群: {}({})\n内容: {}".format(
+            str(cur_time)[:-7], user_nick, qq_id, group_name, group_id, body
+        )
+        await bot.send_private_msg(user_id=int(notification_account), message=mesg)
+    except Exception as e:
+        logger.warning(f"消息提醒转发失败: {e}")

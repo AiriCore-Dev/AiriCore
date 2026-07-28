@@ -5,6 +5,11 @@ try { chcp 65001 > $null } catch {}
 try { [Console]::OutputEncoding = [System.Text.Encoding]::UTF8 } catch {}
 $OutputEncoding = [System.Text.Encoding]::UTF8
 
+try {
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 -bor [Net.SecurityProtocolType]::Tls11 -bor [Net.SecurityProtocolType]::Tls
+} catch {}
+$ProgressPreference = "SilentlyContinue"
+
 $EnvName = "airicore"
 $PyVersion = "3.11"
 
@@ -46,10 +51,13 @@ function Install-Miniconda {
     $installer = Join-Path $env:TEMP "miniconda_installer.exe"
     Write-Host "    从镜像下载: $CondaMirror/miniconda/$file"
     try {
-        Invoke-WebRequest -Uri "$CondaMirror/miniconda/$file" -OutFile $installer
+        Invoke-WebRequest -Uri "$CondaMirror/miniconda/$file" -OutFile $installer -UseBasicParsing
     } catch {
         Write-Host "    镜像下载失败, 回退官方源: https://repo.anaconda.com/miniconda/$file"
-        Invoke-WebRequest -Uri "https://repo.anaconda.com/miniconda/$file" -OutFile $installer
+        Invoke-WebRequest -Uri "https://repo.anaconda.com/miniconda/$file" -OutFile $installer -UseBasicParsing
+    }
+    if (-not (Test-Path $installer)) {
+        throw "Miniconda 安装包下载失败 (镜像与官方源均不可用)。"
     }
     Write-Host "    正在静默安装 (可能需要几分钟)"
     Start-Process -FilePath $installer -ArgumentList @(
@@ -166,16 +174,65 @@ if ((Test-Path $keyFile) -and (Test-Path $pemFile)) {
     Write-Host "    SSL 证书已存在, 保持不变"
 } else {
     if (-not (Test-Path $sslDir)) { New-Item -ItemType Directory -Force -Path $sslDir | Out-Null }
+    $opensslExe = "openssl"
+    $condaOpenssl = Join-Path $env:CONDA_PREFIX "Library\bin\openssl.exe"
+    if (Test-Path $condaOpenssl) { $opensslExe = $condaOpenssl }
     try {
-        openssl req -x509 -newkey rsa:2048 -nodes -keyout $keyFile -out $pemFile -days 3650 -subj "/CN=airicore.local" 2>$null
-        Write-Host "    已在 $sslDir 生成自签名证书"
+        & $opensslExe req -x509 -newkey rsa:2048 -nodes -keyout $keyFile -out $pemFile -days 3650 -subj "/CN=airicore.local" 2>$null
     } catch {
-        Write-Host "    未找到 openssl; 请手动提供 .\ssl\privkey.key 与 .\ssl\fullchain.pem,"
-        Write-Host "    或修改 bot.py 去掉 ssl_keyfile/ssl_certfile 参数。"
+        Write-Host "    未找到可用的 openssl。"
+    }
+    if ((Test-Path $keyFile) -and (Test-Path $pemFile) -and ((Get-Item $pemFile).Length -gt 0)) {
+        Write-Host "    已在 $sslDir 生成自签名证书"
+    } else {
+        Write-Host "    警告: 证书生成失败! bot.py 需要 .\ssl\privkey.key 与 .\ssl\fullchain.pem,"
+        Write-Host "    请手动提供, 或修改 bot.py 去掉 ssl_keyfile/ssl_certfile 参数, 否则无法启动。"
+    }
+}
+
+Write-Host "==> 创建运行时目录"
+foreach ($d in @("logs", "data")) {
+    $p = Join-Path $ProjectDir $d
+    if (-not (Test-Path $p)) { New-Item -ItemType Directory -Force -Path $p | Out-Null }
+}
+
+Write-Host "==> 依赖自检"
+$checkPy = Join-Path $env:TEMP "airicore_depcheck.py"
+@'
+import importlib.util
+mods = ["nonebot", "meme_generator", "playwright", "aiohttp", "openai", "numpy", "PIL", "skia", "uvicorn", "psutil", "mcrcon"]
+missing = [m for m in mods if importlib.util.find_spec(m) is None]
+if missing:
+    print("    缺失模块: " + ", ".join(missing))
+    raise SystemExit(1)
+print("    核心依赖齐全")
+'@ | Set-Content -Path $checkPy -Encoding UTF8
+python $checkPy
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "    警告: 依赖自检未通过, 请回看上面的 pip 报错。"
+}
+Remove-Item $checkPy -Force -ErrorAction SilentlyContinue
+
+Write-Host "==> 整理启动脚本"
+$srcBat = Join-Path $ProjectDir "launch_windows.bat"
+$dstBat = Join-Path $ProjectDir "launch.bat"
+if (Test-Path $srcBat) {
+    Move-Item -Force -Path $srcBat -Destination $dstBat
+    Write-Host "    launch_windows.bat -> launch.bat"
+} elseif (Test-Path $dstBat) {
+    Write-Host "    launch.bat 已存在, 跳过重命名"
+} else {
+    Write-Host "    警告: 未找到 launch_windows.bat 或 launch.bat"
+}
+foreach ($f in @("launch_linux.sh", "launch_macos.sh", "launch.sh")) {
+    $p = Join-Path $ProjectDir $f
+    if (Test-Path $p) {
+        Remove-Item -Force $p
+        Write-Host "    已删除 $f"
     }
 }
 
 Write-Host ""
 Write-Host "==> 部署完成。后续步骤:"
 Write-Host "    1. 编辑 .env.prod (SUPERUSERS, ONEBOT_ACCESS_TOKEN, LLM 密钥 等)"
-Write-Host "    2. 启动: launch_windows.bat"
+Write-Host "    2. 启动: launch.bat"

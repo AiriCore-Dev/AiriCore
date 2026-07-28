@@ -6,6 +6,8 @@ DATA_FILE = os.path.join(DATA_DIR, 'data.pk')
 
 hidden_stickers = [17, 13, 37, 20, 100]
 
+TRANSFER_DAILY_MAX = 200
+
 DIFFICULTY = [0, 'NORMAL', 'EXPERT', 'MASTER']
 CREDIT_BY_DIFF = [0, 20, 100, 300]
 

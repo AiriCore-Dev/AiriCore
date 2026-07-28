@@ -1,5 +1,4 @@
 import time
-import logging
 from dataclasses import dataclass, field
 from typing import Any, List, Optional, TYPE_CHECKING
 
@@ -8,16 +7,19 @@ from . import llm_client
 if TYPE_CHECKING:
     from .memory import GroupContext
 
-logger = logging.getLogger("airi_llm")
+from utils.plugin_logger import get_logger
+
+logger = get_logger("airi_llm")
 
 KNOWLEDGE_MAX_ENTRIES = 150
 KNOWLEDGE_CONTENT_MAX = 150
 KNOWLEDGE_TAG_MAX = 5
 KNOWLEDGE_EXTRACT_MIN_ENTRIES = 8
-KNOWLEDGE_EXTRACT_INTERVAL_SECS = 600
+KNOWLEDGE_EXTRACT_INTERVAL_SECS = 6000
 KNOWLEDGE_ANALYZE_ENTRIES = 20
 KNOWLEDGE_RETRIEVE_TOP_K = 4
 KNOWLEDGE_SUMMARY_MAX_ENTRIES = 40
+KNOWLEDGE_RETRY_BACKOFF_SECS = 300
 
 
 @dataclass
@@ -37,9 +39,16 @@ def _knowledge_index_summary(entries: List[KnowledgeEntry]) -> str:
     return "\n".join(f"[{e.entry_id}] {e.content}" for e in tail)
 
 
+KNOWLEDGE_TAG_MIN_LEN = 2
+
+
 def _tag_prefilter(entries: List[KnowledgeEntry], message_text: str) -> List[KnowledgeEntry]:
     msg_lower = message_text.lower()
-    return [e for e in entries if any(tag.lower() in msg_lower for tag in e.tags)]
+    return [
+        e for e in entries
+        if any(t and len(t) >= KNOWLEDGE_TAG_MIN_LEN and t.lower() in msg_lower
+               for t in (e.tags or []))
+    ]
 
 
 async def extract_and_update(ctx: "GroupContext", gid: str, state: Any) -> None:
@@ -60,6 +69,12 @@ async def extract_and_update(ctx: "GroupContext", gid: str, state: Any) -> None:
         convo = _render_entries_plain(recent)
         existing_summary = _knowledge_index_summary(ctx.knowledge)
         items = await llm_client.extract_knowledge(convo, existing_summary)
+        if items is None:
+            ctx.knowledge_updated_at = min(
+                ctx.knowledge_updated_at,
+                now - KNOWLEDGE_EXTRACT_INTERVAL_SECS + KNOWLEDGE_RETRY_BACKOFF_SECS,
+            )
+            return
         if not items:
             return
 
@@ -71,7 +86,10 @@ async def extract_and_update(ctx: "GroupContext", gid: str, state: Any) -> None:
             action = str(item.get("action", "")).strip()
             content = str(item.get("content", "")).strip()[:KNOWLEDGE_CONTENT_MAX]
             raw_tags = item.get("tags") or []
-            tags = [str(t).strip()[:20] for t in raw_tags if str(t).strip()][:KNOWLEDGE_TAG_MAX]
+            tags = [
+                s[:20] for s in (str(t).strip() for t in raw_tags)
+                if s and len(s) >= KNOWLEDGE_TAG_MIN_LEN
+            ][:KNOWLEDGE_TAG_MAX]
             entry_id = str(item.get("entry_id", "")).strip()
 
             if action == "add" and content:

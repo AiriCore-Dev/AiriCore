@@ -1,17 +1,21 @@
 import random
 import traceback
+
+from nonebot import logger
 from nonebot.adapters.onebot.v11 import Bot
 from nonebot.adapters.onebot.v11.event import MessageEvent
 from ..base.matchers import turtle_soup_on, matcher
 from ..base.constants import max_group_turtle_perday
 from ..base import state
-from ..base.helpers import get_ids, check_data_existance, generate_help_message, construct_turtle_soup, construct_turtle_soup_history, turtle_soup, bot_nick
+from ..base.helpers import get_ids, check_data_existance, generate_help_message, construct_turtle_soup, construct_turtle_soup_history, turtle_soup, bot_nick, _persist
 from ..base.constants import max_player_query_trial, max_player_truth_trial, max_group_trial, min_turtle_minutes
 
 @turtle_soup_on.handle()
 async def _(bot: Bot, ev: MessageEvent):
     try:
         gruop_id, user_id = await get_ids(ev)
+        if gruop_id is None:
+            return
         await check_data_existance(gruop_id, user_id)
         src = str(ev.message)[3:].strip()
         res = ""
@@ -32,8 +36,10 @@ async def _(bot: Bot, ev: MessageEvent):
             else:
                 try:
                     src = int(src)
-                except:
+                except (TypeError, ValueError):
                     raise ValueError('❓ 指令用法：海龟汤 随机 或者 海龟汤 编号')
+                if not 0 <= src < len(turtle_soup):
+                    raise ValueError(f'❌ 编号超出范围，当前可用编号：0 - {len(turtle_soup) - 1}')
             res += f"编号：{src}\n游戏已开始，祝你好运!\n\n"
             state.data['group'][gruop_id]['times'] += 1
             state.data['group'][gruop_id]['turtle'] = await construct_turtle_soup(src, user_id)
@@ -41,9 +47,11 @@ async def _(bot: Bot, ev: MessageEvent):
             history_msg = await construct_turtle_soup_history(bot.self_id, bot_nick, res)
             state.data['group'][gruop_id]['turtle']['history'].append(history_msg)
             res += "\n\nTip：AI反应需要一定时间，提问后请耐心等待，请勿重复发送！"
+            await _persist()
             await matcher.send(res)
             return
     except ValueError as err:
         await matcher.send(str(err), reply_message=True)
-    except Exception as err:
-        await matcher.send(traceback.format_exc(), reply_message=True)
+    except Exception:
+        logger.error(f"海龟汤开局处理失败:\n{traceback.format_exc()}")
+        await matcher.send('❌ 开局时出错了，已记录日志', reply_message=True)

@@ -1,12 +1,13 @@
 from nonebot import on_command
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
-from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
+from nonebot.adapters.onebot.v11.event import MessageEvent
 
 haruki_help = on_command("pjskhelp", priority=99)
 
+
 @haruki_help.handle()
 async def main(bot: Bot, ev: MessageEvent):
-    message = MessageSegment.text("\
-Haruki帮助文档：\n\
-https://neo.haruki.seiunx.com")
-    await haruki_help.send(message)
+    message = MessageSegment.text(
+        "Haruki帮助文档：\nhttps://neo.haruki.seiunx.com"
+    )
+    await haruki_help.finish(message)

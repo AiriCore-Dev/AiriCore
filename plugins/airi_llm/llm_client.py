@@ -1,11 +1,14 @@
 import json
-import logging
 from typing import Any, Dict, List, Optional
 
 from openai import AsyncOpenAI
 from nonebot import get_driver
 
-logger = logging.getLogger("airi_llm")
+from utils import llm_fallback
+
+from utils.plugin_logger import get_logger
+
+logger = get_logger("airi_llm")
 
 driver = get_driver()
 
@@ -13,9 +16,28 @@ LLM_MODEL_VISION = getattr(driver.config, "chat_llm_model", "")
 LLM_MODEL_TEXT = getattr(driver.config, "chat_llm_model_text", "") or LLM_MODEL_VISION
 LLM_MODEL = LLM_MODEL_VISION
 
+LLM_MODEL_FALLBACK = llm_fallback.parse_model_list(
+    getattr(driver.config, "chat_llm_model_fallback", None)
+)
+
+_MODEL_DOWN = llm_fallback._MODEL_DOWN
+MODEL_DOWN_TTL_SECS = llm_fallback.MODEL_DOWN_TTL_SECS
+
 
 def _pick_model(img_b64_list: Optional[List[str]]) -> str:
     return LLM_MODEL_VISION if img_b64_list else LLM_MODEL_TEXT
+
+
+def _model_chain(img_b64_list: Optional[List[str]]) -> List[str]:
+    return llm_fallback.build_chain(_pick_model(img_b64_list), LLM_MODEL_FALLBACK)
+
+
+def _mark_if_unavailable(model: str, err: Exception) -> bool:
+    return llm_fallback.mark_if_unavailable(model, err)
+
+
+def _log_attempt_failed(model: str, chain: List[str], idx: int, err: Exception) -> None:
+    llm_fallback.log_attempt_failed(model, chain, idx, err, "airi_llm")
 
 
 LLM_MAX_TOKENS = 8000
@@ -45,26 +67,30 @@ async def call_llm(
             "image_url": {"url": f"data:image/jpeg;base64,{img_b64}"},
         })
 
-    try:
-        completion = await client.chat.completions.create(
-            model=_pick_model(img_b64_list),
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": content},
-            ],
-            max_completion_tokens=LLM_MAX_TOKENS,
-            temperature=LLM_TEMPERATURE,
-            top_p=LLM_TOP_P,
-            stream=False,
-            stop=None,
-            frequency_penalty=LLM_FREQ_PENALTY,
-            presence_penalty=LLM_PRESENCE_PENALTY,
-        )
-        reply = json.loads(completion.model_dump_json())
-        return (reply["choices"][0]["message"]["content"] or "").strip()
-    except Exception as e:
-        logger.error(f"调用LLM失败: {e}")
-        return ""
+    last_err: Optional[Exception] = None
+    chain = _model_chain(img_b64_list)
+    for idx, model in enumerate(chain):
+        try:
+            completion = await client.chat.completions.create(
+                model=model,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": content},
+                ],
+                max_completion_tokens=LLM_MAX_TOKENS,
+                temperature=LLM_TEMPERATURE,
+                top_p=LLM_TOP_P,
+                stream=False,
+                stop=None,
+                frequency_penalty=LLM_FREQ_PENALTY,
+                presence_penalty=LLM_PRESENCE_PENALTY,
+            )
+            return (completion.choices[0].message.content or "").strip()
+        except Exception as e:
+            last_err = e
+            _log_attempt_failed(model, chain, idx, e)
+    logger.error(f"调用LLM失败，{len(chain)} 个模型全部不可用: {last_err}")
+    return ""
 
 
 async def call_llm_json(
@@ -82,20 +108,23 @@ async def call_llm_json(
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": content},
     ]
-    model = _pick_model(img_b64_list)
 
-    text = await _create_json(model, messages, use_response_format=True)
-    if text is None:
-        text = await _create_json(model, messages, use_response_format=False)
-    if not text:
-        return None
-    parsed = _loads_lenient(text)
-    if parsed is None:
-        logger.warning(f"结构化输出无法解析为JSON，原文前200字: {text[:200]!r}")
-    return parsed
+    chain = _model_chain(img_b64_list)
+    for idx, model in enumerate(chain):
+        text = await _create_json(model, messages, chain, idx, use_response_format=True)
+        if text is None:
+            text = await _create_json(model, messages, chain, idx, use_response_format=False)
+        if not text:
+            continue
+        parsed = _loads_lenient(text)
+        if parsed is not None:
+            return parsed
+        logger.warning(f"模型 {model} 结构化输出无法解析为JSON，原文前200字: {text[:200]!r}")
+    logger.error(f"结构化LLM调用失败，{len(chain)} 个模型全部未拿到可用结果")
+    return None
 
 
-async def _create_json(model, messages, use_response_format):
+async def _create_json(model, messages, chain, idx, use_response_format):
     kwargs = dict(
         model=model,
         messages=messages,
@@ -108,16 +137,20 @@ async def _create_json(model, messages, use_response_format):
     try:
         completion = await client.chat.completions.create(**kwargs)
     except Exception as e:
-        logger.warning(f"结构化LLM调用失败(response_format={use_response_format}): {e}")
+        if use_response_format:
+            _mark_if_unavailable(model, e)
+            logger.warning(f"结构化LLM调用失败(response_format=True): {e}")
+        else:
+            _log_attempt_failed(model, chain, idx, e)
         return None
     try:
-        reply = json.loads(completion.model_dump_json())
-        choice = reply["choices"][0]
-        msg = choice.get("message", {})
-        text = (msg.get("content") or "").strip()
-        finish = choice.get("finish_reason")
+        choice = completion.choices[0]
+        msg = choice.message
+        text = (msg.content or "").strip()
+        finish = choice.finish_reason
         if not text:
-            reasoning = (msg.get("reasoning_content") or "").strip()
+            extra = msg.model_extra or {}
+            reasoning = (extra.get("reasoning_content") or "").strip()
             if reasoning:
                 logger.info("content 为空，改用 reasoning_content 解析")
                 return reasoning
@@ -154,52 +187,12 @@ def _loads_lenient(text: str) -> Optional[Any]:
     return None
 
 
-async def caption_images(img_b64_list: List[str]) -> List[str]:
-    n = len(img_b64_list)
-    if n == 0:
-        return []
-
-    system_prompt = (
-        "你是图片描述助手。逐张用不超过10个字的中文短语描述图片主要内容，"
-        "只描述看到的东西，不要评价、不要编号、不要多余的话。"
-        '严格返回 JSON：{"captions": ["描述1", "描述2", ...]}，'
-        "数组长度必须和图片张数一致，顺序对应。"
-    )
-    user_input = f"共有 {n} 张图片，请依次描述。"
-
-    result = await call_llm_json(system_prompt, user_input, img_b64_list)
-    captions: List[str] = []
-    if isinstance(result, dict):
-        raw = result.get("captions")
-        if isinstance(raw, list):
-            captions = [str(c).strip() for c in raw if str(c).strip()]
-
-    if len(captions) < n:
-        captions += ["图片"] * (n - len(captions))
-    return captions[:n]
-
-
 def _clamp_valence(v: Any) -> Optional[float]:
     try:
         f = float(v)
     except (TypeError, ValueError):
         return None
     return max(-1.0, min(1.0, f))
-
-
-async def analyze_group_mood(convo_text: str) -> Optional[float]:
-    if not convo_text.strip():
-        return None
-    system_prompt = (
-        "你是群聊气氛分析器。阅读最近的群聊，判断当前整体话题氛围的情绪倾向。"
-        "越活泼、积极、向上、热闹给越高的分；越悲观、消极、沉重、负面、冷清给越低的分。"
-        '严格返回 JSON：{"mood": 数值}，数值范围 -1 到 1，'
-        "-1=极度消极，0=中性平淡，1=非常活泼积极。只返回 JSON。"
-    )
-    result = await call_llm_json(system_prompt, f"【最近群聊】\n{convo_text}")
-    if isinstance(result, dict):
-        return _clamp_valence(result.get("mood"))
-    return None
 
 
 async def classify_reply_emotion(reply_text: str) -> Optional[float]:
@@ -244,99 +237,15 @@ async def analyze_speaking_style(convo_text: str) -> Optional[str]:
     if not convo_text.strip():
         return None
     system_prompt = (
-        "你是群聊风格分析器。分析这个群成员们的说话习惯，"
-        "提炼他们的用词特点、语气风格、常用口头禅或梗、标点习惯等，"
-        "用简短的描述总结（不超过100字），只描述风格特征，不要评价好坏。"
+        "你是群聊风格分析器。分析这个群成员们的说话习惯特征，"
+        "提炼语气风格、表达方式、标点习惯等整体特点，"
+        "用简短的描述总结（不超过100字），只描述风格特征，不要列举具体常用词或口头禅。"
         '严格返回 JSON：{"style": "风格描述"}。只返回 JSON。'
     )
     result = await call_llm_json(system_prompt, f"【群聊记录】\n{convo_text}")
     if isinstance(result, dict):
         style = str(result.get("style", "")).strip()
         return style if style else None
-    return None
-
-
-async def analyze_bot_mood(convo_text: str, char_name: str = "角色") -> Optional[float]:
-    if not convo_text.strip():
-        return None
-    system_prompt = (
-        f"你是{char_name}的心情分析器。阅读最近的对话（表格中'你'就是{char_name}自己），"
-        f"根据上下文判断{char_name}此刻应该是什么心情：被夸奖、被关心、聊得开心就偏正面；"
-        "被忽视、被怼、话题无聊、氛围冷清就偏负面；正常聊天是中性。"
-        '严格返回 JSON：{"mood": 数值}，数值范围 -1 到 1，'
-        "-1=很不高兴/无聊/冷淡，0=平常心，1=开心/有活力。只返回 JSON。"
-    )
-    result = await call_llm_json(system_prompt, f"【最近对话】\n{convo_text}")
-    if isinstance(result, dict):
-        return _clamp_valence(result.get("mood"))
-    return None
-
-
-async def analyze_active_topic(convo_text: str) -> Optional[str]:
-    if not convo_text.strip():
-        return None
-    system_prompt = (
-        "你是群聊话题提取器。阅读最近群聊，提炼当前正在聊的核心话题，"
-        "用不超过15字的短语描述（如「在讨论游戏攻略」、「互相分享美食照片」）。"
-        "如果没有明确话题或群聊已沉寂，返回空字符串。"
-        '严格返回 JSON：{"topic": "话题描述或空字符串"}。只返回 JSON。'
-    )
-    result = await call_llm_json(system_prompt, f"【最近群聊】\n{convo_text}")
-    if isinstance(result, dict):
-        t = str(result.get("topic", "")).strip()
-        return t if t else None
-    return None
-
-
-async def extract_pending_callback(user_lines: str, char_name: str = "角色") -> Optional[str]:
-    if not user_lines.strip():
-        return None
-    system_prompt = (
-        f"你是{char_name}，一个细心记事的人。阅读这个用户最近的发言，"
-        "判断TA是否明确提到了某件'之后会发生''打算去做''等一下要做'的具体小事，"
-        "例如今天要去某地、打算买某东西、下次会带某物等。"
-        "如果有，用不超过20字第三人称记录这件事。如果没有，返回空字符串。"
-        '严格返回 JSON：{"callback": "待记事项或空字符串"}。只返回 JSON。'
-    )
-    result = await call_llm_json(system_prompt, f"【用户发言】\n{user_lines}")
-    if isinstance(result, dict):
-        cb = str(result.get("callback", "")).strip()
-        return cb if cb else None
-    return None
-
-
-async def analyze_affinity_delta(interaction_lines: str, char_name: str = "角色") -> Optional[float]:
-    if not interaction_lines.strip():
-        return None
-    system_prompt = (
-        f"你是{char_name}的好感度分析器。根据这段和某用户的最近互动，"
-        f"判断这段互动会让{char_name}对TA的好感产生多大变化。"
-        "被夸/聊得开心/被关心返回正数；被怼/无视/说粗话返回负数；普通聊天接近0。"
-        '严格返回 JSON：{"delta": 数值}，范围 -0.5 到 0.5。只返回 JSON。'
-    )
-    result = await call_llm_json(system_prompt, f"【互动记录】\n{interaction_lines}")
-    if isinstance(result, dict):
-        try:
-            v = float(result.get("delta", 0))
-            return max(-0.5, min(0.5, v))
-        except (TypeError, ValueError):
-            return None
-    return None
-
-
-async def analyze_bot_arousal(convo_text: str, char_name: str = "角色") -> Optional[float]:
-    if not convo_text.strip():
-        return None
-    system_prompt = (
-        f"你是{char_name}的活跃度分析器。阅读最近的对话，"
-        f"判断{char_name}现在的精力和话欲如何。"
-        "话题有趣/被频繁点名/群里热闹返回高分；话题无聊/冷场/刚聊了很久返回低分。"
-        '严格返回 JSON：{"arousal": 数值}，范围 -1 到 1，'
-        "-1=很疲惫/不想说话，0=正常，1=精力充沛/很想聊。只返回 JSON。"
-    )
-    result = await call_llm_json(system_prompt, f"【最近对话】\n{convo_text}")
-    if isinstance(result, dict):
-        return _clamp_valence(result.get("arousal"))
     return None
 
 
@@ -348,6 +257,8 @@ async def extract_knowledge(convo_text: str, existing_summary: str) -> Optional[
         "包括：群成员信息和关系、群规/活动规律、特定术语或缩写的含义、群内梗或典故、"
         "常提到的地点/人名/事件等。"
         "只提取客观事实，不提取主观观点、临时状态或纯闲聊。"
+        "不要提取与『你』自己有关的信息（你的名字、别人怎么称呼你、别人对你的评价），"
+        "也不要提取表格格式、时间戳这类无意义内容。"
         "如果新信息与已有知识矛盾，用 action=update 给出修正；"
         "如果某条已有知识被明确否定，用 action=delete。"
         "无可提取时返回空列表。"
@@ -435,12 +346,11 @@ async def analyze_user_full(
     if not user_lines.strip():
         return None
     system_prompt = (
-        f"你是{char_name}，同时完成对一个群友的四项分析：\n"
+        f"你是{char_name}，同时完成对一个群友的三项分析：\n"
         f"1. notes：更新你对TA的印象（性格/喜好/和你的关系），不超过{120}字，用第二人称；没新信息就原样返回。\n"
         "2. alias：从完整对话中观察群里其他人怎么叫TA，记录最常用的称呼；若与系统昵称相同或无特别称呼则留空。\n"
         f"3. affinity_delta：这段互动让{char_name}对TA的好感变化（-0.5 到 0.5），被夸/聊得开心为正，被怼/无视为负，普通为接近0。\n"
-        "4. callback：TA是否明确提到了某件「之后会发生/打算做」的具体小事（不超过20字第三人称）；没有则留空。\n"
-        '严格返回 JSON：{"notes": "...", "alias": "...", "affinity_delta": 数值, "callback": "..."}'
+        '严格返回 JSON：{"notes": "...", "alias": "...", "affinity_delta": 数值}'
     )
     user_input = (
         f"【这个人】{user_display}\n"

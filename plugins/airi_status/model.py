@@ -1,3 +1,4 @@
+import os
 from dataclasses import dataclass
 
 import psutil
@@ -16,11 +17,26 @@ class CPUInfo:
     @classmethod
     def get_cpu_info(cls):
         cpu_core = psutil.cpu_count(logical=False)
-        cpu_usage = psutil.cpu_percent(interval=1)
-        cpu_freq = round(psutil.cpu_freq().current / 1000, 2)
+        cpu_usage = psutil.cpu_percent(interval=0.3)
+        cpu_freq = 0.0
+        try:
+            freq = psutil.cpu_freq()
+            if freq is not None and freq.current:
+                cpu_freq = round(freq.current / 1000, 2)
+        except Exception:
+            cpu_freq = 0.0
+        if not cpu_freq:
+            try:
+                hz = cpuinfo.get_cpu_info().get("hz_advertised", [0])[0]
+                cpu_freq = round(hz / 1_000_000_000, 2) if hz else 0.0
+            except Exception:
+                cpu_freq = 0.0
 
         if cpu_core is None:
-            cpu_core = cpuinfo.get_cpu_info()["count"]
+            try:
+                cpu_core = cpuinfo.get_cpu_info()["count"]
+            except Exception:
+                cpu_core = psutil.cpu_count(logical=True) or 1
 
         return CPUInfo(core=cpu_core, usage=cpu_usage, freq=cpu_freq)
 
@@ -67,8 +83,14 @@ class DiskInfo:
 
     @classmethod
     def get_disk_info(cls):
-        disk_total = round(psutil.disk_usage("/").total / (1024**3), 2)
-        disk_usage = round(psutil.disk_usage("/").used / (1024**3), 2)
+        path = os.path.abspath(os.sep)
+        try:
+            usage = psutil.disk_usage(path)
+            disk_total = round(usage.total / (1024**3), 2)
+            disk_usage = round(usage.used / (1024**3), 2)
+        except Exception:
+            disk_total = 0.0
+            disk_usage = 0.0
 
         return DiskInfo(total=disk_total, usage=disk_usage)
 

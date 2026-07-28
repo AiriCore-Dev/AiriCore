@@ -34,6 +34,10 @@ def totp(secret: str, digits: int = 6, period: int = 30, timestamp=None) -> str:
 
 def totp_verify(secret: str, code: str, window: int = 1,
                 digits: int = 6, period: int = 30) -> bool:
+    if not secret or not str(secret).strip():
+        return False
+    if not code or not str(code).strip():
+        return False
     now = time.time()
     for offset in range(-window, window + 1):
         candidate = totp(secret, digits, period, now + offset * period)
@@ -67,12 +71,12 @@ def otpauth_uri(secret: str, account: str, issuer: str,
 
 def _progress_bar(remaining: int, total: int, width: int = 20) -> str:
     filled = round(remaining / total * width)
-    return "█" * filled + "░" * (width - filled)
+    return "#" * filled + "-" * (width - filled)
 
 
 def live_display(secret: str, period: int = 30) -> None:
     print("\n  实时验证码（Ctrl+C 退出）")
-    print("  " + "─" * 34)
+    print("  " + "-" * 34)
     prev_code = None
     try:
         while True:
@@ -81,7 +85,7 @@ def live_display(secret: str, period: int = 30) -> None:
             bar  = _progress_bar(rem, period)
 
             if code != prev_code:
-                print(f"\n  ✦ 新验证码 → \033[1;32m{code}\033[0m")
+                print(f"\n  * 新验证码 -> \033[1;32m{code}\033[0m")
                 prev_code = code
 
             print(f"\r  [{bar}] 剩余 {rem:2d}s ", end="", flush=True)
@@ -106,22 +110,22 @@ def main() -> None:
     uri = otpauth_uri(secret, account, issuer)
 
     print()
-    print("╔══════════════════════════════════════════╗")
-    print("║  TOTP 2FA — 兼容 Microsoft Authenticator  ║")
-    print("╚══════════════════════════════════════════╝")
+    print("+" + "=" * 42 + "+")
+    print("|  TOTP 2FA - 兼容 Microsoft Authenticator  |")
+    print("+" + "=" * 42 + "+")
     print()
     print(f"  密钥 (Base32) : {secret}")
     print(f"  账户          : {account}")
     print(f"  发行方        : {issuer}")
     print()
-    print("  ── 绑定到 Microsoft Authenticator ──────────")
+    print("  -- 绑定到 Microsoft Authenticator ----------")
     print(f"  OTP Auth URI  :")
     print(f"  {uri}")
     print()
-    print("  💡 将上面的 URI 粘贴到以下任意工具生成 QR 码：")
-    print("     • https://qr.io  /  https://www.qr-code-generator.com")
-    print("     • python -c \"import qrcode; qrcode.make('<URI>').show()\"")
-    print("     之后用 Microsoft Authenticator → 添加账户 → 扫描 QR 码")
+    print("  提示: 将上面的 URI 粘贴到以下任意工具生成 QR 码：")
+    print("     - https://qr.io  /  https://www.qr-code-generator.com")
+    print("     - python -c \"import qrcode; qrcode.make('<URI>').show()\"")
+    print("     之后用 Microsoft Authenticator 添加账户并扫描 QR 码")
     print()
 
     live_display(secret)

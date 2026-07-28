@@ -74,6 +74,14 @@ def _sig(path: Path):
         return None
 
 
+def preload(max_bytes: int = 0):
+    if is_disk():
+        return 0, 0
+    with _lock:
+        _ensure_loaded()
+        return len(_persist.get("articles", {}) or {}), 0
+
+
 def get_article(article_name: str, index_path: Path) -> Optional[dict]:
     if is_disk():
         return None

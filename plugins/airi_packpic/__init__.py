@@ -6,9 +6,18 @@ from datetime import datetime
 
 import httpx
 from nonebot import on_command
-from nonebot.adapters.onebot.v11 import Bot, GroupMessageEvent, MessageSegment
+from nonebot.adapters.onebot.v11 import Bot, GroupMessageEvent
 from nonebot.adapters.onebot.v11.exception import ActionFailed
 from nonebot.log import logger
+
+from utils.net_guard import is_public_url_async
+
+MAX_IMAGES = 200
+MAX_IMAGE_BYTES = 20 * 1024 * 1024
+MAX_TOTAL_BYTES = 200 * 1024 * 1024
+MAX_ZIP_BYTES = 80 * 1024 * 1024
+MAX_FORWARD_DEPTH = 5
+DOWNLOAD_CONCURRENCY = 8
 
 packpic = on_command("packpic", block=True)
 
@@ -34,35 +43,60 @@ async def handle_packpic(bot: Bot, event: GroupMessageEvent):
         await packpic.finish("获取合并转发消息失败，请稍后再试。")
 
     urls: list[str] = []
-    await _extract_images(bot, forward.get("messages", []), urls)
+    await _extract_images(bot, forward.get("messages", []), urls, set(), 0)
 
     urls = list(dict.fromkeys(urls))
+    truncated = len(urls) > MAX_IMAGES
+    urls = urls[:MAX_IMAGES]
 
     if not urls:
         await packpic.finish("没有在合并转发消息里找到图片。")
 
+    safe_urls = []
+    for url in urls:
+        if await is_public_url_async(url):
+            safe_urls.append(url)
+    blocked = len(urls) - len(safe_urls)
+    if not safe_urls:
+        await packpic.finish("图片地址均不可访问，已拒绝下载。")
+
+    sem = asyncio.Semaphore(DOWNLOAD_CONCURRENCY)
     async with httpx.AsyncClient(
         timeout=30,
         follow_redirects=True,
         headers={"User-Agent": "Mozilla/5.0"},
     ) as client:
         results = await asyncio.gather(
-            *(_download(client, url) for url in urls),
+            *(_download(client, url, sem) for url in safe_urls),
             return_exceptions=True,
         )
 
     images: list[bytes] = []
-    for idx, r in enumerate(results):
+    total = 0
+    oversize = 0
+    for idx, r in enumerate(results, start=1):
         if isinstance(r, Exception):
             logger.warning(f"第 {idx} 张图片下载失败: {r}")
             continue
-        if r:
-            images.append(r)
+        if not r:
+            continue
+        if len(r) > MAX_IMAGE_BYTES:
+            oversize += 1
+            continue
+        if total + len(r) > MAX_TOTAL_BYTES:
+            truncated = True
+            break
+        images.append(r)
+        total += len(r)
 
     if not images:
         await packpic.finish("所有图片都下载失败了。")
 
     zip_bytes = _make_zip(images)
+    if len(zip_bytes) > MAX_ZIP_BYTES:
+        await packpic.finish(
+            f"打包结果 {len(zip_bytes) // 1048576}MB 超过上限，请减少图片数量后重试。"
+        )
 
     b64 = base64.b64encode(zip_bytes).decode()
     filename = f"pack_{datetime.now():%Y%m%d_%H%M%S}.zip"
@@ -78,10 +112,22 @@ async def handle_packpic(bot: Bot, event: GroupMessageEvent):
             "打包完成，但上传群文件失败。请确认协议端支持 base64 上传文件。"
         )
 
-    await packpic.finish(f"已打包 {len(images)} 张图片：{filename}")
+    tips = []
+    if truncated:
+        tips.append("部分图片因数量或体积上限未被打包")
+    if blocked:
+        tips.append(f"{blocked} 个地址不可访问已跳过")
+    if oversize:
+        tips.append(f"{oversize} 张图片超过单张上限已跳过")
+    tail = "（" + "；".join(tips) + "）" if tips else ""
+    await packpic.finish(f"已打包 {len(images)} 张图片：{filename}{tail}")
 
 
-async def _extract_images(bot: Bot, messages: list, collected: list[str]) -> None:
+async def _extract_images(
+    bot: Bot, messages: list, collected: list[str], seen_ids: set, depth: int
+) -> None:
+    if depth > MAX_FORWARD_DEPTH or len(collected) >= MAX_IMAGES:
+        return
     for node in messages:
         content = node.get("content") or node.get("message") or []
         for seg in content:
@@ -93,22 +139,30 @@ async def _extract_images(bot: Bot, messages: list, collected: list[str]) -> Non
                 url = seg_data.get("url") or seg_data.get("file")
                 if url and str(url).startswith(("http://", "https://")):
                     collected.append(url)
+                    if len(collected) >= MAX_IMAGES:
+                        return
             elif seg_type == "forward":
                 nested_id = seg_data.get("id")
-                if nested_id:
+                if nested_id and str(nested_id) not in seen_ids:
+                    seen_ids.add(str(nested_id))
                     try:
                         nested = await bot.get_forward_msg(id=nested_id)
                         await _extract_images(
-                            bot, nested.get("messages", []), collected
+                            bot, nested.get("messages", []), collected,
+                            seen_ids, depth + 1,
                         )
                     except ActionFailed:
                         logger.warning(f"展开嵌套转发失败: {nested_id}")
 
 
-async def _download(client: httpx.AsyncClient, url: str) -> bytes:
-    resp = await client.get(url)
-    resp.raise_for_status()
-    return resp.content
+async def _download(client: httpx.AsyncClient, url: str, sem: asyncio.Semaphore) -> bytes:
+    async with sem:
+        resp = await client.get(url)
+        resp.raise_for_status()
+        data = resp.content
+        if len(data) > MAX_IMAGE_BYTES:
+            return b""
+        return data
 
 
 def _guess_ext(data: bytes) -> str:

@@ -1,10 +1,46 @@
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 
+from nonebot import logger
+
 from ..base import state
 from ..base.matchers import btshenhe, plshenhe, jbshenhe, pdbt, pdpl, pdjb, superuser_debug
-from ..base.helpers import generate_unique_id, send_email, nxcr
+from ..base.helpers import generate_unique_id, send_email, nxcr, add_bottle
 from ..base.email_template import render_bottle_result, render_comment_result, render_report_result
+
+
+async def _approve_bottle(pending_key: str) -> None:
+    pending = state.data.get("pending_bottles", {}).get(pending_key)
+    if pending is None:
+        return
+
+    bottles = state.data.setdefault("bottles", {})
+    target_id = pending_key
+    existing = bottles.get(pending_key)
+    if existing is not None and str(existing.get('owner_id')) != str(pending.get('owner_id')):
+        target_id = pending_key
+        while target_id in bottles:
+            target_id = nxcr(target_id)
+
+    try:
+        add_bottle(
+            target_id,
+            pending.get("owner", ""),
+            pending.get("owner_id", ""),
+            pending.get("content", ""),
+            pending.get("comments", []),
+            pending.get("times", 0),
+        )
+    except Exception as e:
+        logger.warning(f"心愿瓶过审写入失败 {pending_key}: {e}")
+        return
+
+    bottle = bottles[target_id]
+    subj, plain, html_body = render_bottle_result(
+        bottle["owner"], bottle["content"], target_id, True
+    )
+    send_email(f'{bottle["owner_id"]}@qq.com', subj, plain, html_body)
+    state.data["pending_bottles"].pop(pending_key, None)
 
 
 @pdbt.handle()
@@ -46,25 +82,8 @@ async def _(bot: Bot, ev: MessageEvent):
     else:
         unique_id = src[1].strip()
     if src[0] == 'btapprove' and unique_id == 'all':
-        pd_bt = list(state.data["pending_bottles"].keys())
-        for unique_id in pd_bt:
-            if unique_id in state.data["bottles"].keys():
-                if state.data["bottles"][unique_id]['owner_id'] == state.data["pending_bottles"][unique_id]['owner_id']:
-                    state.data["bottles"][unique_id] = state.data["pending_bottles"][unique_id]
-                else:
-                    unique_id_tmp = await generate_unique_id(state.data["pending_bottles"][unique_id]["content"])
-                    state.data["bottles"][unique_id_tmp] = state.data["pending_bottles"][unique_id]
-                    unique_id = unique_id_tmp
-            else:
-                state.data["bottles"][unique_id] = state.data["pending_bottles"][unique_id]
-            try:
-                state.data['collections'][state.data["pending_bottles"][unique_id]['owner_id']]
-            except:
-                state.data['collections'][state.data["pending_bottles"][unique_id]['owner_id']] = []
-            state.data['collections'][state.data["pending_bottles"][unique_id]['owner_id']].append(unique_id)
-            subj, plain, html_body = render_bottle_result(state.data["bottles"][unique_id]["owner"], state.data["bottles"][unique_id]["content"], unique_id, True)
-            send_email(f'{state.data["bottles"][unique_id]["owner_id"]}@qq.com', subj, plain, html_body)
-            del state.data["pending_bottles"][unique_id]
+        for pending_key in list(state.data["pending_bottles"].keys()):
+            await _approve_bottle(pending_key)
     elif src[0] == 'btreject' and unique_id == 'all':
         for unique_id in state.data['pending_bottles'].keys():
             subj, plain, html_body = render_bottle_result(state.data["pending_bottles"][unique_id]["owner"], state.data["pending_bottles"][unique_id]["content"], unique_id, False)
@@ -73,25 +92,7 @@ async def _(bot: Bot, ev: MessageEvent):
     elif unique_id not in state.data["pending_bottles"].keys():
         await jxyp.finish(f'编号为{unique_id}的心愿瓶不存在！', reply_message=True)
     elif src[0] == 'btapprove':
-        if unique_id in state.data["bottles"].keys():
-            if state.data["bottles"][unique_id]['owner_id'] == state.data["pending_bottles"][unique_id]['owner_id']:
-                state.data["bottles"][unique_id] = state.data["pending_bottles"][unique_id]
-            else:
-                unique_id_tmp = unique_id
-                while unique_id_tmp in state.data["bottles"].keys():
-                    unique_id_tmp = nxcr(unique_id_tmp)
-                state.data["bottles"][unique_id_tmp] = state.data["pending_bottles"][unique_id]
-                unique_id = unique_id_tmp
-        else:
-            state.data["bottles"][unique_id] = state.data["pending_bottles"][unique_id]
-        try:
-            state.data['collections'][state.data["pending_bottles"][unique_id]['owner_id']]
-        except:
-            state.data['collections'][state.data["pending_bottles"][unique_id]['owner_id']] = []
-        state.data['collections'][state.data["pending_bottles"][unique_id]['owner_id']].append(unique_id)
-        subj, plain, html_body = render_bottle_result(state.data["bottles"][unique_id]["owner"], state.data["bottles"][unique_id]["content"], unique_id, True)
-        send_email(f'{state.data["bottles"][unique_id]["owner_id"]}@qq.com', subj, plain, html_body)
-        del state.data["pending_bottles"][unique_id]
+        await _approve_bottle(unique_id)
     elif src[0] == 'btreject':
         subj, plain, html_body = render_bottle_result(state.data["pending_bottles"][unique_id]["owner"], state.data["pending_bottles"][unique_id]["content"], unique_id, False)
         send_email(f'{state.data["pending_bottles"][unique_id]["owner_id"]}@qq.com', subj, plain, html_body)

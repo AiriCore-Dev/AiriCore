@@ -72,6 +72,20 @@ def _sig(path: Path):
     return (int(st.st_mtime_ns), st.st_size)
 
 
+def preload(max_bytes: int = 0):
+    if is_disk():
+        return 0, 0
+    with _lock:
+        _ensure_loaded()
+        bucket = _persist.get("img", {}) or {}
+        used = 0
+        for entry in bucket.values():
+            b64 = entry.get("b64") if isinstance(entry, dict) else None
+            if b64:
+                used += len(b64)
+        return len(bucket), used
+
+
 def get_b64(path) -> Optional[str]:
     global _dirty
     path = Path(path)

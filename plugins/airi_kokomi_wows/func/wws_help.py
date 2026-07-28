@@ -1,7 +1,7 @@
 from ._base import program_error
 import os
 import gc
-from PIL import Image
+from utils import asset_cache
 from .. import (
     Plugin_Config,
     Picture,
@@ -44,5 +44,5 @@ def get_png(
     lang: str
 ) -> str:
     help_png_path = os.path.join(plugin_path, 'png', f'bg_{lang}', 'background', 'wws_help.png')
-    res_img = Image.open(help_png_path)
+    res_img = asset_cache.get_image(help_png_path)
     return res_img

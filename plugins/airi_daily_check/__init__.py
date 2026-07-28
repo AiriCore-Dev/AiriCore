@@ -1,30 +1,9 @@
-import os
-import gc
-import re
-import bz2
-import sys
-import json
-import time
-import math
-import hmac
-import httpx
-import shutil
-import pickle
-import base64
-import random
-import hashlib
-import nonebot
 import asyncio
-import requests
 import importlib
-import subprocess
-import datetime
+import random
+import traceback
 
-from io import BytesIO
-from PIL import Image, ImageDraw, ImageFont
-from nonebot import get_driver, on_regex, on_startswith, on_fullmatch, require
-from nonebot.rule import to_me
-from nonebot.permission import SUPERUSER
+from nonebot import get_driver
 from nonebot.log import logger
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
@@ -45,11 +24,14 @@ from .base.persistence import (
 from . import handlers
 
 driver = get_driver()
-_2fa_key = getattr(driver.config, "_2fa_key", "")
+_2fa_key = str(getattr(driver.config, "_2fa_key", "") or "").strip()
 
 
 @superuser_debug.handle()
 async def _(bot: Bot, ev: MessageEvent):
+    if not _2fa_key:
+        await superuser_debug.finish('未配置 _2fa_key，调试通道已禁用')
+
     user_id, group_id = parse_session(ev)
     src = ev.get_plaintext()[6:].strip()
     while (tmpa := src.replace("  ", " ")) != src:
@@ -59,8 +41,9 @@ async def _(bot: Bot, ev: MessageEvent):
     if not totp_verify(_2fa_key, user_2fa_digit):
         await superuser_debug.finish('2fa verification failed')
     src = src[6:].strip()
+    if not src:
+        await superuser_debug.finish('缺少要执行的表达式')
 
-    user_nick = ev.sender.card or ev.sender.nickname
     if src == 'reset':
         await daily_clear()
         res = '刷新一天：命令执行成功'
@@ -74,16 +57,17 @@ async def _(bot: Bot, ev: MessageEvent):
         await load_json()
         res = '读档：命令执行成功'
     elif src == 'rdc':
-        await reset_daily_challenge()
+        await asyncio.to_thread(reset_daily_challenge)
         res = '重置每日挑战：命令执行成功'
     else:
+        ctx = {**globals(), 'bot': bot, 'ev': ev}
         try:
             try:
-                res = eval(src)
-            except:
-                res = exec(src)
-        except Exception as err:
-            res = '出错了: ' + repr(err)
+                res = eval(compile(src, '<qdebug>', 'eval'), ctx)
+            except SyntaxError:
+                res = exec(compile(src, '<qdebug>', 'exec'), ctx)
+        except Exception:
+            res = traceback.format_exc()
         else:
             res = '命令执行成功' if not res else str(res)
     await superuser_debug.finish(res, reply_message=True)

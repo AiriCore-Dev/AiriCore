@@ -1,53 +1,120 @@
-![AiriCore](https://raw.githubusercontent.com/AiriCore-Dev/AiriCore/refs/heads/main/plitvice.avif)
+<div align="center">
 
-# AiriCore v26.7 Plitvice
+  <a href="https://www.airi.asia">
+    <img src="https://raw.githubusercontent.com/AiriCore-Dev/AiriCore/refs/heads/main/version.jpg" alt="AiriCore">
+  </a>
 
-一款高性能 QQ 机器人框架，集成智能对话、音游查询、战舰世界水表、Minecraft 服管、棋类对弈、签到点歌占卜等群聊功能。
+# AiriCore v26.8 Oeschinen
 
-- 官方网站：https://www.airi.asia
-- Bot使用群：1030569383 / 808085026，开发者交流群：1051523491
+_✨ A high-performance QQ bot framework ✨_
 
-## 功能一览
+<p align="center">
+  <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license">
+  <img src="https://img.shields.io/badge/python-3.11-blue.svg" alt="Python">
+  <a href="https://www.airi.asia">
+    <img src="https://img.shields.io/badge/website-airi.asia-brightgreen" alt="website">
+  </a>
+  <img src="https://img.shields.io/badge/QQ%20group-1084667424-orange" alt="qq group">
+</p>
 
-- 智能对话 Airi-LLM：接入 OpenAI 兼容 API，带对话记忆与情绪系统、被动发言与夜间降频。
-- 音游查询：PJSK 综合查询（pjskhelp）、烤倍率 / pt 计算器（计算倍率、单人pt 等）。
-- 战舰世界 WoWS：水表与排行榜查询（wws help）。
-- Minecraft：RCON 服管（/help，仅部分群开放）。
-- 棋类：五子棋 / 黑白棋 / 围棋，以及内置纯 Python 引擎的中国象棋（人机 lv1-8 与 PvP）。
-- 娱乐：签到收藏、心愿瓶、海龟汤、今日运势、塔罗占卜、今日老婆、今天吃什么、网易云点歌、表情包 / 贴纸制作、emoji 合成、扫雷、缩写查询等。
-- 基础：帮助菜单（帮助 / help）、图片打包（packpic）、服务器状态（状态）、三级黑白名单、收发统计、入群欢迎等。
+English | [中文](README_CN.md)
 
-发送 `帮助` 或 `help` 查看完整指令列表。
+</div>
 
-## 部署
+A high-performance QQ bot framework with LLM chat, rhythm-game lookups, World of Warships stats, Minecraft server management, board games, daily check-in, music requests, fortune telling and more group features.
 
-前置：miniconda，以及一个可连接的 OneBot v11 实现（如 NapCat / Lagrange）。
+- Website: https://www.airi.asia
+- Bot groups: 1030569383 / 808085026, distributed dev group: 1084667424
 
-1. 用 miniconda 创建并激活 Python 3.11 环境。
-2. `pip install -r requirements.txt`
-3. 将 memes.zip 解压到环境 site-packages/meme-generator/memes/。
-4. 安装字体 data/nonebot_plugin_meme_stickers/_shared/YurukaFangTang.ttf。
-5. `cp .env.prod_example .env.prod` 并按需修改配置。
-6. 根目录启动：Linux 用 `./launch_linux.sh`，macOS 用 `./launch_macos.sh`，Windows 用 `launch_windows.bat`。
+### Features
 
-入口 airi.py 会包装 bot.py 并在崩溃后自动重启。OneBot 客户端默认连接 ws://127.0.0.1:15100/onebot/v11/ws。
+#### LLM chat (Airi-LLM)
 
-详见 部署教程.md。
+OpenAI-compatible API with conversation memory, a mood system, passive speaking and reduced activity at night.
 
-## 配置
+#### Rhythm games
 
-关键项位于 .env.prod：HOST/PORT、SUPERUSERS、ONEBOT_ACCESS_TOKEN、nickname，以及 LLM 接入（llm_api_key / llm_base_url / chat_llm_model）、cchess_engine_path、unified_password / _2fa_key 等。
+PJSK all-in-one lookups (pjskhelp), event bonus / pt calculators (bonus rate, solo pt, etc.).
 
-缓存策略 cache_mode（默认 balanced）：
+#### World of Warships
 
-- ram：把可缓存的固定文件全部缓存进内存，最大限度降低磁盘 I/O，运行最快，但内存占用最高。
-- balanced：仅缓存高频使用的文件，兼顾磁盘 I/O 与内存占用（推荐）。
-- disk：完全停用缓存，所有文件每次都从磁盘读取，运行期间内存占用最小。
+Player stats and leaderboards (wws help).
 
-改动 cache_mode 后需重启生效；切走某模式不会删除已有的 .pk 缓存文件（disk 模式下仅忽略不读写）。
+#### Minecraft
 
-bot.py 默认加载 ./ssl/ 下证书，若无需 HTTPS 请自行调整。
+RCON server management (/help, enabled for selected groups only).
 
-## 许可证
+#### Board games
 
-MIT License，Copyright (c) 2026 AiriCore Dev. 详见 LICENSE。
+Gomoku / Reversi / Go, plus Chinese chess backed by a bundled pure-Python engine (AI lv1-8 and PvP).
+
+#### Entertainment
+
+Check-in and collections, wish bottle, lateral-thinking puzzles, daily fortune, tarot, daily waifu, what-to-eat, NetEase music requests, meme / sticker generation, emoji mixing, minesweeper, abbreviation lookup and more.
+
+#### Core
+
+Help menu (帮助 / help), image packing (packpic), server status (状态), three-tier allow/deny lists, traffic statistics, group welcome messages.
+
+> [!NOTE]
+>
+> Send `帮助` or `help` for the full command list.
+
+### Deployment
+
+Prerequisites: miniconda, and a reachable OneBot v11 implementation (NapCat / Lagrange, etc.).
+
+1. Create and activate a Python 3.11 environment with miniconda.
+
+2. Install the dependencies
+
+```
+pip install -r requirements.txt
+```
+
+3. Extract memes.zip into the environment's site-packages/meme-generator/memes/.
+
+4. Install the font data/nonebot_plugin_meme_stickers/_shared/YurukaFangTang.ttf.
+
+5. Copy out the config file and adjust it as needed
+
+```
+cp .env.prod_example .env.prod
+```
+
+6. Settle the launch script: on Linux rename `launch_linux.sh` to `launch.sh`, on macOS rename `launch_macos.sh` to `launch.sh`, on Windows rename `launch_windows.bat` to `launch.bat`, then delete the launch scripts for the other systems.
+
+7. Start from the project root: `./launch.sh` on Linux / macOS, `launch.bat` on Windows.
+
+The entry point airi.py wraps bot.py and restarts it automatically after a crash. OneBot clients connect to ws://127.0.0.1:15100/onebot/v11/ws by default.
+
+> [!NOTE]
+>
+> See [手动部署教程.md](一键部署脚本/手动部署教程.md) for details (Chinese).
+
+### Configuration
+
+> Key settings live in `.env.prod`; see `.env.prod_example` for the full description of every key
+
+#### `cache_mode`
+
+- Default: `balanced`
+- Description: cache strategy, with the following options:
+  - `ram`
+    - Description: cache every cacheable static file in memory, minimizing disk I/O. Fastest, highest memory usage.
+  - `balanced`
+    - Description: cache only frequently used files, trading off disk I/O against memory usage (recommended).
+  - `disk`
+    - Description: disable caching entirely, read every file from disk each time. Lowest memory usage at runtime.
+
+> [!NOTE]
+>
+> Changing `cache_mode` requires a restart. Switching away from a mode does not delete existing `.pk` cache files (disk mode simply ignores them).
+
+#### TLS
+
+bot.py loads certificates from `./ssl/` by default; adjust it yourself if you do not need HTTPS.
+
+### License
+
+MIT License, Copyright (c) 2026 AiriCore Dev. See [LICENSE](LICENSE).

@@ -24,12 +24,15 @@ def _parse_user_id(ev: MessageEvent) -> str:
     return str(ev.get_user_id())
 
 
-bind_web = on_regex(r"^登录网页\s*\d{4,8}$", priority=10, block=True)
+bind_web = on_regex(rf"^登录网页\s*{auth.CODE_RE}$", priority=10, block=True)
 
 
 @bind_web.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    code = re.search(r"\d{4,8}", str(ev.get_plaintext())).group()
+    m = re.search(auth.CODE_RE, str(ev.get_plaintext()).replace("登录网页", "", 1))
+    if m is None:
+        await bind_web.finish("验证码格式不对，请回到网页重新获取。", reply_message=True)
+    code = m.group()
     user_id = _parse_user_id(ev)
     nick = ev.sender.card or ev.sender.nickname or user_id
     if auth.confirm_code(code, user_id, nick):
@@ -58,13 +61,27 @@ async def _start_api():
 
     config = driver.config
     auth.init_secret(getattr(config, "web_token_key", ""))
-    host = getattr(config, "web_api_host", "0.0.0.0")
     port = int(getattr(config, "web_api_port", 22319))
     ssl_keyfile = getattr(config, "web_ssl_keyfile", "./ssl/privkey.key")
     ssl_certfile = getattr(config, "web_ssl_certfile", "./ssl/fullchain.pem")
+    allow_plain = bool(getattr(config, "web_allow_insecure_http", False))
 
     use_tls = bool(ssl_keyfile) and bool(ssl_certfile) \
         and os.path.isfile(ssl_keyfile) and os.path.isfile(ssl_certfile)
+
+    host = str(getattr(config, "web_api_host", "") or "").strip()
+    if not host:
+        host = "0.0.0.0" if use_tls else "127.0.0.1"
+
+    is_public = host not in ("127.0.0.1", "localhost", "::1")
+    if not use_tls and is_public and not allow_plain:
+        logger.error(
+            f"[SEKAI] 未找到 TLS 证书而监听地址是 {host}，为避免 token 明文外泄已拒绝启动。"
+            " 请配置 web_ssl_keyfile / web_ssl_certfile，"
+            " 或把 web_api_host 改为 127.0.0.1，"
+            " 或显式设置 web_allow_insecure_http = true。"
+        )
+        return
 
     kwargs = dict(host=host, port=port, log_level="warning", access_log=False)
     if use_tls:
@@ -77,7 +94,7 @@ async def _start_api():
     _server_task = asyncio.create_task(server.serve())
     scheme = "https" if use_tls else "http"
     logger.info(f"[SEKAI] web API listening on {scheme}://{host}:{port}"
-                + ("" if use_tls else "  (⚠️ 未找到证书，已退化为 HTTP)"))
+                + ("" if use_tls else "  (未找到证书，已退化为 HTTP)"))
 
 
 @driver.on_shutdown

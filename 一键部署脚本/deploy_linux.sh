@@ -70,7 +70,8 @@ echo "==> 使用 conda: $CONDA_SH"
 # shellcheck disable=SC1090
 source "$CONDA_SH"
 
-if conda env list | awk '{print $1}' | grep -qx "$ENV_NAME"; then
+ENV_LIST="$(conda env list || true)"
+if printf '%s\n' "$ENV_LIST" | awk '{print $1}' | grep -qx "$ENV_NAME"; then
     echo "==> 环境 '$ENV_NAME' 已存在, 复用"
 else
     echo "==> 接受 conda 默认 channel 服务条款 (旧版无此命令则忽略)"
@@ -122,8 +123,11 @@ if ! python -m playwright install chromium; then
     unset PLAYWRIGHT_DOWNLOAD_HOST
     python -m playwright install chromium || true
 fi
-if command -v sudo >/dev/null 2>&1; then
+if [ "$(id -u)" -eq 0 ] || command -v sudo >/dev/null 2>&1; then
+    echo "==> 安装 chromium 系统依赖 (需要 root/sudo)"
     python -m playwright install-deps chromium || true
+else
+    echo "==> 跳过 chromium 系统依赖 (无 root 且无 sudo), 截图类功能可能不可用"
 fi
 
 echo "==> 解压表情包到 meme_generator 包目录"
@@ -158,18 +162,57 @@ if [ -f "$SSL_DIR/privkey.key" ] && [ -f "$SSL_DIR/fullchain.pem" ]; then
 else
     mkdir -p "$SSL_DIR"
     if command -v openssl >/dev/null 2>&1; then
-        openssl req -x509 -newkey rsa:2048 -nodes \
+        if openssl req -x509 -newkey rsa:2048 -nodes \
             -keyout "$SSL_DIR/privkey.key" \
             -out "$SSL_DIR/fullchain.pem" \
-            -days 3650 -subj "/CN=airicore.local" >/dev/null 2>&1
-        echo "    已在 $SSL_DIR 生成自签名证书"
+            -days 3650 -subj "/CN=airicore.local" >/dev/null 2>&1 \
+            && [ -s "$SSL_DIR/privkey.key" ] && [ -s "$SSL_DIR/fullchain.pem" ]; then
+            echo "    已在 $SSL_DIR 生成自签名证书"
+        else
+            echo "    警告: openssl 生成证书失败! bot.py 需要 ./ssl/privkey.key 与 ./ssl/fullchain.pem,"
+            echo "    请手动生成, 或修改 bot.py 去掉 ssl_keyfile/ssl_certfile 参数, 否则无法启动。"
+        fi
     else
         echo "    未找到 openssl; 请手动提供 ./ssl/privkey.key 与 ./ssl/fullchain.pem,"
         echo "    或修改 bot.py 去掉 ssl_keyfile/ssl_certfile 参数。"
     fi
 fi
 
+echo "==> 创建运行时目录"
+mkdir -p "$PROJECT_DIR/logs" "$PROJECT_DIR/data"
+
+echo "==> 依赖自检"
+if python - <<'PYEOF'
+import importlib.util
+mods = ["nonebot", "meme_generator", "playwright", "aiohttp", "openai", "numpy", "PIL", "skia", "uvicorn", "psutil", "mcrcon"]
+missing = [m for m in mods if importlib.util.find_spec(m) is None]
+if missing:
+    print("    缺失模块: " + ", ".join(missing))
+    raise SystemExit(1)
+print("    核心依赖齐全")
+PYEOF
+then :; else
+    echo "    警告: 依赖自检未通过, 请回看上面的 pip 报错。"
+fi
+
+echo "==> 整理启动脚本"
+if [ -f "$PROJECT_DIR/launch_linux.sh" ]; then
+    mv -f "$PROJECT_DIR/launch_linux.sh" "$PROJECT_DIR/launch.sh"
+    echo "    launch_linux.sh -> launch.sh"
+elif [ -f "$PROJECT_DIR/launch.sh" ]; then
+    echo "    launch.sh 已存在, 跳过重命名"
+else
+    echo "    警告: 未找到 launch_linux.sh 或 launch.sh"
+fi
+chmod +x "$PROJECT_DIR/launch.sh" 2>/dev/null || true
+for f in launch_macos.sh launch_windows.bat launch.bat; do
+    if [ -e "$PROJECT_DIR/$f" ]; then
+        rm -f "$PROJECT_DIR/$f"
+        echo "    已删除 $f"
+    fi
+done
+
 echo ""
 echo "==> 部署完成。后续步骤:"
 echo "    1. 编辑 .env.prod (SUPERUSERS, ONEBOT_ACCESS_TOKEN, LLM 密钥 等)"
-echo "    2. 启动: ./launch_linux.sh"
+echo "    2. 启动: ./launch.sh"

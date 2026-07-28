@@ -34,8 +34,46 @@ class UCCIEngine:
         await self.start()
 
     def close(self):
-        self.stop()
-        self._process.kill()
+        process = getattr(self, "_process", None)
+        if process is None:
+            return
+        self._process = None
+        self.stdin = None
+        self.stdout = None
+        try:
+            self.stdin = process.stdin
+            self.stop()
+        except Exception:
+            pass
+        finally:
+            self.stdin = None
+        if process.returncode is None:
+            try:
+                process.kill()
+            except ProcessLookupError:
+                pass
+            except Exception:
+                pass
+        try:
+            asyncio.get_running_loop().create_task(self._reap(process))
+        except RuntimeError:
+            pass
+
+    @staticmethod
+    async def _reap(process):
+        try:
+            await asyncio.wait_for(process.wait(), timeout=10)
+        except Exception:
+            pass
+        for pipe in (process.stdin, process.stdout, process.stderr):
+            transport = getattr(pipe, "_transport", None)
+            if transport is None:
+                transport = getattr(pipe, "transport", None)
+            if transport is not None:
+                try:
+                    transport.close()
+                except Exception:
+                    pass
 
     def send_line(self, line: str):
         assert self.stdin is not None

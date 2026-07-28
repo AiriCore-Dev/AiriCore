@@ -21,6 +21,7 @@ HEADERS = {
 }
 TOP_N = 5
 SELECT_TIMEOUT = 60
+MAX_AUDIO_BYTES = 4 * 1024 * 1024
 
 netease_music = on_command("点歌", priority=50, block=True)
 
@@ -39,8 +40,10 @@ async def fetch_audio_b64(sid: int):
     async with httpx.AsyncClient(timeout=30, headers=HEADERS, follow_redirects=True) as client:
         resp = await client.get(url)
     if resp.status_code != 200 or "audio" not in resp.headers.get("content-type", ""):
-        return None
-    return base64.b64encode(resp.content).decode()
+        return None, "unavailable"
+    if len(resp.content) > MAX_AUDIO_BYTES:
+        return None, "oversize"
+    return base64.b64encode(resp.content).decode(), ""
 
 
 def format_song(idx: int, song: dict) -> str:
@@ -69,7 +72,7 @@ async def handle_netease_music(bot: Bot, ev: MessageEvent, arg: Message = Comman
         reply_message=True,
     )
 
-    @waiter(waits=["message"], keep_session=True, block=False)
+    @waiter(waits=["message"], keep_session=True, block=True)
     async def get_choice(event: MessageEvent):
         return event.get_plaintext().strip()
 
@@ -85,11 +88,16 @@ async def handle_netease_music(bot: Bot, ev: MessageEvent, arg: Message = Comman
     await netease_music.send(MessageSegment.music("163", sid))
 
     try:
-        audio_b64 = await fetch_audio_b64(sid)
+        audio_b64, reason = await fetch_audio_b64(sid)
     except Exception:
-        audio_b64 = None
+        audio_b64, reason = None, "unavailable"
 
     if audio_b64 is None:
+        if reason == "oversize":
+            await netease_music.finish("这首歌文件过大，只能提供音乐卡片哦~")
         await netease_music.finish("这首歌可能受版权限制，无法获取音频哦~")
 
-    await netease_music.finish(MessageSegment.record(f"base64://{audio_b64}"))
+    try:
+        await netease_music.send(MessageSegment.record(f"base64://{audio_b64}"))
+    except Exception:
+        await netease_music.finish("语音发送失败了，可以直接点上面的音乐卡片收听~")

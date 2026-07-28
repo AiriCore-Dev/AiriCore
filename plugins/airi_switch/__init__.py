@@ -1,6 +1,7 @@
 import os
 import re
 import base64
+import shutil
 import time
 import hashlib
 import asyncio
@@ -19,19 +20,43 @@ from datetime import datetime, timezone, timedelta
 from . import counter
 from . import cache
 from . import ram_inspector
-from . import curfew
 from .charts import draw_pies_vstack, draw_summary, render_bot_cell, draw_grid
 
-async def decimal_to_quaternary(decimal_num):
-    if decimal_num == 0:
+def decimal_to_quaternary(decimal_num: int) -> str:
+    if decimal_num <= 0:
         return "0"
-    quaternary = ""
+    digits = []
     num = decimal_num
     while num > 0:
-        remainder = num % 4
-        quaternary = str(remainder) + quaternary
-        num = num // 4
-    return quaternary[::-1]
+        digits.append(str(num % 4))
+        num //= 4
+    return "".join(digits)
+
+
+_QQ_LEVEL_SIGNALS = ['⭐', '🌙', '☀️', '👑', '🐧']
+_QQ_LEVEL_MAX_SYMBOLS = 60
+
+
+def build_qq_level_signal(qq_level: int) -> str:
+    if qq_level <= 0:
+        return ""
+    top = len(_QQ_LEVEL_SIGNALS) - 1
+    remain = qq_level
+    counts = [0] * len(_QQ_LEVEL_SIGNALS)
+    counts[top] = remain // (4 ** top)
+    remain -= counts[top] * (4 ** top)
+    for i in range(top - 1, -1, -1):
+        counts[i] = remain // (4 ** i)
+        remain -= counts[i] * (4 ** i)
+    parts = []
+    total = 0
+    for i in range(top, -1, -1):
+        n = counts[i]
+        if total + n > _QQ_LEVEL_MAX_SYMBOLS:
+            n = max(0, _QQ_LEVEL_MAX_SYMBOLS - total)
+        total += n
+        parts.append(_QQ_LEVEL_SIGNALS[i] * n)
+    return "".join(parts)
 
 async def format_qq_data(data_list):
     UTC_PLUS_8 = timezone(timedelta(hours=8))
@@ -53,38 +78,30 @@ async def format_qq_data(data_list):
         output_lines.append(f"=== {nickname} ===")
         output_lines.append(f"-QQ号：{qq_number}")
         output_lines.append(f"-QID：{qid if len(qid) else '无'}")
-        qq_level_signal = ['⭐', '🌙', '☀️', '👑', '🐧']
-        qq_level_str2 = ''
-        if qq_level == 0:
-            qq_level = "未知"
-        else:
-            qq_level_str1 = await decimal_to_quaternary(qq_level)
-            for i in range(len(qq_level_str1)):
-                for j in range(int(qq_level_str1[i])):
-                    qq_level_str2 += qq_level_signal[i]
+        try:
+            qq_level_int = int(qq_level)
+        except (TypeError, ValueError):
+            qq_level_int = 0
+        qq_level_str2 = build_qq_level_signal(qq_level_int)
+        qq_level_disp = "未知" if qq_level_int <= 0 else qq_level_int
 
         start_time = time.time()
-        await bot.get_version_info()
-        direct_delay = (time.time() - start_time) * 1000
+        try:
+            await bot.get_version_info()
+            direct_delay = (time.time() - start_time) * 1000
+        except Exception:
+            direct_delay = -1
 
-        output_lines.append(f"-QQ等级：{qq_level} {qq_level_str2[::-1]}".strip())
+        output_lines.append(f"-QQ等级：{qq_level_disp} {qq_level_str2}".strip())
         output_lines.append(f"-是否为VIP及VIP等级：{vip_info}")
-        output_lines.append(f"-连接延迟：{direct_delay:.2f}ms")
+        delay_text = "获取失败" if direct_delay < 0 else f"{direct_delay:.2f}ms"
+        output_lines.append(f"-连接延迟：{delay_text}")
         msg.append({"type": "node", "data": {"name": nickname, "uin": qq_number, "content": '\n'.join(output_lines)}})
     return msg
 
 timing = require("nonebot_plugin_apscheduler").scheduler
 
 driver = get_driver()
-@driver.on_bot_connect
-async def remind(bot: Bot):
-    return
-    try:
-        user_nick = await bot.get_group_member_info(group_id=961098542, user_id=bot.self_id)
-        user_nick = (user_nick.get("card") or user_nick.get("nickname") or user_id)
-        await bot.send_private_msg(user_id=864623174, message=f'{user_nick} 已上线！')
-    except:
-        return
 
 airi_query_accounts = on_fullmatch('airiquery', priority=5, block=True, permission=SUPERUSER)
 @airi_query_accounts.handle()
@@ -95,7 +112,10 @@ async def _(bot: Bot, ev: MessageEvent):
         qqinfo = await bot.get_stranger_info(user_id=qq.self_id)
         data_list.append((qqinfo,qq))
     res = await format_qq_data(data_list)
-    await bot.send_group_forward_msg(group_id=ev.group_id, messages=res)
+    if isinstance(ev, GroupMessageEvent):
+        await bot.send_group_forward_msg(group_id=ev.group_id, messages=res)
+    else:
+        await bot.send_private_forward_msg(user_id=ev.user_id, messages=res)
 
 
 def _img_seg(png: bytes):
@@ -201,12 +221,13 @@ async def _bot_pies(bot: Bot, self_id: str, data: dict, avatars: dict = None, da
     label_of = await _group_labeler(bot, set(recv) | set(sent))
     recv_total = sum(recv.values())
     sent_total = sum(sent.values())
-    return draw_pies_vstack(
+    return await asyncio.to_thread(
+        draw_pies_vstack,
         (f"收 · 共 {recv_total} 条", recv),
         (f"发 · 共 {sent_total} 条", sent),
-        label_of=label_of,
-        avatar_of=lambda sid: avatars.get(sid),
-        date_text=date_text,
+        label_of,
+        lambda sid: avatars.get(sid),
+        date_text,
     )
 
 
@@ -217,13 +238,14 @@ async def _bot_cell(bot: Bot, self_id: str, nick: str, data: dict, avatars: dict
     label_of = await _group_labeler(bot, set(recv) | set(sent))
     recv_total = sum(recv.values())
     sent_total = sum(sent.values())
-    return render_bot_cell(
+    return await asyncio.to_thread(
+        render_bot_cell,
         f"{nick}({self_id})",
         (f"收 · 共 {recv_total} 条", recv),
         (f"发 · 共 {sent_total} 条", sent),
-        label_of=label_of,
-        avatar_of=lambda sid: avatars.get(sid),
-        header_avatar=avatars.get(self_id),
+        label_of,
+        lambda sid: avatars.get(sid),
+        avatars.get(self_id),
     )
 
 
@@ -257,7 +279,7 @@ async def _(bot: Bot, ev: MessageEvent):
         avatars = await _prefetch_avatars([], groups)
         pie = await _bot_pies(bot, bot_id, data, avatars, date_text=day)
         cache.flush()
-        msg = Message(f'📊 {nick}({bot_id}) · {day}\n') + _img_seg(pie)
+        msg = Message(f'{nick}({bot_id}) · {day}\n') + _img_seg(pie)
         await bot.send_group_msg(group_id=ev.group_id, message=msg)
         return
 
@@ -285,44 +307,74 @@ async def _(bot: Bot, ev: MessageEvent):
         except Exception as e:
             logger.opt(colors=True).warning(f'<y>airianalysis 生成 {self_id} 单元格失败: {e}</y>')
 
-    grid = draw_grid(cells, cols=4, date_text=day)
-    summary = draw_summary(bot_totals, date_text=day)
+    grid = await asyncio.to_thread(draw_grid, cells, 4, day)
+    summary = await asyncio.to_thread(draw_summary, bot_totals, day)
 
     cache.flush()
     await airi_analysis.finish(_img_seg(grid)+_img_seg(summary), reply_message=True)
 
 
+SCREEN_BIN = shutil.which('screen') or '/usr/bin/screen'
+SCREEN_SESSION = str(getattr(driver.config, 'reboot_screen_session', '') or 'airicore')
+AIRICORE_DIR = str(getattr(driver.config, 'reboot_workdir', '') or os.getcwd())
+BASH_BIN = shutil.which('bash') or '/bin/bash'
+
 REBOOT_CMD = (
-    '/usr/bin/screen -S airicore -X quit; '
-    '/bin/bash -c "cd /root/airi/airicore && /usr/bin/screen -dmS airicore ./launch.sh"'
+    f'{SCREEN_BIN} -S {SCREEN_SESSION} -X quit; '
+    f'{BASH_BIN} -c "cd {AIRICORE_DIR} && {SCREEN_BIN} -dmS {SCREEN_SESSION} ./launch.sh"'
 )
+
+
+def _reboot_preflight() -> str:
+    if os.name == 'nt':
+        return '重启指令依赖 screen，Windows 环境不支持，请手动重启。'
+    if not os.path.isfile(SCREEN_BIN):
+        return f'未找到 screen（{SCREEN_BIN}），无法执行重启，请手动重启。'
+    if not os.path.isdir(AIRICORE_DIR):
+        return f'工作目录不存在（{AIRICORE_DIR}），请配置 reboot_workdir。'
+    return ''
+
 
 airi_force_reboot = on_fullmatch('force-reboot', priority=5, block=True, permission=SUPERUSER)
 @airi_force_reboot.handle()
-async def _(bot: Bot, ev: PrivateMessageEvent):
-    subprocess.Popen(
-        REBOOT_CMD,
-        shell=True,
-        executable='/bin/bash',
-        stdin=subprocess.DEVNULL,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        start_new_session=True,
-        close_fds=True,
-    )
+async def _(bot: Bot, ev: MessageEvent):
+    err = _reboot_preflight()
+    if err:
+        await airi_force_reboot.finish(err)
+    try:
+        subprocess.Popen(
+            REBOOT_CMD,
+            shell=True,
+            executable=BASH_BIN,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            start_new_session=True,
+            close_fds=True,
+        )
+    except Exception as e:
+        await airi_force_reboot.finish(f'强制重启失败: {e}')
+    await airi_force_reboot.send('已发出强制重启指令，AiriCore 即将重启。')
 
 
 airi_reboot = on_fullmatch('reboot', priority=5, block=True, permission=SUPERUSER)
 @airi_reboot.handle()
-async def _(bot: Bot, ev: PrivateMessageEvent):
-    subprocess.Popen(
-        ['/usr/bin/screen', '-S', 'airicore', '-X', 'stuff', '\003'],
-        stdin=subprocess.DEVNULL,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        start_new_session=True,
-        close_fds=True,
-    )
+async def _(bot: Bot, ev: MessageEvent):
+    err = _reboot_preflight()
+    if err:
+        await airi_reboot.finish(err)
+    try:
+        subprocess.Popen(
+            [SCREEN_BIN, '-S', SCREEN_SESSION, '-X', 'stuff', '\003'],
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            start_new_session=True,
+            close_fds=True,
+        )
+    except Exception as e:
+        await airi_reboot.finish(f'重启失败: {e}')
+    await airi_reboot.send('已发出重启指令，AiriCore 即将重启。')
 
 
 def _format_bytes(b: int) -> str:

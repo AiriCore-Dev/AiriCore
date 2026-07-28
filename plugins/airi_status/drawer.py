@@ -17,7 +17,9 @@ from .model import get_status_info
 from .utils import truncate_string
 from .path import (
     adlam_font_path,
+    baotu_cjk_font_path,
     baotu_font_path,
+    bg_img_dir,
     marker_img_path,
     spicy_font_path,
 )
@@ -49,8 +51,7 @@ adlam_fnt = ImageFont.truetype(str(adlam_font_path), 36)
 spicy_fnt = ImageFont.truetype(str(spicy_font_path), 38)
 baotu_fnt = ImageFont.truetype(str(baotu_font_path), 64)
 _nick_size = 75
-_baotu_cjk_font_path = Path(__file__).parent / "resources" / "fonts" / "baotu.ttf"
-baotu_cjk_fnt = ImageFont.truetype(str(_baotu_cjk_font_path), _nick_size)
+baotu_cjk_fnt = ImageFont.truetype(str(baotu_cjk_font_path), _nick_size)
 
 
 def _has_cjk(text: str) -> bool:
@@ -94,8 +95,17 @@ def _load_fallback_fonts(size: int) -> list[ImageFont.FreeTypeFont]:
 
 _fallback_fnts = _load_fallback_fonts(_nick_size)
 
-_notdef_cache: dict[int, bytes | None] = {}
-_glyph_cache: dict[tuple[int, str], bool] = {}
+_MAX_GLYPH_CACHE = 20000
+_notdef_cache: dict[tuple, bytes | None] = {}
+_glyph_cache: dict[tuple, bool] = {}
+
+
+def _font_key(font: ImageFont.FreeTypeFont) -> tuple:
+    try:
+        return (str(getattr(font, "path", "")), int(getattr(font, "size", 0) or 0),
+                int(getattr(font, "index", 0) or 0))
+    except Exception:
+        return (repr(font),)
 
 
 def _render_char_bytes(font: ImageFont.FreeTypeFont, ch: str) -> bytes | None:
@@ -109,14 +119,14 @@ def _render_char_bytes(font: ImageFont.FreeTypeFont, ch: str) -> bytes | None:
 
 
 def _notdef_signature(font: ImageFont.FreeTypeFont) -> bytes | None:
-    fid = id(font)
+    fid = _font_key(font)
     if fid not in _notdef_cache:
         _notdef_cache[fid] = _render_char_bytes(font, "￿")
     return _notdef_cache[fid]
 
 
 def _has_glyph(font: ImageFont.FreeTypeFont, ch: str) -> bool:
-    key = (id(font), ch)
+    key = (_font_key(font), ch)
     if key in _glyph_cache:
         return _glyph_cache[key]
     if ch in (" ", "\t"):
@@ -128,6 +138,8 @@ def _has_glyph(font: ImageFont.FreeTypeFont, ch: str) -> bool:
     else:
         notdef = _notdef_signature(font)
         result = rendered != notdef and any(rendered)
+    if len(_glyph_cache) >= _MAX_GLYPH_CACHE:
+        _glyph_cache.clear()
     _glyph_cache[key] = result
     return result
 
@@ -316,8 +328,14 @@ def draw(nickname: str = "Momoi Airi") -> bytes:
     loaded_plugins = nonebot.get_loaded_plugins()
 
     resources_dir: Path = Path(__file__).parent / "resources"
-    bg_img_path: Path = resources_dir / "images" / "background_new"
-    bg_img_path: Path = resources_dir / "images" / "background_new" / random.choice(os.listdir(bg_img_path))
+    bg_dir: Path = bg_img_dir
+    candidates = [
+        p for p in sorted(bg_dir.iterdir())
+        if p.is_file() and p.suffix.lower() in (".png", ".jpg", ".jpeg", ".webp", ".bmp")
+    ] if bg_dir.is_dir() else []
+    if not candidates:
+        raise FileNotFoundError(f"状态图背景目录内没有可用图片: {bg_dir}")
+    bg_img_path: Path = random.choice(candidates)
     mask_img_path: Path = resources_dir / "images" / "airi_status_mask.png"
 
     with Image.open(bg_img_path).convert("RGBA") as base:
@@ -364,13 +382,14 @@ def draw(nickname: str = "Momoi Airi") -> bytes:
             width=s(115),
             fill=cpu_color,
         )
-        temp_draw.arc(
-            (s(152), s(878), s(272), s(992)),
-            start=-90,
-            end=(ram.usage / ram.total * 360 - 90),
-            width=s(115),
-            fill=ram_color,
-        )
+        if ram.total > 0:
+            temp_draw.arc(
+                (s(152), s(878), s(272), s(992)),
+                start=-90,
+                end=(ram.usage / ram.total * 360 - 90),
+                width=s(115),
+                fill=ram_color,
+            )
         if swap.total > 0:
             temp_draw.arc(
                 (s(152), s(1032), s(272), s(1146)),
@@ -379,13 +398,14 @@ def draw(nickname: str = "Momoi Airi") -> bytes:
                 width=s(115),
                 fill=swap_color,
             )
-        temp_draw.arc(
-            (s(152), s(1186), s(272), s(1300)),
-            start=-90,
-            end=(disk.usage / disk.total * 360 - 90),
-            width=s(115),
-            fill=disk_color,
-        )
+        if disk.total > 0:
+            temp_draw.arc(
+                (s(152), s(1186), s(272), s(1300)),
+                start=-90,
+                end=(disk.usage / disk.total * 360 - 90),
+                width=s(115),
+                fill=disk_color,
+            )
 
         temp_draw.ellipse((s(163), s(729), s(261), s(833)), width=s(105), fill=transparent_color)
         temp_draw.ellipse((s(163), s(883), s(261), s(987)), width=s(105), fill=transparent_color)

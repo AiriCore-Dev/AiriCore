@@ -41,6 +41,32 @@ def _blob_len(v: Any) -> int:
     return sys.getsizeof(v)
 
 
+def _snapshot(mod: Any, attr: str) -> Any:
+    lock = getattr(mod, "_lock", None)
+    acquired = False
+    try:
+        if lock is not None and hasattr(lock, "acquire"):
+            acquired = lock.acquire(timeout=1) if _supports_timeout(lock) else lock.acquire()
+        raw = getattr(mod, attr, None) or {}
+        if isinstance(raw, dict):
+            return dict(raw)
+        return raw
+    except Exception:
+        return {}
+    finally:
+        if acquired:
+            try:
+                lock.release()
+            except Exception:
+                pass
+
+
+def _supports_timeout(lock: Any) -> bool:
+    import threading
+
+    return isinstance(lock, (type(threading.Lock()), type(threading.RLock())))
+
+
 def _new(name: str, disk_file: str) -> Dict[str, Any]:
     return {
         "name": name,
@@ -56,7 +82,7 @@ def _inspect_airi_switch_meta() -> Dict[str, Any]:
     try:
         from . import cache as mod
 
-        data = getattr(mod, "_cache", {}) or {}
+        data = _snapshot(mod, "_cache")
         kind_label = {
             "group_name": "群名",
             "group_avatar": "群头像",
@@ -88,7 +114,7 @@ def _inspect_airi_switch_counter() -> Dict[str, Any]:
     try:
         from . import counter as mod
 
-        stats = getattr(mod, "_stats", {}) or {}
+        stats = _snapshot(mod, "_stats")
         days = len(stats)
         bot_ids = set()
         sessions = 0
@@ -120,7 +146,7 @@ def _inspect_persist_blob(name, disk_file, import_path, ns, item_label, blob_key
     r = _new(name, disk_file)
     try:
         mod = __import__(import_path, fromlist=["cache"])
-        persist = getattr(mod, "_persist", {}) or {}
+        persist = _snapshot(mod, "_persist")
         bucket = persist.get(ns, {}) or {}
         n = len(bucket)
         rb = sys.getsizeof(persist) + sys.getsizeof(bucket)
@@ -150,7 +176,7 @@ def _inspect_daily_check() -> Dict[str, Any]:
         rb = 0
         total = 0
 
-        persist = getattr(mod, "_persist", {}) or {}
+        persist = _snapshot(mod, "_persist")
         for ns, bucket in persist.items():
             if not isinstance(bucket, dict):
                 continue
@@ -166,7 +192,7 @@ def _inspect_daily_check() -> Dict[str, Any]:
             if n:
                 r["details"].append(f"{ns}: {n} 项")
 
-        decoded = getattr(mod, "_decoded", {}) or {}
+        decoded = _snapshot(mod, "_decoded")
         if decoded:
             total += len(decoded)
             rb += sys.getsizeof(decoded)
@@ -174,13 +200,13 @@ def _inspect_daily_check() -> Dict[str, Any]:
                 rb += sys.getsizeof(k) + sys.getsizeof(v)
             r["details"].append(f"已解码对象: {len(decoded)} 个")
 
-        img_r = _images_bytes(getattr(mod, "_images", {}))
+        img_r = _images_bytes(_snapshot(mod, "_images"))
         if img_r[0]:
             total += img_r[0]
             rb += img_r[1]
             r["details"].append(f"图片: {img_r[0]} 张")
 
-        fonts = getattr(mod, "_fonts", {}) or {}
+        fonts = _snapshot(mod, "_fonts")
         if fonts:
             total += len(fonts)
             rb += sys.getsizeof(fonts)
@@ -213,7 +239,7 @@ def _inspect_kokomi_wows() -> Dict[str, Any]:
     try:
         from plugins.airi_kokomi_wows import cache as mod
 
-        arrays = getattr(mod, "_arrays", {}) or {}
+        arrays = _snapshot(mod, "_arrays")
         count = len(arrays)
         rb = sys.getsizeof(arrays)
         for k, entry in arrays.items():
@@ -238,19 +264,19 @@ def _inspect_asset_cache() -> Dict[str, Any]:
         rb = 0
         total = 0
 
-        img_r = _images_bytes(getattr(mod, "_images", {}))
+        img_r = _images_bytes(_snapshot(mod, "_images"))
         if img_r[0]:
             total += img_r[0]
             rb += img_r[1]
             r["details"].append(f"图片: {img_r[0]} 张")
 
-        fonts = getattr(mod, "_fonts", {}) or {}
+        fonts = _snapshot(mod, "_fonts")
         if fonts:
             total += len(fonts)
             rb += sys.getsizeof(fonts)
             r["details"].append(f"字体: {len(fonts)} 个")
 
-        b64 = getattr(mod, "_b64", {}) or {}
+        b64 = _snapshot(mod, "_b64")
         if b64:
             total += len(b64)
             rb += sys.getsizeof(b64)
@@ -263,6 +289,39 @@ def _inspect_asset_cache() -> Dict[str, Any]:
 
         r["ram_items"] = total
         r["ram_bytes"] = rb if total else 0
+    except Exception as e:
+        r["error"] = str(e)
+    return r
+
+
+def _inspect_preload() -> Dict[str, Any]:
+    r = _new("启动预热", "")
+    try:
+        from utils import cache_preload
+
+        s = cache_preload.get_summary()
+        if not s:
+            r["details"].append("未执行（非 ram 模式或尚未完成）")
+            return r
+        if not s.get("enabled"):
+            r["details"].append(f"{s.get('mode')} 模式不预热")
+            return r
+        r["ram_items"] = s.get("items", 0)
+        r["ram_bytes"] = s.get("bytes", 0)
+        r["details"].append(f"耗时: {s.get('seconds', 0)}s")
+        r["details"].append(f"内存上限: {_fmt(s.get('budget_bytes', 0))}")
+        if s.get("skipped"):
+            r["details"].append(f"因超上限跳过: {s['skipped']} 项")
+        for g in s.get("groups", []):
+            if g.get("error"):
+                r["details"].append(f"{g['label']}: 失败 {g['error']}")
+            elif g.get("items"):
+                line = f"{g['label']}: {g['items']} 项"
+                if g.get("bytes"):
+                    line += f" / {_fmt(g['bytes'])}"
+                if g.get("skipped"):
+                    line += f"（跳过 {g['skipped']}）"
+                r["details"].append(line)
     except Exception as e:
         r["error"] = str(e)
     return r
@@ -304,6 +363,7 @@ def inspect_all() -> Tuple[int, str, List[Dict[str, Any]]]:
         _inspect_daily_check(),
         _inspect_kokomi_wows(),
         _inspect_asset_cache(),
+        _inspect_preload(),
     ]
 
     return memory, mode, results

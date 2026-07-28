@@ -1,8 +1,10 @@
-import gc
 import base64
 import hashlib
+import re
 
 from openai import AsyncOpenAI
+
+from utils import llm_fallback
 
 from . import state
 
@@ -14,28 +16,40 @@ client = AsyncOpenAI(
 weijinci_prompt = '你是一个内容安全审核员。请判断用户输入的文本是否包含违规内容（政治敏感、色情、暴力、违法犯罪、辱骂攻击、广告引流、涉及未成年人不良信息等）。如果包含任何违规内容，只回复数字1；如果内容合规，只回复数字0。不要输出任何其他文字。'
 
 
+_CQ_RE = re.compile(r"\[CQ:[^\]]*\]")
+
+
+def strip_cq(text: str) -> str:
+    text = _CQ_RE.sub("", str(text or ""))
+    text = (text.replace("&#91;", "[").replace("&#93;", "]")
+                .replace("&#44;", ",").replace("&amp;", "&"))
+    return _CQ_RE.sub("", text).strip()
+
+
 async def parse_session(bot, ev):
     session_id = str(ev.get_session_id())
-    if 'group' in session_id:
-        split_id = session_id.split("_")
-        user_id = split_id[2]
-        gruop_id = split_id[1]
-    else:
-        user_id = session_id
-        gruop_id = None
-    user_nick = await bot.get_group_member_info(group_id=gruop_id, user_id=user_id)
-    user_nick = (user_nick.get("nickname") or user_nick.get("card") or user_id)
+    if 'group' not in session_id:
+        return None, None, None
+    split_id = session_id.split("_")
+    user_id = split_id[2]
+    gruop_id = split_id[1]
+    try:
+        info = await bot.get_group_member_info(group_id=gruop_id, user_id=user_id)
+        user_nick = info.get("card") or info.get("nickname") or user_id
+    except Exception:
+        user_nick = user_id
     return user_id, gruop_id, user_nick
 
 
 async def check_weijinci(text):
     try:
-        completion = await client.chat.completions.create(
-            model=getattr(state.driver.config, "other_llm_model", ""),
-            messages=[
+        answer = await llm_fallback.call_with_fallback(
+            client,
+            [
                 {"role": "system", "content": weijinci_prompt},
                 {"role": "user", "content": text},
             ],
+            tag="wish_bottle_weijinci",
             max_completion_tokens=4096,
             temperature=0.1,
             top_p=0.1,
@@ -44,9 +58,8 @@ async def check_weijinci(text):
             frequency_penalty=0,
             presence_penalty=0.1,
         )
-        answer = completion.choices[0].message.content
         return 1 if '1' in answer else 0
-    except:
+    except Exception:
         return 1
 
 
@@ -63,63 +76,73 @@ async def generate_unique_id(content):
     return unique_id
 
 
+def _collection_of(data, owner_id):
+    return data.setdefault('collections', {}).setdefault(str(owner_id), [])
+
+
 def add_bottle(unique_id, owner=-1, owner_id=-1, content=-1, comments=-1, times=-1):
     data = state.data
-    try:
-        bottle_tmp = data['bottles'][unique_id]
-    except:
-        if owner == -1: owner = '田麻小溪'
-        if owner_id == -1: owner_id = '864623174'
-        if content == -1: content = ''
-        if comments == -1: comments = []
-        if times == -1: times = 0
-        data['bottles'][unique_id] = {"owner": owner, "owner_id": owner_id, "content": content, "comments": comments, "times": times}
-        try:
-            data['collections'][owner_id].append(unique_id)
-        except:
-            data['collections'][owner_id] = [unique_id]
-    else:
-        for i in range(len(data['collections'][bottle_tmp["owner_id"]])):
-            if data['collections'][bottle_tmp["owner_id"]][i] == unique_id:
-                data['collections'][bottle_tmp["owner_id"]].pop(i)
-                break
-        if owner != -1: bottle_tmp['owner'] = str(owner)
-        if owner_id != -1: bottle_tmp['owner_id'] = str(owner_id)
-        if content != -1: bottle_tmp['content'] = str(content)
-        if comments != -1: bottle_tmp['comments'] = comments
-        if times != -1: bottle_tmp['times'] = int(times)
-        data['bottles'][unique_id] = bottle_tmp
-        try:
-            data['collections'][owner_id].append(unique_id)
-        except:
-            data['collections'][owner_id] = [unique_id]
+    bottle_tmp = data.setdefault('bottles', {}).get(unique_id)
+    if bottle_tmp is None:
+        if owner == -1 or owner_id == -1:
+            raise ValueError("新建心愿瓶必须提供 owner 与 owner_id")
+        owner_id = str(owner_id)
+        if content == -1:
+            content = ''
+        if comments == -1:
+            comments = []
+        if times == -1:
+            times = 0
+        data['bottles'][unique_id] = {
+            "owner": str(owner), "owner_id": owner_id, "content": str(content),
+            "comments": list(comments), "times": int(times),
+        }
+        lst = _collection_of(data, owner_id)
+        if unique_id not in lst:
+            lst.append(unique_id)
+        return
+
+    old_owner_id = str(bottle_tmp.get("owner_id", ""))
+    old_lst = _collection_of(data, old_owner_id)
+    while unique_id in old_lst:
+        old_lst.remove(unique_id)
+
+    if owner != -1:
+        bottle_tmp['owner'] = str(owner)
+    if owner_id != -1:
+        bottle_tmp['owner_id'] = str(owner_id)
+    if content != -1:
+        bottle_tmp['content'] = str(content)
+    if comments != -1:
+        bottle_tmp['comments'] = list(comments)
+    if times != -1:
+        bottle_tmp['times'] = int(times)
+    data['bottles'][unique_id] = bottle_tmp
+
+    new_lst = _collection_of(data, bottle_tmp['owner_id'])
+    if unique_id not in new_lst:
+        new_lst.append(unique_id)
 
 
 def delete_bottle(unique_id):
     data = state.data
-    try:
-        user_id = data['bottles'][unique_id]['owner_id']
-    except:
-        pass
-    else:
-        del data['bottles'][unique_id]
-        for i in range(len(data['collections'][user_id])):
-            if data['collections'][user_id][i] == unique_id:
-                data['collections'][user_id].pop(i)
-                break
+    bottle = data.get('bottles', {}).get(unique_id)
+    if bottle is None:
+        return
+    owner_id = str(bottle.get('owner_id', ''))
+    data['bottles'].pop(unique_id, None)
+    lst = data.setdefault('collections', {}).get(owner_id)
+    if isinstance(lst, list):
+        while unique_id in lst:
+            lst.remove(unique_id)
 
 
 def sync_bottle():
     collections = {}
-    for i in state.data["bottles"].keys():
-        user_id = str(state.data["bottles"][i]['owner_id'])
-        try:
-            collections[user_id].append(i)
-        except:
-            collections[user_id] = [i]
+    for key, bottle in state.data.get("bottles", {}).items():
+        user_id = str(bottle.get('owner_id', ''))
+        collections.setdefault(user_id, []).append(key)
     state.data["collections"] = collections
-    del collections
-    gc.collect()
 
 
 def send_email(dest, subject, text, html_body=None):

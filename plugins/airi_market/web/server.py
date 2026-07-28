@@ -1,6 +1,9 @@
 import os
 import ssl
 import mimetypes
+from html import escape as html_escape
+from urllib.parse import quote
+
 from aiohttp import web
 from nonebot.log import logger
 
@@ -69,13 +72,22 @@ def _page_invalid():
     )
 
 
+def _post_form(action, token, label):
+    return (
+        f'<form method="post" action="{action}" style="display:inline">'
+        f'<input type="hidden" name="token" value="{html_escape(token)}" />'
+        f'<button class="btn btn-primary" type="submit">{label}</button>'
+        f'</form>'
+    )
+
+
 def _page_unsub_confirm(token, qq):
     return _page(
         "确认退订", "tag-warn",
         "确认退订邮件推送",
-        f"您（QQ：{qq}）将不再收到来自 Airi 的营销邮件推送。<br />此操作可随时撤销。",
-        f'<a class="btn btn-primary" href="/api/unsubscribe?token={token}">确认退订</a>'
-        f'<a class="btn btn-ghost" href="javascript:history.back()">取消</a>',
+        f"您（QQ：{html_escape(qq)}）将不再收到来自 Airi 的营销邮件推送。<br />此操作可随时撤销。",
+        _post_form("/api/unsubscribe", token, "确认退订")
+        + '<a class="btn btn-ghost" href="javascript:history.back()">取消</a>',
     )
 
 
@@ -83,8 +95,8 @@ def _page_unsub_done(token, qq):
     return _page(
         "已退订", "tag-done",
         "退订成功",
-        f"您（QQ：{qq}）已成功退订，此后将不再收到营销邮件。",
-        f'<a class="btn btn-ghost" href="/resubscribe?token={token}">撤销退订</a>',
+        f"您（QQ：{html_escape(qq)}）已成功退订，此后将不再收到营销邮件。",
+        f'<a class="btn btn-ghost" href="/resubscribe?token={quote(token)}">撤销退订</a>',
         "退订后仍可能收到与账户相关的重要通知邮件",
     )
 
@@ -93,9 +105,9 @@ def _page_resub_confirm(token, qq):
     return _page(
         "撤销退订", "tag-done",
         "重新订阅邮件推送",
-        f"您（QQ：{qq}）将重新开始接收来自 Airi 的营销邮件推送。",
-        f'<a class="btn btn-primary" href="/api/resubscribe?token={token}">确认订阅</a>'
-        f'<a class="btn btn-ghost" href="javascript:history.back()">取消</a>',
+        f"您（QQ：{html_escape(qq)}）将重新开始接收来自 Airi 的营销邮件推送。",
+        _post_form("/api/resubscribe", token, "确认订阅")
+        + '<a class="btn btn-ghost" href="javascript:history.back()">取消</a>',
     )
 
 
@@ -103,7 +115,7 @@ def _page_resub_done(qq):
     return _page(
         "已订阅", "tag-done",
         "重新订阅成功",
-        f"您（QQ：{qq}）已成功重新订阅，后续将继续收到 Airi 的邮件推送。",
+        f"您（QQ：{html_escape(qq)}）已成功重新订阅，后续将继续收到 Airi 的邮件推送。",
         "",
     )
 
@@ -112,8 +124,8 @@ def _page_already_unsub(token, qq):
     return _page(
         "已退订", "tag-warn",
         "您已在退订名单中",
-        f"QQ {qq} 已经是退订状态，无需重复操作。",
-        f'<a class="btn btn-ghost" href="/resubscribe?token={token}">撤销退订</a>',
+        f"QQ {html_escape(qq)} 已经是退订状态，无需重复操作。",
+        f'<a class="btn btn-ghost" href="/resubscribe?token={quote(token)}">撤销退订</a>',
     )
 
 
@@ -126,21 +138,29 @@ async def handle_unsubscribe(request):
     return web.Response(text=html, content_type="text/html", charset="utf-8")
 
 
+async def _token_from_post(request):
+    try:
+        form = await request.post()
+    except Exception:
+        return ""
+    return str(form.get("token", "") or "")
+
+
 async def handle_api_unsubscribe(request):
-    token = request.rel_url.query.get("token", "")
+    token = await _token_from_post(request)
     qq = verify_token(token)
     if not qq:
-        return web.Response(text=_page_invalid(), content_type="text/html", charset="utf-8")
+        return web.Response(text=_page_invalid(), content_type="text/html",
+                            charset="utf-8", status=400)
     unsub_list = state.data.setdefault("unsubscribed", [])
     if qq not in unsub_list:
         unsub_list.append(qq)
         from ..base.persistence import save_data
-        import asyncio
-        asyncio.create_task(save_data())
-        html = _page_unsub_done(token, qq)
+        await save_data()
+        page = _page_unsub_done(token, qq)
     else:
-        html = _page_already_unsub(token, qq)
-    return web.Response(text=html, content_type="text/html", charset="utf-8")
+        page = _page_already_unsub(token, qq)
+    return web.Response(text=page, content_type="text/html", charset="utf-8")
 
 
 async def handle_resubscribe(request):
@@ -153,18 +173,20 @@ async def handle_resubscribe(request):
 
 
 async def handle_api_resubscribe(request):
-    token = request.rel_url.query.get("token", "")
+    token = await _token_from_post(request)
     qq = verify_token(token)
     if not qq:
-        return web.Response(text=_page_invalid(), content_type="text/html", charset="utf-8")
+        return web.Response(text=_page_invalid(), content_type="text/html",
+                            charset="utf-8", status=400)
     unsub_list = state.data.setdefault("unsubscribed", [])
     if qq in unsub_list:
         unsub_list.remove(qq)
         from ..base.persistence import save_data
-        import asyncio
-        asyncio.create_task(save_data())
-    html = _page_resub_done(qq)
-    return web.Response(text=html, content_type="text/html", charset="utf-8")
+        await save_data()
+    return web.Response(text=_page_resub_done(qq), content_type="text/html", charset="utf-8")
+
+
+STATIC_MAX_BYTES = 20 * 1024 * 1024
 
 
 async def handle_static_posts(request):
@@ -172,22 +194,35 @@ async def handle_static_posts(request):
     filename = request.match_info["filename"]
     safe_article = os.path.basename(article)
     safe_file = os.path.basename(filename)
-    path = os.path.join(state.POSTS_DIR, safe_article, safe_file)
+    if not safe_article or not safe_file or safe_article.startswith(".") or safe_file.startswith("."):
+        return web.Response(status=404, text="Not Found")
+    base = os.path.realpath(state.POSTS_DIR)
+    path = os.path.realpath(os.path.join(base, safe_article, safe_file))
+    if not (path == base or path.startswith(base + os.sep)):
+        return web.Response(status=404, text="Not Found")
     if not os.path.isfile(path):
         return web.Response(status=404, text="Not Found")
+    try:
+        if os.path.getsize(path) > STATIC_MAX_BYTES:
+            return web.Response(status=413, text="File Too Large")
+    except OSError:
+        return web.Response(status=404, text="Not Found")
     mime, _ = mimetypes.guess_type(path)
-    mime = mime or "application/octet-stream"
-    with open(path, "rb") as f:
-        data = f.read()
-    return web.Response(body=data, content_type=mime)
+    return web.FileResponse(
+        path,
+        headers={
+            "Cache-Control": "public, max-age=86400",
+            "Content-Type": mime or "application/octet-stream",
+        },
+    )
 
 
 async def start_server():
     app = web.Application()
     app.router.add_get("/unsubscribe", handle_unsubscribe)
-    app.router.add_get("/api/unsubscribe", handle_api_unsubscribe)
+    app.router.add_post("/api/unsubscribe", handle_api_unsubscribe)
     app.router.add_get("/resubscribe", handle_resubscribe)
-    app.router.add_get("/api/resubscribe", handle_api_resubscribe)
+    app.router.add_post("/api/resubscribe", handle_api_resubscribe)
     app.router.add_get("/static/posts/{article}/{filename}", handle_static_posts)
 
     ssl_ctx = None
@@ -197,14 +232,28 @@ async def start_server():
     else:
         logger.warning("airi_market: SSL cert not found, running without HTTPS")
 
+    host = str(getattr(state, "market_bind_host", "") or "").strip()
+    if not host:
+        host = "0.0.0.0" if ssl_ctx is not None else "127.0.0.1"
+
+    is_public = host not in ("127.0.0.1", "localhost", "::1")
+    if ssl_ctx is None and is_public and not getattr(state, "market_allow_insecure_http", False):
+        logger.error(
+            f"airi_market 未找到 TLS 证书而监听地址是 {host}，"
+            "退订 token 会以明文传输，已拒绝启动。"
+            " 请配置证书，或把 market_bind_host 改为 127.0.0.1，"
+            " 或显式设置 market_allow_insecure_http = true。"
+        )
+        return
+
     runner = web.AppRunner(app)
     await runner.setup()
-    site = web.TCPSite(runner, "0.0.0.0", state.market_port, ssl_context=ssl_ctx)
+    site = web.TCPSite(runner, host, state.market_port, ssl_context=ssl_ctx)
     try:
         await site.start()
         state._web_runner = runner
         proto = "https" if ssl_ctx else "http"
-        logger.info(f"airi_market web server started at {proto}://0.0.0.0:{state.market_port}")
+        logger.info(f"airi_market web server started at {proto}://{host}:{state.market_port}")
     except Exception as e:
         logger.error(f"airi_market web server failed to start: {e}")
         await runner.cleanup()

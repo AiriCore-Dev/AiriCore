@@ -65,6 +65,20 @@ def flush() -> None:
         _flush(force=True)
 
 
+def preload(max_bytes: int = 0):
+    if is_disk():
+        return 0, 0
+    with _lock:
+        _ensure_loaded()
+        bucket = _persist.get("avatar", {}) or {}
+        used = 0
+        for entry in bucket.values():
+            blob = entry.get("blob") if isinstance(entry, dict) else None
+            if blob:
+                used += len(blob)
+        return len(bucket), used
+
+
 def get_avatar(uid: str) -> Optional[bytes]:
     if is_disk():
         return None

@@ -1,9 +1,12 @@
+import copy
 import os
-import base64
 
-from nonebot import on_fullmatch, get_driver
+from nonebot import on_fullmatch, get_driver, logger
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
+from nonebot.adapters.onebot.v11.permission import GROUP
+
+from utils.asset_cache import get_b64
 
 PLUGIN_DIR = os.path.dirname(__file__)
 
@@ -11,15 +14,19 @@ driver = get_driver()
 airicore_version = getattr(driver.config, "airicore_version", "")
 
 
-def localpath_to_base64(path: str) -> str:
-    with open(path, "rb") as f:
-        data = f.read()
-    return "base64://" + base64.b64encode(data).decode()
-
-
-def image_segment(*path_parts: str) -> MessageSegment:
+def image_segment(*path_parts: str):
     full_path = os.path.join(PLUGIN_DIR, *path_parts)
-    return MessageSegment.image(localpath_to_base64(full_path))
+    data = get_b64(full_path)
+    if data is None:
+        logger.warning(f"airi_help 图片缺失，已降级为纯文本: {full_path}")
+        return ""
+    return MessageSegment.image(data)
+
+
+def version_node_content() -> object:
+    head = f"Momoi Airi 使用帮助\n{airicore_version}"
+    png = image_segment("version", f"{airicore_version}.jpg")
+    return MessageSegment.text(head) + png if png else head
 
 
 def make_node(name: str, content) -> dict:
@@ -32,13 +39,10 @@ def make_node(name: str, content) -> dict:
         },
     }
 
-version_png = image_segment("version", f"{airicore_version}.jpg")
-
 msg = [
     make_node(
         "Momoi Airi",
-        f"Momoi Airi 使用帮助\n⚙️ {airicore_version}"
-        + version_png,
+        version_node_content(),
     ),
     make_node(
         "音游类综合查询",
@@ -48,7 +52,7 @@ msg = [
 PJSK综合查询 By NagiHina
 * 发送指令 pjskhelp 查看帮助
 
-- ena_pjsk_score:
+- ena-pjsk-score:
 烤倍率/pt计算器 By 咖啡不甜
 * 指令：计算倍率，单人pt，协力pt，挑战pt""",
     ),
@@ -56,7 +60,7 @@ PJSK综合查询 By NagiHina
         "战舰世界综合查询",
         """----- 战舰世界综合查询 -----
 
-- Airi_Kokomi_WoWS:
+- Airi-Kokomi-WoWS:
 战舰世界水表查询 By Maoyu，AiriCore Dev.
 * 使用 wws 触发
 * 发送 wws help 查看帮助""",
@@ -65,7 +69,7 @@ PJSK综合查询 By NagiHina
         "Minecraft",
         """----- Minecraft -----
 
-- Airi_MCRcon:
+- Airi-MCRcon:
 Airi Cobblemon Sever 服管 By AiriCore Dev.
 （该功能仅对部分群聊开放）
 * 发送指令 /help 查看帮助""",
@@ -95,7 +99,7 @@ Airi海龟汤 By AiriCore Dev.
 
 - jrys:
 测测你的今日运势
-* 指令：jrys、今日运势
+* 指令：jrys
 
 - tarot:
 塔罗牌占卜 By MinatoAquaCrews
@@ -103,7 +107,7 @@ Airi海龟汤 By AiriCore Dev.
 
 - today-waifu:
 随即抓取群友做老婆 By glamorgan9826
-* 指令: jrlp、今日老婆
+* 指令: jrlp、hlp、强娶
 
 - whateat-pic:
 今天吃什么 By Cvandia
@@ -117,19 +121,19 @@ Airi海龟汤 By AiriCore Dev.
         "功能插件",
         """----- 功能插件 -----
 
-- Airi_Netease_Music:
+- Airi-Netease-Music:
 网易云点歌 By AiriCore Dev.
 * 指令：点歌 歌曲名
 
-- Airi_Choice:
+- Airi-Choice:
 随机挑选插件 By AiriCore Dev.
 * 发送 choicehelp 查看帮助
 
-- Airi_Roll:
+- Airi-Roll:
 抽取随机数 By AiriCore Dev.
 * 发送 roll help 查看帮助
 
-- Airi_Attrwhich:
+- Airi-Attrwhich:
 英文缩写查询 By AiriCore Dev.
 * 指令：@Airi xxx是什么
 
@@ -193,11 +197,11 @@ Airi智能体 By AiriCore Dev.
 #    ),
     make_node(
         "使用时间限制",
-        """=== 🔕 使用时间限制 ===
+        """==== 使用时间限制 ====
 
-直营姬休息时间：
+**直营姬**休息时间：
 23:00 - 次日6:00
-期间无法使用插件功能
+期间无法使用大部分插件功能
 
 请合理分配睡眠时间，保持健康作息""",
     ),
@@ -213,7 +217,8 @@ https://www.airi.asia """
         "广告位",
         MessageSegment.text(
             """* Bot一群：1030569383
-* Bot二群：808085026"""
+* Bot二群：808085026
+* 分布式交流群：1084667424"""
         ),
     ),
     make_node(
@@ -227,12 +232,14 @@ https://github.com/AiriCore-Dev/AiriCore"""
 ]
 
 
-airi_help = on_fullmatch(("help", "帮助"), priority=99)
+Airi_help = on_fullmatch(("help", "帮助"), priority=99, permission=GROUP)
 
 
-@airi_help.handle()
+@Airi_help.handle()
 async def handle_help(bot: Bot, event: MessageEvent):
-    for node in msg:
+    if not isinstance(event, GroupMessageEvent):
+        await Airi_help.finish("帮助只能在群聊内查看哦~")
+    nodes = copy.deepcopy(msg)
+    for node in nodes:
         node["data"]["uin"] = bot.self_id
-    if isinstance(event, GroupMessageEvent):
-        await bot.send_group_forward_msg(group_id=event.group_id, messages=msg)
+    await bot.send_group_forward_msg(group_id=event.group_id, messages=nodes)

@@ -87,6 +87,20 @@ def _encode(path: Path, reversed_: bool) -> Optional[str]:
         return None
 
 
+def preload(max_bytes: int = 0):
+    if is_disk():
+        return 0, 0
+    with _lock:
+        _ensure_loaded()
+        bucket = _persist.get("card", {}) or {}
+        used = 0
+        for entry in bucket.values():
+            b64 = entry.get("b64") if isinstance(entry, dict) else None
+            if b64:
+                used += len(b64)
+        return len(bucket), used
+
+
 def get_card_b64(path, reversed_: bool) -> Optional[str]:
     global _dirty
     path = Path(path)

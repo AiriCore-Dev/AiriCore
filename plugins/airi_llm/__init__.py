@@ -4,11 +4,12 @@ import time
 import random
 import base64
 import asyncio
-import logging
 import traceback
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Set
 
 import httpx
+import nonebot
+from utils import asset_cache
 from utils.totp_2fa import totp_verify
 from nonebot import (
     get_driver,
@@ -29,14 +30,10 @@ from . import llm_client
 from .llm_client import call_llm
 
 driver = get_driver()
-logger = logging.getLogger("airi_llm")
-logger.setLevel(logging.INFO)
-if not logger.handlers:
-    handler = logging.StreamHandler()
-    handler.setFormatter(
-        logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-    )
-    logger.addHandler(handler)
+from utils.plugin_logger import get_logger
+from utils.net_guard import is_public_url_async
+
+logger = get_logger("airi_llm")
 
 timings = require("nonebot_plugin_apscheduler").scheduler
 
@@ -46,7 +43,8 @@ NEGATIVE_SPEAK_TOKENS_INIT = 50
 NEGATIVE_SPEAK_TOKENS_DEDUCT = 3
 ADDRESSED_TOKENS_BONUS = 2
 
-BASE_SPEAK_PROB = 1 / 100
+BASE_SPEAK_PROB = 1 / 200
+REPLY_MENTION_PROB = 0.4
 ADDRESSED_PROB = 0.9
 HARD_COOLDOWN_SECS = 25
 MOMENTUM_WINDOW_SECS = 150
@@ -57,7 +55,7 @@ TRAFFIC_MULT_CAP = 2.0
 MAX_UNADDRESSED_PROB = 0.15
 
 PASSIVE_SPEAK_DELAY_RANGE = (301, 7200)
-PASSIVE_SPEAK_TRIGGER_PROB = 1 / 150
+PASSIVE_SPEAK_TRIGGER_PROB = 1 / 300
 PASSIVE_SPEAK_MIN_GAP = 300
 
 EMOJI_RANDOM_PROB = 1 / 10
@@ -65,7 +63,10 @@ FINAL_EMOJI_PROB = 1 / 5
 EMOJI_MOOD_TOLERANCE = 0.35
 EMOJI_MOOD_SOFTNESS = 0.25
 
-REPLY_MENTION_PROB = 0.1
+TRANSITION_SPLIT_RE = re.compile(
+    r'(?<=[^\s])(?=对了|话说|不过|然后|而且|还有|哦对|诶对|对哦|哦哦|另外|说起来|对吧|诶|哦)'
+)
+SEGMENT_MAX_LEN = 28
 
 MISSED_MENTION_SAVE_PROB = 0.45
 MISSED_MENTION_MIN_DELAY = 480
@@ -73,26 +74,77 @@ MISSED_MENTION_MAX_DELAY = 2400
 MISSED_MENTION_EXPIRY = 4 * 3600
 MISSED_MENTION_MAX_PER_GROUP = 2
 
-TYPING_CHARS_PER_SEC_BASE = 4.5
-TYPING_CHARS_PER_SEC_JITTER = 1.5
-TYPING_MAX_SECS = 14.0
-TYPING_MIN_SECS = 1.2
+TYPING_CHARS_PER_SEC_BASE = 3.5
+TYPING_CHARS_PER_SEC_JITTER = 1.2
+TYPING_MAX_SECS = 18.0
+TYPING_MIN_SECS = 1.8
 
 PROJECT_DIR = os.path.dirname(__file__)
 ROLE_SETUP_FILE = os.path.join(PROJECT_DIR, "airi_prompt_v3.md")
 EMOJI_DIR = os.path.join(PROJECT_DIR, "emoji")
 EMOJI_MOOD_FILE = os.path.join(PROJECT_DIR, "emoji_moods.json")
 
-CHAR_NAME = (getattr(driver.config, "airi_char_name", "") or "").strip() or "爱莉"
+CHAR_NAME = (getattr(driver.config, "airi_char_name", "") or "").strip() or "Airi"
 _raw_aliases = getattr(driver.config, "airi_char_aliases", None)
 if isinstance(_raw_aliases, str):
     _raw_aliases = [a.strip() for a in _raw_aliases.split(",")]
 CHAR_ALIASES = [a.strip().lower() for a in (_raw_aliases or ["airi", "爱莉"]) if a and a.strip()]
 
+_raw_excludes = getattr(driver.config, "airi_char_alias_excludes", None)
+if isinstance(_raw_excludes, str):
+    _raw_excludes = [w.strip() for w in _raw_excludes.split(",")]
+ALIAS_EXCLUDES = [w.strip().lower() for w in (_raw_excludes or ["爱莉希雅"]) if w and w.strip()]
+
+_ASCII_ALIAS_RE = {
+    a: re.compile(r"(?<![0-9a-z])" + re.escape(a) + r"(?![0-9a-z])")
+    for a in CHAR_ALIASES if a.isascii()
+}
+
+
+def _alias_mentioned(text: str) -> bool:
+    low = text.lower()
+    for ex in ALIAS_EXCLUDES:
+        if ex and ex in low:
+            low = low.replace(ex, "")
+    for alias in CHAR_ALIASES:
+        pat = _ASCII_ALIAS_RE.get(alias)
+        if pat is not None:
+            if pat.search(low):
+                return True
+        elif alias in low:
+            return True
+    return False
+
+
+def _at_self(ev: MessageEvent, self_id: str) -> bool:
+    if getattr(ev, "to_me", False):
+        return True
+    try:
+        for seg in ev.original_message or ev.message:
+            if seg.type == "at" and str(seg.data.get("qq", "")) == str(self_id):
+                return True
+    except Exception:
+        pass
+    return False
+
+
+def _reply_to_self(ev: MessageEvent, self_id: str) -> bool:
+    reply = getattr(ev, "reply", None)
+    return bool(reply and str(reply.sender.user_id) == str(self_id))
+
 _raw_whitelist_bot = getattr(driver.config, "airi_llm_whitelist_bot", None)
 if isinstance(_raw_whitelist_bot, str):
     _raw_whitelist_bot = [b.strip() for b in _raw_whitelist_bot.split(",")]
 WHITELIST_BOT = set(_raw_whitelist_bot) if _raw_whitelist_bot else set()
+
+_raw_blacklist_group = getattr(driver.config, "airi_llm_blacklist_group", None)
+if isinstance(_raw_blacklist_group, str):
+    _raw_blacklist_group = [g.strip() for g in _raw_blacklist_group.split(",")]
+BLACKLIST_GROUP = set(
+    str(g).strip() for g in (_raw_blacklist_group or []) if str(g).strip()
+)
+if BLACKLIST_GROUP:
+    logger.info(f"LLM 群黑名单已启用，屏蔽 {len(BLACKLIST_GROUP)} 个群")
 
 
 class AiriState:
@@ -113,6 +165,7 @@ class AiriState:
         self.last_speak_time_group: Dict[str, float] = {}
         self.negative_speaking_tokens: Dict[str, int] = {}
         self.missed_mentions: list = []
+        self.emoji_b64: Dict[str, str] = {}
 
     def flush_prompt(self) -> str:
         try:
@@ -158,10 +211,13 @@ class AiriState:
 
 
 airi_state = AiriState()
-airi_state.flush_prompt()
+try:
+    airi_state.flush_prompt()
+except Exception:
+    logger.error("角色提示词加载失败，插件以空提示词启动，可用 ldebug 刷新")
 airi_state.init_emoji_list()
 
-_2fa_key = getattr(driver.config, "_2fa_key", "")
+_2fa_key = str(getattr(driver.config, "_2fa_key", "") or "").strip()
 
 
 @driver.on_startup
@@ -193,27 +249,56 @@ async def _cleanup_job() -> None:
 
 
 timings.add_job(_flush_job, "interval", minutes=2, misfire_grace_time=600, coalesce=True)
-timings.add_job(_extraction_job, "interval", minutes=30, misfire_grace_time=600, coalesce=True)
+timings.add_job(_extraction_job, "interval", minutes=300, misfire_grace_time=600, coalesce=True)
 timings.add_job(_cleanup_job, "interval", hours=6, misfire_grace_time=600, coalesce=True)
+
+
+def _image_source(seg: Any) -> str:
+    data = seg.data or {}
+    for key in ("url", "file"):
+        val = str(data.get(key) or "")
+        if val.startswith(("base64://", "http://", "https://", "file://")):
+            return val
+    val = str(data.get("file") or "")
+    if val and os.path.exists(val):
+        return "file://" + val
+    return ""
+
+
+MAX_IMAGE_BYTES = 8 * 1024 * 1024
+MAX_IMAGES_PER_MSG = 4
+IMAGE_TIMEOUT = 15
 
 
 async def get_image_base64_list(message: Any) -> List[str]:
     base64_results = []
-    async with httpx.AsyncClient() as http_client:
+    async with httpx.AsyncClient(timeout=IMAGE_TIMEOUT, follow_redirects=True) as http_client:
         for seg in message:
             if seg.type != "image":
                 continue
-            file_str: str = seg.data.get("url", "")
+            if len(base64_results) >= MAX_IMAGES_PER_MSG:
+                break
+            file_str: str = _image_source(seg)
+            if not file_str:
+                continue
             try:
                 if file_str.startswith("base64://"):
-                    base64_results.append(file_str[len("base64://"):])
+                    raw = file_str[len("base64://"):]
+                    if len(raw) <= MAX_IMAGE_BYTES * 4 // 3:
+                        base64_results.append(raw)
                 elif file_str.startswith(("http://", "https://")):
+                    if not await is_public_url_async(file_str):
+                        logger.warning(f"图片地址不可访问，已跳过: {file_str[:80]}")
+                        continue
                     resp = await http_client.get(file_str)
                     resp.raise_for_status()
+                    if len(resp.content) > MAX_IMAGE_BYTES:
+                        logger.warning(f"图片过大已跳过: {len(resp.content)} bytes")
+                        continue
                     base64_results.append(base64.b64encode(resp.content).decode("utf-8"))
                 elif file_str.startswith("file://"):
                     fp = file_str[len("file://"):]
-                    if os.path.exists(fp):
+                    if os.path.exists(fp) and os.path.getsize(fp) <= MAX_IMAGE_BYTES:
                         with open(fp, "rb") as f:
                             base64_results.append(base64.b64encode(f.read()).decode("utf-8"))
             except Exception as e:
@@ -243,17 +328,56 @@ def _pick_emoji_path(target_mood: Optional[float]) -> Optional[str]:
     return random.choices(paths, weights=weights, k=1)[0]
 
 
-async def generate_random_emoji(target_mood: Optional[float] = None) -> MessageSegment:
+def _emoji_b64(path: str) -> Optional[str]:
+    cached = asset_cache.get_b64(path)
+    if cached:
+        return cached
+    try:
+        with open(path, "rb") as f:
+            return "base64://" + base64.b64encode(f.read()).decode("utf-8")
+    except OSError as e:
+        logger.warning(f"读取表情失败: {e}")
+        return None
+
+
+async def generate_random_emoji(target_mood: Optional[float] = None) -> Optional[MessageSegment]:
     path = _pick_emoji_path(target_mood)
     if not path:
-        return MessageSegment.text("😜")
-    with open(path, "rb") as f:
-        b64_data = base64.b64encode(f.read()).decode("utf-8")
-    return MessageSegment.image(f"base64://{b64_data}")
+        return None
+    b64_data = _emoji_b64(path)
+    if not b64_data:
+        return None
+    return MessageSegment.image(b64_data)
 
 
 def get_user_nickname(bot: Bot, ev: MessageEvent) -> str:
     return ev.sender.card or ev.sender.nickname or str(ev.user_id)
+
+
+AT_NICK_TTL = 3 * 3600
+AT_NICK_MAX = 2000
+_at_nick_cache: Dict[str, tuple] = {}
+
+
+async def _member_nickname(bot: Bot, group_id: str, qq_num: str) -> str:
+    key = f"{group_id}:{qq_num}"
+    now = time.time()
+    hit = _at_nick_cache.get(key)
+    if hit and now - hit[1] <= AT_NICK_TTL:
+        return hit[0]
+    try:
+        member_info = await bot.get_group_member_info(group_id=group_id, user_id=qq_num)
+        nick = member_info.get("nickname") or member_info.get("card") or qq_num
+    except Exception as e:
+        logger.warning(f"获取@用户信息失败: {e}")
+        nick = qq_num
+    if len(_at_nick_cache) >= AT_NICK_MAX:
+        for k in [k for k, v in _at_nick_cache.items() if now - v[1] > AT_NICK_TTL]:
+            _at_nick_cache.pop(k, None)
+        if len(_at_nick_cache) >= AT_NICK_MAX:
+            _at_nick_cache.clear()
+    _at_nick_cache[key] = (nick, now)
+    return nick
 
 
 async def replace_at_nickname(bot: Bot, group_id: str, input_text: str) -> str:
@@ -261,14 +385,11 @@ async def replace_at_nickname(bot: Bot, group_id: str, input_text: str) -> str:
     replace_map = {}
     for match in at_pattern.finditer(input_text):
         cq_at = match.group(0)
+        if cq_at in replace_map:
+            continue
         qq_num = match.group(1)
-        try:
-            member_info = await bot.get_group_member_info(group_id=group_id, user_id=qq_num)
-            nick = member_info.get("nickname") or member_info.get("card") or qq_num
-            replace_map[cq_at] = f" @{nick} "
-        except Exception as e:
-            logger.warning(f"获取@用户信息失败: {e}")
-            replace_map[cq_at] = f" @{qq_num} "
+        nick = await _member_nickname(bot, group_id, qq_num)
+        replace_map[cq_at] = f" @{nick} "
     for old, new in replace_map.items():
         input_text = input_text.replace(old, new)
     input_text = re.sub(r"\[CQ:.*?\]", "", input_text)
@@ -277,13 +398,10 @@ async def replace_at_nickname(bot: Bot, group_id: str, input_text: str) -> str:
 
 async def build_message_content(bot: Bot, ev: MessageEvent, group_id: str) -> str:
     text = str(ev.message).strip()
+    if text.startswith("."):
+        text = text.lstrip(".").strip()
     text = await replace_at_nickname(bot, group_id, text)
     return text
-
-
-def _is_night() -> bool:
-    h = time.localtime().tm_hour
-    return h >= 22 or h < 6
 
 
 def _time_prob_mult() -> float:
@@ -303,21 +421,11 @@ def _time_prob_mult() -> float:
     return 0.28
 
 
-def _time_state_hint() -> str:
-    h = time.localtime().tm_hour
-    if 2 <= h < 6:
-        return "现在深夜，困到极点，极不想说话"
-    if 6 <= h < 9:
-        return "刚睡醒，还没完全清醒，有些迷糊"
-    if 12 <= h < 14:
-        return "吃完饭有些犯困，回复比较懒"
-    if 22 <= h or h < 2:
-        return "夜深了，有点困，话少"
-    return ""
-
-
-def _maybe_save_missed_mention(state: Any, gid: str, uid: str, snippet: str) -> None:
-    if random.random() >= MISSED_MENTION_SAVE_PROB:
+def _maybe_save_missed_mention(state: Any, gid: str, uid: str, snippet: str,
+                              nickname: str = "", force: bool = False) -> None:
+    if not snippet:
+        return
+    if not force and random.random() >= MISSED_MENTION_SAVE_PROB:
         return
     existing = [m for m in state.missed_mentions if m["gid"] == gid]
     if len(existing) >= MISSED_MENTION_MAX_PER_GROUP:
@@ -326,23 +434,32 @@ def _maybe_save_missed_mention(state: Any, gid: str, uid: str, snippet: str) -> 
     state.missed_mentions.append({
         "gid": gid,
         "uid": uid,
+        "nickname": nickname or uid,
         "snippet": snippet[:100],
         "reply_after": time.time() + delay,
         "created_at": time.time(),
     })
 
 
-def _pop_due_missed_mention(state: Any, gid: str) -> Optional[dict]:
+def _peek_due_missed_mention(state: Any, gid: str) -> Optional[dict]:
     now = time.time()
     state.missed_mentions = [
         m for m in state.missed_mentions
-        if now - m["created_at"] < MISSED_MENTION_EXPIRY
+        if now - m.get("created_at", now) < MISSED_MENTION_EXPIRY
     ]
-    for m in list(state.missed_mentions):
+    for m in state.missed_mentions:
         if m["gid"] == gid and m["reply_after"] <= now:
-            state.missed_mentions.remove(m)
             return m
     return None
+
+
+def _drop_missed_mention(state: Any, mention: Optional[dict]) -> None:
+    if mention is None:
+        return
+    try:
+        state.missed_mentions.remove(mention)
+    except ValueError:
+        pass
 
 
 def _recent_traffic(group_id: str) -> int:
@@ -353,27 +470,34 @@ def _recent_traffic(group_id: str) -> int:
     return sum(1 for e in ctx.entries if e.ts >= cutoff)
 
 
-async def decide_speak(bot: Bot, ev: MessageEvent, group_id: str, user_id: str) -> bool:
-    if user_id in SUPERUSERS and str(ev.message).startswith("."):
-        return True
-
-    tokens = airi_state.negative_speaking_tokens.get(group_id, 0)
-    msg_raw = str(ev)
-    msg_text = str(ev.message)
-    msg_lower = msg_text.lower()
-    addressed = any([
-        any(alias in msg_lower for alias in CHAR_ALIASES),
-        bot.self_id in msg_raw,
+def _was_addressed(bot: Bot, ev: MessageEvent, msg_text: str) -> bool:
+    return any([
+        _at_self(ev, bot.self_id),
+        _reply_to_self(ev, bot.self_id),
+        _alias_mentioned(msg_text),
         msg_text.startswith("."),
-        (hasattr(ev, "reply") and ev.reply and str(ev.reply.sender.user_id) == bot.self_id),
     ])
+
+
+async def decide_speak(bot: Bot, ev: MessageEvent, group_id: str, user_id: str) -> bool:
+    tokens = airi_state.negative_speaking_tokens.get(group_id, 0)
+    msg_text = str(ev.message)
+    dot_prefixed = msg_text.startswith(".")
+    if dot_prefixed and user_id in SUPERUSERS:
+        return True
+    dot_triggered = dot_prefixed and tokens > 0
+
+    directly_addressed = _at_self(ev, bot.self_id) or _reply_to_self(ev, bot.self_id)
+    alias_triggered = _alias_mentioned(msg_text) and tokens > 0
+    addressed = directly_addressed or alias_triggered or dot_triggered
 
     now = time.time()
     last_speak = airi_state.last_speak_time_group.get(group_id, 0)
     since_last = now - last_speak
 
-    if addressed and tokens > 0:
-        airi_state.negative_speaking_tokens[group_id] = tokens + ADDRESSED_TOKENS_BONUS
+    if addressed:
+        if tokens > 0:
+            airi_state.negative_speaking_tokens[group_id] = tokens + ADDRESSED_TOKENS_BONUS
         umem = airi_state.long_term.users.get(user_id)
         affinity = umem.affinity if umem else 0.0
         prob = min(ADDRESSED_PROB + max(0.0, affinity) * 0.08, 0.98)
@@ -399,31 +523,90 @@ async def decide_speak(bot: Bot, ev: MessageEvent, group_id: str, user_id: str) 
     return random.random() < p
 
 
-async def send_llm_reply(msg_content: str, need_reply: int) -> int:
+_bg_tasks: set = set()
+_send_locks: Dict[str, asyncio.Lock] = {}
+
+
+def _get_send_lock(group_id: str) -> asyncio.Lock:
+    lock = _send_locks.get(group_id)
+    if lock is None:
+        if len(_send_locks) > 500:
+            for k in [k for k, v in _send_locks.items() if not v.locked()]:
+                _send_locks.pop(k, None)
+        lock = asyncio.Lock()
+        _send_locks[group_id] = lock
+    return lock
+
+
+def _spawn(coro, label: str) -> None:
+    task = asyncio.create_task(coro)
+    _bg_tasks.add(task)
+
+    def _done(t):
+        _bg_tasks.discard(t)
+        if t.cancelled():
+            return
+        exc = t.exception()
+        if exc is not None:
+            logger.warning(f"后台任务 {label} 异常: {exc}")
+
+    task.add_done_callback(_done)
+
+
+REPLY_MARK_RE = re.compile(r"[\[［]\s*(?:回复|reply)\s*[:：]\s*(\d{1,20})\s*[\]］]",
+                           re.IGNORECASE)
+
+
+def _extract_reply_target(text: str, valid_ids: Set[str]) -> tuple:
+    picked: Optional[str] = None
+    for m in REPLY_MARK_RE.finditer(text):
+        mid = m.group(1)
+        if picked is None and mid in valid_ids:
+            picked = mid
+        elif picked is None:
+            logger.warning(f"LLM 给出的引用消息ID {mid} 不在上下文中，忽略")
+    cleaned = REPLY_MARK_RE.sub("", text).strip()
+    return cleaned, picked
+
+
+async def send_llm_reply(msg_content: str, reply_to_msg_id: Optional[str] = None,
+                         bot: Optional[Bot] = None, group_id: Optional[str] = None) -> None:
+    async def _out(payload) -> None:
+        if bot is not None and group_id:
+            await bot.send_group_msg(group_id=int(group_id), message=payload)
+        else:
+            await airi_llm.send(payload)
+
     punct_pattern = re.compile(r"[，。！？；：～]+")
-    if random.randint(1, 8) > 1:
-        msg_segments = punct_pattern.split(msg_content)
-    else:
-        msg_segments = [msg_content]
+    msg_segments: list = []
+    last_end = 0
+    for m in punct_pattern.finditer(msg_content):
+        body = msg_content[last_end:m.start()].strip()
+        last_end = m.end()
+        keep = "".join(c for c in m.group(0) if c in "！？")
+        if body:
+            msg_segments.append(body + keep)
+        elif keep and msg_segments:
+            msg_segments[-1] = msg_segments[-1] + keep
+    tail = msg_content[last_end:].strip()
+    if tail:
+        msg_segments.append(tail)
 
-    msg_segments = [seg.strip() for seg in msg_segments if seg.strip()]
     if not msg_segments:
-        return 0
+        return
 
-    if len(msg_segments) > 2:
-        is_single = 1
-        for idx in range(len(msg_segments)):
-            seg = msg_segments[idx]
-            if seg.endswith(("，", "。")):
-                msg_segments[idx] = seg[:-1]
-            if idx != len(msg_segments) - 1 and len(seg) > 1:
-                is_single = 0
-        if is_single:
-            msg_segments = ["！".join(msg_segments) + "！"]
-    for idx in range(len(msg_segments)):
-        seg = msg_segments[idx]
-        if seg.endswith(("，", "。")):
-            msg_segments[idx] = seg[:-1]
+    if len(msg_segments) > 2 and all(len(s.rstrip("！？")) == 1 for s in msg_segments):
+        merged = "！".join(s.rstrip("！？") for s in msg_segments)
+        msg_segments = [merged + "！"]
+
+    expanded: list = []
+    for seg in msg_segments:
+        if len(seg) > SEGMENT_MAX_LEN:
+            parts = [p for p in TRANSITION_SPLIT_RE.split(seg) if p]
+            expanded.extend(parts if len(parts) > 1 else [seg])
+        else:
+            expanded.append(seg)
+    msg_segments = expanded
 
     send_lead = random.random() < EMOJI_RANDOM_PROB
     send_tail = random.random() < FINAL_EMOJI_PROB
@@ -437,37 +620,47 @@ async def send_llm_reply(msg_content: str, need_reply: int) -> int:
     if send_lead:
         try:
             emoji_seg = await generate_random_emoji(reply_mood)
-            await asyncio.sleep(random.randint(3, 8))
-            await airi_llm.send(emoji_seg)
+            if emoji_seg is not None:
+                await asyncio.sleep(random.randint(3, 8))
+                await _out(emoji_seg)
         except Exception as e:
             logger.warning(f"发送开场表情失败（不影响回复）: {e}")
 
     await asyncio.sleep(random.randint(3, 8))
 
+    pending_reply_id = reply_to_msg_id
     for idx, seg in enumerate(msg_segments):
         if seg:
-            await airi_llm.send(seg, reply_message=bool(need_reply))
-            need_reply = 0
+            if pending_reply_id:
+                try:
+                    out = MessageSegment.reply(int(pending_reply_id)) + MessageSegment.text(seg)
+                except (ValueError, TypeError):
+                    out = seg
+                pending_reply_id = None
+            else:
+                out = seg
+            await _out(out)
             if idx != len(msg_segments) - 1:
                 chars = len(seg)
                 cps = TYPING_CHARS_PER_SEC_BASE + random.uniform(-TYPING_CHARS_PER_SEC_JITTER, TYPING_CHARS_PER_SEC_JITTER)
                 sleep_time = max(TYPING_MIN_SECS, min(chars / max(cps, 0.5), TYPING_MAX_SECS))
-                sleep_time += random.uniform(0.3, 1.5)
+                sleep_time += random.uniform(0.5, 2.0)
             else:
-                sleep_time = random.uniform(0.8, 2.0)
+                sleep_time = random.uniform(1.2, 3.0)
             await asyncio.sleep(sleep_time)
 
     if send_tail:
         try:
             emoji_seg = await generate_random_emoji(reply_mood)
-            await airi_llm.send(emoji_seg)
+            if emoji_seg is not None:
+                await _out(emoji_seg)
         except Exception as e:
             logger.warning(f"发送结尾表情失败（不影响回复）: {e}")
 
-    return need_reply
-
 
 async def passive_speaking(bot: Bot, group_id: str, mode: int = 1) -> None:
+    if group_id in BLACKLIST_GROUP:
+        return
     if mode and airi_state.passive_speaking_group_tamed.get(group_id, 0):
         return
     try:
@@ -483,13 +676,24 @@ async def passive_speaking(bot: Bot, group_id: str, mode: int = 1) -> None:
         if airi_state.negative_speaking_tokens.get(group_id, 0) == 0:
             airi_state.negative_speaking_tokens[group_id] = NEGATIVE_SPEAK_TOKENS_INIT
 
+        if str(bot.self_id) not in nonebot.get_bots():
+            logger.warning(f"主动插话时 bot {bot.self_id} 已断线，放弃发送")
+            return
+
         lock = memory._get_lock(airi_state, group_id)
         if lock.locked():
             return
 
+        reply = None
+        reply_to_msg_id = None
         async with lock:
             llm_input = memory.render_context(airi_state, group_id)
+            valid_reply_ids = memory.replyable_msg_ids(airi_state, group_id)
             reply = await call_llm(airi_state.role_setup, llm_input, [])
+            if not reply:
+                return
+
+            reply, reply_to_msg_id = _extract_reply_target(reply, valid_reply_ids)
             if not reply:
                 return
 
@@ -500,10 +704,16 @@ async def passive_speaking(bot: Bot, group_id: str, mode: int = 1) -> None:
                                     nickname="（我）", content=reply, is_self=True),
             )
             airi_state.last_speak_time_group[group_id] = time.time()
-            try:
-                await send_llm_reply(reply, 0)
-            except Exception:
-                pass
+
+        live = nonebot.get_bots().get(str(bot.self_id))
+        if live is None:
+            logger.warning(f"主动插话发送前 bot {bot.self_id} 已断线，放弃发送")
+            return
+        try:
+            async with _get_send_lock(group_id):
+                await send_llm_reply(reply, reply_to_msg_id, bot=live, group_id=group_id)
+        except Exception as e:
+            logger.warning(f"主动插话发送失败: {e}")
     except Exception as e:
         logger.error(f"主动插话失败: {e}")
     finally:
@@ -564,71 +774,113 @@ async def handle_airi_llm(bot: Bot, ev: MessageEvent):
             return
         _, group_id, user_id = session_id.split("_")
 
-        if bot.self_id not in WHITELIST_BOT:
+        if group_id in BLACKLIST_GROUP:
             return
+
+        if WHITELIST_BOT and bot.self_id not in WHITELIST_BOT:
+            return
+
+        uid_str = str(ev.user_id)
+        is_sibling_bot = uid_str == str(bot.self_id) or uid_str in WHITELIST_BOT
 
         tokens = airi_state.negative_speaking_tokens.get(group_id, 0) - NEGATIVE_SPEAK_TOKENS_DEDUCT
         airi_state.negative_speaking_tokens[group_id] = max(tokens, 0)
 
         user_nick = get_user_nickname(bot, ev)
+        qq_nickname = ev.sender.nickname or str(ev.user_id)
         content = await build_message_content(bot, ev, group_id)
+        if not content and any(seg.type == "image" for seg in ev.message):
+            content = "[图片]"
+        msg_id = str(ev.message_id)
+        reply_to_id: Optional[str] = None
+        if hasattr(ev, "reply") and ev.reply:
+            reply_to_id = str(ev.reply.message_id)
+        else:
+            for seg in ev.message:
+                if seg.type == "reply":
+                    reply_to_id = str(seg.data.get("id", "")) or None
+                    break
+        umem = airi_state.long_term.users.get(uid_str)
+        if umem and umem.nickname != qq_nickname:
+            umem.nickname = qq_nickname
+            airi_state.dirty.add(group_id)
+        if umem and (umem.card_name or "") != (ev.sender.card or ""):
+            umem.card_name = ev.sender.card or ""
+            airi_state.dirty.add(group_id)
         if content:
             memory.save_context_entry(
                 airi_state, group_id,
-                memory.ContextEntry(ts=time.time(), user_id=str(ev.user_id),
-                                    nickname=user_nick, content=content),
+                memory.ContextEntry(ts=time.time(), user_id=uid_str,
+                                    nickname=user_nick, content=content,
+                                    msg_id=msg_id, reply_to_id=reply_to_id,
+                                    qq_nickname=qq_nickname),
             )
 
         if random.random() < PASSIVE_SPEAK_TRIGGER_PROB:
-            asyncio.create_task(passive_speaking(bot, group_id, 1))
+            _spawn(passive_speaking(bot, group_id, 1), "passive_speaking")
 
-        asyncio.create_task(memory.maybe_distill(airi_state, group_id))
-        asyncio.create_task(memory.maybe_refresh_mood_and_topic(airi_state, group_id))
-        asyncio.create_task(memory.maybe_refresh_speaking_style(airi_state, group_id))
-        asyncio.create_task(memory.maybe_refresh_bot_state(airi_state, group_id))
-        asyncio.create_task(memory.maybe_extract_knowledge(airi_state, group_id))
+        _spawn(memory.maybe_distill(airi_state, group_id), "distill")
+        _spawn(memory.maybe_refresh_mood_and_topic(airi_state, group_id), "mood_topic")
+        _spawn(memory.maybe_refresh_speaking_style(airi_state, group_id), "speaking_style")
+        _spawn(memory.maybe_refresh_bot_state(airi_state, group_id), "bot_state")
+        _spawn(memory.maybe_extract_knowledge(airi_state, group_id), "extract_knowledge")
 
-        msg_raw = str(ev)
+        if is_sibling_bot:
+            return
+
         msg_text = str(ev.message)
-        msg_lower = msg_text.lower()
-        was_addressed = any([
-            any(alias in msg_lower for alias in CHAR_ALIASES),
-            bot.self_id in msg_raw,
-            msg_text.startswith("."),
-            (hasattr(ev, "reply") and ev.reply and str(ev.reply.sender.user_id) == bot.self_id),
-        ])
+        was_addressed = _was_addressed(bot, ev, msg_text)
 
-        due_mention = _pop_due_missed_mention(airi_state, group_id)
+        due_mention = _peek_due_missed_mention(airi_state, group_id)
         force_speak = due_mention is not None
 
         if not force_speak and not await decide_speak(bot, ev, group_id, user_id):
             if was_addressed and content:
-                _maybe_save_missed_mention(airi_state, group_id, user_id, content)
+                _maybe_save_missed_mention(airi_state, group_id, user_id, content, user_nick)
             return
 
         img_b64_list = await get_image_base64_list(ev.get_message())
 
         lock = memory._get_lock(airi_state, group_id)
         if lock.locked():
+            if was_addressed and content:
+                _maybe_save_missed_mention(airi_state, group_id, user_id, content,
+                                           user_nick, force=True)
             return
+        llm_reply = None
+        reply_to_msg_id = None
         async with lock:
             if airi_state.negative_speaking_tokens.get(group_id, 0) == 0:
                 airi_state.negative_speaking_tokens[group_id] = NEGATIVE_SPEAK_TOKENS_INIT
 
-            need_reply = 1 if random.random() < REPLY_MENTION_PROB else 0
+            need_reply = random.random() < REPLY_MENTION_PROB
+            valid_reply_ids = memory.replyable_msg_ids(airi_state, group_id)
 
-            if due_mention:
-                callback_snippet = (
-                    f"你刚想起来，{due_mention['uid']} 之前说过：「{due_mention['snippet']}」，"
-                    "感觉可以自然地回应一下这件事"
-                )
-            else:
-                callback_snippet = memory.pop_pending_callback(airi_state, group_id, user_id)
             knowledge_snippets = await memory.retrieve_knowledge(airi_state, group_id, content or "")
-            llm_input = memory.render_context(airi_state, group_id, callback_snippet, knowledge_snippets)
+            recall_snippet = None
+            if due_mention is not None:
+                recall_snippet = (
+                    f"{due_mention.get('nickname') or due_mention['uid']}"
+                    f"（{due_mention['uid']}）之前叫过你但你没回："
+                    f"「{due_mention['snippet']}」"
+                )
+            llm_input = memory.render_context(airi_state, group_id, knowledge_snippets,
+                                              recall_snippet)
+            if due_mention is not None:
+                _drop_missed_mention(airi_state, due_mention)
             llm_reply = await call_llm(airi_state.role_setup, llm_input, img_b64_list)
             if not llm_reply:
+                logger.warning(f"群 {group_id} 的 LLM 回复为空，本轮不发言")
                 return
+
+            llm_reply, picked_id = _extract_reply_target(llm_reply, valid_reply_ids)
+            if not llm_reply:
+                logger.warning(f"群 {group_id} 的 LLM 回复只有引用标记，本轮不发言")
+                return
+            if picked_id:
+                reply_to_msg_id = picked_id
+            elif need_reply:
+                reply_to_msg_id = msg_id
 
             llm_reply = re.sub(r"[(（].+?[)）]", "", llm_reply)
             memory.save_context_entry(
@@ -638,10 +890,11 @@ async def handle_airi_llm(bot: Bot, ev: MessageEvent):
             )
             airi_state.last_speak_time_group[group_id] = time.time()
 
-            try:
-                await send_llm_reply(llm_reply, need_reply)
-            except Exception:
-                pass
+        try:
+            async with _get_send_lock(group_id):
+                await send_llm_reply(llm_reply, reply_to_msg_id)
+        except Exception as e:
+            logger.warning(f"回复发送失败: {e}")
 
     except Exception as err:
         logger.error(f"消息处理失败: {err}\n{traceback.format_exc()}")
@@ -651,6 +904,9 @@ async def handle_airi_llm(bot: Bot, ev: MessageEvent):
 @superuser_debug.handle()
 async def handle_superuser_debug(bot: Bot, ev: MessageEvent):
     try:
+        if not _2fa_key:
+            await superuser_debug.send("未配置 _2fa_key，调试通道已禁用")
+            return
         src = ev.get_plaintext()[6:].strip()
         while (tmpa := src.replace("  ", " ")) != src:
             src = tmpa
@@ -659,16 +915,20 @@ async def handle_superuser_debug(bot: Bot, ev: MessageEvent):
             await superuser_debug.send("2fa verification failed")
             return
         cmd = src[6:].strip()
-        if cmd.startswith("await "):
-            try:
-                result = await eval(cmd[6:].lstrip())
-            except Exception:
-                result = await exec(cmd[6:].lstrip())
+        awaited = cmd.startswith("await ")
+        if awaited:
+            cmd = cmd[6:].lstrip()
+        try:
+            code = compile(cmd, "<ldebug>", "eval")
+        except SyntaxError:
+            code = None
+        if code is not None:
+            result = eval(code)
+            if awaited or asyncio.iscoroutine(result):
+                result = await result
         else:
-            try:
-                result = eval(cmd)
-            except Exception:
-                result = exec(cmd)
+            exec(compile(cmd, "<ldebug>", "exec"))
+            result = None
 
         reply = "命令执行成功" if result is None else str(result)
         await superuser_debug.send(reply, reply_message=True)

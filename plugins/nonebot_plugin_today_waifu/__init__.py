@@ -14,7 +14,7 @@ from nonebot.adapters.onebot.v11.permission import GROUP_OWNER, GROUP_ADMIN
 
 from .config import Config
 from .record import get_group_record, save_group_record, construct_waifu_msg, clear_group_record, \
-    construct_change_waifu_msg
+    construct_change_waifu_msg, construct_force_waifu_msg, construct_force_waifu_taken_msg
 
 __plugin_name__ = '今日老婆'
 __plugin_version__ = '0.1.5'
@@ -42,7 +42,10 @@ __plugin_meta__ = PluginMetadata(
         "  ▷ 范围：群聊\n"
         "  ▷ 介绍：设置本群换老婆最大次数\n"
         "  ▷ 参数：\n"
-        "    ▷ N：指定整数次数"
+        "    ▷ N：指定整数次数\n"
+        "▶ 强娶 @某人\n"
+        "  ▷ 范围：群聊\n"
+        "  ▷ 介绍：强制指定某人为今日老婆，若对方已被娶走则提示；成功后今日换老婆次数清零"
     ),
     Config,
     {
@@ -102,6 +105,14 @@ today_waifu_set_allow_change = on_regex(
     permission=permission_opt,
     priority=7,
     block=True
+)
+
+today_waifu_force = on_regex(
+    pattern=r'^\s*强娶',
+    flags=re.S,
+    permission=GROUP | SUPERUSER,
+    priority=7,
+    block=True,
 )
 
 
@@ -226,3 +237,59 @@ async def _(event: GroupMessageEvent, name: Dict[str, Any] = RegexDict()):
     plugin_name: str = name.get('name', __plugin_name__).strip()
     clear_group_record(str(event.group_id))
     await today_waifu_refresh.finish(f"{plugin_name}已刷新！")
+
+
+@today_waifu_force.handle()
+async def _(bot: Bot, event: GroupMessageEvent):
+    gid = str(event.group_id)
+    uid = str(event.user_id)
+    today = str(datetime.date.today())
+
+    at_segments = [seg for seg in event.message if seg.type == 'at']
+    if not at_segments:
+        await today_waifu_force.finish('请@你想强娶的对象', at_sender=True)
+
+    target_id = int(at_segments[0].data['qq'])
+
+    if target_id == int(uid):
+        await today_waifu_force.finish('不能强娶自己哦', at_sender=True)
+    if target_id in ban_id:
+        await today_waifu_force.finish('该用户不可被娶', at_sender=True)
+
+    group_record: Dict[str, Union[int, bool, Dict[str, Dict[str, int]]]] = get_group_record(gid)
+    limit_times: int = group_record.setdefault('limit_times', default_limit_times)
+    allow_change_waifu: bool = group_record.setdefault('allow_change_waifu', default_allow_change_waifu)
+
+    if today not in group_record:
+        group_record.clear()
+        group_record['limit_times'] = limit_times
+        group_record['allow_change_waifu'] = allow_change_waifu
+        group_record[today] = {}
+
+    group_today_record: Dict[str, Dict[str, int]] = group_record[today]
+
+    if uid in group_today_record and group_today_record[uid].get('force_married'):
+        await today_waifu_force.finish('今天已经强娶过一次了哦', at_sender=True)
+
+    for owner_uid, info in group_today_record.items():
+        if info.get('waifu_id') == target_id and owner_uid != uid:
+            try:
+                owner_info = await bot.get_group_member_info(group_id=gid, user_id=int(owner_uid))
+            except ActionFailed:
+                owner_info = {}
+            message: Message = await construct_force_waifu_taken_msg(owner_info, owner_uid)
+            await today_waifu_force.finish(message, at_sender=True)
+
+    group_today_record[uid] = {
+        'waifu_id': target_id,
+        'times': limit_times,
+        'force_married': True,
+    }
+    save_group_record(gid, group_record)
+
+    try:
+        member_info = await bot.get_group_member_info(group_id=gid, user_id=target_id)
+    except ActionFailed:
+        member_info = {}
+    message: Message = await construct_force_waifu_msg(member_info, target_id, int(bot.self_id))
+    await today_waifu_force.finish(message, at_sender=True)

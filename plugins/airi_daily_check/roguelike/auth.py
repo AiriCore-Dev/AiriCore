@@ -12,6 +12,10 @@ CODE_TTL = 300
 TOKEN_TTL = 30 * 86400
 _MAX_PENDING = 5000
 
+CODE_ALPHABET = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ"
+CODE_LEN = 8
+CODE_RE = r"[0-9A-Za-z]{6,10}"
+
 _SECRET: bytes = b""
 
 
@@ -46,20 +50,29 @@ def _gc_pending(now: float) -> None:
             _PENDING.pop(c, None)
 
 
+def _gen() -> str:
+    return "".join(secrets.choice(CODE_ALPHABET) for _ in range(CODE_LEN))
+
+
+def normalize_code(code: str) -> str:
+    return str(code or "").strip().upper()
+
+
 def new_code() -> str:
     now = time.time()
     _gc_pending(now)
     for _ in range(20):
-        code = "".join(secrets.choice("0123456789") for _ in range(6))
+        code = _gen()
         if code not in _PENDING:
             _PENDING[code] = {"qq": None, "nick": "", "ts": now}
             return code
-    code = "".join(secrets.choice("0123456789") for _ in range(6))
+    code = _gen()
     _PENDING[code] = {"qq": None, "nick": "", "ts": now}
     return code
 
 
 def confirm_code(code: str, qq: str, nick: str) -> bool:
+    code = normalize_code(code)
     rec = _PENDING.get(code)
     if rec is None:
         return False
@@ -72,6 +85,7 @@ def confirm_code(code: str, qq: str, nick: str) -> bool:
 
 
 def poll_code(code: str):
+    code = normalize_code(code)
     rec = _PENDING.get(code)
     if rec is None:
         return None

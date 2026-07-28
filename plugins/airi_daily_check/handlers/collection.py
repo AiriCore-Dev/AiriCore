@@ -1,34 +1,43 @@
+import asyncio
 import os
-import gc
 import random
 import datetime
 from io import BytesIO
 
 from PIL import Image, ImageDraw
+from nonebot import logger
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import MessageEvent
 
 from ..base import state
 from ..base import cache
-from ..base.constants import hidden_stickers, asset
+from ..base.constants import hidden_stickers, asset, TRANSFER_DAILY_MAX
 from ..base.matchers import xinxi, shoucang, chouka, yincang17, theme_manage
 from ..base.helpers import (
-    parse_session, resting_guard, ensure_registered,
-    download_avatar, get_sticker, make_250px_cached, generate_new_sticker,
+    parse_session, ensure_registered,
+    download_avatar, get_sticker, get_sticker_sync,
+    make_250px_cached, make_250px_cached_sync,
+    generate_new_sticker, generate_new_sticker_sync,
     acquire_sticker, check_all_achiv, image_to_base64, localpath_to_base64,
+    fallback_avatar, pick_random_image, list_subdirs,
 )
 
 
 @xinxi.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    if await resting_guard():
-        return
     user_id, group_id = parse_session(ev)
     await ensure_registered(shoucang, user_id)
+    user_nick = ev.sender.card or ev.sender.nickname or user_id
+    avater_bytes = await download_avatar(user_id)
+    base64_img = await asyncio.to_thread(_render_info, user_id, user_nick, avater_bytes)
+    await xinxi.send(MessageSegment.image(base64_img), reply_message=True)
 
-    if os.path.exists(asset('info_bg', user_id)):
-        bg_list = os.listdir(asset('info_bg', user_id))
-        backg = Image.open(asset('info_bg', user_id, random.choice(bg_list))).convert('RGBA')
+
+def _render_info(user_id, user_nick, avater_bytes):
+    if os.path.isdir(asset('info_bg', user_id)):
+        backg = cache.get_image_copy(
+            pick_random_image(asset('info_bg', user_id), asset('info_bg', 'default.png'))
+        )
         xb, yb = backg.size
         backg = backg.resize((1414, 1414 * yb // xb) if yb > xb else (1322 * xb // yb, 1322))
         xb, yb = backg.size
@@ -45,7 +54,6 @@ async def _(bot: Bot, ev: MessageEvent):
     font_skc = cache.get_font(asset('utils', 'skc.ttf'), 48)
     draw = ImageDraw.Draw(backg)
 
-    user_nick = ev.sender.card or ev.sender.nickname
     nick_len = draw.textlength(user_nick, font_skc)
     if nick_len > 302:
         user_nick = user_nick[:-1] + "…"
@@ -56,14 +64,16 @@ async def _(bot: Bot, ev: MessageEvent):
     draw.text(xy=(92, 264), text=user_nick, fill=(0, 0, 0), font=font_skc)
     draw.text(xy=(92, 337), text='账户ID: ' + user_id, fill=(0, 0, 0), font=font_sakura)
 
-    avater_bytes = await download_avatar(user_id)
-    avater = Image.open(BytesIO(avater_bytes)).convert('RGBA').resize((200, 200))
+    try:
+        avater = Image.open(BytesIO(avater_bytes)).convert('RGBA').resize((200, 200))
+    except Exception:
+        avater = fallback_avatar()
     avater_mask = cache.get_image(asset('utils', 'avater_mask.png'))
     backg.paste(avater, (435, 192), mask=avater_mask.split()[3])
 
     draw.text(xy=(200 - draw.textlength((tmpdraw := str(state.data[user_id]["credits"])), font_louxing) // 2, 426), text=tmpdraw, fill=(0, 0, 0), font=font_louxing)
     draw.text(xy=(520 - draw.textlength((tmpdraw := str(state.data[user_id]["checked_days"])), font_louxing) // 2, 426), text=tmpdraw, fill=(0, 0, 0), font=font_louxing)
-    draw.text(xy=(900 - draw.textlength((tmpdraw := str(200 - state.data[user_id]["receive_transfer_daily"])), font_louxing) // 2, 426), text=tmpdraw, fill=(0, 0, 0), font=font_louxing)
+    draw.text(xy=(900 - draw.textlength((tmpdraw := str(max(0, TRANSFER_DAILY_MAX - state.data[user_id]["receive_transfer_daily"]))), font_louxing) // 2, 426), text=tmpdraw, fill=(0, 0, 0), font=font_louxing)
     draw.text(xy=(1220 - draw.textlength((tmpdraw := str(state.data[user_id]["reborn_times"])), font_louxing) // 2, 426), text=tmpdraw, fill=(0, 0, 0), font=font_louxing)
     font_louxing = cache.get_font(asset('utils', 'louxing.ttf'), 48)
     draw.text(xy=(1046 - draw.textlength((tmpdraw := str(state.data[user_id]["theme"])), font_louxing) // 2, 266), text=tmpdraw, fill=(0, 0, 0), font=font_louxing)
@@ -96,64 +106,20 @@ async def _(bot: Bot, ev: MessageEvent):
     backg.paste(pgr, (105, 1168), mask=pgr_mask.split()[3])
     backg.paste(airi_head, (105 - 37 + 564 * cl_ur // 5, 1168 - 15), mask=airi_head.split()[3])
 
-    base64_img = image_to_base64(backg.convert('RGB'))
-    await xinxi.send(MessageSegment.image(base64_img), reply_message=True)
-    del backg, backg_2, font_louxing, font_sakura, font_skc, avater, avater_mask, draw, pgr, pgr_mask
-    gc.collect()
+    return image_to_base64(backg.convert('RGB'))
 
 
 @shoucang.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    if await resting_guard():
-        return
     user_id, group_id = parse_session(ev)
     src = str(ev.message)
     await ensure_registered(shoucang, user_id)
 
     if src == '查看收藏':
-        msg = []
-        user_nick = ev.sender.card or ev.sender.nickname
-        res = '账户昵称：{}\n账户id：{}\n'.format(user_nick, user_id)
-        res += '今日已签到！' if state.data[user_id]['check_times_daily'] else '今日未签到'
-        msg.append({"type": "node", "data": {"name": "基本信息", "uin": bot.self_id, "content": res}})
-
-        backg = cache.get_image_copy(asset('stickers', state.data[user_id]['theme'], 'bg.png'))
-        mask = cache.get_image(asset('stickers', state.data[user_id]['theme'], 'mask.png'))
-        unk = cache.get_image(asset('utils', 'unknown.png'))
-        unk_mask = unk.split()[3]
-        draw = ImageDraw.Draw(backg)
-        font = cache.get_font(asset('utils', 'font.ttc'), 48)
-        draw.text(xy=(1843, 2783), text=user_nick if len(user_nick) <= 15 else user_nick[:15] + '...', fill=(0, 0, 0), font=font)
-        draw.text(xy=(2046, 2841), text=user_id, fill=(0, 0, 0), font=font)
-        draw.text(xy=(1816, 2898), text=str(datetime.datetime.now()), fill=(0, 0, 0), font=font)
-
-        own_str = ['', '', '']
-        for i in range(1, 101):
-            x1 = ((i - 1) % 10) * 250
-            y1 = int((i - 1) / 10 + 1) * 250
-            if i in state.data[user_id]['collections']:
-                stk = await get_sticker(i, user_id)
-                sticker_img, sticker_mask = await make_250px_cached(stk)
-                backg.paste(sticker_img, (x1, y1), mask=sticker_mask)
-            else:
-                backg.paste(unk, (x1, y1), mask=unk_mask)
-        for i in range(101, 106):
-            if i in state.data[user_id]['collections']:
-                stk = await get_sticker(i, user_id)
-                sticker_img, sticker_mask = await make_250px_cached(stk)
-                x1 = ((i - 1) % 10) * 250
-                y1 = int((i - 1) / 10 + 1) * 250
-                backg.paste(sticker_img, (x1, y1), mask=sticker_mask)
-                own_str[2] += '{}, '.format(i)
-        own_str[2] = own_str[2][:-2]
-
-        res_img = Image.new('RGBA', backg.size)
-        res_img = Image.alpha_composite(res_img, backg)
-        res_img = Image.alpha_composite(res_img, mask).convert('RGB')
-        base64_img = image_to_base64(res_img)
+        user_nick = ev.sender.card or ev.sender.nickname or user_id
+        base64_img = await asyncio.to_thread(_render_collection, user_id, user_nick)
         await shoucang.send(MessageSegment.image(base64_img), reply_message=True)
-        del backg, mask, res_img, base64_img, font, draw
-        gc.collect()
+        return
     else:
         try:
             query_id = src[4:]
@@ -173,10 +139,46 @@ async def _(bot: Bot, ev: MessageEvent):
         await shoucang.finish(msg, reply_message=True)
 
 
+def _render_collection(user_id, user_nick):
+    if True:
+        backg = cache.get_image_copy(asset('stickers', state.data[user_id]['theme'], 'bg.png'))
+        mask = cache.get_image(asset('stickers', state.data[user_id]['theme'], 'mask.png'))
+        unk = cache.get_image(asset('utils', 'unknown.png'))
+        unk_mask = unk.split()[3]
+        draw = ImageDraw.Draw(backg)
+        font = cache.get_font(asset('utils', 'font.ttc'), 48)
+        draw.text(xy=(1843, 2783), text=user_nick if len(user_nick) <= 15 else user_nick[:15] + '...', fill=(0, 0, 0), font=font)
+        draw.text(xy=(2046, 2841), text=user_id, fill=(0, 0, 0), font=font)
+        draw.text(xy=(1816, 2898), text=str(datetime.datetime.now()), fill=(0, 0, 0), font=font)
+
+        own_str = ['', '', '']
+        for i in range(1, 101):
+            x1 = ((i - 1) % 10) * 250
+            y1 = int((i - 1) / 10 + 1) * 250
+            if i in state.data[user_id]['collections']:
+                stk = get_sticker_sync(i, user_id)
+                sticker_img, sticker_mask = make_250px_cached_sync(stk)
+                backg.paste(sticker_img, (x1, y1), mask=sticker_mask)
+            else:
+                backg.paste(unk, (x1, y1), mask=unk_mask)
+        for i in range(101, 106):
+            if i in state.data[user_id]['collections']:
+                stk = get_sticker_sync(i, user_id)
+                sticker_img, sticker_mask = make_250px_cached_sync(stk)
+                x1 = ((i - 1) % 10) * 250
+                y1 = int((i - 1) / 10 + 1) * 250
+                backg.paste(sticker_img, (x1, y1), mask=sticker_mask)
+                own_str[2] += '{}, '.format(i)
+        own_str[2] = own_str[2][:-2]
+
+        res_img = Image.new('RGBA', backg.size)
+        res_img = Image.alpha_composite(res_img, backg)
+        res_img = Image.alpha_composite(res_img, mask).convert('RGB')
+        return image_to_base64(res_img)
+
+
 @chouka.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    if await resting_guard():
-        return
     user_id, group_id = parse_session(ev)
     src = str(ev.message)
     await ensure_registered(chouka, user_id)
@@ -191,12 +193,27 @@ async def _(bot: Bot, ev: MessageEvent):
 
     if state.data[user_id]['credits'] < chouka_times * 100:
         await chouka.finish('❌ 积分不够辣！>_<\n需要积分：{}\n现有积分：{}'.format(chouka_times * 100, state.data[user_id]['credits']), reply_message=True)
+
+    user_nick = ev.sender.card or ev.sender.nickname or user_id
+    credits_before = state.data[user_id]['credits']
+    collections_before = list(state.data[user_id]['collections'])
     state.data[user_id]['credits'] -= chouka_times * 100
 
+    try:
+        base64_img = await asyncio.to_thread(_render_gacha, user_id, user_nick, chouka_times)
+    except Exception as e:
+        state.data[user_id]['credits'] = credits_before
+        state.data[user_id]['collections'][:] = collections_before
+        logger.error(f"收藏抽卡出图失败，已回滚积分: {e}")
+        await chouka.finish('❌ 抽卡出图失败了，积分已退回，请稍后再试', reply_message=True)
+
+    await chouka.send(MessageSegment.image(base64_img), reply_message=True)
+    await check_all_achiv(user_id, bot, ev)
+
+
+def _render_gacha(user_id, user_nick, chouka_times):
     tot_new = tot_repeat = 0
-    user_nick = ev.sender.card or ev.sender.nickname
-    scck_bg_list = os.listdir(asset('utils', 'gacha'))
-    backg = cache.get_image_copy(asset('utils', 'gacha', random.choice(scck_bg_list)))
+    backg = cache.get_image_copy(pick_random_image(asset('utils', 'gacha')))
     new_mask = cache.get_image(asset('utils', 'new_mask.png'))
     own_mask = cache.get_image(asset('utils', 'own_mask.png'))
     draw = ImageDraw.Draw(backg)
@@ -221,7 +238,7 @@ async def _(bot: Bot, ev: MessageEvent):
         x1 = (i - 1) % 5 * 375 + 300
         y1 = (i - 1) // 5 * 375 + 300
         if acquire_sticker(user_id, rand_sticker):
-            new_sticker = await generate_new_sticker(rand_sticker, user_id, 1)
+            new_sticker = generate_new_sticker_sync(rand_sticker, user_id, 1)
             backg.paste(new_mask, (x1 - 20, y1 - 20), mask=new_mask.split()[3])
             backg.paste(new_sticker, (x1, y1))
             draw.text(xy=(x1 + 193, y1 - 13), text=f'{rand_sticker}'.zfill(2), fill=(0, 0, 0), font=font)
@@ -230,8 +247,8 @@ async def _(bot: Bot, ev: MessageEvent):
             tot_new += 1
         else:
             state.data[user_id]['credits'] += 50
-            stk = await get_sticker(rand_sticker, user_id)
-            pas_sticker, pas_mask = await make_250px_cached(stk, 1)
+            stk = get_sticker_sync(rand_sticker, user_id)
+            pas_sticker, pas_mask = make_250px_cached_sync(stk, 1)
             backg.paste(own_mask, (x1 - 20, y1 - 20), mask=own_mask.split()[3])
             backg.paste(pas_sticker, (x1, y1))
             draw.text(xy=(x1 + 192, y1 - 13), text=f'{rand_sticker}'.zfill(2), fill=(0, 0, 0), font=font)
@@ -246,17 +263,11 @@ async def _(bot: Bot, ev: MessageEvent):
     else:
         draw.text(xy=(216, 1045), text=f'怎么没NEW，是不是有隐藏收藏品……', fill=(0, 0, 0), font=font)
 
-    base64_img = image_to_base64(backg.convert('RGB'))
-    await chouka.send(MessageSegment.image(base64_img), reply_message=True)
-    await check_all_achiv(user_id, bot, ev)
-    del new_sticker, pas_sticker, base64_img, font, draw
-    gc.collect()
+    return image_to_base64(backg.convert('RGB'))
 
 
 @yincang17.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    if await resting_guard():
-        return
     user_id, group_id = parse_session(ev)
     await ensure_registered(yincang17, user_id)
 
@@ -269,18 +280,17 @@ async def _(bot: Bot, ev: MessageEvent):
         msg = MessageSegment.text('😡 拿过了就别再来辣！\nGet out!>_<')
     await yincang17.send(msg, reply_message=True)
     await check_all_achiv(user_id, bot, ev)
-    gc.collect()
 
 
 @theme_manage.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    if await resting_guard():
-        return
     user_id, group_id = parse_session(ev)
     src = str(ev.message)
     await ensure_registered(theme_manage, user_id)
 
-    theme_list = sorted(os.listdir(asset('stickers')))
+    theme_list = list_subdirs(asset('stickers'))
+    if not theme_list:
+        await theme_manage.finish('❌ 没有可用的收藏主题', reply_message=True)
     if src == '收藏主题':
         res = '⭐ 当前收藏主题：{}\n\n🗒️ 所有主题：'.format(state.data[user_id]['theme'])
         for i in range(len(theme_list)):
@@ -288,7 +298,7 @@ async def _(bot: Bot, ev: MessageEvent):
         await theme_manage.finish(res, reply_message=True)
     else:
         change_theme = src[4:].lstrip()
-        if change_theme.isdigit() and int(change_theme) <= len(theme_list):
+        if change_theme.isdigit() and 1 <= int(change_theme) <= len(theme_list):
             change_theme = theme_list[int(change_theme) - 1]
         if change_theme not in theme_list:
             await theme_manage.finish('❌ 找不到该主题，请检查拼写！', reply_message=True)

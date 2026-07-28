@@ -2,9 +2,11 @@ from dataclasses import dataclass
 from io import BytesIO
 from pathlib import Path
 
-from PIL import Image, ImageFont
+from PIL import Image
 from PIL.Image import Image as IMG
 from PIL.ImageFont import FreeTypeFont
+
+from utils.asset_cache import get_font, get_image
 
 data_dir = Path(__file__).parent / "resources"
 skins_dir = data_dir / "skins"
@@ -24,7 +26,7 @@ class Skin:
 
 
 def load_skin(row: int, column: int, skin_name: str = "winxp") -> Skin:
-    image = Image.open(skins_dir / f"{skin_name}.bmp").convert("RGBA")
+    image = get_image(skins_dir / f"{skin_name}.bmp")
 
     def cut(box: tuple[int, int, int, int]) -> IMG:
         return image.crop(box)
@@ -69,4 +71,4 @@ def save_png(frame: IMG) -> BytesIO:
 
 
 def load_font(name: str, fontsize: int) -> FreeTypeFont:
-    return ImageFont.truetype(str(fonts_dir / name), fontsize, encoding="utf-8")
+    return get_font(fonts_dir / name, fontsize, encoding="utf-8")

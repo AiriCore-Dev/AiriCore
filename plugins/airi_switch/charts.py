@@ -8,6 +8,8 @@ from typing import Dict, List, Optional, Tuple
 
 from PIL import Image, ImageDraw, ImageFont
 
+from utils.asset_cache import get_font
+
 _FONT_FAMILY = "Noto Sans CJK SC"
 
 _NOTO_CANDIDATES = [
@@ -18,12 +20,28 @@ _NOTO_CANDIDATES = [
     "/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc",
 ]
 
-_FALLBACK_PATH = (
-    Path(__file__).resolve().parents[1]
-    / "airi_kokomi_wows"
-    / "fonts"
-    / "SHSCN.ttf"
-)
+_LOCAL_CANDIDATES = [
+    Path(__file__).resolve().parents[1] / "airi_status" / "resources" / "fonts" / "baotu.ttf",
+    Path(__file__).resolve().parents[1] / "airi_kokomi_wows" / "fonts" / "SHSCN.ttf",
+    Path(__file__).resolve().parents[1] / "airi_daily_check" / "assets" / "fonts" / "SHSCN.ttf",
+]
+
+_MAC_CANDIDATES = [
+    "/System/Library/Fonts/PingFang.ttc",
+    "/System/Library/Fonts/Hiragino Sans GB.ttc",
+]
+
+_WIN_CANDIDATES = [
+    "C:/Windows/Fonts/msyh.ttc",
+    "C:/Windows/Fonts/simhei.ttf",
+]
+
+
+def _first_local_font() -> Optional[Tuple[str, int]]:
+    for cand in _LOCAL_CANDIDATES:
+        if Path(cand).is_file():
+            return str(cand), 0
+    return None
 
 
 def _fc_match() -> Optional[Tuple[str, int]]:
@@ -46,16 +64,28 @@ def _fc_match() -> Optional[Tuple[str, int]]:
 
 
 def _resolve_font_source() -> Tuple[str, int]:
+    local = _first_local_font()
+    if local:
+        return local
+    for cand in _NOTO_CANDIDATES + _MAC_CANDIDATES + _WIN_CANDIDATES:
+        if Path(cand).is_file():
+            return cand, 0
     matched = _fc_match()
     if matched:
         return matched
-    for cand in _NOTO_CANDIDATES:
-        if Path(cand).is_file():
-            return cand, 0
-    return str(_FALLBACK_PATH), 0
+    return "", 0
 
 
-_FONT_SRC, _FONT_INDEX = _resolve_font_source()
+_FONT_SRC: Optional[str] = None
+_FONT_INDEX = 0
+_FALLBACK_PATH = _LOCAL_CANDIDATES[0]
+
+
+def _ensure_font_source() -> Tuple[str, int]:
+    global _FONT_SRC, _FONT_INDEX
+    if _FONT_SRC is None:
+        _FONT_SRC, _FONT_INDEX = _resolve_font_source()
+    return _FONT_SRC, _FONT_INDEX
 
 _BG = (245, 247, 250)
 _FG = (40, 44, 52)
@@ -69,13 +99,18 @@ _PALETTE = [
 
 
 def _font(size: int) -> ImageFont.FreeTypeFont:
-    try:
-        return ImageFont.truetype(_FONT_SRC, size, index=_FONT_INDEX)
-    except Exception:
+    src, index = _ensure_font_source()
+    if src:
         try:
-            return ImageFont.truetype(str(_FALLBACK_PATH), size)
+            return get_font(src, size, index=index)
         except Exception:
-            return ImageFont.load_default()
+            pass
+    for cand in _LOCAL_CANDIDATES:
+        try:
+            return get_font(cand, size)
+        except Exception:
+            continue
+    return ImageFont.load_default()
 
 
 def _color(i: int) -> Tuple[int, int, int]:
@@ -88,14 +123,34 @@ def _text_w(draw: ImageDraw.ImageDraw, text: str, font) -> int:
 
 def _encode(img: Image.Image) -> bytes:
     buf = BytesIO()
-    img.convert("RGB").quantize(colors=256, method=Image.MEDIANCUT).save(
-        buf, format="PNG", optimize=True
-    )
+    rgb = img.convert("RGB")
+    if rgb.getcolors(maxcolors=4096) is None:
+        rgb.save(buf, format="JPEG", quality=88, optimize=True, subsampling=1)
+    else:
+        rgb.quantize(colors=256, method=Image.MEDIANCUT).save(
+            buf, format="PNG", optimize=True
+        )
     return buf.getvalue()
+
+
+_TOP_N = 20
+_OTHERS_KEY = "__others__"
+_MAX_GRID_CELLS = 24
+_MAX_SUMMARY_ROWS = 40
 
 
 def _sorted_items(counts: Dict[str, int]) -> List[Tuple[str, int]]:
     return sorted(counts.items(), key=lambda kv: kv[1], reverse=True)
+
+
+def _capped_items(counts: Dict[str, int], top_n: int = _TOP_N) -> List[Tuple[str, int]]:
+    items = _sorted_items({k: v for k, v in counts.items() if v > 0})
+    if len(items) <= top_n:
+        return items
+    head = items[:top_n]
+    rest = sum(v for _, v in items[top_n:])
+    head.append((_OTHERS_KEY, rest))
+    return head
 
 
 def _stamp_date(img: Image.Image, text: str, margin: int = 24) -> None:
@@ -176,6 +231,7 @@ def draw_grid(cells: List[Image.Image], cols: int = 4, date_text: str = "") -> b
         _stamp_date(img, date_text)
         return _encode(img)
 
+    cells = cells[:_MAX_GRID_CELLS]
     gap = 20
     cw = max(c.width for c in cells)
     rows = (len(cells) + cols - 1) // cols
@@ -192,7 +248,7 @@ def draw_grid(cells: List[Image.Image], cols: int = 4, date_text: str = "") -> b
     for r in range(rows):
         x = gap
         for c in cells[r * cols:(r + 1) * cols]:
-            canvas.paste(c, (x, y))
+            canvas.paste(c, (x + (cw - c.width) // 2, y))
             x += cw + gap
         y += row_h[r] + gap
     _stamp_date(canvas, date_text)
@@ -216,9 +272,19 @@ def _norm_label(raw) -> Tuple[str, str]:
 
 
 def _render_pie(title: str, counts: Dict[str, int], label_of=None, avatar_of=None) -> Image.Image:
-    label_of = label_of or (lambda k: k)
-    avatar_of = avatar_of or (lambda k: None)
-    items = _sorted_items({k: v for k, v in counts.items() if v > 0})
+    raw_label_of = label_of or (lambda k: k)
+    raw_avatar_of = avatar_of or (lambda k: None)
+    hidden = max(0, len([1 for v in counts.values() if v > 0]) - _TOP_N)
+
+    def label_of(k):
+        if k == _OTHERS_KEY:
+            return (f"其余 {hidden} 项合计", "")
+        return raw_label_of(k)
+
+    def avatar_of(k):
+        return None if k == _OTHERS_KEY else raw_avatar_of(k)
+
+    items = _capped_items(counts)
     total = sum(v for _, v in items)
 
     W = 1080
@@ -292,6 +358,7 @@ def _render_pie(title: str, counts: Dict[str, int], label_of=None, avatar_of=Non
 
 
 def draw_summary(bot_totals: List[Tuple], date_text: str = "") -> bytes:
+    bot_totals = sorted(bot_totals, key=lambda r: (r[2] + r[3]), reverse=True)[:_MAX_SUMMARY_ROWS]
     W = 1040
     top = 110
     left = 340

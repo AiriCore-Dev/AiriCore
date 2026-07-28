@@ -2,9 +2,11 @@ import threading
 
 _VALID = ("ram", "balanced", "disk")
 _DEFAULT = "balanced"
+_DEFAULT_BUDGET_MB = 4096
 
 _lock = threading.Lock()
 _mode = None
+_budget_mb = None
 
 
 def _resolve() -> str:
@@ -42,3 +44,35 @@ def is_balanced() -> bool:
 
 def is_disk() -> bool:
     return get_mode() == "disk"
+
+
+def _resolve_budget_mb() -> int:
+    try:
+        from nonebot import get_driver
+
+        raw = getattr(get_driver().config, "cache_preload_budget_mb", None)
+    except Exception:
+        raw = None
+    if raw is None:
+        return _DEFAULT_BUDGET_MB
+    try:
+        val = int(str(raw).strip())
+    except Exception:
+        return _DEFAULT_BUDGET_MB
+    if val <= 0:
+        return 0
+    return val
+
+
+def get_preload_budget_mb() -> int:
+    global _budget_mb
+    if _budget_mb is not None:
+        return _budget_mb
+    with _lock:
+        if _budget_mb is None:
+            _budget_mb = _resolve_budget_mb()
+        return _budget_mb
+
+
+def get_preload_budget_bytes() -> int:
+    return get_preload_budget_mb() * 1024 * 1024
