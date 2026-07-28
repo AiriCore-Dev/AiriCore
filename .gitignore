@@ -5,6 +5,8 @@ record/
 .env.prod
 CLAUDE.md
 sdk_diff*
+logs/
+log/
 
 # Django/Database
 *.pk
