@@ -4,7 +4,7 @@
     <img src="https://raw.githubusercontent.com/AiriCore-Dev/AiriCore/refs/heads/main/version.jpg" alt="AiriCore">
   </a>
 
-# AiriCore v26.8 Oeschinen
+# AiriCore
 
 _✨ A high-performance QQ bot framework ✨_
 

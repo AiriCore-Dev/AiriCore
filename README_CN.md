@@ -4,9 +4,9 @@
     <img src="https://raw.githubusercontent.com/AiriCore-Dev/AiriCore/refs/heads/main/version.jpg" alt="AiriCore">
   </a>
 
-# AiriCore v26.8 Oeschinen
+# AiriCore
 
-_✨ 高性能 QQ 机器人框架 ✨_
+_✨ 一款高性能 QQ 机器人框架 ✨_
 
 <p align="center">
   <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license">
