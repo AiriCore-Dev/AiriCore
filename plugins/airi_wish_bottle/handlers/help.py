@@ -35,7 +35,7 @@ async def _(bot: Bot, ev: MessageEvent):
 相较于普通漂流瓶，Airi心愿瓶的提供了更多有趣的玩法。'
     msg.append({"type": "node", "data": {"name": "游戏玩法", "uin": bot.self_id, "content": res}})
 
-    res = '☑️ 心愿上限为500字，不支持图片。\n\
+    res = '☑️ 心愿上限为500字，支持图片（最多9张）。\n\
 每人每天可发表十条评论，单条评论上限为20字，一条心愿最多保留30条评论。'
     msg.append({"type": "node", "data": {"name": "一些限制", "uin": bot.self_id, "content": res}})
 

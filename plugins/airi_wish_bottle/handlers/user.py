@@ -10,11 +10,13 @@ from ..base import state
 from ..base.matchers import rxyp, jxyp, plxyp, wdxyp, xgxyp, zyxyp, xhxyp, jbxyp
 from ..base.helpers import (
     parse_session, check_weijinci, generate_unique_id, add_bottle, delete_bottle,
-    send_email, strip_cq,
+    send_email, strip_cq, process_images_from_message,
+)
+from ..base.constants import (
+    MAX_CONTENT_LENGTH, MAX_COMMENT_LENGTH, MAX_COMMENTS_PER_BOTTLE,
+    DAILY_COMMENT_LIMIT, MAX_IMAGES_PER_BOTTLE, UNIQUE_ID_LENGTH,
 )
 import re
-
-DAILY_COMMENT_LIMIT = 10
 
 
 async def _notify_admin(bot: Bot, text: str) -> None:
@@ -34,21 +36,24 @@ async def _(bot: Bot, ev: MessageEvent):
         await rxyp.finish('💫 心愿瓶只能在群聊里使用哦', reply_message=True)
     raw = str(ev.message).strip()
     if raw == "扔心愿瓶":
-        await rxyp.finish('💫 指令用法：扔心愿瓶 内容', reply_message=True)
-    src = [0, strip_cq(raw[4:])]
-    if not src[1]:
-        await rxyp.finish('💫 指令用法：扔心愿瓶 内容', reply_message=True)
-    if len(src[1]) > 500:
-        await rxyp.finish(f'❌ 心愿长度超出500字限制，请重新填写！当前字数：{len(src[1])}', reply_message=True)
-    iswj = await check_weijinci(src[1])
+        await rxyp.finish('💫 指令用法：扔心愿瓶 内容（可附带图片）', reply_message=True)
+    content = strip_cq(raw[4:])
+    images = await process_images_from_message(raw)
+    if not content and not images:
+        await rxyp.finish('💫 指令用法：扔心愿瓶 内容（可附带图片）', reply_message=True)
+    if len(content) > MAX_CONTENT_LENGTH:
+        await rxyp.finish(f'❌ 心愿长度超出{MAX_CONTENT_LENGTH}字限制，请重新填写！当前字数：{len(content)}', reply_message=True)
+    if len(images) > MAX_IMAGES_PER_BOTTLE:
+        await rxyp.finish(f'❌ 图片数量超出{MAX_IMAGES_PER_BOTTLE}张限制！当前图片数：{len(images)}', reply_message=True)
+    iswj = await check_weijinci(content, images)
     if iswj:
-        unique_id = await generate_unique_id(src[1])
-        state.data['pending_bottles'][unique_id] = {"owner": user_nick, "owner_id": user_id, "content": src[1], "comments": [], "times": 0}
-        await _notify_admin(bot, f'心愿瓶审核：{unique_id}\n{src[1]}')
+        unique_id = await generate_unique_id(content or str(images))
+        state.data['pending_bottles'][unique_id] = {"owner": user_nick, "owner_id": user_id, "content": content, "comments": [], "times": 0, "images": images}
+        await _notify_admin(bot, f'心愿瓶审核：{unique_id}\n{content}')
         await rxyp.finish('❌ 未通过机器审核，请等待人工审核。人工审核结果将会以邮件形式告知。', reply_message=True)
     else:
-        unique_id = await generate_unique_id(src[1])
-        add_bottle(unique_id, user_nick, user_id, src[1], [], 0)
+        unique_id = await generate_unique_id(content or str(images))
+        add_bottle(unique_id, user_nick, user_id, content, [], 0, images)
         await rxyp.finish(f'✅ 您的心愿瓶编号：{unique_id}，等待有缘人的开启......', reply_message=True)
 
 
@@ -68,15 +73,20 @@ async def _(bot: Bot, ev: MessageEvent):
             unique_id = src[0][4:].strip()
     else:
         unique_id = src[1].strip()
-    if len(unique_id) != 8:
+    if len(unique_id) != UNIQUE_ID_LENGTH:
         await jxyp.finish(f'❌ 请检查心愿瓶编号格式！', reply_message=True)
     elif unique_id not in state.data["bottles"].keys():
         await jxyp.finish(f'❌ 编号为{unique_id}的心愿瓶不存在！', reply_message=True)
     msg = []
     res = f'💫 {user_nick}拾取的心愿瓶'
     msg.append({"type": "node", "data": {"name": "Momoi Airi Wish Bottle", "uin": bot.self_id, "content": res}})
-    res = state.data["bottles"][unique_id]["content"]
-    msg.append({"type": "node", "data": {"name": "心愿瓶内容", "uin": bot.self_id, "content": res}})
+    bottle = state.data["bottles"][unique_id]
+    content_parts = []
+    if bottle["content"]:
+        content_parts.append(bottle["content"])
+    for img_b64 in bottle.get("images", []):
+        content_parts.append(MessageSegment.image(img_b64))
+    msg.append({"type": "node", "data": {"name": "心愿瓶内容", "uin": bot.self_id, "content": content_parts}})
     res = f'{unique_id}'
     msg.append({"type": "node", "data": {"name": "心愿瓶编号", "uin": bot.self_id, "content": res}})
     state.data["bottles"][unique_id]["times"] += 1
@@ -97,7 +107,7 @@ async def _(bot: Bot, ev: MessageEvent):
         await jxyp.finish('💫 指令用法：评论心愿瓶 编号 评论内容', reply_message=True)
     else:
         unique_id = src[1].strip()
-    if len(unique_id) != 8:
+    if len(unique_id) != UNIQUE_ID_LENGTH:
         await jxyp.finish(f'❌ 请检查心愿瓶编号格式！', reply_message=True)
     elif unique_id not in state.data["bottles"].keys():
         await jxyp.finish(f'❌ 编号为{unique_id}的心愿瓶不存在！', reply_message=True)
@@ -110,8 +120,8 @@ async def _(bot: Bot, ev: MessageEvent):
     comment = strip_cq(" ".join(src[2:]))
     if not comment:
         await plxyp.finish('💫 指令用法：评论心愿瓶 编号 评论内容', reply_message=True)
-    if len(comment) > 20:
-        await plxyp.finish(f'❌ 评论长度超出20字限制，请重新填写！当前字数：{len(comment)}', reply_message=True)
+    if len(comment) > MAX_COMMENT_LENGTH:
+        await plxyp.finish(f'❌ 评论长度超出{MAX_COMMENT_LENGTH}字限制，请重新填写！当前字数：{len(comment)}', reply_message=True)
     daily[user_id] += 1
     iswj = await check_weijinci(comment)
     if iswj:
@@ -122,7 +132,7 @@ async def _(bot: Bot, ev: MessageEvent):
         await plxyp.finish('❌ 未通过机器审核，请等待人工审核。人工审核结果将会以邮件形式告知。', reply_message=True)
     else:
         state.data['bottles'][unique_id]['comments'].append(comment)
-        if len(state.data['bottles'][unique_id]['comments']) > 30:
+        if len(state.data['bottles'][unique_id]['comments']) > MAX_COMMENTS_PER_BOTTLE:
             state.data['bottles'][unique_id]['comments'].pop(0)
         await plxyp.finish(f'✅ 已评论编号为{unique_id}的心愿瓶：{comment}', reply_message=True)
 
@@ -153,7 +163,7 @@ async def _(bot: Bot, ev: MessageEvent):
         await xgxyp.finish('💫 心愿瓶只能在群聊里使用哦', reply_message=True)
     src = str(ev.message).split()
     if len(src) <= 2:
-        await xgxyp.finish('💫 指令用法：修改心愿瓶 编号 内容', reply_message=True)
+        await xgxyp.finish('💫 指令用法：修改心愿瓶 编号 内容（可附带图片）', reply_message=True)
     unique_id = src[1].strip()
     if len(unique_id) != 8:
         await xgxyp.finish('❌ 请检查心愿瓶编号格式！', reply_message=True)
@@ -161,19 +171,24 @@ async def _(bot: Bot, ev: MessageEvent):
         await xgxyp.finish(f'❌ 编号为{unique_id}的心愿瓶不存在！', reply_message=True)
     if str(state.data["bottles"][unique_id]["owner_id"]) != str(user_id):
         await xgxyp.finish('❌ 你不是该心愿瓶的拥有者！', reply_message=True)
-    comment = strip_cq(" ".join(src[2:]))
-    if not comment:
-        await xgxyp.finish('💫 指令用法：修改心愿瓶 编号 内容', reply_message=True)
-    if len(comment) > 500:
-        await xgxyp.finish(f'❌ 心愿长度超出500字限制，请重新填写！当前字数：{len(comment)}', reply_message=True)
-    iswj = await check_weijinci(comment)
+    raw_content = " ".join(src[2:])
+    content = strip_cq(raw_content)
+    images = await process_images_from_message(raw_content)
+    if not content and not images:
+        await xgxyp.finish('💫 指令用法：修改心愿瓶 编号 内容（可附带图片）', reply_message=True)
+    if len(content) > MAX_CONTENT_LENGTH:
+        await xgxyp.finish(f'❌ 心愿长度超出{MAX_CONTENT_LENGTH}字限制，请重新填写！当前字数：{len(content)}', reply_message=True)
+    if len(images) > MAX_IMAGES_PER_BOTTLE:
+        await xgxyp.finish(f'❌ 图片数量超出{MAX_IMAGES_PER_BOTTLE}张限制！当前图片数：{len(images)}', reply_message=True)
+    iswj = await check_weijinci(content, images)
     if iswj:
-        state.data['pending_bottles'][unique_id] = {"owner": user_nick, "owner_id": user_id, "content": comment, "comments": state.data["bottles"][unique_id]["comments"], "times": state.data["bottles"][unique_id]["times"]}
-        await _notify_admin(bot, f'心愿瓶修改审核：{unique_id}\n{comment}')
+        state.data['pending_bottles'][unique_id] = {"owner": user_nick, "owner_id": user_id, "content": content, "comments": state.data["bottles"][unique_id]["comments"], "times": state.data["bottles"][unique_id]["times"], "images": images}
+        await _notify_admin(bot, f'心愿瓶修改审核：{unique_id}\n{content}')
         await xgxyp.finish('❌ 未通过机器审核，请等待人工审核。人工审核结果将会以邮件形式告知。', reply_message=True)
     else:
         state.data['bottles'][unique_id]['owner'] = user_nick
-        state.data['bottles'][unique_id]['content'] = comment
+        state.data['bottles'][unique_id]['content'] = content
+        state.data['bottles'][unique_id]['images'] = images
         await xgxyp.finish('修改成功', reply_message=True)
 
 

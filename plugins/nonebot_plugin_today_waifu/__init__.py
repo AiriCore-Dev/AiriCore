@@ -163,7 +163,6 @@ async def _(bot: Bot, event: GroupMessageEvent):
     old_times: int = group_today_record[uid].setdefault('times', 0)
     if old_times >= limit_times or old_waifu_id == int(bot.self_id):
         new_waifu_id = -1
-        old_times = limit_times
     else:
         all_member: list = await bot.get_group_member_list(group_id=gid)
         id_set: Set[int] = set(i['user_id'] for i in all_member) - set(
@@ -175,7 +174,7 @@ async def _(bot: Bot, event: GroupMessageEvent):
             new_waifu_id: int = int(bot.self_id)
     group_today_record[uid] = {
         'waifu_id': new_waifu_id,
-        'times': old_times + 1
+        'times': old_times if new_waifu_id == -1 else old_times + 1
     }
     save_group_record(gid, group_record)
     try:

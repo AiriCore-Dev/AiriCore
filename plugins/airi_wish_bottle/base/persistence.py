@@ -31,6 +31,7 @@ def _try_load(path):
 
 @driver.on_startup
 async def load_json():
+    from .helpers import sync_bottle
     global _load_failed
     os.makedirs(DATA_DIR, exist_ok=True)
 
@@ -61,6 +62,8 @@ async def load_json():
     if loaded is not None:
         state.data.clear()
         state.data.update(loaded)
+        sync_bottle()
+        logger.info("airi_wish_bottle collections 索引已重建")
     elif not _load_failed:
         await save_to_json()
 

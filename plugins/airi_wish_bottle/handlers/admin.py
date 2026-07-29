@@ -7,6 +7,7 @@ from ..base import state
 from ..base.matchers import btshenhe, plshenhe, jbshenhe, pdbt, pdpl, pdjb, superuser_debug
 from ..base.helpers import generate_unique_id, send_email, nxcr, add_bottle
 from ..base.email_template import render_bottle_result, render_comment_result, render_report_result
+from ..base.constants import MAX_COMMENTS_PER_BOTTLE
 
 
 async def _approve_bottle(pending_key: str) -> None:
@@ -30,6 +31,7 @@ async def _approve_bottle(pending_key: str) -> None:
             pending.get("content", ""),
             pending.get("comments", []),
             pending.get("times", 0),
+            pending.get("images", []),
         )
     except Exception as e:
         logger.warning(f"心愿瓶过审写入失败 {pending_key}: {e}")
@@ -112,7 +114,7 @@ async def _(bot: Bot, ev: MessageEvent):
         pd_pl = list(state.data["pending_comment"].keys())
         for unique_id in pd_pl:
             state.data['bottles'][state.data["pending_comment"][unique_id]["comment_to"]]['comments'].append(state.data["pending_comment"][unique_id]["content"])
-            if len(state.data['bottles'][state.data["pending_comment"][unique_id]["comment_to"]]['comments']) > 30:
+            if len(state.data['bottles'][state.data["pending_comment"][unique_id]["comment_to"]]['comments']) > MAX_COMMENTS_PER_BOTTLE:
                 state.data['bottles'][state.data["pending_comment"][unique_id]["comment_to"]]['comments'].pop(0)
             subj, plain, html_body = render_comment_result(state.data["pending_comment"][unique_id]["from"].split("_")[0], state.data["pending_comment"][unique_id]["content"], unique_id[-8:], True)
             send_email(f'{state.data["pending_comment"][unique_id]["from"].split("_")[1]}@qq.com', subj, plain, html_body)
