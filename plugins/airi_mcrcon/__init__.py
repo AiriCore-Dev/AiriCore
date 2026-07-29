@@ -739,7 +739,8 @@ async def _(bot: Bot, ev: MessageEvent):
         except Exception as err:
             res = f"{str(err)}"
     else:
-        res = "你没有权限执行该指令"
+        # res = "你没有权限执行该指令"
+        return
 
     out = res.rstrip() if len(res) else "执行成功（输出为空）"
     if translate_groups.get(gruop_id):

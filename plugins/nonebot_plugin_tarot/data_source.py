@@ -1,7 +1,4 @@
-import asyncio
-import base64
 import random
-from io import BytesIO
 from pathlib import Path
 from typing import Dict, List, Tuple, Union
 
@@ -10,10 +7,9 @@ from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import (GroupMessageEvent, MessageEvent,
                                                PrivateMessageEvent)
 from nonebot.matcher import Matcher
-from PIL import Image
 
 from . import cache
-from .config import EventNotSupport, ResourceError, get_tarot, tarot_config
+from .config import EventNotSupport, ResourceError, tarot_config
 
 try:
     import ujson as json
@@ -42,24 +38,17 @@ def pick_theme() -> str:
 
 def pick_sub_types(theme: str) -> List[str]:
     all_sub_types: List[str] = ["MajorArcana",
-                                "Cups", "Pentacles", "Sowrds", "Wands"]
-
-    if theme == "BilibiliTarot":
-        return all_sub_types
+                                "Cups", "Pentacles", "Swords", "Wands"]
 
     if theme == "TouhouTarot":
         return ["MajorArcana"]
 
-    sub_types: List[str] = [f.name for f in (
-        tarot_config.tarot_path / theme).iterdir() if f.is_dir() and f.name in all_sub_types]
-
-    return sub_types
+    return all_sub_types
 
 
 class Tarot:
     def __init__(self):
-        self.tarot_json: Path = Path(__file__).parent / "tarot.json"
-        self.is_chain_reply: bool = tarot_config.chain_reply
+        self.tarot_json: Path = Path(__file__).resolve().parent / "tarot.json"
 
     async def divine(self, bot: Bot, matcher: Matcher, event: MessageEvent, f_name) -> None:
         session_id = str(event.get_session_id())
@@ -88,10 +77,6 @@ class Tarot:
                 msgs = msgs[:-2]
                 await matcher.finish(msgs, reply_message = True)
             formation = all_formations.get(formation_name)
-        '''
-        if formation_name != '无牌阵': await matcher.send(f"启用{formation_name}，正在洗牌中", reply_message = True)
-        else: await matcher.send("正在洗牌中", reply_message = True)
-        '''
         cards_num: int = formation.get("cards_num")
         cards_info_list = self._random_cards(all_cards, theme, cards_num)
 
@@ -114,23 +99,14 @@ class Tarot:
                 await matcher.finish(msg_body)
 
             if isinstance(event, PrivateMessageEvent):
-                if i < cards_num:
-                    await matcher.send(msg_header + msg_body)
-                else:
-                    await matcher.finish(msg_header + msg_body)
+                await matcher.send(msg_header + msg_body)
 
             elif isinstance(event, GroupMessageEvent):
-                if self.is_chain_reply:
-                    chain = chain_reply(bot, chain, msg_header + msg_body)
-                else:
-                    if i < cards_num - 1:
-                        await matcher.send(msg_header + msg_body)
-                    else:
-                        await matcher.finish(msg_header + msg_body)
+                chain = chain_reply(bot, chain, msg_header + msg_body)
             else:
                 raise EventNotSupport
 
-        if self.is_chain_reply:
+        if isinstance(event, GroupMessageEvent):
             await bot.send_group_forward_msg(group_id=event.group_id, messages=chain)
 
     async def onetime_divine(self) -> MessageSegment:
@@ -145,15 +121,11 @@ class Tarot:
 
         return body
 
-    def switch_chain_reply(self, new_state: bool) -> None:
-        return
-
     def _random_cards(self,
                       all_cards: Dict[str, Dict[str, Dict[str, Union[str, Dict[str, str]]]]],
                       theme: str,
                       num: int = 1
                       ) -> List[Dict[str, Union[str, Dict[str, str]]]]:
-        theme = "BilibiliTarot"
         sub_types: List[str] = pick_sub_types(theme)
 
         if len(sub_types) < 1:
@@ -195,24 +167,11 @@ class Tarot:
             else: msg = MessageSegment.text(f"「{name_cn}逆位」\n")
 
         if img_name == "":
-            if theme in tarot_config.tarot_official_themes:
-                data = await get_tarot(theme, _type, _name)
-                if data is None:
-                    return False, MessageSegment.text("图片下载出错，请重试或将资源部署本地……")
+            raise ResourceError(f"塔罗牌图片 {theme}/{_type}/{_name} 缺失！请检查资源完整性！")
 
-                img: Image.Image = Image.open(BytesIO(data))
-                if is_reversed:
-                    img = img.rotate(180)
-                buf = BytesIO()
-                img.save(buf, format='png')
-                img_b64 = "base64://" + base64.b64encode(buf.getvalue()).decode()
-            else:
-                raise ResourceError(
-                    f"Tarot image {theme}/{_type}/{_name} doesn't exist! Make sure the type {_type} is complete.")
-        else:
-            img_b64 = cache.get_card_b64(img_dir / img_name, is_reversed)
-            if img_b64 is None:
-                return False, MessageSegment.text("图片读取出错，请检查本地资源……")
+        img_b64 = cache.get_card_b64(img_dir / img_name, is_reversed)
+        if img_b64 is None:
+            return False, MessageSegment.text("图片读取出错，请检查本地资源……")
 
         return True, msg + MessageSegment.image(img_b64)
 
