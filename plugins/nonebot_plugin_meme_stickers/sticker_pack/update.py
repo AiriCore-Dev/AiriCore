@@ -1,8 +1,7 @@
 import asyncio
 import shutil
-from contextlib import contextmanager, nullcontext
 from dataclasses import dataclass
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 from tempfile import TemporaryDirectory
 from typing import Any, Callable, Optional
 from typing_extensions import Unpack
@@ -23,6 +22,22 @@ from .hub import fetch_manifest, fetch_optional_checksum
 from .models import StickerPackConfig, StickerPackManifest
 
 
+def validate_pack_file_path(path: str) -> str:
+    if not path or "\x00" in path:
+        raise ValueError(f"Invalid sticker pack file path: {path!r}")
+    normalized = path.replace("\\", "/")
+    posix_path = PurePosixPath(normalized)
+    windows_path = PureWindowsPath(path)
+    if (
+        posix_path.is_absolute()
+        or windows_path.is_absolute()
+        or bool(windows_path.drive)
+        or ".." in posix_path.parts
+    ):
+        raise ValueError(f"Unsafe sticker pack file path: {path!r}")
+    return path
+
+
 def collect_manifest_files(manifest: StickerPackManifest) -> list[str]:
     files: list[str] = []
     if manifest.external_fonts:
@@ -40,7 +55,7 @@ def collect_manifest_files(manifest: StickerPackManifest) -> list[str]:
         if isinstance(x, str)
     )
     files.extend(img for x in manifest.stickers if (img := x.params.base_image))
-    return files
+    return [validate_pack_file_path(path) for path in files]
 
 
 def collect_local_files(path: Path) -> list[str]:
@@ -62,6 +77,39 @@ def collect_local_files(path: Path) -> list[str]:
 class UpdatedResourcesInfo:
     assets: set[str]
     fonts: set[str]
+
+
+def _replace_path(src: Path, dst: Path) -> None:
+    src.replace(dst)
+
+
+def _restore_backup(backup_path: Path, pack_path: Path) -> None:
+    try:
+        _replace_path(backup_path, pack_path)
+    except Exception:
+        if pack_path.exists():
+            shutil.rmtree(pack_path)
+        shutil.copytree(backup_path, pack_path, symlinks=True)
+        shutil.rmtree(backup_path)
+
+
+def _commit_staging(staging_path: Path, pack_path: Path) -> None:
+    if not pack_path.exists():
+        _replace_path(staging_path, pack_path)
+        return
+
+    backup_path = staging_path.with_name(f"{staging_path.name}-backup")
+    _replace_path(pack_path, backup_path)
+    try:
+        _replace_path(staging_path, pack_path)
+    except Exception:
+        _restore_backup(backup_path, pack_path)
+        raise
+
+    try:
+        shutil.rmtree(backup_path)
+    except Exception as e:
+        logger.warning(f"贴纸包 `{pack_path.name}` 旧目录清理失败: {e}")
 
 
 async def update_sticker_pack(
@@ -113,10 +161,10 @@ async def update_sticker_pack(
     download_total = len(files_should_download)
     downloaded_count = 0
 
-    async def download(base: Path, path: str):
+    async def download(staging_path: Path, path: str):
         nonlocal downloaded_count
         r = await fetch_source(source, path, **req_kw)
-        p = base / path
+        p = staging_path / path
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_bytes(r.content)
         downloaded_count += 1
@@ -131,36 +179,19 @@ async def update_sticker_pack(
             ),
         )
 
-    @contextmanager
-    def file_updating_ctx():
-        pack_path.mkdir(parents=True, exist_ok=True)
-        flag_path = pack_path / UPDATING_FLAG_FILENAME
-        flag_path.touch()
-        if file_update_start_callback:
-            file_update_start_callback()
-        try:
-            yield
-        finally:
-            flag_path.unlink()
-
-    def move_files(tmp_dir: Path):
-        for path in files_should_download:
-            src_p = tmp_dir / path
-            dst_p = pack_path / path
-            dst_p.parent.mkdir(parents=True, exist_ok=True)
-            shutil.move(src_p, dst_p)
-
-    def after_ops():
+    def after_ops(staging_path: Path):
         files_should_remove = local_files - remote_files
         if files_should_remove:
             logger.info(
                 f"Removing {len(files_should_remove)} not needed files from pack `{slug}`",
             )
             for path in files_should_remove:
-                (pack_path / path).unlink()
+                (staging_path / path).unlink()
 
         empty_folders = tuple(
-            p for p in pack_path.rglob("*") if p.is_dir() and not any(p.iterdir())
+            p
+            for p in staging_path.rglob("*")
+            if p.is_dir() and not any(p.iterdir())
         )
         if empty_folders:
             logger.info(
@@ -170,12 +201,12 @@ async def update_sticker_pack(
                 p.rmdir()
 
         logger.debug(f"Updating manifest and config of pack `{slug}`")
-        (pack_path / MANIFEST_FILENAME).write_text(
+        (staging_path / MANIFEST_FILENAME).write_text(
             dump_readable_model(manifest, exclude_defaults=True, exclude_unset=True),
             "u8",
         )
 
-        config_path = pack_path / CONFIG_FILENAME
+        config_path = staging_path / CONFIG_FILENAME
         config = (
             type_validate_json(StickerPackConfig, config_path.read_text("u8"))
             if config_path.exists()
@@ -187,28 +218,49 @@ async def update_sticker_pack(
             "u8",
         )
 
-    tmp_dir_ctx = TemporaryDirectory() if download_total else nullcontext()
-    with tmp_dir_ctx as tmp_dir_str:
-        tmp_dir = Path(tmp_dir_str) if tmp_dir_str else None
-
-        if tmp_dir:
-            logger.info(
-                f"Pack `{slug}`"
-                f" collected {download_total} files will update from remote,"
-                f" downloading to temp dir",
+    pack_path.parent.mkdir(parents=True, exist_ok=True)
+    pack_created_for_flag = not pack_path.exists()
+    pack_path.mkdir(exist_ok=True)
+    flag_path = pack_path / UPDATING_FLAG_FILENAME
+    try:
+        flag_path.touch(exist_ok=False)
+    except FileExistsError:
+        raise RuntimeError(f"Pack `{slug}` is updating")
+    try:
+        with TemporaryDirectory(
+            dir=pack_path.parent,
+            prefix=f".{slug}-staging-",
+        ) as staging_dir:
+            staging_path = Path(staging_dir)
+            shutil.copytree(
+                pack_path,
+                staging_path,
+                dirs_exist_ok=True,
+                symlinks=True,
             )
-            async with with_kw_cli(req_kw), with_kw_sem(req_kw):
-                await asyncio.gather(
-                    *(download(tmp_dir, x) for x in files_should_download),
-                )
-        else:
-            logger.info(f"No files need to update for pack `{slug}`")
+            (staging_path / UPDATING_FLAG_FILENAME).unlink(missing_ok=True)
 
-        with file_updating_ctx():
-            if tmp_dir:
-                logger.info(f"Moving downloaded files to data dir of pack `{slug}`")
-                move_files(tmp_dir)
-            after_ops()
+            if download_total:
+                logger.info(
+                    f"Pack `{slug}`"
+                    f" collected {download_total} files will update from remote,"
+                    f" downloading to temp dir",
+                )
+                async with with_kw_cli(req_kw), with_kw_sem(req_kw):
+                    await asyncio.gather(
+                        *(download(staging_path, x) for x in files_should_download),
+                    )
+            else:
+                logger.info(f"No files need to update for pack `{slug}`")
+
+            after_ops(staging_path)
+            if file_update_start_callback:
+                file_update_start_callback()
+            _commit_staging(staging_path, pack_path)
+    finally:
+        flag_path.unlink(missing_ok=True)
+        if pack_created_for_flag and pack_path.exists() and not any(pack_path.iterdir()):
+            pack_path.rmdir()
 
     external_fonts_updated = {
         x.path for x in manifest.external_fonts if x.path in files_should_download

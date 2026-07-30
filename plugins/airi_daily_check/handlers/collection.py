@@ -196,14 +196,48 @@ async def _(bot: Bot, ev: MessageEvent):
 
     user_nick = ev.sender.card or ev.sender.nickname or user_id
     credits_before = state.data[user_id]['credits']
-    collections_before = list(state.data[user_id]['collections'])
     state.data[user_id]['credits'] -= chouka_times * 100
+    draws = []
+    new_ids = []
+    tot_repeat = 0
+    for i in range(1, chouka_times + 1):
+        rand_sticker = 17
+        while rand_sticker in hidden_stickers:
+            rand_sticker = random.randint(1, 100)
+        if i == 10 and tot_repeat == 9:
+            nonacq_tmp = [
+                j for j in list(set(range(1, 101)) - set(hidden_stickers))
+                if j not in state.data[user_id]['collections']
+            ]
+            if nonacq_tmp:
+                rand_sticker = random.choice(nonacq_tmp)
+        is_new = bool(acquire_sticker(user_id, rand_sticker))
+        draws.append((rand_sticker, is_new))
+        if is_new:
+            new_ids.append(rand_sticker)
+        else:
+            state.data[user_id]['credits'] += 50
+            tot_repeat += 1
+    credits_delta = state.data[user_id]['credits'] - credits_before
+    remaining_credits = state.data[user_id]['credits']
+    need_reborn = state.data[user_id]['need_reborn']
 
     try:
-        base64_img = await asyncio.to_thread(_render_gacha, user_id, user_nick, chouka_times)
+        base64_img = await asyncio.to_thread(
+            _render_gacha,
+            user_id,
+            user_nick,
+            draws,
+            remaining_credits,
+            need_reborn,
+        )
     except Exception as e:
-        state.data[user_id]['credits'] = credits_before
-        state.data[user_id]['collections'][:] = collections_before
+        state.data[user_id]['credits'] -= credits_delta
+        for sticker_id in new_ids:
+            try:
+                state.data[user_id]['collections'].remove(sticker_id)
+            except ValueError:
+                pass
         logger.error(f"收藏抽卡出图失败，已回滚积分: {e}")
         await chouka.finish('❌ 抽卡出图失败了，积分已退回，请稍后再试', reply_message=True)
 
@@ -211,8 +245,8 @@ async def _(bot: Bot, ev: MessageEvent):
     await check_all_achiv(user_id, bot, ev)
 
 
-def _render_gacha(user_id, user_nick, chouka_times):
-    tot_new = tot_repeat = 0
+def _render_gacha(user_id, user_nick, draws, remaining_credits, need_reborn):
+    tot_repeat = sum(1 for _, is_new in draws if not is_new)
     backg = cache.get_image_copy(pick_random_image(asset('utils', 'gacha')))
     new_mask = cache.get_image(asset('utils', 'new_mask.png'))
     own_mask = cache.get_image(asset('utils', 'own_mask.png'))
@@ -223,30 +257,17 @@ def _render_gacha(user_id, user_nick, chouka_times):
     draw.text(xy=(351, 1248), text=str(datetime.datetime.now()), fill=(0, 0, 0), font=font)
 
     new_sticker = pas_sticker = 0
-    for i in range(1, chouka_times + 1):
-        rand_sticker = 17
-        while rand_sticker in hidden_stickers:
-            rand_sticker = random.randint(1, 100)
-        if i == 10 and tot_repeat == 9:
-            nonacq_tmp = [
-                j for j in list(set(range(1, 101)) - set(hidden_stickers))
-                if j not in state.data[user_id]['collections']
-            ]
-            if len(nonacq_tmp):
-                rand_sticker = random.choice(nonacq_tmp)
-
+    for i, (rand_sticker, is_new) in enumerate(draws, start=1):
         x1 = (i - 1) % 5 * 375 + 300
         y1 = (i - 1) // 5 * 375 + 300
-        if acquire_sticker(user_id, rand_sticker):
+        if is_new:
             new_sticker = generate_new_sticker_sync(rand_sticker, user_id, 1)
             backg.paste(new_mask, (x1 - 20, y1 - 20), mask=new_mask.split()[3])
             backg.paste(new_sticker, (x1, y1))
             draw.text(xy=(x1 + 193, y1 - 13), text=f'{rand_sticker}'.zfill(2), fill=(0, 0, 0), font=font)
             draw.text(xy=(x1 + 187, y1 - 19), text=f'{rand_sticker}'.zfill(2), fill=(0, 0, 0), font=font)
             draw.text(xy=(x1 + 190, y1 - 16), text=f'{rand_sticker}'.zfill(2), fill=(255, 0, 0), font=font)
-            tot_new += 1
         else:
-            state.data[user_id]['credits'] += 50
             stk = get_sticker_sync(rand_sticker, user_id)
             pas_sticker, pas_mask = make_250px_cached_sync(stk, 1)
             backg.paste(own_mask, (x1 - 20, y1 - 20), mask=own_mask.split()[3])
@@ -254,12 +275,11 @@ def _render_gacha(user_id, user_nick, chouka_times):
             draw.text(xy=(x1 + 192, y1 - 13), text=f'{rand_sticker}'.zfill(2), fill=(0, 0, 0), font=font)
             draw.text(xy=(x1 + 187, y1 - 19), text=f'{rand_sticker}'.zfill(2), fill=(0, 0, 0), font=font)
             draw.text(xy=(x1 + 190, y1 - 16), text=f'{rand_sticker}'.zfill(2), fill=(255, 255, 0), font=font)
-            tot_repeat += 1
 
-    if state.data[user_id]["need_reborn"]:
+    if need_reborn:
         draw.text(xy=(216, 1045), text=f'你已经齐活了，快点重生吧！', fill=(0, 0, 0), font=font)
     elif tot_repeat != 10:
-        draw.text(xy=(216, 1045), text=f'重复收藏共转化为{tot_repeat * 50}积分, 剩余积分: {state.data[user_id]["credits"]}', fill=(0, 0, 0), font=font)
+        draw.text(xy=(216, 1045), text=f'重复收藏共转化为{tot_repeat * 50}积分, 剩余积分: {remaining_credits}', fill=(0, 0, 0), font=font)
     else:
         draw.text(xy=(216, 1045), text=f'怎么没NEW，是不是有隐藏收藏品……', fill=(0, 0, 0), font=font)
 

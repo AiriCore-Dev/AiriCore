@@ -208,7 +208,7 @@ class Board:
                 ):
                     yield to_pos
         elif piece_type == PieceType.PAWN:
-            if self.moveside:
+            if piece.color:
                 if from_pos.x >= 5:
                     moves = ((1, 0), (0, 1), (0, -1))
                 else:

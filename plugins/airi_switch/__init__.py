@@ -321,10 +321,15 @@ AIRICORE_DIR = str(getattr(driver.config, 'reboot_workdir', '') or os.getcwd())
 BASH_BIN = shutil.which('bash') or '/bin/bash'
 
 def _launch_script() -> str:
-    for name in ('launch.command', 'launch.sh'):
+    names = (
+        ('launch_macos.command', 'launch.command', 'launch_linux.sh', 'launch.sh')
+        if sys.platform == 'darwin'
+        else ('launch_linux.sh', 'launch.sh', 'launch_macos.command', 'launch.command')
+    )
+    for name in names:
         if os.path.isfile(os.path.join(AIRICORE_DIR, name)):
             return name
-    return 'launch.command' if sys.platform == 'darwin' else 'launch.sh'
+    return names[0]
 
 
 LAUNCH_SCRIPT = _launch_script()
@@ -342,6 +347,11 @@ def _reboot_preflight() -> str:
         return f'未找到 screen（{SCREEN_BIN}），无法执行重启，请手动重启。'
     if not os.path.isdir(AIRICORE_DIR):
         return f'工作目录不存在（{AIRICORE_DIR}），请配置 reboot_workdir。'
+    launch_path = os.path.join(AIRICORE_DIR, LAUNCH_SCRIPT)
+    if not os.path.isfile(launch_path):
+        return f'启动脚本不存在（{launch_path}），无法执行重启。'
+    if not os.access(launch_path, os.X_OK):
+        return f'启动脚本不可执行（{launch_path}），请先补充执行权限。'
     return ''
 
 

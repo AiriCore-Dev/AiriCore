@@ -142,29 +142,6 @@ def get_png(
                 font_size=55
             )
         )
-    elif lang == 'ja':
-        text_list.append(
-            Text_Data(
-                xy=(390, 355),
-                text=tag,
-                fill=tag_color,
-                font_index=1,
-                font_size=55
-            )
-        )
-        battle_type_dict = {
-            'pvp':'ランダム戦',
-            'rank':'ランク戦'
-        }
-        text_list.append(
-            Text_Data(
-                xy=(510, 445),
-                text=battle_type_dict[battle_type],
-                fill=(0,0,0),
-                font_index=1,
-                font_size=55
-            )
-        )
     ship_name = result['data']['ship_info']['ship_name']
     ship_tier = result['data']['ship_info']['ship_tier']
     ship_index = result['data']['ship_info']['ship_index']
@@ -331,8 +308,6 @@ def get_png(
                 str_pr = '■ '+str(int(temp_data['avg_pr']))
             elif lang == 'en':
                 str_pr = '■ '+str(int(temp_data['avg_pr']))
-            elif lang == 'ja':
-                str_pr = '■ '+str(int(temp_data['avg_pr']))
         w = Picture.x_coord(battles_count, fontStyle)
         text_list.append(
             Text_Data(
@@ -448,23 +423,6 @@ def get_png(
                 )
             )
             i += 1
-    elif lang == 'ja':
-        i = 0
-        fontStyle = fonts.data[1][55]
-        for index in index_list:
-            x = int(i/6)
-            y = i%6
-            w = Picture.x_coord(result['data']['detailed_data'][index], fontStyle)
-            text_list.append(
-                Text_Data(
-                    xy=(807-w+690*x, 1981+90*y),
-                    text=result['data']['detailed_data'][index],
-                    fill=(0,0,0),
-                    font_index=1,
-                    font_size=55
-                )
-            )
-            i += 1
     i = 0
     for index in ['uwin','udmg','ufrag']:
         w = Picture.x_coord(result['data']['pr_info'][index], fontStyle)
@@ -534,7 +492,6 @@ def get_png(
     res_img = Picture.add_box(box_list, res_img)
     res_img = Picture.add_text(text_list, res_img)
     return res_img
-
 
 
 

@@ -48,6 +48,8 @@ def _snapshot(mod: Any, attr: str) -> Any:
         if lock is not None and hasattr(lock, "acquire"):
             acquired = lock.acquire(timeout=1) if _supports_timeout(lock) else lock.acquire()
         raw = getattr(mod, attr, None) or {}
+        if hasattr(raw, "keys") and hasattr(raw, "get") and not isinstance(raw, dict):
+            return {key: raw.get(key) for key in raw.keys()}
         if isinstance(raw, dict):
             return dict(raw)
         return raw
@@ -214,6 +216,7 @@ def _inspect_daily_check() -> Dict[str, Any]:
 
         r["ram_items"] = total
         r["ram_bytes"] = rb if total else 0
+        _append_policy_stats(r, "daily_check.decoded", "daily_check.images", "daily_check.fonts")
     except Exception as e:
         r["error"] = str(e)
     return r
@@ -226,6 +229,8 @@ def _images_bytes(images) -> Tuple[int, int]:
     rb = sys.getsizeof(images)
     for k, img in images.items():
         rb += sys.getsizeof(k)
+        if isinstance(img, tuple) and len(img) == 2:
+            img = img[1]
         try:
             w, h = img.size
             rb += w * h * len(img.mode)
@@ -249,6 +254,7 @@ def _inspect_kokomi_wows() -> Dict[str, Any]:
                 rb += int(arr.nbytes)
         if count:
             r["details"].append(f"解码图片数组: {count} 个")
+        _append_policy_stats(r, "kokomi.arrays")
         r["ram_items"] = count
         r["ram_bytes"] = rb if count else 0
     except Exception as e:
@@ -283,12 +289,15 @@ def _inspect_asset_cache() -> Dict[str, Any]:
             btotal = 0
             for k, v in b64.items():
                 rb += sys.getsizeof(k)
+                if isinstance(v, tuple) and len(v) == 2:
+                    v = v[1]
                 btotal += _blob_len(v)
             rb += btotal
             r["details"].append(f"base64: {len(b64)} 个")
 
         r["ram_items"] = total
         r["ram_bytes"] = rb if total else 0
+        _append_policy_stats(r, "asset_cache.images", "asset_cache.fonts", "asset_cache.base64")
     except Exception as e:
         r["error"] = str(e)
     return r
@@ -310,21 +319,44 @@ def _inspect_preload() -> Dict[str, Any]:
         r["ram_bytes"] = s.get("bytes", 0)
         r["details"].append(f"耗时: {s.get('seconds', 0)}s")
         r["details"].append(f"内存上限: {_fmt(s.get('budget_bytes', 0))}")
+        r["details"].append(f"估算: {_fmt(s.get('estimated_bytes', 0))}")
         if s.get("skipped"):
             r["details"].append(f"因超上限跳过: {s['skipped']} 项")
+        for reason, count in (s.get("skip_reasons") or {}).items():
+            r["details"].append(f"跳过原因 {reason}: {count} 项")
         for g in s.get("groups", []):
             if g.get("error"):
                 r["details"].append(f"{g['label']}: 失败 {g['error']}")
-            elif g.get("items"):
+            elif g.get("items") or g.get("skipped"):
                 line = f"{g['label']}: {g['items']} 项"
                 if g.get("bytes"):
                     line += f" / {_fmt(g['bytes'])}"
                 if g.get("skipped"):
                     line += f"（跳过 {g['skipped']}）"
+                if g.get("reason"):
+                    line += f"，原因 {g['reason']}"
                 r["details"].append(line)
     except Exception as e:
         r["error"] = str(e)
     return r
+
+
+def _append_policy_stats(result: Dict[str, Any], *names: str) -> None:
+    try:
+        from utils.cache_mode import get_cache_stats
+
+        stats = get_cache_stats()
+    except Exception:
+        return
+    for name in names:
+        stat = stats.get(name)
+        if not stat:
+            continue
+        result["details"].append(
+            f"策略: {stat.get('bytes', 0)}B / 命中 {stat.get('hits', 0)} / "
+            f"未命中 {stat.get('misses', 0)} / 淘汰 {stat.get('evictions', 0)} / "
+            f"跳过 {stat.get('skips', 0)}"
+        )
 
 
 def _fmt(n: int) -> str:

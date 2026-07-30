@@ -7,7 +7,6 @@ import asyncio
 import traceback
 from typing import Dict, List, Optional, Any, Set
 
-import httpx
 import nonebot
 from utils import asset_cache
 from utils.totp_2fa import totp_verify
@@ -31,7 +30,7 @@ from .llm_client import call_llm
 
 driver = get_driver()
 from utils.plugin_logger import get_logger
-from utils.net_guard import is_public_url_async
+from utils.safe_download import download_public_bytes
 
 logger = get_logger("airi_llm")
 
@@ -272,37 +271,31 @@ IMAGE_TIMEOUT = 15
 
 async def get_image_base64_list(message: Any) -> List[str]:
     base64_results = []
-    async with httpx.AsyncClient(timeout=IMAGE_TIMEOUT, follow_redirects=True) as http_client:
-        for seg in message:
-            if seg.type != "image":
-                continue
-            if len(base64_results) >= MAX_IMAGES_PER_MSG:
-                break
-            file_str: str = _image_source(seg)
-            if not file_str:
-                continue
-            try:
-                if file_str.startswith("base64://"):
-                    raw = file_str[len("base64://"):]
-                    if len(raw) <= MAX_IMAGE_BYTES * 4 // 3:
-                        base64_results.append(raw)
-                elif file_str.startswith(("http://", "https://")):
-                    if not await is_public_url_async(file_str):
-                        logger.warning(f"图片地址不可访问，已跳过: {file_str[:80]}")
-                        continue
-                    resp = await http_client.get(file_str)
-                    resp.raise_for_status()
-                    if len(resp.content) > MAX_IMAGE_BYTES:
-                        logger.warning(f"图片过大已跳过: {len(resp.content)} bytes")
-                        continue
-                    base64_results.append(base64.b64encode(resp.content).decode("utf-8"))
-                elif file_str.startswith("file://"):
-                    fp = file_str[len("file://"):]
-                    if os.path.exists(fp) and os.path.getsize(fp) <= MAX_IMAGE_BYTES:
-                        with open(fp, "rb") as f:
-                            base64_results.append(base64.b64encode(f.read()).decode("utf-8"))
-            except Exception as e:
-                logger.warning(f"处理图片失败: {e}")
+    for seg in message:
+        if seg.type != "image":
+            continue
+        if len(base64_results) >= MAX_IMAGES_PER_MSG:
+            break
+        file_str: str = _image_source(seg)
+        if not file_str:
+            continue
+        try:
+            if file_str.startswith("base64://"):
+                raw = file_str[len("base64://"):]
+                if len(raw) <= MAX_IMAGE_BYTES * 4 // 3:
+                    base64_results.append(raw)
+            elif file_str.startswith(("http://", "https://")):
+                content = await download_public_bytes(
+                    file_str, MAX_IMAGE_BYTES, timeout=IMAGE_TIMEOUT
+                )
+                base64_results.append(base64.b64encode(content).decode("utf-8"))
+            elif file_str.startswith("file://"):
+                fp = file_str[len("file://"):]
+                if os.path.exists(fp) and os.path.getsize(fp) <= MAX_IMAGE_BYTES:
+                    with open(fp, "rb") as f:
+                        base64_results.append(base64.b64encode(f.read()).decode("utf-8"))
+        except Exception as e:
+            logger.warning(f"处理图片失败: {e}")
     return base64_results
 
 

@@ -31,7 +31,11 @@ class UCCIEngine:
         )
         self.stdin = self._process.stdin
         self.stdout = self._process.stdout
-        await self.start()
+        try:
+            await self.start()
+        except Exception:
+            self.close()
+            raise
 
     def close(self):
         process = getattr(self, "_process", None)
@@ -85,6 +89,8 @@ class UCCIEngine:
             line = await asyncio.wait_for(self.stdout.readline(), timeout)
         except asyncio.TimeoutError:
             raise EngineError("读取引擎输出超时")
+        if not line:
+            raise EngineError("UCCI引擎已退出")
         return line.decode("utf-8").strip()
 
     async def read_lines(self, endword: str) -> list[str]:

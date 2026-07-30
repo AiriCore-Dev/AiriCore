@@ -196,7 +196,7 @@ async def stop_game_timeout(matcher: Matcher, user_id: str):
     stop_game(user_id)
     if game:
         msg = f"{game.name}下棋超时，游戏结束，可发送“重载{game.name}棋局”继续下棋"
-        await matcher.finish(msg)
+        await matcher.send(msg)
 
 
 def set_timeout(matcher: Matcher, user_id: str, timeout: float = 600):
@@ -247,12 +247,14 @@ async def _(
         )
 
     game = Game()
+    if user_id in games:
+        await matcher.finish("当前会话已有棋类对局")
+    games[user_id] = game
     if white.result:
         game.player_white = player
     else:
         game.player_black = player
 
-    games[user_id] = game
     set_timeout(matcher, user_id)
     await game.save_record(user_id)
 
@@ -304,7 +306,9 @@ async def _(matcher: Matcher, user_id: UserId, player: CurrentPlayer):
         await matcher.finish("当前游戏不允许跳过回合")
     if game.player_next and game.player_next != player:
         await matcher.finish("当前不是你的回合")
-    game.update(Pos.null())
+    result = game.update(Pos.null())
+    if result == MoveResult.ILLEGAL:
+        await matcher.finish("当前仍有合法落子，不能跳过回合")
     await game.save_record(user_id)
     msg = f"{player} 选择跳过其回合"
     if game.player_next:

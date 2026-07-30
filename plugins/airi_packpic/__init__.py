@@ -4,13 +4,13 @@ import io
 import zipfile
 from datetime import datetime
 
-import httpx
 from nonebot import on_command
 from nonebot.adapters.onebot.v11 import Bot, GroupMessageEvent
 from nonebot.adapters.onebot.v11.exception import ActionFailed
 from nonebot.log import logger
 
 from utils.net_guard import is_public_url_async
+from utils.safe_download import download_public_bytes
 
 MAX_IMAGES = 200
 MAX_IMAGE_BYTES = 20 * 1024 * 1024
@@ -61,33 +61,8 @@ async def handle_packpic(bot: Bot, event: GroupMessageEvent):
         await packpic.finish("图片地址均不可访问，已拒绝下载。")
 
     sem = asyncio.Semaphore(DOWNLOAD_CONCURRENCY)
-    async with httpx.AsyncClient(
-        timeout=30,
-        follow_redirects=True,
-        headers={"User-Agent": "Mozilla/5.0"},
-    ) as client:
-        results = await asyncio.gather(
-            *(_download(client, url, sem) for url in safe_urls),
-            return_exceptions=True,
-        )
-
-    images: list[bytes] = []
-    total = 0
-    oversize = 0
-    for idx, r in enumerate(results, start=1):
-        if isinstance(r, Exception):
-            logger.warning(f"第 {idx} 张图片下载失败: {r}")
-            continue
-        if not r:
-            continue
-        if len(r) > MAX_IMAGE_BYTES:
-            oversize += 1
-            continue
-        if total + len(r) > MAX_TOTAL_BYTES:
-            truncated = True
-            break
-        images.append(r)
-        total += len(r)
+    images, oversize, total_truncated = await _download_images_limited(safe_urls, sem)
+    truncated = truncated or total_truncated
 
     if not images:
         await packpic.finish("所有图片都下载失败了。")
@@ -155,14 +130,48 @@ async def _extract_images(
                         logger.warning(f"展开嵌套转发失败: {nested_id}")
 
 
-async def _download(client: httpx.AsyncClient, url: str, sem: asyncio.Semaphore) -> bytes:
+async def _download(url: str, sem: asyncio.Semaphore) -> bytes:
     async with sem:
-        resp = await client.get(url)
-        resp.raise_for_status()
-        data = resp.content
-        if len(data) > MAX_IMAGE_BYTES:
-            return b""
-        return data
+        return await download_public_bytes(
+            url,
+            MAX_IMAGE_BYTES,
+            timeout=30,
+            headers={"User-Agent": "Mozilla/5.0"},
+        )
+
+
+async def _iter_download_batches(urls: list[str], sem: asyncio.Semaphore):
+    for start in range(0, len(urls), DOWNLOAD_CONCURRENCY):
+        batch = urls[start:start + DOWNLOAD_CONCURRENCY]
+        yield await asyncio.gather(
+            *(_download(url, sem) for url in batch),
+            return_exceptions=True,
+        )
+
+
+async def _download_images_limited(
+    urls: list[str], sem: asyncio.Semaphore
+) -> tuple[list[bytes], int, bool]:
+    images = []
+    total = 0
+    oversize = 0
+    processed = 0
+    async for results in _iter_download_batches(urls, sem):
+        for result in results:
+            processed += 1
+            if isinstance(result, Exception):
+                logger.warning(f"第 {processed} 张图片下载失败: {result}")
+                continue
+            if not result:
+                continue
+            if len(result) > MAX_IMAGE_BYTES:
+                oversize += 1
+                continue
+            if total + len(result) > MAX_TOTAL_BYTES:
+                return images, oversize, True
+            images.append(result)
+            total += len(result)
+    return images, oversize, False
 
 
 def _guess_ext(data: bytes) -> str:

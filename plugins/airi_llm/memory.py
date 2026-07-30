@@ -63,6 +63,7 @@ INACTIVE_USER_TTL_DAYS = 180
 MAX_LOCK_DICT_SIZE = 500
 
 SCHEMA_VERSION = 1
+_long_term_load_failed = False
 
 
 @dataclass
@@ -161,6 +162,7 @@ def _write_bytes(path: str, data: bytes) -> None:
 
 
 def load_all(state: Any) -> None:
+    global _long_term_load_failed
     ensure_dirs()
 
     try:
@@ -168,6 +170,7 @@ def load_all(state: Any) -> None:
             with open(MEMORY_FILE, "rb") as f:
                 loaded = pickle.load(f)
             if isinstance(loaded, LongTermStore):
+                _long_term_load_failed = False
                 _normalize_dataclass(loaded)
                 _now = time.time()
                 for um in loaded.users.values():
@@ -183,11 +186,13 @@ def load_all(state: Any) -> None:
                     ]
             else:
                 logger.warning("memory.pk 类型异常，重新初始化")
+                _long_term_load_failed = True
                 state.long_term = LongTermStore()
         else:
             state.long_term = LongTermStore()
     except Exception as e:
         logger.error(f"加载长期记忆失败，重新初始化: {e}")
+        _long_term_load_failed = True
         state.long_term = LongTermStore()
 
     state.group_ctx = {}
@@ -219,6 +224,9 @@ def load_all(state: Any) -> None:
 
 
 async def save_long_term(state: Any) -> None:
+    if _long_term_load_failed:
+        logger.warning("长期记忆读取失败过，已跳过写入以保护原存档")
+        return
     mm = getattr(state, "missed_mentions", None)
     if isinstance(mm, list):
         state.long_term.missed_mentions = list(mm)

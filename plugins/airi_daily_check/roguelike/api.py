@@ -75,6 +75,14 @@ def _today_str() -> str:
     return f"{n.year}-{n.month:02d}-{n.day:02d}"
 
 
+def _require_today(value: str) -> str:
+    date = value.strip()[:10]
+    today = _today_str()
+    if date != today:
+        raise HTTPException(status_code=400, detail="日期必须为今天")
+    return today
+
+
 class SpendBody(BaseModel):
     amount: int
     reason: str = ""
@@ -202,11 +210,11 @@ async def credits_grant(body: GrantBody, request: Request,
 @app.post("/api/sekai/claim")
 async def sekai_claim(body: ClaimBody, authorization: str = Header(default="")):
     qq = _auth_qq(authorization)
-    date = body.date.strip()[:10]
-    if not date:
-        raise HTTPException(status_code=400, detail="缺少日期")
+    date = _require_today(body.date)
     acc = store.ensure_account(qq)
     started = acc.setdefault("sekai_started", {})
+    for stale in [d for d in started if d != date]:
+        started.pop(stale, None)
     used = int(started.get(date, 0))
     best = int(acc.get("sekai_daily", {}).get(date, 0))
     if used >= SEKAI_DAILY_LIMIT:
@@ -225,10 +233,10 @@ async def sekai_score(body: ScoreBody, authorization: str = Header(default="")):
     if score > SCORE_MAX:
         logger.warning(f"roguelike 上报分数异常偏高，已截断: qq={qq} score={score}")
         score = SCORE_MAX
-    date = body.date.strip()[:10]
-    if not date:
-        raise HTTPException(status_code=400, detail="缺少日期")
+    date = _require_today(body.date)
     acc = store.ensure_account(qq)
+    if int(acc.get("sekai_started", {}).get(date, 0)) <= 0:
+        raise HTTPException(status_code=400, detail="请先开始今日对局")
     daily = acc.setdefault("sekai_daily", {})
     daily[date] = max(int(daily.get(date, 0)), score)
     return {"ok": True, "best": daily[date]}
@@ -272,6 +280,7 @@ async def sekai_board(date: str, request: Request, limit: int = 20):
 
 
 ACTIVITY_ID_MAX = 64
+ACTIVITY_COUNT_MAX = 128
 
 
 @app.post("/api/sekai/activity/score")
@@ -287,6 +296,8 @@ async def sekai_activity_score(body: ActScoreBody, authorization: str = Header(d
         score = SCORE_MAX
     acc = store.ensure_account(qq)
     act = acc.setdefault("sekai_activity", {})
+    if aid not in act and len(act) >= ACTIVITY_COUNT_MAX:
+        raise HTTPException(status_code=400, detail="活动记录数量已达上限")
     act[aid] = max(int(act.get(aid, 0)), score)
     return {"ok": True, "id": aid, "best": act[aid]}
 

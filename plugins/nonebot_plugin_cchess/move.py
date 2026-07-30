@@ -232,7 +232,7 @@ class Move:
             if board.moveside:
                 col = 8 - col
             col_pos = [pos for pos in board.get_piece_pos(piece_type) if pos.y == col]
-            if len(col_pos) < min_count:
+            if len(col_pos) < min_count or count < 1 or count > len(col_pos):
                 return
             col_pos.sort(key=lambda p: p.x, reverse=board.moveside)
             return col_pos[count - 1]

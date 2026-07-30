@@ -67,6 +67,7 @@ async def load_json():
                 _load_failed = True
 
     if loaded is not None:
+        _load_failed = False
         state.data.clear()
         state.data.update(loaded)
         _backfill_last_check_time()

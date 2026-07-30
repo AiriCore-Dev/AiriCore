@@ -206,38 +206,6 @@ def get_png(
                 font_size=55
             )
         )
-    elif lang == 'ja':
-        text_1 = 'クラン:'
-        w_1 = Picture.x_coord(text_1, fontStyle)
-        text_list.append(
-            Text_Data(
-                xy=(169, 358),
-                text=text_1,
-                fill=(72, 72, 72),
-                font_index=1,
-                font_size=55
-            )
-        )
-        text_list.append(
-            Text_Data(
-                xy=(169+w_1+30, 358),
-                text=tag,
-                fill=tag_color,
-                font_index=1,
-                font_size=55
-            )
-        )
-        text_2 = 'Token:'
-        w_2 = Picture.x_coord(text_2, fontStyle)
-        text_list.append(
-            Text_Data(
-                xy=(169, 448),
-                text=text_2,
-                fill=(72, 72, 72),
-                font_index=1,
-                font_size=55
-            )
-        )
     '''
     if Plugin_Config.SHOW_DOG_TAG:
         if result['dog_tag'] == [] or result['dog_tag'] == {}:
@@ -374,4 +342,3 @@ def get_png(
     res_img = Picture.add_box(box_list, res_img)
     res_img = Picture.add_text(text_list, res_img)
     return res_img
-

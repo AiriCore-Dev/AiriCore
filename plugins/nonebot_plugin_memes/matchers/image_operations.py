@@ -62,6 +62,8 @@ def resize(text: str, img: bytes):
         height = int(image_info.height * ratio)
     else:
         return "请使用正确的尺寸格式，如：100x100、100x、50%"
+    if (width is not None and width <= 0) or (height is not None and height <= 0):
+        return "图片尺寸必须大于 0"
     return image_operations.resize(img, width, height)
 
 
@@ -85,11 +87,15 @@ def crop(text: str, img: bytes):
         elif match3:
             wp = int(match3.group(1))
             hp = int(match3.group(2))
+            if wp <= 0 or hp <= 0:
+                return "裁剪尺寸或比例必须大于 0"
             size = min(image_info.width / wp, image_info.height / hp)
             width = int(wp * size)
             height = int(hp * size)
         else:
             return "请使用正确的裁剪格式，如：0,0,100,100、100x100、2:1"
+        if width <= 0 or height <= 0:
+            return "裁剪尺寸或比例必须大于 0"
         left = (image_info.width - width) // 2
         top = (image_info.height - height) // 2
         right = left + width
@@ -118,6 +124,8 @@ def gif_split(img: bytes):
 
 
 def gif_merge(num: Optional[float], imgs: list[bytes]):
+    if num is not None and num <= 0:
+        return "帧间隔必须大于 0"
     return image_operations.gif_merge(imgs, num)
 
 
@@ -128,20 +136,30 @@ def gif_reverse(img: bytes):
 def gif_change_duration(text: str, img: bytes):
     p_float = r"\d{0,3}\.?\d{1,3}"
     if match := re.fullmatch(rf"({p_float})fps", text, re.I):
-        duration = 1 / float(match.group(1))
+        value = float(match.group(1))
+        if value <= 0:
+            return "帧率、帧间隔或倍率必须大于 0"
+        duration = 1 / value
     elif match := re.fullmatch(rf"({p_float})(m?)s", text, re.I):
-        duration = (
-            float(match.group(1)) / 1000 if match.group(2) else float(match.group(1))
-        )
+        value = float(match.group(1))
+        if value <= 0:
+            return "帧率、帧间隔或倍率必须大于 0"
+        duration = value / 1000 if match.group(2) else value
     else:
         image_info = image_operations.inspect(img)
         if not isinstance(image_info, image_operations.ImageInfo):
             return image_info
         duration = image_info.average_duration or 0.1
         if match := re.fullmatch(rf"({p_float})(?:x|X|倍速?)", text):
-            duration /= float(match.group(1))
+            value = float(match.group(1))
+            if value <= 0:
+                return "帧率、帧间隔或倍率必须大于 0"
+            duration /= value
         elif match := re.fullmatch(rf"({p_float})%", text):
-            duration /= float(match.group(1)) / 100
+            value = float(match.group(1))
+            if value <= 0:
+                return "帧率、帧间隔或倍率必须大于 0"
+            duration /= value / 100
         else:
             return "请使用正确的倍率格式，如：0.5x、50%、20FPS、0.05s"
     if duration < 0.02:

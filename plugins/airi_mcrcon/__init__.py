@@ -40,6 +40,7 @@ data = {}
 translate_groups = {}
 mcr = SafeMCRcon(rcon_host, rcon_password, port=rcon_port, timeout=RCON_TIMEOUT)
 _rcon_lock = asyncio.Lock()
+_account_tx_lock = asyncio.Lock()
 server_path = str(getattr(driver.config, "mc_server_path", "") or '/root/airi/airicob5')
 
 MC_NAME_RE = re.compile(r"^[A-Za-z0-9_]{3,16}$")
@@ -381,6 +382,100 @@ async def save_translate():
     _atomic_dump(_DATA_DIR / 'translate.pk', translate_groups)
 
 
+async def _rcon_rollback(cmd: str) -> None:
+    try:
+        await rcon(cmd)
+    except Exception as e:
+        logger.warning(f"airi_mcrcon 绑定回滚指令失败 {cmd!r}: {e}")
+
+
+async def _bind_account(user_id: str, name: str) -> None:
+    async with _account_tx_lock:
+        owners = [
+            qq for qq, value in data.items()
+            if isinstance(value, dict)
+            and str(value.get("username", "")).lower() == name.lower()
+        ]
+        if [qq for qq in owners if qq != user_id]:
+            raise ValueError("该游戏账户已被其他QQ号绑定")
+        old_account = dict(data[user_id]) if user_id in data else None
+        old_name = require_mc_name(old_account["username"]) if old_account else None
+        old_password = old_account.get("password", "") if old_account else ""
+        password = hashlib.md5(str(random.random()).encode()).hexdigest()
+        same_name = old_name is not None and old_name.lower() == name.lower()
+        new_whitelist_attempted = False
+        new_register_attempted = False
+        restore_old = False
+        committed = False
+        try:
+            if same_name:
+                restore_old = True
+                await rcon(f'easywhitelist remove {old_name}')
+                await rcon(f'auth remove {old_name}')
+
+            new_whitelist_attempted = True
+            await rcon(f'easywhitelist add {name}')
+            new_register_attempted = True
+            await rcon(f'auth register {name} {password}')
+
+            if old_name and not same_name:
+                restore_old = True
+                await rcon(f'easywhitelist remove {old_name}')
+                await rcon(f'auth remove {old_name}')
+
+            data[user_id] = {"username": name, "password": password}
+            try:
+                await save_json()
+            except Exception:
+                if old_account is None:
+                    data.pop(user_id, None)
+                else:
+                    data[user_id] = old_account
+                raise
+            committed = True
+        finally:
+            if not committed:
+                if new_register_attempted:
+                    await _rcon_rollback(f'auth remove {name}')
+                if new_whitelist_attempted:
+                    await _rcon_rollback(f'easywhitelist remove {name}')
+                if restore_old and old_name:
+                    await _rcon_rollback(f'easywhitelist add {old_name}')
+                    await _rcon_rollback(
+                        f'auth register {old_name} {old_password}'
+                    )
+
+
+async def _unbind_account(user_id: str) -> None:
+    async with _account_tx_lock:
+        old_account = dict(require_account(user_id))
+        username = require_mc_name(old_account["username"])
+        password = old_account.get("password", "")
+        whitelist_remove_attempted = False
+        auth_remove_attempted = False
+        committed = False
+        try:
+            whitelist_remove_attempted = True
+            await rcon(f'easywhitelist remove {username}')
+            auth_remove_attempted = True
+            await rcon(f'auth remove {username}')
+            data.pop(user_id, None)
+            try:
+                await save_json()
+            except Exception:
+                data[user_id] = old_account
+                raise
+            committed = True
+        finally:
+            if not committed:
+                if whitelist_remove_attempted:
+                    await _rcon_rollback(f'easywhitelist add {username}')
+                if auth_remove_attempted:
+                    await _rcon_rollback(
+                        f'auth register {username} {password}'
+                    )
+
+
 def _sync_reconnect() -> None:
     mcr.force_close()
     mcr.connect()
@@ -601,34 +696,13 @@ async def _(bot: Bot, ev: MessageEvent):
             if len(raw.split()) != 1:
                 raise ValueError("指令用法：/auth 你的mc玩家名（玩家名不能含空格）")
             name = require_mc_name(raw)
-            owners = [
-                qq for qq, v in data.items()
-                if isinstance(v, dict) and str(v.get("username", "")).lower() == name.lower()
-            ]
-            if [qq for qq in owners if qq != user_id]:
-                raise ValueError("该游戏账户已被其他QQ号绑定")
-            if user_id not in data:
-                data[user_id] = {}
-            else:
-                old = require_mc_name(data[user_id]["username"])
-                await rcon(f'easywhitelist remove {old}')
-                await rcon(f'auth remove {old}')
-            rand_passwd = hashlib.md5(str(random.random()).encode()).hexdigest()
-            data[user_id]["username"] = name
-            data[user_id]["password"] = rand_passwd
-            await rcon(f'easywhitelist add {name}')
-            await rcon(f'auth register {name} {rand_passwd}')
-            await save_json()
+            await _bind_account(user_id, name)
             res = '认证成功！\n你现在可以进入服务器了'
         except Exception as err:
             res = f"{str(err)}"
     elif src == 'unauth':
         try:
-            username = require_mc_name(require_account(user_id)["username"])
-            await rcon(f'easywhitelist remove {username}')
-            await rcon(f'auth remove {username}')
-            del data[user_id]
-            await save_json()
+            await _unbind_account(user_id)
             res = '注销成功'
         except Exception as err:
             res = f"{str(err)}"

@@ -8,11 +8,9 @@ def get_default_lang(
         lang = 'cn'
     if platform in ['discord']:
         if channel_id == '1236595725459132546':
-            lang == 'en'
-        elif channel_id == '1236596062957994016':
-            lang == 'ja'
+            lang = 'en'
         elif channel_id == '1236595725685493780':
-            lang == 'cn'
+            lang = 'cn'
         else:
             lang = 'en'
     return lang

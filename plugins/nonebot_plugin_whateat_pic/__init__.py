@@ -92,10 +92,15 @@ del_dish = on_regex(
 )
 
 img_eat_path = Path(os.path.join(os.path.dirname(__file__), "eat_pic"))
-all_file_eat_name = os.listdir(str(img_eat_path))
 
 img_drink_path = Path(os.path.join(os.path.dirname(__file__), "drink_pic"))
-all_file_drink_name = os.listdir(str(img_drink_path))
+
+
+def _menu_files(path: Path):
+    try:
+        return os.listdir(str(path))
+    except OSError:
+        return []
 
 DEFAULT_NICKNAME = Config.parse_obj(nonebot.get_driver().config.dict()).bot_nickname
 bot_nicknames = {}
@@ -218,10 +223,9 @@ async def handle(state: T_State, name: Message = Arg()):
 async def handle(bot: Bot, event: MessageEvent, args:Tuple[Any,...] = RegexGroup()):
     if args[1] in ["菜单", "菜品"]:
         path = img_eat_path
-        all_name = all_file_eat_name
     elif args[1] in ["饮料", "饮品"]:
         path = img_drink_path
-        all_name = all_file_drink_name
+    all_name = _menu_files(path)
 
     msg_list = [f"{get_nickname(bot)}查询到的{args[1]}如下"]
     N = 0
@@ -252,7 +256,10 @@ async def wtd(bot: Bot, msg: MessageEvent):
         if is_max:
             await what_drink.finish(random.choice(get_max_msg(get_nickname(bot))), at_sender=True)
         time = new_last_time
-        img_name = random.choice(all_file_drink_name)
+        files = _menu_files(img_drink_path)
+        if not files:
+            await what_drink.finish("出错啦！没有找到好喝的~")
+        img_name = random.choice(files)
         img = img_drink_path / img_name
         base64_str = cache.get_b64(img)
         if base64_str is None:
@@ -276,7 +283,10 @@ async def wte(bot: Bot, msg: MessageEvent):
         if is_max:
             await what_eat.finish(random.choice(get_max_msg(get_nickname(bot))), at_sender=True)
         time = new_last_time
-        img_name = random.choice(all_file_eat_name)
+        files = _menu_files(img_eat_path)
+        if not files:
+            await what_eat.finish("出错啦！没有找到好吃的~")
+        img_name = random.choice(files)
         img = img_eat_path / img_name
         base64_str = cache.get_b64(img)
         if base64_str is None:

@@ -54,10 +54,10 @@ async def _(bot: Bot, ev: MessageEvent):
     else:
         awaited = src[:6] == 'await '
         expr = src[6:].lstrip() if awaited else src
-        user_id, gruop_id, user_nick = _debug_session(ev)
+        user_id, group_id, user_nick = _debug_session(ev)
         ctx = {
             **globals(), 'bot': bot, 'ev': ev,
-            'user_id': user_id, 'gruop_id': gruop_id, 'user_nick': user_nick,
+            'user_id': user_id, 'group_id': group_id, 'user_nick': user_nick,
         }
         try:
             try:

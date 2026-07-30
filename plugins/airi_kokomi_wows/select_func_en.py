@@ -1,4 +1,4 @@
-from .data_source import Message
+from .data_source import Message, SafeMessage
 from .log.error_log import write_error
 from .scripts import (
     get_clan,
@@ -52,6 +52,7 @@ async def main(
     use_ac:bool,
     ac:str
 ):
+    msg = SafeMessage(msg)
     parameter = []
     try:
         params_error_msg = {'status':'ok','message':'PARAMS ERROR'}
@@ -271,14 +272,14 @@ async def main(
             }
         if (
             len(msg) >= 2 and
-            msg[0] in ['ship']
+            msg[0] in ['ship'] and
+            not (len(msg) >= 3 and msg[2] in ['recent', 'rank'])
         ):
             if len(msg) == 2:
                 ship_name = msg[1]
             else:
                 name_tmp = ''
                 for i in msg[1:]:
-                    if i in recent_list: break
                     name_tmp += i
                 ship_name = name_tmp
             shipid = await search_ship_name.search_ship_name(

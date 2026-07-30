@@ -154,7 +154,7 @@ async def stop_game_timeout(matcher: Matcher, user_id: str):
     stop_game(user_id)
     if game:
         msg = "象棋下棋超时，游戏结束，可发送“重载象棋棋局”继续下棋"
-        await matcher.finish(msg)
+        await matcher.send(msg)
 
 
 def set_timeout(matcher: Matcher, user_id: str, timeout: float = 600):
@@ -198,6 +198,9 @@ async def _(
         await matcher.finish("私聊不支持对战模式")
 
     game = Game()
+    if user_id in games:
+        await matcher.finish("当前会话已有象棋对局")
+    games[user_id] = game
     if black.result:
         game.player_black = player
     else:
@@ -213,6 +216,7 @@ async def _(
             ai_player = AiPlayer(level.result)
             await ai_player.engine.open()
         except EngineError as e:
+            games.pop(user_id, None)
             await matcher.finish(f"象棋引擎加载失败：{e.message}")
 
         if black.result:
@@ -224,13 +228,13 @@ async def _(
             try:
                 move = await ai_player.get_move(game.position())
             except EngineError as e:
+                stop_game(user_id)
                 await matcher.finish(f"象棋引擎出错：{e.message}")
 
             move_str = move.chinese(game)
             game.push(move)
             msg += f"{ai_player} 下出 {move_str}\n"
 
-    games[user_id] = game
     set_timeout(matcher, user_id)
 
     await game.save_record(user_id)

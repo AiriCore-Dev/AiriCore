@@ -1,7 +1,7 @@
 import time
 import random
 
-from nonebot.adapters.onebot.v11 import Bot, MessageSegment
+from nonebot.adapters.onebot.v11 import Bot
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 
 from nonebot import logger
@@ -10,12 +10,14 @@ from ..base import state
 from ..base.matchers import rxyp, jxyp, plxyp, wdxyp, xgxyp, zyxyp, xhxyp, jbxyp
 from ..base.helpers import (
     parse_session, check_weijinci, generate_unique_id, add_bottle, delete_bottle,
-    send_email, strip_cq, process_images_from_message,
+    send_email, strip_cq, extract_images, process_bottle_content,
+    bottle_content_message,
 )
 from ..base.constants import (
     MAX_CONTENT_LENGTH, MAX_COMMENT_LENGTH, MAX_COMMENTS_PER_BOTTLE,
     DAILY_COMMENT_LIMIT, MAX_IMAGES_PER_BOTTLE, UNIQUE_ID_LENGTH,
 )
+from ..base.image_store import delete_image_refs, record_image_refs, store_bottle_images
 import re
 
 
@@ -31,35 +33,57 @@ async def _notify_admin(bot: Bot, text: str) -> None:
 
 @rxyp.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    user_id, gruop_id, user_nick = await parse_session(bot, ev)
+    user_id, group_id, user_nick = await parse_session(bot, ev)
     if user_id is None:
         await rxyp.finish('💫 心愿瓶只能在群聊里使用哦', reply_message=True)
-    raw = str(ev.message).strip()
-    if raw == "扔心愿瓶":
+    content_message = ev.message
+    command_pattern = r'^\s*扔心愿瓶\s*'
+    if ev.get_plaintext().strip() == '扔心愿瓶' and getattr(ev, 'reply', None) is not None:
+        content_message = ev.reply.message
+        command_pattern = None
+
+    image_count = len(extract_images(content_message))
+    if image_count > MAX_IMAGES_PER_BOTTLE:
+        await rxyp.finish(f'❌ 图片数量超出{MAX_IMAGES_PER_BOTTLE}张限制！当前图片数：{image_count}', reply_message=True)
+    pure_text, images, segments = await process_bottle_content(
+        content_message,
+        bot,
+        command_pattern,
+    )
+    if len(images) != image_count:
+        await rxyp.finish('❌ 部分图片读取失败，请重新发送图片后再试', reply_message=True)
+
+    if not pure_text and not images:
         await rxyp.finish('💫 指令用法：扔心愿瓶 内容（可附带图片）', reply_message=True)
-    content = strip_cq(raw[4:])
-    images = await process_images_from_message(raw)
-    if not content and not images:
-        await rxyp.finish('💫 指令用法：扔心愿瓶 内容（可附带图片）', reply_message=True)
-    if len(content) > MAX_CONTENT_LENGTH:
-        await rxyp.finish(f'❌ 心愿长度超出{MAX_CONTENT_LENGTH}字限制，请重新填写！当前字数：{len(content)}', reply_message=True)
-    if len(images) > MAX_IMAGES_PER_BOTTLE:
-        await rxyp.finish(f'❌ 图片数量超出{MAX_IMAGES_PER_BOTTLE}张限制！当前图片数：{len(images)}', reply_message=True)
-    iswj = await check_weijinci(content, images)
+    if len(pure_text) > MAX_CONTENT_LENGTH:
+        await rxyp.finish(f'❌ 心愿长度超出{MAX_CONTENT_LENGTH}字限制，请重新填写！当前字数：{len(pure_text)}', reply_message=True)
+
+    await rxyp.send('⏳ 审核中，请耐心等待...', reply_message=True)
+
+    iswj = await check_weijinci(pure_text, images)
+    unique_id = await generate_unique_id(pure_text or str(images))
+    try:
+        stored_images, stored_segments = await store_bottle_images(images, segments)
+    except Exception as e:
+        logger.warning(f"心愿瓶图片保存失败: {e}")
+        await rxyp.finish('❌ 图片保存失败，请稍后再试', reply_message=True)
     if iswj:
-        unique_id = await generate_unique_id(content or str(images))
-        state.data['pending_bottles'][unique_id] = {"owner": user_nick, "owner_id": user_id, "content": content, "comments": [], "times": 0, "images": images}
-        await _notify_admin(bot, f'心愿瓶审核：{unique_id}\n{content}')
+        state.data['pending_bottles'][unique_id] = {"owner": user_nick, "owner_id": user_id, "content": pure_text, "comments": [], "times": 0, "images": stored_images, "segments": stored_segments}
+        await _notify_admin(bot, f'心愿瓶审核：{unique_id}\n{pure_text}')
         await rxyp.finish('❌ 未通过机器审核，请等待人工审核。人工审核结果将会以邮件形式告知。', reply_message=True)
     else:
-        unique_id = await generate_unique_id(content or str(images))
-        add_bottle(unique_id, user_nick, user_id, content, [], 0, images)
+        try:
+            add_bottle(unique_id, user_nick, user_id, pure_text, [], 0, stored_images, stored_segments)
+        except Exception as e:
+            await delete_image_refs(stored_images)
+            logger.warning(f"心愿瓶保存失败 {unique_id}: {e}")
+            await rxyp.finish('❌ 心愿瓶保存失败，请稍后再试', reply_message=True)
         await rxyp.finish(f'✅ 您的心愿瓶编号：{unique_id}，等待有缘人的开启......', reply_message=True)
 
 
 @jxyp.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    user_id, gruop_id, user_nick = await parse_session(bot, ev)
+    user_id, group_id, user_nick = await parse_session(bot, ev)
     if user_id is None:
         await jxyp.finish('💫 心愿瓶只能在群聊里使用哦', reply_message=True)
     src = str(ev.message).split(' ', 1)
@@ -81,12 +105,10 @@ async def _(bot: Bot, ev: MessageEvent):
     res = f'💫 {user_nick}拾取的心愿瓶'
     msg.append({"type": "node", "data": {"name": "Momoi Airi Wish Bottle", "uin": bot.self_id, "content": res}})
     bottle = state.data["bottles"][unique_id]
-    content_parts = []
-    if bottle["content"]:
-        content_parts.append(bottle["content"])
-    for img_b64 in bottle.get("images", []):
-        content_parts.append(MessageSegment.image(img_b64))
-    msg.append({"type": "node", "data": {"name": "心愿瓶内容", "uin": bot.self_id, "content": content_parts}})
+
+    content_msg = await bottle_content_message(bottle)
+
+    msg.append({"type": "node", "data": {"name": "心愿瓶内容", "uin": bot.self_id, "content": content_msg}})
     res = f'{unique_id}'
     msg.append({"type": "node", "data": {"name": "心愿瓶编号", "uin": bot.self_id, "content": res}})
     state.data["bottles"][unique_id]["times"] += 1
@@ -99,18 +121,18 @@ async def _(bot: Bot, ev: MessageEvent):
 
 @plxyp.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    user_id, gruop_id, user_nick = await parse_session(bot, ev)
+    user_id, group_id, user_nick = await parse_session(bot, ev)
     if user_id is None:
         await plxyp.finish('💫 心愿瓶只能在群聊里使用哦', reply_message=True)
     src = str(ev.message).split()
     if len(src) <= 2:
-        await jxyp.finish('💫 指令用法：评论心愿瓶 编号 评论内容', reply_message=True)
+        await plxyp.finish('💫 指令用法：评论心愿瓶 编号 评论内容', reply_message=True)
     else:
         unique_id = src[1].strip()
     if len(unique_id) != UNIQUE_ID_LENGTH:
-        await jxyp.finish(f'❌ 请检查心愿瓶编号格式！', reply_message=True)
+        await plxyp.finish(f'❌ 请检查心愿瓶编号格式！', reply_message=True)
     elif unique_id not in state.data["bottles"].keys():
-        await jxyp.finish(f'❌ 编号为{unique_id}的心愿瓶不存在！', reply_message=True)
+        await plxyp.finish(f'❌ 编号为{unique_id}的心愿瓶不存在！', reply_message=True)
     daily = state.data.setdefault("comments_daily", {})
     daily.setdefault(user_id, 0)
     if daily[user_id] >= DAILY_COMMENT_LIMIT:
@@ -139,7 +161,7 @@ async def _(bot: Bot, ev: MessageEvent):
 
 @wdxyp.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    user_id, gruop_id, user_nick = await parse_session(bot, ev)
+    user_id, group_id, user_nick = await parse_session(bot, ev)
     if user_id is None:
         await wdxyp.finish('💫 心愿瓶只能在群聊里使用哦', reply_message=True)
     owned = state.data.setdefault('collections', {}).setdefault(user_id, [])
@@ -158,47 +180,68 @@ async def _(bot: Bot, ev: MessageEvent):
 
 @xgxyp.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    user_id, gruop_id, user_nick = await parse_session(bot, ev)
+    user_id, group_id, user_nick = await parse_session(bot, ev)
     if user_id is None:
         await xgxyp.finish('💫 心愿瓶只能在群聊里使用哦', reply_message=True)
-    src = str(ev.message).split()
-    if len(src) <= 2:
+    src = ev.get_plaintext().strip().split(maxsplit=2)
+    if len(src) < 2:
         await xgxyp.finish('💫 指令用法：修改心愿瓶 编号 内容（可附带图片）', reply_message=True)
     unique_id = src[1].strip()
-    if len(unique_id) != 8:
+    if len(unique_id) != UNIQUE_ID_LENGTH:
         await xgxyp.finish('❌ 请检查心愿瓶编号格式！', reply_message=True)
     elif unique_id not in state.data.get("bottles", {}):
         await xgxyp.finish(f'❌ 编号为{unique_id}的心愿瓶不存在！', reply_message=True)
     if str(state.data["bottles"][unique_id]["owner_id"]) != str(user_id):
         await xgxyp.finish('❌ 你不是该心愿瓶的拥有者！', reply_message=True)
-    raw_content = " ".join(src[2:])
-    content = strip_cq(raw_content)
-    images = await process_images_from_message(raw_content)
-    if not content and not images:
+
+    image_count = len(extract_images(ev.message))
+    if image_count > MAX_IMAGES_PER_BOTTLE:
+        await xgxyp.finish(f'❌ 图片数量超出{MAX_IMAGES_PER_BOTTLE}张限制！当前图片数：{image_count}', reply_message=True)
+    pure_text, images, segments = await process_bottle_content(
+        ev.message,
+        bot,
+        r'^\s*修改心愿瓶\s+\S+\s*',
+    )
+    if len(images) != image_count:
+        await xgxyp.finish('❌ 部分图片读取失败，请重新发送图片后再试', reply_message=True)
+
+    if not pure_text and not images:
         await xgxyp.finish('💫 指令用法：修改心愿瓶 编号 内容（可附带图片）', reply_message=True)
-    if len(content) > MAX_CONTENT_LENGTH:
-        await xgxyp.finish(f'❌ 心愿长度超出{MAX_CONTENT_LENGTH}字限制，请重新填写！当前字数：{len(content)}', reply_message=True)
-    if len(images) > MAX_IMAGES_PER_BOTTLE:
-        await xgxyp.finish(f'❌ 图片数量超出{MAX_IMAGES_PER_BOTTLE}张限制！当前图片数：{len(images)}', reply_message=True)
-    iswj = await check_weijinci(content, images)
+    if len(pure_text) > MAX_CONTENT_LENGTH:
+        await xgxyp.finish(f'❌ 心愿长度超出{MAX_CONTENT_LENGTH}字限制，请重新填写！当前字数：{len(pure_text)}', reply_message=True)
+
+    iswj = await check_weijinci(pure_text, images)
+    try:
+        stored_images, stored_segments = await store_bottle_images(images, segments)
+    except Exception as e:
+        logger.warning(f"心愿瓶修改图片保存失败 {unique_id}: {e}")
+        await xgxyp.finish('❌ 图片保存失败，请稍后再试', reply_message=True)
+    old_pending = state.data.get('pending_bottles', {}).get(unique_id)
     if iswj:
-        state.data['pending_bottles'][unique_id] = {"owner": user_nick, "owner_id": user_id, "content": content, "comments": state.data["bottles"][unique_id]["comments"], "times": state.data["bottles"][unique_id]["times"], "images": images}
-        await _notify_admin(bot, f'心愿瓶修改审核：{unique_id}\n{content}')
+        old_pending_refs = record_image_refs(old_pending)
+        state.data['pending_bottles'][unique_id] = {"owner": user_nick, "owner_id": user_id, "content": pure_text, "comments": state.data["bottles"][unique_id]["comments"], "times": state.data["bottles"][unique_id]["times"], "images": stored_images, "segments": stored_segments}
+        await delete_image_refs(old_pending_refs)
+        await _notify_admin(bot, f'心愿瓶修改审核：{unique_id}\n{pure_text}')
         await xgxyp.finish('❌ 未通过机器审核，请等待人工审核。人工审核结果将会以邮件形式告知。', reply_message=True)
     else:
+        old_active_refs = record_image_refs(state.data['bottles'][unique_id])
+        old_pending_refs = record_image_refs(old_pending)
         state.data['bottles'][unique_id]['owner'] = user_nick
-        state.data['bottles'][unique_id]['content'] = content
-        state.data['bottles'][unique_id]['images'] = images
+        state.data['bottles'][unique_id]['content'] = pure_text
+        state.data['bottles'][unique_id]['images'] = stored_images
+        state.data['bottles'][unique_id]['segments'] = stored_segments
+        state.data.get('pending_bottles', {}).pop(unique_id, None)
+        await delete_image_refs(old_active_refs | old_pending_refs)
         await xgxyp.finish('修改成功', reply_message=True)
 
 
 @zyxyp.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    user_id, gruop_id, user_nick = await parse_session(bot, ev)
+    user_id, group_id, user_nick = await parse_session(bot, ev)
     if user_id is None:
         await zyxyp.finish('💫 心愿瓶只能在群聊里使用哦', reply_message=True)
     src = str(ev.message).split()
-    if len(src) != 3:
+    if len(src) < 3:
         await zyxyp.finish('💫 指令用法：转移心愿瓶 编号 @...', reply_message=True)
     unique_id = src[1].strip()
     if len(unique_id) != 8:
@@ -208,14 +251,14 @@ async def _(bot: Bot, ev: MessageEvent):
     if str(state.data["bottles"][unique_id]["owner_id"]) != str(user_id):
         await zyxyp.finish('❌ 你不是该心愿瓶的拥有者！', reply_message=True)
 
-    m = re.search(r'\[CQ:at,qq=(\d+)', src[2].strip())
+    m = re.search(r'\[CQ:at,qq=(\d+)', str(ev.message))
     if m is None:
         await zyxyp.finish('💫 指令用法：转移心愿瓶 编号 @...', reply_message=True)
     transfer_id = m.group(1)
     if transfer_id == str(user_id):
         await zyxyp.finish('❌ 不能转给自己', reply_message=True)
     try:
-        info = await bot.get_group_member_info(group_id=gruop_id, user_id=transfer_id)
+        info = await bot.get_group_member_info(group_id=group_id, user_id=transfer_id)
         transfer_nick = info.get("card") or info.get("nickname") or transfer_id
     except Exception:
         transfer_nick = transfer_id
@@ -229,7 +272,7 @@ async def _(bot: Bot, ev: MessageEvent):
 
 @xhxyp.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    user_id, gruop_id, user_nick = await parse_session(bot, ev)
+    user_id, group_id, user_nick = await parse_session(bot, ev)
     if user_id is None:
         await xhxyp.finish('💫 心愿瓶只能在群聊里使用哦', reply_message=True)
     src = str(ev.message).split()
@@ -242,13 +285,13 @@ async def _(bot: Bot, ev: MessageEvent):
         await xhxyp.finish(f'❌ 编号为{unique_id}的心愿瓶不存在！', reply_message=True)
     if str(state.data["bottles"][unique_id]["owner_id"]) != str(user_id):
         await xhxyp.finish('❌ 你不是该心愿瓶的拥有者！', reply_message=True)
-    delete_bottle(unique_id)
+    await delete_bottle(unique_id)
     await xhxyp.finish(f'🗑️ 编号为{unique_id}的心愿瓶已销毁', reply_message=True)
 
 
 @jbxyp.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    user_id, gruop_id, user_nick = await parse_session(bot, ev)
+    user_id, group_id, user_nick = await parse_session(bot, ev)
     if user_id is None:
         await jbxyp.finish('💫 心愿瓶只能在群聊里使用哦', reply_message=True)
     src = str(ev.message).split()

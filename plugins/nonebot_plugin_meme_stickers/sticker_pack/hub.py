@@ -117,4 +117,7 @@ async def temp_sticker_card_params(
         )
 
     async with with_kw_sem(req_kw):
-        return await asyncio.gather(*(task(i, x) for i, x in enumerate(hub, 1)))
+        available = [x for x in hub if x.slug in manifests]
+        return await asyncio.gather(
+            *(task(i, x) for i, x in enumerate(available, 1))
+        )

@@ -29,49 +29,58 @@ def _ip_allowed(ip_str: str) -> bool:
     except ValueError:
         return False
     if (
-        ip.is_private
-        or ip.is_loopback
-        or ip.is_link_local
+        not ip.is_global
         or ip.is_multicast
-        or ip.is_reserved
-        or ip.is_unspecified
+        or getattr(ip, "is_site_local", False)
     ):
         return False
     return True
 
 
 async def is_public_url_async(url) -> bool:
+    return bool(await resolve_public_ips_async(url))
+
+
+async def resolve_public_ips_async(url) -> tuple[str, ...] | None:
     import asyncio
 
     loop = asyncio.get_running_loop()
-    fut = loop.run_in_executor(_get_executor(), is_public_url, url)
+    fut = loop.run_in_executor(_get_executor(), resolve_public_ips, url)
     try:
         return await asyncio.wait_for(asyncio.shield(fut), timeout=_RESOLVE_TIMEOUT)
     except (asyncio.TimeoutError, asyncio.CancelledError):
         fut.add_done_callback(lambda f: f.exception())
-        return False
+        return None
 
 
 def is_public_url(url) -> bool:
+    return bool(resolve_public_ips(url))
+
+
+def resolve_public_ips(url) -> tuple[str, ...] | None:
     try:
         parsed = urlparse(str(url))
+        port = parsed.port
     except Exception:
-        return False
+        return None
     if parsed.scheme not in ("http", "https"):
-        return False
+        return None
     host = parsed.hostname
     if not host:
-        return False
-    port = parsed.port
+        return None
     if port is not None and port in _BLOCKED_PORTS:
-        return False
+        return None
     try:
-        infos = socket.getaddrinfo(host, None)
+        infos = socket.getaddrinfo(host, port, type=socket.SOCK_STREAM)
     except Exception:
-        return False
+        return None
     if not infos:
-        return False
+        return None
+    addresses = []
     for info in infos:
-        if not _ip_allowed(info[4][0]):
-            return False
-    return True
+        address = info[4][0]
+        if not _ip_allowed(address):
+            return None
+        if address not in addresses:
+            addresses.append(address)
+    return tuple(addresses)

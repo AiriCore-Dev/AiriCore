@@ -203,7 +203,6 @@ class Message_EN:
         'DIV2':'pvp_div2',
         'DIV3':'pvp_div3'
     }
-Message_JA = Message_EN
 
 def main(
     lang: str,
@@ -219,8 +218,6 @@ def main(
         message = Message_CN
     elif lang == 'en':
         message = Message_EN
-    elif lang == 'ja':
-        message = Message_JA
     for params_index in params:
         msg = params_index.upper()
         if '_' in msg:

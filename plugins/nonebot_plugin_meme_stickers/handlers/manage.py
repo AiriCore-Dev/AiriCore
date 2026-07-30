@@ -19,7 +19,7 @@ from ..draw.pack_list import draw_sticker_pack_grid
 from ..draw.tools import save_image
 from ..sticker_pack import pack_manager
 from ..sticker_pack.hub import (
-    fetch_checksum,
+    fetch_optional_checksum,
     fetch_hub,
     fetch_hub_and_packs,
     temp_sticker_card_params,
@@ -64,20 +64,21 @@ async def _(
             hub, manifests = await fetch_hub_and_packs()
         if not manifests:
             await UniMessage("Hub 上无可用贴纸包").finish()
+        available_hub = [x for x in hub if x.slug in manifests]
         async with exception_notify("从 Hub 获取贴纸包信息失败"):
             sem = create_req_sem()
-            checksums = dict(
-                zip(
-                    (x.slug for x in hub),
-                    await asyncio.gather(
-                        *(fetch_checksum(x.source, sem=sem) for x in hub),
-                    ),
-                ),
+            checksum_results = await asyncio.gather(
+                *(fetch_optional_checksum(x.source, sem=sem) for x in available_hub),
             )
+            checksums = {
+                info.slug: checksum
+                for info, checksum in zip(available_hub, checksum_results)
+                if checksum is not None
+            }
         async with exception_notify("下载用于预览的贴纸失败"):
             params = await temp_sticker_card_params(
                 data_dir / PREVIEW_CACHE_DIR_NAME,
-                hub,
+                available_hub,
                 manifests,
                 checksums,
             )
@@ -139,7 +140,7 @@ async def _(
     m: AlconnaMatcher,
     q_packs: Query[list[str]] = Query("~packs"),
 ):
-    existed = [x for x in q_packs.result if pack_manager.find_pack(x)]
+    existed = [x for x in q_packs.result if pack_manager.find_pack(x, True)]
     if existed:
         await m.finish(f"以下贴纸包已存在：\n{', '.join(f'`{x}`' for x in existed)}")
 

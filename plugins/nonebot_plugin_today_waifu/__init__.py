@@ -1,6 +1,8 @@
 import re
 import random
 import datetime
+import asyncio
+import weakref
 from typing import Set, Dict, Any, Union, List
 
 import nonebot
@@ -68,6 +70,16 @@ if today_waifu_superuser_opt:
 else:
     permission_opt = SUPERUSER | GROUP_OWNER | GROUP_ADMIN
 
+_group_locks = weakref.WeakValueDictionary()
+
+
+def _group_lock(gid: str) -> asyncio.Lock:
+    lock = _group_locks.get(gid)
+    if lock is None:
+        lock = asyncio.Lock()
+        _group_locks[gid] = lock
+    return lock
+
 PatternStr = '|'.join([__plugin_name__, ] + plugin_aliases)
 
 today_waifu = on_regex(
@@ -116,8 +128,7 @@ today_waifu_force = on_regex(
 )
 
 
-@today_waifu_set_allow_change.handle()
-async def _(event: GroupMessageEvent, val: Dict[str, Any] = RegexDict()):
+async def _handle_set_allow_change(event: GroupMessageEvent, val: Dict[str, Any]):
     gid = str(event.group_id)
     group_record: Dict[str, Union[bool, Dict[str, Dict[str, int]]]] = get_group_record(gid)
     val: str = val.get('val', '').strip()
@@ -131,8 +142,13 @@ async def _(event: GroupMessageEvent, val: Dict[str, Any] = RegexDict()):
     await today_waifu_set_allow_change.finish(f'本群设置为{val}')
 
 
-@today_waifu_set_limit_times.handle()
-async def _(event: GroupMessageEvent, times: Dict[str, Any] = RegexDict()):
+@today_waifu_set_allow_change.handle()
+async def _(event: GroupMessageEvent, val: Dict[str, Any] = RegexDict()):
+    async with _group_lock(str(event.group_id)):
+        await _handle_set_allow_change(event, val)
+
+
+async def _handle_set_limit_times(event: GroupMessageEvent, times: Dict[str, Any]):
     limit_times: str = times.get('times', str(default_limit_times)).strip()
     try:
         limit_times_num = int(limit_times)
@@ -146,8 +162,13 @@ async def _(event: GroupMessageEvent, times: Dict[str, Any] = RegexDict()):
     await today_waifu_set_limit_times.finish(f'已将本群换老婆次数设置为{limit_times_num}次')
 
 
-@today_waifu_change.handle()
-async def _(bot: Bot, event: GroupMessageEvent):
+@today_waifu_set_limit_times.handle()
+async def _(event: GroupMessageEvent, times: Dict[str, Any] = RegexDict()):
+    async with _group_lock(str(event.group_id)):
+        await _handle_set_limit_times(event, times)
+
+
+async def _handle_waifu_change(bot: Bot, event: GroupMessageEvent):
     gid = str(event.group_id)
     uid = str(event.user_id)
     today = str(datetime.date.today())
@@ -185,8 +206,14 @@ async def _(bot: Bot, event: GroupMessageEvent):
                                                         limit_times)
     await today_waifu_change.finish(message, at_sender=True)
 
-@today_waifu.handle()
+
+@today_waifu_change.handle()
 async def _(bot: Bot, event: GroupMessageEvent):
+    async with _group_lock(str(event.group_id)):
+        await _handle_waifu_change(bot, event)
+
+
+async def _handle_today_waifu(bot: Bot, event: GroupMessageEvent):
     gid = str(event.group_id)
     uid = str(event.user_id)
     today = str(datetime.date.today())
@@ -231,15 +258,25 @@ async def _(bot: Bot, event: GroupMessageEvent):
     await today_waifu.finish(message, at_sender=True)
 
 
-@today_waifu_refresh.handle()
-async def _(event: GroupMessageEvent, name: Dict[str, Any] = RegexDict()):
+@today_waifu.handle()
+async def _(bot: Bot, event: GroupMessageEvent):
+    async with _group_lock(str(event.group_id)):
+        await _handle_today_waifu(bot, event)
+
+
+async def _handle_waifu_refresh(event: GroupMessageEvent, name: Dict[str, Any]):
     plugin_name: str = name.get('name', __plugin_name__).strip()
     clear_group_record(str(event.group_id))
     await today_waifu_refresh.finish(f"{plugin_name}已刷新！")
 
 
-@today_waifu_force.handle()
-async def _(bot: Bot, event: GroupMessageEvent):
+@today_waifu_refresh.handle()
+async def _(event: GroupMessageEvent, name: Dict[str, Any] = RegexDict()):
+    async with _group_lock(str(event.group_id)):
+        await _handle_waifu_refresh(event, name)
+
+
+async def _handle_waifu_force(bot: Bot, event: GroupMessageEvent):
     gid = str(event.group_id)
     uid = str(event.user_id)
     today = str(datetime.date.today())
@@ -254,6 +291,10 @@ async def _(bot: Bot, event: GroupMessageEvent):
         await today_waifu_force.finish('不能强娶自己哦', at_sender=True)
     if target_id in ban_id:
         await today_waifu_force.finish('该用户不可被娶', at_sender=True)
+    try:
+        member_info = await bot.get_group_member_info(group_id=gid, user_id=target_id)
+    except ActionFailed:
+        await today_waifu_force.finish('该用户不在本群', at_sender=True)
 
     group_record: Dict[str, Union[int, bool, Dict[str, Dict[str, int]]]] = get_group_record(gid)
     limit_times: int = group_record.setdefault('limit_times', default_limit_times)
@@ -286,9 +327,11 @@ async def _(bot: Bot, event: GroupMessageEvent):
     }
     save_group_record(gid, group_record)
 
-    try:
-        member_info = await bot.get_group_member_info(group_id=gid, user_id=target_id)
-    except ActionFailed:
-        member_info = {}
     message: Message = await construct_force_waifu_msg(member_info, target_id, int(bot.self_id))
     await today_waifu_force.finish(message, at_sender=True)
+
+
+@today_waifu_force.handle()
+async def _(bot: Bot, event: GroupMessageEvent):
+    async with _group_lock(str(event.group_id)):
+        await _handle_waifu_force(bot, event)

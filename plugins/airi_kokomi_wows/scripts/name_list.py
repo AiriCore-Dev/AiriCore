@@ -137,25 +137,6 @@ def get_png(
                     font_size=50
                 )
             )
-        elif lang == 'ja':
-            text_list.append(
-                Text_Data(
-                    xy=(743, 417+90*i),
-                    text=ship_data['ship_data']['ja'],
-                    fill=(0,0,0),
-                    font_index=1,
-                    font_size=50
-                )
-            )
-            text_list.append(
-                Text_Data(
-                    xy=(1238, 417+90*i),
-                    text=ship_data['ship_data']['en'],
-                    fill=(0,0,0),
-                    font_index=1,
-                    font_size=50
-                )
-            )
         i += 1
 
     png_len = 407 + 90*i + 90

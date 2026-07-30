@@ -7,8 +7,12 @@ def parse_to_command(msg: str):
         split_msg = ['wws', 'bind', 'cn', msg[12:]]
     else:
         split_msg = msg.split()
+    if not split_msg:
+        return ('stop', None)
     if Plugin_Config.EN_START_WITH == split_msg[0]:
         del split_msg[0]
+        if not split_msg:
+            return ('stop', None)
     if Plugin_Config.EN_START_WITH == split_msg[0][0]:
         split_msg[0] = split_msg[0].replace(Plugin_Config.EN_START_WITH,'')
     if split_msg[0][:6] == 'recent' and split_msg[0] != 'recents':

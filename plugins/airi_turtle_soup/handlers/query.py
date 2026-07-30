@@ -7,7 +7,7 @@ from nonebot.adapters.onebot.v11.event import MessageEvent
 from ..base.matchers import query, matcher
 from ..base.constants import max_player_query_trial, max_group_trial
 from ..base import state
-from ..base.helpers import get_ids, check_data_existance, get_usernick, construct_turtle_soup_history, call_llm, turtle_soup_question_prompt, turtle_soup, end_game, strip_cq, _persist
+from ..base.helpers import get_ids, check_data_existance, get_usernick, construct_turtle_soup_history, call_llm, turtle_soup_question_prompt, turtle_soup, end_game, strip_cq, _persist, add_pending_trial, remove_pending_trial
 
 LLM_MAX_ATTEMPTS = 3
 LLM_RETRY_DELAY = 2
@@ -15,6 +15,9 @@ LLM_RETRY_DELAY = 2
 
 @query.handle()
 async def _(bot: Bot, ev: MessageEvent):
+    reserved_turtle = None
+    reserved_user = None
+    trial_kept = False
     try:
         gruop_id, user_id = await get_ids(ev)
         if gruop_id is None:
@@ -24,11 +27,20 @@ async def _(bot: Bot, ev: MessageEvent):
             return
         src = strip_cq(str(ev.message)[2:])[:300]
         if len(src):
-            if state.data['group'][gruop_id]['turtle']['players'][user_id]['query_trial'] >= max_player_query_trial:
+            turtle = state.data['group'][gruop_id]['turtle']
+            player = turtle['players'][user_id]
+            if player['query_trial'] >= max_player_query_trial:
                 raise ValueError("❌ 你的提问机会已用完")
+            if turtle['trial'] >= max_group_trial:
+                raise ValueError("❌ 本场游戏的总轮询机会已用完")
+            player['query_trial'] += 1
+            turtle['trial'] += 1
+            add_pending_trial(turtle, user_id, 'query')
+            reserved_turtle = turtle
+            reserved_user = user_id
             user_nick = await get_usernick(bot, gruop_id, user_id)
             history_text = f"提问：{src}"
-            soup = turtle_soup[state.data['group'][gruop_id]['turtle']['soup_id']]
+            soup = turtle_soup[turtle['soup_id']]
             llm_answer = None
             for attempt in range(LLM_MAX_ATTEMPTS):
                 try:
@@ -53,15 +65,31 @@ async def _(bot: Bot, ev: MessageEvent):
             if not llm_answer:
                 await matcher.send('AI没有给出有效回复，请稍后再试\n（提问次数已返还）', reply_message=True)
                 return
-            await matcher.send(llm_answer, reply_message=True)
             history_text += f'\n\n答：{llm_answer}'
             history_msg = await construct_turtle_soup_history(user_id, user_nick, history_text)
-            state.data['group'][gruop_id]['turtle']['history'].append(history_msg)
-            state.data['group'][gruop_id]['turtle']['trial'] += 1
-            state.data['group'][gruop_id]['turtle']['players'][user_id]['query_trial'] += 1
-            await _persist()
-            if state.data['group'][gruop_id]['turtle']['trial'] >= max_group_trial:
-                await end_game("trial_off", gruop_id, bot, user_id, user_nick, max_group_trial, matcher)
+            current = state.data.get('group', {}).get(gruop_id, {}).get('turtle')
+            if current is not reserved_turtle:
+                return
+            await matcher.send(llm_answer, reply_message=True)
+            current = state.data.get('group', {}).get(gruop_id, {}).get('turtle')
+            if current is not reserved_turtle:
+                return
+            turtle['history'].append(history_msg)
+            remove_pending_trial(turtle, user_id, 'query')
+            trial_kept = True
+            if turtle['trial'] >= max_group_trial and turtle['_pending'] == 0:
+                await end_game(
+                    "trial_off",
+                    gruop_id,
+                    bot,
+                    user_id,
+                    user_nick,
+                    max_group_trial,
+                    matcher,
+                    expected_turtle=turtle,
+                )
+            else:
+                await _persist()
             return
         else:
             raise ValueError("❌ 请输入提问内容")
@@ -70,3 +98,12 @@ async def _(bot: Bot, ev: MessageEvent):
     except Exception:
         logger.error(f"海龟汤提问处理失败:\n{traceback.format_exc()}")
         await matcher.send('❌ 处理提问时出错了，已记录日志', reply_message=True)
+    finally:
+        if reserved_turtle is not None and not trial_kept:
+            current = state.data.get('group', {}).get(gruop_id, {}).get('turtle')
+            if current is reserved_turtle:
+                current['trial'] = max(0, current['trial'] - 1)
+                remove_pending_trial(current, reserved_user, 'query')
+                player = current.get('players', {}).get(reserved_user)
+                if player is not None:
+                    player['query_trial'] = max(0, player['query_trial'] - 1)

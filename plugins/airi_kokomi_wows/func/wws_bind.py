@@ -118,18 +118,6 @@ def get_png(
                 font_size=55
             )
         )
-    elif lang == 'ja':
-        lang_info = '日本語'
-        w = Picture.x_coord(lang_info, fontStyle)
-        text_list.append(
-            Text_Data(
-                xy=(1750-w, 705),
-                text=lang_info,
-                fill=(0,0,0),
-                font_index=1,
-                font_size=55
-            )
-        )
 
     w = Picture.x_coord(str(aid), fontStyle)
     text_list.append(
@@ -244,22 +232,6 @@ def get_png(
                 font_size=55
             )
         )
-    elif lang == 'ja':
-        recents_class = {
-            0:'-',
-            1:'Official API-1 (VIP)',
-            2:'Official API-2'
-        }
-        w = Picture.x_coord(recents_class[result['data']['recents']['class']], fontStyle)
-        text_list.append(
-            Text_Data(
-                xy=(1750-w, 2772),
-                text=recents_class[result['data']['recents']['class']],
-                fill=(0,0,0),
-                font_index=1,
-                font_size=55
-            )
-        )
     on_png_path = os.path.join(plugin_path, 'png', 'list', 'on.png')
     on_png = Picture.imread(on_png_path)
     off_png_path = os.path.join(plugin_path, 'png', 'list', 'off.png')
@@ -319,7 +291,6 @@ def get_png(
     res_img = Picture.add_box(box_list, res_img)
     res_img = Picture.add_text(text_list, res_img)
     return res_img
-
 
 
 

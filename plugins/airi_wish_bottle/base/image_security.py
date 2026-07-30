@@ -1,45 +1,31 @@
-import ipaddress
-import imghdr
-from urllib.parse import urlparse
-
-PRIVATE_IP_RANGES = [
-    ipaddress.ip_network('10.0.0.0/8'),
-    ipaddress.ip_network('172.16.0.0/12'),
-    ipaddress.ip_network('192.168.0.0/16'),
-    ipaddress.ip_network('127.0.0.0/8'),
-    ipaddress.ip_network('169.254.0.0/16'),
-    ipaddress.ip_network('::1/128'),
-    ipaddress.ip_network('fc00::/7'),
-    ipaddress.ip_network('fe80::/10'),
-]
+from utils.net_guard import is_public_url
 
 ALLOWED_IMAGE_TYPES = {'png', 'jpeg', 'gif', 'webp'}
 MAX_IMAGE_SIZE = 5 * 1024 * 1024
 
+_IMAGE_SIGNATURES = {
+    b'\x89PNG\r\n\x1a\n': 'png',
+    b'\xff\xd8\xff': 'jpeg',
+    b'GIF87a': 'gif',
+    b'GIF89a': 'gif',
+    b'RIFF': 'webp',
+}
+
 
 def is_safe_url(url: str) -> bool:
-    try:
-        parsed = urlparse(url)
-        if parsed.scheme not in ('http', 'https'):
-            return False
+    return is_public_url(url)
 
-        hostname = parsed.hostname
-        if not hostname:
-            return False
 
-        try:
-            ip = ipaddress.ip_address(hostname)
-            for private_range in PRIVATE_IP_RANGES:
-                if ip in private_range:
-                    return False
-        except ValueError:
-            pass
-
-        return True
-    except Exception:
-        return False
+def detect_image_type(image_bytes: bytes) -> str | None:
+    if len(image_bytes) < 12:
+        return None
+    for sig, fmt in _IMAGE_SIGNATURES.items():
+        if image_bytes.startswith(sig):
+            if fmt == 'webp':
+                return fmt if b'WEBP' in image_bytes[8:12] else None
+            return fmt if fmt in ALLOWED_IMAGE_TYPES else None
+    return None
 
 
 def validate_image_format(image_bytes: bytes) -> bool:
-    img_type = imghdr.what(None, h=image_bytes)
-    return img_type in ALLOWED_IMAGE_TYPES
+    return detect_image_type(image_bytes) is not None

@@ -85,7 +85,11 @@ async def call_llm(
                 frequency_penalty=LLM_FREQ_PENALTY,
                 presence_penalty=LLM_PRESENCE_PENALTY,
             )
-            return (completion.choices[0].message.content or "").strip()
+            text = (completion.choices[0].message.content or "").strip()
+            if text:
+                return text
+            last_err = RuntimeError("模型返回空内容")
+            logger.warning(f"模型 {model} 返回空内容，尝试下一个备用模型")
         except Exception as e:
             last_err = e
             _log_attempt_failed(model, chain, idx, e)
@@ -363,4 +367,3 @@ async def analyze_user_full(
     if isinstance(result, dict):
         return result
     return None
-

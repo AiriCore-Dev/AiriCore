@@ -145,29 +145,6 @@ def get_png(
                 font_size=55
             )
         )
-    elif lang == 'ja':
-        text_list.append(
-            Text_Data(
-                xy=(390, 355),
-                text=tag,
-                fill=tag_color,
-                font_index=1,
-                font_size=55
-            )
-        )
-        creat_time = time.strftime(
-            "%Y-%m-%d",
-            time.localtime(result['data']['user']['created_at'])
-        )
-        text_list.append(
-            Text_Data(
-                xy=(390, 445),
-                text=creat_time,
-                fill=(0,0,0),
-                font_index=1,
-                font_size=55
-            )
-        )
     pr_png = result['data']['pr']['avg_pr_index']
     pr_png_path = os.path.join(plugin_path, 'png', f'bg_{lang}', 'pr', '{}.png'.format(pr_png))
     pr_png = Picture.imread(pr_png_path)
@@ -288,8 +265,6 @@ def get_png(
                 str_pr = '■ '+str(int(temp_data['avg_pr']))
             elif lang == 'en':
                 str_pr = '■ '+str(int(temp_data['avg_pr']))
-            elif lang == 'ja':
-                str_pr = '■ '+str(int(temp_data['avg_pr']))
         fontStyle = fonts.data[1][55]
         w = Picture.x_coord(battles_count, fontStyle)
         text_list.append(
@@ -372,8 +347,6 @@ def get_png(
             if lang == 'cn':
                 str_pr = '■ '+str(int(temp_data['avg_pr']))
             elif lang == 'en':
-                str_pr = '■ '+str(int(temp_data['avg_pr']))
-            elif lang == 'ja':
                 str_pr = '■ '+str(int(temp_data['avg_pr']))
         fontStyle = fonts.data[1][55]
         w = Picture.x_coord(battles_count, fontStyle)
@@ -486,7 +459,6 @@ def get_png(
     res_img = Picture.add_box(box_list, res_img)
     res_img = Picture.add_text(text_list, res_img)
     return res_img
-
 
 
 

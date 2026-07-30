@@ -1,6 +1,7 @@
 
 import copy
 import pickle
+import sys
 import time
 import threading
 from pathlib import Path
@@ -18,12 +19,23 @@ _CACHE_FILE = _DATA_DIR / "meta_cache.pk"
 
 _FLUSH_INTERVAL = 30.0
 _PURGE_INTERVAL = 300.0
-_MAX_PER_KIND = {"avatar": 800, "group_avatar": 800}
+_MAX_PER_KIND = {
+    "user_avatar": 800,
+    "group_avatar": 800,
+    "bot_name": 5000,
+    "group_name": 5000,
+}
 _MAX_PER_KIND_DEFAULT = 5000
+_MAX_BYTES_PER_KIND = {
+    "user_avatar": 64 * 1024 * 1024,
+    "group_avatar": 64 * 1024 * 1024,
+    "bot_name": 2 * 1024 * 1024,
+    "group_name": 8 * 1024 * 1024,
+}
 _KIND_TTL = {
-    "avatar": TTL_AVATAR,
+    "user_avatar": TTL_AVATAR,
     "group_avatar": TTL_AVATAR,
-    "name": TTL_NAME,
+    "bot_name": TTL_NAME,
     "group_name": TTL_NAME,
 }
 
@@ -34,8 +46,14 @@ _last_purge = 0.0
 _dirty = False
 
 
+def _value_bytes(value) -> int:
+    if isinstance(value, (bytes, bytearray, str)):
+        return len(value)
+    return sys.getsizeof(value)
+
+
 def _purge_unlocked(force: bool = False) -> None:
-    global _last_purge
+    global _last_purge, _dirty
     now = time.time()
     if not force and now - _last_purge < _PURGE_INTERVAL:
         return
@@ -47,11 +65,16 @@ def _purge_unlocked(force: bool = False) -> None:
         for key in [k for k, v in entries.items()
                     if not (isinstance(v, tuple) and len(v) == 2) or now - v[1] > ttl]:
             entries.pop(key, None)
+            _dirty = True
         cap = _MAX_PER_KIND.get(kind, _MAX_PER_KIND_DEFAULT)
-        if len(entries) > cap:
+        max_bytes = _MAX_BYTES_PER_KIND.get(kind, 16 * 1024 * 1024)
+        while len(entries) > cap or (
+            max_bytes and sum(_value_bytes(v[0]) for v in entries.values()) > max_bytes
+        ):
             ordered = sorted(entries.items(), key=lambda kv: kv[1][1])
-            for key, _ in ordered[: len(entries) - cap]:
+            for key, _ in ordered[:1]:
                 entries.pop(key, None)
+                _dirty = True
 
 
 def _load() -> None:
@@ -63,6 +86,7 @@ def _load() -> None:
         try:
             with open(_CACHE_FILE, "rb") as f:
                 _cache = pickle.load(f)
+            _purge_unlocked(force=True)
             return
         except Exception as e:
             logger.opt(colors=True).warning(f"<y>airi_switch 元信息缓存读取失败,已重置: {e}</y>")

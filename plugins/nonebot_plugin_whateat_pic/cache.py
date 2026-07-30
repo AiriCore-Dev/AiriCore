@@ -13,6 +13,8 @@ _DATA_DIR = Path(__file__).resolve().parents[2] / "data" / "nonebot_plugin_whate
 _CACHE_FILE = _DATA_DIR / "cache.pk"
 
 _FLUSH_INTERVAL = 3.0
+_MAX_PERSIST_BYTES = 64 * 1024 * 1024
+_MAX_ENTRIES = 512
 
 _lock = threading.Lock()
 
@@ -20,10 +22,39 @@ _persist: dict = {}
 _persist_loaded = False
 _last_flush = 0.0
 _dirty = False
+_legacy_oversized = False
+
+
+def _entry_bytes(entry) -> int:
+    if not isinstance(entry, dict):
+        return 0
+    b64 = entry.get("b64")
+    return len(b64) if isinstance(b64, str) else 0
+
+
+def _persist_bytes() -> int:
+    return sum(_entry_bytes(entry) for entry in _persist.get("img", {}).values())
+
+
+def _purge_unlocked() -> None:
+    global _dirty
+    bucket = _persist.get("img", {})
+    if not isinstance(bucket, dict):
+        _persist["img"] = {}
+        _dirty = True
+        return
+    for key, entry in list(bucket.items()):
+        if not isinstance(entry, dict) or not isinstance(entry.get("b64"), str):
+            bucket.pop(key, None)
+            _dirty = True
+    while len(bucket) > _MAX_ENTRIES or (_MAX_PERSIST_BYTES and _persist_bytes() > _MAX_PERSIST_BYTES):
+        key, _ = min(bucket.items(), key=lambda item: item[1].get("ts", 0))
+        bucket.pop(key, None)
+        _dirty = True
 
 
 def _ensure_loaded() -> None:
-    global _persist, _persist_loaded
+    global _persist, _persist_loaded, _legacy_oversized
     if _persist_loaded:
         return
     _persist_loaded = True
@@ -32,8 +63,13 @@ def _ensure_loaded() -> None:
         return
     if _CACHE_FILE.is_file():
         try:
+            if _MAX_PERSIST_BYTES and _CACHE_FILE.stat().st_size > _MAX_PERSIST_BYTES:
+                _legacy_oversized = True
+                logger.warning("whateat_pic cache.pk 超过缓存上限，跳过旧缓存并在下次写入时收敛")
+                return
             with open(_CACHE_FILE, "rb") as f:
                 _persist = pickle.load(f)
+            _purge_unlocked()
             return
         except Exception as e:
             logger.opt(colors=True).warning(f"<y>whateat_pic cache.pk load failed, reset: {e}</y>")
@@ -77,6 +113,8 @@ def preload(max_bytes: int = 0):
         return 0, 0
     with _lock:
         _ensure_loaded()
+        if _legacy_oversized:
+            return 0, 0
         bucket = _persist.get("img", {}) or {}
         used = 0
         for entry in bucket.values():
@@ -112,7 +150,8 @@ def get_b64(path) -> Optional[str]:
         return None
     with _lock:
         _ensure_loaded()
-        _persist.setdefault("img", {})[key] = {"sig": sig, "b64": b64}
+        _persist.setdefault("img", {})[key] = {"sig": sig, "b64": b64, "ts": time.time()}
+        _purge_unlocked()
         _dirty = True
         _flush()
     return b64

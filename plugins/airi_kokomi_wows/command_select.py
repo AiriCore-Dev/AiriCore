@@ -6,6 +6,7 @@ from .scripts import (
     wws_message
 )
 from .config import Plugin_Config
+from .data_source import SafeMessage
 from .select_func_cn import main as main_cn
 from .select_func_en import main as main_en
 from .kokomi_chs import *
@@ -20,7 +21,7 @@ class select_funtion:
         channel_id:str,
         platform_data:dict
     ):
-
+        msg = SafeMessage(msg)
         tot = 0
         while 1:
             if len(msg) > 1:
@@ -56,6 +57,11 @@ class select_funtion:
                 bind_data['status'] != 'ok' or
                 bind_data['message'] != 'SUCCESS'
             ):
+                lang = default_lang.get_default_lang(
+                    platform=platform,
+                    platform_id=platform_id,
+                    channel_id=channel_id
+                ) or 'cn'
                 return select_funtion.return_data(
                     result=bind_data,
                     lang=lang
@@ -76,8 +82,12 @@ class select_funtion:
                 use_ac=False
                 ac=None
 
-            if lang == 'ja' or lang == 'jp':
-                lang == 'cn'
+            if lang not in ['cn', 'en']:
+                lang = default_lang.get_default_lang(
+                    platform=platform,
+                    platform_id=platform_id,
+                    channel_id=channel_id
+                ) or 'cn'
             '''
             if lang == 'cn':
                 if msg[0] == Plugin_Config.CN_START_WITH:
@@ -177,7 +187,3 @@ class select_funtion:
                 'msg': None,
                 'img': return_img['img']
             }
-
-
-
-

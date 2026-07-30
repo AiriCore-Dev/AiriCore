@@ -65,16 +65,19 @@ def get_png(
     ship_tier:list,
     ship_nation:list
 ) -> str:
-    while True:
-        random_ship = random.randint(0,int(result['data']['data_num'])-1)
-        text = result['data']['ships'][random_ship]['ship_info']['ship_name']['cn']
-        if '（old）' in text or '(old)' in text: continue
-        ship_tier = Game_Data.tier_dict[result['data']['ships'][random_ship]['ship_info']['tier']]
-        ship_type = result['data']['ships'][random_ship]['ship_info']['type']
-        break
-    res_img = '{} {} {}'.format(ship_tier, ship_type, text)
+    ships = [
+        ship for ship in result['data']['ships']
+        if '（old）' not in ship['ship_info']['ship_name']['cn']
+        and '(old)' not in ship['ship_info']['ship_name']['cn']
+    ]
+    if not ships:
+        return '未找到符合条件的舰船' if lang == 'cn' else 'No matching ships found.'
+    ship = random.choice(ships)
+    text = ship['ship_info']['ship_name']['cn']
+    tier_text = Game_Data.tier_dict[ship['ship_info']['tier']]
+    type_text = ship['ship_info']['type']
+    res_img = '{} {} {}'.format(tier_text, type_text, text)
     return res_img
-
 
 
 

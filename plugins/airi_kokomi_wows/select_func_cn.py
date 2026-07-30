@@ -1,4 +1,4 @@
-from .data_source import Message
+from .data_source import Message, SafeMessage
 from .log.error_log import write_error
 from .kokomi_chs import *
 from .scripts import (
@@ -59,6 +59,7 @@ async def main(
     use_ac:bool,
     ac:str
 ):
+    msg = SafeMessage(msg)
     parameter = []
     try:
         params_error_msg = {'status':'ok','message':'PARAMS ERROR'}

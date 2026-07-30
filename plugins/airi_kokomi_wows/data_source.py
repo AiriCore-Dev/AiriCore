@@ -270,6 +270,13 @@ class Picture:
             )
         return jpg_img
 
+class SafeMessage(list):
+    def __getitem__(self, index):
+        if isinstance(index, int) and not -len(self) <= index < len(self):
+            return ''
+        return super().__getitem__(index)
+
+
 class Message:
     server_dict = {
         'asia': 'asia',

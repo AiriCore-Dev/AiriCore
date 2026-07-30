@@ -17,6 +17,7 @@ async def _(bot: Bot, ev: MessageEvent):
     msg.append({"type": "node", "data": {"name": "Momoi Airi Wish Bottle", "uin": bot.self_id, "content": res}})
     res = '📒 指令列表：\n\
  -扔心愿瓶 [内容]：记下你的心愿并装入具有唯一编号的心愿瓶内，等待有缘人的开启。\n\
+ -引用一条消息后发送“扔心愿瓶”：将引用消息中的文字和图片装入心愿瓶，心愿瓶归属于发送命令的人。\n\
  -捡心愿瓶：随机捡起一个心愿瓶阅读。\n\
  -捡心愿瓶 [编号]：捡起特定编号的心愿瓶阅读。\n\
  -评论心愿瓶 [编号] [评论内容]：在特定编号的心愿瓶里写下你的评论。\n\

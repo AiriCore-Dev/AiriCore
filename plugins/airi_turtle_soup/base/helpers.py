@@ -103,12 +103,32 @@ async def construct_turtle_soup(soup_id, creator):
     res['creator'] = creator
     res['create_time'] = int(time.time())
     res['trial'] = 0
+    res['_pending'] = 0
+    res['_pending_players'] = {}
     res['players'] = {}
     res['history'] = []
     return res
 
 async def construct_turtle_soup_history(user_id, user_nick, content):
     return {"type": "node", "data": {"name": user_nick, "uin": user_id, "content": content}}
+
+
+def add_pending_trial(turtle, user_id, trial_type):
+    turtle['_pending'] = turtle.get('_pending', 0) + 1
+    pending_players = turtle.setdefault('_pending_players', {})
+    counts = pending_players.setdefault(user_id, {'query': 0, 'truth': 0})
+    counts[trial_type] = counts.get(trial_type, 0) + 1
+
+
+def remove_pending_trial(turtle, user_id, trial_type):
+    pending_players = turtle.setdefault('_pending_players', {})
+    counts = pending_players.get(user_id)
+    if not isinstance(counts, dict) or counts.get(trial_type, 0) <= 0:
+        return
+    counts[trial_type] -= 1
+    turtle['_pending'] = max(0, turtle.get('_pending', 1) - 1)
+    if counts.get('query', 0) <= 0 and counts.get('truth', 0) <= 0:
+        pending_players.pop(user_id, None)
 
 async def get_usernick(bot, gruop_id, user_id):
     user_nick = await bot.get_group_member_info(group_id=gruop_id, user_id=user_id)
@@ -174,10 +194,22 @@ def get_soup(soup_id):
     return None
 
 
-async def end_game(mode, gruop_id, bot, user_id, user_nick, max_group_trial, matcher):
-    turtle = state.data.get('group', {}).get(gruop_id, {}).get('turtle')
-    if turtle is None:
-        return
+async def end_game(
+    mode,
+    gruop_id,
+    bot,
+    user_id,
+    user_nick,
+    max_group_trial,
+    matcher,
+    expected_turtle=None,
+):
+    group = state.data.get('group', {}).get(gruop_id, {})
+    turtle = group.get('turtle')
+    if turtle is None or (
+        expected_turtle is not None and turtle is not expected_turtle
+    ):
+        return False
     soup_id = turtle.get('soup_id')
     soup = get_soup(soup_id)
 
@@ -186,7 +218,7 @@ async def end_game(mode, gruop_id, bot, user_id, user_nick, max_group_trial, mat
     elif mode == "victory":
         truth_text = soup['truth'] if soup else '（题库已变动，无法取到本题汤底）'
         msg = f"🧩 PURE MEMORY\n恭喜{user_nick}完成最后一块记忆拼图\n\n【汤底】\n{truth_text}"
-        played = state.data['group'][gruop_id].setdefault('has_played', [])
+        played = group.setdefault('has_played', [])
         if soup_id not in played:
             played.append(soup_id)
     elif mode == "break":
@@ -194,15 +226,20 @@ async def end_game(mode, gruop_id, bot, user_id, user_nick, max_group_trial, mat
     else:
         msg = '游戏结束'
 
-    history_msg = await construct_turtle_soup_history(bot.self_id, bot_nick, msg)
+    history_msg = {
+        "type": "node",
+        "data": {"name": bot_nick, "uin": bot.self_id, "content": msg},
+    }
     turtle.setdefault('history', []).append(history_msg)
+    history = list(turtle['history'])
+    group.pop('turtle', None)
+    await _persist()
     await matcher.send(f'{msg}\n\n以下是历史记录：')
     try:
-        await bot.send_group_forward_msg(group_id=gruop_id, messages=turtle['history'])
+        await bot.send_group_forward_msg(group_id=gruop_id, messages=history)
     except Exception as e:
         logger.warning(f"海龟汤历史记录发送失败: {e}")
-    state.data['group'][gruop_id].pop('turtle', None)
-    await _persist()
+    return True
 
 
 async def _persist():

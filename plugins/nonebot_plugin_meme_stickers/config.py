@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Optional, cast
+import re
+from typing import Optional, cast
 
 import skia
 from cookit.nonebot.localstore import ensure_localstore_path_config
@@ -15,10 +16,6 @@ from .consts import (
     SkiaEncodedImageFormatType,
 )
 
-if TYPE_CHECKING:
-    import re
-
-
 def resolve_color_to_tuple(color: str) -> RGBAColorTuple:
     sm: Optional[re.Match[str]] = None
     fm: Optional[re.Match[str]] = None
@@ -32,7 +29,7 @@ def resolve_color_to_tuple(color: str) -> RGBAColorTuple:
         return tuple(int(hex_str[i : i + 2], 16) for i in range(0, 8, 2))
 
     if (
-        (parts := color.lstrip("(").rstrip(")").split(",，"))
+        (parts := re.split(r"[,，]", color.lstrip("(").rstrip(")")))
         and (3 <= len(parts) <= 4)
         and (parts := [part.strip() for part in parts])
         and all(x.isdigit() for x in parts[:3])

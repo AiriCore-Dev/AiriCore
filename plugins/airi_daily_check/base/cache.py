@@ -4,13 +4,19 @@ import pickle
 import threading
 from io import BytesIO
 from pathlib import Path
-from collections import OrderedDict
 from typing import Any, Optional
 
 from PIL import Image, ImageFont
 from nonebot.log import logger
 
-from utils.cache_mode import is_disk, is_ram
+from utils.cache_mode import (
+    get_cache_budget_bytes,
+    is_balanced,
+    is_disk,
+    is_ram,
+    register_cache,
+)
+from utils.cache_policy import ByteLRU, value_bytes
 
 TTL_AVATAR = 7 * 24 * 3600
 
@@ -19,8 +25,6 @@ _CACHE_FILE = _DATA_DIR / "cache.pk"
 
 _FLUSH_INTERVAL = 3.0
 
-_MAX_IMAGES = 64
-_MAX_DECODED = 256
 _MAX_PERSIST_PER_NS = 600
 _NS_TTL = {"avatar": TTL_AVATAR}
 _DEFAULT_NS_TTL = 7 * 24 * 3600
@@ -29,22 +33,32 @@ _PURGE_INTERVAL = 300.0
 _lock = threading.Lock()
 
 _persist: dict = {}
-_decoded: "OrderedDict[tuple, Any]" = OrderedDict()
+_decoded = ByteLRU(get_cache_budget_bytes("decoded"), owner="daily_check.decoded")
 _persist_loaded = False
 _last_flush = 0.0
 _last_purge = 0.0
 _dirty = False
 
-_images: "OrderedDict[str, Image.Image]" = OrderedDict()
-_fonts: dict = {}
+_images = ByteLRU(get_cache_budget_bytes("images"), owner="daily_check.images")
+_fonts = ByteLRU(get_cache_budget_bytes("fonts"), owner="daily_check.fonts")
+
+register_cache("daily_check.decoded", _decoded)
+register_cache("daily_check.images", _images)
+register_cache("daily_check.fonts", _fonts)
+
+
+def _configure_caches():
+    _decoded.max_bytes = 0 if is_ram() else get_cache_budget_bytes("decoded")
+    _decoded.probationary = is_balanced()
+    _images.max_bytes = 0 if is_ram() else get_cache_budget_bytes("images")
+    _images.probationary = is_balanced()
+    _fonts.max_bytes = 0 if is_ram() else get_cache_budget_bytes("fonts")
+    _fonts.probationary = is_balanced()
 
 
 def _touch_decoded(dkey, value) -> None:
-    _decoded[dkey] = value
-    _decoded.move_to_end(dkey)
-    if not is_ram():
-        while len(_decoded) > _MAX_DECODED:
-            _decoded.popitem(last=False)
+    _configure_caches()
+    _decoded.put(dkey, value, value_bytes(value))
 
 
 def _purge_unlocked(force: bool = False) -> None:
@@ -171,7 +185,6 @@ def get(namespace: str, key: str, ttl: Optional[float] = None) -> Any:
             return None
         cached = _decoded.get(k)
         if cached is not None:
-            _decoded.move_to_end(k)
             return cached
         blob = entry["blob"]
     value = _decode(blob)
@@ -212,7 +225,6 @@ def get_or_build(namespace: str, key, build, stat_path=None) -> Any:
         else:
             cached = _decoded.get(dkey)
             if cached is not None:
-                _decoded.move_to_end(dkey)
                 return cached
             if stat_path is None:
                 version = entry["v"] if entry is not None else ""
@@ -265,7 +277,7 @@ def preload(max_bytes: int = 0):
                 if blob is None:
                     continue
                 dkey = (namespace, key)
-                if dkey in _decoded:
+                if _decoded.get(dkey) is not None:
                     continue
                 pending.append((dkey, blob))
 
@@ -289,19 +301,21 @@ def preload(max_bytes: int = 0):
 
 def get_image(path: str) -> Image.Image:
     if is_disk():
+        _images.clear()
+        _fonts.clear()
         return Image.open(path).convert("RGBA")
+    _configure_caches()
+    signature = _version_of(path)
     with _lock:
-        img = _images.get(path)
-        if img is not None:
-            _images.move_to_end(path)
-            return img
+        cached = _images.get(path)
+        if cached is not None:
+            cached_signature, img = cached
+            if cached_signature == signature:
+                return img
+            _images.pop(path, None)
     img = Image.open(path).convert("RGBA")
     with _lock:
-        _images[path] = img
-        _images.move_to_end(path)
-        if not is_ram():
-            while len(_images) > _MAX_IMAGES:
-                _images.popitem(last=False)
+        _images.put(path, (signature, img), value_bytes(img))
     return img
 
 
@@ -311,13 +325,19 @@ def get_image_copy(path: str) -> Image.Image:
 
 def get_font(path: str, size: int):
     if is_disk():
+        _fonts.clear()
         return ImageFont.truetype(font=path, size=size)
+    _configure_caches()
     key = (path, size)
+    signature = _version_of(path)
     with _lock:
-        f = _fonts.get(key)
-    if f is not None:
-        return f
+        cached = _fonts.get(key)
+        if cached is not None:
+            cached_signature, f = cached
+            if cached_signature == signature:
+                return f
+            _fonts.pop(key, None)
     f = ImageFont.truetype(font=path, size=size)
     with _lock:
-        _fonts[key] = f
+        _fonts.put(key, (signature, f), 256 * 1024)
     return f

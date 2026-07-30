@@ -1,62 +1,72 @@
 import os
 import threading
-from collections import OrderedDict
 
 import numpy as np
 from PIL import Image
 
-from utils.cache_mode import is_disk, is_ram
-
-_MAX_ARRAYS = 128
+from utils.cache_mode import (
+    get_cache_budget_bytes,
+    is_balanced,
+    is_disk,
+    is_ram,
+    register_cache,
+)
+from utils.cache_policy import ByteLRU
 
 _lock = threading.Lock()
-_arrays: "OrderedDict[str, tuple]" = OrderedDict()
+_arrays = ByteLRU(get_cache_budget_bytes("arrays"), owner="kokomi.arrays")
+
+register_cache("kokomi.arrays", _arrays)
+
+
+def _signature(path):
+    try:
+        stat = os.stat(path)
+    except OSError:
+        return None
+    return int(stat.st_mtime_ns), int(stat.st_size)
+
+
+def _configure():
+    _arrays.max_bytes = 0 if is_ram() else get_cache_budget_bytes("arrays")
+    _arrays.probationary = is_balanced()
 
 
 def _decode(path) -> np.ndarray:
-    pil_img = Image.open(path)
-    if pil_img.mode == 'RGBA':
-        arr = np.array(pil_img)
-        return arr[:, :, [2, 1, 0, 3]].copy()
-    elif pil_img.mode == 'LA':
-        arr = np.array(pil_img.convert('RGBA'))
-        return arr[:, :, [2, 1, 0, 3]].copy()
-    elif pil_img.mode == 'P':
-        if 'transparency' in pil_img.info:
-            arr = np.array(pil_img.convert('RGBA'))
+    with Image.open(path) as pil_img:
+        if pil_img.mode == "RGBA":
+            arr = np.array(pil_img)
             return arr[:, :, [2, 1, 0, 3]].copy()
-        arr = np.array(pil_img.convert('RGB'))
+        if pil_img.mode == "LA":
+            arr = np.array(pil_img.convert("RGBA"))
+            return arr[:, :, [2, 1, 0, 3]].copy()
+        if pil_img.mode == "P":
+            if "transparency" in pil_img.info:
+                arr = np.array(pil_img.convert("RGBA"))
+                return arr[:, :, [2, 1, 0, 3]].copy()
+            arr = np.array(pil_img.convert("RGB"))
+            return arr[:, :, ::-1].copy()
+        if pil_img.mode == "L":
+            return np.array(pil_img).copy()
+        arr = np.array(pil_img.convert("RGB"))
         return arr[:, :, ::-1].copy()
-    elif pil_img.mode == 'L':
-        return np.array(pil_img).copy()
-    else:
-        arr = np.array(pil_img.convert('RGB'))
-        return arr[:, :, ::-1].copy()
-
-
-def _sig(path):
-    try:
-        st = os.stat(path)
-    except OSError:
-        return None
-    return (st.st_mtime_ns, st.st_size)
 
 
 def get_array(path) -> np.ndarray:
     key = str(path)
     if is_disk():
+        _arrays.clear()
         return _decode(key)
-    sig = _sig(key)
+    _configure()
+    signature = _signature(key)
     with _lock:
-        entry = _arrays.get(key)
-        if entry is not None and entry[0] == sig:
-            _arrays.move_to_end(key)
-            return entry[1].copy()
-    arr = _decode(key)
+        cached = _arrays.get(key)
+        if cached is not None:
+            cached_signature, array = cached
+            if cached_signature == signature:
+                return array.copy()
+            _arrays.pop(key, None)
+    array = _decode(key)
     with _lock:
-        _arrays[key] = (sig, arr)
-        _arrays.move_to_end(key)
-        if not is_ram():
-            while len(_arrays) > _MAX_ARRAYS:
-                _arrays.popitem(last=False)
-    return arr.copy()
+        _arrays.put(key, (signature, array), int(array.nbytes))
+    return array.copy()

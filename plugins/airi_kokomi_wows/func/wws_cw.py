@@ -148,29 +148,6 @@ def get_png(
                 font_size=55
             )
         )
-    elif lang == 'ja':
-        text_list.append(
-            Text_Data(
-                xy=(390, 355),
-                text=tag,
-                fill=tag_color,
-                font_index=1,
-                font_size=55
-            )
-        )
-        creat_time = time.strftime(
-            "%Y-%m-%d",
-            time.localtime(result['data']['user']['created_at'])
-        )
-        text_list.append(
-            Text_Data(
-                xy=(390, 445),
-                text=creat_time,
-                fill=(0,0,0),
-                font_index=1,
-                font_size=55
-            )
-        )
     if Plugin_Config.SHOW_DOG_TAG:
         if result['dog_tag'] == [] or result['dog_tag'] == {}:
             pass
@@ -210,8 +187,6 @@ def get_png(
             season_number = f'第 {season_number} 赛季'
         elif lang == 'en':
             season_number = f'Season {season_number}'
-        elif lang == 'ja':
-            season_number = f'第 {season_number} シーズン'
         battles_count = index['battles_count']
         avg_win = index['win_rate']
         avg_damage = index['avg_damage']
@@ -308,7 +283,6 @@ def get_png(
     res_img = Picture.add_text(text_list, res_img)
     res_img = res_img.crop((0, 0, 2428, png_len))
     return res_img
-
 
 
 

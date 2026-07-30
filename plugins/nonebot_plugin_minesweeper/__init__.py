@@ -171,8 +171,8 @@ async def _(
     if cols.result < 8 or cols.result > 30:
         await matcher.finish("列数应在8~30之间")
 
-    if nums.result < 10 or nums.result > rows.result * cols.result:
-        await matcher.finish("地雷数应不少于10且不多于行数*列数")
+    if nums.result < 10 or nums.result >= rows.result * cols.result:
+        await matcher.finish("地雷数应不少于10且少于行数*列数")
 
     if skin.result not in skin_list:
         await matcher.finish("支持的皮肤：" + ", ".join(skin_list))
@@ -278,4 +278,3 @@ async def _(
 @minesweeper_help.handle()
 async def _(matcher: Matcher):
     await matcher.finish(help_msg)
-

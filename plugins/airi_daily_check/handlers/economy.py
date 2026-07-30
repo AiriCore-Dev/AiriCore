@@ -40,6 +40,8 @@ async def _(bot: Bot, ev: MessageEvent):
     if transfer_id not in state.data:
         await transcation.finish('❌ 收款方未注册账号', reply_message=True)
 
+    user_nick = await bot.get_group_member_info(group_id=group_id, user_id=transfer_id)
+    user_nick = (user_nick.get("nickname") or user_nick.get("card") or transfer_id)
     taxs = math.ceil(transfer_num * 1.0 / 10)
     if transfer_num + taxs > state.data[user_id]['credits']:
         await transcation.finish('❌ 你的积分余额不足！\n现有积分：{}\n需要积分(含税)：{}'.format(state.data[user_id]['credits'], transfer_num + taxs), reply_message=True)
@@ -50,8 +52,6 @@ async def _(bot: Bot, ev: MessageEvent):
     state.data[user_id]['receive_transfer_daily'] += transfer_num
     state.data[user_id]['credits'] -= transfer_num + taxs
     state.data[transfer_id]['credits'] += transfer_num
-    user_nick = await bot.get_group_member_info(group_id=group_id, user_id=transfer_id)
-    user_nick = (user_nick.get("nickname") or user_nick.get("card") or transfer_id)
     await transcation.send('✅ 交易成功！\n你已向{}转出了{}积分\nAiri从中收取了{}点手续费(10%)\n剩余积分：{}'.format(user_nick, transfer_num, taxs, state.data[user_id]['credits']), reply_message=True)
 
     if state.data[transfer_id]['credits'] >= 2000 and acquire_sticker(transfer_id, 20):

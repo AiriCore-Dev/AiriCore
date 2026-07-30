@@ -32,4 +32,5 @@ data = {
 }
 
 email_list = []
+invite_inflight = set()
 _web_runner = None

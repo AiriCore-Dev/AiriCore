@@ -86,7 +86,6 @@ async def on_shutdown():
             pass
 
 
-_ARTICLE_SENT_MAX = 20000
 _CAMPAIGN_KEEP_DAYS = 90
 
 
@@ -100,15 +99,6 @@ def _prune_state():
         done.sort(key=lambda kv: kv[1].get("finished_at") or kv[1].get("started_at") or 0)
         for name, _ in done[: len(campaigns) - 200]:
             campaigns.pop(name, None)
-
-    sent = state.data.get("article_sent")
-    if isinstance(sent, dict):
-        for name, lst in list(sent.items()):
-            if isinstance(lst, list) and len(lst) > _ARTICLE_SENT_MAX:
-                del lst[: len(lst) - _ARTICLE_SENT_MAX]
-            if isinstance(campaigns, dict) and name not in campaigns:
-                sent.pop(name, None)
-
 
 async def save_data():
     if _load_failed:
@@ -180,27 +170,41 @@ async def market_tick():
 
     pending = state.data.get("pending_sends", [])
     if pending:
-        item = pending.pop(0)
+        item = pending[0]
         dest = item["dest"] if isinstance(item, dict) else item[0]
-        if isinstance(item, dict):
-            result = await _send_single(item["dest"], item["subject"], item["plain"], item["html"])
-        else:
-            result = await _send_single(*item)
+        bot_qq = item.get("bot_qq") if isinstance(item, dict) else None
+        if bot_qq:
+            state.invite_inflight.add(bot_qq)
+        try:
+            if isinstance(item, dict):
+                result = await _send_single(
+                    item["dest"], item["subject"], item["plain"], item["html"]
+                )
+            else:
+                result = await _send_single(*item)
+        finally:
+            if bot_qq:
+                state.invite_inflight.discard(bot_qq)
         if result is True:
-            if isinstance(item, dict) and item.get("bot_qq"):
-                state.data.setdefault("bot_notified", []).append(item["bot_qq"])
+            pending.remove(item)
+            if bot_qq:
+                notified = state.data.setdefault("bot_notified", [])
+                if bot_qq not in notified:
+                    notified.append(bot_qq)
             logger.info(f"airi_market: pending send to {dest} 重发成功")
         elif result == "throttled":
-            pending.insert(0, item)
+            pass
         else:
             fails = (item.get("fails", 0) + 1) if isinstance(item, dict) else 1
             if isinstance(item, dict):
                 item["fails"] = fails
             if fails >= PENDING_MAX_RETRY:
+                pending.remove(item)
                 logger.error(
                     f"airi_market: pending send to {dest} 连续失败 {fails} 次，已丢弃该条"
                 )
             else:
+                pending.remove(item)
                 pending.append(item)
         await save_data()
         return

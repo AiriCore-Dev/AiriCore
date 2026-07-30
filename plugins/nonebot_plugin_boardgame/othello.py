@@ -56,13 +56,17 @@ class Othello(Game):
         b_count = total(self.b_board)
         w_count = total(self.w_board)
 
-        def sign(a: int):
-            return 1 if a > 0 else -1 if a < 0 else 0
-
-        return MoveResult(sign(b_count - w_count))
+        diff = b_count - w_count
+        if diff > 0:
+            return MoveResult.BLACK_WIN
+        if diff < 0:
+            return MoveResult.WHITE_WIN
+        return MoveResult.DRAW
 
     def update(self, pos: Pos) -> Optional[MoveResult]:
         if not self.in_range(pos):
+            if self.has_legal_move(self.moveside):
+                return MoveResult.ILLEGAL
             self.push(pos)
             return MoveResult.SKIP
         moveside = self.moveside

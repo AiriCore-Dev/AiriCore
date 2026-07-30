@@ -14,10 +14,6 @@ async def call_api(
 ) -> dict:
     try:
         base_url = Plugin_Config.API_URL + path
-        if params == {}:
-            url = '{}'.format(base_url)
-        else:
-            url = '{}?{}'.format(base_url, '&'.join(['{}={}'.format(key, value) for key, value in params.items()]))
         headers = {
             'accept': 'application/json',
             'Authorization': Authorization.get_authorization()
@@ -25,13 +21,15 @@ async def call_api(
         async with httpx.AsyncClient() as client:
             if method == 'get':
                 res = await client.get(
-                    url=url,
+                    url=base_url,
+                    params=params,
                     headers=headers,
                     timeout=Plugin_Config.REQUEST_TIMEOUT
                 )
             elif method == 'post':
                 res = await client.post(
-                    url=url,
+                    url=base_url,
+                    params=params,
                     headers=headers,
                     timeout=Plugin_Config.REQUEST_TIMEOUT
                 )

@@ -152,29 +152,6 @@ def get_png(
                 font_size=55
             )
         )
-    elif lang == 'ja':
-        text_list.append(
-            Text_Data(
-                xy=(390, 355),
-                text=tag,
-                fill=tag_color,
-                font_index=1,
-                font_size=55
-            )
-        )
-        battle_type_dict = {
-            'pvp':'ランダム戦',
-            'rank':'ランク戦'
-        }
-        text_list.append(
-            Text_Data(
-                xy=(510, 445),
-                text=battle_type_dict[battle_type],
-                fill=(0,0,0),
-                font_index=1,
-                font_size=55
-            )
-        )
     battle_type = result['data']['pr']['battle_type']
     pr_png = result['data']['pr']['avg_pr_index']
     pr_png_path = os.path.join(plugin_path, 'png', f'bg_{lang}', 'pr', '{}.png'.format(pr_png))
@@ -283,8 +260,6 @@ def get_png(
         time_str = f'数据统计区间:  {start_time} ~ {end_time}  {timezone}'
     elif lang == 'en':
         time_str = f'Time interval:  {start_time} ~ {end_time}  {timezone}'
-    elif lang == 'ja':
-        time_str = f'統計区間です:  {start_time} ~ {end_time}  {timezone}'
     w = Picture.x_coord(time_str, fontStyle)
     text_list.append(
         Text_Data(
@@ -320,8 +295,6 @@ def get_png(
             if lang == 'cn':
                 str_pr = '■ '+str(int(temp_data['avg_pr']))
             elif lang == 'en':
-                str_pr = '■ '+str(int(temp_data['avg_pr']))
-            elif lang == 'ja':
                 str_pr = '■ '+str(int(temp_data['avg_pr']))
         w = Picture.x_coord(battles_count, fontStyle)
         text_list.append(
@@ -435,8 +408,6 @@ def get_png(
                 str_pr = '■ '+str(int(temp_data['avg_pr']))
             elif lang == 'en':
                 str_pr = '■ '+str(int(temp_data['avg_pr']))
-            elif lang == 'ja':
-                str_pr = '■ '+str(int(temp_data['avg_pr']))
         w = Picture.x_coord(battles_count, fontStyle)
         text_list.append(
             Text_Data(
@@ -544,5 +515,4 @@ def get_png(
     res_img = Picture.add_text(text_list, res_img)
     res_img = res_img.crop((0, 0, 2428, png_len))
     return res_img
-
 

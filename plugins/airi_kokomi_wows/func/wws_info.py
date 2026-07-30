@@ -560,7 +560,7 @@ def get_png(
     fontStyle = fonts.data[1][25]
     for index in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']:
         temp_data = result['data']['ship_tier'][index]
-        count = temp_data['battle_count']
+        count = temp_data.get('battle_count', 0)
         pic_len = 280-count/max_index*280
         x1 = int(2086*.8+89*0.8*i)
         y1 = int(2180*0.8+pic_len)
@@ -590,7 +590,6 @@ def get_png(
     res_img = Picture.add_box(box_list, res_img)
     res_img = Picture.add_text(text_list, res_img)
     return res_img
-
 
 
 

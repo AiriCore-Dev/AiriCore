@@ -27,6 +27,37 @@ def _try_load(path):
     return loaded
 
 
+def _nonnegative_int(value):
+    try:
+        return max(0, int(value))
+    except (TypeError, ValueError):
+        return 0
+
+
+def _reset_pending_reservations(turtle):
+    pending_players = turtle.get('_pending_players', {})
+    if isinstance(pending_players, dict):
+        for user_id, counts in pending_players.items():
+            if not isinstance(counts, dict):
+                continue
+            query_count = _nonnegative_int(counts.get('query', 0))
+            truth_count = _nonnegative_int(counts.get('truth', 0))
+            turtle['trial'] = max(
+                0, turtle.get('trial', 0) - query_count - truth_count
+            )
+            player = turtle.get('players', {}).get(user_id)
+            if not isinstance(player, dict):
+                continue
+            player['query_trial'] = max(
+                0, player.get('query_trial', 0) - query_count
+            )
+            player['truth_trial'] = max(
+                0, player.get('truth_trial', 0) - truth_count
+            )
+    turtle['_pending'] = 0
+    turtle['_pending_players'] = {}
+
+
 @driver.on_startup
 async def load_json():
     global _load_failed
@@ -57,6 +88,12 @@ async def load_json():
                 _load_failed = True
 
     if loaded is not None:
+        for group_data in loaded.get('group', {}).values():
+            if not isinstance(group_data, dict):
+                continue
+            turtle = group_data.get('turtle')
+            if isinstance(turtle, dict):
+                _reset_pending_reservations(turtle)
         state.data.clear()
         state.data.update(loaded)
     elif not _load_failed:

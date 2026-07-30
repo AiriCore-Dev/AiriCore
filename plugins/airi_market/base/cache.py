@@ -12,16 +12,49 @@ _DATA_DIR = Path(__file__).resolve().parents[3] / "data" / "airi_market"
 _CACHE_FILE = _DATA_DIR / "cache.pk"
 
 _FLUSH_INTERVAL = 3.0
+_MAX_PERSIST_BYTES = 64 * 1024 * 1024
+_MAX_ENTRIES = 256
 
 _lock = threading.Lock()
 _persist: dict = {}
 _persist_loaded = False
 _last_flush = 0.0
 _dirty = False
+_legacy_oversized = False
+
+
+def _entry_bytes(entry) -> int:
+    if not isinstance(entry, dict):
+        return 0
+    try:
+        return len(pickle.dumps(entry.get("data"), protocol=pickle.HIGHEST_PROTOCOL))
+    except Exception:
+        return 0
+
+
+def _persist_bytes() -> int:
+    return sum(_entry_bytes(entry) for entry in _persist.get("articles", {}).values())
+
+
+def _purge_unlocked() -> None:
+    global _dirty
+    bucket = _persist.get("articles", {})
+    if not isinstance(bucket, dict):
+        _persist["articles"] = {}
+        _dirty = True
+        return
+    for key, entry in list(bucket.items()):
+        if not isinstance(entry, dict) or not isinstance(entry.get("data"), dict):
+            bucket.pop(key, None)
+            _dirty = True
+    while len(bucket) > _MAX_ENTRIES or (_MAX_PERSIST_BYTES and _persist_bytes() > _MAX_PERSIST_BYTES):
+        key, _ = min(bucket.items(), key=lambda item: item[1].get("ts", 0))
+        bucket.pop(key, None)
+        _dirty = True
 
 
 def _ensure_loaded() -> None:
-    global _persist, _persist_loaded
+    global _persist, _persist_loaded, _legacy_oversized
     if _persist_loaded:
         return
     _persist_loaded = True
@@ -30,8 +63,13 @@ def _ensure_loaded() -> None:
         return
     if _CACHE_FILE.is_file():
         try:
+            if _MAX_PERSIST_BYTES and _CACHE_FILE.stat().st_size > _MAX_PERSIST_BYTES:
+                _legacy_oversized = True
+                logger.warning("airi_market cache.pk 超过缓存上限，跳过旧缓存并在下次写入时收敛")
+                return
             with open(_CACHE_FILE, "rb") as f:
                 _persist = pickle.load(f)
+            _purge_unlocked()
             return
         except Exception as e:
             logger.opt(colors=True).warning(
@@ -79,6 +117,8 @@ def preload(max_bytes: int = 0):
         return 0, 0
     with _lock:
         _ensure_loaded()
+        if _legacy_oversized:
+            return 0, 0
         return len(_persist.get("articles", {}) or {}), 0
 
 
@@ -105,7 +145,8 @@ def put_article(article_name: str, index_path: Path, data: dict) -> None:
         return
     with _lock:
         _ensure_loaded()
-        _persist.setdefault("articles", {})[article_name] = {"sig": sig, "data": data}
+        _persist.setdefault("articles", {})[article_name] = {"sig": sig, "data": data, "ts": time.time()}
+        _purge_unlocked()
         _dirty = True
         _flush()
 

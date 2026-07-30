@@ -51,16 +51,17 @@ class Tarot:
         self.tarot_json: Path = Path(__file__).resolve().parent / "tarot.json"
 
     async def divine(self, bot: Bot, matcher: Matcher, event: MessageEvent, f_name) -> None:
-        session_id = str(event.get_session_id())
-        if 'group' in session_id:
-            split_id = session_id.split('_')
-            user_id = split_id[2]
-            gruop_id = split_id[1]
+        user_id = str(event.user_id)
+        if isinstance(event, GroupMessageEvent):
+            user_info = await bot.get_group_member_info(
+                group_id=event.group_id,
+                user_id=event.user_id,
+            )
+            user_nick = user_info.get("card") or user_info.get("nickname") or user_id
+        elif isinstance(event, PrivateMessageEvent):
+            user_nick = event.sender.nickname or user_id
         else:
-            user_id = session_id
-            gruop_id = None
-        user_nick = await bot.get_group_member_info(group_id=gruop_id, user_id=user_id)
-        user_nick = (user_nick.get("card") or user_nick.get("nickname") or user_id)
+            raise EventNotSupport
 
         theme: str = pick_theme()
 
@@ -137,7 +138,7 @@ class Tarot:
 
         cards_index: List[str] = random.sample(list(subset), num)
         cards_info: List[Dict[str, Union[str, Dict[str, str]]]] = [
-            v for k, v in subset.items() if k in cards_index]
+            subset[k] for k in cards_index]
 
         return cards_info
 

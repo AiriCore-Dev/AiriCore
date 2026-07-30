@@ -2,6 +2,8 @@ import time
 from pathlib import Path
 from typing import Any, Dict, List
 
+from PIL import Image
+
 from utils.cache_mode import get_mode, get_preload_budget_bytes, is_ram
 
 _ROOT = Path(__file__).resolve().parents[1]
@@ -13,16 +15,23 @@ class Budget:
     def __init__(self, limit: int):
         self.limit = limit
         self.used = 0
+        self.estimated = 0
         self.skipped = 0
+        self.reasons = {}
 
     def ok(self) -> bool:
         return self.limit <= 0 or self.used < self.limit
 
-    def add(self, n: int) -> None:
-        self.used += max(0, int(n))
+    def can_fit(self, n: int) -> bool:
+        return self.limit <= 0 or self.used + max(0, int(n)) <= self.limit
 
-    def skip(self, n: int = 1) -> None:
+    def add(self, n: int, estimate: int = None) -> None:
+        self.used += max(0, int(n))
+        self.estimated += max(0, int(n if estimate is None else estimate))
+
+    def skip(self, n: int = 1, reason: str = "budget") -> None:
         self.skipped += n
+        self.reasons[reason] = self.reasons.get(reason, 0) + n
 
 
 def _iter_files(base: Path, patterns, recursive: bool = True) -> List[Path]:
@@ -44,6 +53,29 @@ def _image_bytes(img) -> int:
         return w * h * len(img.mode)
     except Exception:
         return 0
+
+
+def _decoded_channels(pil_img) -> int:
+    if pil_img.mode == "L":
+        return 1
+    if pil_img.mode == "P" and "transparency" not in pil_img.info:
+        return 3
+    return 4
+
+
+def _estimate_file(path: Path, loader) -> int:
+    if loader in (_load_shared_image, _load_dc_image, _load_kokomi_array):
+        try:
+            with Image.open(path) as image:
+                return image.width * image.height * _decoded_channels(image)
+        except Exception:
+            return 0
+    if loader in (_load_shared_b64, _load_dc_b64, _load_whateat_b64):
+        try:
+            return 9 + ((path.stat().st_size + 2) // 3) * 4
+        except OSError:
+            return 0
+    return 0
 
 
 def _load_shared_image(path: Path) -> int:
@@ -140,9 +172,9 @@ def _asset_groups() -> List[Dict[str, Any]]:
         {"label": "kokomi 排位素材", "dir": kk / "png" / "cw",
          "patterns": _IMG, "loader": _load_kokomi_array},
         {"label": "kokomi 中文底图", "dir": kk / "png" / "bg_cn",
-         "patterns": _IMG, "loader": _load_kokomi_array},
+         "patterns": _IMG, "loader": _load_kokomi_array, "preload": False},
         {"label": "kokomi 英文底图", "dir": kk / "png" / "bg_en",
-         "patterns": _IMG, "loader": _load_kokomi_array},
+         "patterns": _IMG, "loader": _load_kokomi_array, "preload": False},
         {"label": "whateat 图片", "dir": _PLUGINS / "nonebot_plugin_whateat_pic" / "eat_pic",
          "patterns": _IMG, "loader": _load_whateat_b64},
         {"label": "whateat 饮品", "dir": _PLUGINS / "nonebot_plugin_whateat_pic" / "drink_pic",
@@ -151,7 +183,7 @@ def _asset_groups() -> List[Dict[str, Any]]:
     for name in ("dog_tag_custom", "dog_tag_special", "dog_tag_lesta", "dog_tag_wg", "dog_tag_2"):
         groups.append({
             "label": f"kokomi {name}", "dir": kk / "png" / name,
-            "patterns": _IMG, "loader": _load_kokomi_array,
+            "patterns": _IMG, "loader": _load_kokomi_array, "preload": False,
         })
     return groups
 
@@ -181,7 +213,7 @@ def _preload_fonts(budget: Budget) -> Dict[str, Any]:
             continue
         for size in spec["sizes"]:
             if not budget.ok():
-                budget.skip()
+                budget.skip(reason="budget")
                 continue
             try:
                 if spec["target"] == "dc":
@@ -190,7 +222,7 @@ def _preload_fonts(budget: Budget) -> Dict[str, Any]:
                     asset_cache.get_font(path, size, encoding=spec.get("encoding", ""))
                 items += 1
                 used += 256 * 1024
-                budget.add(256 * 1024)
+                budget.add(256 * 1024, 256 * 1024)
             except Exception:
                 continue
     return {"label": "字体", "items": items, "bytes": used}
@@ -201,7 +233,6 @@ _PK_CACHES = [
     ("airi_switch 收发统计", "plugins.airi_switch.counter"),
     ("today_waifu 头像", "plugins.nonebot_plugin_today_waifu.cache"),
     ("whateat_pic 图片", "plugins.nonebot_plugin_whateat_pic.cache"),
-    ("tarot 牌图", "plugins.nonebot_plugin_tarot.cache"),
     ("airi_daily_check 产物", "plugins.airi_daily_check.base.cache"),
     ("airi_market 文章", "plugins.airi_market.base.cache"),
 ]
@@ -218,13 +249,13 @@ def _preload_pk_caches(budget: Budget) -> List[Dict[str, Any]]:
                 entry["error"] = "无 preload 接口"
             elif not budget.ok():
                 entry["error"] = "预算已用尽, 跳过"
-                budget.skip()
+                budget.skip(reason="budget")
             else:
                 remain = budget.limit - budget.used if budget.limit > 0 else -1
                 items, used = fn(remain)
                 entry["items"] = int(items)
                 entry["bytes"] = int(used)
-                budget.add(used)
+                budget.add(used, used)
         except Exception as e:
             entry["error"] = str(e)
         results.append(entry)
@@ -240,10 +271,17 @@ def _preload_assets(budget: Budget) -> List[Dict[str, Any]]:
             continue
         entry = {"label": group["label"], "items": 0, "bytes": 0, "skipped": 0}
         loader = group["loader"]
+        if not group.get("preload", True):
+            entry["skipped"] = len(files)
+            entry["reason"] = "cold_group"
+            budget.skip(len(files), reason="cold_group")
+            results.append(entry)
+            continue
         for path in files:
-            if not budget.ok():
+            estimate = _estimate_file(path, loader)
+            if not budget.can_fit(estimate):
                 entry["skipped"] += 1
-                budget.skip()
+                budget.skip(reason="budget")
                 continue
             try:
                 used = loader(path)
@@ -251,7 +289,7 @@ def _preload_assets(budget: Budget) -> List[Dict[str, Any]]:
                 continue
             entry["items"] += 1
             entry["bytes"] += used
-            budget.add(used)
+            budget.add(used, estimate)
         results.append(entry)
     return results
 
@@ -269,7 +307,8 @@ def run() -> Dict[str, Any]:
     mode = get_mode()
     if not is_ram():
         _summary = {"mode": mode, "enabled": False, "groups": [], "items": 0,
-                    "bytes": 0, "skipped": 0, "seconds": 0.0}
+                    "bytes": 0, "estimated_bytes": 0, "skipped": 0,
+                    "skip_reasons": {}, "seconds": 0.0}
         return _summary
 
     budget = Budget(get_preload_budget_bytes())
@@ -285,7 +324,9 @@ def run() -> Dict[str, Any]:
         "groups": groups,
         "items": items,
         "bytes": budget.used,
+        "estimated_bytes": budget.estimated,
         "skipped": budget.skipped,
+        "skip_reasons": dict(budget.reasons),
         "budget_bytes": budget.limit,
         "seconds": round(time.time() - started, 2),
     }
@@ -325,6 +366,3 @@ def run_and_log() -> Dict[str, Any]:
             f"可调大 .env.prod 的 cache_preload_budget_mb</y>"
         )
     return s
-
-
-

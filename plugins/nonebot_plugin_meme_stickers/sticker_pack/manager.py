@@ -137,7 +137,7 @@ class StickerPackManager:
         manifest: Optional[StickerPackManifest] = None,
         **req_kw: Unpack[ReqKwargs],
     ) -> tuple[OpInfo[Union[StickerPack, str]], dict[str, UpdatedResourcesInfo]]:
-        if p := next((self.find_pack_by_slug(x.slug) for x in infos), None):
+        if p := next((self.find_pack_by_slug(x.slug, True) for x in infos), None):
             raise ValueError(f"Pack `{p.slug}` already loaded")
 
         op_info = OpInfo[Union[StickerPack, str]]()
