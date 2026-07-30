@@ -19,10 +19,11 @@ Full automation of the flow described in [手动部署教程.md](手动部署教
 7. Generate a self-signed certificate in `./utils/ssl/` if absent; leave it untouched if present.
 8. Create the `logs/` and `data/` runtime directories, then run a final core-dependency self-check.
 9. Settle the launch script: rename the one matching the current system to a unified name (`launch.sh` on Linux, `launch.command` on macOS, `launch.bat` on Windows) and delete the launch scripts for the other systems.
+10. After every deployment step succeeds, delete `memes.zip.001` and `memes.zip.002` from the project root.
 
 > [!NOTE]
 >
-> Every step is idempotent; re-running never overwrites an existing environment, `.env.prod` or certificate.
+> Existing environments, `.env.prod` files and certificates are not overwritten. After a successful deployment removes the split archives, restore both files before running the full deployment script again.
 
 ### The setup wizard `_setup_env.py`
 

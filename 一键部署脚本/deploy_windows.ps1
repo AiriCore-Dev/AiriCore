@@ -236,6 +236,15 @@ foreach ($f in @("launch_linux.sh", "launch_macos.sh", "launch_macos.command", "
     }
 }
 
+Write-Host "==> 清理 memes 分卷"
+foreach ($archiveName in @("memes.zip.001", "memes.zip.002")) {
+    $archivePath = Join-Path $ProjectDir $archiveName
+    if (Test-Path $archivePath) {
+        Remove-Item -Force $archivePath
+        Write-Host "    已删除 $archiveName"
+    }
+}
+
 Write-Host ""
 Write-Host "==> 部署完成。后续步骤:"
 Write-Host "    1. 启动: launch.bat"

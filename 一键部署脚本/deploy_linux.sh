@@ -215,6 +215,14 @@ for f in launch_macos.sh launch_macos.command launch_windows.bat launch.bat laun
     fi
 done
 
+echo "==> 清理 memes 分卷"
+for archive_name in memes.zip.001 memes.zip.002; do
+    if [ -e "$PROJECT_DIR/$archive_name" ]; then
+        rm -f "$PROJECT_DIR/$archive_name"
+        echo "    已删除 $archive_name"
+    fi
+done
+
 echo ""
 echo "==> 部署完成。后续步骤:"
 echo "    1. 启动: ./launch.sh"
