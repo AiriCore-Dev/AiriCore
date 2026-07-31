@@ -32,7 +32,6 @@ CHARACTER_ALIASES = {
     "遥": Character.HARUKA,
     "桐谷遥": Character.HARUKA,
     "airi": Character.AIRI,
-    "爱莉": Character.AIRI,
     "桃井爱莉": Character.AIRI,
     "shizuku": Character.SHIZUKU,
     "雫": Character.SHIZUKU,

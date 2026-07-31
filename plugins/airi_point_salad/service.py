@@ -153,13 +153,25 @@ class GameService:
             return copy.deepcopy(self._require_state(group_id))
 
     async def rules_text(self, group_id: str | None = None) -> str:
-        if group_id and group_id in self.games:
-            state = self.games[group_id]
-            if state.phase is Phase.PLAYING:
-                player = state.players[state.current_player]
-                if player.center is not None and not player.skill_used:
-                    return f"当前 Center 技能：{skill_usage(player.center)}"
-        return "创建：sl cr qk cl 或 sl cr std mx\n操作：sl ta A / sl ta A1 B2 / sl fl 2 / sl sk"
+        lines = [
+            "MORE MORE JUMP！得分沙拉｜2–6 人",
+            "每回合可先翻一张自己的计分牌，再选择：拿一张 A/B/C 列计分牌，或拿两张 A1–C2 角色牌。",
+            "牌库与市场清空后，按计分牌、角色组合与 Mission 总分排名。混合模式另有一次性 Center 技能和公开 Live Mission。",
+            "创建：创建/create/cr + 快速/quick/qk 或 标准/standard/std + 原版/classic/cl 或 混合/mix/mx",
+            "房间：加入/join/j · 退出/leave/lv · 开始/start/st · 结束/stop/sp",
+            "行动：拿/take/ta · 翻/flip/fl · 技能/skill/sk",
+            "查看：桌面/board/bd · 规则/rules/rl",
+            "示例：sl cr qk cl · sl ta A · sl ta A1 B2 · sl fl 2 · sl sk",
+        ]
+        if group_id:
+            lock = self.locks.setdefault(group_id, asyncio.Lock())
+            async with lock:
+                state = self.games.get(group_id)
+                if state is not None and state.phase is Phase.PLAYING:
+                    player = state.players[state.current_player]
+                    if player.center is not None and not player.skill_used:
+                        lines.append(f"当前 Center 技能：{skill_usage(player.center)}")
+        return "\n".join(lines)
 
     async def _state_mutation(self, group_id, action, prepare):
         def operation():
@@ -223,7 +235,16 @@ class GameService:
             phase = state.phase
             self.games.pop(group_id, None)
             self.timers.pop(group_id, None)
-            await self.store.save(self.games)
+            try:
+                await self.store.save(self.games)
+            except Exception:
+                self.games[group_id] = state
+                loop = asyncio.get_running_loop()
+                self.timers[group_id] = loop.call_later(
+                    60,
+                    lambda: asyncio.create_task(self._expire(group_id)),
+                )
+                raise
         if self.timeout_callback is not None:
             await self.timeout_callback(group_id, phase)
 

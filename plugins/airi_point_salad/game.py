@@ -84,6 +84,11 @@ def stop_game(state: GameState, user_id: str, is_admin: bool, now: float) -> Non
 
 def flip_score(state: GameState, user_id: str, score_index: int, now: float) -> str:
     player = require_turn(state, user_id)
+    pending = state.pending_skill.get("kind") if state.pending_skill.get("user_id") == user_id else None
+    if pending == "airi_armed":
+        raise GameError("桃井爱莉技能生效的回合不能翻牌")
+    if pending == "minori_swap":
+        raise GameError("请先完成花里实乃理的角色牌交换")
     if state.turn_flips >= 1:
         raise GameError("本回合已经翻过牌")
     card_id = pop_index(player.score_cards, score_index, "计分牌编号无效")
@@ -101,6 +106,9 @@ def take_score(
     extra_slot: tuple[int, int] | None = None,
 ) -> str:
     player = require_turn(state, user_id)
+    pending = state.pending_skill.get("kind") if state.pending_skill.get("user_id") == user_id else None
+    if pending in {"minori_armed", "minori_swap"}:
+        raise GameError("花里实乃理技能准备后必须完成角色牌拿取与交换")
     if not 0 <= column < 3 or state.score_market[column] is None:
         raise GameError("该列没有可拿取的计分牌")
     airi_armed = (
@@ -111,7 +119,7 @@ def take_score(
     extra_card = None
     if airi_armed:
         if extra_slot is None or extra_slot[0] != column:
-            raise GameError("爱莉的技能需要选择同列一张角色牌")
+            raise GameError("桃井爱莉的技能需要选择同列一张角色牌")
         extra_card = require_character_slot(state, extra_slot)
     elif extra_slot is not None:
         raise GameError("普通拿取计分牌不能附带角色牌")
@@ -136,6 +144,11 @@ def take_characters(
     now: float,
 ) -> list[str]:
     player = require_turn(state, user_id)
+    pending = state.pending_skill.get("kind") if state.pending_skill.get("user_id") == user_id else None
+    if pending == "airi_armed":
+        raise GameError("桃井爱莉技能准备后必须拿取计分牌和同列角色牌")
+    if pending == "minori_swap":
+        raise GameError("请先完成花里实乃理的角色牌交换")
     available = available_character_slots(state)
     required = min(2, len(available))
     if required == 0:

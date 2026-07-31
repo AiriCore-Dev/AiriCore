@@ -146,10 +146,28 @@ def rule_text(card: Card) -> tuple[str, str]:
     return f"每个 {names[0]} ＋{rule.points}\n每个 {names[1]} {rule.penalty}", "风险牌"
 
 
-def render_board(state: GameState, viewer_id: str) -> str:
+def center_status(state: GameState, player: PlayerState) -> str:
+    if player.skill_used:
+        return "已使用"
+    if state.pending_skill.get("user_id") == player.user_id:
+        return {
+            "airi_armed": "已准备：sl ta A A1",
+            "minori_armed": "已准备：先 sl ta A1 B2",
+            "minori_swap": "待交换：sl sk A1 C2",
+        }.get(state.pending_skill.get("kind"), "待完成")
+    return "可使用"
+
+
+def render_board(state: GameState, _viewer_id: str) -> str:
     width = 1350
     base_height = 1920 if state.mode is GameMode.MIX else 1720
-    height = base_height + max(0, len(state.players) - 4) * 78
+    current = state.players[state.current_player]
+    player_start = 1355 if state.mode is GameMode.MIX else 1190
+    detail_y = player_start + len(state.players) * 78 + 30
+    height = max(
+        base_height,
+        detail_y + len(current.score_cards) * 34 + 190,
+    )
     image = gradient((width, height), (246, 255, 252), (255, 244, 251))
     draw = ImageDraw.Draw(image)
     logo = get_image_copy(LOGO_PATH).convert("RGBA")
@@ -159,12 +177,11 @@ def render_board(state: GameState, viewer_id: str) -> str:
     speed = "快速局" if state.speed.value == "quick" else "标准局"
     draw.text((1280, 65), f"{speed} · {mode}", font=font(38), anchor="ra", fill=(66, 74, 83))
     draw.text((1280, 118), f"第 {state.turn_number} 回合 · 牌库 {len(state.deck)}", font=font(30), anchor="ra", fill=(104, 91, 108))
-    current = state.players[state.current_player]
     draw.rounded_rectangle((55, 190, 1295, 275), 20, fill=(222, 247, 241), outline=(92, 176, 160), width=3)
     draw.text((85, 232), f"当前回合：{current.name}", font=font(34), anchor="lm", fill=(50, 120, 108))
     if current.center is not None:
-        status = "已使用" if current.skill_used else "可使用"
-        draw.text((1260, 232), f"Center：{current.center.display_name} · {status}", font=font(27), anchor="rm", fill=(73, 112, 122))
+        status = center_status(state, current)
+        draw.text((1260, 232), f"Center：{current.center.display_name} · {status}", font=font(23), anchor="rm", fill=(73, 112, 122))
     card_width = 250
     card_height = 350
     market_y = 350
@@ -200,12 +217,21 @@ def render_board(state: GameState, viewer_id: str) -> str:
         draw.rounded_rectangle((55, y, 1295, y + 62), 14, fill=fill, outline=(226, 210, 224), width=2)
         draw.text((80, y + 31), f"{index + 1}. {player.name}", font=font(25), anchor="lm", fill=(61, 52, 66))
         draw.text((1265, y + 31), f"计分 {len(player.score_cards)} · 角色 {len(player.character_cards)} · 任务 {len(player.mission_ids)}", font=font(23), anchor="rm", fill=(105, 91, 108))
-    viewer = next((player for player in state.players if player.user_id == viewer_id), None)
-    if viewer is not None:
-        counts = Counter(state.cards[card_id].character for card_id in viewer.character_cards)
-        details = "  ".join(f"{character.display_name}×{counts.get(character, 0)}" for character in Character)
-        draw.text((675, height - 105), f"你的角色牌：{details}", font=font(23), anchor="mm", fill=(91, 76, 94))
-    draw.text((675, height - 48), "sl ta A · sl ta A1 B2 · sl fl 2 · sl sk", font=font(22), anchor="mm", fill=(114, 99, 116))
+    draw.text((55, detail_y), f"当前玩家持牌 · {current.name}", font=font(28), fill=(89, 75, 92))
+    score_y = detail_y + 46
+    if current.score_cards:
+        for index, card_id in enumerate(current.score_cards):
+            text, score = rule_text(state.cards[card_id])
+            label = text.replace("\n", " ")
+            draw.text((70, score_y), f"{index + 1}. {label}  {score}", font=font(22), fill=(100, 82, 102))
+            score_y += 34
+    else:
+        draw.text((70, score_y), "暂无计分牌", font=font(22), fill=(125, 110, 126))
+        score_y += 34
+    counts = Counter(state.cards[card_id].character for card_id in current.character_cards)
+    details = "  ".join(f"{character.display_name}×{counts.get(character, 0)}" for character in Character)
+    draw.text((675, score_y + 28), f"角色牌：{details}", font=font(23), anchor="mm", fill=(91, 76, 94))
+    draw.text((675, score_y + 82), "sl ta A · sl ta A1 B2 · sl fl 2 · sl sk", font=font(22), anchor="mm", fill=(114, 99, 116))
     return image_b64(image)
 
 

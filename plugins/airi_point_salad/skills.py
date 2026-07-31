@@ -66,6 +66,8 @@ def _arm(state, player, args, kind, now):
         raise GameError(f"该技能无需参数：{skill_usage(player.center)}")
     if state.pending_skill:
         raise GameError("已有待完成的技能操作")
+    if kind == "airi_armed" and state.turn_flips:
+        raise GameError("本回合已经翻过牌，不能再发动桃井爱莉技能")
     state.pending_skill = {"kind": kind, "user_id": player.user_id}
     state.updated_at = now
     return SkillResult("技能已准备，请继续完成本回合拿牌")
