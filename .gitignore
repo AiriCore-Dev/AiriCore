@@ -8,6 +8,8 @@ AGENTS.md
 sdk_diff*
 logs/
 log/
+docs/
+.ruff_cache/
 
 # Django/Database
 *.pk
