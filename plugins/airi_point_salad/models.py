@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from enum import Enum
+from math import isfinite
 from typing import Any
 
 
@@ -136,40 +137,57 @@ class GameState:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "GameState":
+        data = _object(data, "游戏状态")
+        players = _list(data.get("players", []), "players")
+        cards = _object(data.get("cards", {}), "cards")
+        deck = _list(data.get("deck", []), "deck")
+        score_market = _list(
+            data.get("score_market", [None, None, None]), "score_market"
+        )
+        character_market = _list(
+            data.get("character_market", [[None, None] for _ in range(3)]),
+            "character_market",
+        )
+        centers = _list(data.get("centers", []), "centers")
+        mission_deck = _list(data.get("mission_deck", []), "mission_deck")
+        active_missions = _list(data.get("active_missions", []), "active_missions")
         return cls(
-            group_id=str(data["group_id"]),
-            host_id=str(data["host_id"]),
-            speed=GameSpeed(data["speed"]),
-            mode=GameMode(data["mode"]),
-            phase=Phase(data.get("phase", Phase.LOBBY.value)),
-            players=[_player_from_dict(player) for player in data.get("players", [])],
+            group_id=_string(data["group_id"], "group_id"),
+            host_id=_string(data["host_id"], "host_id"),
+            speed=GameSpeed(_string(data["speed"], "speed")),
+            mode=GameMode(_string(data["mode"], "mode")),
+            phase=Phase(_string(data.get("phase", Phase.LOBBY.value), "phase")),
+            players=[_player_from_dict(player) for player in players],
             cards={
-                str(card_id): _card_from_dict(card)
-                for card_id, card in data.get("cards", {}).items()
+                _string(card_id, "cards 键"): _card_from_dict(card)
+                for card_id, card in cards.items()
             },
-            deck=[str(card_id) for card_id in data.get("deck", [])],
+            deck=_string_list(deck, "deck"),
             score_market=[
-                None if card_id is None else str(card_id)
-                for card_id in data.get("score_market", [None, None, None])
+                None if card_id is None else _string(card_id, "score_market 元素")
+                for card_id in score_market
             ],
             character_market=[
-                [None if card_id is None else str(card_id) for card_id in row]
-                for row in data.get(
-                    "character_market", [[None, None] for _ in range(3)]
-                )
+                [
+                    None
+                    if card_id is None
+                    else _string(card_id, "character_market 元素")
+                    for card_id in _list(row, "character_market 行")
+                ]
+                for row in character_market
             ],
-            current_player=int(data.get("current_player", 0)),
-            turn_number=int(data.get("turn_number", 0)),
-            turn_flips=int(data.get("turn_flips", 0)),
-            centers=[Character(character) for character in data.get("centers", [])],
-            mission_deck=[str(mission_id) for mission_id in data.get("mission_deck", [])],
-            active_missions=[
-                str(mission_id) for mission_id in data.get("active_missions", [])
+            current_player=_integer(data.get("current_player", 0), "current_player"),
+            turn_number=_integer(data.get("turn_number", 0), "turn_number"),
+            turn_flips=_integer(data.get("turn_flips", 0), "turn_flips"),
+            centers=[
+                Character(_string(character, "centers 元素")) for character in centers
             ],
-            pending_skill=_plain_dict(data.get("pending_skill", {})) or {},
-            seed=int(data.get("seed", 0)),
-            created_at=float(data.get("created_at", 0.0)),
-            updated_at=float(data.get("updated_at", 0.0)),
+            mission_deck=_string_list(mission_deck, "mission_deck"),
+            active_missions=_string_list(active_missions, "active_missions"),
+            pending_skill=_plain_dict(data.get("pending_skill", {})),
+            seed=_integer(data.get("seed", 0), "seed"),
+            created_at=_number(data.get("created_at", 0.0), "created_at"),
+            updated_at=_number(data.get("updated_at", 0.0), "updated_at"),
         )
 
 
@@ -184,12 +202,17 @@ def _rule_to_dict(rule: ScoreRule) -> dict[str, Any]:
 
 
 def _rule_from_dict(data: dict[str, Any]) -> ScoreRule:
+    data = _object(data, "rule")
+    characters = _list(data.get("characters", []), "rule.characters")
     return ScoreRule(
-        kind=RuleKind(data["kind"]),
-        characters=[Character(character) for character in data.get("characters", [])],
-        points=int(data["points"]),
-        penalty=int(data.get("penalty", 0)),
-        relation=str(data.get("relation", "")),
+        kind=RuleKind(_string(data["kind"], "rule.kind")),
+        characters=[
+            Character(_string(character, "rule.characters 元素"))
+            for character in characters
+        ],
+        points=_integer(data["points"], "rule.points"),
+        penalty=_integer(data.get("penalty", 0), "rule.penalty"),
+        relation=_string(data.get("relation", ""), "rule.relation"),
     )
 
 
@@ -202,9 +225,10 @@ def _card_to_dict(card: Card) -> dict[str, Any]:
 
 
 def _card_from_dict(data: dict[str, Any]) -> Card:
+    data = _object(data, "card")
     return Card(
-        card_id=str(data["card_id"]),
-        character=Character(data["character"]),
+        card_id=_string(data["card_id"], "card.card_id"),
+        character=Character(_string(data["character"], "card.character")),
         rule=_rule_from_dict(data["rule"]),
     )
 
@@ -224,47 +248,102 @@ def _player_to_dict(player: PlayerState) -> dict[str, Any]:
 
 
 def _player_from_dict(data: dict[str, Any]) -> PlayerState:
+    data = _object(data, "player")
     center = data.get("center")
+    score_cards = _list(data.get("score_cards", []), "player.score_cards")
+    character_cards = _list(data.get("character_cards", []), "player.character_cards")
+    mission_ids = _list(data.get("mission_ids", []), "player.mission_ids")
     return PlayerState(
-        user_id=str(data["user_id"]),
-        name=str(data["name"]),
-        score_cards=[str(card_id) for card_id in data.get("score_cards", [])],
-        character_cards=[
-            str(card_id) for card_id in data.get("character_cards", [])
-        ],
-        center=None if center is None else Character(center),
-        skill_used=bool(data.get("skill_used", False)),
-        mission_ids=[str(mission_id) for mission_id in data.get("mission_ids", [])],
-        mission_points=int(data.get("mission_points", 0)),
-        skill_payload=_plain_dict(data.get("skill_payload", {})) or {},
+        user_id=_string(data["user_id"], "player.user_id"),
+        name=_string(data["name"], "player.name"),
+        score_cards=_string_list(score_cards, "player.score_cards"),
+        character_cards=_string_list(character_cards, "player.character_cards"),
+        center=(
+            None if center is None else Character(_string(center, "player.center"))
+        ),
+        skill_used=_boolean(data.get("skill_used", False), "player.skill_used"),
+        mission_ids=_string_list(mission_ids, "player.mission_ids"),
+        mission_points=_integer(data.get("mission_points", 0), "player.mission_points"),
+        skill_payload=_plain_dict(data.get("skill_payload", {})),
     )
 
 
 def _json_value(value: Any) -> Any:
     if isinstance(value, Enum):
-        return value.value
+        return _json_value(value.value)
     if isinstance(value, dict):
-        return {str(key): _json_value(item) for key, item in value.items()}
+        return {
+            _string(key, "JSON 对象键"): _json_value(item)
+            for key, item in value.items()
+        }
     if isinstance(value, (list, tuple)):
         return [_json_value(item) for item in value]
+    if isinstance(value, float) and not isfinite(value):
+        raise ValueError("JSON 数值必须是有限值")
     if value is None or isinstance(value, (str, int, float, bool)):
         return value
     raise TypeError(f"不支持序列化的数据类型：{type(value).__name__}")
 
 
-def _plain_dict(value: Any) -> dict[str, Any] | None:
-    if value is None:
-        return None
-    if not isinstance(value, dict):
-        raise TypeError("字典字段必须是对象")
-    return {str(key): _plain_value(item) for key, item in value.items()}
+def _plain_dict(value: Any) -> dict[str, Any]:
+    value = _object(value, "字典字段")
+    return {
+        _string(key, "JSON 对象键"): _plain_value(item) for key, item in value.items()
+    }
 
 
 def _plain_value(value: Any) -> Any:
-    if isinstance(value, dict):
-        return {str(key): _plain_value(item) for key, item in value.items()}
-    if isinstance(value, list):
+    if type(value) is dict:
+        return {
+            _string(key, "JSON 对象键"): _plain_value(item)
+            for key, item in value.items()
+        }
+    if type(value) is list:
         return [_plain_value(item) for item in value]
-    if value is None or isinstance(value, (str, int, float, bool)):
+    if type(value) is float and not isfinite(value):
+        raise ValueError("JSON 数值必须是有限值")
+    if value is None or type(value) in (str, int, float, bool):
         return value
     raise TypeError(f"不支持反序列化的数据类型：{type(value).__name__}")
+
+
+def _object(value: Any, field_name: str) -> dict[str, Any]:
+    if type(value) is not dict:
+        raise TypeError(f"{field_name} 必须是对象")
+    return value
+
+
+def _list(value: Any, field_name: str) -> list[Any]:
+    if type(value) is not list:
+        raise TypeError(f"{field_name} 必须是数组")
+    return value
+
+
+def _string(value: Any, field_name: str) -> str:
+    if type(value) is not str:
+        raise TypeError(f"{field_name} 必须是字符串")
+    return value
+
+
+def _integer(value: Any, field_name: str) -> int:
+    if type(value) is not int:
+        raise TypeError(f"{field_name} 必须是整数")
+    return value
+
+
+def _number(value: Any, field_name: str) -> float:
+    if type(value) not in (int, float):
+        raise TypeError(f"{field_name} 必须是数值")
+    if not isfinite(value):
+        raise ValueError(f"{field_name} 必须是有限值")
+    return float(value)
+
+
+def _boolean(value: Any, field_name: str) -> bool:
+    if type(value) is not bool:
+        raise TypeError(f"{field_name} 必须是布尔值")
+    return value
+
+
+def _string_list(value: list[Any], field_name: str) -> list[str]:
+    return [_string(item, f"{field_name} 元素") for item in value]
