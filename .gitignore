@@ -9,6 +9,7 @@ sdk_diff*
 logs/
 log/
 docs/
+/plugins/airi_point_salad/
 .ruff_cache/
 
 # Django/Database
