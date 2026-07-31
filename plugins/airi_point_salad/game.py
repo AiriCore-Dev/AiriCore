@@ -1,5 +1,6 @@
 from .cards import build_deck
-from .models import GameMode, GameSpeed, GameState, Phase, PlayerState
+from .missions import TurnSummary
+from .models import Character, GameMode, GameSpeed, GameState, Phase, PlayerState
 
 
 class GameError(ValueError):
@@ -65,6 +66,12 @@ def start_game(state: GameState, user_id: str, now: float) -> None:
     state.turn_number = 1
     state.turn_flips = 0
     refill_market(state)
+    if state.mode is GameMode.MIX:
+        from .missions import initialize_missions
+        from .skills import assign_centers
+
+        assign_centers(state)
+        initialize_missions(state)
     state.updated_at = now
 
 
@@ -86,14 +93,39 @@ def flip_score(state: GameState, user_id: str, score_index: int, now: float) -> 
     return card_id
 
 
-def take_score(state: GameState, user_id: str, column: int, now: float) -> str:
+def take_score(
+    state: GameState,
+    user_id: str,
+    column: int,
+    now: float,
+    extra_slot: tuple[int, int] | None = None,
+) -> str:
     player = require_turn(state, user_id)
     if not 0 <= column < 3 or state.score_market[column] is None:
         raise GameError("该列没有可拿取的计分牌")
+    airi_armed = (
+        state.pending_skill.get("kind") == "airi_armed"
+        and state.pending_skill.get("user_id") == user_id
+        and player.center is Character.AIRI
+    )
+    extra_card = None
+    if airi_armed:
+        if extra_slot is None or extra_slot[0] != column:
+            raise GameError("爱莉的技能需要选择同列一张角色牌")
+        extra_card = require_character_slot(state, extra_slot)
+    elif extra_slot is not None:
+        raise GameError("普通拿取计分牌不能附带角色牌")
     card_id = state.score_market[column]
     state.score_market[column] = None
     player.score_cards.append(card_id)
-    finish_action(state, now)
+    summary = TurnSummary([], [card_id])
+    if extra_card is not None:
+        state.character_market[extra_slot[0]][extra_slot[1]] = None
+        player.character_cards.append(extra_card)
+        player.skill_used = True
+        state.pending_skill = {}
+        summary.character_ids.append(extra_card)
+    finish_action(state, now, summary)
     return card_id
 
 
@@ -114,7 +146,22 @@ def take_characters(
     for column, row in slots:
         state.character_market[column][row] = None
     player.character_cards.extend(card_ids)
-    finish_action(state, now)
+    if (
+        state.pending_skill.get("kind") == "minori_armed"
+        and state.pending_skill.get("user_id") == user_id
+        and player.center is Character.MINORI
+    ):
+        state.pending_skill = {
+            "kind": "minori_swap",
+            "user_id": user_id,
+            "taken": {
+                f"{slot[0]}:{slot[1]}": card_id
+                for slot, card_id in zip(slots, card_ids)
+            },
+        }
+        state.updated_at = now
+        return card_ids
+    finish_action(state, now, TurnSummary(card_ids))
     return card_ids
 
 
@@ -128,7 +175,15 @@ def refill_market(state: GameState) -> None:
                 state.character_market[column][row] = state.deck.pop()
 
 
-def finish_action(state: GameState, now: float) -> None:
+def finish_action(
+    state: GameState,
+    now: float,
+    summary: TurnSummary | None = None,
+) -> None:
+    if state.mode is GameMode.MIX and summary is not None:
+        from .missions import claim_completed_mission
+
+        claim_completed_mission(state, state.players[state.current_player], summary)
     refill_market(state)
     state.updated_at = now
     if not state.deck and not any(state.score_market) and not any(
