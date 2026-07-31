@@ -97,6 +97,10 @@ Airi心愿瓶（漂流瓶plus） By AiriCore Dev.
 Airi海龟汤 By AiriCore Dev.
 * 发送 海龟汤 查看帮助
 
+- MORE MORE JUMP！Point Salad:
+2–6 人群聊选牌桌游 By AiriCore Dev.
+* 发送 sl rl 查看玩法和完整指令
+
 - jrys:
 测测你的今日运势
 * 指令：jrys
