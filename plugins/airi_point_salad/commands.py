@@ -103,6 +103,15 @@ def parse_take(args: list[str]) -> Command:
         raise CommandError("拿牌格式：sl ta A 或 sl ta A1 B2")
     if len(args) == 1 and re.fullmatch(r"[abc]", args[0], re.IGNORECASE):
         return Command("take", [ord(args[0].upper()) - ord("A")])
+    if (
+        len(args) == 2
+        and re.fullmatch(r"[abc]", args[0], re.IGNORECASE)
+        and re.fullmatch(r"[abc][12]", args[1], re.IGNORECASE)
+    ):
+        return Command(
+            "take",
+            [ord(args[0].upper()) - ord("A"), parse_slot(args[1])],
+        )
     try:
         slots = [parse_slot(item) for item in args]
     except CommandError:
