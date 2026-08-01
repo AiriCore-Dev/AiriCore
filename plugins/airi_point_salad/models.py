@@ -102,6 +102,7 @@ class PlayerState:
     mission_ids: list[str] = field(default_factory=list)
     mission_points: int = 0
     skill_payload: dict[str, Any] = field(default_factory=dict)
+    last_action_turn: int = -1
 
 
 @dataclass(slots=True)
@@ -297,6 +298,9 @@ def _player_to_dict(player: PlayerState) -> dict[str, Any]:
         "mission_ids": list(player.mission_ids),
         "mission_points": player.mission_points,
         "skill_payload": _json_value(player.skill_payload),
+        "last_action_turn": _integer(
+            player.last_action_turn, "player.last_action_turn"
+        ),
     }
 
 
@@ -318,6 +322,9 @@ def _player_from_dict(data: dict[str, Any]) -> PlayerState:
         mission_ids=_string_list(mission_ids, "player.mission_ids"),
         mission_points=_integer(data.get("mission_points", 0), "player.mission_points"),
         skill_payload=_plain_dict(data.get("skill_payload", {})),
+        last_action_turn=_integer(
+            data.get("last_action_turn", -1), "player.last_action_turn"
+        ),
     )
 
 
