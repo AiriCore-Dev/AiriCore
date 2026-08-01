@@ -5,6 +5,14 @@ from io import BytesIO
 from PIL import Image, ImageDraw, ImageFilter, ImageOps
 
 from utils.asset_cache import get_font, get_image_copy
+from utils.cache_mode import (
+    get_cache_budget_bytes,
+    is_balanced,
+    is_disk,
+    is_ram,
+    register_cache,
+)
+from utils.cache_policy import ByteLRU, value_bytes
 
 from .art_assets import (
     ASSET_DIR,
@@ -23,6 +31,11 @@ from .scoring import rank_players
 CARD_SIZE = (750, 1050)
 GOLD = (205, 171, 96, 255)
 FONT_PATH = ASSET_DIR / "font.ttf"
+_render_cache = ByteLRU(
+    get_cache_budget_bytes("images"),
+    owner="point_salad.rendered",
+)
+register_cache("point_salad.rendered", _render_cache)
 
 
 CHARACTER_COLORS = {
@@ -62,7 +75,25 @@ def gradient(size, top, bottom):
     return ImageOps.colorize(layer, top, bottom).convert("RGBA")
 
 
-def render_character_front(character: Character) -> Image.Image:
+def _configure_render_cache() -> None:
+    _render_cache.max_bytes = 0 if is_ram() else get_cache_budget_bytes("images")
+    _render_cache.probationary = is_balanced()
+
+
+def _cached_image(key, build) -> Image.Image:
+    if is_disk():
+        _render_cache.clear()
+        return build().copy()
+    _configure_render_cache()
+    cached = _render_cache.get(key)
+    if cached is not None:
+        return cached.copy()
+    image = build()
+    _render_cache.put(key, image, value_bytes(image))
+    return image.copy()
+
+
+def _build_character_front(character: Character) -> Image.Image:
     image = get_image_copy(FRONT_BASE_PATH).convert("RGBA")
     art = character_source(character)
     art.thumbnail((650, 840), Image.Resampling.LANCZOS)
@@ -100,7 +131,14 @@ def render_character_front(character: Character) -> Image.Image:
     return image
 
 
-def render_character_icon(character: Character, size: int = 100) -> Image.Image:
+def render_character_front(character: Character) -> Image.Image:
+    def build():
+        return _build_character_front(character)
+
+    return _cached_image(("character_front", character.value), build)
+
+
+def _build_character_icon(character: Character, size: int) -> Image.Image:
     source = chibi_source(character)
     bbox = source.getchannel("A").getbbox()
     if bbox is not None:
@@ -128,7 +166,14 @@ def render_character_icon(character: Character, size: int = 100) -> Image.Image:
     return icon
 
 
-def render_score_back(card: Card) -> Image.Image:
+def render_character_icon(character: Character, size: int = 100) -> Image.Image:
+    def build():
+        return _build_character_icon(character, size)
+
+    return _cached_image(("character_icon", character.value, size), build)
+
+
+def _build_score_back(card: Card) -> Image.Image:
     image = get_image_copy(BACK_BASE_PATH).convert("RGBA")
     title = get_image_copy(TITLE_PATH).convert("RGBA")
     title.thumbnail((430, 190), Image.Resampling.LANCZOS)
@@ -145,6 +190,26 @@ def render_score_back(card: Card) -> Image.Image:
     draw.text((375, 735), score, font=font(76), anchor="mm", fill=(181, 87, 137))
     draw.text((375, 950), card.card_id.upper(), font=font(20), anchor="mm", fill=(117, 98, 119))
     return image
+
+
+def _score_cache_key(card: Card):
+    rule = card.rule
+    return (
+        "score_back",
+        card.card_id,
+        rule.kind.value,
+        tuple(character.value for character in rule.characters),
+        rule.points,
+        rule.penalty,
+        rule.relation,
+    )
+
+
+def render_score_back(card: Card) -> Image.Image:
+    def build():
+        return _build_score_back(card)
+
+    return _cached_image(_score_cache_key(card), build)
 
 
 def rule_text(card: Card) -> tuple[str, str]:
