@@ -1,5 +1,4 @@
 import asyncio
-import json
 import os
 from pathlib import Path
 import pickle
@@ -10,6 +9,13 @@ import time
 from nonebot import logger
 
 from .models import GameState
+
+
+PAYLOAD_VERSION = 2
+
+
+class _LegacyPayload(ValueError):
+    pass
 
 
 class _PlainUnpickler(pickle.Unpickler):
@@ -28,53 +34,59 @@ class GameStore:
         self._save_lock = asyncio.Lock()
 
     async def load(self) -> dict[str, GameState]:
+        await self._delete_legacy_json_files()
         if self.path.exists() or self.backup_path.exists():
             return await self._load_current()
-        if self.legacy_path.exists() or self.legacy_backup_path.exists():
-            return await self._migrate_legacy()
         return {}
 
     async def _load_current(self) -> dict[str, GameState]:
+        primary_error = None
         if self.path.exists():
             try:
-                return await asyncio.to_thread(self._read_pickle, self.path)
-            except Exception as primary_error:
-                logger.error(f"得分沙拉主存档读取失败：{primary_error}")
+                games = await asyncio.to_thread(self._read_pickle, self.path)
+                await self._delete_legacy_pickle(self.backup_path)
+                return games
+            except _LegacyPayload:
+                await self._delete_file(self.path, "旧版主存档")
+            except Exception as error:
+                primary_error = error
+                logger.error(f"得分沙拉主存档读取失败：{error}")
         if self.backup_path.exists():
             try:
                 games = await asyncio.to_thread(
                     self._read_pickle, self.backup_path
                 )
-                await self._quarantine(self.path, self.path.suffix)
+                if primary_error is not None:
+                    await self._quarantine(self.path, self.path.suffix)
                 logger.warning("得分沙拉已从备份存档恢复")
                 return games
+            except _LegacyPayload:
+                await self._delete_file(self.backup_path, "旧版备份存档")
             except Exception as backup_error:
                 logger.error(f"得分沙拉备份存档读取失败：{backup_error}")
-        await self._quarantine(self.path, self.path.suffix)
+        if primary_error is not None:
+            await self._quarantine(self.path, self.path.suffix)
         return {}
 
-    async def _migrate_legacy(self) -> dict[str, GameState]:
-        games = None
-        if self.legacy_path.exists():
-            try:
-                games = await asyncio.to_thread(
-                    self._read_json, self.legacy_path
-                )
-            except Exception as primary_error:
-                logger.error(f"得分沙拉旧版主存档读取失败：{primary_error}")
-        if games is None and self.legacy_backup_path.exists():
-            try:
-                games = await asyncio.to_thread(
-                    self._read_json, self.legacy_backup_path
-                )
-            except Exception as backup_error:
-                logger.error(f"得分沙拉旧版备份存档读取失败：{backup_error}")
-        if games is None:
-            await self._quarantine(self.legacy_path, self.legacy_path.suffix)
-            return {}
-        await self.save(games)
-        logger.warning("得分沙拉旧版 JSON 存档已迁移为 pickle 存档")
-        return games
+    async def _delete_legacy_json_files(self) -> None:
+        await self._delete_file(self.legacy_path, "旧版 JSON 主存档")
+        await self._delete_file(self.legacy_backup_path, "旧版 JSON 备份存档")
+
+    async def _delete_legacy_pickle(self, path: Path) -> None:
+        if not path.exists():
+            return
+        try:
+            await asyncio.to_thread(self._read_pickle, path)
+        except _LegacyPayload:
+            await self._delete_file(path, "旧版备份存档")
+        except Exception:
+            return
+
+    async def _delete_file(self, path: Path, label: str) -> None:
+        if not path.exists():
+            return
+        await asyncio.to_thread(path.unlink)
+        logger.warning(f"得分沙拉{label}已删除")
 
     async def _quarantine(self, path: Path, suffix: str) -> None:
         if not path.exists():
@@ -90,7 +102,7 @@ class GameStore:
 
     async def save(self, games: dict[str, GameState]) -> None:
         async with self._save_lock:
-            payload = {group_id: state.to_dict() for group_id, state in games.items()}
+            payload = _encode(games)
             await asyncio.to_thread(self._write_atomic, payload)
 
     def _read_pickle(self, path: Path) -> dict[str, GameState]:
@@ -98,17 +110,27 @@ class GameStore:
             payload = _PlainUnpickler(file).load()
         return self._decode(payload)
 
-    def _read_json(self, path: Path) -> dict[str, GameState]:
-        with path.open("r", encoding="utf-8") as file:
-            payload = json.load(file, parse_constant=self._reject_constant)
-        return self._decode(payload)
-
     def _decode(self, payload) -> dict[str, GameState]:
         if type(payload) is not dict:
             raise TypeError("存档根节点必须是对象")
+        if "schema_version" not in payload and "games" not in payload:
+            if all(
+                type(group_id) is str and type(state) is dict
+                for group_id, state in payload.items()
+            ):
+                raise _LegacyPayload("检测到旧版存档")
+        if set(payload) != {"schema_version", "games"}:
+            raise ValueError("存档根节点字段不匹配")
+        if type(payload["schema_version"]) is not int:
+            raise TypeError("存档版本必须是整数")
+        if payload["schema_version"] != PAYLOAD_VERSION:
+            raise ValueError("不支持的存档版本")
+        games = payload["games"]
+        if type(games) is not dict:
+            raise TypeError("games 必须是对象")
         return {
             self._group_id(group_id): GameState.from_dict(state)
-            for group_id, state in payload.items()
+            for group_id, state in games.items()
         }
 
     def _write_atomic(self, payload: dict) -> None:
@@ -140,3 +162,15 @@ class GameStore:
         if type(value) is not str:
             raise TypeError("群号键必须是字符串")
         return value
+
+
+def _encode(games: dict[str, GameState]) -> dict:
+    if type(games) is not dict:
+        raise TypeError("games 必须是对象")
+    return {
+        "schema_version": PAYLOAD_VERSION,
+        "games": {
+            GameStore._group_id(group_id): state.to_dict()
+            for group_id, state in games.items()
+        },
+    }
