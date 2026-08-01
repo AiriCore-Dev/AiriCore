@@ -11,7 +11,7 @@ from .models import Card, Character, RuleKind
 
 
 CARD_SIZE = (750, 1050)
-CARD_CORNER_RADIUS = 24
+CARD_CORNER_RADIUS = 50
 CARD_CORNER_SCALE = 4
 PORTRAIT_SHADOW_OPACITY = 0.65
 GOLD = (205, 171, 96, 255)
@@ -50,7 +50,7 @@ def font(size: int):
 
 
 def character_label(character: Character) -> str:
-    return character.value.upper()
+    return character.short_name
 
 
 def _cached_image(key, build: Callable[[], Image.Image]) -> Image.Image:
@@ -147,14 +147,14 @@ def render_character_icon(character: Character, size: int = 100) -> Image.Image:
     return _cached_image(("character_icon", character.value, size), lambda: _build_character_icon(character, size))
 
 
-def _badge(draw: ImageDraw.ImageDraw, center: tuple[int, int], text: str, fill=PINK, width: int = 220) -> None:
+def _badge(draw: ImageDraw.ImageDraw, center: tuple[int, int], text: str, fill=PINK, width: int = 240) -> None:
     x, y = center
-    draw.rounded_rectangle((x - width // 2, y - 54, x + width // 2, y + 54), 30, fill=fill, outline=GOLD, width=4)
-    draw.text((x, y), text, font=font(58), anchor="mm", fill=(255, 255, 255), stroke_width=1, stroke_fill=(70, 52, 68))
+    draw.rounded_rectangle((x - width // 2, y - 58, x + width // 2, y + 58), 32, fill=fill, outline=GOLD, width=4)
+    draw.text((x, y), text, font=font(64), anchor="mm", fill=(255, 255, 255), stroke_width=1, stroke_fill=(70, 52, 68))
 
 
 def _operator(draw: ImageDraw.ImageDraw, position: tuple[int, int], text: str) -> None:
-    draw.text(position, text, font=font(54), anchor="mm", fill=DARK)
+    draw.text(position, text, font=font(64), anchor="mm", fill=DARK)
 
 
 def _icon(image: Image.Image, character: Character, center: tuple[int, int], size: int) -> None:
@@ -165,31 +165,31 @@ def _icon(image: Image.Image, character: Character, center: tuple[int, int], siz
 def _frame(card: Card) -> tuple[Image.Image, ImageDraw.ImageDraw]:
     image = get_image_copy(BACK_BASE_PATH).convert("RGBA")
     title = get_image_copy(TITLE_PATH).convert("RGBA")
-    title.thumbnail((420, 160), Image.Resampling.LANCZOS)
+    title.thumbnail((470, 180), Image.Resampling.LANCZOS)
     image.alpha_composite(title, ((CARD_SIZE[0] - title.width) // 2, 28))
     draw = ImageDraw.Draw(image)
     color = CHARACTER_COLORS[card.character][1] + (245,)
     draw.polygon(((0, 0), (160, 0), (0, 160)), fill=color)
     draw.polygon(((750, 1050), (590, 1050), (750, 890)), fill=color)
-    _icon(image, card.character, (55, 55), 82)
-    _icon(image, card.character, (695, 995), 82)
+    _icon(image, card.character, (58, 58), 90)
+    _icon(image, card.character, (692, 992), 90)
     draw.rounded_rectangle((54, 214, 696, 928), 36, fill=PLATE, outline=GOLD, width=5)
     return image, draw
 
 
 def _comparison(image: Image.Image, draw: ImageDraw.ImageDraw, card: Card) -> None:
     label = "最多" if card.rule.kind is RuleKind.MOST else "最少"
-    draw.text((375, 315), label, font=font(72), anchor="mm", fill=DARK)
-    _icon(image, card.rule.target, (375, 515), 190)
-    _badge(draw, (375, 755), f"+{card.rule.points}")
+    draw.text((375, 315), label, font=font(80), anchor="mm", fill=DARK)
+    _icon(image, card.rule.target, (375, 520), 230)
+    _badge(draw, (375, 790), f"+{card.rule.points}")
 
 
 def _parity(image: Image.Image, draw: ImageDraw.ImageDraw, card: Card) -> None:
-    _icon(image, card.rule.target, (205, 435), 160)
-    draw.text((470, 360), "偶数", font=font(56), anchor="mm", fill=DARK)
-    _badge(draw, (500, 455), f"+{card.rule.points}", width=190)
-    draw.text((470, 610), "奇数", font=font(56), anchor="mm", fill=DARK)
-    _badge(draw, (500, 705), f"+{card.rule.odd_points}", fill=GREEN, width=190)
+    _icon(image, card.rule.target, (190, 490), 195)
+    draw.text((485, 345), "偶数", font=font(64), anchor="mm", fill=DARK)
+    _badge(draw, (500, 455), f"+{card.rule.points}", width=210)
+    draw.text((485, 600), "奇数", font=font(64), anchor="mm", fill=DARK)
+    _badge(draw, (500, 710), f"+{card.rule.odd_points}", fill=GREEN, width=210)
 
 
 def _linear(image: Image.Image, draw: ImageDraw.ImageDraw, card: Card) -> None:
@@ -197,40 +197,44 @@ def _linear(image: Image.Image, draw: ImageDraw.ImageDraw, card: Card) -> None:
     start = 540 - (len(items) - 1) * 105
     for index, (character, weight) in enumerate(items):
         y = start + index * 210
-        draw.text((185, y), f"{weight:+d}", font=font(68), anchor="mm", fill=RED if weight < 0 else GREEN)
-        _operator(draw, (275, y), "×")
-        _icon(image, character, (420, y), 145)
-        draw.text((555, y), character_label(character), font=font(34), anchor="lm", fill=DARK)
+        draw.text((180, y), f"{weight:+d}", font=font(78), anchor="mm", fill=RED if weight < 0 else GREEN)
+        _operator(draw, (290, y), "×")
+        _icon(image, character, (470, y), 180)
 
 
 def _repeated(image: Image.Image, draw: ImageDraw.ImageDraw, card: Card) -> None:
     count = card.rule.threshold
-    size = 145 if count == 2 else 125
-    gap = 38
-    total = count * size + (count - 1) * gap
-    x = (750 - total) // 2 + size // 2
-    for index in range(count):
-        _icon(image, card.rule.target, (x, 470), size)
-        if index < count - 1:
-            _operator(draw, (x + size // 2 + gap // 2, 470), "+")
-        x += size + gap
-    _operator(draw, (375, 625), "=")
-    _badge(draw, (375, 755), f"+{card.rule.points}")
+    if count == 3:
+        for center in ((280, 400), (470, 400), (375, 630)):
+            _icon(image, card.rule.target, center, 170)
+        _operator(draw, (375, 520), "+")
+        _operator(draw, (375, 745), "=")
+        _badge(draw, (375, 840), f"+{card.rule.points}")
+        return
+    _icon(image, card.rule.target, (270, 480), 180)
+    _operator(draw, (375, 480), "+")
+    _icon(image, card.rule.target, (480, 480), 180)
+    _operator(draw, (375, 650), "=")
+    _badge(draw, (375, 790), f"+{card.rule.points}")
 
 
 def _set_rule(image: Image.Image, draw: ImageDraw.ImageDraw, card: Card) -> None:
     characters = list(card.rule.requirements)
-    size = 150 if len(characters) == 2 else 125
-    gap = 38
-    total = len(characters) * size + (len(characters) - 1) * gap
-    x = (750 - total) // 2 + size // 2
-    for index, character in enumerate(characters):
-        _icon(image, character, (x, 455), size)
-        if index < len(characters) - 1:
-            _operator(draw, (x + size // 2 + gap // 2, 455), "+")
-        x += size + gap
-    _operator(draw, (375, 615), "=")
-    _badge(draw, (375, 750), f"+{card.rule.points}")
+    if len(characters) == 3:
+        for character, center in zip(
+            characters,
+            ((280, 400), (470, 400), (375, 630)),
+        ):
+            _icon(image, character, center, 170)
+        _operator(draw, (375, 520), "+")
+        _operator(draw, (375, 745), "=")
+        _badge(draw, (375, 840), f"+{card.rule.points}")
+        return
+    _icon(image, characters[0], (270, 480), 180)
+    _operator(draw, (375, 480), "+")
+    _icon(image, characters[1], (480, 480), 180)
+    _operator(draw, (375, 650), "=")
+    _badge(draw, (375, 790), f"+{card.rule.points}")
 
 
 def _types_rule(image: Image.Image, draw: ImageDraw.ImageDraw, card: Card) -> None:
@@ -239,27 +243,27 @@ def _types_rule(image: Image.Image, draw: ImageDraw.ImageDraw, card: Card) -> No
         RuleKind.TYPES_AT_LEAST: ("每种达到数量", f"≥ {card.rule.threshold} 张"),
     }
     title, condition = labels[card.rule.kind]
-    draw.text((375, 330), title, font=font(52), anchor="mm", fill=DARK)
+    draw.text((375, 315), title, font=font(60), anchor="mm", fill=DARK)
     icons = list(Character)
     for index, character in enumerate(icons):
-        _icon(image, character, (170 + index % 3 * 205, 470 + index // 3 * 145), 105)
-    draw.text((375, 720), condition, font=font(48), anchor="mm", fill=DARK)
-    _badge(draw, (375, 835), f"+{card.rule.points}", width=190)
+        _icon(image, character, (170 + index % 3 * 205, 465 + index // 3 * 145), 120)
+    draw.text((375, 730), condition, font=font(54), anchor="mm", fill=DARK)
+    _badge(draw, (375, 840), f"+{card.rule.points}", width=210)
 
 
 def _total_rule(image: Image.Image, draw: ImageDraw.ImageDraw, card: Card) -> None:
     label = "角色总数最多" if card.rule.kind is RuleKind.MOST_TOTAL else "角色总数最少"
-    draw.text((375, 330), label, font=font(58), anchor="mm", fill=DARK)
+    draw.text((375, 315), label, font=font(66), anchor="mm", fill=DARK)
     for index, character in enumerate(Character):
-        _icon(image, character, (145 + index * 92, 510), 86)
-    _badge(draw, (375, 740), f"+{card.rule.points}")
+        _icon(image, character, (125 + index * 100, 520), 100)
+    _badge(draw, (375, 780), f"+{card.rule.points}")
 
 
 def _complete_set(image: Image.Image, draw: ImageDraw.ImageDraw, card: Card) -> None:
-    draw.text((375, 305), "每套完整六种角色", font=font(52), anchor="mm", fill=DARK)
+    draw.text((375, 300), "每套完整六种角色", font=font(60), anchor="mm", fill=DARK)
     for index, character in enumerate(Character):
-        _icon(image, character, (175 + index % 3 * 200, 440 + index // 3 * 160), 115)
-    _badge(draw, (375, 815), f"+{card.rule.points}")
+        _icon(image, character, (175 + index % 3 * 200, 450 + index // 3 * 160), 130)
+    _badge(draw, (375, 835), f"+{card.rule.points}")
 
 
 def _build_score_back(card: Card) -> Image.Image:

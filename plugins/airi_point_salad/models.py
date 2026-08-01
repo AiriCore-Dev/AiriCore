@@ -17,7 +17,7 @@ class Character(str, Enum):
         return {
             Character.MINORI: "花里实乃理",
             Character.HARUKA: "桐谷遥",
-            Character.AIRI: "桃井 Airi",
+            Character.AIRI: "桃井爱莉",
             Character.SHIZUKU: "日野森雫",
             Character.MIKU: "初音未来",
             Character.RIN: "镜音铃",
@@ -128,6 +128,12 @@ class GameState:
     mission_deck: list[str] = field(default_factory=list)
     active_missions: list[str] = field(default_factory=list)
     pending_skill: dict[str, Any] = field(default_factory=dict)
+    turn_start_user_id: str | None = None
+    turn_start_score_cards: list[str] = field(default_factory=list)
+    turn_start_character_cards: list[str] = field(default_factory=list)
+    last_turn_user_id: str | None = None
+    last_turn_score_cards_before: list[str] = field(default_factory=list)
+    last_turn_character_cards_before: list[str] = field(default_factory=list)
     seed: int = 0
     created_at: float = 0.0
     updated_at: float = 0.0
@@ -155,6 +161,16 @@ class GameState:
             "mission_deck": list(self.mission_deck),
             "active_missions": list(self.active_missions),
             "pending_skill": _json_value(self.pending_skill),
+            "turn_start_user_id": self.turn_start_user_id,
+            "turn_start_score_cards": list(self.turn_start_score_cards),
+            "turn_start_character_cards": list(self.turn_start_character_cards),
+            "last_turn_user_id": self.last_turn_user_id,
+            "last_turn_score_cards_before": list(
+                self.last_turn_score_cards_before
+            ),
+            "last_turn_character_cards_before": list(
+                self.last_turn_character_cards_before
+            ),
             "seed": self.seed,
             "created_at": self.created_at,
             "updated_at": self.updated_at,
@@ -180,6 +196,22 @@ class GameState:
         centers = _list(data.get("centers", []), "centers")
         mission_deck = _list(data.get("mission_deck", []), "mission_deck")
         active_missions = _list(data.get("active_missions", []), "active_missions")
+        turn_start_score_cards = _list(
+            data.get("turn_start_score_cards", []),
+            "turn_start_score_cards",
+        )
+        turn_start_character_cards = _list(
+            data.get("turn_start_character_cards", []),
+            "turn_start_character_cards",
+        )
+        last_turn_score_cards_before = _list(
+            data.get("last_turn_score_cards_before", []),
+            "last_turn_score_cards_before",
+        )
+        last_turn_character_cards_before = _list(
+            data.get("last_turn_character_cards_before", []),
+            "last_turn_character_cards_before",
+        )
         return cls(
             group_id=_string(data["group_id"], "group_id"),
             host_id=_string(data["host_id"], "host_id"),
@@ -224,6 +256,32 @@ class GameState:
             mission_deck=_string_list(mission_deck, "mission_deck"),
             active_missions=_string_list(active_missions, "active_missions"),
             pending_skill=_plain_dict(data.get("pending_skill", {})),
+            turn_start_user_id=(
+                None
+                if data.get("turn_start_user_id") is None
+                else _string(data["turn_start_user_id"], "turn_start_user_id")
+            ),
+            turn_start_score_cards=_string_list(
+                turn_start_score_cards,
+                "turn_start_score_cards",
+            ),
+            turn_start_character_cards=_string_list(
+                turn_start_character_cards,
+                "turn_start_character_cards",
+            ),
+            last_turn_user_id=(
+                None
+                if data.get("last_turn_user_id") is None
+                else _string(data["last_turn_user_id"], "last_turn_user_id")
+            ),
+            last_turn_score_cards_before=_string_list(
+                last_turn_score_cards_before,
+                "last_turn_score_cards_before",
+            ),
+            last_turn_character_cards_before=_string_list(
+                last_turn_character_cards_before,
+                "last_turn_character_cards_before",
+            ),
             seed=_integer(data.get("seed", 0), "seed"),
             created_at=_number(data.get("created_at", 0.0), "created_at"),
             updated_at=_number(data.get("updated_at", 0.0), "updated_at"),

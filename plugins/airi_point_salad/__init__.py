@@ -5,7 +5,7 @@ import re
 
 import nonebot
 from nonebot import get_driver, logger, on_regex
-from nonebot.adapters.onebot.v11 import Bot, MessageSegment
+from nonebot.adapters.onebot.v11 import Bot, Message, MessageSegment
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 from nonebot.plugin import PluginMetadata
 
@@ -16,7 +16,8 @@ from .game import GameError
 from .help import help_sections
 from .models import GameMode, GameSpeed, GameState, Phase
 from .persistence import GameStore
-from .renderer import render_board, render_result
+from .message_retention import MessageRetention
+from .renderer import render_board_images, render_result, render_turn_change
 from .service import GameService
 
 
@@ -47,6 +48,7 @@ __plugin_meta__ = PluginMetadata(
 service = GameService(
     GameStore(Path("data/airi_point_salad/games.pk"))
 )
+message_retention = MessageRetention()
 try:
     driver = get_driver()
 except ValueError:
@@ -62,17 +64,28 @@ COVER_PATH = Path(__file__).resolve().parent / "assets" / "cover.png"
 
 @dataclass(frozen=True, slots=True)
 class CommandResponse:
-    body: str
+    body: str | tuple[str, ...]
     turn_user_id: str | None = None
+    turn_notice: str | None = None
 
 
 def response_message(response: CommandResponse):
+    segments = Message()
+    if response.turn_notice is not None:
+        segments += MessageSegment.image(response.turn_notice)
+    if response.turn_user_id is not None:
+        segments += MessageSegment.at(response.turn_user_id)
+    if isinstance(response.body, tuple):
+        for item in response.body:
+            segments += MessageSegment.image(item)
+        return segments
     if not response.body.startswith("base64://"):
+        if len(segments):
+            segments += MessageSegment.text(response.body)
+            return segments
         return response.body
-    image = MessageSegment.image(response.body)
-    if response.turn_user_id is None:
-        return image
-    return MessageSegment.at(response.turn_user_id) + image
+    segments += MessageSegment.image(response.body)
+    return segments
 
 
 def detailed_help_nodes(bot_id: str) -> list[dict]:
@@ -96,26 +109,36 @@ def detailed_help_nodes(bot_id: str) -> list[dict]:
     return nodes
 
 
-async def send_detailed_help(bot: Bot, group_id: int) -> str | None:
+async def send_detailed_help(bot: Bot, group_id: int) -> tuple[str | None, str | None]:
     try:
-        await bot.send_group_forward_msg(
+        receipt = await bot.send_group_forward_msg(
             group_id=group_id,
             messages=detailed_help_nodes(bot.self_id),
         )
     except Exception as error:
         logger.opt(exception=error).error("得分沙拉详细帮助发送失败")
-        return "得分沙拉详细帮助暂时无法发送，请稍后重试"
-    return None
+        return "得分沙拉详细帮助暂时无法发送，请稍后重试", None
+    return None, receipt_message_id(receipt)
 
 
-def render_state(state: GameState, viewer_id: str) -> str:
+def receipt_message_id(receipt) -> str | None:
+    if isinstance(receipt, dict):
+        message_id = receipt.get("message_id")
+    elif receipt is not None:
+        message_id = getattr(receipt, "message_id", None)
+    else:
+        message_id = None
+    return None if message_id is None else str(message_id)
+
+
+def render_state(state: GameState, viewer_id: str) -> str | tuple[str, str]:
     if state.phase is Phase.PLAYING:
-        return render_board(state, viewer_id)
+        return render_board_images(state, viewer_id)
     if state.phase is Phase.FINISHED:
         if state.cards:
             return render_result(state)
         return "得分沙拉房间已关闭"
-    return render_board(state, viewer_id)
+    return render_board_images(state, viewer_id)
 
 
 async def execute_command(
@@ -125,8 +148,9 @@ async def execute_command(
     user_name: str,
     is_admin: bool,
 ) -> CommandResponse:
-    def prepare(state, turn_user_id):
-        return CommandResponse(render_state(state, user_id), turn_user_id)
+    def prepare(state, turn_user_id, before=None):
+        notice = render_turn_change(before, state) if turn_user_id is not None else None
+        return CommandResponse(render_state(state, user_id), turn_user_id, notice)
 
     if command.action == "create":
         return await service.create(
@@ -173,11 +197,34 @@ async def handle_salad(bot: Bot, event: MessageEvent):
     user_id = str(event.user_id)
     user_name = event.sender.card or event.sender.nickname or user_id
     is_admin = event.sender.role in {"owner", "admin"}
+    token = message_retention.reserve(group_id, str(event.message_id))
+
+    async def delete(message_id):
+        await bot.call_api(
+            "delete_msg",
+            message_id=int(message_id) if str(message_id).isdigit() else message_id,
+        )
+
+    was_playing = (
+        group_id in service.games
+        and service.games[group_id].phase is Phase.PLAYING
+    )
+    if was_playing:
+        await message_retention.activate(group_id, token, delete)
     try:
         command = parse_command(event.get_plaintext())
         if command.action == "rules":
-            error_message = await send_detailed_help(bot, event.group_id)
+            error_message, bot_message_id = await send_detailed_help(bot, event.group_id)
             if error_message is None:
+                if was_playing:
+                    await message_retention.complete(
+                        group_id,
+                        token,
+                        bot_message_id,
+                        delete,
+                    )
+                else:
+                    message_retention.cancel(group_id, token)
                 return
             response = CommandResponse(error_message)
         else:
@@ -193,10 +240,34 @@ async def handle_salad(bot: Bot, event: MessageEvent):
     except Exception as error:
         logger.opt(exception=error).error("得分沙拉指令处理失败")
         response = CommandResponse("得分沙拉暂时无法处理这次操作，请稍后重试")
-    await salad.finish(response_message(response))
+    current = service.games.get(group_id)
+    playing = current is not None and current.phase is Phase.PLAYING
+    if playing and not was_playing:
+        await message_retention.activate(group_id, token, delete)
+    try:
+        receipt = await bot.send(event, response_message(response))
+    except Exception as error:
+        logger.opt(exception=error).error("得分沙拉回复发送失败")
+        if playing or was_playing:
+            await message_retention.complete(group_id, token, None, delete)
+        else:
+            message_retention.cancel(group_id, token)
+        return
+    if playing or was_playing:
+        await message_retention.complete(
+            group_id,
+            token,
+            receipt_message_id(receipt),
+            delete,
+        )
+        if not playing:
+            message_retention.clear(group_id)
+    else:
+        message_retention.cancel(group_id, token)
 
 
 async def notify_timeout(group_id: str, phase: Phase) -> None:
+    message_retention.clear(group_id)
     label = "大厅" if phase is Phase.LOBBY else "对局"
     message = f"得分沙拉{label}因长时间无人操作已自动关闭"
     for bot in nonebot.get_bots().values():

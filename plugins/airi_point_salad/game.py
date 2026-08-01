@@ -73,6 +73,7 @@ def start_game(state: GameState, user_id: str, now: float) -> None:
 
         assign_centers(state)
         initialize_missions(state)
+    snapshot_turn_start(state)
     state.updated_at = now
 
 
@@ -241,6 +242,11 @@ def finish_action(
     allow_post_flip: bool = True,
 ) -> None:
     player = state.players[state.current_player]
+    state.last_turn_user_id = state.turn_start_user_id or player.user_id
+    state.last_turn_score_cards_before = list(state.turn_start_score_cards)
+    state.last_turn_character_cards_before = list(
+        state.turn_start_character_cards
+    )
     if state.mode is GameMode.MIX and summary is not None:
         from .missions import claim_completed_mission
 
@@ -260,6 +266,14 @@ def finish_action(
     state.current_player = (state.current_player + 1) % len(state.players)
     state.turn_number += 1
     state.turn_flips = 0
+    snapshot_turn_start(state)
+
+
+def snapshot_turn_start(state: GameState) -> None:
+    player = state.players[state.current_player]
+    state.turn_start_user_id = player.user_id
+    state.turn_start_score_cards = list(player.score_cards)
+    state.turn_start_character_cards = list(player.character_cards)
 
 
 def close_post_flip_window(state: GameState, user_id: str) -> None:

@@ -1,8 +1,10 @@
 import asyncio
 import copy
+import inspect
 from pathlib import Path
 import time
 from typing import Any
+import weakref
 
 from .game import (
     GameError,
@@ -28,21 +30,22 @@ class GameService:
     def __init__(self, store: GameStore | None = None):
         self.store = store or GameStore(Path("data/airi_point_salad/games.pk"))
         self.games: dict[str, GameState] = {}
-        self.locks: dict[str, asyncio.Lock] = {}
+        self.locks = weakref.WeakValueDictionary()
         self.timers: dict[str, asyncio.TimerHandle] = {}
         self.timeout_callback = None
 
     async def load(self) -> None:
         self.games = await self.store.load()
         now = time.time()
-        expired = [
+        removable = [
             group_id
             for group_id, state in self.games.items()
-            if now - state.updated_at >= self._timeout_for(state)
+            if state.phase is Phase.FINISHED
+            or now - state.updated_at >= self._timeout_for(state)
         ]
-        for group_id in expired:
+        for group_id in removable:
             self.games.pop(group_id, None)
-        if expired:
+        if removable:
             await self.store.save(self.games)
         for group_id in self.games:
             self._schedule_timeout(group_id)
@@ -200,11 +203,23 @@ class GameService:
                 )
                 prepared = result
                 if prepare is not None:
-                    prepared = await asyncio.to_thread(
-                        prepare,
+                    prepare_args = (
                         copy.deepcopy(result),
                         turn_user_id,
                     )
+                    parameters = tuple(inspect.signature(prepare).parameters.values())
+                    accepts_before = len(parameters) >= 3 or any(
+                        parameter.kind is inspect.Parameter.VAR_POSITIONAL
+                        for parameter in parameters
+                    )
+                    if accepts_before:
+                        prepare_args += (copy.deepcopy(before) if before_exists else None,)
+                    prepared = await asyncio.to_thread(
+                        prepare,
+                        *prepare_args,
+                    )
+                if result.phase is Phase.FINISHED:
+                    self.games.pop(group_id, None)
                 await self.store.save(self.games)
             except Exception:
                 if not before_exists:

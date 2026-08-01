@@ -2,7 +2,7 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageOps
 
-from plugins.airi_point_salad.card_renderer import font, render_character_front, render_score_back
+from plugins.airi_point_salad.card_renderer import font, render_character_front, render_character_icon, render_score_back
 from plugins.airi_point_salad.cards import load_catalog
 from plugins.airi_point_salad.game import create_game, start_game
 from plugins.airi_point_salad.models import Character, GameMode, GameSpeed, PlayerState, RuleKind
@@ -139,11 +139,11 @@ def build_centers():
         x = 80 + column * 510
         y = 220 + row * 300
         draw.rounded_rectangle((x, y, x + 470, y + 245), 34, fill=(255, 255, 255, 235), outline=(PINK, BLUE, MINT)[column], width=5)
-        portrait = render_character_front(character).resize((130, 182), Image.Resampling.LANCZOS)
-        image.alpha_composite(portrait, (x + 24, y + 28))
+        portrait = render_character_icon(character, 150)
+        image.alpha_composite(portrait, (x + 25, y + 48))
         name = "Airi" if character is Character.AIRI else character.short_name
-        draw.text((x + 180, y + 70), name, font=font(38), anchor="lm", fill=INK)
-        draw.multiline_text((x + 180, y + 145), label, font=font(23), anchor="lm", fill=MUTED, spacing=10)
+        draw.text((x + 205, y + 70), name, font=font(38), anchor="lm", fill=INK)
+        draw.multiline_text((x + 205, y + 145), label, font=font(23), anchor="lm", fill=MUTED, spacing=10)
     save(image, "center-skills.png")
 
 
