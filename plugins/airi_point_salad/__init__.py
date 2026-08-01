@@ -11,6 +11,7 @@ from nonebot.plugin import PluginMetadata
 
 from .commands import Command, CommandError, parse_command
 from .game import GameError
+from .help import help_sections
 from .models import GameMode, GameSpeed, GameState, Phase
 from .persistence import GameStore
 from .renderer import render_board, render_result
@@ -69,6 +70,32 @@ def response_message(response: CommandResponse):
     return MessageSegment.at(response.turn_user_id) + image
 
 
+def detailed_help_nodes(bot_id: str) -> list[dict]:
+    return [
+        {
+            "type": "node",
+            "data": {
+                "name": title,
+                "uin": bot_id,
+                "content": body,
+            },
+        }
+        for title, body in help_sections()
+    ]
+
+
+async def send_detailed_help(bot: Bot, group_id: int) -> str | None:
+    try:
+        await bot.send_group_forward_msg(
+            group_id=group_id,
+            messages=detailed_help_nodes(bot.self_id),
+        )
+    except Exception as error:
+        logger.opt(exception=error).error("得分沙拉详细帮助发送失败")
+        return "得分沙拉详细帮助暂时无法发送，请稍后重试"
+    return None
+
+
 def render_state(state: GameState, viewer_id: str) -> str:
     if state.phase is Phase.PLAYING:
         return render_board(state, viewer_id)
@@ -121,7 +148,7 @@ async def execute_command(
         state = await service.board_state(group_id)
         body = await asyncio.to_thread(render_state, state, user_id)
         return CommandResponse(body)
-    if command.action == "rules":
+    if command.action == "summary":
         return CommandResponse(await service.rules_text(group_id))
     raise CommandError("未知指令，请使用 ,sl rl 查看规则")
 
@@ -136,13 +163,19 @@ async def handle_salad(bot: Bot, event: MessageEvent):
     is_admin = event.sender.role in {"owner", "admin"}
     try:
         command = parse_command(event.get_plaintext())
-        response = await execute_command(
-            command,
-            group_id,
-            user_id,
-            user_name,
-            is_admin,
-        )
+        if command.action == "rules":
+            error_message = await send_detailed_help(bot, event.group_id)
+            if error_message is None:
+                return
+            response = CommandResponse(error_message)
+        else:
+            response = await execute_command(
+                command,
+                group_id,
+                user_id,
+                user_name,
+                is_admin,
+            )
     except (CommandError, GameError) as error:
         response = CommandResponse(str(error))
     except Exception as error:

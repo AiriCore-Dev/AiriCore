@@ -68,7 +68,7 @@ def parse_command(text: str) -> Command:
     if not tokens or tokens[0].casefold() not in {item.casefold() for item in ALIASES["root"]}:
         raise CommandError("请使用 ,沙拉、,salad 或 ,sl 开头")
     if len(tokens) == 1:
-        return Command("rules", [])
+        return Command("summary", [])
     action = normalize(tokens[1])
     raw_args = tokens[2:]
     if action == "create":

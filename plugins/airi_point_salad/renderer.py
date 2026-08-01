@@ -202,6 +202,37 @@ def _build_score_back(card: Card) -> Image.Image:
     for icon in icons:
         image.alpha_composite(icon, (icon_x, 270))
         icon_x += SCORE_ICON_SIZE + gap
+    if card.rule.kind is RuleKind.RISK:
+        risk_font = font(SCORE_RULE_FONT_SIZE)
+        for y, (text, value) in zip((610, 735), risk_rule_lines(card)):
+            text_box = draw.textbbox((0, 0), text, font=risk_font)
+            value_box = draw.textbbox((0, 0), value, font=risk_font)
+            text_width = text_box[2] - text_box[0]
+            value_width = value_box[2] - value_box[0]
+            gap_width = 28
+            left = (CARD_SIZE[0] - text_width - gap_width - value_width) // 2
+            draw.text(
+                (left, y),
+                text,
+                font=risk_font,
+                anchor="lm",
+                fill=(48, 43, 49),
+            )
+            draw.text(
+                (left + text_width + gap_width, y),
+                value,
+                font=risk_font,
+                anchor="lm",
+                fill=(205, 52, 62),
+            )
+        draw.text(
+            (375, 985),
+            card.card_id.upper(),
+            font=font(32),
+            anchor="mm",
+            fill=(117, 98, 119),
+        )
+        return image
     text, score = rule_text(card)
     draw.multiline_text(
         (375, 600),
@@ -259,10 +290,17 @@ def rule_text(card: Card) -> tuple[str, str]:
     if rule.kind is RuleKind.SET:
         return "每组三名角色", f"+{rule.points}"
     if rule.kind is RuleKind.COMPARE:
-        return f"{names[0]} {rule.relation}\n{names[1]}", f"+{rule.points}"
+        return f"{names[0]} {rule.relation} {names[1]}", f"+{rule.points}"
+    lines = risk_rule_lines(card)
+    return "\n".join(f"{text} {value}" for text, value in lines), ""
+
+
+def risk_rule_lines(card: Card) -> tuple[tuple[str, str], tuple[str, str]]:
+    rule = card.rule
+    names = [character.short_name for character in rule.characters]
     return (
-        f"每个 {names[0]} ＋{rule.points}\n每个 {names[1]}\n{rule.penalty}",
-        "风险牌",
+        (f"每个 {names[0]}", f"{rule.points:+d}"),
+        (f"每个 {names[1]}", f"{rule.penalty:+d}"),
     )
 
 
