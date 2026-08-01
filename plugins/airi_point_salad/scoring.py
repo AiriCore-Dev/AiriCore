@@ -105,12 +105,19 @@ def score_player(state: GameState, player: PlayerState) -> ScoreBreakdown:
     except ValueError:
         all_counts = (*all_counts, character_counts(state, player))
         player_index = len(all_counts) - 1
-    return _score_player(state, player, all_counts[player_index], all_counts)
+    return _score_player(
+        state,
+        player,
+        player_index,
+        all_counts[player_index],
+        all_counts,
+    )
 
 
 def _score_player(
     state: GameState,
     player: PlayerState,
+    player_index: int,
     base_counts: dict[Character, int],
     all_counts: tuple[dict[Character, int], ...],
 ) -> ScoreBreakdown:
@@ -119,10 +126,16 @@ def _score_player(
     card_scores = []
     for card_id in player.score_cards:
         counts = dict(base_counts)
+        comparison_counts = all_counts
         if card_id == wildcard_card and wildcard_character:
             character = Character(wildcard_character)
             counts[character] = counts.get(character, 0) + 1
-        points = score_rule(state.cards[card_id].rule, counts, all_counts)
+            comparison_counts = (
+                *all_counts[:player_index],
+                counts,
+                *all_counts[player_index + 1 :],
+            )
+        points = score_rule(state.cards[card_id].rule, counts, comparison_counts)
         card_scores.append(CardScore(card_id, points))
     total = sum(item.points for item in card_scores) + player.mission_points
     return ScoreBreakdown(player.user_id, tuple(card_scores), player.mission_points, total)
@@ -131,7 +144,10 @@ def _score_player(
 def rank_players(state: GameState) -> list[RankedPlayer]:
     all_counts = tuple(character_counts(state, player) for player in state.players)
     scored = [
-        (player, _score_player(state, player, all_counts[index], all_counts))
+        (
+            player,
+            _score_player(state, player, index, all_counts[index], all_counts),
+        )
         for index, player in enumerate(state.players)
     ]
     scored.sort(
