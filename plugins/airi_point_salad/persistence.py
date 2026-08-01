@@ -45,6 +45,7 @@ class GameStore:
                 games = await asyncio.to_thread(
                     self._read_pickle, self.backup_path
                 )
+                await self._quarantine(self.path, self.path.suffix)
                 logger.warning("得分沙拉已从备份存档恢复")
                 return games
             except Exception as backup_error:
