@@ -186,11 +186,22 @@ class GameService:
         async with lock:
             before_exists = group_id in self.games
             before = copy.deepcopy(self.games[group_id]) if before_exists else None
+            before_turn_user_id = self._turn_user_id(before)
             try:
                 result = operation()
+                after_turn_user_id = self._turn_user_id(result)
+                turn_user_id = (
+                    after_turn_user_id
+                    if after_turn_user_id != before_turn_user_id
+                    else None
+                )
                 prepared = result
                 if prepare is not None:
-                    prepared = await asyncio.to_thread(prepare, copy.deepcopy(result))
+                    prepared = await asyncio.to_thread(
+                        prepare,
+                        copy.deepcopy(result),
+                        turn_user_id,
+                    )
                 await self.store.save(self.games)
             except Exception:
                 if not before_exists:
@@ -200,6 +211,12 @@ class GameService:
                 raise
             self._schedule_timeout(group_id)
             return prepared
+
+    @staticmethod
+    def _turn_user_id(state: GameState | None) -> str | None:
+        if state is None or state.phase is not Phase.PLAYING:
+            return None
+        return state.players[state.current_player].user_id
 
     def _require_state(self, group_id: str) -> GameState:
         state = self.games.get(group_id)

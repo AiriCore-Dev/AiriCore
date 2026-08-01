@@ -1,4 +1,5 @@
 import asyncio
+from dataclasses import dataclass
 from pathlib import Path
 import re
 
@@ -53,6 +54,21 @@ salad = on_regex(
 )
 
 
+@dataclass(frozen=True, slots=True)
+class CommandResponse:
+    body: str
+    turn_user_id: str | None = None
+
+
+def response_message(response: CommandResponse):
+    if not response.body.startswith("base64://"):
+        return response.body
+    image = MessageSegment.image(response.body)
+    if response.turn_user_id is None:
+        return image
+    return MessageSegment.at(response.turn_user_id) + image
+
+
 def render_state(state: GameState, viewer_id: str) -> str:
     if state.phase is Phase.PLAYING:
         return render_board(state, viewer_id)
@@ -69,9 +85,9 @@ async def execute_command(
     user_id: str,
     user_name: str,
     is_admin: bool,
-) -> str:
-    def prepare(state):
-        return render_state(state, user_id)
+) -> CommandResponse:
+    def prepare(state, turn_user_id):
+        return CommandResponse(render_state(state, user_id), turn_user_id)
 
     if command.action == "create":
         return await service.create(
@@ -103,9 +119,10 @@ async def execute_command(
         )
     if command.action == "board":
         state = await service.board_state(group_id)
-        return await asyncio.to_thread(render_state, state, user_id)
+        body = await asyncio.to_thread(render_state, state, user_id)
+        return CommandResponse(body)
     if command.action == "rules":
-        return await service.rules_text(group_id)
+        return CommandResponse(await service.rules_text(group_id))
     raise CommandError("未知指令，请使用 sl rl 查看规则")
 
 
@@ -127,13 +144,11 @@ async def handle_salad(bot: Bot, event: MessageEvent):
             is_admin,
         )
     except (CommandError, GameError) as error:
-        response = str(error)
+        response = CommandResponse(str(error))
     except Exception as error:
         logger.opt(exception=error).error("得分沙拉指令处理失败")
-        response = "得分沙拉暂时无法处理这次操作，请稍后重试"
-    if response.startswith("base64://"):
-        await salad.finish(MessageSegment.image(response))
-    await salad.finish(response)
+        response = CommandResponse("得分沙拉暂时无法处理这次操作，请稍后重试")
+    await salad.finish(response_message(response))
 
 
 async def notify_timeout(group_id: str, phase: Phase) -> None:
