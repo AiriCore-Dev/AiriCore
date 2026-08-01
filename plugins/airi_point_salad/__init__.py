@@ -9,6 +9,8 @@ from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 from nonebot.plugin import PluginMetadata
 
+from utils.asset_cache import get_b64
+
 from .commands import Command, CommandError, parse_command
 from .game import GameError
 from .help import help_sections
@@ -20,6 +22,8 @@ from .service import GameService
 
 USAGE = (
     "MORE MORE JUMP！得分沙拉\n"
+    "普通模式使用官方基础规则；混合模式增加 Center 与 Live Mission\n"
+    "快速/标准只改变牌量：每种角色为人数 × 2 / 人数 × 3\n"
     "创建：,沙拉 创建 快速 原版\n"
     "等价：,salad create quick classic\n"
     "缩写：,sl cr qk cl\n"
@@ -53,6 +57,7 @@ salad = on_regex(
     priority=12,
     block=True,
 )
+COVER_PATH = Path(__file__).resolve().parent / "assets" / "cover.png"
 
 
 @dataclass(frozen=True, slots=True)
@@ -71,17 +76,24 @@ def response_message(response: CommandResponse):
 
 
 def detailed_help_nodes(bot_id: str) -> list[dict]:
-    return [
-        {
+    nodes = []
+    for index, (title, body) in enumerate(help_sections()):
+        content = body
+        if index == 0:
+            cover = get_b64(COVER_PATH)
+            if cover is None:
+                logger.warning("得分沙拉帮助封面缺失，已降级为纯文本")
+            else:
+                content = MessageSegment.text(body) + MessageSegment.image(cover)
+        nodes.append({
             "type": "node",
             "data": {
                 "name": title,
                 "uin": bot_id,
-                "content": body,
+                "content": content,
             },
-        }
-        for title, body in help_sections()
-    ]
+        })
+    return nodes
 
 
 async def send_detailed_help(bot: Bot, group_id: int) -> str | None:

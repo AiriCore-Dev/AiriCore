@@ -154,9 +154,11 @@ class GameService:
 
     async def rules_text(self, group_id: str | None = None) -> str:
         lines = [
-            "MORE MORE JUMP！得分沙拉｜2–6 人",
-            "每回合可先翻一张自己的计分牌，再选择：拿一张 A/B/C 列计分牌，或拿两张 A1–C2 角色牌。",
-            "牌库与市场清空后，按计分牌、角色组合与 Mission 总分排名。混合模式另有一次性 Center 技能和公开 Live Mission。",
+            "MORE MORE JUMP！得分沙拉｜2–6 人｜官方 108 张卡牌",
+            "快速和标准只改变牌量；普通模式使用官方基础规则，混合模式在其上加入 Center 与 Live Mission。",
+            "三叠独立牌库按列补牌；空堆从最大牌堆拆出下半部分。每回合拿一张计分牌或两张角色牌。",
+            "每回合最多翻一张计分牌，可在行动前或行动后翻；下一名玩家首次有效行动会关闭上一人的后置窗口。",
+            "牌库与市场清空后结算十二类官方计分；同分时最后行动顺序较晚者优先。",
             "创建：创建/create/cr + 快速/quick/qk 或 标准/standard/std + 原版/classic/cl 或 混合/mix/mx",
             "房间：加入/join/j · 退出/leave/lv · 开始/start/st · 结束/stop/sp",
             "行动：拿/take/ta · 翻/flip/fl · 技能/skill/sk",
@@ -172,7 +174,7 @@ class GameService:
                     player = state.players[state.current_player]
                     if player.center is not None and not player.skill_used:
                         lines.append(f"当前 Center 技能：{skill_usage(player.center)}")
-        return "\n".join(lines)
+        return "\n\n".join(lines)
 
     async def _state_mutation(self, group_id, action, prepare):
         def operation():
