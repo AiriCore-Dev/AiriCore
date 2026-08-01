@@ -2,7 +2,7 @@ import base64
 from collections import Counter
 from io import BytesIO
 
-from PIL import Image, ImageDraw, ImageFilter, ImageOps
+from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageOps
 
 from utils.asset_cache import get_font, get_image_copy
 from utils.cache_mode import (
@@ -29,6 +29,9 @@ from .scoring import rank_players
 
 
 CARD_SIZE = (750, 1050)
+CARD_CORNER_RADIUS = 24
+CARD_CORNER_SCALE = 4
+PORTRAIT_SHADOW_OPACITY = 0.65
 BOARD_WIDTH = 2160
 MARKET_SCORE_SIZE = (432, 605)
 MARKET_CHARACTER_SIZE = (252, 353)
@@ -88,6 +91,20 @@ def gradient(size, top, bottom):
     return ImageOps.colorize(layer, top, bottom).convert("RGBA")
 
 
+def _round_card_corners(image: Image.Image) -> Image.Image:
+    width, height = image.size
+    scale = CARD_CORNER_SCALE
+    mask = Image.new("L", (width * scale, height * scale))
+    ImageDraw.Draw(mask).rounded_rectangle(
+        (0, 0, width * scale - 1, height * scale - 1),
+        radius=CARD_CORNER_RADIUS * scale,
+        fill=255,
+    )
+    mask = mask.resize((width, height), Image.Resampling.LANCZOS)
+    image.putalpha(ImageChops.multiply(image.getchannel("A"), mask))
+    return image
+
+
 def _configure_render_cache() -> None:
     _render_cache.max_bytes = 0 if is_ram() else get_cache_budget_bytes("images")
     _render_cache.probationary = is_balanced()
@@ -113,7 +130,10 @@ def _build_character_front(character: Character) -> Image.Image:
     x = (CARD_SIZE[0] - art.width) // 2
     y = max(45, 885 - art.height)
     shadow = Image.new("RGBA", art.size)
-    shadow.putalpha(art.getchannel("A").filter(ImageFilter.GaussianBlur(14)))
+    shadow_alpha = art.getchannel("A").filter(ImageFilter.GaussianBlur(14))
+    shadow.putalpha(
+        shadow_alpha.point(lambda value: round(value * PORTRAIT_SHADOW_OPACITY))
+    )
     image.alpha_composite(shadow, (x + 10, y + 14))
     image.alpha_composite(art, (x, y))
     nameplate = get_image_copy(NAMEPLATE_PATH).convert("RGBA")
@@ -141,7 +161,7 @@ def _build_character_front(character: Character) -> Image.Image:
         stroke_width=1,
         stroke_fill=(71, 52, 69),
     )
-    return image
+    return _round_card_corners(image)
 
 
 def render_character_front(character: Character) -> Image.Image:
@@ -232,7 +252,7 @@ def _build_score_back(card: Card) -> Image.Image:
             anchor="mm",
             fill=(117, 98, 119),
         )
-        return image
+        return _round_card_corners(image)
     text, score = rule_text(card)
     draw.multiline_text(
         (375, 600),
@@ -257,7 +277,7 @@ def _build_score_back(card: Card) -> Image.Image:
         anchor="mm",
         fill=(117, 98, 119),
     )
-    return image
+    return _round_card_corners(image)
 
 
 def _score_cache_key(card: Card):
