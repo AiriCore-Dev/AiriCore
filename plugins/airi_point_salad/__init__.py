@@ -19,15 +19,15 @@ from .service import GameService
 
 USAGE = (
     "MORE MORE JUMP！得分沙拉\n"
-    "创建：沙拉 创建 快速 原版\n"
-    "等价：salad create quick classic\n"
-    "缩写：sl cr qk cl\n"
-    "加入/退出：sl j / sl lv\n"
-    "开始/结束：sl st / sl sp\n"
-    "拿牌：sl ta A / sl ta A1 B2\n"
-    "翻牌：sl fl 2\n"
-    "技能：sl sk\n"
-    "桌面/规则：sl bd / sl rl"
+    "创建：,沙拉 创建 快速 原版\n"
+    "等价：,salad create quick classic\n"
+    "缩写：,sl cr qk cl\n"
+    "加入/退出：,sl j / ,sl lv\n"
+    "开始/结束：,sl st / ,sl sp\n"
+    "拿牌：,sl ta A / ,sl ta A1 B2\n"
+    "翻牌：,sl fl 2\n"
+    "技能：,sl sk\n"
+    "桌面/规则：,sl bd / ,sl rl"
 )
 
 
@@ -47,7 +47,7 @@ try:
 except ValueError:
     driver = None
 salad = on_regex(
-    r"^\s*(?:沙拉|salad|sl)(?:\s+|$)",
+    r"^\s*,\s*(?:沙拉|salad|sl)(?:\s+|$)",
     flags=re.IGNORECASE,
     priority=12,
     block=True,
@@ -123,7 +123,7 @@ async def execute_command(
         return CommandResponse(body)
     if command.action == "rules":
         return CommandResponse(await service.rules_text(group_id))
-    raise CommandError("未知指令，请使用 sl rl 查看规则")
+    raise CommandError("未知指令，请使用 ,sl rl 查看规则")
 
 
 @salad.handle()

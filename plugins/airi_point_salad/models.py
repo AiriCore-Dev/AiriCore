@@ -23,6 +23,17 @@ class Character(str, Enum):
             Character.RIN: "镜音铃",
         }[self]
 
+    @property
+    def short_name(self) -> str:
+        return {
+            Character.MINORI: "实乃理",
+            Character.HARUKA: "遥",
+            Character.AIRI: "爱莉",
+            Character.SHIZUKU: "雫",
+            Character.MIKU: "未来",
+            Character.RIN: "铃",
+        }[self]
+
 
 class GameSpeed(str, Enum):
     QUICK = "quick"

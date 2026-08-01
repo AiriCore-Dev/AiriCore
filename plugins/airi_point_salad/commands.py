@@ -61,9 +61,12 @@ class CommandError(ValueError):
 
 
 def parse_command(text: str) -> Command:
-    tokens = text.strip().split()
+    stripped = text.strip()
+    if not stripped.startswith(","):
+        raise CommandError("请使用 ,沙拉、,salad 或 ,sl 开头")
+    tokens = stripped[1:].lstrip().split()
     if not tokens or tokens[0].casefold() not in {item.casefold() for item in ALIASES["root"]}:
-        raise CommandError("请使用 沙拉、salad 或 sl 开头")
+        raise CommandError("请使用 ,沙拉、,salad 或 ,sl 开头")
     if len(tokens) == 1:
         return Command("rules", [])
     action = normalize(tokens[1])
@@ -73,14 +76,14 @@ def parse_command(text: str) -> Command:
     if action == "take":
         return parse_take(raw_args)
     if action == "flip":
-        return Command(action, [parse_index(raw_args, "sl fl 2")])
+        return Command(action, [parse_index(raw_args, ",sl fl 2")])
     if action == "skill":
         return Command(action, [parse_skill_arg(item) for item in raw_args])
     if action in {"join", "leave", "start", "board", "rules", "stop"}:
         if raw_args:
             raise CommandError(f"{tokens[1]} 不需要额外参数")
         return Command(action, [])
-    raise CommandError("未知指令，请使用 sl rl 查看规则")
+    raise CommandError("未知指令，请使用 ,sl rl 查看规则")
 
 
 def normalize(token: str) -> str:
@@ -89,17 +92,17 @@ def normalize(token: str) -> str:
 
 def parse_create(args: list[str]) -> Command:
     if len(args) != 2:
-        raise CommandError("创建格式：sl cr qk cl")
+        raise CommandError("创建格式：,sl cr qk cl")
     speed = normalize(args[0])
     mode = normalize(args[1])
     if speed not in {"quick", "standard"} or mode not in {"classic", "mix"}:
-        raise CommandError("创建格式：sl cr qk cl")
+        raise CommandError("创建格式：,sl cr qk cl")
     return Command("create", [speed, mode])
 
 
 def parse_take(args: list[str]) -> Command:
     if not args:
-        raise CommandError("拿牌格式：sl ta A 或 sl ta A1 B2")
+        raise CommandError("拿牌格式：,sl ta A 或 ,sl ta A1 B2")
     if len(args) == 1 and re.fullmatch(r"[abc]", args[0], re.IGNORECASE):
         return Command("take", [ord(args[0].upper()) - ord("A")])
     if (
@@ -114,7 +117,7 @@ def parse_take(args: list[str]) -> Command:
     try:
         slots = [parse_slot(item) for item in args]
     except CommandError:
-        raise CommandError("拿牌格式：sl ta A 或 sl ta A1 B2") from None
+        raise CommandError("拿牌格式：,sl ta A 或 ,sl ta A1 B2") from None
     return Command("take", slots)
 
 
@@ -141,4 +144,4 @@ def parse_skill_arg(token: str) -> Any:
         return character
     if token.isdigit() and int(token) >= 1:
         return int(token) - 1
-    raise CommandError("技能参数无效，请先发送 sl sk 查看示例")
+    raise CommandError("技能参数无效，请先发送 ,sl sk 查看示例")

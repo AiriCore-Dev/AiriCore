@@ -251,7 +251,7 @@ def render_score_back(card: Card) -> Image.Image:
 
 def rule_text(card: Card) -> tuple[str, str]:
     rule = card.rule
-    names = [character.display_name for character in rule.characters]
+    names = [character.short_name for character in rule.characters]
     if rule.kind is RuleKind.EACH:
         return f"每个 {names[0]}", f"+{rule.points}"
     if rule.kind is RuleKind.PAIR:
@@ -271,9 +271,9 @@ def center_status(state: GameState, player: PlayerState) -> str:
         return "已使用"
     if state.pending_skill.get("user_id") == player.user_id:
         return {
-            "airi_armed": "已准备：sl ta A A1",
-            "minori_armed": "已准备：先 sl ta A1 B2",
-            "minori_swap": "待交换：sl sk A1 C2",
+            "airi_armed": "已准备：,sl ta A A1",
+            "minori_armed": "已准备：先 ,sl ta A1 B2",
+            "minori_swap": "待交换：,sl sk A1 C2",
         }.get(state.pending_skill.get("kind"), "待完成")
     return "可使用"
 
@@ -328,7 +328,7 @@ def render_board(state: GameState, _viewer_id: str) -> str:
         status = center_status(state, current)
         draw.text(
             (2030, 335),
-            f"Center：{current.center.display_name} · {status}",
+            f"Center：{current.center.short_name} · {status}",
             font=font(36),
             anchor="rm",
             fill=(73, 112, 122),
@@ -465,7 +465,7 @@ def render_board(state: GameState, _viewer_id: str) -> str:
         score_y += DETAIL_LINE_HEIGHT
     counts = Counter(state.cards[card_id].character for card_id in current.character_cards)
     details = "  ".join(
-        f"{character.display_name}×{counts.get(character, 0)}"
+        f"{character.short_name}×{counts.get(character, 0)}"
         for character in Character
     )
     draw.text(
@@ -477,7 +477,7 @@ def render_board(state: GameState, _viewer_id: str) -> str:
     )
     draw.text(
         (1080, score_y + 115),
-        "sl ta A · sl ta A1 B2 · sl fl 2 · sl sk",
+        ",sl ta A · ,sl ta A1 B2 · ,sl fl 2 · ,sl sk",
         font=font(32),
         anchor="mm",
         fill=(114, 99, 116),

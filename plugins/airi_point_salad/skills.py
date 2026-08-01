@@ -30,12 +30,12 @@ def assign_centers(state: GameState) -> None:
 
 def skill_usage(center: Character) -> str:
     return {
-        Character.MINORI: "sl sk，然后正常拿角色牌，再按提示交换",
-        Character.HARUKA: "sl sk A",
-        Character.AIRI: "sl sk，然后使用 sl ta A A1",
-        Character.SHIZUKU: "sl sk 2",
-        Character.MIKU: "sl sk 2 rin",
-        Character.RIN: "sl sk A1 B2 C1",
+        Character.MINORI: ",sl sk，然后正常拿角色牌，再按提示交换",
+        Character.HARUKA: ",sl sk A",
+        Character.AIRI: ",sl sk，然后使用 ,sl ta A A1",
+        Character.SHIZUKU: ",sl sk 2",
+        Character.MIKU: ",sl sk 2 rin",
+        Character.RIN: ",sl sk A1 B2 C1",
     }[center]
 
 
@@ -66,7 +66,7 @@ def _arm(state, player, args, kind, now):
     if state.pending_skill:
         raise GameError("已有待完成的技能操作")
     if kind == "airi_armed" and state.turn_flips:
-        raise GameError("本回合已经翻过牌，不能再发动桃井爱莉技能")
+        raise GameError("本回合已经翻过牌，不能再发动爱莉技能")
     state.pending_skill = {"kind": kind, "user_id": player.user_id}
     state.updated_at = now
     return SkillResult("技能已准备，请继续完成本回合拿牌")

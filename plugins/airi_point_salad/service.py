@@ -161,7 +161,7 @@ class GameService:
             "房间：加入/join/j · 退出/leave/lv · 开始/start/st · 结束/stop/sp",
             "行动：拿/take/ta · 翻/flip/fl · 技能/skill/sk",
             "查看：桌面/board/bd · 规则/rules/rl",
-            "示例：sl cr qk cl · sl ta A · sl ta A1 B2 · sl fl 2 · sl sk",
+            "示例：,sl cr qk cl · ,sl ta A · ,sl ta A1 B2 · ,sl fl 2 · ,sl sk",
         ]
         if group_id:
             lock = self.locks.setdefault(group_id, asyncio.Lock())
