@@ -1,10 +1,10 @@
-# Airi Point Salad Rounded Corners Implementation Plan
+# Airi Point Salad Rounded Corners and Softer Shadow Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Add smooth `24px` transparent corners to every rendered Point Salad card while caching the final rounded RGBA images.
+**Goal:** Add smooth `24px` transparent corners to every rendered Point Salad card, reduce portrait shadow Alpha to `65%`, and cache the final RGBA images.
 
-**Architecture:** Keep the change inside `renderer.py`: a single helper builds a four-times-resolution rounded mask, downsamples it, multiplies it with the card Alpha channel, and returns the final image. Both front and back builders apply it before returning, so `_cached_image` stores final rounded cards and board composition reuses them unchanged.
+**Architecture:** Keep the change inside `renderer.py`: a single helper builds a four-times-resolution rounded mask, downsamples it, multiplies it with the card Alpha channel, and returns the final image. The character builder scales its existing blurred shadow Alpha by a constant before compositing. Front and back builders finish all visual processing before returning, so `_cached_image` stores final cards and board composition reuses them unchanged.
 
 **Tech Stack:** Python 3.11, Pillow, existing `ByteLRU` render cache, temporary `unittest` verification.
 
@@ -12,8 +12,8 @@
 
 ## File Structure
 
-- Modify `plugins/airi_point_salad/renderer.py`: define the corner constants and mask helper, then apply it to character fronts and both score-back branches.
-- Create temporarily `/tmp/test_airi_point_salad_rounded_corners.py`: verify Alpha geometry, anti-aliasing, risk cards, and cache hits; delete it after verification.
+- Modify `plugins/airi_point_salad/renderer.py`: define corner and shadow constants, reduce the portrait shadow Alpha, add the mask helper, then apply it to character fronts and both score-back branches.
+- Create temporarily `/tmp/test_airi_point_salad_rounded_corners.py`: verify Alpha geometry, anti-aliasing, risk cards, shadow strength, and cache hits; delete it after verification.
 - Update `/Users/liko/.Codex/projects/-Users-liko-Documents-GitHub-AiriCore/memory/airi-point-salad.md` and its `MEMORY.md` index entry after the code is verified.
 
 ### Task 1: Lock down card corner and cache behavior
@@ -85,6 +85,9 @@ class RoundedCornerTests(unittest.TestCase):
         self.assertEqual(first.getchannel("A").tobytes(), second.getchannel("A").tobytes())
         self.assertEqual(second.getchannel("A").getpixel((0, 0)), 0)
 
+    def test_portrait_shadow_uses_sixty_five_percent_alpha(self):
+        self.assertEqual(getattr(renderer, "PORTRAIT_SHADOW_OPACITY", 1.0), 0.65)
+
 
 if __name__ == "__main__":
     unittest.main()
@@ -98,7 +101,7 @@ Run:
 conda run -n airicore python -m unittest discover -s /tmp -p 'test_airi_point_salad_rounded_corners.py'
 ```
 
-Expected: three failures because the current card corners have Alpha `255` instead of `0`.
+Expected: four failures because the current card corners have Alpha `255` instead of `0`, and the shadow opacity constant is absent.
 
 ### Task 2: Apply the final rounded mask before caching
 
@@ -116,6 +119,7 @@ from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageOps
 CARD_SIZE = (750, 1050)
 CARD_CORNER_RADIUS = 24
 CARD_CORNER_SCALE = 4
+PORTRAIT_SHADOW_OPACITY = 0.65
 ```
 
 - [ ] **Step 2: Add the shared corner helper**
@@ -137,7 +141,23 @@ def _round_card_corners(image: Image.Image) -> Image.Image:
     return image
 ```
 
-- [ ] **Step 3: Apply it to every full card builder**
+- [ ] **Step 3: Reduce the existing portrait shadow Alpha**
+
+Replace the shadow block in `_build_character_front` with:
+
+```python
+    shadow = Image.new("RGBA", art.size)
+    shadow_alpha = art.getchannel("A").filter(ImageFilter.GaussianBlur(14))
+    shadow.putalpha(
+        shadow_alpha.point(
+            lambda value: round(value * PORTRAIT_SHADOW_OPACITY)
+        )
+    )
+```
+
+Keep the existing `(x + 10, y + 14)` shadow offset unchanged.
+
+- [ ] **Step 4: Apply rounded corners to every full card builder**
 
 Replace the return at the end of `_build_character_front` with:
 
@@ -159,7 +179,7 @@ and:
 
 This placement ensures `_cached_image` receives and stores the final rounded card.
 
-- [ ] **Step 4: Run the focused tests to verify they pass**
+- [ ] **Step 5: Run the focused tests to verify they pass**
 
 Run:
 
@@ -167,9 +187,9 @@ Run:
 conda run -n airicore python -m unittest discover -s /tmp -p 'test_airi_point_salad_rounded_corners.py'
 ```
 
-Expected: `Ran 3 tests` and `OK`.
+Expected: `Ran 4 tests` and `OK`.
 
-- [ ] **Step 5: Run static checks**
+- [ ] **Step 6: Run static checks**
 
 Run:
 
@@ -237,7 +257,7 @@ env PYTHONPATH=/Users/liko/Documents/GitHub/AiriCore conda run -n airicore pytho
 file /tmp/airi_point_salad_rounded_preview/*
 ```
 
-Expected: three `750×1050 RGBA` PNG cards and one decodable `2160px`-wide JPEG board. Visually inspect that the curve is slight and smooth.
+Expected: three `750×1050 RGBA` PNG cards and one decodable `2160px`-wide JPEG board. Visually inspect that the curve is slight and smooth and that the character portrait shadow is lighter while retaining its shape.
 
 - [ ] **Step 2: Verify the full plugin set**
 
@@ -254,10 +274,10 @@ Expected: `插件加载完成：33，失败：0`.
 Append this record to `airi-point-salad.md`:
 
 ```markdown
-2026-08-01 卡牌圆角升级：角色牌正面和所有计分牌背面统一应用 `24px` 四倍超采样 Alpha 圆角蒙版；风险牌专用分支同样经过最终处理。`ram` 与 `balanced` 缓存保存圆角后的最终 RGBA 卡面，命中时不重复裁切；桌面直接缩放合成圆角卡面。聚焦测试、真实正面/比较/风险/桌面渲染、Ruff、编译和 33/33 插件加载通过。
+2026-08-01 卡牌圆角与阴影升级：角色牌正面和所有计分牌背面统一应用 `24px` 四倍超采样 Alpha 圆角蒙版；角色正面立绘阴影 Alpha 降为原强度的 `65%`，模糊与偏移不变；风险牌专用分支同样经过最终处理。`ram` 与 `balanced` 缓存保存最终 RGBA 卡面，命中时不重复裁切；桌面直接缩放合成圆角卡面。聚焦测试、真实正面/比较/风险/桌面渲染、Ruff、编译和 33/33 插件加载通过。
 ```
 
-将 `MEMORY.md` 的 `airi point salad` 索引描述更新为包含“24px 抗锯齿圆角与最终卡面缓存”。
+将 `MEMORY.md` 的 `airi point salad` 索引描述更新为包含“24px 抗锯齿圆角、65% 立绘阴影与最终卡面缓存”。
 
 - [ ] **Step 4: Clean temporary artifacts**
 
@@ -269,7 +289,7 @@ Run:
 
 ```bash
 git add plugins/airi_point_salad/renderer.py docs/superpowers/plans/2026-08-01-airi-point-salad-rounded-corners.md
-git commit --only plugins/airi_point_salad/renderer.py docs/superpowers/plans/2026-08-01-airi-point-salad-rounded-corners.md -m "feat: round point salad card corners"
+git commit --only plugins/airi_point_salad/renderer.py docs/superpowers/plans/2026-08-01-airi-point-salad-rounded-corners.md -m "feat: refine point salad card rendering"
 ```
 
 Expected: a new commit on `main`; existing `.gitignore`, `plugins/airi_help/__init__.py`, and `plugins/airi_status/drawer.py` changes remain outside the commit, and no temporary branch remains.
