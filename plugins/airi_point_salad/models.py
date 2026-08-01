@@ -114,16 +114,16 @@ class GameState:
     phase: Phase = Phase.LOBBY
     players: list[PlayerState] = field(default_factory=list)
     cards: dict[str, Card] = field(default_factory=dict)
-    deck: list[str] = field(default_factory=list)
-    score_market: list[str | None] = field(
-        default_factory=lambda: [None, None, None]
-    )
+    decks: list[list[str]] = field(default_factory=lambda: [[], [], []])
     character_market: list[list[str | None]] = field(
         default_factory=lambda: [[None, None] for _ in range(3)]
     )
     current_player: int = 0
+    starting_player: int = 0
     turn_number: int = 0
     turn_flips: int = 0
+    post_flip_user_id: str | None = None
+    post_flip_available: bool = False
     centers: list[Character] = field(default_factory=list)
     mission_deck: list[str] = field(default_factory=list)
     active_missions: list[str] = field(default_factory=list)
@@ -143,12 +143,14 @@ class GameState:
             "cards": {
                 card_id: _card_to_dict(card) for card_id, card in self.cards.items()
             },
-            "deck": list(self.deck),
-            "score_market": list(self.score_market),
+            "decks": [list(deck) for deck in self.decks],
             "character_market": [list(row) for row in self.character_market],
             "current_player": self.current_player,
+            "starting_player": self.starting_player,
             "turn_number": self.turn_number,
             "turn_flips": self.turn_flips,
+            "post_flip_user_id": self.post_flip_user_id,
+            "post_flip_available": self.post_flip_available,
             "centers": [character.value for character in self.centers],
             "mission_deck": list(self.mission_deck),
             "active_missions": list(self.active_missions),
@@ -163,14 +165,18 @@ class GameState:
         data = _object(data, "游戏状态")
         players = _list(data.get("players", []), "players")
         cards = _object(data.get("cards", {}), "cards")
-        deck = _list(data.get("deck", []), "deck")
-        score_market = _list(
-            data.get("score_market", [None, None, None]), "score_market"
-        )
+        decks = _list(data.get("decks", [[], [], []]), "decks")
+        if len(decks) != 3:
+            raise ValueError("decks 必须恰好包含三列")
         character_market = _list(
             data.get("character_market", [[None, None] for _ in range(3)]),
             "character_market",
         )
+        if len(character_market) != 3 or any(
+            len(_list(row, "character_market 行")) != 2
+            for row in character_market
+        ):
+            raise ValueError("character_market 必须是三行两列")
         centers = _list(data.get("centers", []), "centers")
         mission_deck = _list(data.get("mission_deck", []), "mission_deck")
         active_missions = _list(data.get("active_missions", []), "active_missions")
@@ -185,10 +191,9 @@ class GameState:
                 _string(card_id, "cards 键"): _card_from_dict(card)
                 for card_id, card in cards.items()
             },
-            deck=_string_list(deck, "deck"),
-            score_market=[
-                None if card_id is None else _string(card_id, "score_market 元素")
-                for card_id in score_market
+            decks=[
+                _string_list(_list(deck, "decks 列"), "decks 列")
+                for deck in decks
             ],
             character_market=[
                 [
@@ -200,8 +205,19 @@ class GameState:
                 for row in character_market
             ],
             current_player=_integer(data.get("current_player", 0), "current_player"),
+            starting_player=_integer(
+                data.get("starting_player", 0), "starting_player"
+            ),
             turn_number=_integer(data.get("turn_number", 0), "turn_number"),
             turn_flips=_integer(data.get("turn_flips", 0), "turn_flips"),
+            post_flip_user_id=(
+                None
+                if data.get("post_flip_user_id") is None
+                else _string(data["post_flip_user_id"], "post_flip_user_id")
+            ),
+            post_flip_available=_boolean(
+                data.get("post_flip_available", False), "post_flip_available"
+            ),
             centers=[
                 Character(_string(character, "centers 元素")) for character in centers
             ],

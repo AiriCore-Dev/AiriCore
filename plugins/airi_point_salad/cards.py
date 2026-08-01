@@ -190,18 +190,26 @@ def cards_per_character(player_count: int, speed: GameSpeed) -> int:
     return player_count * (2 if speed is GameSpeed.QUICK else 3)
 
 
-def build_deck(player_count: int, speed: GameSpeed, seed: int) -> list[Card]:
+def build_decks(
+    player_count: int,
+    speed: GameSpeed,
+    seed: int,
+) -> tuple[dict[str, Card], list[list[str]], int]:
     count = cards_per_character(player_count, speed)
     if type(seed) is not int:
         raise TypeError("seed 必须是整数")
     generator = random.Random(seed)
-    cards = []
+    selected = []
     catalog = load_catalog()
     for character in Character:
         group = [card for card in catalog if card.character is character]
-        cards.extend(generator.sample(group, count))
-    generator.shuffle(cards)
-    return cards
+        selected.extend(generator.sample(group, count))
+    generator.shuffle(selected)
+    decks = [[], [], []]
+    for index, card in enumerate(selected):
+        decks[index % 3].append(card.card_id)
+    cards = {card.card_id: card for card in selected}
+    return cards, decks, generator.randrange(player_count)
 
 
 def _reject_constant(value: str) -> None:

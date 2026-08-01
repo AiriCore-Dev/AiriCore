@@ -1,4 +1,4 @@
-from .cards import build_deck
+from .cards import build_decks
 from .missions import TurnSummary
 from .models import Character, GameMode, GameSpeed, GameState, Phase, PlayerState
 
@@ -58,11 +58,12 @@ def start_game(state: GameState, user_id: str, now: float) -> None:
         raise GameError("只有房主可以开始游戏")
     if len(state.players) < 2:
         raise GameError("至少需要 2 名玩家")
-    cards = build_deck(len(state.players), state.speed, state.seed)
-    state.cards = {card.card_id: card for card in cards}
-    state.deck = [card.card_id for card in cards]
+    state.cards, state.decks, starting_player = build_decks(
+        len(state.players), state.speed, state.seed
+    )
     state.phase = Phase.PLAYING
-    state.current_player = 0
+    state.current_player = starting_player
+    state.starting_player = starting_player
     state.turn_number = 1
     state.turn_flips = 0
     refill_market(state)
@@ -109,7 +110,7 @@ def take_score(
     pending = state.pending_skill.get("kind") if state.pending_skill.get("user_id") == user_id else None
     if pending in {"minori_armed", "minori_swap"}:
         raise GameError("实乃理技能准备后必须完成角色牌拿取与交换")
-    if not 0 <= column < 3 or state.score_market[column] is None:
+    if not 0 <= column < 3 or not state.decks[column]:
         raise GameError("该列没有可拿取的计分牌")
     airi_armed = (
         state.pending_skill.get("kind") == "airi_armed"
@@ -123,8 +124,7 @@ def take_score(
         extra_card = require_character_slot(state, extra_slot)
     elif extra_slot is not None:
         raise GameError("普通拿取计分牌不能附带角色牌")
-    card_id = state.score_market[column]
-    state.score_market[column] = None
+    card_id = state.decks[column].pop()
     player.score_cards.append(card_id)
     summary = TurnSummary([], [card_id])
     if extra_card is not None:
@@ -179,13 +179,37 @@ def take_characters(
 
 
 def refill_market(state: GameState) -> None:
-    for column in range(3):
-        if state.score_market[column] is None and state.deck:
-            state.score_market[column] = state.deck.pop()
-    for column in range(3):
-        for row in range(2):
-            if state.character_market[column][row] is None and state.deck:
-                state.character_market[column][row] = state.deck.pop()
+    while True:
+        changed = rebalance_empty_decks(state)
+        for column in range(3):
+            for row in range(2):
+                if state.character_market[column][row] is None and state.decks[column]:
+                    state.character_market[column][row] = state.decks[column].pop()
+                    changed = True
+        if not changed:
+            return
+
+
+def rebalance_empty_decks(state: GameState) -> bool:
+    changed = False
+    while True:
+        empty_column = next(
+            (index for index, deck in enumerate(state.decks) if not deck),
+            None,
+        )
+        if empty_column is None:
+            return changed
+        source_column = max(
+            range(3),
+            key=lambda index: (len(state.decks[index]), -index),
+        )
+        amount = len(state.decks[source_column]) // 2
+        if amount == 0:
+            return changed
+        source = state.decks[source_column]
+        state.decks[empty_column] = source[:amount]
+        del source[:amount]
+        changed = True
 
 
 def finish_action(
@@ -199,7 +223,7 @@ def finish_action(
         claim_completed_mission(state, state.players[state.current_player], summary)
     refill_market(state)
     state.updated_at = now
-    if not state.deck and not any(state.score_market) and not any(
+    if not any(state.decks) and not any(
         card_id for column in state.character_market for card_id in column
     ):
         state.phase = Phase.FINISHED
