@@ -39,7 +39,7 @@ __plugin_meta__ = PluginMetadata(
 
 
 service = GameService(
-    GameStore(Path("data/airi_point_salad/games.json"))
+    GameStore(Path("data/airi_point_salad/games.pk"))
 )
 try:
     driver = get_driver()

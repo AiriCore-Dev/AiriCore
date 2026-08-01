@@ -26,7 +26,7 @@ GAME_TIMEOUT = 30 * 60
 
 class GameService:
     def __init__(self, store: GameStore | None = None):
-        self.store = store or GameStore(Path("data/airi_point_salad/games.json"))
+        self.store = store or GameStore(Path("data/airi_point_salad/games.pk"))
         self.games: dict[str, GameState] = {}
         self.locks: dict[str, asyncio.Lock] = {}
         self.timers: dict[str, asyncio.TimerHandle] = {}
