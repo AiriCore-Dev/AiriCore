@@ -29,6 +29,19 @@ from .scoring import rank_players
 
 
 CARD_SIZE = (750, 1050)
+BOARD_WIDTH = 2160
+MARKET_SCORE_SIZE = (432, 605)
+MARKET_CHARACTER_SIZE = (252, 353)
+MARKET_X = (120, 864, 1608)
+MARKET_SCORE_Y = 520
+MARKET_CHARACTER_Y = 1170
+MARKET_CHARACTER_STEP = 390
+SECTION_Y = 2030
+PLAYER_ROW_HEIGHT = 116
+DETAIL_LINE_HEIGHT = 52
+SCORE_ICON_SIZE = 204
+SCORE_RULE_FONT_SIZE = 72
+SCORE_VALUE_FONT_SIZE = 120
 GOLD = (205, 171, 96, 255)
 FONT_PATH = ASSET_DIR / "font.ttf"
 _render_cache = ByteLRU(
@@ -176,19 +189,43 @@ def render_character_icon(character: Character, size: int = 100) -> Image.Image:
 def _build_score_back(card: Card) -> Image.Image:
     image = get_image_copy(BACK_BASE_PATH).convert("RGBA")
     title = get_image_copy(TITLE_PATH).convert("RGBA")
-    title.thumbnail((430, 190), Image.Resampling.LANCZOS)
-    image.alpha_composite(title, ((CARD_SIZE[0] - title.width) // 2, 48))
+    title.thumbnail((500, 210), Image.Resampling.LANCZOS)
+    image.alpha_composite(title, ((CARD_SIZE[0] - title.width) // 2, 28))
     draw = ImageDraw.Draw(image)
-    icons = [render_character_icon(character, 130) for character in card.rule.characters]
-    total_width = len(icons) * 130 + max(0, len(icons) - 1) * 12
-    icon_x = (750 - total_width) // 2
+    icons = [
+        render_character_icon(character, SCORE_ICON_SIZE)
+        for character in card.rule.characters
+    ]
+    gap = 12
+    total_width = len(icons) * SCORE_ICON_SIZE + max(0, len(icons) - 1) * gap
+    icon_x = (CARD_SIZE[0] - total_width) // 2
     for icon in icons:
-        image.alpha_composite(icon, (icon_x, 325))
-        icon_x += 142
+        image.alpha_composite(icon, (icon_x, 270))
+        icon_x += SCORE_ICON_SIZE + gap
     text, score = rule_text(card)
-    draw.multiline_text((375, 570), text, font=font(44), anchor="mm", align="center", fill=(65, 51, 68), spacing=14)
-    draw.text((375, 735), score, font=font(76), anchor="mm", fill=(181, 87, 137))
-    draw.text((375, 950), card.card_id.upper(), font=font(20), anchor="mm", fill=(117, 98, 119))
+    draw.multiline_text(
+        (375, 600),
+        text,
+        font=font(SCORE_RULE_FONT_SIZE),
+        anchor="mm",
+        align="center",
+        fill=(65, 51, 68),
+        spacing=12,
+    )
+    draw.text(
+        (375, 810),
+        score,
+        font=font(SCORE_VALUE_FONT_SIZE),
+        anchor="mm",
+        fill=(181, 87, 137),
+    )
+    draw.text(
+        (375, 985),
+        card.card_id.upper(),
+        font=font(32),
+        anchor="mm",
+        fill=(117, 98, 119),
+    )
     return image
 
 
@@ -222,8 +259,11 @@ def rule_text(card: Card) -> tuple[str, str]:
     if rule.kind is RuleKind.SET:
         return "每组三名角色", f"+{rule.points}"
     if rule.kind is RuleKind.COMPARE:
-        return f"{names[0]} {rule.relation} {names[1]}", f"+{rule.points}"
-    return f"每个 {names[0]} ＋{rule.points}\n每个 {names[1]} {rule.penalty}", "风险牌"
+        return f"{names[0]} {rule.relation}\n{names[1]}", f"+{rule.points}"
+    return (
+        f"每个 {names[0]} ＋{rule.points}\n每个 {names[1]}\n{rule.penalty}",
+        "风险牌",
+    )
 
 
 def center_status(state: GameState, player: PlayerState) -> str:
@@ -239,79 +279,209 @@ def center_status(state: GameState, player: PlayerState) -> str:
 
 
 def render_board(state: GameState, _viewer_id: str) -> str:
-    width = 1350
-    base_height = 1920 if state.mode is GameMode.MIX else 1720
     current = state.players[state.current_player]
-    player_start = 1355 if state.mode is GameMode.MIX else 1190
-    detail_y = player_start + len(state.players) * 78 + 30
+    mission_height = 280 if state.mode is GameMode.MIX else 0
+    player_header_y = SECTION_Y + mission_height
+    player_rows_y = player_header_y + 80
+    detail_y = player_rows_y + len(state.players) * PLAYER_ROW_HEIGHT + 80
+    detail_lines = max(1, len(current.score_cards))
     height = max(
-        base_height,
-        detail_y + len(current.score_cards) * 34 + 190,
+        3100 if state.mode is GameMode.MIX else 2800,
+        detail_y + detail_lines * DETAIL_LINE_HEIGHT + 230,
     )
-    image = gradient((width, height), (246, 255, 252), (255, 244, 251))
+    image = gradient((BOARD_WIDTH, height), (246, 255, 252), (255, 244, 251))
     draw = ImageDraw.Draw(image)
     title = get_image_copy(TITLE_PATH).convert("RGBA")
-    title.thumbnail((340, 150), Image.Resampling.LANCZOS)
-    image.alpha_composite(title, (55, 35))
+    title.thumbnail((520, 230), Image.Resampling.LANCZOS)
+    image.alpha_composite(title, (80, 45))
     mode = "混合模式" if state.mode is GameMode.MIX else "主题原版"
     speed = "快速局" if state.speed.value == "quick" else "标准局"
-    draw.text((1280, 65), f"{speed} · {mode}", font=font(38), anchor="ra", fill=(66, 74, 83))
-    draw.text((1280, 118), f"第 {state.turn_number} 回合 · 牌库 {len(state.deck)}", font=font(30), anchor="ra", fill=(104, 91, 108))
-    draw.rounded_rectangle((55, 190, 1295, 275), 20, fill=(222, 247, 241), outline=(92, 176, 160), width=3)
-    draw.text((85, 232), f"当前回合：{current.name}", font=font(34), anchor="lm", fill=(50, 120, 108))
+    draw.text(
+        (2040, 92),
+        f"{speed} · {mode}",
+        font=font(58),
+        anchor="ra",
+        fill=(66, 74, 83),
+    )
+    draw.text(
+        (2040, 170),
+        f"第 {state.turn_number} 回合 · 牌库 {len(state.deck)}",
+        font=font(46),
+        anchor="ra",
+        fill=(104, 91, 108),
+    )
+    draw.rounded_rectangle(
+        (80, 270, 2080, 400),
+        30,
+        fill=(222, 247, 241),
+        outline=(92, 176, 160),
+        width=4,
+    )
+    draw.text(
+        (125, 335),
+        f"当前回合：{current.name}",
+        font=font(52),
+        anchor="lm",
+        fill=(50, 120, 108),
+    )
     if current.center is not None:
         status = center_status(state, current)
-        draw.text((1260, 232), f"Center：{current.center.display_name} · {status}", font=font(23), anchor="rm", fill=(73, 112, 122))
-    card_width = 250
-    card_height = 350
-    market_y = 350
+        draw.text(
+            (2030, 335),
+            f"Center：{current.center.display_name} · {status}",
+            font=font(36),
+            anchor="rm",
+            fill=(73, 112, 122),
+        )
+    score_width, score_height = MARKET_SCORE_SIZE
+    character_width, character_height = MARKET_CHARACTER_SIZE
     for column in range(3):
-        x = 145 + column * 405
-        draw.text((x + card_width // 2, 315), chr(ord("A") + column), font=font(40), anchor="mm", fill=(95, 74, 97))
+        x = MARKET_X[column]
+        draw.text(
+            (x + score_width // 2, 470),
+            chr(ord("A") + column),
+            font=font(60),
+            anchor="mm",
+            fill=(95, 74, 97),
+        )
         score_id = state.score_market[column]
         if score_id:
-            paste_card(image, render_score_back(state.cards[score_id]), x, market_y, card_width, card_height)
+            paste_card(
+                image,
+                render_score_back(state.cards[score_id]),
+                x,
+                MARKET_SCORE_Y,
+                score_width,
+                score_height,
+            )
         for row in range(2):
             card_id = state.character_market[column][row]
-            y = market_y + card_height + 24 + row * 195
+            y = MARKET_CHARACTER_Y + row * MARKET_CHARACTER_STEP
             if card_id:
-                paste_card(image, render_character_front(state.cards[card_id].character), x + 55, y, 140, 196)
-                draw.text((x + 210, y + 98), f"{chr(65 + column)}{row + 1}", font=font(28), anchor="lm", fill=(71, 62, 76))
-    cursor_y = 1135
+                character_x = x + (score_width - character_width) // 2
+                paste_card(
+                    image,
+                    render_character_front(state.cards[card_id].character),
+                    character_x,
+                    y,
+                    character_width,
+                    character_height,
+                )
+                draw.text(
+                    (x + 365, y + character_height // 2),
+                    f"{chr(65 + column)}{row + 1}",
+                    font=font(42),
+                    anchor="lm",
+                    fill=(71, 62, 76),
+                )
     if state.mode is GameMode.MIX:
         catalog = mission_catalog()
-        draw.text((55, cursor_y), "LIVE MISSION", font=font(34), fill=(171, 118, 37))
+        draw.text(
+            (80, SECTION_Y),
+            "LIVE MISSION",
+            font=font(48),
+            fill=(171, 118, 37),
+        )
         for index, mission_id in enumerate(state.active_missions):
             mission = catalog[mission_id]
-            x = 55 + index * 625
-            draw.rounded_rectangle((x, cursor_y + 55, x + 585, cursor_y + 125), 16, fill=(255, 249, 230), outline=(215, 186, 107), width=2)
-            draw.text((x + 20, cursor_y + 90), mission_label(mission.kind, mission.amount), font=font(25), anchor="lm", fill=(84, 69, 71))
-            draw.text((x + 560, cursor_y + 90), f"+{mission.points}", font=font(30), anchor="rm", fill=(195, 139, 35))
-        cursor_y += 165
-    draw.text((55, cursor_y), "PLAYERS", font=font(34), fill=(89, 75, 92))
-    cursor_y += 55
+            x = 80 + index * 1000
+            draw.rounded_rectangle(
+                (x, SECTION_Y + 80, x + 920, SECTION_Y + 200),
+                24,
+                fill=(255, 249, 230),
+                outline=(215, 186, 107),
+                width=3,
+            )
+            draw.text(
+                (x + 35, SECTION_Y + 140),
+                mission_label(mission.kind, mission.amount),
+                font=font(36),
+                anchor="lm",
+                fill=(84, 69, 71),
+            )
+            draw.text(
+                (x + 885, SECTION_Y + 140),
+                f"+{mission.points}",
+                font=font(42),
+                anchor="rm",
+                fill=(195, 139, 35),
+            )
+    draw.text(
+        (80, player_header_y),
+        "PLAYERS",
+        font=font(48),
+        fill=(89, 75, 92),
+    )
     for index, player in enumerate(state.players):
-        y = cursor_y + index * 78
+        y = player_rows_y + index * PLAYER_ROW_HEIGHT
         active = index == state.current_player
         fill = (231, 249, 246) if active else (255, 255, 255)
-        draw.rounded_rectangle((55, y, 1295, y + 62), 14, fill=fill, outline=(226, 210, 224), width=2)
-        draw.text((80, y + 31), f"{index + 1}. {player.name}", font=font(25), anchor="lm", fill=(61, 52, 66))
-        draw.text((1265, y + 31), f"计分 {len(player.score_cards)} · 角色 {len(player.character_cards)} · 任务 {len(player.mission_ids)}", font=font(23), anchor="rm", fill=(105, 91, 108))
-    draw.text((55, detail_y), f"当前玩家持牌 · {current.name}", font=font(28), fill=(89, 75, 92))
-    score_y = detail_y + 46
+        draw.rounded_rectangle(
+            (80, y, 2080, y + 92),
+            20,
+            fill=fill,
+            outline=(226, 210, 224),
+            width=3,
+        )
+        draw.text(
+            (120, y + 46),
+            f"{index + 1}. {player.name}",
+            font=font(38),
+            anchor="lm",
+            fill=(61, 52, 66),
+        )
+        draw.text(
+            (2040, y + 46),
+            f"计分 {len(player.score_cards)} · 角色 {len(player.character_cards)} · 任务 {len(player.mission_ids)}",
+            font=font(34),
+            anchor="rm",
+            fill=(105, 91, 108),
+        )
+    draw.text(
+        (80, detail_y),
+        f"当前玩家持牌 · {current.name}",
+        font=font(42),
+        fill=(89, 75, 92),
+    )
+    score_y = detail_y + 66
     if current.score_cards:
         for index, card_id in enumerate(current.score_cards):
             text, score = rule_text(state.cards[card_id])
             label = text.replace("\n", " ")
-            draw.text((70, score_y), f"{index + 1}. {label}  {score}", font=font(22), fill=(100, 82, 102))
-            score_y += 34
+            draw.text(
+                (105, score_y),
+                f"{index + 1}. {label}  {score}",
+                font=font(32),
+                fill=(100, 82, 102),
+            )
+            score_y += DETAIL_LINE_HEIGHT
     else:
-        draw.text((70, score_y), "暂无计分牌", font=font(22), fill=(125, 110, 126))
-        score_y += 34
+        draw.text(
+            (105, score_y),
+            "暂无计分牌",
+            font=font(32),
+            fill=(125, 110, 126),
+        )
+        score_y += DETAIL_LINE_HEIGHT
     counts = Counter(state.cards[card_id].character for card_id in current.character_cards)
-    details = "  ".join(f"{character.display_name}×{counts.get(character, 0)}" for character in Character)
-    draw.text((675, score_y + 28), f"角色牌：{details}", font=font(23), anchor="mm", fill=(91, 76, 94))
-    draw.text((675, score_y + 82), "sl ta A · sl ta A1 B2 · sl fl 2 · sl sk", font=font(22), anchor="mm", fill=(114, 99, 116))
+    details = "  ".join(
+        f"{character.display_name}×{counts.get(character, 0)}"
+        for character in Character
+    )
+    draw.text(
+        (1080, score_y + 45),
+        f"角色牌：{details}",
+        font=font(34),
+        anchor="mm",
+        fill=(91, 76, 94),
+    )
+    draw.text(
+        (1080, score_y + 115),
+        "sl ta A · sl ta A1 B2 · sl fl 2 · sl sk",
+        font=font(32),
+        anchor="mm",
+        fill=(114, 99, 116),
+    )
     return image_b64(image)
 
 
@@ -352,7 +522,7 @@ def image_b64(image: Image.Image) -> str:
         flattened.paste(image.convert("RGB"))
     quality = 92
     data = b""
-    while quality >= 82:
+    while quality >= 40:
         buffer = BytesIO()
         flattened.save(buffer, format="JPEG", quality=quality, optimize=True)
         data = buffer.getvalue()
