@@ -84,15 +84,35 @@ def stop_game(state: GameState, user_id: str, is_admin: bool, now: float) -> Non
 
 
 def flip_score(state: GameState, user_id: str, score_index: int, now: float) -> str:
+    if state.phase is not Phase.PLAYING:
+        raise GameError("当前没有进行中的游戏")
+    if state.post_flip_available and state.post_flip_user_id == user_id:
+        player = next(
+            (item for item in state.players if item.user_id == user_id),
+            None,
+        )
+        if player is None:
+            raise GameError("你不在本局游戏中")
+        if not 0 <= score_index < len(player.score_cards):
+            raise GameError("计分牌编号无效")
+        card_id = player.score_cards.pop(score_index)
+        player.character_cards.append(card_id)
+        state.post_flip_user_id = None
+        state.post_flip_available = False
+        state.updated_at = now
+        return card_id
     player = require_turn(state, user_id)
     pending = state.pending_skill.get("kind") if state.pending_skill.get("user_id") == user_id else None
     if pending == "airi_armed":
-        raise GameError("爱莉技能生效的回合不能翻牌")
+        raise GameError("Airi 技能生效的回合不能翻牌")
     if pending == "minori_swap":
         raise GameError("请先完成实乃理的角色牌交换")
     if state.turn_flips >= 1:
         raise GameError("本回合已经翻过牌")
-    card_id = pop_index(player.score_cards, score_index, "计分牌编号无效")
+    if not 0 <= score_index < len(player.score_cards):
+        raise GameError("计分牌编号无效")
+    close_post_flip_window(state, user_id)
+    card_id = player.score_cards.pop(score_index)
     player.character_cards.append(card_id)
     state.turn_flips += 1
     state.updated_at = now
@@ -124,6 +144,7 @@ def take_score(
         extra_card = require_character_slot(state, extra_slot)
     elif extra_slot is not None:
         raise GameError("普通拿取计分牌不能附带角色牌")
+    close_post_flip_window(state, user_id)
     card_id = state.decks[column].pop()
     player.score_cards.append(card_id)
     summary = TurnSummary([], [card_id])
@@ -133,7 +154,7 @@ def take_score(
         player.skill_used = True
         state.pending_skill = {}
         summary.character_ids.append(extra_card)
-    finish_action(state, now, summary)
+    finish_action(state, now, summary, allow_post_flip=not airi_armed)
     return card_id
 
 
@@ -156,6 +177,7 @@ def take_characters(
     if len(slots) != required or len(set(slots)) != len(slots):
         raise GameError(f"本回合需要拿取 {required} 张不同位置的角色牌")
     card_ids = [require_character_slot(state, slot) for slot in slots]
+    close_post_flip_window(state, user_id)
     for column, row in slots:
         state.character_market[column][row] = None
     player.character_cards.extend(card_ids)
@@ -216,21 +238,34 @@ def finish_action(
     state: GameState,
     now: float,
     summary: TurnSummary | None = None,
+    allow_post_flip: bool = True,
 ) -> None:
+    player = state.players[state.current_player]
     if state.mode is GameMode.MIX and summary is not None:
         from .missions import claim_completed_mission
 
-        claim_completed_mission(state, state.players[state.current_player], summary)
+        claim_completed_mission(state, player, summary)
+    player.last_action_turn = state.turn_number
     refill_market(state)
     state.updated_at = now
     if not any(state.decks) and not any(
         card_id for column in state.character_market for card_id in column
     ):
+        state.post_flip_user_id = None
+        state.post_flip_available = False
         state.phase = Phase.FINISHED
         return
+    state.post_flip_user_id = player.user_id
+    state.post_flip_available = state.turn_flips == 0 and allow_post_flip
     state.current_player = (state.current_player + 1) % len(state.players)
     state.turn_number += 1
     state.turn_flips = 0
+
+
+def close_post_flip_window(state: GameState, user_id: str) -> None:
+    if state.post_flip_available and state.post_flip_user_id != user_id:
+        state.post_flip_user_id = None
+        state.post_flip_available = False
 
 
 def require_lobby(state: GameState) -> None:

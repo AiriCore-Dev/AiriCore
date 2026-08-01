@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from .game import (
+    close_post_flip_window,
     GameError,
     finish_action,
     pop_index,
@@ -66,7 +67,8 @@ def _arm(state, player, args, kind, now):
     if state.pending_skill:
         raise GameError("已有待完成的技能操作")
     if kind == "airi_armed" and state.turn_flips:
-        raise GameError("本回合已经翻过牌，不能再发动爱莉技能")
+        raise GameError("本回合已经翻过牌，不能再发动 Airi 技能")
+    close_post_flip_window(state, player.user_id)
     state.pending_skill = {"kind": kind, "user_id": player.user_id}
     state.updated_at = now
     return SkillResult("技能已准备，请继续完成本回合拿牌")
@@ -87,6 +89,7 @@ def _use_minori(state, player, args, now):
         raise GameError("放回位置不属于本回合取得的角色牌")
     new_card = require_character_slot(state, new_slot)
     returned_card = taken[return_key]
+    close_post_flip_window(state, player.user_id)
     player.character_cards.remove(returned_card)
     state.character_market[return_slot[0]][return_slot[1]] = returned_card
     state.character_market[new_slot[0]][new_slot[1]] = None
@@ -102,14 +105,16 @@ def _use_haruka(state, player, args, now):
         raise GameError(f"请选择一列：{skill_usage(player.center)}")
     column = args[0]
     returned = []
-    if state.score_market[column] is not None:
-        returned.append(state.score_market[column])
+    if state.decks[column]:
+        returned.append(state.decks[column][-1])
     returned.extend(card_id for card_id in state.character_market[column] if card_id is not None)
     if not returned:
         raise GameError("该列没有可刷新的卡牌")
-    state.score_market[column] = None
+    close_post_flip_window(state, player.user_id)
+    if state.decks[column]:
+        state.decks[column].pop()
     state.character_market[column] = [None, None]
-    state.deck[0:0] = returned
+    state.decks[column][0:0] = returned
     refill_market(state)
     player.skill_used = True
     state.updated_at = now
@@ -119,6 +124,9 @@ def _use_haruka(state, player, args, now):
 def _use_shizuku(state, player, args, now):
     if len(args) != 1 or type(args[0]) is not int:
         raise GameError(f"请选择计分牌：{skill_usage(player.center)}")
+    if not 0 <= args[0] < len(player.score_cards):
+        raise GameError("计分牌编号无效")
+    close_post_flip_window(state, player.user_id)
     card_id = pop_index(player.score_cards, args[0], "计分牌编号无效")
     player.character_cards.append(card_id)
     player.skill_used = True
@@ -131,6 +139,7 @@ def _use_miku(state, player, args, now):
         raise GameError(f"请选择计分牌和角色：{skill_usage(player.center)}")
     if not 0 <= args[0] < len(player.score_cards):
         raise GameError("计分牌编号无效")
+    close_post_flip_window(state, player.user_id)
     player.skill_payload = {
         "score_card_id": player.score_cards[args[0]],
         "as_character": args[1].value,
@@ -146,6 +155,7 @@ def _use_rin(state, player, args, now):
     card_ids = [require_character_slot(state, slot) for slot in args]
     if len({state.cards[card_id].character for card_id in card_ids}) != 3:
         raise GameError("铃的技能必须拿取三名不同角色")
+    close_post_flip_window(state, player.user_id)
     for column, row in args:
         state.character_market[column][row] = None
     player.character_cards.extend(card_ids)
