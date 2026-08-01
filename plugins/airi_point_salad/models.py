@@ -57,20 +57,29 @@ class Face(str, Enum):
 
 
 class RuleKind(str, Enum):
-    EACH = "each"
-    PAIR = "pair"
+    MOST = "most"
+    FEWEST = "fewest"
+    PARITY = "parity"
+    LINEAR = "linear"
+    SAME_PAIR = "same_pair"
+    SAME_TRIPLE = "same_triple"
     SET = "set"
-    COMPARE = "compare"
-    RISK = "risk"
+    MISSING_TYPES = "missing_types"
+    TYPES_AT_LEAST = "types_at_least"
+    FEWEST_TOTAL = "fewest_total"
+    MOST_TOTAL = "most_total"
+    COMPLETE_SET = "complete_set"
 
 
 @dataclass(slots=True)
 class ScoreRule:
     kind: RuleKind
-    characters: list[Character]
-    points: int
-    penalty: int = 0
-    relation: str = ""
+    target: Character | None = None
+    points: int = 0
+    odd_points: int = 0
+    threshold: int = 0
+    weights: dict[Character, int] = field(default_factory=dict)
+    requirements: dict[Character, int] = field(default_factory=dict)
 
 
 @dataclass(slots=True)
@@ -78,6 +87,8 @@ class Card:
     card_id: str
     character: Character
     rule: ScoreRule
+    produce: str
+    source: str
 
 
 @dataclass(slots=True)
@@ -204,43 +215,74 @@ class GameState:
 
 def _rule_to_dict(rule: ScoreRule) -> dict[str, Any]:
     return {
-        "kind": rule.kind.value,
-        "characters": [character.value for character in rule.characters],
-        "points": rule.points,
-        "penalty": rule.penalty,
-        "relation": rule.relation,
+        "kind": _rule_kind(rule.kind, "rule.kind").value,
+        "target": (
+            None
+            if rule.target is None
+            else _character(rule.target, "rule.target").value
+        ),
+        "points": _integer(rule.points, "rule.points"),
+        "odd_points": _integer(rule.odd_points, "rule.odd_points"),
+        "threshold": _integer(rule.threshold, "rule.threshold"),
+        "weights": _character_integer_dict(rule.weights, "rule.weights"),
+        "requirements": _character_integer_dict(
+            rule.requirements, "rule.requirements"
+        ),
     }
 
 
 def _rule_from_dict(data: dict[str, Any]) -> ScoreRule:
     data = _object(data, "rule")
-    characters = _list(data.get("characters", []), "rule.characters")
+    _exact_keys(
+        data,
+        {
+            "kind",
+            "target",
+            "points",
+            "odd_points",
+            "threshold",
+            "weights",
+            "requirements",
+        },
+        "rule",
+    )
+    target = data["target"]
     return ScoreRule(
         kind=RuleKind(_string(data["kind"], "rule.kind")),
-        characters=[
-            Character(_string(character, "rule.characters 元素"))
-            for character in characters
-        ],
+        target=(
+            None
+            if target is None
+            else Character(_string(target, "rule.target"))
+        ),
         points=_integer(data["points"], "rule.points"),
-        penalty=_integer(data.get("penalty", 0), "rule.penalty"),
-        relation=_string(data.get("relation", ""), "rule.relation"),
+        odd_points=_integer(data["odd_points"], "rule.odd_points"),
+        threshold=_integer(data["threshold"], "rule.threshold"),
+        weights=_character_integer_dict_from_dict(data["weights"], "rule.weights"),
+        requirements=_character_integer_dict_from_dict(
+            data["requirements"], "rule.requirements"
+        ),
     )
 
 
 def _card_to_dict(card: Card) -> dict[str, Any]:
     return {
-        "card_id": card.card_id,
-        "character": card.character.value,
+        "card_id": _string(card.card_id, "card.card_id"),
+        "character": _character(card.character, "card.character").value,
         "rule": _rule_to_dict(card.rule),
+        "produce": _string(card.produce, "card.produce"),
+        "source": _string(card.source, "card.source"),
     }
 
 
 def _card_from_dict(data: dict[str, Any]) -> Card:
     data = _object(data, "card")
+    _exact_keys(data, {"card_id", "character", "rule", "produce", "source"}, "card")
     return Card(
         card_id=_string(data["card_id"], "card.card_id"),
         character=Character(_string(data["character"], "card.character")),
         rule=_rule_from_dict(data["rule"]),
+        produce=_string(data["produce"], "card.produce"),
+        source=_string(data["source"], "card.source"),
     )
 
 
@@ -358,3 +400,46 @@ def _boolean(value: Any, field_name: str) -> bool:
 
 def _string_list(value: list[Any], field_name: str) -> list[str]:
     return [_string(item, f"{field_name} 元素") for item in value]
+
+
+def _exact_keys(
+    value: dict[str, Any], expected: set[str], field_name: str
+) -> None:
+    if set(value) != expected:
+        raise ValueError(f"{field_name} 字段不匹配")
+
+
+def _character(value: Any, field_name: str) -> Character:
+    if type(value) is not Character:
+        raise TypeError(f"{field_name} 必须是角色枚举")
+    return value
+
+
+def _rule_kind(value: Any, field_name: str) -> RuleKind:
+    if type(value) is not RuleKind:
+        raise TypeError(f"{field_name} 必须是规则枚举")
+    return value
+
+
+def _character_integer_dict(
+    value: Any, field_name: str
+) -> dict[str, int]:
+    value = _object(value, field_name)
+    return {
+        _character(key, f"{field_name} 键").value: _integer(
+            item, f"{field_name} 值"
+        )
+        for key, item in value.items()
+    }
+
+
+def _character_integer_dict_from_dict(
+    value: Any, field_name: str
+) -> dict[Character, int]:
+    value = _object(value, field_name)
+    return {
+        Character(_string(key, f"{field_name} 键")): _integer(
+            item, f"{field_name} 值"
+        )
+        for key, item in value.items()
+    }
