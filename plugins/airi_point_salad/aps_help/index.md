@@ -9,7 +9,7 @@ draft: false
 image: cover.png
 ---
 
-MORE MORE JUMP！得分沙拉是适合 2–6 人在群聊中游玩的 Point Salad 主题实现。卡牌保留 MORE MORE JUMP！角色主题，牌库、拿牌、翻面、计分和同分判定采用官方规则。
+MORE MORE JUMP！得分沙拉是适合 2–6 人在群聊中游玩的 Point Salad（得分沙拉）桌游主题实现。
 
 ![MORE MORE JUMP！得分沙拉主题封面](cover.png)
 

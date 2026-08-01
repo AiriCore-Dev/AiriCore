@@ -30,7 +30,6 @@ from .color import (
     swap_color,
     details_color,
     nickname_color,
-    transparent_color,
 )
 
 driver = get_driver()
@@ -194,51 +193,46 @@ class LiquidGlass:
 
         mask = Image.new("L", large_size, 0)
         draw = ImageDraw.Draw(mask)
-        large_radius = self.corner_radius * scale_factor
-        draw.rounded_rectangle([(0, 0), large_size], radius=large_radius, fill=255)
+        large_radius = min(self.corner_radius, w / 2, h / 2) * scale_factor
+        draw.rounded_rectangle(
+            [(0, 0), (large_size[0] - 1, large_size[1] - 1)],
+            radius=large_radius,
+            fill=255,
+        )
 
         mask = mask.resize(size, Image.Resampling.LANCZOS)
         return mask
 
     def _create_edge_highlight(self, size: tuple[int, int]) -> Image.Image:
         w, h = size
-        highlight = Image.new("RGBA", (w, h), (255, 255, 255, 0))
-        draw = ImageDraw.Draw(highlight)
+        if self.edge_highlight_intensity <= 0:
+            return Image.new("RGBA", size, (255, 255, 255, 0))
 
-        line_width_outer = 3
-        line_width_inner = 1
-        alpha_outer = int(255 * self.edge_highlight_intensity * 0.8)
-        alpha_inner = int(255 * self.edge_highlight_intensity * 1.2)
+        mask = self._create_rounded_mask(size)
+        eroded = mask.filter(ImageFilter.MinFilter(9))
+        edge = np.maximum(
+            np.asarray(mask, dtype=np.float32) - np.asarray(eroded, dtype=np.float32),
+            0,
+        ) / 255
+        yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+        light = 1 - 0.36 * xx / max(w - 1, 1) - 0.64 * yy / max(h - 1, 1)
+        light = np.clip(light, 0, 1)
+        bright_alpha = np.clip(
+            edge * (0.35 + 0.95 * light) * self.edge_highlight_intensity * 255,
+            0,
+            255,
+        ).astype(np.uint8)
+        shade_alpha = np.clip(
+            edge * (1 - light) * self.edge_highlight_intensity * 120,
+            0,
+            255,
+        ).astype(np.uint8)
 
-        alpha_outer = min(255, max(0, alpha_outer))
-        alpha_inner = min(255, max(0, alpha_inner))
-
-        highlight_radius_outer = max(self.corner_radius - 1, 0)
-        outer_rect = [(0, 0), (w, h)]
-        temp_outer = Image.new("RGBA", (w, h), (255, 255, 255, 0))
-        temp_draw = ImageDraw.Draw(temp_outer)
-        temp_draw.rounded_rectangle(
-            outer_rect,
-            radius=highlight_radius_outer,
-            outline=(255, 255, 255, alpha_outer),
-            width=line_width_outer
-        )
-        temp_outer = temp_outer.filter(ImageFilter.GaussianBlur(radius=1))
-
-        highlight_radius_inner = max(self.corner_radius - 1, 0)
-        inner_rect = [(1, 1), (w - 1, h - 1)]
-        temp_inner = Image.new("RGBA", (w, h), (255, 255, 255, 0))
-        temp_draw_inner = ImageDraw.Draw(temp_inner)
-        temp_draw_inner.rounded_rectangle(
-            inner_rect,
-            radius=highlight_radius_inner,
-            outline=(255, 255, 255, alpha_inner),
-            width=line_width_inner
-        )
-
-        highlight = Image.alpha_composite(highlight, temp_outer)
-        highlight = Image.alpha_composite(highlight, temp_inner)
-        return highlight
+        shade = Image.new("RGBA", size, (0, 0, 0, 0))
+        shade.putalpha(Image.fromarray(shade_alpha))
+        highlight = Image.new("RGBA", size, (255, 255, 255, 0))
+        highlight.putalpha(Image.fromarray(bright_alpha))
+        return Image.alpha_composite(shade, highlight)
 
     def _adjust_saturation(self, img: Image.Image, saturation: float) -> Image.Image:
         img_array = np.array(img.convert("RGB"))
@@ -249,41 +243,83 @@ class LiquidGlass:
 
     def _chromatic_aberration(self, img: Image.Image, intensity: float) -> Image.Image:
         img_array = np.array(img)
-        h, w = img_array.shape[:2]
+        _, w = img_array.shape[:2]
         r, g, b = img_array[:, :, 0], img_array[:, :, 1], img_array[:, :, 2]
-        offset = int(intensity)
-        r_shifted = np.roll(r, offset, axis=1)
-        b_shifted = np.roll(b, -offset, axis=1)
+        offset = max(0, int(round(abs(intensity))))
+        if offset == 0:
+            return img.convert("RGB")
+        positions = np.arange(w)
+        r_shifted = r[:, np.clip(positions - offset, 0, w - 1)]
+        b_shifted = b[:, np.clip(positions + offset, 0, w - 1)]
         aberration = np.dstack([r_shifted, g, b_shifted])
         return Image.fromarray(aberration.astype(np.uint8))
 
     def _generate_displacement_map(self, size: tuple[int, int]) -> Image.Image:
         w, h = size
-        x = np.linspace(0, 1, w)
-        y = np.linspace(0, 1, h)
-        xx, yy = np.meshgrid(x, y)
-        center_x, center_y = 0.5, 0.5
-        dist = np.sqrt((xx - center_x)**2 + (yy - center_y)**2)
-        displacement = np.clip(1 - dist * 2, 0, 1)
-        disp_r = (displacement * 255).astype(np.uint8)
-        disp_g = (displacement * 255).astype(np.uint8)
-        disp_b = disp_g
+        yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+        center_x = (w - 1) / 2
+        center_y = (h - 1) / 2
+        half_w = max((w - 1) / 2, 0.5)
+        half_h = max((h - 1) / 2, 0.5)
+        radius = min(float(self.corner_radius), half_w, half_h)
+        qx = np.abs(xx - center_x) - half_w + radius
+        qy = np.abs(yy - center_y) - half_h + radius
+        outside = np.hypot(np.maximum(qx, 0), np.maximum(qy, 0))
+        signed_distance = outside + np.minimum(np.maximum(qx, qy), 0) - radius
+        normal_y, normal_x = np.gradient(signed_distance)
+        normal_length = np.hypot(normal_x, normal_y)
+        normal_x = np.divide(
+            normal_x,
+            normal_length,
+            out=np.zeros_like(normal_x),
+            where=normal_length > 1e-5,
+        )
+        normal_y = np.divide(
+            normal_y,
+            normal_length,
+            out=np.zeros_like(normal_y),
+            where=normal_length > 1e-5,
+        )
+        edge_band = max(4, min(w, h) * 0.12)
+        edge_strength = np.exp(-np.square(np.maximum(-signed_distance, 0) / edge_band))
+        edge_strength[signed_distance > 0] = 0
+        disp_r = np.clip(
+            np.rint(128 + normal_x * edge_strength * 127), 0, 255
+        ).astype(np.uint8)
+        disp_g = np.clip(
+            np.rint(128 + normal_y * edge_strength * 127), 0, 255
+        ).astype(np.uint8)
+        disp_b = np.clip(np.rint(edge_strength * 255), 0, 255).astype(np.uint8)
         disp_map = np.dstack([disp_r, disp_g, disp_b])
         return Image.fromarray(disp_map)
 
     def _apply_displacement(self, img: Image.Image, disp_map: Image.Image, scale: float) -> Image.Image:
-        img_array = np.array(img)
-        disp_array = np.array(disp_map)
+        img_array = np.asarray(img.convert("RGB"), dtype=np.float32)
+        disp_array = np.asarray(disp_map, dtype=np.float32)
         h, w = img_array.shape[:2]
-        x = np.arange(w)
-        y = np.arange(h)
-        xx, yy = np.meshgrid(x, y)
-        dx = (disp_array[:, :, 0] / 255 - 0.5) * scale
-        dy = (disp_array[:, :, 1] / 255 - 0.5) * scale
-        new_xx = np.clip(xx + dx, 0, w - 1).astype(int)
-        new_yy = np.clip(yy + dy, 0, h - 1).astype(int)
-        displaced = img_array[new_yy, new_xx]
-        return Image.fromarray(displaced.astype(np.uint8))
+        yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+        dx = np.clip((disp_array[:, :, 0] - 128) / 127, -1, 1) * scale
+        dy = np.clip((disp_array[:, :, 1] - 128) / 127, -1, 1) * scale
+        sample_x = np.clip(xx - dx, 0, w - 1)
+        sample_y = np.clip(yy - dy, 0, h - 1)
+        x0 = np.floor(sample_x).astype(np.int32)
+        y0 = np.floor(sample_y).astype(np.int32)
+        x1 = np.minimum(x0 + 1, w - 1)
+        y1 = np.minimum(y0 + 1, h - 1)
+        weight_x = sample_x - x0
+        weight_y = sample_y - y0
+        displaced = np.empty_like(img_array)
+        for channel in range(3):
+            top = (
+                img_array[y0, x0, channel] * (1 - weight_x)
+                + img_array[y0, x1, channel] * weight_x
+            )
+            bottom = (
+                img_array[y1, x0, channel] * (1 - weight_x)
+                + img_array[y1, x1, channel] * weight_x
+            )
+            displaced[:, :, channel] = top * (1 - weight_y) + bottom * weight_y
+        return Image.fromarray(np.clip(displaced, 0, 255).astype(np.uint8))
 
     def apply(
         self,
@@ -302,14 +338,17 @@ class LiquidGlass:
         disp_map = self._generate_displacement_map((w, h))
         displaced = self._apply_displacement(saturated, disp_map, self.displacement_scale)
         aberrated = self._chromatic_aberration(displaced, self.aberration_intensity)
+        edge_mask = np.asarray(disp_map, dtype=np.uint8)[:, :, 2]
+        edge_mask = Image.fromarray((edge_mask.astype(np.float32) * 0.55).astype(np.uint8))
+        refracted = Image.composite(aberrated, displaced, edge_mask)
 
-        aberrated_rgba = aberrated.convert("RGBA")
-        white_overlay = Image.new(
+        refracted_rgba = refracted.convert("RGBA")
+        material_tint = Image.new(
             "RGBA",
             (w, h),
             (0, 0, 0, int(self.white_overlay_opacity * 255))
         )
-        glass_with_white = Image.alpha_composite(aberrated_rgba, white_overlay)
+        glass_with_white = Image.alpha_composite(refracted_rgba, material_tint)
 
         glass_with_white.putalpha(rounded_mask)
 
@@ -345,12 +384,12 @@ def draw(nickname: str = "Momoi Airi") -> bytes:
 
         base = Image.alpha_composite(base, Image.new("RGBA", base.size, (0, 0, 0, 40)))
         liquid_glass = LiquidGlass(
-            displacement_scale=50,
+            displacement_scale=14,
             blur_amount=16,
             saturation=160,
-            aberration_intensity=2,
+            aberration_intensity=1,
             corner_radius=50,
-            edge_highlight_intensity=0.2,
+            edge_highlight_intensity=0.3,
             white_overlay_opacity=0.35,
         )
         base = liquid_glass.apply(base, glass_position=(100, 575), glass_size=(888, 750))
@@ -366,55 +405,59 @@ def draw(nickname: str = "Momoi Airi") -> bytes:
         swap_info = f"{swap.usage} / {swap.total} GB"
         disk_info = f"{disk.usage} / {disk.total} GB"
 
-        ssaa_scale = 4
-        img_w, img_h = img.size
+        mask_alpha = np.asarray(mask_img.getchannel("A"), dtype=np.uint8)
 
-        temp_img = Image.new("RGBA", (img_w * ssaa_scale, img_h * ssaa_scale), (255, 255, 255, 0))
-        temp_draw = ImageDraw.Draw(temp_img)
+        def draw_ring(center_x, center_y, ratio, fill):
+            ratio = min(1, max(0, float(ratio)))
+            if ratio <= 0:
+                return
+            padding = 60
+            left = int(np.floor(center_x - padding))
+            top = center_y - padding
+            right = int(np.ceil(center_x + padding)) + 1
+            bottom = center_y + padding + 1
+            alpha = mask_alpha[top:bottom, left:right].astype(np.float32)
+            yy, xx = np.mgrid[top:bottom, left:right].astype(np.float32)
+            radius = np.hypot(xx - center_x, yy - center_y)
+            alpha[(radius < 51.5) | (radius > 59.5)] = 0
+            normal_x = np.divide(
+                xx - center_x,
+                radius,
+                out=np.zeros_like(radius),
+                where=radius > 0,
+            )
+            normal_y = np.divide(
+                yy - center_y,
+                radius,
+                out=np.zeros_like(radius),
+                where=radius > 0,
+            )
+            sample_x = np.clip(
+                np.rint(xx - left + normal_x).astype(np.int32),
+                0,
+                right - left - 1,
+            )
+            sample_y = np.clip(
+                np.rint(yy - top + normal_y).astype(np.int32),
+                0,
+                bottom - top - 1,
+            )
+            alpha = np.maximum(alpha, alpha[sample_y, sample_x])
+            if ratio < 1:
+                angle = (np.degrees(np.arctan2(yy - center_y, xx - center_x)) + 90) % 360
+                coverage = np.clip((ratio * 360 - angle) / 1.2 + 0.5, 0, 1)
+                alpha *= coverage
+            ring = Image.new("RGBA", (right - left, bottom - top), fill)
+            ring.putalpha(Image.fromarray(np.clip(np.rint(alpha), 0, 255).astype(np.uint8)))
+            img.alpha_composite(ring, (left, top))
 
-        def s(val):
-            return val * ssaa_scale
-
-        temp_draw.arc(
-            (s(152), s(724), s(272), s(838)),
-            start=-90,
-            end=(cpu.usage * 3.6 - 90),
-            width=s(115),
-            fill=cpu_color,
-        )
+        draw_ring(212.5, 781, cpu.usage / 100, cpu_color)
         if ram.total > 0:
-            temp_draw.arc(
-                (s(152), s(878), s(272), s(992)),
-                start=-90,
-                end=(ram.usage / ram.total * 360 - 90),
-                width=s(115),
-                fill=ram_color,
-            )
+            draw_ring(211.5, 935, ram.usage / ram.total, ram_color)
         if swap.total > 0:
-            temp_draw.arc(
-                (s(152), s(1032), s(272), s(1146)),
-                start=-90,
-                end=(swap.usage / swap.total * 360 - 90),
-                width=s(115),
-                fill=swap_color,
-            )
+            draw_ring(211.5, 1089, swap.usage / swap.total, swap_color)
         if disk.total > 0:
-            temp_draw.arc(
-                (s(152), s(1186), s(272), s(1300)),
-                start=-90,
-                end=(disk.usage / disk.total * 360 - 90),
-                width=s(115),
-                fill=disk_color,
-            )
-
-        temp_draw.ellipse((s(163), s(729), s(261), s(833)), width=s(105), fill=transparent_color)
-        temp_draw.ellipse((s(163), s(883), s(261), s(987)), width=s(105), fill=transparent_color)
-        temp_draw.ellipse((s(163), s(1037), s(261), s(1141)), width=s(105), fill=transparent_color)
-        temp_draw.ellipse((s(163), s(1192), s(261), s(1295)), width=s(105), fill=transparent_color)
-
-        temp_img_resized = temp_img.resize((img_w, img_h), Image.Resampling.LANCZOS)
-
-        img = Image.alpha_composite(img, temp_img_resized)
+            draw_ring(212.5, 1243, disk.usage / disk.total, disk_color)
 
         content = ImageDraw.Draw(img)
         nick_fnt = baotu_cjk_fnt if _has_cjk(nickname) else baotu_fnt
@@ -464,8 +507,3 @@ def draw(nickname: str = "Momoi Airi") -> bytes:
         img_bytes = byte_io.getvalue()
 
         return img_bytes
-
-
-
-
-
