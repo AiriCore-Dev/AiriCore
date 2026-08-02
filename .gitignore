@@ -11,6 +11,7 @@ log/
 docs/
 .ruff_cache/
 tmp/
+.worktrees/
 
 # Django/Database
 *.pk
