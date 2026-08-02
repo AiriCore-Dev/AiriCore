@@ -67,7 +67,7 @@ def _arm(state, player, args, kind, now):
     if state.pending_skill:
         raise GameError("已有待完成的技能操作")
     if kind == "airi_armed" and state.turn_flips:
-        raise GameError("本回合已经翻过牌，不能再发动 Airi 技能")
+        raise GameError("本回合已经翻过牌，不能再发动爱莉的技能")
     close_post_flip_window(state, player.user_id)
     state.pending_skill = {"kind": kind, "user_id": player.user_id}
     state.updated_at = now
