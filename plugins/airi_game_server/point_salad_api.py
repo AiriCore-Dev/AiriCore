@@ -1,0 +1,160 @@
+from typing import Literal
+
+from fastapi import APIRouter, Header, HTTPException
+from pydantic import BaseModel
+
+from plugins.airi_point_salad import service
+from plugins.airi_point_salad.commands import parse_slot
+from plugins.airi_point_salad.game import GameError
+from plugins.airi_point_salad.models import Phase
+from plugins.airi_point_salad.renderer import render_board_images, render_turn_change
+from plugins.airi_point_salad.web_api import WebRooms
+
+from . import auth
+
+
+router = APIRouter(prefix="/api/point-salad")
+rooms = WebRooms(service)
+
+
+class CreateBody(BaseModel):
+    speed: Literal["quick", "standard"]
+    mode: Literal["classic", "mix"]
+
+
+class CodeBody(BaseModel):
+    room_id: str
+
+
+class RedeemBody(BaseModel):
+    code: str
+
+
+class HeartbeatBody(BaseModel):
+    room_id: str
+
+
+class ActionBody(BaseModel):
+    action: Literal["start", "leave", "stop", "take", "flip", "skill"]
+    args: list = []
+
+
+def _qq(authorization: str):
+    token = authorization[7:].strip() if authorization.lower().startswith("bearer ") else ""
+    qq = auth.verify_token(token)
+    if not qq:
+        raise HTTPException(status_code=401, detail="未登录或登录已过期")
+    return qq
+
+
+def _nick(qq):
+    from plugins.airi_daily_check.roguelike import store
+    account = store.ensure_account(qq)
+    return account.get("web_nick") or qq
+
+
+def _result(value):
+    return {"ok": True, "data": value}
+
+
+async def _notify_group(room_id, before, after):
+    if room_id.startswith("web:") or before is None:
+        return
+    from nonebot import get_bots
+    from nonebot.adapters.onebot.v11 import MessageSegment
+
+    bots = list(get_bots().values())
+    if not bots or after.phase is not Phase.PLAYING:
+        return
+    bot = bots[0]
+    group_id = int(room_id)
+    change = render_turn_change(before, after)
+    if change is not None:
+        await bot.send_group_msg(group_id=group_id, message=MessageSegment.image(change))
+    player = after.players[after.current_player]
+    active = rooms.active(room_id, player.user_id)
+    member = False
+    if active:
+        try:
+            await bot.get_group_member_info(group_id=group_id, user_id=int(player.user_id), no_cache=True)
+            member = True
+        except Exception:
+            member = False
+    if active and member:
+        await bot.send_group_msg(group_id=group_id, message=MessageSegment.at(player.user_id) + " 轮到你了，请在网页端继续操作")
+    else:
+        board, _ = render_board_images(after, player.user_id)
+        await bot.send_group_msg(group_id=group_id, message=MessageSegment.at(player.user_id) + MessageSegment.image(board))
+
+
+@router.post("/rooms")
+async def create_room(body: CreateBody, authorization: str = Header(default="")):
+    qq = _qq(authorization)
+    return _result(rooms.snapshot((await rooms.create(qq, _nick(qq), body.speed, body.mode)).group_id, qq))
+
+
+@router.post("/codes")
+async def create_code(body: CodeBody, authorization: str = Header(default="")):
+    qq = _qq(authorization)
+    try:
+        return _result({"code": await rooms.code(body.room_id, qq), "ttl": 600})
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error))
+
+
+@router.post("/codes/redeem")
+async def redeem_code(body: RedeemBody, authorization: str = Header(default="")):
+    qq = _qq(authorization)
+    try:
+        state = await rooms.redeem(body.code, qq, _nick(qq))
+        return _result(rooms.snapshot(state.group_id, qq))
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error))
+
+
+@router.get("/rooms/{room_id}")
+async def room_snapshot(room_id: str, authorization: str = Header(default="")):
+    qq = _qq(authorization)
+    try:
+        return _result(rooms.snapshot(room_id, qq))
+    except ValueError as error:
+        raise HTTPException(status_code=404, detail=str(error))
+
+
+@router.post("/heartbeat")
+async def heartbeat(body: HeartbeatBody, authorization: str = Header(default="")):
+    qq = _qq(authorization)
+    try:
+        rooms.heartbeat(body.room_id, qq)
+        return _result({"active": True})
+    except ValueError as error:
+        raise HTTPException(status_code=403, detail=str(error))
+
+
+@router.post("/rooms/{room_id}/actions")
+async def action(room_id: str, body: ActionBody, authorization: str = Header(default="")):
+    qq = _qq(authorization)
+    if not rooms.allowed(room_id, qq):
+        raise HTTPException(status_code=403, detail="无权访问该房间")
+    try:
+        before = await service.board_state(room_id)
+        if body.action == "start":
+            await service.start(room_id, qq)
+        elif body.action == "leave":
+            await service.leave(room_id, qq)
+        elif body.action == "stop":
+            await service.stop(room_id, qq, False)
+        elif body.action == "flip":
+            await service.flip(room_id, qq, int(body.args[0]) - 1)
+        elif body.action == "skill":
+            await service.skill(room_id, qq, body.args)
+        elif body.action == "take":
+            if len(body.args) == 1 and isinstance(body.args[0], int):
+                await service.take(room_id, qq, [body.args[0] - 1])
+            else:
+                await service.take(room_id, qq, [parse_slot(str(value)) for value in body.args])
+        after = await service.board_state(room_id)
+        await _notify_group(room_id, before, after)
+        return _result(rooms.snapshot(room_id, qq))
+    except (GameError, IndexError, TypeError, ValueError) as error:
+        raise HTTPException(status_code=400, detail=str(error) or "操作参数无效")
