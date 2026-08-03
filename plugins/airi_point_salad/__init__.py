@@ -157,7 +157,7 @@ async def execute_command(
         return CommandResponse(render_state(state, user_id), turn_user_id, notice)
 
     if command.action == "create":
-        return await service.create(
+        response = await service.create(
             group_id,
             user_id,
             user_name,
@@ -165,6 +165,18 @@ async def execute_command(
             GameMode(command.args[1]),
             prepare=prepare,
         )
+        try:
+            from plugins.airi_game_server.point_salad_api import rooms
+
+            code = await rooms.code(group_id, user_id)
+            body = response.body
+            if isinstance(body, tuple):
+                body = (f"网页房间码：{code}", *body)
+            else:
+                body = (f"网页房间码：{code}", body)
+            return CommandResponse(body, response.turn_user_id, response.turn_notice)
+        except Exception:
+            return response
     if command.action == "join":
         return await service.join(group_id, user_id, user_name, prepare=prepare)
     if command.action == "leave":
