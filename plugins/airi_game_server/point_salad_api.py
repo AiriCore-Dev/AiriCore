@@ -4,7 +4,7 @@ from fastapi import APIRouter, Header, HTTPException
 from pydantic import BaseModel
 
 from plugins.airi_point_salad import service
-from plugins.airi_point_salad.commands import parse_slot
+from plugins.airi_point_salad.commands import parse_skill_arg, parse_slot
 from plugins.airi_point_salad.game import GameError
 from plugins.airi_point_salad.models import Phase
 from plugins.airi_point_salad.renderer import render_board_images, render_turn_change
@@ -81,10 +81,14 @@ async def _notify_group(room_id, before, after):
         except Exception:
             member = False
     if active and member:
-        await bot.send_group_msg(group_id=group_id, message=MessageSegment.at(player.user_id) + " 轮到你了，请在网页端继续操作")
+        message = MessageSegment.at(player.user_id) + " 轮到你了，请在网页端继续操作"
     else:
         board, _ = render_board_images(after, player.user_id)
-        await bot.send_group_msg(group_id=group_id, message=MessageSegment.at(player.user_id) + MessageSegment.image(board))
+        if member:
+            message = MessageSegment.at(player.user_id) + MessageSegment.image(board)
+        else:
+            message = MessageSegment.image(board)
+    await bot.send_group_msg(group_id=group_id, message=message)
 
 
 @router.post("/rooms")
@@ -147,10 +151,12 @@ async def action(room_id: str, body: ActionBody, authorization: str = Header(def
         elif body.action == "flip":
             await service.flip(room_id, qq, int(body.args[0]) - 1)
         elif body.action == "skill":
-            await service.skill(room_id, qq, body.args)
+            await service.skill(room_id, qq, [parse_skill_arg(str(value)) for value in body.args])
         elif body.action == "take":
             if len(body.args) == 1 and isinstance(body.args[0], int):
                 await service.take(room_id, qq, [body.args[0] - 1])
+            elif len(body.args) == 2 and isinstance(body.args[0], int):
+                await service.take(room_id, qq, [body.args[0] - 1, parse_slot(str(body.args[1]))])
             else:
                 await service.take(room_id, qq, [parse_slot(str(value)) for value in body.args])
         after = await service.board_state(room_id)
