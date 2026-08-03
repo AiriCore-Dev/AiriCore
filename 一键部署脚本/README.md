@@ -107,3 +107,9 @@ Besides the main port, two plugins each start their own HTTPS service. Both reus
 - The generated certificate is self-signed. To serve HTTPS publicly, replace `./utils/ssl/privkey.key` and `./utils/ssl/fullchain.pem` with real ones. To drop TLS entirely, remove the `ssl_keyfile` / `ssl_certfile` arguments in `bot.py` and switch the client to `ws://`.
 - On Windows the font is registered under the current user's Fonts registry key, so administrator rights are not required.
 - All four downloads (Miniconda, conda channel, pip, Playwright) try a China mirror first and fall back to the official source automatically.
+
+### License
+
+MIT License, Copyright (c) 2026 AiriCore Dev. See [LICENSE](../LICENSE).
+
+Adapted from NoneBot · MIT.

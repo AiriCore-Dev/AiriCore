@@ -118,3 +118,5 @@ bot.py 默认加载 ./utils/ssl/ 下证书，若无需 HTTPS 请自行调整。
 ### 许可证
 
 MIT License，Copyright (c) 2026 AiriCore Dev. 详见 [LICENSE](LICENSE)。
+
+Adapted from NoneBot · MIT。

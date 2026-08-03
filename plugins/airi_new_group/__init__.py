@@ -1,7 +1,10 @@
 import os
 import asyncio
+import base64
+import re
 import nonebot
 from utils.asset_cache import get_b64
+from utils.safe_download import download_public_bytes
 from utils.totp_2fa import totp_verify
 from nonebot import on_notice, on_command, get_driver, logger
 from nonebot.permission import SUPERUSER
@@ -13,6 +16,14 @@ driver = get_driver()
 _2fa_key = str(getattr(driver.config, "_2fa_key", "") or "").strip()
 BROADCAST_INTERVAL = 2
 BROADCAST_MAX_GROUPS = 2000
+BROADCAST_MAX_IMAGE_BYTES = 5 * 1024 * 1024
+_DATA_IMAGE_RE = re.compile(r"^data:image/[^;]+;base64,(.+)$", re.I | re.S)
+_IMAGE_SIGNATURES = (
+    b"\x89PNG\r\n\x1a\n",
+    b"\xff\xd8\xff",
+    b"GIF87a",
+    b"GIF89a",
+)
 
 
 def localpath_to_base64(pth):
@@ -77,22 +88,162 @@ async def handle_group_increase(bot: Bot, event: GroupIncreaseNoticeEvent):
 
 airi_full_group = on_command('airifullgroup', priority=5, block=True, permission=SUPERUSER)
 
+
+def _is_image_data(data: bytes) -> bool:
+    return (
+        any(data.startswith(signature) for signature in _IMAGE_SIGNATURES)
+        or (data.startswith(b"RIFF") and data[8:12] == b"WEBP")
+    )
+
+
+def _as_base64_image(data: bytes) -> str | None:
+    if not data or len(data) > BROADCAST_MAX_IMAGE_BYTES or not _is_image_data(data):
+        return None
+    return "base64://" + base64.b64encode(data).decode("ascii")
+
+
+def _embedded_image(source: str) -> str | None:
+    value = str(source or "").strip()
+    encoded = value[9:] if value.startswith("base64://") else ""
+    if not encoded:
+        match = _DATA_IMAGE_RE.match(value)
+        if not match:
+            return None
+        encoded = match.group(1)
+    try:
+        return _as_base64_image(base64.b64decode(encoded, validate=True))
+    except Exception:
+        return None
+
+
+def _local_image(source: str) -> str | None:
+    try:
+        with open(source, "rb") as file:
+            return _as_base64_image(file.read(BROADCAST_MAX_IMAGE_BYTES + 1))
+    except OSError:
+        return None
+
+
+async def _image_as_base64(data: dict, bot: Bot) -> str | None:
+    sources = []
+    for key in ("url", "file"):
+        source = data.get(key)
+        if source and source not in sources:
+            sources.append(str(source))
+    for source in sources:
+        embedded = _embedded_image(source)
+        if embedded:
+            return embedded
+        if source.startswith(("http://", "https://")):
+            try:
+                image = _as_base64_image(await download_public_bytes(
+                    source, BROADCAST_MAX_IMAGE_BYTES
+                ))
+            except Exception as error:
+                logger.warning(f"全群广播图片下载失败: {type(error).__name__}: {error}")
+                continue
+            if image:
+                return image
+    image_id = data.get("file")
+    if not image_id:
+        return None
+    try:
+        info = await bot.get_image(file=image_id)
+    except Exception as error:
+        logger.warning(f"全群广播无法获取图片: {type(error).__name__}: {error}")
+        return None
+    if not isinstance(info, dict):
+        return None
+    for key in ("url", "file"):
+        source = info.get(key)
+        if not source:
+            continue
+        source = str(source)
+        embedded = _embedded_image(source)
+        if embedded:
+            return embedded
+        if source.startswith(("http://", "https://")):
+            try:
+                image = _as_base64_image(await download_public_bytes(
+                    source, BROADCAST_MAX_IMAGE_BYTES
+                ))
+            except Exception as error:
+                logger.warning(f"全群广播图片下载失败: {type(error).__name__}: {error}")
+                continue
+            if image:
+                return image
+        else:
+            image = _local_image(source)
+            if image:
+                return image
+    return None
+
+
+async def _parse_broadcast_argument(arg: Message, bot: Bot) -> tuple[str | None, list]:
+    digit = None
+    content = []
+    for segment in arg:
+        if segment.type == "text":
+            value = str(segment.data.get("text", ""))
+            if digit is None:
+                match = re.match(r"\s*(\S+)", value)
+                if not match:
+                    continue
+                digit = match.group(1)
+                value = value[match.end():].lstrip()
+            if value:
+                content.append(MessageSegment.text(value))
+        elif digit is not None and segment.type == "image":
+            image = await _image_as_base64(dict(segment.data), bot)
+            if image is None:
+                return digit, []
+            content.append(MessageSegment.image(image))
+    return digit, content
+
+
+def _broadcast_nodes(bot_id: str, content: list) -> list[dict]:
+    nodes = []
+    text_parts = Message()
+    for segment in content:
+        if segment.type == "text":
+            text_parts.append(segment)
+            continue
+        if text_parts:
+            nodes.append(_broadcast_node(bot_id, text_parts))
+            text_parts = Message()
+        nodes.append(_broadcast_node(bot_id, Message(segment)))
+    if text_parts:
+        nodes.append(_broadcast_node(bot_id, text_parts))
+    return nodes
+
+
+def _broadcast_node(bot_id: str, content: Message) -> dict:
+    return {
+        "type": "node",
+        "data": {
+            "name": "Airi 全群广播",
+            "uin": bot_id,
+            "content": content,
+        },
+    }
+
+
 @airi_full_group.handle()
 async def _(bot: Bot, arg: Message = CommandArg()):
     if not _2fa_key:
         await airi_full_group.finish("未配置 _2fa_key，全群广播已禁用。")
 
-    args = arg.extract_plain_text().strip().split(maxsplit=1)
-    if not args:
+    digit, content = await _parse_broadcast_argument(arg, bot)
+    if not digit:
         await airi_full_group.finish("用法：airifullgroup <2FA验证码> [广播内容]")
-
-    digit = args[0].strip()
-    msg_content = args[1].strip() if len(args) > 1 else ""
 
     if not totp_verify(_2fa_key, digit):
         await airi_full_group.finish("2fa verification failed")
 
-    target_msg = Message(msg_content) if len(msg_content) else msg
+    if any(segment.type == "image" for segment in arg) and not content:
+        await airi_full_group.finish("图片解析失败，广播未开始。")
+
+    target_content = content or list(msg)
 
     targets = []
     for bot_instance in nonebot.get_bots().values():
@@ -119,7 +270,8 @@ async def _(bot: Bot, arg: Message = CommandArg()):
     failed = 0
     for bot_instance, gid in targets:
         try:
-            await bot_instance.send_group_msg(group_id=gid, message=target_msg)
+            nodes = _broadcast_nodes(bot_instance.self_id, target_content)
+            await bot_instance.send_group_forward_msg(group_id=gid, messages=nodes)
             ok += 1
         except Exception as e:
             failed += 1

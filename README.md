@@ -118,3 +118,5 @@ bot.py loads certificates from `./utils/ssl/` by default; adjust it yourself if 
 ### License
 
 MIT License, Copyright (c) 2026 AiriCore Dev. See [LICENSE](LICENSE).
+
+Adapted from NoneBot · MIT.

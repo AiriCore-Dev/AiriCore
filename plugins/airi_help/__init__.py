@@ -45,8 +45,8 @@ msg = [
         version_node_content(),
     ),
     make_node(
-        "音游类综合查询",
-        """----- 音游类综合查询 -----
+        "游戏综合查询",
+        """----- 游戏综合查询 -----
 
 - HarukiBot:
 PJSK综合查询 By NagiHina
@@ -54,20 +54,12 @@ PJSK综合查询 By NagiHina
 
 - ena-pjsk-score:
 烤倍率/pt计算器 By 咖啡不甜
-* 指令：计算倍率，单人pt，协力pt，挑战pt""",
-    ),
-    make_node(
-        "战舰世界综合查询",
-        """----- 战舰世界综合查询 -----
-
+* 指令：计算倍率，单人pt，协力pt，挑战pt
+   
 - Airi-Kokomi-WoWS:
 战舰世界水表查询 By Maoyu，AiriCore Dev.
 * 使用 wws 触发
-* 发送 wws help 查看帮助""",
-    ),
-    make_node(
-        "Minecraft",
-        """----- Minecraft -----
+* 发送 wws help 查看帮助
 
 - Airi-MCRcon:
 Airi Cobblemon Sever 服管 By AiriCore Dev.
@@ -96,10 +88,6 @@ Airi心愿瓶（漂流瓶plus） By AiriCore Dev.
 - Momoi Airi Turtle Soup:
 Airi海龟汤 By AiriCore Dev.
 * 发送 海龟汤 查看帮助
-
-- MORE MORE JUMP！Point Salad:
-得分沙拉桌游 By AiriCore Dev.
-* 发送 ,sl rl 查看玩法和完整指令
 
 - jrys:
 测测你的今日运势
@@ -160,7 +148,7 @@ emoji合成
     ),
     make_node(
         "棋类插件",
-        """----- 棋类插件 -----
+        """----- 棋类 / 桌游 -----
 
 - chess:
 五子棋，黑白棋，围棋（PvP only）
@@ -171,7 +159,11 @@ emoji合成
 中国象棋（PvE & PvP）
 * 开局指令：@Airi 象棋人机lvX，@Airi 象棋对战
 * 落子指令：炮二平五（中文格式），b2e2（坐标格式）
-* 其他指令：结束下棋，显示棋盘，悔棋""",
+* 其他指令：结束下棋，显示棋盘，悔棋
+
+- MORE MORE JUMP！Point Salad:
+得分沙拉桌游 By AiriCore Dev.
+* 发送 ,sl rl 查看玩法和完整指令""",
     ),
     make_node(
         "基础插件",
@@ -232,6 +224,10 @@ https://www.airi.asia """
 https://github.com/AiriCore-Dev/AiriCore"""
         )
         + image_segment("airocore.png"),
+    ),
+    make_node(
+        "版权信息",
+        "Copyright (c) 2026 AiriCore\nAdapted from NoneBot · MIT",
     ),
 ]
 

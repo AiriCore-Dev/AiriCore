@@ -107,3 +107,9 @@ bash deploy_macos.command
 - 生成的是自签名证书。要对公网提供 HTTPS，把 `./utils/ssl/privkey.key` 与 `./utils/ssl/fullchain.pem` 换成真证书即可。完全不想用 TLS 则删掉 `bot.py` 里的 `ssl_keyfile` / `ssl_certfile` 两个参数，客户端改用 `ws://`。
 - Windows 的字体写进当前用户的 Fonts 注册表项，不需要管理员权限。
 - 四处下载（Miniconda、conda channel、pip、Playwright）都是先国内镜像、失败自动回退官方源。
+
+### 许可证
+
+MIT License，Copyright (c) 2026 AiriCore Dev. 详见 [LICENSE](../LICENSE)。
+
+Adapted from NoneBot · MIT。
