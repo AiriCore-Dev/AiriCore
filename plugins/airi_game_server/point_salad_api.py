@@ -1,7 +1,8 @@
 from typing import Literal
 
 from fastapi import APIRouter, Header, HTTPException
-from pydantic import BaseModel
+from nonebot.log import logger
+from pydantic import BaseModel, Field
 
 from plugins.airi_point_salad import service
 from plugins.airi_point_salad.commands import parse_skill_arg, parse_slot
@@ -36,7 +37,7 @@ class HeartbeatBody(BaseModel):
 
 class ActionBody(BaseModel):
     action: Literal["start", "leave", "stop", "take", "flip", "skill"]
-    args: list = []
+    args: list = Field(default_factory=list)
 
 
 def _qq(authorization: str):
@@ -57,6 +58,18 @@ def _result(value):
     return {"ok": True, "data": value}
 
 
+def _skill_args(values):
+    return [parse_skill_arg(str(value)) for value in values]
+
+
+def _take_args(values):
+    if len(values) == 1 and type(values[0]) is int:
+        return [values[0] - 1]
+    if len(values) == 2 and type(values[0]) is int:
+        return [values[0] - 1, parse_slot(str(values[1]))]
+    return [parse_slot(str(value)) for value in values]
+
+
 async def _notify_group(room_id, before, after):
     if room_id.startswith("web:") or before is None:
         return
@@ -73,13 +86,11 @@ async def _notify_group(room_id, before, after):
         await bot.send_group_msg(group_id=group_id, message=MessageSegment.image(change))
     player = after.players[after.current_player]
     active = rooms.active(room_id, player.user_id)
-    member = False
-    if active:
-        try:
-            await bot.get_group_member_info(group_id=group_id, user_id=int(player.user_id), no_cache=True)
-            member = True
-        except Exception:
-            member = False
+    try:
+        await bot.get_group_member_info(group_id=group_id, user_id=int(player.user_id), no_cache=True)
+        member = True
+    except Exception:
+        member = False
     if active and member:
         message = MessageSegment.at(player.user_id) + " 轮到你了，请在网页端继续操作"
     else:
@@ -95,6 +106,11 @@ async def _notify_group(room_id, before, after):
 async def create_room(body: CreateBody, authorization: str = Header(default="")):
     qq = _qq(authorization)
     return _result(rooms.snapshot((await rooms.create(qq, _nick(qq), body.speed, body.mode)).group_id, qq))
+
+
+@router.get("/rooms")
+async def room_list(authorization: str = Header(default="")):
+    return _result(rooms.list_rooms(_qq(authorization)))
 
 
 @router.post("/codes")
@@ -143,24 +159,27 @@ async def action(room_id: str, body: ActionBody, authorization: str = Header(def
     try:
         before = await service.board_state(room_id)
         if body.action == "start":
-            await service.start(room_id, qq)
+            after = await service.start(room_id, qq)
         elif body.action == "leave":
-            await service.leave(room_id, qq)
+            after = await service.leave(room_id, qq)
         elif body.action == "stop":
-            await service.stop(room_id, qq, False)
+            after = await service.stop(room_id, qq, False)
         elif body.action == "flip":
-            await service.flip(room_id, qq, int(body.args[0]) - 1)
+            after = await service.flip(room_id, qq, int(body.args[0]) - 1)
         elif body.action == "skill":
-            await service.skill(room_id, qq, [parse_skill_arg(str(value)) for value in body.args])
+            after = await service.skill(room_id, qq, _skill_args(body.args))
         elif body.action == "take":
-            if len(body.args) == 1 and isinstance(body.args[0], int):
-                await service.take(room_id, qq, [body.args[0] - 1])
-            elif len(body.args) == 2 and isinstance(body.args[0], int):
-                await service.take(room_id, qq, [body.args[0] - 1, parse_slot(str(body.args[1]))])
-            else:
-                await service.take(room_id, qq, [parse_slot(str(value)) for value in body.args])
-        after = await service.board_state(room_id)
-        await _notify_group(room_id, before, after)
+            after = await service.take(room_id, qq, _take_args(body.args))
+        if after.phase is Phase.FINISHED:
+            rooms.close(room_id)
+            return _result({"room_id": room_id, "finished": True})
+        try:
+            await _notify_group(room_id, before, after)
+        except Exception:
+            logger.exception("Point Salad 群聊回合提示发送失败")
+        if body.action == "leave":
+            rooms.revoke(room_id, qq)
+            return _result({"room_id": room_id, "left": True})
         return _result(rooms.snapshot(room_id, qq))
     except (GameError, IndexError, TypeError, ValueError) as error:
         raise HTTPException(status_code=400, detail=str(error) or "操作参数无效")

@@ -24,9 +24,37 @@ class WebRooms:
     def _grant(self, room_id, qq):
         self.access.setdefault(room_id, set()).add(qq)
 
+    def revoke(self, room_id, qq):
+        members = self.access.get(room_id)
+        if members is not None:
+            members.discard(qq)
+            if not members:
+                self.access.pop(room_id, None)
+        self.presence.pop((room_id, qq), None)
+
+    def close(self, room_id):
+        self.access.pop(room_id, None)
+        self.codes = {
+            code: record
+            for code, record in self.codes.items()
+            if record[0] != room_id
+        }
+        self.presence = {
+            key: seen_at
+            for key, seen_at in self.presence.items()
+            if key[0] != room_id
+        }
+
     def allowed(self, room_id, qq):
         state = self.service.games.get(room_id)
         return state is not None and (qq in self.access.get(room_id, set()) or any(player.user_id == qq for player in state.players))
+
+    def list_rooms(self, qq):
+        return [
+            self.snapshot(room_id, qq)
+            for room_id, state in self.service.games.items()
+            if state.phase is not Phase.FINISHED and self.allowed(room_id, qq)
+        ]
 
     async def create(self, qq, nick, speed, mode):
         room_id = self._new_room_id()
