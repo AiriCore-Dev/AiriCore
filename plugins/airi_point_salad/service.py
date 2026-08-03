@@ -55,6 +55,14 @@ class GameService:
     async def save(self) -> None:
         await self.store.save(self.games)
 
+    async def set_room_code(self, group_id: str, room_code: str) -> GameState:
+        def operation():
+            state = self._require_state(group_id)
+            state.room_code = room_code
+            return state
+
+        return await self._mutate(group_id, operation)
+
     def close(self) -> None:
         for timer in self.timers.values():
             timer.cancel()

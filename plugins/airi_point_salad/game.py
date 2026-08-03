@@ -19,6 +19,7 @@ def create_game(
     state = GameState(
         group_id=group_id,
         host_id=host_id,
+        room_code="",
         speed=speed,
         mode=mode,
         seed=seed,

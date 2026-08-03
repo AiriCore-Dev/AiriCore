@@ -111,6 +111,7 @@ class GameState:
     host_id: str
     speed: GameSpeed
     mode: GameMode
+    room_code: str = ""
     phase: Phase = Phase.LOBBY
     players: list[PlayerState] = field(default_factory=list)
     cards: dict[str, Card] = field(default_factory=dict)
@@ -143,6 +144,7 @@ class GameState:
         return {
             "group_id": self.group_id,
             "host_id": self.host_id,
+            "room_code": self.room_code,
             "speed": self.speed.value,
             "mode": self.mode.value,
             "phase": self.phase.value,
@@ -227,6 +229,7 @@ class GameState:
         return cls(
             group_id=_string(data["group_id"], "group_id"),
             host_id=_string(data["host_id"], "host_id"),
+            room_code=_string(data.get("room_code", ""), "room_code"),
             speed=GameSpeed(_string(data["speed"], "speed")),
             mode=GameMode(_string(data["mode"], "mode")),
             phase=Phase(_string(data.get("phase", Phase.LOBBY.value), "phase")),

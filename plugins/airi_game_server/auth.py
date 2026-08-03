@@ -161,9 +161,25 @@ def _digest(qq: str, code: str) -> str:
 
 
 def create_email_code(qq: str) -> str:
+    now = time.time()
+    if len(_email_codes) >= _MAX_PENDING:
+        expired = [
+            account
+            for account, record in _email_codes.items()
+            if record["expires"] < now
+        ]
+        for account in expired:
+            _email_codes.pop(account, None)
+    if len(_email_codes) >= _MAX_PENDING:
+        oldest = min(_email_codes, key=lambda account: _email_codes[account]["expires"])
+        _email_codes.pop(oldest, None)
     code = f"{secrets.randbelow(1000000):06d}"
-    _email_codes[qq] = {"digest": _digest(qq, code), "expires": time.time() + EMAIL_CODE_TTL, "attempts": 0}
+    _email_codes[qq] = {"digest": _digest(qq, code), "expires": now + EMAIL_CODE_TTL, "attempts": 0}
     return code
+
+
+def discard_email_code(qq: str) -> None:
+    _email_codes.pop(qq, None)
 
 
 def confirm_email_code(qq: str, code: str) -> bool:

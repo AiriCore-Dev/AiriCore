@@ -175,7 +175,15 @@ async def execute_command(
     if command.action == "join":
         return await service.join(group_id, user_id, user_name, prepare=prepare)
     if command.action == "leave":
-        return await service.leave(group_id, user_id, prepare=prepare)
+        response = await service.leave(group_id, user_id, prepare=prepare)
+        if group_id not in service.games:
+            try:
+                from plugins.airi_game_server.point_salad_api import rooms
+
+                rooms.close(group_id)
+            except Exception as error:
+                logger.opt(exception=error).error("得分沙拉网页房间清理失败")
+        return response
     if command.action == "start":
         state = await service.board_state(group_id)
         if state.phase is Phase.PLAYING and state.mode is GameMode.MIX:
@@ -196,12 +204,19 @@ async def execute_command(
             return CommandResponse((skill_description(player.center), body), response.turn_user_id, response.turn_notice)
         return await service.skill(group_id, user_id, command.args, prepare=prepare)
     if command.action == "stop":
-        return await service.stop(
+        response = await service.stop(
             group_id,
             user_id,
             is_admin,
             prepare=prepare,
         )
+        try:
+            from plugins.airi_game_server.point_salad_api import rooms
+
+            rooms.close(group_id)
+        except Exception as error:
+            logger.opt(exception=error).error("得分沙拉网页房间清理失败")
+        return response
     if command.action == "board":
         state = await service.board_state(group_id)
         body = await asyncio.to_thread(render_state, state, user_id)
@@ -290,6 +305,12 @@ async def handle_salad(bot: Bot, event: MessageEvent):
 
 async def notify_timeout(group_id: str, phase: Phase) -> None:
     message_retention.clear(group_id)
+    try:
+        from plugins.airi_game_server.point_salad_api import rooms
+
+        rooms.close(group_id)
+    except Exception as error:
+        logger.opt(exception=error).error("得分沙拉网页房间清理失败")
     label = "大厅" if phase is Phase.LOBBY else "对局"
     message = f"得分沙拉{label}因长时间无人操作已自动关闭"
     for bot in nonebot.get_bots().values():

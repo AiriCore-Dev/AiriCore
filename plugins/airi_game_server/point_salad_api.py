@@ -1,6 +1,8 @@
+from collections import deque
+import time
 from typing import Literal
 
-from fastapi import APIRouter, Header, HTTPException
+from fastapi import APIRouter, Header, HTTPException, Request
 from nonebot.log import logger
 from pydantic import BaseModel, Field
 
@@ -16,6 +18,9 @@ from . import accounts, auth
 
 router = APIRouter(prefix="/api/point-salad")
 rooms = WebRooms(service)
+_redeem_attempts = {}
+REDEEM_WINDOW = 60
+REDEEM_LIMIT = 20
 
 
 class CreateBody(BaseModel):
@@ -24,15 +29,15 @@ class CreateBody(BaseModel):
 
 
 class CodeBody(BaseModel):
-    room_id: str
+    room_id: str = Field(min_length=1, max_length=160)
 
 
 class RedeemBody(BaseModel):
-    code: str
+    code: str = Field(min_length=4, max_length=32)
 
 
 class HeartbeatBody(BaseModel):
-    room_id: str
+    room_id: str = Field(min_length=1, max_length=160)
 
 
 class ActionBody(BaseModel):
@@ -46,7 +51,7 @@ class ActionBody(BaseModel):
         "request_swap",
         "respond_swap",
     ]
-    args: list = Field(default_factory=list)
+    args: list = Field(default_factory=list, max_length=6)
 
 
 def _qq(authorization: str):
@@ -90,8 +95,28 @@ def _respond_swap_args(values):
     return values[0]
 
 
+def _check_redeem_rate(request: Request):
+    now = time.time()
+    client_ip = (request.client.host if request.client else "") or "unknown"
+    attempts = _redeem_attempts.setdefault(client_ip, deque())
+    while attempts and now - attempts[0] >= REDEEM_WINDOW:
+        attempts.popleft()
+    if len(attempts) >= REDEEM_LIMIT:
+        raise HTTPException(status_code=429, detail="房间码尝试过于频繁，请稍后再试")
+    attempts.append(now)
+    if len(_redeem_attempts) > 2048:
+        stale = [
+            ip
+            for ip, values in _redeem_attempts.items()
+            if not values or now - values[-1] >= REDEEM_WINDOW
+        ]
+        for ip in stale:
+            _redeem_attempts.pop(ip, None)
+
+
 def _finished_action(room_id, state):
     payload = state.to_dict()
+    payload.pop("room_code", None)
     payload["room_id"] = room_id
     payload["finished"] = True
     rooms.close(room_id, payload)
@@ -154,8 +179,13 @@ async def create_code(body: CodeBody, authorization: str = Header(default="")):
 
 
 @router.post("/codes/redeem")
-async def redeem_code(body: RedeemBody, authorization: str = Header(default="")):
+async def redeem_code(
+    body: RedeemBody,
+    request: Request,
+    authorization: str = Header(default=""),
+):
     qq = _qq(authorization)
+    _check_redeem_rate(request)
     try:
         state = await rooms.redeem(body.code, qq, _nick(qq))
         return _result(rooms.snapshot(state.group_id, qq))

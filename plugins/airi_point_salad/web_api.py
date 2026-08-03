@@ -4,7 +4,7 @@ import time
 from .models import GameMode, GameSpeed, Phase
 
 
-PRESENCE_TTL = 90
+PRESENCE_TTL = 30
 FINISHED_TTL = 600
 
 
@@ -22,7 +22,13 @@ class WebRooms:
         return f"web:{secrets.token_urlsafe(12)}"
 
     def _new_code(self):
-        return secrets.token_urlsafe(8).upper()
+        while True:
+            code = secrets.token_urlsafe(8).upper()
+            if code not in self.codes and not any(
+                getattr(state, "room_code", "") == code
+                for state in self.service.games.values()
+            ):
+                return code
 
     def _grant(self, room_id, qq):
         self.access.setdefault(room_id, set()).add(qq)
@@ -33,9 +39,16 @@ class WebRooms:
         if code is not None:
             self.codes.pop(code, None)
 
-    def _ensure_code(self, room_id, state=None):
+    async def _ensure_code(self, room_id, state=None):
         current = self.room_codes.get(room_id)
         generation = getattr(state, "created_at", None)
+        if current is None and state is not None:
+            current = getattr(state, "room_code", "") or None
+            if current:
+                self.codes[current] = room_id
+                self.room_codes[room_id] = current
+                self.code_generations[room_id] = generation
+                return current
         if (
             current is not None
             and self.codes.get(current) == room_id
@@ -48,6 +61,8 @@ class WebRooms:
         self.codes[code] = room_id
         self.room_codes[room_id] = code
         self.code_generations[room_id] = generation
+        if state is not None and getattr(state, "room_code", "") != code:
+            state = await self.service.set_room_code(room_id, code)
         return code
 
     def revoke(self, room_id, qq):
@@ -99,7 +114,7 @@ class WebRooms:
         room_id = self._new_room_id()
         state = await self.service.create(room_id, qq, nick, GameSpeed(speed), GameMode(mode))
         self._grant(room_id, qq)
-        self._ensure_code(room_id, state)
+        await self._ensure_code(room_id, state)
         return state
 
     async def code(self, room_id, qq):
@@ -109,11 +124,24 @@ class WebRooms:
             raise ValueError("房间不存在或已结束")
         if qq not in self.access.get(room_id, set()) and not any(player.user_id == qq for player in state.players):
             raise ValueError("无权访问该房间码")
-        return self._ensure_code(room_id, state)
+        return await self._ensure_code(room_id, state)
+
+    def _room_for_code(self, code):
+        room_id = self.codes.get(code)
+        if room_id is not None:
+            return room_id
+        for candidate_id, state in self.service.games.items():
+            if state.phase is Phase.FINISHED or state.room_code != code:
+                continue
+            self.codes[code] = candidate_id
+            self.room_codes[candidate_id] = code
+            self.code_generations[candidate_id] = state.created_at
+            return candidate_id
+        return None
 
     async def redeem(self, code, qq, nick):
         normalized = code.strip().upper()
-        room_id = self.codes.get(normalized)
+        room_id = self._room_for_code(normalized)
         if room_id is None:
             raise ValueError("房间码无效或已过期")
         state = self.service.games.get(room_id)
@@ -149,6 +177,7 @@ class WebRooms:
             payload["web_active"] = False
             return payload
         payload = state.to_dict()
+        payload.pop("room_code", None)
         payload["room_id"] = room_id
         payload["web_room"] = room_id.startswith("web:")
         payload["viewer_id"] = qq
