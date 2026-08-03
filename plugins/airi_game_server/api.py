@@ -4,11 +4,11 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from plugins.airi_daily_check.roguelike.api import app as sekai_app
 from utils import mailer
 
-from . import auth
+from . import accounts, auth
 from .point_salad_api import router as point_salad_router
+from .sekai_api import router as sekai_router
 
 
 app = FastAPI(title="Airi Game Server", docs_url=None, redoc_url=None)
@@ -19,7 +19,7 @@ app.add_middleware(
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Authorization", "Content-Type"],
 )
-app.include_router(sekai_app.router)
+app.include_router(sekai_router)
 app.include_router(point_salad_router)
 _email_requests = {}
 
@@ -68,11 +68,6 @@ async def confirm_email_login(body: EmailConfirm):
         raise HTTPException(status_code=400, detail=str(error))
     if not auth.confirm_email_code(qq, body.code):
         raise HTTPException(status_code=400, detail="验证码无效或已过期")
-    account = __import__("plugins.airi_daily_check.roguelike.store", fromlist=["ensure_account"]).ensure_account(qq)
+    account = accounts.ensure_account(qq)
     nick = account.get("web_nick") or qq
     return {"ok": True, "token": auth.issue_token(qq), "qq": qq, "nick": nick}
-
-
-@app.get("/api/health")
-async def health():
-    return {"ok": True}

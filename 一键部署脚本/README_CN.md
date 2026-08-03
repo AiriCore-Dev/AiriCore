@@ -86,7 +86,7 @@ bash deploy_macos.command
 | 端口 | 来源 | 配置项 |
 |---|---|---|
 | 15100 | bot 主体（OneBot 反向 WS） | `PORT` |
-| 22319 | airi_daily_check 肉鸽 Web API | `web_api_port` |
+| 22319 | 游戏 Web API（SEKAI 与 Point Salad） | `web_api_port` |
 | 22320 | airi_market 邮件退订服务 | `market_port` |
 
 ### 缓存模式

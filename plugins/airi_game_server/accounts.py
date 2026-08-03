@@ -1,4 +1,5 @@
-import sys
+from plugins.airi_daily_check.base import state
+from plugins.airi_daily_check.base.constants import new_account as daily_new_account
 
 
 _WEB_DEFAULTS = {
@@ -10,23 +11,12 @@ _WEB_DEFAULTS = {
 }
 
 
-def _parent_module():
-    parent_name = __package__.rsplit(".", 1)[0] if "." in __package__ else __package__
-    return sys.modules.get(parent_name)
-
-
 def get_data() -> dict:
-    mod = _parent_module()
-    if mod is None:
-        return {}
-    d = getattr(mod, "data", None)
-    return d if isinstance(d, dict) else {}
+    return state.data if isinstance(state.data, dict) else {}
 
 
 def new_account() -> dict:
-    mod = _parent_module()
-    acc = mod.new_account() if mod and hasattr(mod, "new_account") else {"credits": 0}
-    return _ensure_web_fields(acc)
+    return _ensure_web_fields(daily_new_account())
 
 
 def _ensure_web_fields(acc: dict) -> dict:

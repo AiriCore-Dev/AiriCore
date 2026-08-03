@@ -1,5 +1,4 @@
 import asyncio
-import importlib
 import random
 import traceback
 
@@ -71,8 +70,3 @@ async def _(bot: Bot, ev: MessageEvent):
         else:
             res = '命令执行成功' if not res else str(res)
     await superuser_debug.finish(res, reply_message=True)
-
-
-_roguelike = importlib.import_module(
-    f"{__package__}.roguelike" if __package__ else "roguelike"
-)

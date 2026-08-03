@@ -11,7 +11,7 @@ from plugins.airi_point_salad.models import Phase
 from plugins.airi_point_salad.renderer import render_board_images, render_turn_change
 from plugins.airi_point_salad.web_api import WebRooms
 
-from . import auth
+from . import accounts, auth
 
 
 router = APIRouter(prefix="/api/point-salad")
@@ -49,8 +49,7 @@ def _qq(authorization: str):
 
 
 def _nick(qq):
-    from plugins.airi_daily_check.roguelike import store
-    account = store.ensure_account(qq)
+    account = accounts.ensure_account(qq)
     return account.get("web_nick") or qq
 
 
@@ -68,6 +67,14 @@ def _take_args(values):
     if len(values) == 2 and type(values[0]) is int:
         return [values[0] - 1, parse_slot(str(values[1]))]
     return [parse_slot(str(value)) for value in values]
+
+
+def _finished_action(room_id, state):
+    payload = state.to_dict()
+    payload["room_id"] = room_id
+    payload["finished"] = True
+    rooms.close(room_id, payload)
+    return _result(payload)
 
 
 async def _notify_group(room_id, before, after):
@@ -171,8 +178,7 @@ async def action(room_id: str, body: ActionBody, authorization: str = Header(def
         elif body.action == "take":
             after = await service.take(room_id, qq, _take_args(body.args))
         if after.phase is Phase.FINISHED:
-            rooms.close(room_id)
-            return _result({"room_id": room_id, "finished": True})
+            return _finished_action(room_id, after)
         try:
             await _notify_group(room_id, before, after)
         except Exception:

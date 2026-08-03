@@ -6,6 +6,7 @@ from .models import GameMode, GameSpeed, Phase
 
 CODE_TTL = 600
 PRESENCE_TTL = 90
+FINISHED_TTL = 600
 
 
 class WebRooms:
@@ -14,6 +15,7 @@ class WebRooms:
         self.codes = {}
         self.access = {}
         self.presence = {}
+        self.finished = {}
 
     def _new_room_id(self):
         return f"web:{secrets.token_urlsafe(12)}"
@@ -32,7 +34,19 @@ class WebRooms:
                 self.access.pop(room_id, None)
         self.presence.pop((room_id, qq), None)
 
-    def close(self, room_id):
+    def _prune_finished(self):
+        now = time.time()
+        self.finished = {
+            room_id: record
+            for room_id, record in self.finished.items()
+            if record[2] > now
+        }
+
+    def close(self, room_id, payload=None):
+        self._prune_finished()
+        members = set(self.access.get(room_id, set()))
+        if payload is not None and members:
+            self.finished[room_id] = (dict(payload), members, time.time() + FINISHED_TTL)
         self.access.pop(room_id, None)
         self.codes = {
             code: record
@@ -46,10 +60,15 @@ class WebRooms:
         }
 
     def allowed(self, room_id, qq):
+        self._prune_finished()
         state = self.service.games.get(room_id)
-        return state is not None and (qq in self.access.get(room_id, set()) or any(player.user_id == qq for player in state.players))
+        if state is not None:
+            return qq in self.access.get(room_id, set()) or any(player.user_id == qq for player in state.players)
+        record = self.finished.get(room_id)
+        return record is not None and qq in record[1]
 
     def list_rooms(self, qq):
+        self._prune_finished()
         return [
             self.snapshot(room_id, qq)
             for room_id, state in self.service.games.items()
@@ -88,11 +107,18 @@ class WebRooms:
         return time.time() - self.presence.get((room_id, qq), 0) <= PRESENCE_TTL
 
     def snapshot(self, room_id, qq):
+        self._prune_finished()
         if not self.allowed(room_id, qq):
             raise ValueError("无权访问该房间")
         state = self.service.games.get(room_id)
         if state is None:
-            raise ValueError("房间不存在或已结束")
+            record = self.finished.get(room_id)
+            if record is None:
+                raise ValueError("房间不存在或已结束")
+            payload = dict(record[0])
+            payload["viewer_id"] = qq
+            payload["web_active"] = False
+            return payload
         payload = state.to_dict()
         payload["room_id"] = room_id
         payload["web_room"] = room_id.startswith("web:")

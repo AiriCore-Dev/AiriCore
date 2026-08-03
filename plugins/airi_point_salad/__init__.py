@@ -23,18 +23,13 @@ from .skills import skill_description
 
 
 USAGE = (
-    "MORE MORE JUMP！得分沙拉\n"
-    "普通模式使用官方基础规则；混合模式增加 Center 与 Live Mission\n"
-    "快速/标准只改变牌量：每种角色为人数 × 2 / 人数 × 3\n"
-    "创建：,沙拉 创建 快速 原版\n"
-    "等价：,salad create quick classic\n"
-    "缩写：,sl cr qk cl\n"
-    "加入/退出：,sl j / ,sl lv\n"
-    "开始/结束：,sl st / ,sl sp\n"
-    "拿牌：,sl ta A / ,sl ta A1 B2\n"
-    "翻牌：,sl fl 2\n"
-    "技能：,sl sk\n"
-    "桌面/规则：,sl bd / ,sl rl"
+    "MMJ 得分沙拉｜指令速查" 
+    "创建房间：创建/create/cr + 快速/quick/qk 或 标准/standard/std + 原版/classic/cl 或 混合/mix/mx"
+    "房间：加入/join/j · 退出/leave/lv · 开始/start/st · 结束/stop/sp"
+    "行动：拿/take/ta · 翻/flip/fl · 技能/skill/sk"
+    "查看：桌面/board/bd · 规则/rules/rl"
+    "示例：,sl cr qk cl · ,sl ta A · ,sl ta A1 B2 · ,sl fl 2 · ,sl sk"
+    "详细帮助请发送 ,sl rl 查看"
 )
 
 

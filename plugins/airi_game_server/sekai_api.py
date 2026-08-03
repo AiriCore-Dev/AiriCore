@@ -2,14 +2,12 @@ import json
 import time
 import datetime
 
-from fastapi import FastAPI, Header, HTTPException, Request
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import APIRouter, Header, HTTPException, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from nonebot import get_driver, logger
 
-from . import auth, store
-from . import ratelimit
+from . import accounts, auth, ratelimit
 
 _driver_config = get_driver().config
 
@@ -29,15 +27,7 @@ RUN_BLOB_MAX = 256 * 1024
 BOARD_CACHE_TTL = 15.0
 _board_cache: dict = {}
 
-app = FastAPI(title="SEKAI Roguelike API", docs_url=None, redoc_url=None)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
-    allow_methods=["GET", "POST", "OPTIONS"],
-    allow_headers=["*"],
-)
+router = APIRouter()
 
 
 def _client_ip(request: Request) -> str:
@@ -111,14 +101,14 @@ class RunBody(BaseModel):
     run: dict | None = None
 
 
-@app.post("/api/auth/request")
+@router.post("/api/auth/request")
 async def auth_request(request: Request):
     _need(f"authreq:{_client_ip(request)}", 10, 60)
     code = auth.new_code()
     return {"code": code, "ttl": auth.CODE_TTL}
 
 
-@app.get("/api/auth/poll")
+@router.get("/api/auth/poll")
 async def auth_poll(code: str, request: Request):
     _need(f"authpoll-code:{auth.normalize_code(code)}", POLL_PER_CODE, auth.CODE_TTL + 60)
     _need(f"authpoll-ip:{_client_ip(request)}", POLL_PER_IP, 60)
@@ -126,18 +116,18 @@ async def auth_poll(code: str, request: Request):
     if res is None:
         return {"bound": False}
     qq, nick = res
-    store.ensure_account(qq)
-    acc = store.get_account(qq)
+    accounts.ensure_account(qq)
+    acc = accounts.get_account(qq)
     acc["web_nick"] = nick
     token = auth.issue_token(qq)
     return {"bound": True, "token": token, "qq": qq, "nick": nick,
             "credits": int(acc.get("credits", 0))}
 
 
-@app.get("/api/me")
+@router.get("/api/me")
 async def me(authorization: str = Header(default="")):
     qq = _auth_qq(authorization)
-    acc = store.ensure_account(qq)
+    acc = accounts.ensure_account(qq)
     today = _today_str()
     started = acc.get("sekai_started", {})
     run_rec = acc.get("sekai_run", {}) or {}
@@ -156,13 +146,13 @@ async def me(authorization: str = Header(default="")):
     }
 
 
-@app.post("/api/credits/spend")
+@router.post("/api/credits/spend")
 async def credits_spend(body: SpendBody, authorization: str = Header(default="")):
     qq = _auth_qq(authorization)
     amount = int(body.amount)
     if amount <= 0:
         raise HTTPException(status_code=400, detail="金额必须为正")
-    acc = store.ensure_account(qq)
+    acc = accounts.ensure_account(qq)
     cur = int(acc.get("credits", 0))
     if cur < amount:
         return JSONResponse(status_code=402,
@@ -171,7 +161,7 @@ async def credits_spend(body: SpendBody, authorization: str = Header(default="")
     return {"ok": True, "credits": acc["credits"]}
 
 
-@app.post("/api/credits/grant")
+@router.post("/api/credits/grant")
 async def credits_grant(body: GrantBody, request: Request,
                         authorization: str = Header(default="")):
     qq = _auth_qq(authorization)
@@ -180,7 +170,7 @@ async def credits_grant(body: GrantBody, request: Request,
     if amount < 0:
         raise HTTPException(status_code=400, detail="金额不能为负")
     amount = min(amount, GRANT_CAP)
-    acc = store.ensure_account(qq)
+    acc = accounts.ensure_account(qq)
     today = _today_str()
     granted = acc.setdefault("web_granted", {})
     if not isinstance(granted, dict):
@@ -190,7 +180,7 @@ async def credits_grant(body: GrantBody, request: Request,
         granted.pop(stale, None)
     used = int(granted.get(today, 0))
     if used >= GRANT_DAILY_CAP:
-        logger.warning(f"roguelike 网页加分已达当日上限: qq={qq} used={used}")
+        logger.warning(f"SEKAI 网页加分已达当日上限: qq={qq} used={used}")
         return JSONResponse(
             status_code=429,
             content={"ok": False, "credits": int(acc.get("credits", 0)),
@@ -200,17 +190,17 @@ async def credits_grant(body: GrantBody, request: Request,
     granted[today] = used + amount
     acc["credits"] = int(acc.get("credits", 0)) + amount
     logger.info(
-        f"roguelike 网页加分: qq={qq} amount={amount} 今日累计={granted[today]} "
+        f"SEKAI 网页加分: qq={qq} amount={amount} 今日累计={granted[today]} "
         f"reason={str(body.reason)[:40]} ip={_client_ip(request)}"
     )
     return {"ok": True, "credits": acc["credits"], "granted_today": granted[today]}
 
 
-@app.post("/api/sekai/claim")
+@router.post("/api/sekai/claim")
 async def sekai_claim(body: ClaimBody, authorization: str = Header(default="")):
     qq = _auth_qq(authorization)
     date = _require_today(body.date)
-    acc = store.ensure_account(qq)
+    acc = accounts.ensure_account(qq)
     started = acc.setdefault("sekai_started", {})
     for stale in [d for d in started if d != date]:
         started.pop(stale, None)
@@ -224,16 +214,16 @@ async def sekai_claim(body: ClaimBody, authorization: str = Header(default="")):
             "limit": SEKAI_DAILY_LIMIT, "best": best}
 
 
-@app.post("/api/sekai/score")
+@router.post("/api/sekai/score")
 async def sekai_score(body: ScoreBody, authorization: str = Header(default="")):
     qq = _auth_qq(authorization)
     _need(f"score:{qq}", 30, 60)
     score = max(0, int(body.score))
     if score > SCORE_MAX:
-        logger.warning(f"roguelike 上报分数异常偏高，已截断: qq={qq} score={score}")
+        logger.warning(f"SEKAI 上报分数异常偏高，已截断: qq={qq} score={score}")
         score = SCORE_MAX
     date = _require_today(body.date)
-    acc = store.ensure_account(qq)
+    acc = accounts.ensure_account(qq)
     if int(acc.get("sekai_started", {}).get(date, 0)) <= 0:
         raise HTTPException(status_code=400, detail="请先开始今日对局")
     daily = acc.setdefault("sekai_daily", {})
@@ -253,7 +243,7 @@ def _cached_board(cache_key: str, builder):
     return rows
 
 
-@app.get("/api/sekai/board")
+@router.get("/api/sekai/board")
 async def sekai_board(date: str, request: Request, limit: int = 20):
     _need(f"board:{_client_ip(request)}", 60, 60)
     date = date.strip()[:10]
@@ -261,7 +251,7 @@ async def sekai_board(date: str, request: Request, limit: int = 20):
 
     def build():
         rows = []
-        for qq, acc in store.get_data().items():
+        for qq, acc in accounts.get_data().items():
             if not isinstance(acc, dict):
                 continue
             sc = acc.get("sekai_daily", {})
@@ -282,7 +272,7 @@ ACTIVITY_ID_MAX = 64
 ACTIVITY_COUNT_MAX = 128
 
 
-@app.post("/api/sekai/activity/score")
+@router.post("/api/sekai/activity/score")
 async def sekai_activity_score(body: ActScoreBody, authorization: str = Header(default="")):
     qq = _auth_qq(authorization)
     _need(f"actscore:{qq}", 30, 60)
@@ -291,9 +281,9 @@ async def sekai_activity_score(body: ActScoreBody, authorization: str = Header(d
         raise HTTPException(status_code=400, detail="缺少活动 id")
     score = max(0, int(body.score))
     if score > SCORE_MAX:
-        logger.warning(f"roguelike 活动分数异常偏高，已截断: qq={qq} score={score}")
+        logger.warning(f"SEKAI 活动分数异常偏高，已截断: qq={qq} score={score}")
         score = SCORE_MAX
-    acc = store.ensure_account(qq)
+    acc = accounts.ensure_account(qq)
     act = acc.setdefault("sekai_activity", {})
     if aid not in act and len(act) >= ACTIVITY_COUNT_MAX:
         raise HTTPException(status_code=400, detail="活动记录数量已达上限")
@@ -301,7 +291,7 @@ async def sekai_activity_score(body: ActScoreBody, authorization: str = Header(d
     return {"ok": True, "id": aid, "best": act[aid]}
 
 
-@app.get("/api/sekai/activity/board")
+@router.get("/api/sekai/activity/board")
 async def sekai_activity_board(id: str, request: Request, limit: int = 20):
     _need(f"actboard:{_client_ip(request)}", 60, 60)
     aid = id.strip()[:ACTIVITY_ID_MAX]
@@ -311,7 +301,7 @@ async def sekai_activity_board(id: str, request: Request, limit: int = 20):
 
     def build():
         rows = []
-        for qq, acc in store.get_data().items():
+        for qq, acc in accounts.get_data().items():
             if not isinstance(acc, dict):
                 continue
             sc = acc.get("sekai_activity", {})
@@ -328,15 +318,15 @@ async def sekai_activity_board(id: str, request: Request, limit: int = 20):
     return {"id": aid, "rows": rows[:limit]}
 
 
-@app.get("/api/sekai/load")
+@router.get("/api/sekai/load")
 async def sekai_load(authorization: str = Header(default="")):
     qq = _auth_qq(authorization)
-    acc = store.ensure_account(qq)
+    acc = accounts.ensure_account(qq)
     rec = acc.get("sekai_run", {}) or {}
     return {"rev": int(rec.get("rev", 0)), "run": rec.get("run")}
 
 
-@app.post("/api/sekai/save")
+@router.post("/api/sekai/save")
 async def sekai_save(body: RunBody, authorization: str = Header(default="")):
     qq = _auth_qq(authorization)
     rev = int(body.rev)
@@ -350,7 +340,7 @@ async def sekai_save(body: RunBody, authorization: str = Header(default="")):
         if size > RUN_BLOB_MAX:
             raise HTTPException(status_code=413, detail="对局数据过大")
 
-    acc = store.ensure_account(qq)
+    acc = accounts.ensure_account(qq)
     rec = acc.get("sekai_run")
     if not isinstance(rec, dict):
         rec = {}
@@ -363,6 +353,6 @@ async def sekai_save(body: RunBody, authorization: str = Header(default="")):
     return {"ok": True, "rev": rev}
 
 
-@app.get("/api/health")
+@router.get("/api/health")
 async def health():
     return {"ok": True}
