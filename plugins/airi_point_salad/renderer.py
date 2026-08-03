@@ -66,6 +66,7 @@ def render_board(state: GameState, _viewer_id: str) -> str:
     if state.phase is Phase.LOBBY:
         draw.text((1080, 720), "游戏未开始", font=font(86), anchor="mm", fill=(104, 91, 108))
         draw.text((1080, 850), f"当前已有 {len(state.players)} 名玩家，等待房主开始", font=font(40), anchor="mm", fill=(125, 110, 126))
+        draw.text((1080, 930), "加入房间：,sl j    退出房间：,sl lv", font=font(34), anchor="mm", fill=(91, 110, 116))
         return image_b64(image)
     current = state.players[state.current_player]
     pile_counts = " / ".join(str(len(deck)) for deck in state.decks)

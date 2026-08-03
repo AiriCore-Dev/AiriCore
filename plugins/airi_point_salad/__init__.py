@@ -19,6 +19,7 @@ from .persistence import GameStore
 from .message_retention import MessageRetention
 from .renderer import render_board_images, render_result, render_turn_change
 from .service import GameService
+from .skills import skill_description
 
 
 USAGE = (
@@ -77,7 +78,10 @@ def response_message(response: CommandResponse):
         segments += MessageSegment.at(response.turn_user_id)
     if isinstance(response.body, tuple):
         for item in response.body:
-            segments += MessageSegment.image(item)
+            if item.startswith("base64://"):
+                segments += MessageSegment.image(item)
+            else:
+                segments += MessageSegment.text(item)
         return segments
     if not response.body.startswith("base64://"):
         if len(segments):
@@ -166,12 +170,23 @@ async def execute_command(
     if command.action == "leave":
         return await service.leave(group_id, user_id, prepare=prepare)
     if command.action == "start":
+        state = await service.board_state(group_id)
+        if state.phase is Phase.PLAYING and state.mode is GameMode.MIX:
+            return CommandResponse(await service.rules_text(group_id))
         return await service.start(group_id, user_id, prepare=prepare)
     if command.action == "take":
         return await service.take(group_id, user_id, command.args, prepare=prepare)
     if command.action == "flip":
         return await service.flip(group_id, user_id, command.args[0], prepare=prepare)
     if command.action == "skill":
+        state = await service.board_state(group_id)
+        player = next((item for item in state.players if item.user_id == user_id), None)
+        if state.mode is GameMode.MIX and state.phase is Phase.PLAYING and player is not None and player.center is not None:
+            response = await service.skill(group_id, user_id, command.args, prepare=prepare)
+            body = response.body
+            if isinstance(body, tuple):
+                return CommandResponse((skill_description(player.center), *body), response.turn_user_id, response.turn_notice)
+            return CommandResponse((skill_description(player.center), body), response.turn_user_id, response.turn_notice)
         return await service.skill(group_id, user_id, command.args, prepare=prepare)
     if command.action == "stop":
         return await service.stop(

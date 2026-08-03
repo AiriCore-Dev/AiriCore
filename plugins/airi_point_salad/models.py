@@ -28,7 +28,7 @@ class Character(str, Enum):
         return {
             Character.MINORI: "实乃理",
             Character.HARUKA: "遥",
-            Character.AIRI: "Airi",
+            Character.AIRI: "爱莉",
             Character.SHIZUKU: "雫",
             Character.MIKU: "未来",
             Character.RIN: "铃",

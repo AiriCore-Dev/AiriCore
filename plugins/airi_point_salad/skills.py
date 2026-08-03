@@ -40,6 +40,28 @@ def skill_usage(center: Character) -> str:
     }[center]
 
 
+def skill_description(center: Character) -> str:
+    return {
+        Character.MINORI: "实乃理：本回合拿取角色牌后，可将其中一张放回原位置，再拿取另一位置的一张角色牌。",
+        Character.HARUKA: "遥：刷新指定一列，将该列计分牌与角色牌放回牌堆并补充市场。",
+        Character.AIRI: "爱莉：本回合同时拿取两张角色牌，且本回合不能翻开计分牌。",
+        Character.SHIZUKU: "雫：将自己的一张计分牌翻为角色牌，视为额外翻牌。",
+        Character.MIKU: "未来：选择一张计分牌，使其结算时可视为任意一种角色。",
+        Character.RIN: "铃：一次拿取三张来自不同角色的角色牌。",
+    }[center]
+
+
+def skill_description(center: Character) -> str:
+    return {
+        Character.MINORI: "实乃理：本回合拿取角色牌后，可将其中一张放回原位置，再从市场拿取另一张角色牌。",
+        Character.HARUKA: "遥：刷新指定一列，将该列计分牌和角色牌放回牌堆后重新补牌。",
+        Character.AIRI: "爱莉：本回合改为一次拿取同一列的两张角色牌，且本回合不能翻牌。",
+        Character.SHIZUKU: "雫：将自己的一张计分牌翻为对应角色牌，额外获得一张角色牌。",
+        Character.MIKU: "未来：指定一张计分牌，使它在结算时视为任意一种角色。",
+        Character.RIN: "铃：一次拿取三张角色牌，且三张必须来自不同角色。",
+    }[center]
+
+
 def use_skill(state: GameState, user_id: str, args: list[Any], now: float) -> SkillResult:
     player = require_turn(state, user_id)
     if player.center is None:
