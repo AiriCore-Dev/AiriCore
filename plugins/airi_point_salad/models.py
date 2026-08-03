@@ -128,6 +128,7 @@ class GameState:
     mission_deck: list[str] = field(default_factory=list)
     active_missions: list[str] = field(default_factory=list)
     pending_skill: dict[str, Any] = field(default_factory=dict)
+    player_swap_request: dict[str, str] = field(default_factory=dict)
     turn_start_user_id: str | None = None
     turn_start_score_cards: list[str] = field(default_factory=list)
     turn_start_character_cards: list[str] = field(default_factory=list)
@@ -161,6 +162,7 @@ class GameState:
             "mission_deck": list(self.mission_deck),
             "active_missions": list(self.active_missions),
             "pending_skill": _json_value(self.pending_skill),
+            "player_swap_request": _json_value(self.player_swap_request),
             "turn_start_user_id": self.turn_start_user_id,
             "turn_start_score_cards": list(self.turn_start_score_cards),
             "turn_start_character_cards": list(self.turn_start_character_cards),
@@ -196,6 +198,16 @@ class GameState:
         centers = _list(data.get("centers", []), "centers")
         mission_deck = _list(data.get("mission_deck", []), "mission_deck")
         active_missions = _list(data.get("active_missions", []), "active_missions")
+        player_swap_request = _plain_dict(data.get("player_swap_request", {}))
+        if set(player_swap_request) - {"from_user_id", "to_user_id"}:
+            raise ValueError("player_swap_request 字段不匹配")
+        if player_swap_request and set(player_swap_request) != {"from_user_id", "to_user_id"}:
+            raise ValueError("player_swap_request 字段不匹配")
+        if player_swap_request:
+            player_swap_request = {
+                key: _string(value, f"player_swap_request.{key}")
+                for key, value in player_swap_request.items()
+            }
         turn_start_score_cards = _list(
             data.get("turn_start_score_cards", []),
             "turn_start_score_cards",
@@ -256,6 +268,7 @@ class GameState:
             mission_deck=_string_list(mission_deck, "mission_deck"),
             active_missions=_string_list(active_missions, "active_missions"),
             pending_skill=_plain_dict(data.get("pending_skill", {})),
+            player_swap_request=player_swap_request,
             turn_start_user_id=(
                 None
                 if data.get("turn_start_user_id") is None

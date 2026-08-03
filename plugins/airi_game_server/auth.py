@@ -2,6 +2,7 @@ import base64
 import hashlib
 import hmac
 import os
+import re
 import secrets
 import time
 
@@ -150,12 +151,9 @@ def set_nick(qq: str, nick: str):
 
 
 def parse_qq_email(value: str) -> str:
-    if not isinstance(value, str) or not value.endswith("@qq.com"):
+    if not isinstance(value, str) or re.fullmatch(r"[0-9]+@qq\.com", value) is None:
         raise ValueError("邮箱格式应为 QQ号@qq.com")
-    qq = value[:-7]
-    if not qq.isdigit() or not qq:
-        raise ValueError("邮箱格式应为 QQ号@qq.com")
-    return qq
+    return value[:-7]
 
 
 def _digest(qq: str, code: str) -> str:

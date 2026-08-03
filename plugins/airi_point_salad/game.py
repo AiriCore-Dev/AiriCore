@@ -45,10 +45,66 @@ def remove_player(state: GameState, user_id: str, now: float) -> None:
     if index is None:
         raise GameError("你还没有加入本局")
     state.players.pop(index)
+    request = state.player_swap_request
+    if request and user_id in (request.get("from_user_id"), request.get("to_user_id")):
+        state.player_swap_request = {}
     if not state.players:
         state.phase = Phase.FINISHED
     elif user_id == state.host_id:
         state.host_id = state.players[0].user_id
+    state.updated_at = now
+
+
+def request_player_swap(
+    state: GameState,
+    user_id: str,
+    target_user_id: str,
+    now: float,
+) -> None:
+    require_lobby(state)
+    if user_id == target_user_id:
+        raise GameError("不能和自己交换顺序")
+    if not any(player.user_id == user_id for player in state.players):
+        raise GameError("你还没有加入本局")
+    if not any(player.user_id == target_user_id for player in state.players):
+        raise GameError("目标玩家不在本局")
+    if state.player_swap_request:
+        raise GameError("当前已有待处理的交换请求")
+    state.player_swap_request = {
+        "from_user_id": user_id,
+        "to_user_id": target_user_id,
+    }
+    state.updated_at = now
+
+
+def respond_player_swap(state: GameState, user_id: str, accept: bool, now: float) -> None:
+    require_lobby(state)
+    if type(accept) is not bool:
+        raise GameError("交换响应参数无效")
+    request = state.player_swap_request
+    if not request:
+        raise GameError("当前没有待处理的交换请求")
+    if request.get("to_user_id") != user_id:
+        raise GameError("只有目标玩家可以处理交换请求")
+    requester_id = request.get("from_user_id")
+    requester_index = next(
+        (index for index, player in enumerate(state.players) if player.user_id == requester_id),
+        None,
+    )
+    target_index = next(
+        (index for index, player in enumerate(state.players) if player.user_id == user_id),
+        None,
+    )
+    if requester_index is None or target_index is None:
+        state.player_swap_request = {}
+        state.updated_at = now
+        raise GameError("交换请求中的玩家已离开本局")
+    if accept:
+        state.players[requester_index], state.players[target_index] = (
+            state.players[target_index],
+            state.players[requester_index],
+        )
+    state.player_swap_request = {}
     state.updated_at = now
 
 
@@ -58,10 +114,14 @@ def start_game(state: GameState, user_id: str, now: float) -> None:
         raise GameError("只有房主可以开始游戏")
     if len(state.players) < 2:
         raise GameError("至少需要 2 名玩家")
-    state.cards, state.decks, starting_player = build_decks(
+    state.player_swap_request = {}
+    state.cards, state.decks, _starting_player = build_decks(
         len(state.players), state.speed, state.seed
     )
     state.phase = Phase.PLAYING
+    starting_player = next(
+        index for index, player in enumerate(state.players) if player.user_id == state.host_id
+    )
     state.current_player = starting_player
     state.starting_player = starting_player
     state.turn_number = 1

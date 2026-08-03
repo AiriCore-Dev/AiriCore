@@ -12,6 +12,8 @@ from .game import (
     create_game,
     flip_score,
     remove_player,
+    request_player_swap,
+    respond_player_swap,
     start_game,
     stop_game,
     take_characters,
@@ -99,6 +101,37 @@ class GameService:
         return await self._state_mutation(
             group_id,
             lambda state: remove_player(state, user_id, time.time()),
+            prepare,
+        )
+
+    async def request_swap(
+        self,
+        group_id: str,
+        user_id: str,
+        target_user_id: str,
+        prepare=None,
+    ):
+        return await self._state_mutation(
+            group_id,
+            lambda state: request_player_swap(
+                state,
+                user_id,
+                target_user_id,
+                time.time(),
+            ),
+            prepare,
+        )
+
+    async def respond_swap(
+        self,
+        group_id: str,
+        user_id: str,
+        accept: bool,
+        prepare=None,
+    ):
+        return await self._state_mutation(
+            group_id,
+            lambda state: respond_player_swap(state, user_id, accept, time.time()),
             prepare,
         )
 

@@ -36,7 +36,16 @@ class HeartbeatBody(BaseModel):
 
 
 class ActionBody(BaseModel):
-    action: Literal["start", "leave", "stop", "take", "flip", "skill"]
+    action: Literal[
+        "start",
+        "leave",
+        "stop",
+        "take",
+        "flip",
+        "skill",
+        "request_swap",
+        "respond_swap",
+    ]
     args: list = Field(default_factory=list)
 
 
@@ -67,6 +76,18 @@ def _take_args(values):
     if len(values) == 2 and type(values[0]) is int:
         return [values[0] - 1, parse_slot(str(values[1]))]
     return [parse_slot(str(value)) for value in values]
+
+
+def _request_swap_args(values):
+    if len(values) != 1 or type(values[0]) is not str or not values[0].strip():
+        raise ValueError("交换请求参数无效")
+    return values[0].strip()
+
+
+def _respond_swap_args(values):
+    if len(values) != 1 or type(values[0]) is not bool:
+        raise ValueError("交换响应参数无效")
+    return values[0]
 
 
 def _finished_action(room_id, state):
@@ -112,7 +133,10 @@ async def _notify_group(room_id, before, after):
 @router.post("/rooms")
 async def create_room(body: CreateBody, authorization: str = Header(default="")):
     qq = _qq(authorization)
-    return _result(rooms.snapshot((await rooms.create(qq, _nick(qq), body.speed, body.mode)).group_id, qq))
+    state = await rooms.create(qq, _nick(qq), body.speed, body.mode)
+    payload = rooms.snapshot(state.group_id, qq)
+    payload["room_code"] = await rooms.code(state.group_id, qq)
+    return _result(payload)
 
 
 @router.get("/rooms")
@@ -124,7 +148,7 @@ async def room_list(authorization: str = Header(default="")):
 async def create_code(body: CodeBody, authorization: str = Header(default="")):
     qq = _qq(authorization)
     try:
-        return _result({"code": await rooms.code(body.room_id, qq), "ttl": 600})
+        return _result({"code": await rooms.code(body.room_id, qq), "ttl": None})
     except ValueError as error:
         raise HTTPException(status_code=400, detail=str(error))
 
@@ -177,15 +201,29 @@ async def action(room_id: str, body: ActionBody, authorization: str = Header(def
             after = await service.skill(room_id, qq, _skill_args(body.args))
         elif body.action == "take":
             after = await service.take(room_id, qq, _take_args(body.args))
-        if after.phase is Phase.FINISHED:
-            return _finished_action(room_id, after)
+        elif body.action == "request_swap":
+            after = await service.request_swap(
+                room_id,
+                qq,
+                _request_swap_args(body.args),
+            )
+        elif body.action == "respond_swap":
+            after = await service.respond_swap(
+                room_id,
+                qq,
+                _respond_swap_args(body.args),
+            )
         try:
             await _notify_group(room_id, before, after)
         except Exception:
             logger.exception("Point Salad 群聊回合提示发送失败")
         if body.action == "leave":
             rooms.revoke(room_id, qq)
+            if after.phase is Phase.FINISHED:
+                rooms.close(room_id)
             return _result({"room_id": room_id, "left": True})
+        if after.phase is Phase.FINISHED:
+            return _finished_action(room_id, after)
         return _result(rooms.snapshot(room_id, qq))
     except (GameError, IndexError, TypeError, ValueError) as error:
         raise HTTPException(status_code=400, detail=str(error) or "操作参数无效")

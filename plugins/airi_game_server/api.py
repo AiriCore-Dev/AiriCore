@@ -21,7 +21,10 @@ app.add_middleware(
 )
 app.include_router(sekai_router)
 app.include_router(point_salad_router)
-_email_requests = {}
+_email_ip_requests = {}
+_email_daily_attempts = {}
+EMAIL_IP_COOLDOWN = 5 * 60
+EMAIL_DAILY_LIMIT = 2
 
 
 class EmailRequest(BaseModel):
@@ -44,9 +47,16 @@ async def request_email_login(body: EmailRequest, request: Request):
     except ValueError as error:
         raise HTTPException(status_code=400, detail=str(error))
     now = time.time()
-    key = f"{qq}:{_client_ip(request)}"
-    if now - _email_requests.get(key, 0) < 60:
-        raise HTTPException(status_code=429, detail="请稍后再获取验证码")
+    client_ip = _client_ip(request)
+    last_request = _email_ip_requests.get(client_ip)
+    if last_request is not None and now - last_request < EMAIL_IP_COOLDOWN:
+        raise HTTPException(status_code=429, detail="同一 IP 请 5 分钟后再进行邮箱认证")
+    day = time.strftime("%Y-%m-%d", time.localtime(now))
+    recorded_day, attempts = _email_daily_attempts.get(qq, (day, 0))
+    if recorded_day != day:
+        attempts = 0
+    if attempts >= EMAIL_DAILY_LIMIT:
+        raise HTTPException(status_code=429, detail="该邮箱今日登录次数已达上限，请明天再试")
     code = auth.create_email_code(qq)
     result = await mailer.send_single(
         body.email,
@@ -56,7 +66,8 @@ async def request_email_login(body: EmailRequest, request: Request):
     )
     if result is not True:
         raise HTTPException(status_code=503, detail="验证码邮件暂时无法发送")
-    _email_requests[key] = now
+    _email_ip_requests[client_ip] = now
+    _email_daily_attempts[qq] = (day, attempts + 1)
     return {"ok": True, "ttl": auth.EMAIL_CODE_TTL}
 
 
