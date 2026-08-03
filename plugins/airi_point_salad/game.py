@@ -49,6 +49,9 @@ def remove_player(state: GameState, user_id: str, now: float) -> None:
     request = state.player_swap_request
     if request and user_id in (request.get("from_user_id"), request.get("to_user_id")):
         state.player_swap_request = {}
+    notice = state.player_swap_notice
+    if notice and user_id in (notice.get("from_user_id"), notice.get("to_user_id")):
+        state.player_swap_notice = {}
     if not state.players:
         state.phase = Phase.FINISHED
     elif user_id == state.host_id:
@@ -71,6 +74,7 @@ def request_player_swap(
         raise GameError("目标玩家不在本局")
     if state.player_swap_request:
         raise GameError("当前已有待处理的交换请求")
+    state.player_swap_notice = {}
     state.player_swap_request = {
         "from_user_id": user_id,
         "to_user_id": target_user_id,
@@ -105,6 +109,13 @@ def respond_player_swap(state: GameState, user_id: str, accept: bool, now: float
             state.players[target_index],
             state.players[requester_index],
         )
+        state.player_swap_notice = {}
+    else:
+        state.player_swap_notice = {
+            "from_user_id": requester_id,
+            "to_user_id": user_id,
+            "result": "rejected",
+        }
     state.player_swap_request = {}
     state.updated_at = now
 
@@ -116,6 +127,7 @@ def start_game(state: GameState, user_id: str, now: float) -> None:
     if len(state.players) < 2:
         raise GameError("至少需要 2 名玩家")
     state.player_swap_request = {}
+    state.player_swap_notice = {}
     state.cards, state.decks, _starting_player = build_decks(
         len(state.players), state.speed, state.seed
     )

@@ -130,6 +130,7 @@ class GameState:
     active_missions: list[str] = field(default_factory=list)
     pending_skill: dict[str, Any] = field(default_factory=dict)
     player_swap_request: dict[str, str] = field(default_factory=dict)
+    player_swap_notice: dict[str, str] = field(default_factory=dict)
     turn_start_user_id: str | None = None
     turn_start_score_cards: list[str] = field(default_factory=list)
     turn_start_character_cards: list[str] = field(default_factory=list)
@@ -165,6 +166,7 @@ class GameState:
             "active_missions": list(self.active_missions),
             "pending_skill": _json_value(self.pending_skill),
             "player_swap_request": _json_value(self.player_swap_request),
+            "player_swap_notice": _json_value(self.player_swap_notice),
             "turn_start_user_id": self.turn_start_user_id,
             "turn_start_score_cards": list(self.turn_start_score_cards),
             "turn_start_character_cards": list(self.turn_start_character_cards),
@@ -210,6 +212,18 @@ class GameState:
                 key: _string(value, f"player_swap_request.{key}")
                 for key, value in player_swap_request.items()
             }
+        player_swap_notice = _plain_dict(data.get("player_swap_notice", {}))
+        if set(player_swap_notice) - {"from_user_id", "to_user_id", "result"}:
+            raise ValueError("player_swap_notice 字段不匹配")
+        if player_swap_notice and set(player_swap_notice) != {"from_user_id", "to_user_id", "result"}:
+            raise ValueError("player_swap_notice 字段不匹配")
+        if player_swap_notice:
+            player_swap_notice = {
+                key: _string(value, f"player_swap_notice.{key}")
+                for key, value in player_swap_notice.items()
+            }
+            if player_swap_notice["result"] != "rejected":
+                raise ValueError("player_swap_notice.result 无效")
         turn_start_score_cards = _list(
             data.get("turn_start_score_cards", []),
             "turn_start_score_cards",
@@ -272,6 +286,7 @@ class GameState:
             active_missions=_string_list(active_missions, "active_missions"),
             pending_skill=_plain_dict(data.get("pending_skill", {})),
             player_swap_request=player_swap_request,
+            player_swap_notice=player_swap_notice,
             turn_start_user_id=(
                 None
                 if data.get("turn_start_user_id") is None
