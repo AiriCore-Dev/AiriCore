@@ -45,7 +45,7 @@ async def query_tmxx_status_func(bot: Bot, ev: MessageEvent):
             user_nick = qq_id
         group_name = await _group_name(bot, group_id)
         body = msg.replace(f"[CQ:at,qq={notification_account}]", "@葡萄柚🍇")
-        mesg = "新消息提醒\n时间: {}\n发送者: {}({})\n群: {}({})\n内容: {}".format(
+        mesg = "📢 新消息提醒\n时间: {}\n发送者: {}({})\n群: {}({})\n内容: {}".format(
             str(cur_time)[:-7], user_nick, qq_id, group_name, group_id, body
         )
         await bot.send_private_msg(user_id=int(notification_account), message=mesg)

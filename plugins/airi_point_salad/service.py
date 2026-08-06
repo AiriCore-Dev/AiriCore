@@ -21,6 +21,7 @@ from .game import (
 )
 from .models import GameMode, GameSpeed, GameState, Phase
 from .persistence import GameStore
+from .render_runtime import run_sync
 from .skills import skill_usage, use_skill
 
 
@@ -255,7 +256,7 @@ class GameService:
                     )
                     if accepts_before:
                         prepare_args += (copy.deepcopy(before) if before_exists else None,)
-                    prepared = await asyncio.to_thread(
+                    prepared = await run_sync(
                         prepare,
                         *prepare_args,
                     )

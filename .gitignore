@@ -12,6 +12,7 @@ docs/
 .ruff_cache/
 tmp/
 .worktrees/
+/plugins/airi_game_server/
 
 # Django/Database
 *.pk

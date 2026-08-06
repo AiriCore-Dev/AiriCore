@@ -711,6 +711,19 @@ STEP_OPS = {
             ],
         },
         {
+            "key": "airifullgroup_bot_whitelist",
+            "type": "list",
+            "q": "哪些 Bot 可以执行全群广播?",
+            "tip": ["只填允许广播的 Bot QQ 号, 多个用空格隔开, 留空表示禁止广播"],
+            "validate": v_qq,
+            "example": "1330248395 535071478",
+            "help": [
+                "airifullgroup 只会使用这里列出的 Bot 向所有群发送消息。",
+                "这里填 Bot 自己的 QQ 号, 不是管理员 QQ 号。",
+                "留空时不会有任何 Bot 执行全群广播, 用于防止误发。",
+            ],
+        },
+        {
             "key": "_2fa_key",
             "type": "secret",
             "q": "二步验证密钥 (进阶, 不用就回车跳过)",
@@ -756,6 +769,7 @@ SUMMARY_GROUPS = [
         ("cache_mode", False),
         ("notification_account", False),
         ("curfew_bot_ids", False),
+        ("airifullgroup_bot_whitelist", False),
     ]),
 ]
 

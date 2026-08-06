@@ -25,7 +25,7 @@ from nonebot.rule import to_me
 from nonebot.permission import SUPERUSER
 from nonebot import get_driver, logger, on_startswith, require
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
-from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
+from nonebot.adapters.onebot.v11.event import MessageEvent
 
 driver = get_driver()
 rcon_password = getattr(driver.config, "rcon_password", "")
@@ -148,7 +148,8 @@ def parse_at_qq(raw, usage):
 async def generate_minecraft_head(username):
     uuid_url = f"https://api.mojang.com/users/profiles/minecraft/{username}"
     try:
-        async with aiohttp.ClientSession() as session:
+        timeout = aiohttp.ClientTimeout(total=15)
+        async with aiohttp.ClientSession(timeout=timeout) as session:
             async with session.get(uuid_url) as response:
                 response.raise_for_status()
                 uuid = (await response.json())["id"]

@@ -1,3 +1,4 @@
+import asyncio
 import ipaddress
 import socket
 import threading
@@ -9,6 +10,7 @@ _BLOCKED_PORTS = {22, 23, 25, 445, 3306, 5432, 6379, 9200, 11211, 27017}
 _RESOLVE_TIMEOUT = 5.0
 _executor = None
 _executor_lock = threading.Lock()
+_resolve_slots = None
 
 
 def _get_executor() -> ThreadPoolExecutor:
@@ -42,15 +44,29 @@ async def is_public_url_async(url) -> bool:
 
 
 async def resolve_public_ips_async(url) -> tuple[str, ...] | None:
-    import asyncio
-
+    global _resolve_slots
+    if _resolve_slots is None:
+        _resolve_slots = asyncio.Semaphore(4)
+    slots = _resolve_slots
+    try:
+        await asyncio.wait_for(slots.acquire(), timeout=_RESOLVE_TIMEOUT)
+    except asyncio.TimeoutError:
+        return None
     loop = asyncio.get_running_loop()
-    fut = loop.run_in_executor(_get_executor(), resolve_public_ips, url)
+    try:
+        fut = loop.run_in_executor(_get_executor(), resolve_public_ips, url)
+    except Exception:
+        slots.release()
+        raise
+    fut.add_done_callback(lambda _: slots.release())
     try:
         return await asyncio.wait_for(asyncio.shield(fut), timeout=_RESOLVE_TIMEOUT)
-    except (asyncio.TimeoutError, asyncio.CancelledError):
+    except asyncio.TimeoutError:
         fut.add_done_callback(lambda f: f.exception())
         return None
+    except asyncio.CancelledError:
+        fut.add_done_callback(lambda f: f.exception())
+        raise
 
 
 def is_public_url(url) -> bool:

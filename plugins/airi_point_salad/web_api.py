@@ -1,3 +1,4 @@
+import asyncio
 import secrets
 import time
 
@@ -6,6 +7,12 @@ from .models import GameMode, GameSpeed, Phase
 
 PRESENCE_TTL = 30
 FINISHED_TTL = 600
+MAX_WEB_ROOMS = 256
+MAX_ROOMS_PER_USER = 8
+
+
+class RoomLimitError(ValueError):
+    pass
 
 
 class WebRooms:
@@ -14,9 +21,11 @@ class WebRooms:
         self.codes = {}
         self.room_codes = {}
         self.code_generations = {}
+        self.owners = {}
         self.access = {}
         self.presence = {}
         self.finished = {}
+        self._create_lock = asyncio.Lock()
 
     def _new_room_id(self):
         return f"web:{secrets.token_urlsafe(12)}"
@@ -87,6 +96,7 @@ class WebRooms:
         if payload is not None and members:
             self.finished[room_id] = (dict(payload), members, time.time() + FINISHED_TTL)
         self.access.pop(room_id, None)
+        self.owners.pop(room_id, None)
         self._drop_code(room_id)
         self.presence = {
             key: seen_at
@@ -111,11 +121,35 @@ class WebRooms:
         ]
 
     async def create(self, qq, nick, speed, mode):
-        room_id = self._new_room_id()
-        state = await self.service.create(room_id, qq, nick, GameSpeed(speed), GameMode(mode))
-        self._grant(room_id, qq)
-        await self._ensure_code(room_id, state)
-        return state
+        async with self._create_lock:
+            active_rooms = [
+                room_id
+                for room_id, state in self.service.games.items()
+                if room_id.startswith("web:") and state.phase is not Phase.FINISHED
+            ]
+            if len(active_rooms) >= MAX_WEB_ROOMS:
+                raise RoomLimitError("当前网页房间数量已达上限，请稍后再试")
+            user_rooms = sum(
+                1
+                for room_id in active_rooms
+                if self.owners.get(room_id) == qq
+                or qq in self.access.get(room_id, set())
+                or any(player.user_id == qq for player in self.service.games[room_id].players)
+            )
+            if user_rooms >= MAX_ROOMS_PER_USER:
+                raise RoomLimitError("你创建或加入的网页房间数量已达上限")
+            room_id = self._new_room_id()
+            state = await self.service.create(
+                room_id,
+                qq,
+                nick,
+                GameSpeed(speed),
+                GameMode(mode),
+            )
+            self.owners[room_id] = qq
+            self._grant(room_id, qq)
+            await self._ensure_code(room_id, state)
+            return state
 
     async def code(self, room_id, qq):
         state = self.service.games.get(room_id)

@@ -3,6 +3,7 @@ from .skills import skill_usage
 
 
 RULES_DOCUMENT_URL = "https://www.airi.asia/posts/aps_help/"
+WEB_GAME_URL = "https://www.airi.asia/salad/"
 
 
 def help_sections() -> tuple[tuple[str, str], ...]:
@@ -21,6 +22,18 @@ def help_sections() -> tuple[tuple[str, str], ...]:
             "🍀 游戏简介\n"
             "这是一款适合 2–6 人在群聊中游玩的选牌桌游。\n"
             "玩家轮流拿取角色牌或计分牌，通过角色组合、翻牌规划和不同计分条件积累分数，最后总分最高者获胜。",
+        ),
+        (
+            "得分沙拉网页端",
+            "🌐 得分沙拉网页端\n"
+            "网页端游戏和Bot端数据互通，提供了更好的交互性和更多的实用功能：\n"
+            f"{WEB_GAME_URL}",
+        ),
+        (
+            "桌游玩法文档",
+            "📚 桌游玩法文档\n"
+            "网页版指南更加适合新手宝宝:\n"
+            f"{RULES_DOCUMENT_URL}",
         ),
         (
             "指令列表",
@@ -48,12 +61,6 @@ def help_sections() -> tuple[tuple[str, str], ...]:
             "- 查看：\n"
             "    桌面/board/bd\n"
             "    规则/rules/rl"
-        ),
-        (
-            "桌游玩法文档",
-            "📚 桌游玩法文档\n"
-            "网页版指南更加适合新手宝宝:\n"
-            f"{RULES_DOCUMENT_URL}",
         ),
         (
             "版权信息",

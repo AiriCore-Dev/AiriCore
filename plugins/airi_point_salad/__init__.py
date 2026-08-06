@@ -1,4 +1,3 @@
-import asyncio
 from dataclasses import dataclass
 from pathlib import Path
 import re
@@ -18,6 +17,7 @@ from .models import GameMode, GameSpeed, GameState, Phase
 from .persistence import GameStore
 from .message_retention import MessageRetention
 from .renderer import render_board_images, render_result, render_turn_change
+from .render_runtime import run_sync, shutdown as shutdown_render_runtime
 from .service import GameService
 from .skills import skill_description
 
@@ -219,7 +219,7 @@ async def execute_command(
         return response
     if command.action == "board":
         state = await service.board_state(group_id)
-        body = await asyncio.to_thread(render_state, state, user_id)
+        body = await run_sync(render_state, state, user_id)
         return CommandResponse(body)
     if command.action == "summary":
         return CommandResponse(await service.rules_text(group_id))
@@ -340,6 +340,7 @@ async def save_games() -> None:
         logger.opt(exception=error).error("得分沙拉存档保存失败")
     finally:
         service.close()
+        shutdown_render_runtime()
 
 
 if driver is not None:

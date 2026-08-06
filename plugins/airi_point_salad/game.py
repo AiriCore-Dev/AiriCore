@@ -132,9 +132,7 @@ def start_game(state: GameState, user_id: str, now: float) -> None:
         len(state.players), state.speed, state.seed
     )
     state.phase = Phase.PLAYING
-    starting_player = next(
-        index for index, player in enumerate(state.players) if player.user_id == state.host_id
-    )
+    starting_player = 0
     state.current_player = starting_player
     state.starting_player = starting_player
     state.turn_number = 1

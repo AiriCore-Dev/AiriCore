@@ -24,7 +24,7 @@ def image_segment(*path_parts: str):
 
 
 def version_node_content() -> object:
-    head = f"Momoi Airi 使用帮助\n{airicore_version}"
+    head = f"Momoi Airi 使用帮助\n⚙️ {airicore_version}"
     png = image_segment("version", f"{airicore_version}.jpg")
     return MessageSegment.text(head) + png if png else head
 
@@ -77,9 +77,7 @@ Airi Cobblemon Sever 服管 By AiriCore Dev.
 
 - Momoi Airi SEKAI Roguelike:
 勇闯未知SEKAI小游戏 By AiriCore Dev.
-* https://www.airi.asia/game
-* 强烈建议使用外部浏览器游玩
-（QQ自带浏览器登录较为困难）
+* 网页端：https://www.airi.asia/game
 
 - Momoi Airi Wish Bottle:
 Airi心愿瓶（漂流瓶plus） By AiriCore Dev.
@@ -163,7 +161,8 @@ emoji合成
 
 - MORE MORE JUMP！Point Salad:
 得分沙拉桌游 By AiriCore Dev.
-* 发送 ,sl rl 查看玩法和完整指令""",
+* 发送 ,sl rl 查看玩法和完整指令
+* 网页端：https://www.airi.asia/salad/""",
     ),
     make_node(
         "基础插件",

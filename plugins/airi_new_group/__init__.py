@@ -54,6 +54,18 @@ elif isinstance(_raw_whitelist, str):
 else:
     bot_whitelist = [str(b).strip() for b in _raw_whitelist if str(b).strip()]
 
+_raw_full_group_whitelist = getattr(driver.config, "airifullgroup_bot_whitelist", None)
+if _raw_full_group_whitelist is None:
+    airifullgroup_bot_whitelist = []
+elif isinstance(_raw_full_group_whitelist, str):
+    airifullgroup_bot_whitelist = [
+        b.strip() for b in _raw_full_group_whitelist.split(",") if b.strip()
+    ]
+else:
+    airifullgroup_bot_whitelist = [
+        str(b).strip() for b in _raw_full_group_whitelist if str(b).strip()
+    ]
+
 group_increase = on_notice(priority=5, block=False)
 
 @group_increase.handle()
@@ -201,33 +213,6 @@ async def _parse_broadcast_argument(arg: Message, bot: Bot) -> tuple[str | None,
     return digit, content
 
 
-def _broadcast_nodes(bot_id: str, content: list) -> list[dict]:
-    nodes = []
-    text_parts = Message()
-    for segment in content:
-        if segment.type == "text":
-            text_parts.append(segment)
-            continue
-        if text_parts:
-            nodes.append(_broadcast_node(bot_id, text_parts))
-            text_parts = Message()
-        nodes.append(_broadcast_node(bot_id, Message(segment)))
-    if text_parts:
-        nodes.append(_broadcast_node(bot_id, text_parts))
-    return nodes
-
-
-def _broadcast_node(bot_id: str, content: Message) -> dict:
-    return {
-        "type": "node",
-        "data": {
-            "name": "Airi 全群广播",
-            "uin": bot_id,
-            "content": content,
-        },
-    }
-
-
 @airi_full_group.handle()
 async def _(bot: Bot, arg: Message = CommandArg()):
     if not _2fa_key:
@@ -247,6 +232,8 @@ async def _(bot: Bot, arg: Message = CommandArg()):
 
     targets = []
     for bot_instance in nonebot.get_bots().values():
+        if str(bot_instance.self_id) not in airifullgroup_bot_whitelist:
+            continue
         try:
             gr_list = await bot_instance.get_group_list()
         except Exception as e:
@@ -256,7 +243,7 @@ async def _(bot: Bot, arg: Message = CommandArg()):
             targets.append((bot_instance, gr["group_id"]))
 
     if not targets:
-        await airi_full_group.finish("没有可广播的群。")
+        await airi_full_group.finish("没有可广播的群，请检查 airifullgroup_bot_whitelist 配置。")
 
     truncated = len(targets) > BROADCAST_MAX_GROUPS
     targets = targets[:BROADCAST_MAX_GROUPS]
@@ -268,10 +255,10 @@ async def _(bot: Bot, arg: Message = CommandArg()):
 
     ok = 0
     failed = 0
+    target_message = Message(target_content)
     for bot_instance, gid in targets:
         try:
-            nodes = _broadcast_nodes(bot_instance.self_id, target_content)
-            await bot_instance.send_group_forward_msg(group_id=gid, messages=nodes)
+            await bot_instance.send_group_msg(group_id=gid, message=target_message)
             ok += 1
         except Exception as e:
             failed += 1
