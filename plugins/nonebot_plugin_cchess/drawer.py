@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from PIL.Image import Resampling
 
-from utils.asset_cache import get_image, get_image_copy
+from utils.cache import get_image, get_image_copy
 
 if TYPE_CHECKING:
     from .board import Board

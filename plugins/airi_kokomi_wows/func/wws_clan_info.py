@@ -1,7 +1,7 @@
 from ._base import program_error
 import os
 import gc
-from utils import asset_cache
+from utils import cache as asset_cache
 from .. import (
     Plugin_Config,
     Picture,

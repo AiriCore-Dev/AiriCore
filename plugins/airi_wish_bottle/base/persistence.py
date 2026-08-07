@@ -6,7 +6,7 @@ import tempfile
 
 from nonebot import logger, require
 
-from utils import mailer
+from utils import email as mailer
 
 from . import state
 from .image_store import cleanup_orphans, has_legacy_images, migrate_records

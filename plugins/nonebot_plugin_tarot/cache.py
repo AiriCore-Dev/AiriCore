@@ -10,7 +10,7 @@ from typing import Optional
 from nonebot.log import logger
 from PIL import Image
 
-from utils.cache_mode import is_disk
+from utils.cache import is_disk
 
 _DATA_DIR = Path(__file__).resolve().parents[2] / "data" / "nonebot_plugin_tarot"
 _CACHE_FILE = _DATA_DIR / "cache.pk"

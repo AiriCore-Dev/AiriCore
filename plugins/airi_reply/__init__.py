@@ -4,7 +4,7 @@ from nonebot import on_startswith
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 
-from utils.asset_cache import get_b64
+from utils.cache import get_b64
 
 reply_interval = 60
 last_notice: dict = {}

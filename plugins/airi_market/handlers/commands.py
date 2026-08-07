@@ -5,7 +5,7 @@ import nonebot
 from nonebot.adapters.onebot.v11 import Bot, MessageEvent
 from nonebot.log import logger
 from utils.totp_2fa import totp_verify
-from utils import mailer
+from utils import email as mailer
 
 from ..base import state
 from ..base.matchers import airimarket, airimarketlist, airimarkettest, airimarketcancel, airimarketboost, airimarketsdebug

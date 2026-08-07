@@ -10,7 +10,7 @@ from nonebot.adapters.onebot.v11 import Message, MessageSegment
 from openai import AsyncOpenAI
 
 from utils import llm_fallback
-from utils.net_guard import is_public_url_async
+from utils.network import is_public_url_async
 
 from . import state
 from .image_security import (

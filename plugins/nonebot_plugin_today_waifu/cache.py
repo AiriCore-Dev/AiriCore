@@ -6,7 +6,7 @@ from typing import Optional
 
 from nonebot.log import logger
 
-from utils.cache_mode import is_disk
+from utils.cache import is_disk
 
 TTL_AVATAR = 3 * 24 * 3600
 

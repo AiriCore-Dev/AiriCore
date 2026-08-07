@@ -2,7 +2,7 @@ from ._base import program_error
 import os
 from PIL import Image
 import gc
-from utils import asset_cache
+from utils import cache as asset_cache
 from .. import (
     Plugin_Config,
     Picture,
@@ -515,4 +515,3 @@ def get_png(
     res_img = Picture.add_text(text_list, res_img)
     res_img = res_img.crop((0, 0, 2428, png_len))
     return res_img
-

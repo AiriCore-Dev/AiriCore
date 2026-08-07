@@ -1,4 +1,4 @@
-from utils.net_guard import is_public_url
+from utils.network import is_public_url
 
 ALLOWED_IMAGE_TYPES = {'png', 'jpeg', 'gif', 'webp'}
 MAX_IMAGE_SIZE = 5 * 1024 * 1024

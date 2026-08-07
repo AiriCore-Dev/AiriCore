@@ -69,7 +69,7 @@ async def _(bot: Bot, ev: MessageEvent):
         await rxyp.finish('❌ 图片保存失败，请稍后再试', reply_message=True)
     if iswj:
         state.data['pending_bottles'][unique_id] = {"owner": user_nick, "owner_id": user_id, "content": pure_text, "comments": [], "times": 0, "images": stored_images, "segments": stored_segments}
-        await _notify_admin(bot, f'心愿瓶审核：{unique_id}\n{pure_text}')
+        await _notify_admin(bot, f'📛 心愿瓶审核：{unique_id}\n{pure_text}')
         await rxyp.finish('❌ 未通过机器审核，请等待人工审核。人工审核结果将会以邮件形式告知。', reply_message=True)
     else:
         try:
@@ -150,7 +150,7 @@ async def _(bot: Bot, ev: MessageEvent):
         uqid = await generate_unique_id(comment)
         comment_unique_id = str(time.time()) + '_' + uqid
         state.data['pending_comment'][comment_unique_id] = {"comment_to": unique_id, "from": user_nick + '_' + user_id, "content": comment}
-        await _notify_admin(bot, f'评论审核：{unique_id}\n{comment}')
+        await _notify_admin(bot, f'📛 评论审核：{unique_id}\n{comment}')
         await plxyp.finish('❌ 未通过机器审核，请等待人工审核。人工审核结果将会以邮件形式告知。', reply_message=True)
     else:
         state.data['bottles'][unique_id]['comments'].append(comment)
@@ -221,7 +221,7 @@ async def _(bot: Bot, ev: MessageEvent):
         old_pending_refs = record_image_refs(old_pending)
         state.data['pending_bottles'][unique_id] = {"owner": user_nick, "owner_id": user_id, "content": pure_text, "comments": state.data["bottles"][unique_id]["comments"], "times": state.data["bottles"][unique_id]["times"], "images": stored_images, "segments": stored_segments}
         await delete_image_refs(old_pending_refs)
-        await _notify_admin(bot, f'心愿瓶修改审核：{unique_id}\n{pure_text}')
+        await _notify_admin(bot, f'📛 心愿瓶修改审核：{unique_id}\n{pure_text}')
         await xgxyp.finish('❌ 未通过机器审核，请等待人工审核。人工审核结果将会以邮件形式告知。', reply_message=True)
     else:
         old_active_refs = record_image_refs(state.data['bottles'][unique_id])
@@ -307,5 +307,5 @@ async def _(bot: Bot, ev: MessageEvent):
     state.data.setdefault('pending_jb', {})[jb_unique_id] = {
         'jbr': f'{user_nick}_{user_id}', 'unique_id': unique_id, 'comment': comment,
     }
-    await _notify_admin(bot, f'举报审核：{jb_unique_id}')
+    await _notify_admin(bot, f'📛 举报审核：{jb_unique_id}')
     await jbxyp.finish('💬 您的举报已收到，请等待核实......', reply_message=True)

@@ -265,7 +265,7 @@ def _inspect_kokomi_wows() -> Dict[str, Any]:
 def _inspect_asset_cache() -> Dict[str, Any]:
     r = _new("asset_cache 共享静态资源", "")
     try:
-        from utils import asset_cache as mod
+        from utils import cache as mod
 
         rb = 0
         total = 0
@@ -306,7 +306,7 @@ def _inspect_asset_cache() -> Dict[str, Any]:
 def _inspect_preload() -> Dict[str, Any]:
     r = _new("启动预热", "")
     try:
-        from utils import cache_preload
+        from utils import cache as cache_preload
 
         s = cache_preload.get_summary()
         if not s:
@@ -343,7 +343,7 @@ def _inspect_preload() -> Dict[str, Any]:
 
 def _append_policy_stats(result: Dict[str, Any], *names: str) -> None:
     try:
-        from utils.cache_mode import get_cache_stats
+        from utils.cache import get_cache_stats
 
         stats = get_cache_stats()
     except Exception:
@@ -372,7 +372,7 @@ def _fmt(n: int) -> str:
 
 
 def inspect_all() -> Tuple[int, str, List[Dict[str, Any]]]:
-    from utils.cache_mode import get_mode
+    from utils.cache import get_mode
 
     mode = get_mode()
     memory = get_process_memory()

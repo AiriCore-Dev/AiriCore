@@ -1,6 +1,6 @@
 import hashlib
 
-from utils import email_template as et
+from utils import email as et
 
 APPEAL_MAIL = "airicore@saki.ln.cn"
 _APPEAL_TEXT = "如果对审核结果有异议，可于收到该邮件三日内发送邮件至 {MAIL} 申请复核。"

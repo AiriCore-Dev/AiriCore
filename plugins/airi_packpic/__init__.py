@@ -9,8 +9,8 @@ from nonebot.adapters.onebot.v11 import Bot, GroupMessageEvent
 from nonebot.adapters.onebot.v11.exception import ActionFailed
 from nonebot.log import logger
 
-from utils.net_guard import is_public_url_async
-from utils.safe_download import download_public_bytes
+from utils.network import is_public_url_async
+from utils.network import download_public_bytes
 
 MAX_IMAGES = 200
 MAX_IMAGE_BYTES = 20 * 1024 * 1024

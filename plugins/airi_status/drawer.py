@@ -12,7 +12,7 @@ from nonebot.config import Config as BotConfig
 from nonebot import __version__ as __nb_version__
 from nonebot import get_driver
 
-from utils.asset_cache import get_image
+from utils.cache import get_image
 from .model import get_status_info
 from .utils import truncate_string
 from .path import (

@@ -6,7 +6,7 @@ from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 from nonebot.adapters.onebot.v11.permission import GROUP
 
-from utils.asset_cache import get_b64
+from utils.cache import get_b64
 
 PLUGIN_DIR = os.path.dirname(__file__)
 

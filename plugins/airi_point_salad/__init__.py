@@ -8,7 +8,7 @@ from nonebot.adapters.onebot.v11 import Bot, Message, MessageSegment
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 from nonebot.plugin import PluginMetadata
 
-from utils.asset_cache import get_b64
+from utils.cache import get_b64
 
 from .commands import Command, CommandError, parse_command
 from .game import GameError

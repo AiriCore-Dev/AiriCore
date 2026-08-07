@@ -6,7 +6,7 @@ from PIL import Image
 from PIL.Image import Image as IMG
 from PIL.ImageFont import FreeTypeFont
 
-from utils.asset_cache import get_font, get_image
+from utils.cache import get_font, get_image
 
 data_dir = Path(__file__).parent / "resources"
 skins_dir = data_dir / "skins"

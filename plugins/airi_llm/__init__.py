@@ -8,7 +8,7 @@ import traceback
 from typing import Dict, List, Optional, Any, Set
 
 import nonebot
-from utils import asset_cache
+from utils import cache as asset_cache
 from utils.totp_2fa import totp_verify
 from nonebot import (
     get_driver,
@@ -30,7 +30,7 @@ from .llm_client import call_llm
 
 driver = get_driver()
 from utils.plugin_logger import get_logger
-from utils.safe_download import download_public_bytes
+from utils.network import download_public_bytes
 
 logger = get_logger("airi_llm")
 

@@ -1,10 +1,392 @@
+import base64
+import os
+import sys
+import threading
 import time
+from collections import OrderedDict
 from pathlib import Path
 from typing import Any, Dict, List
 
-from PIL import Image
+from PIL import Image, ImageFont
 
-from utils.cache_mode import get_mode, get_preload_budget_bytes, is_ram
+_VALID = ("ram", "balanced", "disk")
+_DEFAULT = "balanced"
+_DEFAULT_BUDGET_MB = 4096
+
+_CACHE_BUDGETS = {
+    "images": 128 * 1024 * 1024,
+    "arrays": 256 * 1024 * 1024,
+    "base64": 64 * 1024 * 1024,
+    "decoded": 128 * 1024 * 1024,
+    "fonts": 16 * 1024 * 1024,
+}
+
+_lock = threading.Lock()
+_mode = None
+_budget_mb = None
+_cache_registry = {}
+_ram_allocations = {}
+_ram_used = 0
+
+
+def _resolve() -> str:
+    try:
+        from nonebot import get_driver
+
+        raw = getattr(get_driver().config, "cache_mode", None)
+    except Exception:
+        raw = None
+    if raw is None:
+        return _DEFAULT
+    val = str(raw).strip().lower()
+    if val not in _VALID:
+        return _DEFAULT
+    return val
+
+
+def get_mode() -> str:
+    global _mode
+    if _mode is not None:
+        return _mode
+    with _lock:
+        if _mode is None:
+            _mode = _resolve()
+        return _mode
+
+
+def is_ram() -> bool:
+    return get_mode() == "ram"
+
+
+def is_balanced() -> bool:
+    return get_mode() == "balanced"
+
+
+def is_disk() -> bool:
+    return get_mode() == "disk"
+
+
+def _resolve_budget_mb() -> int:
+    try:
+        from nonebot import get_driver
+
+        raw = getattr(get_driver().config, "cache_preload_budget_mb", None)
+    except Exception:
+        raw = None
+    if raw is None:
+        return _DEFAULT_BUDGET_MB
+    try:
+        val = int(str(raw).strip())
+    except Exception:
+        return _DEFAULT_BUDGET_MB
+    if val <= 0:
+        return 0
+    return val
+
+
+def get_preload_budget_mb() -> int:
+    global _budget_mb
+    if _budget_mb is not None:
+        return _budget_mb
+    with _lock:
+        if _budget_mb is None:
+            _budget_mb = _resolve_budget_mb()
+        return _budget_mb
+
+
+def get_preload_budget_bytes() -> int:
+    return get_preload_budget_mb() * 1024 * 1024
+
+
+def get_cache_budget_bytes(kind: str) -> int:
+    return _CACHE_BUDGETS.get(str(kind), 64 * 1024 * 1024)
+
+
+def register_cache(name: str, cache) -> None:
+    with _lock:
+        _cache_registry[str(name)] = cache
+
+
+def get_cache_stats():
+    with _lock:
+        items = list(_cache_registry.items())
+    result = {}
+    for name, cache in items:
+        try:
+            result[name] = cache.stats()
+        except Exception:
+            continue
+    return result
+
+
+def reset_ram_budget() -> None:
+    global _ram_allocations, _ram_used
+    with _lock:
+        _ram_allocations = {}
+        _ram_used = 0
+
+
+def reserve_ram(owner: str, key, size: int) -> bool:
+    global _ram_used
+    if not is_ram():
+        return True
+    limit = get_preload_budget_bytes()
+    token = (str(owner), key)
+    size = max(0, int(size))
+    with _lock:
+        previous = _ram_allocations.get(token, 0)
+        if limit > 0 and _ram_used - previous + size > limit:
+            return False
+        _ram_used = _ram_used - previous + size
+        _ram_allocations[token] = size
+        return True
+
+
+def release_ram(owner: str, key) -> None:
+    global _ram_used
+    token = (str(owner), key)
+    with _lock:
+        previous = _ram_allocations.pop(token, 0)
+        _ram_used = max(0, _ram_used - previous)
+
+
+def get_ram_resident_bytes() -> int:
+    with _lock:
+        return _ram_used
+
+def value_bytes(value) -> int:
+    if isinstance(value, (bytes, bytearray, str)):
+        return len(value)
+    nbytes = getattr(value, "nbytes", None)
+    if nbytes is not None:
+        try:
+            return max(0, int(nbytes))
+        except (TypeError, ValueError):
+            pass
+    size = getattr(value, "size", None)
+    mode = getattr(value, "mode", None)
+    if isinstance(size, tuple) and len(size) == 2 and isinstance(mode, str):
+        try:
+            return max(0, int(size[0]) * int(size[1]) * len(mode))
+        except (TypeError, ValueError):
+            pass
+    if isinstance(value, (tuple, list)):
+        return sum(value_bytes(item) for item in value)
+    return max(0, sys.getsizeof(value))
+
+
+class ByteLRU:
+
+    def __init__(self, max_bytes: int, probationary: bool = False, seen_limit: int = 4096, owner: str = ""):
+        self.max_bytes = max(0, int(max_bytes))
+        self.probationary = probationary
+        self.seen_limit = max(1, int(seen_limit))
+        self.owner = owner
+        self._data = OrderedDict()
+        self._seen = OrderedDict()
+        self._bytes = 0
+        self._lock = threading.RLock()
+        self.hits = 0
+        self.misses = 0
+        self.evictions = 0
+        self.admissions = 0
+        self.skips = 0
+
+    @property
+    def bytes(self) -> int:
+        with self._lock:
+            return self._bytes
+
+    def __len__(self) -> int:
+        with self._lock:
+            return len(self._data)
+
+    def get(self, key, default=None):
+        with self._lock:
+            item = self._data.get(key)
+            if item is None:
+                self.misses += 1
+                return default
+            self._data.move_to_end(key)
+            self.hits += 1
+            return item[0]
+
+    def put(self, key, value, cost: int = None) -> bool:
+        cost = value_bytes(value) if cost is None else max(0, int(cost))
+        with self._lock:
+            if self.max_bytes and cost > self.max_bytes:
+                self._seen.pop(key, None)
+                self.skips += 1
+                return False
+            if self.probationary and key not in self._data and key not in self._seen:
+                self._seen[key] = None
+                self._seen.move_to_end(key)
+                while len(self._seen) > self.seen_limit:
+                    self._seen.popitem(last=False)
+                self.skips += 1
+                return False
+            if self.owner:
+
+                if not reserve_ram(self.owner, key, cost):
+                    self.skips += 1
+                    return False
+            self._seen.pop(key, None)
+            old = self._data.pop(key, None)
+            if old is not None:
+                self._bytes -= old[1]
+            while self.max_bytes and self._data and self._bytes + cost > self.max_bytes:
+                old_key, (_, old_cost) = self._data.popitem(last=False)
+                self._bytes -= old_cost
+                if self.owner:
+                    release_ram(self.owner, old_key)
+                self.evictions += 1
+            if self.max_bytes and self._bytes + cost > self.max_bytes:
+                if self.owner:
+                    release_ram(self.owner, key)
+                self.skips += 1
+                return False
+            self._data[key] = (value, cost)
+            self._bytes += cost
+            self.admissions += 1
+            return True
+
+    def pop(self, key, default=None):
+        with self._lock:
+            item = self._data.pop(key, None)
+            self._seen.pop(key, None)
+            if item is None:
+                return default
+            self._bytes -= item[1]
+            if self.owner:
+                release_ram(self.owner, key)
+            return item[0]
+
+    def clear(self) -> None:
+        with self._lock:
+            keys = list(self._data.keys())
+            self._data.clear()
+            self._seen.clear()
+            self._bytes = 0
+            if self.owner:
+                for key in keys:
+                    release_ram(self.owner, key)
+
+    def keys(self):
+        with self._lock:
+            return list(self._data.keys())
+
+    def stats(self):
+        with self._lock:
+            return {
+                "items": len(self._data),
+                "bytes": self._bytes,
+                "hits": self.hits,
+                "misses": self.misses,
+                "evictions": self.evictions,
+                "admissions": self.admissions,
+                "skips": self.skips,
+                "probation": len(self._seen),
+            }
+
+_asset_lock = threading.Lock()
+_images = ByteLRU(get_cache_budget_bytes("images"), owner="asset_cache.images")
+_fonts = ByteLRU(get_cache_budget_bytes("fonts"), owner="asset_cache.fonts")
+_b64 = ByteLRU(get_cache_budget_bytes("base64"), owner="asset_cache.base64")
+
+register_cache("asset_cache.images", _images)
+register_cache("asset_cache.fonts", _fonts)
+register_cache("asset_cache.base64", _b64)
+
+
+def _signature(path):
+    try:
+        stat = os.stat(path)
+    except OSError:
+        return None
+    return int(stat.st_mtime_ns), int(stat.st_size)
+
+
+def _configure(cache, kind):
+    cache.max_bytes = 0 if is_ram() else get_cache_budget_bytes(kind)
+    cache.probationary = is_balanced()
+
+
+def _clear_for_disk():
+    _images.clear()
+    _fonts.clear()
+    _b64.clear()
+
+
+def get_image(path) -> Image.Image:
+    key = str(path)
+    if is_disk():
+        _clear_for_disk()
+        return Image.open(key).convert("RGBA")
+    _configure(_images, "images")
+    signature = _signature(key)
+    with _asset_lock:
+        cached = _images.get(key)
+        if cached is not None:
+            cached_signature, image = cached
+            if cached_signature == signature:
+                return image
+            _images.pop(key, None)
+    image = Image.open(key).convert("RGBA")
+    with _asset_lock:
+        _images.put(key, (signature, image), value_bytes(image))
+    return image
+
+
+def get_image_copy(path) -> Image.Image:
+    return get_image(path).copy()
+
+
+def get_font(path, size: int, index: int = 0, encoding: str = ""):
+    if is_disk():
+        _clear_for_disk()
+        return ImageFont.truetype(font=str(path), size=size, index=index, encoding=encoding)
+    _configure(_fonts, "fonts")
+    key = (str(path), int(size), int(index), encoding)
+    signature = _signature(path)
+    with _asset_lock:
+        cached = _fonts.get(key)
+        if cached is not None:
+            cached_signature, font = cached
+            if cached_signature == signature:
+                return font
+            _fonts.pop(key, None)
+    font = ImageFont.truetype(font=str(path), size=size, index=index, encoding=encoding)
+    with _asset_lock:
+        _fonts.put(key, (signature, font), 256 * 1024)
+    return font
+
+
+def get_b64(path):
+    key = str(path)
+    if is_disk():
+        _clear_for_disk()
+        try:
+            with open(key, "rb") as file:
+                return "base64://" + base64.b64encode(file.read()).decode()
+        except OSError:
+            return None
+    _configure(_b64, "base64")
+    signature = _signature(key)
+    with _asset_lock:
+        cached = _b64.get(key)
+        if cached is not None:
+            cached_signature, data = cached
+            if cached_signature == signature:
+                return data
+            _b64.pop(key, None)
+    try:
+        with open(key, "rb") as file:
+            data = "base64://" + base64.b64encode(file.read()).decode()
+    except OSError:
+        return None
+    with _asset_lock:
+        _b64.put(key, (signature, data), len(data))
+    return data
 
 _ROOT = Path(__file__).resolve().parents[1]
 _PLUGINS = _ROOT / "plugins"
@@ -79,13 +461,13 @@ def _estimate_file(path: Path, loader) -> int:
 
 
 def _load_shared_image(path: Path) -> int:
-    from utils import asset_cache
+    from utils import cache as asset_cache
 
     return _image_bytes(asset_cache.get_image(path))
 
 
 def _load_shared_b64(path: Path) -> int:
-    from utils import asset_cache
+    from utils import cache as asset_cache
 
     data = asset_cache.get_b64(path)
     return len(data) if data else 0
@@ -202,7 +584,7 @@ def _font_specs() -> List[Dict[str, Any]]:
 
 
 def _preload_fonts(budget: Budget) -> Dict[str, Any]:
-    from utils import asset_cache
+    from utils import cache as asset_cache
     from plugins.airi_daily_check.base import cache as dc_cache
 
     items = 0

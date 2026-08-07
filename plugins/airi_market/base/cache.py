@@ -6,7 +6,7 @@ from typing import Optional
 
 from nonebot.log import logger
 
-from utils.cache_mode import is_disk
+from utils.cache import is_disk
 
 _DATA_DIR = Path(__file__).resolve().parents[3] / "data" / "airi_market"
 _CACHE_FILE = _DATA_DIR / "cache.pk"

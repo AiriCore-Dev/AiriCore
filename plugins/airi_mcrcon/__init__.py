@@ -19,7 +19,7 @@ from .rcon_safe import SafeMCRcon, get_executor, shutdown_executor
 from openai import AsyncOpenAI
 from datetime import datetime
 from PIL import Image, ImageDraw
-from utils import asset_cache
+from utils import cache as asset_cache
 from utils import llm_fallback
 from nonebot.rule import to_me
 from nonebot.permission import SUPERUSER

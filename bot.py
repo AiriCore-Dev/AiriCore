@@ -408,11 +408,29 @@ async def _flush_logs_on_shutdown():
 _bg_tasks = set()
 
 
+def _compile_utils():
+    import compileall
+
+    try:
+        ok = compileall.compile_dir(
+            str(Path(__file__).resolve().parent / "utils"),
+            quiet=1,
+            force=False,
+            optimize=0,
+        )
+    except Exception as e:
+        logger.warning(f"启动编译 utils 失败: {e}")
+        return False
+    if not ok:
+        logger.warning("启动编译 utils 未完全成功")
+    return ok
+
+
 @driver.on_startup
 async def _preload_caches_on_startup():
     import asyncio
 
-    from utils.cache_preload import run_and_log
+    from utils.cache import run_and_log
 
     task = asyncio.create_task(asyncio.to_thread(run_and_log))
     _bg_tasks.add(task)
@@ -428,6 +446,7 @@ async def _preload_caches_on_startup():
 
 
 if __name__ == "__main__":
+    _compile_utils()
     nonebot.load_plugin("nonebot_plugin_localstore")
     nonebot.load_plugins("plugins")
     nonebot.run(

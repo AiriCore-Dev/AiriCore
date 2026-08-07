@@ -8,7 +8,7 @@ import tempfile
 from nonebot import require
 from nonebot.log import logger
 
-from utils import mailer
+from utils import email as mailer
 
 from . import state
 from .state import driver

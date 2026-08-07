@@ -4,14 +4,14 @@ import threading
 import numpy as np
 from PIL import Image
 
-from utils.cache_mode import (
+from utils.cache import (
     get_cache_budget_bytes,
     is_balanced,
     is_disk,
     is_ram,
     register_cache,
 )
-from utils.cache_policy import ByteLRU
+from utils.cache import ByteLRU
 
 _lock = threading.Lock()
 _arrays = ByteLRU(get_cache_budget_bytes("arrays"), owner="kokomi.arrays")

@@ -9,14 +9,14 @@ from typing import Any, Optional
 from PIL import Image, ImageFont
 from nonebot.log import logger
 
-from utils.cache_mode import (
+from utils.cache import (
     get_cache_budget_bytes,
     is_balanced,
     is_disk,
     is_ram,
     register_cache,
 )
-from utils.cache_policy import ByteLRU, value_bytes
+from utils.cache import ByteLRU, value_bytes
 
 TTL_AVATAR = 7 * 24 * 3600
 

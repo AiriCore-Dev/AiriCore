@@ -8,7 +8,7 @@ from typing import Dict, List, Optional, Tuple
 
 from PIL import Image, ImageDraw, ImageFont
 
-from utils.asset_cache import get_font
+from utils.cache import get_font
 
 _FONT_FAMILY = "Noto Sans CJK SC"
 

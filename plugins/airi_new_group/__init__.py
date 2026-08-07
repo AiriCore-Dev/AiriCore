@@ -3,8 +3,8 @@ import asyncio
 import base64
 import re
 import nonebot
-from utils.asset_cache import get_b64
-from utils.safe_download import download_public_bytes
+from utils.cache import get_b64
+from utils.network import download_public_bytes
 from utils.totp_2fa import totp_verify
 from nonebot import on_notice, on_command, get_driver, logger
 from nonebot.permission import SUPERUSER

@@ -4,7 +4,7 @@ from io import BytesIO
 
 from PIL import Image, ImageDraw, ImageOps
 
-from utils.asset_cache import get_image_copy
+from utils.cache import get_image_copy
 
 from .art_assets import TITLE_PATH, portrait_path
 from .card_renderer import character_label, font, render_character_front, render_character_icon, render_score_back

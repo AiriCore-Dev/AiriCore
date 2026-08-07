@@ -9,7 +9,7 @@ from typing import Any, Dict, Optional
 
 from nonebot import logger
 
-from utils.cache_mode import is_disk
+from utils.cache import is_disk
 
 TTL_NAME = 3 * 24 * 3600
 TTL_AVATAR = 7 * 24 * 3600
