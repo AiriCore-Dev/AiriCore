@@ -81,7 +81,6 @@ def filter_statement(
         filter_scene = False
 
     whereclause: list[ColumnElement[bool]] = []
-    whereclause.append(BotModel.self_id == session.self_id)
     whereclause.append(BotModel.scope == scope_value(session.scope))
 
     if filter_scene:
