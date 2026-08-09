@@ -10,16 +10,14 @@ import subprocess
 import httpx
 import nonebot
 from nonebot import on_fullmatch, on_startswith, require, get_driver, logger
-from nonebot.message import event_preprocessor
 from nonebot.permission import SUPERUSER
-from nonebot.adapters import Bot as BaseBot, Event as BaseEvent
 from nonebot.adapters.onebot.v11 import Bot, Message, MessageSegment
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, PrivateMessageEvent, MessageEvent
-import json
 from datetime import datetime, timezone, timedelta
 
 from . import counter
 from . import cache
+from . import dedup
 from . import ram_inspector
 from .charts import draw_pies_vstack, draw_summary, render_bot_cell, draw_grid
 

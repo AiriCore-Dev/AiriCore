@@ -1,10 +1,17 @@
+import asyncio
 import hashlib
 import time
 from collections import OrderedDict
 from typing import Callable, Optional
 
+import nonebot
 from nonebot import logger
-from nonebot.adapters.onebot.v11.event import GroupMessageEvent
+from nonebot.exception import IgnoredException
+from nonebot.message import event_preprocessor
+from nonebot.adapters.onebot.v11 import Bot
+from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
+
+from . import counter
 
 CLAIM_TTL = 120.0
 CLAIM_MAX = 4096
@@ -79,3 +86,20 @@ def claim(bot_id: str, event: GroupMessageEvent, online_ids: set):
     entry["ts"] = now
     _claims.move_to_end(fp)
     return entry["owner"] == bot_id, entry["owner"], fp
+
+
+@event_preprocessor
+async def _dedup(bot: Bot, event: MessageEvent):
+    counter.count_recv(bot, event)
+    if not isinstance(event, GroupMessageEvent):
+        return
+    bot_id = str(bot.self_id)
+    if is_deferred(bot_id):
+        await asyncio.sleep(DEFER_DELAY)
+    allowed, owner, fp = claim(bot_id, event, set(nonebot.get_bots()))
+    if allowed:
+        return
+    logger.opt(colors=True).debug(
+        f"<y>多bot去重: 群{event.group_id} 指纹{fp[:8]} 归属{owner}, 丢弃 {bot_id}</y>"
+    )
+    raise IgnoredException("multi-bot dedup")

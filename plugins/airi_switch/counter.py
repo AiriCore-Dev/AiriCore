@@ -8,7 +8,6 @@ from datetime import datetime, timezone, timedelta
 from typing import Any, Dict
 
 from nonebot import logger
-from nonebot.message import event_preprocessor
 from nonebot.adapters.onebot.v11 import Bot
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 
@@ -140,8 +139,7 @@ except Exception:
     pass
 
 
-@event_preprocessor
-def _count_recv(bot: Bot, event: MessageEvent):
+def count_recv(bot: Bot, event: MessageEvent) -> None:
     session = str(event.group_id) if isinstance(event, GroupMessageEvent) else PRIVATE_KEY
     _bump(bot.self_id, "recv", session)
 
