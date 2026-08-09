@@ -19,7 +19,7 @@ from ..manager import meme_manager
 
 
 def get_user_id(uninfo: Uninfo) -> str:
-    return f"{uninfo.scope}_{uninfo.self_id}_{uninfo.scene_path}"
+    return f"{uninfo.scope}_{uninfo.scene_path}"
 
 
 UserId = Annotated[str, Depends(get_user_id)]

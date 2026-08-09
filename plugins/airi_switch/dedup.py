@@ -13,7 +13,7 @@ from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 
 from . import counter
 
-CLAIM_TTL = 120.0
+CLAIM_TTL = 15.0
 CLAIM_MAX = 4096
 DEFER_DELAY = 0.15
 
