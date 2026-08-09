@@ -45,9 +45,12 @@ def _curfew_deferral(bot_id: str) -> bool:
 @driver.on_startup
 async def load_curfew_config():
     _load_curfew_config()
-    from plugins.airi_switch import dedup
+    try:
+        from plugins.airi_switch import dedup
 
-    dedup.register_deferral(_curfew_deferral)
+        dedup.register_deferral(_curfew_deferral)
+    except Exception as e:
+        logger.opt(colors=True).warning(f"<y>宵禁降级注册失败，多bot去重让路不生效: {e}</y>")
     logger.opt(colors=True).info(
         f"<y>宵禁机制已加载: bot白名单={CURFEW_BOT_IDS}, 插件白名单={CURFEW_PLUGIN_WHITELIST}</y>"
     )

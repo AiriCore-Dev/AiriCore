@@ -96,7 +96,11 @@ async def _dedup(bot: Bot, event: MessageEvent):
     bot_id = str(bot.self_id)
     if is_deferred(bot_id):
         await asyncio.sleep(DEFER_DELAY)
-    allowed, owner, fp = claim(bot_id, event, set(nonebot.get_bots()))
+    try:
+        allowed, owner, fp = claim(bot_id, event, set(nonebot.get_bots()))
+    except Exception as e:
+        logger.opt(colors=True).warning(f"<y>多bot去重判定异常，本条放行: {e}</y>")
+        return
     if allowed:
         return
     logger.opt(colors=True).debug(
