@@ -46,14 +46,6 @@ img = localpath_to_base64(os.path.join(os.path.dirname(__file__), 'airi.jpg'))
 duang = localpath_to_base64(os.path.join(os.path.dirname(__file__), 'duang.wav'))
 msg = MessageSegment.text(intro) + MessageSegment.image(img) if img else MessageSegment.text(intro)
 
-_raw_whitelist = getattr(driver.config, "new_group_bot_whitelist", None)
-if _raw_whitelist is None:
-    bot_whitelist = []
-elif isinstance(_raw_whitelist, str):
-    bot_whitelist = [b.strip() for b in _raw_whitelist.split(",") if b.strip()]
-else:
-    bot_whitelist = [str(b).strip() for b in _raw_whitelist if str(b).strip()]
-
 _raw_full_group_whitelist = getattr(driver.config, "airifullgroup_bot_whitelist", None)
 if _raw_full_group_whitelist is None:
     airifullgroup_bot_whitelist = []
@@ -86,13 +78,14 @@ async def handle_group_increase(bot: Bot, event: GroupIncreaseNoticeEvent):
                 if botq in group_member_list and botq != bot_id:
                     target_bots.append(botq)
 
-            if bot_id in bot_whitelist or not len(target_bots):
+            if not len(target_bots):
                 if duang:
                     await bot.send_group_msg(group_id=group_id, message=MessageSegment.record(duang))
                 await bot.send_group_msg(group_id=group_id, message=msg)
             else:
-                await bot.send_group_msg(group_id=group_id, message=f"该群已存在AiriCore分布式账号（{', '.join(target_bots)}），即将退群")
-                await bot.set_group_leave(group_id=group_id)
+                logger.opt(colors=True).info(
+                    f"<y>群{group_id} 已有同项目 Bot（{', '.join(target_bots)}），静默入群</y>"
+                )
 
     except Exception as e:
         logger.warning(f"处理入群事件时发生错误：{e}")
