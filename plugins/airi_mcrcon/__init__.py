@@ -687,7 +687,8 @@ async def _(bot: Bot, ev: MessageEvent):
         await rcon_handle.finish(res.strip())
 
     if not await check_alive():
-        await rcon_handle.finish("服务器 RCON 暂时不可用，请稍后再试。", reply_message=True)
+        # await rcon_handle.finish("服务器 RCON 暂时不可用，请稍后再试。", reply_message=True)
+        return
 
     if src.startswith('auth'):
         try:

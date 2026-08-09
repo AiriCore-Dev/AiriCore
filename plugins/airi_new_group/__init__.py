@@ -36,7 +36,7 @@ intro = """Lovely！Fairy！Momoi Airi！
 本Bot是一款基于 AiriCore 的高性能QQ群Bot，功能请发送 help 查看。
 Bot一群：1030569383
 Bot二群：808085026
-AiriCore Dev群：1051523491
+AiriCore 分布式群：1084667424
 Bot官网：www.airi.asia
 本Bot是完全公益的，不接受任何形式的收费和赞助。如果你遇到收费拉群、索要赞助等情况，请联系bot主举报！
 bot主联系邮箱：saki@saki.ln.cn
