@@ -33,17 +33,24 @@ def _load_curfew_config():
 _load_curfew_config()
 
 
-@driver.on_startup
-async def load_curfew_config():
-    _load_curfew_config()
-    logger.opt(colors=True).info(
-        f"<y>宵禁机制已加载: bot白名单={CURFEW_BOT_IDS}, 插件白名单={CURFEW_PLUGIN_WHITELIST}</y>"
-    )
-
-
 def is_curfew_time() -> bool:
     hour = datetime.datetime.now().hour
     return hour >= 23 or hour < 6
+
+
+def _curfew_deferral(bot_id: str) -> bool:
+    return is_curfew_time() and bot_id in CURFEW_BOT_IDS
+
+
+@driver.on_startup
+async def load_curfew_config():
+    _load_curfew_config()
+    from plugins.airi_switch import dedup
+
+    dedup.register_deferral(_curfew_deferral)
+    logger.opt(colors=True).info(
+        f"<y>宵禁机制已加载: bot白名单={CURFEW_BOT_IDS}, 插件白名单={CURFEW_PLUGIN_WHITELIST}</y>"
+    )
 
 
 def get_session_key() -> str:
