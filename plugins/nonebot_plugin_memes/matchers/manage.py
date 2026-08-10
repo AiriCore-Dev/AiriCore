@@ -1,19 +1,13 @@
 from nonebot.matcher import Matcher
-from nonebot.permission import SUPERUSER, Permission
+from nonebot.permission import SUPERUSER
+from nonebot.adapters.onebot.v11.permission import GROUP_ADMIN, GROUP_OWNER, PRIVATE
 from nonebot_plugin_alconna import Alconna, Args, on_alconna
-from nonebot_plugin_uninfo import Uninfo
 
 from ..manager import MemeMode, meme_manager
 from .utils import UserId, find_meme
 
 
-def _uninfo_role(session: Uninfo) -> bool:
-    return session.scene.is_private or bool(
-        session.member and session.member.role and session.member.role.level > 1
-    )
-
-
-PERM_EDIT = SUPERUSER | Permission(_uninfo_role)
+PERM_EDIT = SUPERUSER | PRIVATE | GROUP_OWNER | GROUP_ADMIN
 PERM_GLOBAL = SUPERUSER
 
 

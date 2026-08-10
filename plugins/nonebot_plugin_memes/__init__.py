@@ -3,7 +3,6 @@ from nonebot.plugin import PluginMetadata, inherit_supported_adapters
 
 require("nonebot_plugin_alconna")
 require("nonebot_plugin_waiter")
-require("nonebot_plugin_uninfo")
 require("nonebot_plugin_orm")
 
 from . import matchers as matchers
@@ -47,7 +46,5 @@ __plugin_meta__ = PluginMetadata(
     type="application",
     homepage="https://github.com/noneplugin/nonebot-plugin-memes",
     config=Config,
-    supported_adapters=inherit_supported_adapters(
-        "nonebot_plugin_alconna", "nonebot_plugin_uninfo"
-    ),
+    supported_adapters=inherit_supported_adapters("nonebot_plugin_alconna"),
 )

@@ -6,6 +6,8 @@ from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 
 from nonebot import logger
 
+from utils.onebot_query import member_name
+
 from ..base import state
 from ..base.matchers import rxyp, jxyp, plxyp, wdxyp, xgxyp, zyxyp, xhxyp, jbxyp
 from ..base.helpers import (
@@ -257,11 +259,7 @@ async def _(bot: Bot, ev: MessageEvent):
     transfer_id = m.group(1)
     if transfer_id == str(user_id):
         await zyxyp.finish('❌ 不能转给自己', reply_message=True)
-    try:
-        info = await bot.get_group_member_info(group_id=group_id, user_id=transfer_id)
-        transfer_nick = info.get("card") or info.get("nickname") or transfer_id
-    except Exception:
-        transfer_nick = transfer_id
+    transfer_nick = await member_name(bot, group_id, transfer_id)
     try:
         add_bottle(unique_id, transfer_nick, transfer_id)
     except Exception as e:

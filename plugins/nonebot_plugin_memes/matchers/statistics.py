@@ -17,7 +17,6 @@ from nonebot_plugin_alconna import (
     on_alconna,
     store_true,
 )
-from nonebot_plugin_uninfo import Uninfo
 
 from ..manager import meme_manager
 from ..recorder import (
@@ -26,7 +25,7 @@ from ..recorder import (
     get_meme_generation_times,
 )
 from ..utils import add_timezone
-from .utils import find_meme
+from .utils import EventSession, find_meme
 
 statistics_matcher = on_alconna(
     Alconna(
@@ -105,7 +104,7 @@ statistics_matcher.shortcut(
 @statistics_matcher.handle()
 async def _(
     matcher: Matcher,
-    session: Uninfo,
+    session: EventSession,
     meme_name: Optional[str] = None,
     query_global: Query[bool] = AlconnaQuery("global.value", False),
     query_my: Query[bool] = AlconnaQuery("my.value", False),

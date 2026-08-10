@@ -1,5 +1,4 @@
 
-import copy
 import pickle
 import time
 import threading
@@ -61,6 +60,20 @@ def _load() -> None:
     _stats = {}
 
 
+def _copy_day(day_stats: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        bot_id: {
+            direction: dict(bucket)
+            for direction, bucket in directions.items()
+        }
+        for bot_id, directions in day_stats.items()
+    }
+
+
+def _snapshot() -> Dict[str, Any]:
+    return {day: _copy_day(day_stats) for day, day_stats in _stats.items()}
+
+
 def _flush(force: bool = False) -> None:
     global _last_flush, _dirty
     now = time.time()
@@ -68,7 +81,7 @@ def _flush(force: bool = False) -> None:
         if not force and (not _dirty or now - _last_flush < _FLUSH_INTERVAL):
             return
         _prune_old_days()
-        snapshot = copy.deepcopy(_stats)
+        snapshot = _snapshot()
         _last_flush = now
         _dirty = False
     try:
@@ -111,7 +124,7 @@ def _bump(bot_id: str, direction: str, session: str) -> None:
 
 def get_stats(day: str = "") -> Dict[str, Any]:
     with _lock:
-        return copy.deepcopy(_stats.get(day or _today(), {}))
+        return _copy_day(_stats.get(day or _today(), {}))
 
 
 def get_available_days() -> list:

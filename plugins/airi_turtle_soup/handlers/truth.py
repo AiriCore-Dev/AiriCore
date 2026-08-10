@@ -4,10 +4,11 @@ import traceback
 from nonebot import logger
 from nonebot.adapters.onebot.v11 import Bot
 from nonebot.adapters.onebot.v11.event import MessageEvent
+from utils.onebot_query import event_nickname
 from ..base.matchers import truth, matcher
 from ..base.constants import max_player_truth_trial, max_group_trial
 from ..base import state
-from ..base.helpers import get_ids, check_data_existance, get_usernick, construct_turtle_soup_history, call_llm, turtle_soup_truth_prompt, turtle_soup, end_game, strip_cq, _persist, add_pending_trial, remove_pending_trial
+from ..base.helpers import get_ids, check_data_existance, construct_turtle_soup_history, call_llm, turtle_soup_truth_prompt, turtle_soup, end_game, strip_cq, _persist, add_pending_trial, remove_pending_trial
 
 LLM_MAX_ATTEMPTS = 3
 LLM_RETRY_DELAY = 2
@@ -38,7 +39,7 @@ async def _(bot: Bot, ev: MessageEvent):
             add_pending_trial(turtle, user_id, 'truth')
             reserved_turtle = turtle
             reserved_user = user_id
-            user_nick = await get_usernick(bot, gruop_id, user_id)
+            user_nick = event_nickname(ev)
             is_tg = 0
             history_text = f"猜汤底：{src}"
             soup = turtle_soup[turtle['soup_id']]

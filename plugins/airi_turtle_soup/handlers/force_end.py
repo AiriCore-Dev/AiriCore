@@ -4,10 +4,11 @@ import traceback
 from nonebot import logger
 from nonebot.adapters.onebot.v11 import Bot
 from nonebot.adapters.onebot.v11.event import MessageEvent
+from utils.onebot_query import event_nickname
 from ..base.matchers import force_end, matcher
 from ..base.constants import min_turtle_minutes, max_group_trial
 from ..base import state
-from ..base.helpers import get_ids, check_data_existance, get_usernick, end_game
+from ..base.helpers import get_ids, check_data_existance, end_game
 
 @force_end.handle()
 async def _(bot: Bot, ev: MessageEvent):
@@ -19,7 +20,7 @@ async def _(bot: Bot, ev: MessageEvent):
         if 'turtle' not in state.data['group'][gruop_id]:
             return
         turtle = state.data['group'][gruop_id]['turtle']
-        user_nick = await get_usernick(bot, gruop_id, user_id)
+        user_nick = event_nickname(ev)
         if user_id != turtle['creator']:
             raise ValueError('❌ 你不是提问的发起者')
         time_passed = (int(time.time()) - turtle['create_time']) // 60

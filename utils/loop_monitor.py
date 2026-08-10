@@ -1,0 +1,93 @@
+import asyncio
+import threading
+import time
+
+from nonebot import logger
+
+SAMPLE_INTERVAL = 60.0
+REPORT_EVERY = 10
+LAG_WARN_SECS = 1.0
+TASK_WARN_COUNT = 200
+
+_task = None
+
+
+async def measure_lag(samples: int = 5, delay: float = 0.2) -> float:
+    worst = 0.0
+    for _ in range(samples):
+        start = time.perf_counter()
+        await asyncio.sleep(delay)
+        worst = max(worst, time.perf_counter() - start - delay)
+    return worst
+
+
+def _process():
+    try:
+        import psutil
+
+        return psutil.Process()
+    except Exception:
+        return None
+
+
+def _fd_count(proc) -> int:
+    if proc is None:
+        return -1
+    try:
+        return proc.num_fds()
+    except Exception:
+        return -1
+
+
+def _rss_mb(proc) -> float:
+    if proc is None:
+        return -1.0
+    try:
+        return proc.memory_info().rss / 1048576
+    except Exception:
+        return -1.0
+
+
+def snapshot(proc, lag: float) -> str:
+    return (
+        f"运行状态：事件循环延迟 {lag * 1000:.0f}ms，"
+        f"协程 {len(asyncio.all_tasks())} 个，"
+        f"线程 {threading.active_count()} 个，"
+        f"句柄 {_fd_count(proc)} 个，"
+        f"内存 {_rss_mb(proc):.0f}MB"
+    )
+
+
+async def _monitor() -> None:
+    proc = _process()
+    round_no = 0
+    while True:
+        await asyncio.sleep(SAMPLE_INTERVAL)
+        round_no += 1
+        try:
+            lag = await measure_lag()
+            tasks = len(asyncio.all_tasks())
+            line = snapshot(proc, lag)
+            if lag >= LAG_WARN_SECS or tasks >= TASK_WARN_COUNT:
+                logger.warning(f"{line}；消息处理已开始积压，回复会明显变慢")
+            elif round_no % REPORT_EVERY == 0:
+                logger.info(line)
+        except asyncio.CancelledError:
+            raise
+        except Exception as e:
+            logger.warning(f"运行状态采样失败: {e}")
+
+
+def start():
+    global _task
+    if _task is not None and not _task.done():
+        return _task
+    _task = asyncio.create_task(_monitor())
+    return _task
+
+
+def stop() -> None:
+    global _task
+    if _task is not None:
+        _task.cancel()
+        _task = None

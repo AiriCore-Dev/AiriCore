@@ -4,12 +4,11 @@ from meme_generator.tools import MemeProperties, MemeSortBy, render_meme_list
 from nonebot.log import logger
 from nonebot.utils import run_sync
 from nonebot_plugin_alconna import Image, Text, on_alconna
-from nonebot_plugin_uninfo import Uninfo
 
 from ..config import memes_config
 from ..manager import meme_manager
 from ..recorder import SessionIdType, get_meme_generation_keys
-from .utils import UserId
+from .utils import EventSession, UserId
 
 help_matcher = on_alconna(
     "表情包制作",
@@ -21,7 +20,7 @@ help_matcher = on_alconna(
 
 
 @help_matcher.handle()
-async def _(user_id: UserId, session: Uninfo):
+async def _(user_id: UserId, session: EventSession):
     memes = meme_manager.get_memes()
     list_image_config = memes_config.memes_list_image_config
 

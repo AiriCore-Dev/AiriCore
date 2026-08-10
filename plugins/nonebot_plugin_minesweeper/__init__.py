@@ -4,6 +4,7 @@ from asyncio import TimerHandle
 from typing import Annotated, Optional
 
 from nonebot import require
+from nonebot.adapters.onebot.v11 import MessageEvent
 from nonebot.matcher import Matcher
 from nonebot.params import Depends
 from nonebot.plugin import PluginMetadata, inherit_supported_adapters
@@ -11,7 +12,6 @@ from nonebot.rule import to_me
 from nonebot.utils import run_sync
 
 require("nonebot_plugin_alconna")
-require("nonebot_plugin_uninfo")
 
 from nonebot_plugin_alconna import (
     Alconna,
@@ -21,11 +21,14 @@ from nonebot_plugin_alconna import (
     MultiVar,
     Option,
     Query,
+    Target,
     Text,
     UniMessage,
     on_alconna,
 )
-from nonebot_plugin_uninfo import Uninfo
+
+from utils.onebot_query import session_key
+from utils.uniseg_target import capture_target, send_with_fallback
 
 from .config import Config, minesweeper_config
 from .data_source import GameState, MarkResult, MineSweeper, OpenResult
@@ -50,8 +53,8 @@ games: dict[str, MineSweeper] = {}
 timers: dict[str, TimerHandle] = {}
 
 
-def get_user_id(uninfo: Uninfo) -> str:
-    return f"{uninfo.scope}_{uninfo.scene_path}"
+def get_user_id(event: MessageEvent) -> str:
+    return session_key(event)
 
 
 UserId = Annotated[str, Depends(get_user_id)]
@@ -139,19 +142,20 @@ def stop_game(user_id: str):
     games.pop(user_id, None)
 
 
-async def stop_game_timeout(matcher: Matcher, user_id: str):
+async def stop_game_timeout(matcher: Matcher, user_id: str, target: Optional[Target] = None):
     game = games.get(user_id, None)
     stop_game(user_id)
     if game:
-        await matcher.send("扫雷超时，游戏结束")
+        await send_with_fallback(matcher, "扫雷超时，游戏结束", target, "扫雷超时提醒")
 
 
 def set_timeout(matcher: Matcher, user_id: str, timeout: float = 300):
     if timer := timers.get(user_id, None):
         timer.cancel()
+    target = capture_target()
     loop = asyncio.get_running_loop()
     timer = loop.call_later(
-        timeout, lambda: asyncio.ensure_future(stop_game_timeout(matcher, user_id))
+        timeout, lambda: asyncio.ensure_future(stop_game_timeout(matcher, user_id, target))
     )
     timers[user_id] = timer
 

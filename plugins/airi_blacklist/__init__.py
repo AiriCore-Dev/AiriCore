@@ -1,10 +1,11 @@
 import os
 import re
 import tempfile
+import time
 from pathlib import Path
 from typing import Literal
 from datetime import datetime, timedelta
-from collections import defaultdict
+from collections import OrderedDict, defaultdict
 import asyncio
 from nonebot import get_driver, logger, on_fullmatch, on_startswith
 from nonebot.adapters import Event
@@ -44,6 +45,55 @@ block_stats = defaultdict(lambda: defaultdict(lambda: {"last_time": None, "count
 stats_lock = asyncio.Lock()
 _bg_tasks = set()
 LOG_LINE_RE = re.compile(r"^\[(.+?)\] (.+)，今日已尝试 (\d+) 次$")
+
+LOG_DEDUP_TTL = 15.0
+LOG_DEDUP_MAX = 4096
+_logged_rounds: "OrderedDict[str, dict]" = OrderedDict()
+
+
+def _event_fingerprint(event) -> str | None:
+    if isinstance(event, GroupMessageEvent):
+        try:
+            from plugins.airi_switch import dedup
+        except Exception:
+            return None
+        try:
+            return dedup.fingerprint(event)
+        except Exception:
+            return None
+    if isinstance(event, MessageEvent) or event is None:
+        return None
+    parts = [
+        getattr(event, "post_type", ""),
+        getattr(event, "notice_type", ""),
+        getattr(event, "request_type", ""),
+        getattr(event, "sub_type", ""),
+        getattr(event, "user_id", ""),
+        getattr(event, "group_id", ""),
+        getattr(event, "operator_id", ""),
+    ]
+    return "notice|" + "|".join(str(part) for part in parts)
+
+
+def _first_log_of_round(bot_id: str, key: str, event) -> bool:
+    fingerprint = _event_fingerprint(event)
+    if fingerprint is None:
+        return True
+    now = time.monotonic()
+    for stale in [k for k, v in _logged_rounds.items() if now - v["ts"] > LOG_DEDUP_TTL]:
+        _logged_rounds.pop(stale, None)
+    while len(_logged_rounds) > LOG_DEDUP_MAX:
+        _logged_rounds.popitem(last=False)
+    token = f"{fingerprint}|{key}"
+    entry = _logged_rounds.get(token)
+    if entry is None or bot_id in entry["seen"]:
+        _logged_rounds[token] = {"seen": {bot_id}, "ts": now}
+        _logged_rounds.move_to_end(token)
+        return True
+    entry["seen"].add(bot_id)
+    entry["ts"] = now
+    _logged_rounds.move_to_end(token)
+    return False
 
 
 def get_today_date() -> str:
@@ -106,10 +156,14 @@ async def save_block_log():
                 logger.warning(f"拦截统计落盘失败: {e}")
 
 
-async def log_block_attempt(category: str, target_type: str, identifier: str, action: str):
+async def log_block_attempt(category: str, target_type: str, identifier: str, action: str,
+                            bot=None, event=None):
+    key = f"{category}{target_type} {identifier} {action}"
+    if bot is not None and event is not None:
+        if not _first_log_of_round(str(bot.self_id), key, event):
+            return
     async with stats_lock:
         today = get_today_date()
-        key = f"{category}{target_type} {identifier} {action}"
         block_stats[today][key]["last_time"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         block_stats[today][key]["count"] += 1
 
@@ -283,17 +337,17 @@ async def notice_namelist_processor(bot: Bot, event: Event):
 
     if is_blacklist():
         if uid in namelist["user_blacklist"]:
-            await log_block_attempt("黑名单", "用户", uid, "尝试触发通知事件")
+            await log_block_attempt("黑名单", "用户", uid, "尝试触发通知事件", bot, event)
             raise IgnoredException("namelist block")
         if gid and gid in namelist["group_blacklist"]:
-            await log_block_attempt("黑名单", "群聊", gid, "尝试触发通知事件")
+            await log_block_attempt("黑名单", "群聊", gid, "尝试触发通知事件", bot, event)
             raise IgnoredException("namelist block")
         return
     if uid not in namelist["user_whitelist"]:
-        await log_block_attempt("非白名单", "用户", uid, "尝试触发通知事件")
+        await log_block_attempt("非白名单", "用户", uid, "尝试触发通知事件", bot, event)
         raise IgnoredException("namelist block")
     if gid and gid not in namelist["group_whitelist"]:
-        await log_block_attempt("非白名单", "群聊", gid, "尝试触发通知事件")
+        await log_block_attempt("非白名单", "群聊", gid, "尝试触发通知事件", bot, event)
         raise IgnoredException("namelist block")
 
 
@@ -336,7 +390,7 @@ async def namelist_processor(bot: Bot, event: MessageEvent):
                 identifier = gid
 
     if should_block:
-        await log_block_attempt(category, target_type, identifier, "尝试使用Bot")
+        await log_block_attempt(category, target_type, identifier, "尝试使用Bot", bot, event)
         raise IgnoredException("namelist block")
 
 

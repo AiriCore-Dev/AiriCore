@@ -8,6 +8,8 @@ from nonebot.adapters.onebot.v11.event import (GroupMessageEvent, MessageEvent,
                                                PrivateMessageEvent)
 from nonebot.matcher import Matcher
 
+from utils.onebot_query import event_nickname
+
 from . import cache
 from .config import EventNotSupport, ResourceError, tarot_config
 
@@ -52,14 +54,8 @@ class Tarot:
 
     async def divine(self, bot: Bot, matcher: Matcher, event: MessageEvent, f_name) -> None:
         user_id = str(event.user_id)
-        if isinstance(event, GroupMessageEvent):
-            user_info = await bot.get_group_member_info(
-                group_id=event.group_id,
-                user_id=event.user_id,
-            )
-            user_nick = user_info.get("card") or user_info.get("nickname") or user_id
-        elif isinstance(event, PrivateMessageEvent):
-            user_nick = event.sender.nickname or user_id
+        if isinstance(event, (GroupMessageEvent, PrivateMessageEvent)):
+            user_nick = event_nickname(event)
         else:
             raise EventNotSupport
 

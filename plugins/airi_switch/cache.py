@@ -11,7 +11,7 @@ from nonebot import logger
 
 from utils.cache import is_disk
 
-TTL_NAME = 3 * 24 * 3600
+TTL_NAME = 2 * 3600
 TTL_AVATAR = 7 * 24 * 3600
 
 _DATA_DIR = Path(__file__).resolve().parents[2] / "data" / "airi_switch"

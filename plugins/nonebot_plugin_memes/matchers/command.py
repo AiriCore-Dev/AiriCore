@@ -1,8 +1,10 @@
 import random
+import re
 import traceback
 from itertools import chain
 from typing import Any, Optional, Union
 
+from arclet.alconna import Arparma, command_manager, output_manager
 from arclet.alconna import config as alc_config
 from meme_generator import (
     BooleanOption,
@@ -21,8 +23,9 @@ from meme_generator import (
     TextOverLength,
 )
 from meme_generator import Image as MemeImage
-from nonebot import get_driver
+from nonebot import get_driver, on_message
 from nonebot.adapters import Bot, Event
+from nonebot.adapters.onebot.v11 import GroupMessageEvent, MessageEvent
 from nonebot.exception import AdapterException
 from nonebot.log import logger
 from nonebot.matcher import Matcher
@@ -44,14 +47,22 @@ from nonebot_plugin_alconna import (
     store_true,
 )
 from nonebot_plugin_alconna.builtins.extensions.reply import ReplyMergeExtension
+from nonebot_plugin_alconna.uniseg.constraint import UNISEG_MESSAGE
 from nonebot_plugin_alconna.uniseg.tools import image_fetch
-from nonebot_plugin_uninfo import Interface, QryItrface, Session, Uninfo, User
+from nonebot_plugin_uninfo.model import Session
 from nonebot_plugin_waiter import waiter
+
+from utils.onebot_query import (
+    avatar_url,
+    event_nickname,
+    event_session,
+    member_name,
+    session_key,
+)
 
 from ..config import memes_config
 from ..manager import meme_manager
 from ..recorder import record_meme_generation
-from .utils import UserId
 
 alc_config.command_max_count += 1000
 
@@ -129,62 +140,44 @@ arg_meme_params = Args[meme_params_key, MultiVar(T_MemeParams, "*")]
 
 
 async def handle_params(
-    session: Session,
-    interface: Interface,
+    bot: Bot,
+    event: MessageEvent,
     meme_params: list[T_MemeParams],
 ):
     texts: list[str] = []
     images: list[Image] = []
     names: list[str] = []
 
-    def user_name(user: User) -> str:
-        return user.nick or user.name or user.id
-
     for msg_seg in meme_params:
         if isinstance(msg_seg, At):
-            try:
-                user = None
-                if not session.scene.is_private:
-                    try:
-                        if member := await interface.get_member(
-                            session.scene.type, session.scene.id, msg_seg.target
-                        ):
-                            user = member.user
-                            if member.nick:
-                                user.nick = member.nick
-                    except (NotImplementedError, AdapterException):
-                        pass
-                if not user:
-                    user = await interface.get_user(msg_seg.target)
-                if user:
-                    if image_url := user.avatar:
-                        images.append(Image(name=user_name(user), url=image_url))
-            except NotImplementedError:
-                logger.warning("当前平台可能不支持获取用户信息")
-            except AdapterException:
-                logger.warning(f"用户信息获取出错：\n{traceback.format_exc()}")
+            target = str(msg_seg.target)
+            name = (
+                await member_name(bot, event.group_id, target)
+                if isinstance(event, GroupMessageEvent)
+                else target
+            )
+            images.append(Image(name=name, url=avatar_url(target)))
 
         elif isinstance(msg_seg, Image):
             images.append(msg_seg)
 
         elif isinstance(msg_seg, Text):
             text = msg_seg.text
-            if text.startswith("@") and (user_id := text[1:]):
-                try:
-                    if user := await interface.get_user(user_id):
-                        if image_url := user.avatar:
-                            images.append(Image(name=user_name(user), url=image_url))
-                except NotImplementedError:
-                    logger.warning("当前平台可能不支持获取用户信息")
-                except AdapterException:
-                    logger.warning(f"用户信息获取出错：\n{traceback.format_exc()}")
+            if text.startswith("@") and (target := text[1:]):
+                name = (
+                    await member_name(bot, event.group_id, target)
+                    if isinstance(event, GroupMessageEvent)
+                    else target
+                )
+                images.append(Image(name=name, url=avatar_url(target)))
 
             elif text == "自己":
-                user = session.user
-                if (member := session.member) and member.nick:
-                    user.nick = member.nick
-                if image_url := user.avatar:
-                    images.append(Image(name=user_name(user), url=image_url))
+                images.append(
+                    Image(
+                        name=event_nickname(event),
+                        url=avatar_url(event.get_user_id()),
+                    )
+                )
 
             elif text.startswith("#"):
                 names.append(text[1:])
@@ -243,6 +236,23 @@ if (meme_prefixes := memes_config.memes_command_prefixes) is not None:
     prefixes = meme_prefixes
 
 
+_reply_ext = ReplyMergeExtension()
+_keyword_entries: list[tuple[str, Alconna, T_Handler]] = []
+_shortcut_entries: list[tuple[Optional[re.Pattern], Alconna, T_Handler]] = []
+
+
+def _gate_pattern(pattern: str) -> Optional[re.Pattern]:
+    probe = pattern
+    while probe.startswith("^"):
+        probe = probe[1:]
+    if "\\A" in probe:
+        return None
+    try:
+        return re.compile(probe, re.IGNORECASE)
+    except re.error:
+        return None
+
+
 def create_matcher(meme: Meme):
     info = meme.info
     params = info.params
@@ -250,34 +260,24 @@ def create_matcher(meme: Meme):
 
     keyword_handler = create_handler(meme)
     for keyword in info.keywords:
-        matcher = on_alconna(
-            Alconna(prefixes, keyword, *options, arg_meme_params),
-            block=False,
-            priority=12,
-            extensions=[ReplyMergeExtension()],
-        )
-        matcher.append_handler(keyword_handler)
+        command = Alconna(prefixes, keyword, *options, arg_meme_params)
+        _keyword_entries.append((keyword.lower(), command, keyword_handler))
 
     for shortcut in info.shortcuts:
-        matcher = on_alconna(
-            Alconna(prefixes, f"re:{shortcut.pattern}", *options, arg_meme_params),
-            block=False,
-            priority=12,
-            extensions=[ReplyMergeExtension()],
+        command = Alconna(prefixes, f"re:{shortcut.pattern}", *options, arg_meme_params)
+        _shortcut_entries.append(
+            (_gate_pattern(shortcut.pattern), command, create_handler(meme, shortcut))
         )
-        shortcut_handler = create_handler(meme, shortcut)
-        matcher.append_handler(shortcut_handler)
 
 
 def create_handler(meme: Meme, shortcut: Optional[MemeShortcut] = None) -> T_Handler:
     async def handler(
         bot: Bot,
-        event: Event,
+        event: MessageEvent,
         state: T_State,
         matcher: Matcher,
-        user_id: UserId,
-        session: Uninfo,
-        interface: QryItrface,
+        user_id: str,
+        session: Session,
         alc_matches: AlcMatches,
     ):
         if not meme_manager.check(user_id, meme.key):
@@ -306,36 +306,34 @@ def create_handler(meme: Meme, shortcut: Optional[MemeShortcut] = None) -> T_Han
                 options[option] = option_result.value
 
         meme_params: list[T_MemeParams] = list(alc_matches.query(meme_params_key, ()))
-        alc_texts, images, alc_names = await handle_params(
-            session, interface, meme_params
-        )
+        alc_texts, images, alc_names = await handle_params(bot, event, meme_params)
         texts.extend(alc_texts)
         names.extend(alc_names)
         for i in range(len(names)):
             if i < len(images):
                 images[i].name = names[i]
 
-        def user_name(user: User) -> str:
-            return user.nick or user.name or user.id
-
         info = meme.info
         params = info.params
 
         if params.min_images == 2 and len(images) == 1:
-            user = session.user
-            if (member := session.member) and member.nick:
-                user.nick = member.nick
-            if image_url := user.avatar:
-                images.insert(0, Image(name=user_name(user), url=image_url))
+            images.insert(
+                0,
+                Image(
+                    name=event_nickname(event),
+                    url=avatar_url(event.get_user_id()),
+                ),
+            )
 
         if memes_config.memes_use_sender_when_no_image and (
             params.min_images == 1 and len(images) == 0
         ):
-            user = session.user
-            if (member := session.member) and member.nick:
-                user.nick = member.nick
-            if image_url := user.avatar:
-                images.append(Image(name=user_name(user), url=image_url))
+            images.append(
+                Image(
+                    name=event_nickname(event),
+                    url=avatar_url(event.get_user_id()),
+                )
+            )
 
         if memes_config.memes_use_default_when_no_text and (
             params.min_texts > 0 and len(texts) == 0
@@ -356,7 +354,7 @@ def create_handler(meme: Meme, shortcut: Optional[MemeShortcut] = None) -> T_Han
                 list(msg) for msg in uni_msg.include(Image, At, Text).split()
             )
             params: list[T_MemeParams] = list(uni_segs)
-            _, new_images, new_names = await handle_params(session, interface, params)
+            _, new_images, new_names = await handle_params(bot, event, params)
             for i in range(len(new_names)):
                 if i < len(new_images):
                     new_images[i].name = new_names[i]
@@ -459,6 +457,97 @@ def create_matchers():
 create_matchers()
 
 
+_auto_send_output = getattr(get_driver().config, "alconna_auto_send_output", None)
+_auto_send_output = True if _auto_send_output is None else bool(_auto_send_output)
+
+memes_matcher = on_message(priority=12, block=False)
+
+
+async def _uni_message(bot: Bot, event: Event, state: T_State) -> Optional[UniMessage]:
+    try:
+        msg = await _reply_ext.message_provider(event, state, bot)
+    except Exception:
+        msg = None
+    if msg is not None:
+        return msg
+    try:
+        return UniMessage.of(event.get_message(), bot=bot)
+    except (NotImplementedError, ValueError):
+        return None
+
+
+def _candidates(text: str) -> list[tuple[Alconna, T_Handler]]:
+    lowered = text.lower()
+    picked: list[tuple[int, Alconna, T_Handler]] = []
+    for keyword, command, handler in _keyword_entries:
+        if keyword in lowered:
+            picked.append((len(keyword), command, handler))
+    for regex, command, handler in _shortcut_entries:
+        if regex is None or regex.search(text):
+            picked.append((0, command, handler))
+    picked.sort(key=lambda item: item[0], reverse=True)
+    return [(command, handler) for _, command, handler in picked]
+
+
+@memes_matcher.handle()
+async def _(
+    bot: Bot,
+    event: MessageEvent,
+    state: T_State,
+    matcher: Matcher,
+):
+    try:
+        if event.get_user_id() == bot.self_id:
+            return
+        text = event.get_plaintext()
+    except (NotImplementedError, ValueError):
+        return
+
+    candidates = _candidates(text)
+    if not candidates:
+        return
+
+    user_id = session_key(event)
+    session = event_session(bot, event)
+
+    msg = await _uni_message(bot, event, state)
+    if msg is None:
+        return
+
+    Arparma._additional.update(bot=lambda: bot, event=lambda: event, state=lambda: state)
+    state[UNISEG_MESSAGE] = msg
+
+    for command, handler in candidates:
+        if command_manager.is_disable(command):
+            continue
+        with output_manager.capture(command.name) as cap:
+            output_manager.set_action(lambda x: x, command.name)
+            try:
+                arp = command.parse(msg)
+            except Exception as e:
+                logger.warning(f"表情命令解析出错 {command.path}: {e}")
+                continue
+            output = cap.get("output", None)
+        if not arp.head_matched:
+            continue
+        if output:
+            if _auto_send_output:
+                await matcher.send(output)
+            return
+        if not arp.matched:
+            return
+        await handler(
+            bot=bot,
+            event=event,
+            state=state,
+            matcher=matcher,
+            user_id=user_id,
+            session=session,
+            alc_matches=arp,
+        )
+        return
+
+
 random_matcher = on_alconna(
     Alconna("随机表情", arg_meme_params),
     block=False,
@@ -471,16 +560,15 @@ random_matcher = on_alconna(
 @random_matcher.handle()
 async def _(
     bot: Bot,
-    event: Event,
+    event: MessageEvent,
     state: T_State,
     matcher: Matcher,
-    user_id: UserId,
-    session: Uninfo,
-    interface: QryItrface,
     alc_matches: AlcMatches,
 ):
+    user_id = session_key(event)
+    session = event_session(bot, event)
     meme_params: list[T_MemeParams] = list(alc_matches.query(meme_params_key, ()))
-    texts, images, names = await handle_params(session, interface, meme_params)
+    texts, images, names = await handle_params(bot, event, meme_params)
     for i in range(len(names)):
         if i < len(images):
             images[i].name = names[i]

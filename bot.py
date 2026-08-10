@@ -7,6 +7,10 @@ import threading
 from pathlib import Path
 from datetime import datetime
 
+from utils.fontconfig import configure_fontconfig
+
+configure_fontconfig()
+
 CHILD_ARG = "--airicore-child"
 
 if __name__ == "__main__" and CHILD_ARG not in sys.argv:
@@ -266,7 +270,6 @@ def print_banner():
 print_banner()
 
 import nonebot
-from nonebot.adapters.onebot.v11 import Adapter as ONEBOT_V11Adapter
 from nonebot.log import default_format, logger
 
 BRAND_NAME = BRAND_LABEL
@@ -294,8 +297,11 @@ logger.configure(patcher=_brand_patcher)
 nonebot.init()
 app = nonebot.get_asgi()
 
+from utils.onebot_query import Adapter as ONEBOT_V11Adapter, install_event_observer
+
 driver = nonebot.get_driver()
 driver.register_adapter(ONEBOT_V11Adapter)
+install_event_observer()
 config = driver.config
 config.nb2_path = Path(__file__).parent
 
@@ -443,6 +449,26 @@ async def _preload_caches_on_startup():
             logger.error(f"缓存预热任务异常: {e}")
 
     task.add_done_callback(_done)
+
+
+@driver.on_startup
+async def _start_loop_monitor():
+    try:
+        from utils import loop_monitor
+
+        loop_monitor.start()
+    except Exception as e:
+        logger.warning(f"运行状态监控启动失败: {e}")
+
+
+@driver.on_shutdown
+async def _stop_loop_monitor():
+    try:
+        from utils import loop_monitor
+
+        loop_monitor.stop()
+    except Exception:
+        pass
 
 
 if __name__ == "__main__":

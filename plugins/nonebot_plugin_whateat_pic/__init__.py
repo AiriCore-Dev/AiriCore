@@ -32,6 +32,8 @@ import nonebot
 from httpx import AsyncClient
 import random
 
+from utils.onebot_query import bot_name
+
 
 @nonebot.get_driver().on_shutdown
 async def _flush_cache():
@@ -115,12 +117,11 @@ def get_nickname(bot: Bot = None) -> str:
 @nonebot.get_driver().on_bot_connect
 async def _load_bot_nickname(bot: Bot):
     try:
-        info = await bot.get_login_info()
-        nickname = info.get("nickname")
+        nickname = await bot_name(bot, DEFAULT_NICKNAME)
         if nickname:
             bot_nicknames[bot.self_id] = nickname
     except Exception as e:
-        logger.warning(f"whateat_pic get_login_info failed: {repr(e)}")
+        logger.warning(f"获取 Airi 登录昵称失败: {e!r}")
 
 
 @nonebot.get_driver().on_bot_disconnect

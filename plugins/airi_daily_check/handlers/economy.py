@@ -5,6 +5,8 @@ import random
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import MessageEvent
 
+from utils.onebot_query import member_name
+
 from ..base import state
 from ..base.constants import SECRET_MESSAGES, TRANSFER_DAILY_MAX
 from ..base.matchers import transcation, reborn, buy_tip
@@ -40,8 +42,7 @@ async def _(bot: Bot, ev: MessageEvent):
     if transfer_id not in state.data:
         await transcation.finish('❌ 收款方未注册账号', reply_message=True)
 
-    user_nick = await bot.get_group_member_info(group_id=group_id, user_id=transfer_id)
-    user_nick = (user_nick.get("nickname") or user_nick.get("card") or transfer_id)
+    user_nick = await member_name(bot, group_id, transfer_id)
     taxs = math.ceil(transfer_num * 1.0 / 10)
     if transfer_num + taxs > state.data[user_id]['credits']:
         await transcation.finish('❌ 你的积分余额不足！\n现有积分：{}\n需要积分(含税)：{}'.format(state.data[user_id]['credits'], transfer_num + taxs), reply_message=True)

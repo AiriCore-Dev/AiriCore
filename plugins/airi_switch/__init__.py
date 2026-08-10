@@ -15,6 +15,8 @@ from nonebot.adapters.onebot.v11 import Bot, Message, MessageSegment
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, PrivateMessageEvent, MessageEvent
 from datetime import datetime, timezone, timedelta
 
+from utils.onebot_query import bot_name, bot_profile, group_name, latest_api_latency
+
 from . import counter
 from . import cache
 from . import dedup
@@ -62,27 +64,38 @@ async def format_qq_data(data_list):
     msg = []
     for user,bot in data_list:
         output_lines = []
-        nickname = user.get('nickname', user.get('nick', 'N/A'))
-        qq_number = user.get('uin', '0')
-        reg_timestamp = user.get('reg_time', 0)
-        reg_time = "未知"
-        if reg_timestamp > 0:
-            dt = datetime.fromtimestamp(reg_timestamp, tz=UTC_PLUS_8)
-            reg_time = dt.strftime("%Y年%m月%d日 %H:%M:%S")
-        qq_level = user.get('qqLevel', 0)
-        qid = user.get('qid', 'N/A')
-        is_vip = user.get('is_vip', False)
-        vip_level = user.get('vip_level', 0)
-        vip_info = ('\n' + f"是，VIP等级：{vip_level}") if is_vip else "否"
-        output_lines.append(f"=== {nickname} ===")
-        output_lines.append(f"-QQ号：{qq_number}")
-        output_lines.append(f"-QID：{qid if len(qid) else '无'}")
-        try:
-            qq_level_int = int(qq_level)
-        except (TypeError, ValueError):
-            qq_level_int = 0
-        qq_level_str2 = build_qq_level_signal(qq_level_int)
-        qq_level_disp = "未知" if qq_level_int <= 0 else qq_level_int
+        if isinstance(user, BaseException):
+            qq_number = str(bot.self_id)
+            nickname = await bot_name(bot, qq_number)
+            output_lines.append(f"=== {nickname} ===")
+            output_lines.append(f"-QQ号：{qq_number}")
+        else:
+            nickname = user.get('nickname', user.get('nick', 'N/A'))
+            qq_number = user.get('uin', '0')
+            reg_timestamp = user.get('regTime', user.get('reg_time', 0))
+            try:
+                reg_timestamp_int = int(reg_timestamp)
+            except (TypeError, ValueError):
+                reg_timestamp_int = 0
+            reg_time = "未知"
+            if reg_timestamp_int > 0:
+                dt = datetime.fromtimestamp(reg_timestamp_int, tz=UTC_PLUS_8)
+                reg_time = dt.strftime("%Y年%m月%d日 %H:%M:%S")
+            qq_level = user.get('qqLevel', 0)
+            qid = user.get('qid', 'N/A')
+            is_vip = user.get('is_vip', False)
+            vip_level = user.get('vip_level', 0)
+            vip_info = ('\n' + f"是，VIP等级：{vip_level}") if is_vip else "否"
+            output_lines.append(f"=== {nickname} ===")
+            output_lines.append(f"-QQ号：{qq_number}")
+            output_lines.append(f"-QID：{qid if len(qid) else '无'}")
+            output_lines.append(f"-注册时间：{reg_time}")
+            try:
+                qq_level_int = int(qq_level)
+            except (TypeError, ValueError):
+                qq_level_int = 0
+            qq_level_str2 = build_qq_level_signal(qq_level_int)
+            qq_level_disp = "未知" if qq_level_int <= 0 else qq_level_int
 
         start_time = time.time()
         try:
@@ -91,8 +104,9 @@ async def format_qq_data(data_list):
         except Exception:
             direct_delay = -1
 
-        output_lines.append(f"-QQ等级：{qq_level_disp} {qq_level_str2}".strip())
-        output_lines.append(f"-是否为VIP及VIP等级：{vip_info}")
+        if not isinstance(user, BaseException):
+            output_lines.append(f"-QQ等级：{qq_level_disp} {qq_level_str2}".strip())
+            output_lines.append(f"-是否为VIP及VIP等级：{vip_info}")
         delay_text = "获取失败" if direct_delay < 0 else f"{direct_delay:.2f}ms"
         output_lines.append(f"-连接延迟：{delay_text}")
         msg.append({"type": "node", "data": {"name": nickname, "uin": qq_number, "content": '\n'.join(output_lines)}})
@@ -103,13 +117,21 @@ timing = require("nonebot_plugin_apscheduler").scheduler
 driver = get_driver()
 
 airi_query_accounts = on_fullmatch('airiquery', priority=5, block=True, permission=SUPERUSER)
+
+
+async def _query_bot_profiles():
+    bots = nonebot.get_bots()
+    accounts = list(bots.values())
+    profiles = await asyncio.gather(
+        *(account.get_stranger_info(user_id=int(account.self_id)) for account in accounts),
+        return_exceptions=True,
+    )
+    return list(zip(profiles, accounts))
+
+
 @airi_query_accounts.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    qq_list = list(nonebot.get_bots().values())
-    data_list = []
-    for qq in qq_list:
-        qqinfo = await bot.get_stranger_info(user_id=qq.self_id)
-        data_list.append((qqinfo,qq))
+    data_list = await _query_bot_profiles()
     res = await format_qq_data(data_list)
     if isinstance(ev, GroupMessageEvent):
         await bot.send_group_forward_msg(group_id=ev.group_id, messages=res)
@@ -175,14 +197,11 @@ async def _bot_nick(bot: Bot, self_id: str) -> str:
     cached = cache.get("bot_name", self_id, ttl=cache.TTL_NAME)
     if cached:
         return cached
-    try:
-        info = await bot.get_stranger_info(user_id=int(self_id))
-        nick = info.get("nickname") or info.get("nick")
+    if str(bot.self_id) == str(self_id):
+        nick = await bot_name(bot, str(self_id))
         if nick:
             cache.put("bot_name", self_id, nick)
             return nick
-    except Exception:
-        pass
     return cache.get("bot_name", self_id) or self_id
 
 
@@ -195,14 +214,12 @@ async def _group_labeler(bot: Bot, sessions):
         if cached:
             names[sid] = cached
             continue
-        try:
-            info = await bot.get_group_info(group_id=int(sid))
-            gname = info.get("group_name") or ""
-            if gname:
-                cache.put("group_name", sid, gname)
-            names[sid] = gname or cache.get("group_name", sid) or ""
-        except Exception:
-            names[sid] = cache.get("group_name", sid) or ""
+        gname = await group_name(bot, sid)
+        if gname == str(sid):
+            gname = ""
+        if gname and gname != str(sid):
+            cache.put("group_name", sid, gname)
+        names[sid] = gname or cache.get("group_name", sid) or ""
 
     def label_of(sid):
         if sid == counter.PRIVATE_KEY:

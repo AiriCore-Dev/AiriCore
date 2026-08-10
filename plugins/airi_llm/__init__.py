@@ -9,6 +9,7 @@ from typing import Dict, List, Optional, Any, Set
 
 import nonebot
 from utils import cache as asset_cache
+from utils.onebot_query import member_name
 from utils.totp_2fa import totp_verify
 from nonebot import (
     get_driver,
@@ -347,30 +348,8 @@ def get_user_nickname(bot: Bot, ev: MessageEvent) -> str:
     return ev.sender.card or ev.sender.nickname or str(ev.user_id)
 
 
-AT_NICK_TTL = 3 * 3600
-AT_NICK_MAX = 2000
-_at_nick_cache: Dict[str, tuple] = {}
-
-
 async def _member_nickname(bot: Bot, group_id: str, qq_num: str) -> str:
-    key = f"{group_id}:{qq_num}"
-    now = time.time()
-    hit = _at_nick_cache.get(key)
-    if hit and now - hit[1] <= AT_NICK_TTL:
-        return hit[0]
-    try:
-        member_info = await bot.get_group_member_info(group_id=group_id, user_id=qq_num)
-        nick = member_info.get("nickname") or member_info.get("card") or qq_num
-    except Exception as e:
-        logger.warning(f"获取@用户信息失败: {e}")
-        nick = qq_num
-    if len(_at_nick_cache) >= AT_NICK_MAX:
-        for k in [k for k, v in _at_nick_cache.items() if now - v[1] > AT_NICK_TTL]:
-            _at_nick_cache.pop(k, None)
-        if len(_at_nick_cache) >= AT_NICK_MAX:
-            _at_nick_cache.clear()
-    _at_nick_cache[key] = (nick, now)
-    return nick
+    return await member_name(bot, group_id, qq_num)
 
 
 async def replace_at_nickname(bot: Bot, group_id: str, input_text: str) -> str:

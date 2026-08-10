@@ -11,8 +11,9 @@ from .config import Config
 from .config import config as plugin_config
 
 from .drawer import draw
+from utils.onebot_query import bot_name
 
-COOLDOWN = 30
+COOLDOWN = 0
 _last_call: dict = {}
 _render_lock = asyncio.Lock()
 
@@ -63,11 +64,7 @@ async def _(bot: Bot, ev: MessageEvent):
         await status.finish(f"状态图刚生成过，请 {int(left) + 1} 秒后再试~")
     if _render_lock.locked():
         await status.finish("正在生成状态图，请稍等~")
-    try:
-        login_info = await bot.get_login_info()
-        nickname = login_info.get("nickname") or "Momoi Airi"
-    except Exception:
-        nickname = "Momoi Airi"
+    nickname = await bot_name(bot, "Momoi Airi")
     async with _render_lock:
         try:
             data = await asyncio.to_thread(draw, nickname)

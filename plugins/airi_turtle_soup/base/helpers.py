@@ -130,11 +130,6 @@ def remove_pending_trial(turtle, user_id, trial_type):
     if counts.get('query', 0) <= 0 and counts.get('truth', 0) <= 0:
         pending_players.pop(user_id, None)
 
-async def get_usernick(bot, gruop_id, user_id):
-    user_nick = await bot.get_group_member_info(group_id=gruop_id, user_id=user_id)
-    user_nick = (user_nick.get("nickname") or user_nick.get("card") or user_id)
-    return user_nick
-
 async def get_ids(ev):
     session_id = str(ev.get_session_id())
     if 'group' in session_id:

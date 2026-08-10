@@ -11,7 +11,7 @@ from nonebot.params import RegexDict
 from nonebot.permission import SUPERUSER
 from nonebot.plugin import PluginMetadata
 from nonebot.adapters import Bot
-from nonebot.adapters.onebot.v11 import GROUP, GroupMessageEvent, ActionFailed, Message
+from nonebot.adapters.onebot.v11 import GROUP, GroupMessageEvent, Message
 from nonebot.adapters.onebot.v11.permission import GROUP_OWNER, GROUP_ADMIN
 
 from .config import Config
@@ -71,6 +71,14 @@ else:
     permission_opt = SUPERUSER | GROUP_OWNER | GROUP_ADMIN
 
 _group_locks = weakref.WeakValueDictionary()
+
+
+def _member_map(members):
+    return {
+        int(member["user_id"]): member
+        for member in members
+        if member.get("user_id") is not None
+    }
 
 
 def _group_lock(gid: str) -> asyncio.Lock:
@@ -182,10 +190,15 @@ async def _handle_waifu_change(bot: Bot, event: GroupMessageEvent):
     group_today_record: Dict[str, Dict[str, int]] = group_record[today]
     old_waifu_id: int = group_today_record[uid].get('waifu_id', 1234567)
     old_times: int = group_today_record[uid].setdefault('times', 0)
+    members_by_id = {}
     if old_times >= limit_times or old_waifu_id == int(bot.self_id):
         new_waifu_id = -1
     else:
-        all_member: list = await bot.get_group_member_list(group_id=gid)
+        try:
+            all_member: list = await bot.get_group_member_list(group_id=gid)
+        except Exception:
+            await today_waifu_change.finish('群成员信息暂时不可用，请稍后再试')
+        members_by_id = _member_map(all_member)
         id_set: Set[int] = set(i['user_id'] for i in all_member) - set(
             i['waifu_id'] for i in group_today_record.values()) - ban_id
         id_set.discard(int(uid))
@@ -198,10 +211,12 @@ async def _handle_waifu_change(bot: Bot, event: GroupMessageEvent):
         'times': old_times if new_waifu_id == -1 else old_times + 1
     }
     save_group_record(gid, group_record)
-    try:
-        member_info = await bot.get_group_member_info(group_id=gid, user_id=new_waifu_id)
-    except ActionFailed:
-        member_info = {}
+    member_info = members_by_id.get(new_waifu_id, {})
+    if not member_info and new_waifu_id not in (-1, int(bot.self_id)):
+        try:
+            member_info = await bot.get_group_member_info(group_id=gid, user_id=new_waifu_id)
+        except Exception:
+            member_info = {}
     message: Message = await construct_change_waifu_msg(member_info, new_waifu_id, int(bot.self_id), old_times,
                                                         limit_times)
     await today_waifu_change.finish(message, at_sender=True)
@@ -223,6 +238,7 @@ async def _handle_today_waifu(bot: Bot, event: GroupMessageEvent):
     save = False
     is_first: bool
     waifu_id: int
+    members_by_id = {}
     if today not in group_record.keys():
         group_record.clear()
         group_record['limit_times'] = limit_times
@@ -234,7 +250,11 @@ async def _handle_today_waifu(bot: Bot, event: GroupMessageEvent):
         waifu_id: int = group_today_record[uid].get('waifu_id', 1234567)
         is_first = False
     else:
-        all_member: list = await bot.get_group_member_list(group_id=gid)
+        try:
+            all_member: list = await bot.get_group_member_list(group_id=gid)
+        except Exception:
+            await today_waifu.finish('群成员信息暂时不可用，请稍后再试')
+        members_by_id = _member_map(all_member)
         id_set: Set[int] = set(i['user_id'] for i in all_member) - set(
             i['waifu_id'] for i in group_today_record.values()) - ban_id
         id_set.discard(int(uid))
@@ -250,10 +270,12 @@ async def _handle_today_waifu(bot: Bot, event: GroupMessageEvent):
         is_first = True
     if save:
         save_group_record(gid, group_record)
-    try:
-        member_info = await bot.get_group_member_info(group_id=gid, user_id=waifu_id)
-    except ActionFailed:
-        member_info = {}
+    member_info = members_by_id.get(waifu_id, {})
+    if not member_info:
+        try:
+            member_info = await bot.get_group_member_info(group_id=gid, user_id=waifu_id)
+        except Exception:
+            member_info = {}
     message: Message = await construct_waifu_msg(member_info, waifu_id, int(bot.self_id), is_first)
     await today_waifu.finish(message, at_sender=True)
 
@@ -293,7 +315,7 @@ async def _handle_waifu_force(bot: Bot, event: GroupMessageEvent):
         await today_waifu_force.finish('该用户不可被娶', at_sender=True)
     try:
         member_info = await bot.get_group_member_info(group_id=gid, user_id=target_id)
-    except ActionFailed:
+    except Exception:
         await today_waifu_force.finish('该用户不在本群', at_sender=True)
 
     group_record: Dict[str, Union[int, bool, Dict[str, Dict[str, int]]]] = get_group_record(gid)
@@ -315,7 +337,7 @@ async def _handle_waifu_force(bot: Bot, event: GroupMessageEvent):
         if info.get('waifu_id') == target_id and owner_uid != uid:
             try:
                 owner_info = await bot.get_group_member_info(group_id=gid, user_id=int(owner_uid))
-            except ActionFailed:
+            except Exception:
                 owner_info = {}
             message: Message = await construct_force_waifu_taken_msg(owner_info, owner_uid)
             await today_waifu_force.finish(message, at_sender=True)

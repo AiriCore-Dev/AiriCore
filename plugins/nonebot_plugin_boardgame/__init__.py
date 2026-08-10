@@ -3,13 +3,13 @@ from asyncio import TimerHandle
 from typing import Annotated, Optional, Union
 
 from nonebot import require
+from nonebot.adapters.onebot.v11 import GroupMessageEvent, MessageEvent
 from nonebot.matcher import Matcher
 from nonebot.params import Depends
 from nonebot.plugin import PluginMetadata, inherit_supported_adapters
 from nonebot.rule import to_me
 
 require("nonebot_plugin_alconna")
-require("nonebot_plugin_uninfo")
 require("nonebot_plugin_orm")
 require("nonebot_plugin_htmlrender")
 
@@ -20,12 +20,15 @@ from nonebot_plugin_alconna import (
     Image,
     Option,
     Query,
+    Target,
     Text,
     UniMessage,
     on_alconna,
     store_true,
 )
-from nonebot_plugin_uninfo import Uninfo
+
+from utils.onebot_query import event_nickname, session_key
+from utils.uniseg_target import capture_target, send_with_fallback
 
 from .game import Game, MoveResult, Player, Pos
 from .go import Go
@@ -42,9 +45,7 @@ __plugin_meta__ = PluginMetadata(
     ),
     type="application",
     homepage="https://github.com/noneplugin/nonebot-plugin-boardgame",
-    supported_adapters=inherit_supported_adapters(
-        "nonebot_plugin_alconna", "nonebot_plugin_uninfo"
-    ),
+    supported_adapters=inherit_supported_adapters("nonebot_plugin_alconna"),
 )
 
 
@@ -52,8 +53,8 @@ games: dict[str, Game] = {}
 timers: dict[str, TimerHandle] = {}
 
 
-def get_user_id(uninfo: Uninfo) -> str:
-    return f"{uninfo.scope}_{uninfo.scene_path}"
+def get_user_id(event: MessageEvent) -> str:
+    return session_key(event)
 
 
 UserId = Annotated[str, Depends(get_user_id)]
@@ -191,33 +192,27 @@ def stop_game(user_id: str):
     games.pop(user_id, None)
 
 
-async def stop_game_timeout(matcher: Matcher, user_id: str):
+async def stop_game_timeout(matcher: Matcher, user_id: str, target: Optional[Target] = None):
     game = games.get(user_id, None)
     stop_game(user_id)
     if game:
         msg = f"{game.name}下棋超时，游戏结束，可发送“重载{game.name}棋局”继续下棋"
-        await matcher.send(msg)
+        await send_with_fallback(matcher, msg, target, f"{game.name}超时提醒")
 
 
 def set_timeout(matcher: Matcher, user_id: str, timeout: float = 600):
     if timer := timers.get(user_id, None):
         timer.cancel()
+    target = capture_target()
     loop = asyncio.get_running_loop()
     timer = loop.call_later(
-        timeout, lambda: asyncio.ensure_future(stop_game_timeout(matcher, user_id))
+        timeout, lambda: asyncio.ensure_future(stop_game_timeout(matcher, user_id, target))
     )
     timers[user_id] = timer
 
 
-def current_player(uninfo: Uninfo) -> Player:
-    user_id = uninfo.user.id
-    user_name = (
-        (uninfo.member.nick if uninfo.member else None)
-        or uninfo.user.nick
-        or uninfo.user.name
-        or ""
-    )
-    return Player(user_id, user_name)
+def current_player(event: MessageEvent) -> Player:
+    return Player(str(event.user_id), event_nickname(event))
 
 
 CurrentPlayer = Annotated[Player, Depends(current_player)]
@@ -227,12 +222,12 @@ CurrentPlayer = Annotated[Player, Depends(current_player)]
 async def _(
     matcher: Matcher,
     user_id: UserId,
-    uninfo: Uninfo,
+    event: MessageEvent,
     player: CurrentPlayer,
     rule: Query[str] = AlconnaQuery("rule", ""),
     white: Query[bool] = AlconnaQuery("white.value", False),
 ):
-    if uninfo.scene.is_private:
+    if not isinstance(event, GroupMessageEvent):
         await matcher.finish("棋类游戏暂不支持私聊")
 
     if rule.result == "go":

@@ -11,6 +11,7 @@ from openai import AsyncOpenAI
 
 from utils import llm_fallback
 from utils.network import is_public_url_async
+from utils.onebot_query import event_nickname
 
 from . import state
 from .image_security import (
@@ -65,11 +66,7 @@ async def parse_session(bot, ev):
     split_id = session_id.split("_")
     user_id = split_id[2]
     group_id = split_id[1]
-    try:
-        info = await bot.get_group_member_info(group_id=group_id, user_id=user_id)
-        user_nick = info.get("card") or info.get("nickname") or user_id
-    except Exception:
-        user_nick = user_id
+    user_nick = event_nickname(ev)
     return user_id, group_id, user_nick
 
 

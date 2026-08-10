@@ -8,21 +8,29 @@ from zipfile import ZIP_BZIP2, ZipFile
 import filetype
 from meme_generator import Meme
 from nonebot.adapters import Bot, Event
+from nonebot.adapters.onebot.v11 import MessageEvent
 from nonebot.matcher import Matcher
 from nonebot.params import Depends
 from nonebot_plugin_alconna import CustomNode, Image, UniMessage
-from nonebot_plugin_uninfo import Uninfo
+from nonebot_plugin_uninfo.model import Session
 from nonebot_plugin_waiter import waiter
+
+from utils.onebot_query import event_session, session_key
 
 from ..config import memes_config
 from ..manager import meme_manager
 
 
-def get_user_id(uninfo: Uninfo) -> str:
-    return f"{uninfo.scope}_{uninfo.scene_path}"
+def get_user_id(event: MessageEvent) -> str:
+    return session_key(event)
+
+
+def get_event_session(bot: Bot, event: MessageEvent) -> Session:
+    return event_session(bot, event)
 
 
 UserId = Annotated[str, Depends(get_user_id)]
+EventSession = Annotated[Session, Depends(get_event_session)]
 
 
 async def find_meme(matcher: Matcher, meme_name: str) -> Meme:

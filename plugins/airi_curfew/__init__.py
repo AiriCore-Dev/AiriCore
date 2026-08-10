@@ -38,8 +38,12 @@ def is_curfew_time() -> bool:
     return hour >= 23 or hour < 6
 
 
-def _curfew_deferral(bot_id: str) -> bool:
-    return is_curfew_time() and bot_id in CURFEW_BOT_IDS
+def _curfew_deferral(bot_id: str, plugin_name: str) -> bool:
+    return (
+        is_curfew_time()
+        and bot_id in CURFEW_BOT_IDS
+        and plugin_name not in CURFEW_PLUGIN_WHITELIST
+    )
 
 
 @driver.on_startup
