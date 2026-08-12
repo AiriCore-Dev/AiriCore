@@ -7,9 +7,14 @@ import time
 import hashlib
 import asyncio
 import subprocess
+from io import StringIO
+from pathlib import Path
+from tempfile import TemporaryDirectory
 import httpx
 import nonebot
+from dotenv.parser import parse_stream
 from nonebot import on_fullmatch, on_startswith, require, get_driver, logger
+from nonebot.config import Config
 from nonebot.permission import SUPERUSER
 from nonebot.adapters.onebot.v11 import Bot, Message, MessageSegment
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, PrivateMessageEvent, MessageEvent
@@ -70,8 +75,8 @@ async def format_qq_data(data_list):
             output_lines.append(f"=== {nickname} ===")
             output_lines.append(f"-QQ号：{qq_number}")
         else:
-            nickname = user.get('nickname', user.get('nick', 'N/A'))
-            qq_number = user.get('uin', '0')
+            qq_number = user.get('uin', str(bot.self_id))
+            nickname = user.get('nickname', user.get('nick', '')) or await bot_name(bot, qq_number)
             reg_timestamp = user.get('regTime', user.get('reg_time', 0))
             try:
                 reg_timestamp_int = int(reg_timestamp)
@@ -80,7 +85,7 @@ async def format_qq_data(data_list):
             reg_time = "未知"
             if reg_timestamp_int > 0:
                 dt = datetime.fromtimestamp(reg_timestamp_int, tz=UTC_PLUS_8)
-                reg_time = dt.strftime("%Y年%m月%d日 %H:%M:%S")
+                reg_time = dt.strftime("%Y年%m月%d日 %H:%M:%S")[:5]
             qq_level = user.get('qqLevel', 0)
             qid = user.get('qid', 'N/A')
             is_vip = user.get('is_vip', False)
@@ -89,7 +94,7 @@ async def format_qq_data(data_list):
             output_lines.append(f"=== {nickname} ===")
             output_lines.append(f"-QQ号：{qq_number}")
             output_lines.append(f"-QID：{qid if len(qid) else '无'}")
-            output_lines.append(f"-注册时间：{reg_time}")
+            output_lines.append(f"-注册年份：{reg_time}")
             try:
                 qq_level_int = int(qq_level)
             except (TypeError, ValueError):
@@ -115,6 +120,100 @@ async def format_qq_data(data_list):
 timing = require("nonebot_plugin_apscheduler").scheduler
 
 driver = get_driver()
+
+
+def _env_files(root: Path, environment: str) -> tuple[Path, Path]:
+    return root / ".env", root / f".env.{environment}"
+
+
+def _read_env_keys(paths: tuple[Path, ...]) -> set[str]:
+    contents = []
+    for path in paths:
+        if not path.is_file():
+            raise FileNotFoundError(path)
+        contents.append(path.read_text(encoding="utf-8"))
+    return _parse_env_keys(paths, tuple(contents))
+
+
+def _parse_env_keys(paths: tuple[Path, ...], contents: tuple[str, ...]) -> set[str]:
+    keys = set()
+    for path, content in zip(paths, contents):
+        for binding in parse_stream(StringIO(content)):
+            if binding.error:
+                raise ValueError(
+                    f"配置文件格式错误：{path.name} 第 {binding.original.line} 行"
+                )
+            if binding.key:
+                keys.add(binding.key.lower())
+    return keys
+
+
+def load_env_config(root: Path, environment: str) -> tuple[Config, set[str]]:
+    paths = _env_files(root, environment)
+    contents = []
+    for path in paths:
+        if not path.is_file():
+            raise FileNotFoundError(path)
+        contents.append(path.read_text(encoding="utf-8"))
+    snapshots = tuple(contents)
+    keys = _parse_env_keys(paths, snapshots)
+    try:
+        with TemporaryDirectory() as directory:
+            snapshot_root = Path(directory)
+            snapshot_paths = tuple(snapshot_root / path.name for path in paths)
+            for snapshot_path, content in zip(snapshot_paths, snapshots):
+                snapshot_path.write_text(content, encoding="utf-8")
+            fresh = Config(_env_file=snapshot_paths)
+    except Exception:
+        raise ValueError("配置校验失败，请检查配置项格式") from None
+    fresh.__dict__["_env_file"] = paths
+    return fresh, keys
+
+
+def replace_config(
+    current: Config,
+    fresh: Config,
+    previous_env_keys: set[str],
+) -> None:
+    current_extra = dict(current.__pydantic_extra__ or {})
+    runtime_extra = {
+        key: value
+        for key, value in current_extra.items()
+        if key.lower() not in previous_env_keys
+    }
+    fresh_extra = dict(fresh.__pydantic_extra__ or {})
+    merged_extra = runtime_extra | fresh_extra
+    object.__setattr__(current, "__dict__", fresh.__dict__.copy())
+    object.__setattr__(current, "__pydantic_extra__", merged_extra)
+    object.__setattr__(
+        current,
+        "__pydantic_fields_set__",
+        fresh.__pydantic_fields_set__.copy() | set(runtime_extra),
+    )
+
+
+_CONFIG_ROOT = Path(
+    getattr(driver.config, "nb2_path", Path(__file__).resolve().parents[2])
+)
+_ENVIRONMENT = str(driver.env or "prod")
+_loaded_env_keys = _read_env_keys(_env_files(_CONFIG_ROOT, _ENVIRONMENT))
+
+airi_flush = on_fullmatch('airiflush', priority=5, block=True, permission=SUPERUSER)
+
+
+@airi_flush.handle()
+async def _():
+    global _loaded_env_keys
+    try:
+        fresh, current_env_keys = load_env_config(_CONFIG_ROOT, _ENVIRONMENT)
+    except Exception as e:
+        logger.opt(colors=True).warning(f'<y>配置刷新失败: {e}</y>')
+        await airi_flush.finish(f'配置刷新失败：{e}')
+    replace_config(driver.config, fresh, _loaded_env_keys)
+    _loaded_env_keys = current_env_keys
+    await airi_flush.finish(
+        '配置已刷新。运行时动态读取的配置已生效，导入时固化的配置仍需重启。'
+    )
 
 airi_query_accounts = on_fullmatch('airiquery', priority=5, block=True, permission=SUPERUSER)
 

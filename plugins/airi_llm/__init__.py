@@ -67,6 +67,8 @@ TRANSITION_SPLIT_RE = re.compile(
     r'(?<=[^\s])(?=对了|话说|不过|然后|而且|还有|哦对|诶对|对哦|哦哦|另外|说起来|对吧|诶|哦)'
 )
 SEGMENT_MAX_LEN = 28
+PARENTHETICAL_RE = re.compile(r"[(（](.+?)[)）]")
+CHINESE_CHAR_RE = re.compile(r"[\u4e00-\u9fff]")
 
 MISSED_MENTION_SAVE_PROB = 0.45
 MISSED_MENTION_MIN_DELAY = 480
@@ -99,6 +101,13 @@ _ASCII_ALIAS_RE = {
     a: re.compile(r"(?<![0-9a-z])" + re.escape(a) + r"(?![0-9a-z])")
     for a in CHAR_ALIASES if a.isascii()
 }
+
+
+def _strip_chinese_parentheticals(text: str) -> str:
+    return PARENTHETICAL_RE.sub(
+        lambda match: "" if CHINESE_CHAR_RE.search(match.group(1)) else match.group(0),
+        text,
+    )
 
 
 def _alias_mentioned(text: str) -> bool:
@@ -669,7 +678,7 @@ async def passive_speaking(bot: Bot, group_id: str, mode: int = 1) -> None:
             if not reply:
                 return
 
-            reply = re.sub(r"[(（].+?[)）]", "", reply)
+            reply = _strip_chinese_parentheticals(reply)
             memory.save_context_entry(
                 airi_state, group_id,
                 memory.ContextEntry(ts=time.time(), user_id=bot.self_id,
@@ -854,7 +863,7 @@ async def handle_airi_llm(bot: Bot, ev: MessageEvent):
             elif need_reply:
                 reply_to_msg_id = msg_id
 
-            llm_reply = re.sub(r"[(（].+?[)）]", "", llm_reply)
+            llm_reply = _strip_chinese_parentheticals(llm_reply)
             memory.save_context_entry(
                 airi_state, group_id,
                 memory.ContextEntry(ts=time.time(), user_id=bot.self_id,
