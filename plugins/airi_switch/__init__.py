@@ -13,8 +13,9 @@ from tempfile import TemporaryDirectory
 import httpx
 import nonebot
 from dotenv.parser import parse_stream
-from nonebot import on_fullmatch, on_startswith, require, get_driver, logger
+from nonebot import on_command, on_fullmatch, on_startswith, require, get_driver, logger
 from nonebot.config import Config
+from nonebot.params import CommandArg
 from nonebot.permission import SUPERUSER
 from nonebot.adapters.onebot.v11 import Bot, Message, MessageSegment
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, PrivateMessageEvent, MessageEvent
@@ -27,6 +28,7 @@ from . import cache
 from . import dedup
 from . import ram_inspector
 from .charts import draw_pies_vstack, draw_summary, render_bot_cell, draw_grid
+from .llm_query import render_query
 
 def decimal_to_quaternary(decimal_num: int) -> str:
     if decimal_num <= 0:
@@ -216,6 +218,20 @@ async def _():
     )
 
 airi_query_accounts = on_fullmatch('airiquery', priority=5, block=True, permission=SUPERUSER)
+
+airi_llm_query = on_command("airillmquery", priority=5, block=True, permission=SUPERUSER)
+
+
+@airi_llm_query.handle()
+async def _(args: Message = CommandArg()):
+    try:
+        result = render_query(str(args))
+    except ValueError as e:
+        result = str(e)
+    except Exception as e:
+        logger.warning(f"LLM 调用统计查询失败: {e}")
+        result = "LLM 调用统计读取失败，请稍后重试。"
+    await airi_llm_query.finish(result)
 
 
 async def _query_bot_profiles():
