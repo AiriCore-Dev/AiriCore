@@ -2,7 +2,7 @@ import os
 import nonebot
 from openai import AsyncOpenAI
 
-from utils import llm_fallback
+from utils import llm_fallback, llm_usage
 
 driver = nonebot.get_driver()
 
@@ -36,6 +36,7 @@ async def kokomi_llm(input_words):
                 }
             ],
             tag="kokomi_nl2c",
+            usage_source=llm_usage.SOURCE_WATER_METER,
             validate=_parse_nl2c,
             max_completion_tokens=4096,
             temperature=0,

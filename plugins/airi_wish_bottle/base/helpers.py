@@ -9,7 +9,7 @@ from nonebot import logger
 from nonebot.adapters.onebot.v11 import Message, MessageSegment
 from openai import AsyncOpenAI
 
-from utils import llm_fallback
+from utils import llm_fallback, llm_usage
 from utils.network import is_public_url_async
 from utils.onebot_query import event_nickname
 
@@ -99,6 +99,7 @@ async def check_weijinci(text, images=None):
             client,
             messages,
             tag="wish_bottle_weijinci",
+            usage_source=llm_usage.SOURCE_WISH_BOTTLE,
             max_completion_tokens=4096,
             temperature=0.1,
             top_p=0.1,

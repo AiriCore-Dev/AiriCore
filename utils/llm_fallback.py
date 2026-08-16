@@ -3,6 +3,7 @@ from typing import Any, Callable, Dict, List, Optional
 
 import nonebot
 
+from utils import llm_usage
 from utils.plugin_logger import get_logger
 
 logger = get_logger("llm_fallback")
@@ -82,6 +83,7 @@ async def call_with_fallback(
     messages: List[Dict[str, Any]],
     chain: Optional[List[str]] = None,
     tag: str = "",
+    usage_source: str = "",
     validate: Optional[Callable[[str], Any]] = None,
     **kwargs,
 ) -> Any:
@@ -96,6 +98,8 @@ async def call_with_fallback(
             completion = await client.chat.completions.create(
                 model=model, messages=messages, **kwargs
             )
+            if usage_source:
+                llm_usage.record_success(usage_source, model)
             text = (completion.choices[0].message.content or "").strip()
             if not text:
                 raise RuntimeError("返回内容为空")

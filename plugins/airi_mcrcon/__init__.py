@@ -20,7 +20,7 @@ from openai import AsyncOpenAI
 from datetime import datetime
 from PIL import Image, ImageDraw
 from utils import cache as asset_cache
-from utils import llm_fallback
+from utils import llm_fallback, llm_usage
 from nonebot.rule import to_me
 from nonebot.permission import SUPERUSER
 from nonebot import get_driver, logger, on_startswith, require
@@ -95,6 +95,7 @@ async def translate_to_chinese(text):
                 {"role": "user", "content": text},
             ],
             tag="mcrcon_translate",
+            usage_source=llm_usage.SOURCE_RCON_TRANSLATION,
             temperature=0.2,
             stream=False,
             stop=None,

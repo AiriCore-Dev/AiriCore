@@ -5,7 +5,7 @@ import time
 
 from nonebot import logger
 from openai import AsyncOpenAI
-from utils import llm_fallback
+from utils import llm_fallback, llm_usage
 from .constants import bot_nick, llm_api_key, llm_base_url
 from . import state
 
@@ -67,6 +67,7 @@ async def call_llm(prompt, input, deepseek):
             }
         ],
         tag="turtle_soup",
+        usage_source=llm_usage.SOURCE_TURTLE_SOUP,
         max_completion_tokens=4096,
         temperature=0.1,
         top_p=0.3,
