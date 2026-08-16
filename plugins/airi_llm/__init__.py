@@ -40,10 +40,10 @@ timings = require("nonebot_plugin_apscheduler").scheduler
 SUPERUSERS = set(str(uid) for uid in driver.config.superusers)
 
 NEGATIVE_SPEAK_TOKENS_INIT = 50
-NEGATIVE_SPEAK_TOKENS_DEDUCT = 3
+NEGATIVE_SPEAK_TOKENS_DEDUCT = 5
 ADDRESSED_TOKENS_BONUS = 2
 
-BASE_SPEAK_PROB = 1 / 200
+BASE_SPEAK_PROB = 1 / 300
 REPLY_MENTION_PROB = 0.4
 ADDRESSED_PROB = 0.9
 HARD_COOLDOWN_SECS = 25
@@ -55,7 +55,7 @@ TRAFFIC_MULT_CAP = 2.0
 MAX_UNADDRESSED_PROB = 0.15
 
 PASSIVE_SPEAK_DELAY_RANGE = (301, 7200)
-PASSIVE_SPEAK_TRIGGER_PROB = 1 / 300
+PASSIVE_SPEAK_TRIGGER_PROB = 1 / 400
 PASSIVE_SPEAK_MIN_GAP = 300
 
 EMOJI_RANDOM_PROB = 1 / 10
@@ -258,7 +258,7 @@ async def _cleanup_job() -> None:
 
 
 timings.add_job(_flush_job, "interval", minutes=2, misfire_grace_time=600, coalesce=True)
-timings.add_job(_extraction_job, "interval", minutes=300, misfire_grace_time=600, coalesce=True)
+timings.add_job(_extraction_job, "interval", minutes=900, misfire_grace_time=600, coalesce=True)
 timings.add_job(_cleanup_job, "interval", hours=6, misfire_grace_time=600, coalesce=True)
 
 

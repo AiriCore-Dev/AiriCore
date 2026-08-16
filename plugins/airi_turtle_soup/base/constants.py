@@ -3,11 +3,11 @@ from nonebot import get_driver
 driver = get_driver()
 
 bot_nick = "Momoi Airi"
-max_group_turtle_perday = 5
-max_player_query_trial = 15
-max_player_truth_trial = 3
-max_group_trial = 90
-min_turtle_minutes = 30
+max_group_turtle_perday = 3
+max_player_query_trial = 25
+max_player_truth_trial = 5
+max_group_trial = 50
+min_turtle_minutes = 10
 difficulty = {
     "简单": [20, 10],
     "普通": [15, 7],
