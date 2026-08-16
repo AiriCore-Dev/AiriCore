@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional
 from openai import AsyncOpenAI
 from nonebot import get_driver
 
-from utils import llm_fallback
+from utils import llm_fallback, llm_usage
 
 from utils.plugin_logger import get_logger
 
@@ -85,6 +85,7 @@ async def call_llm(
                 frequency_penalty=LLM_FREQ_PENALTY,
                 presence_penalty=LLM_PRESENCE_PENALTY,
             )
+            llm_usage.record_success(llm_usage.SOURCE_CHAT, model)
             text = (completion.choices[0].message.content or "").strip()
             if text:
                 return text
@@ -140,6 +141,7 @@ async def _create_json(model, messages, chain, idx, use_response_format):
         kwargs["response_format"] = {"type": "json_object"}
     try:
         completion = await client.chat.completions.create(**kwargs)
+        llm_usage.record_success(llm_usage.SOURCE_MECHANISM, model)
     except Exception as e:
         if use_response_format:
             _mark_if_unavailable(model, e)
