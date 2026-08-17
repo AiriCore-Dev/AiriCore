@@ -9,6 +9,7 @@ from ..base.matchers import query, matcher
 from ..base.constants import max_player_query_trial, max_group_trial
 from ..base import state
 from ..base.helpers import get_ids, check_data_existance, construct_turtle_soup_history, call_llm, turtle_soup_question_prompt, turtle_soup, end_game, strip_cq, _persist, add_pending_trial, remove_pending_trial
+from ..base.tips import serialize_tips
 
 LLM_MAX_ATTEMPTS = 3
 LLM_RETRY_DELAY = 2
@@ -47,7 +48,7 @@ async def _(bot: Bot, ev: MessageEvent):
                 try:
                     llm_answer = await call_llm(
                         turtle_soup_question_prompt.format(
-                            soup['story'], soup['truth'], '\n'.join(soup['tips'])
+                            soup['story'], soup['truth'], serialize_tips(soup['tips'])
                         ),
                         src, 0,
                     )

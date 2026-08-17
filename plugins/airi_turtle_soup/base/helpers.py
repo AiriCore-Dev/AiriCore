@@ -8,6 +8,7 @@ from openai import AsyncOpenAI
 from utils import llm_fallback, llm_usage
 from .constants import bot_nick, llm_api_key, llm_base_url
 from . import state
+from .tips import validate_turtle_soup_bank
 
 _UTILS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'utils')
 _CQ_RE = re.compile(r"\[CQ:[^\]]*\]")
@@ -35,15 +36,12 @@ def _read_json(name: str):
     try:
         with open(path, 'r', encoding='utf-8') as f:
             loaded = json.load(f)
-        if not isinstance(loaded, list):
-            raise ValueError("题库应为列表")
-        return loaded
+        return validate_turtle_soup_bank(loaded)
     except Exception as e:
         logger.error(f"airi_turtle_soup 读取题库 {name} 失败，海龟汤将不可用: {e}")
         return []
 
 
-generate_turtle_soup_prompt = _read_text('generate_turtle_soup_prompt.md')
 turtle_soup_question_prompt = _read_text('turtle_soup_question_prompt.md')
 turtle_soup_truth_prompt = _read_text('turtle_soup_truth_prompt.md')
 turtle_soup = _read_json('turtle_soup.json')
