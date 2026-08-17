@@ -51,10 +51,6 @@ ACCOUNT_CHANGE_RE = re.compile(
     r"\b(?:useradd|adduser|userdel|deluser|usermod|groupadd|groupdel|passwd)\b",
     re.IGNORECASE,
 )
-ROOT_LOGIN_RE = re.compile(
-    r"(?:Accepted\s+(?:password|publickey|keyboard-interactive)\s+for\s+root\b|session\s+opened\s+for\s+user\s+root\b)",
-    re.IGNORECASE,
-)
 FAILED_LOGIN_RE = re.compile(r"Failed\s+password\s+for(?:\s+invalid\s+user)?\s+\S+\s+from\s+(\S+)", re.IGNORECASE)
 
 
@@ -97,17 +93,6 @@ def find_process_findings(processes):
                     "mcsm-root-shell",
                     f"PID {pid} 是由 MCSManager 链路创建的 root shell，命令行为：{text[:360]}",
                     "停止并隔离管理面板，核查面板审计日志和该 shell 的全部子进程",
-                )
-            )
-        exe = str(process.get("exe") or "")
-        if username == "root" and any(exe.startswith(prefix) for prefix in ("/tmp/", "/var/tmp/", "/dev/shm/")):
-            findings.append(
-                _finding(
-                    "高",
-                    "运行进程",
-                    f"writable-exec:{exe}",
-                    f"root 正在执行临时目录中的程序：PID {pid} {exe}",
-                    "隔离主机并核查该文件来源、父进程和持久化配置",
                 )
             )
         if DOWNLOAD_SHELL_RE.search(text):
@@ -182,17 +167,6 @@ def find_auth_findings(lines, failed_threshold=20):
     findings = []
     failed = {}
     for line in lines:
-        root_match = ROOT_LOGIN_RE.search(line)
-        if root_match:
-            findings.append(
-                _finding(
-                    "严重",
-                    "认证日志",
-                    "root-login",
-                    f"检测到 root 认证或 root 会话建立：{line.strip()[-420:]}",
-                    "确认来源和操作者；若非预期，立即轮换密钥并隔离主机",
-                )
-            )
         failed_match = FAILED_LOGIN_RE.search(line)
         if failed_match:
             source = failed_match.group(1)
@@ -477,48 +451,6 @@ def find_file_changes(previous, current):
     return findings
 
 
-def find_world_writable(paths):
-    findings = []
-    for raw_path in paths:
-        path = Path(raw_path)
-        try:
-            info = path.lstat()
-        except OSError:
-            continue
-        mode = info.st_mode
-        if mode & stat.S_IWOTH:
-            if path.is_dir() and mode & stat.S_ISVTX:
-                continue
-            kind = "目录" if path.is_dir() else "文件"
-            findings.append(
-                _finding(
-                    "高",
-                    "可写 root 执行路径",
-                    f"world-writable:{path}",
-                    f"root 相关路径中的{kind}对所有用户可写：{path}（权限 {stat.filemode(mode)}）",
-                    "收紧目录和文件权限，确认 root 服务执行链没有可被低权限用户替换的内容",
-                )
-            )
-    return findings
-
-
-def collect_world_writable_paths(roots, max_depth=3):
-    candidates = []
-    for raw_root in roots:
-        root = Path(raw_root)
-        try:
-            if root.exists() or root.is_symlink():
-                candidates.append(root)
-            if root.is_dir():
-                base_depth = len(root.parts)
-                for path in root.rglob("*"):
-                    if len(path.parts) - base_depth <= max_depth:
-                        candidates.append(path)
-        except OSError:
-            continue
-    return find_world_writable(candidates)
-
-
 def collect_listeners():
     listeners = {}
     if psutil is None:
@@ -660,7 +592,6 @@ def scan_system(
     log_offsets,
     failed_threshold=20,
     log_paths=None,
-    writable_roots=None,
     previous_privileged=None,
 ):
     findings = []
@@ -694,10 +625,4 @@ def scan_system(
         lines, next_offset = read_log_delta(path, log_offsets.get(path, {}))
         next_offsets[path] = next_offset
         findings.extend(find_log_findings(lines))
-    findings.extend(
-        collect_world_writable_paths(
-            writable_roots
-            or ("/etc/systemd/system", "/etc/cron.d", "/var/spool/cron", "/root/airi", "/root/.config/systemd", "/usr/local/bin")
-        )
-    )
     return findings, current_files, listeners, next_offsets, privileged

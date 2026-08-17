@@ -54,19 +54,8 @@ DEFAULT_WATCH_PATHS = (
 DEFAULT_LOG_PATHS = (
     "/var/log/auth.log",
     "/var/log/secure",
-    "/opt/mcsmanager/web/logs/current.log",
-    "/opt/mcsmanager/daemon/logs/current.log",
-    "/opt/mcsmanager/daemon/data/InstanceLog/global0001.log",
     "/var/log/dpkg.log",
     "/var/log/apt/history.log",
-)
-DEFAULT_WRITABLE_ROOTS = (
-    "/etc/systemd/system",
-    "/etc/cron.d",
-    "/var/spool/cron",
-    "/root/airi",
-    "/root/.config/systemd",
-    "/usr/local/bin",
 )
 _task = None
 _stop_event = None
@@ -121,9 +110,6 @@ def _config():
         "recipient": str(getattr(config, "notification_account", "") or "").strip(),
         "watch_paths": _as_list(getattr(config, "security_monitor_watch_paths", None), DEFAULT_WATCH_PATHS),
         "log_paths": _as_list(getattr(config, "security_monitor_log_paths", None), DEFAULT_LOG_PATHS),
-        "writable_roots": _as_list(
-            getattr(config, "security_monitor_world_writable_roots", None), DEFAULT_WRITABLE_ROOTS
-        ),
     }
 
 
@@ -196,7 +182,7 @@ def _format_finding(finding):
 
 def _message(findings, bot_id):
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    header = f"🚨 Airi 安全监控告警\n主机：{socket.gethostname()}\n时间：{now}\n通知 Bot：{bot_id}\n"
+    header = f"🚨 安全监控告警\n主机：{socket.gethostname()}\n时间：{now}\n通知 Bot：{bot_id}\n"
     body = "\n\n".join(_format_finding(finding) for finding in findings[:8])
     extra = "" if len(findings) <= 8 else f"\n\n其余 {len(findings) - 8} 条同轮告警已合并。"
     return (header + "\n" + body + extra)[:3900]
@@ -250,7 +236,6 @@ async def _scan_once():
         _state.get("log_offsets", {}),
         config["failed_threshold"],
         config["log_paths"],
-        config["writable_roots"],
         _state.get("privileged", {}),
     )
     _state["files"] = files

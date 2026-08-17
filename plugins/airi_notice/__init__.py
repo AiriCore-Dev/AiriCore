@@ -28,7 +28,7 @@ async def query_tmxx_status_func(bot: Bot, ev: MessageEvent):
         group_id = int(ev.group_id)
         user_nick = event_nickname(ev)
         current_group_name = await group_name(bot, group_id)
-        body = msg.replace(f"[CQ:at,qq={notification_account}]", "@葡萄柚🍇")
+        body = msg.replace(f"[CQ:at,qq={notification_account}]", "@你")
         mesg = "📢 新消息提醒\n时间: {}\n发送者: {}({})\n群: {}({})\n内容: {}".format(
             str(cur_time)[:-7], user_nick, qq_id, current_group_name, group_id, body
         )
