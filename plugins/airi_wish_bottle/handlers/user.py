@@ -7,6 +7,7 @@ from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 from nonebot import logger
 
 from utils.onebot_query import member_name
+from utils.notification import get_notification_bot
 
 from ..base import state
 from ..base.matchers import rxyp, jxyp, plxyp, wdxyp, xgxyp, zyxyp, xhxyp, jbxyp
@@ -28,7 +29,11 @@ async def _notify_admin(bot: Bot, text: str) -> None:
         logger.warning(f"未配置 notification_account，人工审核通知未发出: {text[:40]}")
         return
     try:
-        await bot.send_private_msg(user_id=int(state.notification_account), message=text)
+        notify_bot = get_notification_bot(bot)
+        if notify_bot is None:
+            logger.warning("审核通知发送失败：没有可用的通知 Bot")
+            return
+        await notify_bot.send_private_msg(user_id=int(state.notification_account), message=text)
     except Exception as e:
         logger.warning(f"审核通知发送失败: {e}")
 

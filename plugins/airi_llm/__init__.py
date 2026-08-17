@@ -43,7 +43,7 @@ NEGATIVE_SPEAK_TOKENS_INIT = 50
 NEGATIVE_SPEAK_TOKENS_DEDUCT = 5
 ADDRESSED_TOKENS_BONUS = 2
 
-BASE_SPEAK_PROB = 1 / 300
+BASE_SPEAK_PROB = 1 / 200
 REPLY_MENTION_PROB = 0.4
 ADDRESSED_PROB = 0.9
 HARD_COOLDOWN_SECS = 25
@@ -258,7 +258,7 @@ async def _cleanup_job() -> None:
 
 
 timings.add_job(_flush_job, "interval", minutes=2, misfire_grace_time=600, coalesce=True)
-timings.add_job(_extraction_job, "interval", minutes=900, misfire_grace_time=600, coalesce=True)
+timings.add_job(_extraction_job, "interval", minutes=450, misfire_grace_time=600, coalesce=True)
 timings.add_job(_cleanup_job, "interval", hours=6, misfire_grace_time=600, coalesce=True)
 
 

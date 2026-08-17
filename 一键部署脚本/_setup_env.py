@@ -697,6 +697,18 @@ STEP_OPS = {
             ],
         },
         {
+            "key": "notification_bot_account",
+            "type": "text",
+            "q": "系统通知由哪个 Bot 账号发送?",
+            "tip": ["填在线 Bot 的 QQ 号, 留空则自动选择第一个在线 Bot"],
+            "validate": v_qq,
+            "example": "1330248395",
+            "help": [
+                "这个账号决定 airi_security_monitor、airi_notice 和 airi_wish_bottle 使用哪个 Bot 发私聊通知。",
+                "留空时会从当前在线 Bot 中自动选择, 建议生产环境固定填写。",
+            ],
+        },
+        {
             "key": "curfew_bot_ids",
             "type": "list",
             "q": "哪些 Bot 需要晚上 23:00-6:00 静默?",
@@ -767,6 +779,7 @@ SUMMARY_GROUPS = [
     ("运行设置", [
         ("cache_mode", False),
         ("notification_account", False),
+        ("notification_bot_account", False),
         ("curfew_bot_ids", False),
         ("airifullgroup_bot_whitelist", False),
     ]),

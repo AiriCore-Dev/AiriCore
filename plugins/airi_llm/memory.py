@@ -20,10 +20,11 @@ DATA_DIR = os.path.join("data", "airi_llm")
 MEMORY_FILE = os.path.join(DATA_DIR, "memory.pk")
 GROUP_DIR = os.path.join(DATA_DIR, "group")
 
-RAW_CONTEXT_MAX = 60
-DISTILL_TRIGGER_COUNT = 45
-DISTILL_CHUNK = 20
-DISTILL_MIN_NEW = 15
+RAW_CONTEXT_MAX = 150
+DISTILL_TRIGGER_COUNT = RAW_CONTEXT_MAX
+DISTILL_CHUNK = RAW_CONTEXT_MAX
+DISTILL_MIN_NEW = RAW_CONTEXT_MAX
+DISTILL_KEEP_RECENT = 15
 ROLLING_SUMMARY_MAX_CHARS = 150
 
 MIN_ENTRIES_FOR_EXTRACTION = 12
@@ -36,18 +37,18 @@ USER_MEMORY_MAX_CHARS = 120
 
 MOOD_EMA_ALPHA = 0.5
 
-STYLE_TTL_SECS = 54000
+STYLE_TTL_SECS = 27000
 STYLE_MIN_ENTRIES = 20
 STYLE_ANALYZE_ENTRIES = 40
 STYLE_MAX_CHARS = 100
 
-BOT_STATE_TTL_SECS = 7200
+BOT_STATE_TTL_SECS = 3600
 BOT_STATE_MIN_ENTRIES = 3
 BOT_STATE_ANALYZE_ENTRIES = 10
 BOT_MOOD_EMA_ALPHA = 0.4
 BOT_AROUSAL_EMA_ALPHA = 0.4
 
-MOOD_TOPIC_TTL_SECS = 9000
+MOOD_TOPIC_TTL_SECS = 4500
 MOOD_TOPIC_MIN_ENTRIES = 5
 MOOD_TOPIC_ANALYZE_ENTRIES = 15
 
@@ -515,10 +516,12 @@ async def maybe_distill(state: Any, gid: str) -> None:
         ctx.rolling_summary = summary[:ROLLING_SUMMARY_MAX_CHARS]
         ctx.summary_updated_at = time.time()
         done = {id(e) for e in old}
-        kept = [e for e in ctx.entries if id(e) not in done]
+        kept = old[-DISTILL_KEEP_RECENT:]
+        new_entries = [e for e in ctx.entries if id(e) not in done]
         ctx.entries.clear()
         ctx.entries.extend(kept)
-        ctx.entries_since_summary = max(0, ctx.entries_since_summary - len(old))
+        ctx.entries.extend(new_entries)
+        ctx.entries_since_summary = len(new_entries)
         state.dirty.add(gid)
         logger.info(f"群 {gid} 已蒸馏 {len(old)} 条为滚动概要")
 

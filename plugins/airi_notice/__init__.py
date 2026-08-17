@@ -4,6 +4,7 @@ from nonebot.adapters.onebot.v11 import Bot
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 
 from utils.onebot_query import event_nickname, group_name
+from utils.notification import get_notification_bot
 
 driver = get_driver()
 notification_account = str(getattr(driver.config, "notification_account", "") or "").strip()
@@ -31,6 +32,10 @@ async def query_tmxx_status_func(bot: Bot, ev: MessageEvent):
         mesg = "📢 新消息提醒\n时间: {}\n发送者: {}({})\n群: {}({})\n内容: {}".format(
             str(cur_time)[:-7], user_nick, qq_id, current_group_name, group_id, body
         )
-        await bot.send_private_msg(user_id=int(notification_account), message=mesg)
+        notify_bot = get_notification_bot(bot)
+        if notify_bot is None:
+            logger.warning("消息提醒发送失败：没有可用的通知 Bot")
+            return
+        await notify_bot.send_private_msg(user_id=int(notification_account), message=mesg)
     except Exception as e:
         logger.warning(f"消息提醒转发失败: {e}")
