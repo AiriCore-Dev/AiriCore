@@ -111,9 +111,9 @@ cp .env.prod_example .env.prod
 >
 > 改动 `cache_mode` 后需重启生效；切走某模式不会删除已有的 `.pk` 缓存文件（disk 模式下仅忽略不读写）。
 
-#### TLS
+#### SSL
 
-bot.py 默认加载 ./utils/ssl/ 下证书，若无需 HTTPS 请自行调整。
+`.env.prod` 的 `enable_ssl` 默认是 `false`。改为 `true` 后，Bot 和营销服务才会加载 `./utils/ssl/` 下的证书。
 
 ### 许可证
 

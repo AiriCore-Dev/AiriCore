@@ -12,7 +12,7 @@ market_daily_limit = int(getattr(driver.config, "market_daily_limit", 200))
 market_send_start_hour = int(getattr(driver.config, "market_send_start_hour", 9))
 market_send_end_hour = int(getattr(driver.config, "market_send_end_hour", 17))
 market_bind_host = str(getattr(driver.config, "market_bind_host", "") or "").strip()
-market_allow_insecure_http = bool(getattr(driver.config, "market_allow_insecure_http", False))
+enable_ssl = str(getattr(driver.config, "enable_ssl", False)).lower() in {"1", "true", "yes", "y", "on"}
 
 _PLUGIN_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 _ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -21,6 +21,7 @@ POSTS_DIR = os.path.join(_PLUGIN_DIR, "posts")
 TEMPLATES_DIR = os.path.join(_PLUGIN_DIR, "templates")
 SSL_CERT = os.path.join(_ROOT_DIR, "utils", "ssl", "fullchain.pem")
 SSL_KEY = os.path.join(_ROOT_DIR, "utils", "ssl", "privkey.key")
+market_scheme = "https" if enable_ssl else "http"
 
 data = {
     "unsubscribed": [],

@@ -103,7 +103,7 @@ async def handle_airimarkettest(bot: Bot, ev: MessageEvent):
         await airimarkettest.finish(f"文章解析失败：{e}")
 
     token = make_token("test")
-    unsub_url = f"https://{state.market_domain}:{state.market_port}/unsubscribe?token={token}"
+    unsub_url = f"{state.market_scheme}://{state.market_domain}:{state.market_port}/unsubscribe?token={token}"
     subject, plain, html_body = render_marketing_email(article_info, "test", unsub_url)
 
     from ..base.persistence import _send_single
@@ -225,7 +225,7 @@ async def handle_airimarketboost(bot: Bot, ev: MessageEvent):
         qq = queue.pop(0)
         try:
             token = make_token(qq)
-            unsub_url = f"https://{state.market_domain}:{state.market_port}/unsubscribe?token={token}"
+            unsub_url = f"{state.market_scheme}://{state.market_domain}:{state.market_port}/unsubscribe?token={token}"
             subject, plain, html_body = render_marketing_email(article_info, qq, unsub_url)
             result = await _send_single(f"{qq}@qq.com", subject, plain, html_body)
             if result is True:

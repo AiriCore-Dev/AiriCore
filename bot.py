@@ -475,8 +475,17 @@ if __name__ == "__main__":
     _compile_utils()
     nonebot.load_plugin("nonebot_plugin_localstore")
     nonebot.load_plugins("plugins")
-    nonebot.run(
-        app="__mp_main__:app",
-        ssl_keyfile="./utils/ssl/privkey.key",
-        ssl_certfile="./utils/ssl/fullchain.pem",
-    )
+    run_kwargs = {"app": "__mp_main__:app"}
+    enable_ssl = str(getattr(driver.config, "enable_ssl", False)).lower() in {
+        "1",
+        "true",
+        "yes",
+        "y",
+        "on",
+    }
+    if enable_ssl:
+        run_kwargs.update(
+            ssl_keyfile="./utils/ssl/privkey.key",
+            ssl_certfile="./utils/ssl/fullchain.pem",
+        )
+    nonebot.run(**run_kwargs)

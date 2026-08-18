@@ -16,14 +16,14 @@ Full automation of the flow described in [手动部署教程.md](手动部署教
 4. Join the split archives `memes.zip.001` / `memes.zip.002` and extract them into the `meme_generator` package directory.
 5. Install the font `YurukaFangTang.ttf` system-wide (on Windows, per current user, no administrator needed).
 6. Launch the interactive `.env.prod` setup wizard `_setup_env.py`, which builds the config through a guided Q&A. If a config already exists, it asks first and leaves it untouched when you decline.
-7. Generate a self-signed certificate in `./utils/ssl/` if absent; leave it untouched if present.
+7. Write the `enable_ssl` setting (off by default; provide certificates yourself when enabling it).
 8. Create the `logs/` and `data/` runtime directories, then run a final core-dependency self-check.
 9. Settle the launch script: rename the one matching the current system to a unified name (`launch.sh` on Linux, `launch.command` on macOS, `launch.bat` on Windows) and delete the launch scripts for the other systems.
 10. After every deployment step succeeds, delete `memes.zip.001` and `memes.zip.002` from the project root.
 
 > [!NOTE]
 >
-> Existing environments, `.env.prod` files and certificates are not overwritten. After a successful deployment removes the split archives, restore both files before running the full deployment script again.
+> Existing environments and `.env.prod` files are not overwritten. After a successful deployment removes the split archives, restore both files before running the full deployment script again.
 
 ### The setup wizard `_setup_env.py`
 
@@ -76,17 +76,16 @@ bash deploy_macos.command
 ### After deployment
 
 1. The wizard already walked you through the config during deployment. To change anything, re-run `python 一键部署脚本/_setup_env.py`, or edit `.env.prod` in the project root by hand. At minimum you need `SUPERUSERS`, `ONEBOT_ACCESS_TOKEN`, `nickname`, and the three LLM keys `llm_api_key` / `llm_base_url` / `chat_llm_model`.
-2. Point your OneBot v11 client (NapCat / Lagrange, etc.) at the bot. It listens on `HOST=0.0.0.0` `PORT=15100` by default with the WebSocket route `/ws`; since TLS is enabled, use `wss://` on the client.
+2. Point your OneBot v11 client (NapCat / Lagrange, etc.) at the bot. It listens on `HOST=0.0.0.0` `PORT=15100` by default with the WebSocket route `/ws`; use `ws://` when `enable_ssl=false`, or `wss://` after changing it to `true`.
 3. Start from the project root: `./launch.sh` on Linux, `./launch.command` on macOS (double-clicking it in Finder works too), `launch.bat` on Windows (the deploy script already renamed your system's launch script to that name). `bot.py` supervises itself and restarts after a crash; press Ctrl+C to exit.
 
 ### Listening ports
 
-Besides the main port, two plugins each start their own HTTPS service. Both reuse the same certificate pair under `./utils/ssl/` and fall back to HTTP when it is missing. There is no need to open a port for a feature you do not use.
+The marketing unsubscribe service uses `market_port` and follows the protocol selected by `enable_ssl`.
 
 | Port | Source | Config key |
 |---|---|---|
 | 15100 | bot core (OneBot reverse WS) | `PORT` |
-| 22319 | airi_daily_check roguelike Web API | `web_api_port` |
 | 22320 | airi_market email unsubscribe service | `market_port` |
 
 ### Cache modes
@@ -104,7 +103,7 @@ Besides the main port, two plugins each start their own HTTPS service. Both reus
 
 ### Notes
 
-- The generated certificate is self-signed. To serve HTTPS publicly, replace `./utils/ssl/privkey.key` and `./utils/ssl/fullchain.pem` with real ones. To drop TLS entirely, remove the `ssl_keyfile` / `ssl_certfile` arguments in `bot.py` and switch the client to `ws://`.
+- `enable_ssl` defaults to `false`. Change it to `true` to make the bot and marketing service load `./utils/ssl/privkey.key` and `./utils/ssl/fullchain.pem`; with it disabled, use `ws://`.
 - On Windows the font is registered under the current user's Fonts registry key, so administrator rights are not required.
 - All four downloads (Miniconda, conda channel, pip, Playwright) try a China mirror first and fall back to the official source automatically.
 

@@ -356,6 +356,17 @@ STEP_BASE = {
                 "默认 15100 一般不用改。只有当这个端口被别的程序占了才需要换。",
             ],
         },
+        {
+            "key": "enable_ssl",
+            "type": "bool",
+            "q": "要启用 SSL 加密吗?",
+            "tip": ["默认关闭, QQ 客户端地址使用 ws://; 有证书时才选是"],
+            "help": [
+                "关闭时 bot.py 与 airi_market 会跳过 SSL 启动参数, 使用普通 HTTP/WS。",
+                "启用时需要准备 ./utils/ssl/privkey.key 与 ./utils/ssl/fullchain.pem。",
+                "默认关闭适合本机或由反向代理负责 HTTPS 的部署。",
+            ],
+        },
     ],
 }
 
@@ -704,7 +715,7 @@ STEP_OPS = {
             "validate": v_qq,
             "example": "1330248395",
             "help": [
-                "这个账号决定 airi_security_monitor、airi_notice 和 airi_wish_bottle 使用哪个 Bot 发私聊通知。",
+                "这个账号决定 airi_notice 和 airi_wish_bottle 使用哪个 Bot 发私聊通知。",
                 "留空时会从当前在线 Bot 中自动选择, 建议生产环境固定填写。",
             ],
         },
@@ -755,6 +766,7 @@ SUMMARY_GROUPS = [
         ("SUPERUSERS", False),
         ("nickname", False),
         ("PORT", False),
+        ("enable_ssl", False),
         ("ONEBOT_ACCESS_TOKEN", True),
     ]),
     ("AI 大模型", [
@@ -940,8 +952,10 @@ def run_wizard(root, values, records):
     out("配置完成! 接下来:")
     port = decode_text(values.get("PORT", "")) or "15100"
     out("  1. 打开 NapCat (或你用的 QQ 客户端), 添加反向 WebSocket:")
-    out("     wss://127.0.0.1:" + port + "/onebot/v11/ws")
-    out("     用的是自签名证书, 客户端要勾选 '忽略证书校验' 之类的选项")
+    scheme = "wss" if decode_bool(values.get("enable_ssl", "false")) else "ws"
+    out("     " + scheme + "://127.0.0.1:" + port + "/onebot/v11/ws")
+    if scheme == "wss":
+        out("     用的是自签名证书, 客户端要勾选 '忽略证书校验' 之类的选项")
     out("     Token 填你刚才设置的那串 (留空就不用填)")
     out("  2. 运行启动脚本把 Bot 拉起来")
     out("  3. 想改配置: 重跑本向导, 或直接用记事本编辑 .env.prod")

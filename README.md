@@ -111,9 +111,9 @@ The entry point bot.py supervises itself and restarts automatically after a cras
 >
 > Changing `cache_mode` requires a restart. Switching away from a mode does not delete existing `.pk` cache files (disk mode simply ignores them).
 
-#### TLS
+#### SSL
 
-bot.py loads certificates from `./utils/ssl/` by default; adjust it yourself if you do not need HTTPS.
+`.env.prod` sets `enable_ssl` to `false` by default. Change it to `true` to load certificates from `./utils/ssl/` for the bot and marketing service.
 
 ### License
 

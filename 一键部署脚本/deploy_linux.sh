@@ -158,27 +158,27 @@ fi
     [ -f "$PROJECT_DIR/.env.prod" ] || cp "$PROJECT_DIR/.env.prod_example" "$PROJECT_DIR/.env.prod"
 }
 
-echo "==> 准备自签名 SSL 证书 (bot.py 会加载 ./utils/ssl/)"
-SSL_DIR="$PROJECT_DIR/utils/ssl"
-if [ -f "$SSL_DIR/privkey.key" ] && [ -f "$SSL_DIR/fullchain.pem" ]; then
-    echo "    SSL 证书已存在, 保持不变"
-else
-    mkdir -p "$SSL_DIR"
-    if command -v openssl >/dev/null 2>&1; then
+echo "==> SSL 由 .env.prod 的 enable_ssl 配置控制"
+if grep -Eiq '^[[:space:]]*enable_ssl[[:space:]]*=[[:space:]]*(true|1|yes|y|on)([[:space:]]|$)' "$PROJECT_DIR/.env.prod"; then
+    SSL_DIR="$PROJECT_DIR/utils/ssl"
+    if [ -f "$SSL_DIR/privkey.key" ] && [ -f "$SSL_DIR/fullchain.pem" ]; then
+        echo "    SSL 证书已存在, 保持不变"
+    elif command -v openssl >/dev/null 2>&1; then
+        mkdir -p "$SSL_DIR"
         if openssl req -x509 -newkey rsa:2048 -nodes \
             -keyout "$SSL_DIR/privkey.key" \
             -out "$SSL_DIR/fullchain.pem" \
             -days 3650 -subj "/CN=airicore.local" >/dev/null 2>&1 \
             && [ -s "$SSL_DIR/privkey.key" ] && [ -s "$SSL_DIR/fullchain.pem" ]; then
-            echo "    已在 $SSL_DIR 生成自签名证书"
+            echo "    已生成 SSL 自签名证书"
         else
-            echo "    警告: openssl 生成证书失败! bot.py 需要 ./utils/ssl/privkey.key 与 ./utils/ssl/fullchain.pem,"
-            echo "    请手动生成, 或修改 bot.py 去掉 ssl_keyfile/ssl_certfile 参数, 否则无法启动。"
+            echo "    警告: SSL 证书生成失败, enable_ssl=true 时 bot 无法启动"
         fi
     else
-        echo "    未找到 openssl; 请手动提供 ./utils/ssl/privkey.key 与 ./utils/ssl/fullchain.pem,"
-        echo "    或修改 bot.py 去掉 ssl_keyfile/ssl_certfile 参数。"
+        echo "    警告: 未找到 openssl, enable_ssl=true 时请手动准备 utils/ssl/ 证书"
     fi
+else
+    echo "    SSL 未启用, 跳过证书生成"
 fi
 
 echo "==> 创建运行时目录"
@@ -187,7 +187,7 @@ mkdir -p "$PROJECT_DIR/logs" "$PROJECT_DIR/data"
 echo "==> 依赖自检"
 if python - <<'PYEOF'
 import importlib.util
-mods = ["nonebot", "meme_generator", "playwright", "aiohttp", "openai", "numpy", "PIL", "skia", "uvicorn", "psutil", "mcrcon"]
+mods = ["nonebot", "meme_generator", "playwright", "aiohttp", "openai", "numpy", "PIL", "skia", "psutil", "mcrcon"]
 missing = [m for m in mods if importlib.util.find_spec(m) is None]
 if missing:
     print("    缺失模块: " + ", ".join(missing))

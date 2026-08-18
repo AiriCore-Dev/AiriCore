@@ -265,7 +265,7 @@ async def market_tick():
         try:
             article_info = parse_article(campaign_name)
             token = make_token(qq)
-            unsub_url = f"https://{state.market_domain}:{state.market_port}/unsubscribe?token={token}"
+            unsub_url = f"{state.market_scheme}://{state.market_domain}:{state.market_port}/unsubscribe?token={token}"
             subject, plain, html_body = render_marketing_email(article_info, qq, unsub_url)
         except Exception as e:
             logger.warning(f"airi_market 渲染邮件失败 campaign={campaign_name} qq={qq}: {e}")

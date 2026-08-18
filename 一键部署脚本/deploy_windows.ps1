@@ -170,28 +170,27 @@ if (-not (Test-Path $envProd)) {
     Write-Host "    已回退为直接复制示例文件, 启动前请手动编辑 .env.prod"
 }
 
-Write-Host "==> 准备自签名 SSL 证书 (bot.py 会加载 .\utils\ssl\)"
-$sslDir = Join-Path $ProjectDir "utils\ssl"
-$keyFile = Join-Path $sslDir "privkey.key"
-$pemFile = Join-Path $sslDir "fullchain.pem"
-if ((Test-Path $keyFile) -and (Test-Path $pemFile)) {
-    Write-Host "    SSL 证书已存在, 保持不变"
-} else {
-    if (-not (Test-Path $sslDir)) { New-Item -ItemType Directory -Force -Path $sslDir | Out-Null }
-    $opensslExe = "openssl"
-    $condaOpenssl = Join-Path $env:CONDA_PREFIX "Library\bin\openssl.exe"
-    if (Test-Path $condaOpenssl) { $opensslExe = $condaOpenssl }
-    try {
-        & $opensslExe req -x509 -newkey rsa:2048 -nodes -keyout $keyFile -out $pemFile -days 3650 -subj "/CN=airicore.local" 2>$null
-    } catch {
-        Write-Host "    未找到可用的 openssl。"
-    }
-    if ((Test-Path $keyFile) -and (Test-Path $pemFile) -and ((Get-Item $pemFile).Length -gt 0)) {
-        Write-Host "    已在 $sslDir 生成自签名证书"
+Write-Host "==> SSL 由 .env.prod 的 enable_ssl 配置控制"
+if (Get-Content (Join-Path $ProjectDir ".env.prod") | Select-String -Pattern '^\s*enable_ssl\s*=\s*(true|1|yes|y|on)\b') {
+    $sslDir = Join-Path $ProjectDir "utils\ssl"
+    $keyFile = Join-Path $sslDir "privkey.key"
+    $pemFile = Join-Path $sslDir "fullchain.pem"
+    if ((Test-Path $keyFile) -and (Test-Path $pemFile)) {
+        Write-Host "    SSL 证书已存在, 保持不变"
     } else {
-        Write-Host "    警告: 证书生成失败! bot.py 需要 .\utils\ssl\privkey.key 与 .\utils\ssl\fullchain.pem,"
-        Write-Host "    请手动提供, 或修改 bot.py 去掉 ssl_keyfile/ssl_certfile 参数, 否则无法启动。"
+        if (-not (Test-Path $sslDir)) { New-Item -ItemType Directory -Force -Path $sslDir | Out-Null }
+        $opensslExe = "openssl"
+        $condaOpenssl = Join-Path $env:CONDA_PREFIX "Library\bin\openssl.exe"
+        if (Test-Path $condaOpenssl) { $opensslExe = $condaOpenssl }
+        try { & $opensslExe req -x509 -newkey rsa:2048 -nodes -keyout $keyFile -out $pemFile -days 3650 -subj "/CN=airicore.local" 2>$null } catch {}
+        if ((Test-Path $keyFile) -and (Test-Path $pemFile) -and ((Get-Item $pemFile).Length -gt 0)) {
+            Write-Host "    已生成 SSL 自签名证书"
+        } else {
+            Write-Host "    警告: SSL 证书生成失败, enable_ssl=true 时 bot 无法启动"
+        }
     }
+} else {
+    Write-Host "    SSL 未启用, 跳过证书生成"
 }
 
 Write-Host "==> 创建运行时目录"
@@ -204,7 +203,7 @@ Write-Host "==> 依赖自检"
 $checkPy = Join-Path $env:TEMP "airicore_depcheck.py"
 @'
 import importlib.util
-mods = ["nonebot", "meme_generator", "playwright", "aiohttp", "openai", "numpy", "PIL", "skia", "uvicorn", "psutil", "mcrcon"]
+mods = ["nonebot", "meme_generator", "playwright", "aiohttp", "openai", "numpy", "PIL", "skia", "psutil", "mcrcon"]
 missing = [m for m in mods if importlib.util.find_spec(m) is None]
 if missing:
     print("    缺失模块: " + ", ".join(missing))

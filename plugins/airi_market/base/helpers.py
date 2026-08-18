@@ -15,7 +15,7 @@ from . import cache as _cache
 
 
 def image_url(article_name, filename):
-    return f"https://{state.market_domain}:{state.market_port}/static/posts/{article_name}/{filename}"
+    return f"{state.market_scheme}://{state.market_domain}:{state.market_port}/static/posts/{article_name}/{filename}"
 
 
 def parse_article(article_name):

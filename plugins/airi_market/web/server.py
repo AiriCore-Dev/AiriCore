@@ -226,25 +226,17 @@ async def start_server():
     app.router.add_get("/static/posts/{article}/{filename}", handle_static_posts)
 
     ssl_ctx = None
-    if os.path.isfile(state.SSL_CERT) and os.path.isfile(state.SSL_KEY):
-        ssl_ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-        ssl_ctx.load_cert_chain(state.SSL_CERT, state.SSL_KEY)
-    else:
-        logger.warning("airi_market: SSL cert not found, running without HTTPS")
+    if state.enable_ssl:
+        if os.path.isfile(state.SSL_CERT) and os.path.isfile(state.SSL_KEY):
+            ssl_ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+            ssl_ctx.load_cert_chain(state.SSL_CERT, state.SSL_KEY)
+        else:
+            logger.error("airi_market: enable_ssl=true 但未找到 SSL 证书，服务未启动")
+            return
 
     host = str(getattr(state, "market_bind_host", "") or "").strip()
     if not host:
         host = "0.0.0.0" if ssl_ctx is not None else "127.0.0.1"
-
-    is_public = host not in ("127.0.0.1", "localhost", "::1")
-    if ssl_ctx is None and is_public and not getattr(state, "market_allow_insecure_http", False):
-        logger.error(
-            f"airi_market 未找到 TLS 证书而监听地址是 {host}，"
-            "退订 token 会以明文传输，已拒绝启动。"
-            " 请配置证书，或把 market_bind_host 改为 127.0.0.1，"
-            " 或显式设置 market_allow_insecure_http = true。"
-        )
-        return
 
     runner = web.AppRunner(app)
     await runner.setup()
