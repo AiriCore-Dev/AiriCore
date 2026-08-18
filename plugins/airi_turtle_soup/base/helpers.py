@@ -153,7 +153,7 @@ async def generate_help_message(bot, max_player_query_trial, max_player_truth_tr
 📒 指令列表：\n\
   -海龟汤：显示此帮助信息\n\
   -海龟汤 随机：随机开启一篇海龟汤游戏\n\
-  -海龟汤 X：开启编号为X的海龟汤游戏\n\
+  -海龟汤 X：开启编号为X的海龟汤游戏（当前编号：1-306）\n\
   -提问 xxx：进行提问\n\
   -猜汤底 xxx：判断真相\n\
   -次数：查看自己和群已用次数\n\

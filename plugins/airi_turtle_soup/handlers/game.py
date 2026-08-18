@@ -9,6 +9,7 @@ from ..base.constants import max_group_turtle_perday
 from ..base import state
 from ..base.helpers import get_ids, check_data_existance, generate_help_message, construct_turtle_soup, construct_turtle_soup_history, turtle_soup, bot_nick, _persist
 from ..base.constants import max_player_query_trial, max_player_truth_trial, max_group_trial, min_turtle_minutes
+from ..base.numbering import soup_id_to_number, soup_number_to_id
 
 @turtle_soup_on.handle()
 async def _(bot: Bot, ev: MessageEvent):
@@ -32,17 +33,18 @@ async def _(bot: Bot, ev: MessageEvent):
                 if len(state.data['group'][gruop_id]['has_played']) == len(turtle_soup):
                     state.data['group'][gruop_id]['has_played'] = []
                 turtle_pool = [x for x in list(range(len(turtle_soup))) if x not in state.data['group'][gruop_id]['has_played']]
-                src = random.choice(turtle_pool)
+                soup_id = random.choice(turtle_pool)
             else:
                 try:
-                    src = int(src)
+                    soup_number = int(src)
                 except (TypeError, ValueError):
                     raise ValueError('❓ 指令用法：海龟汤 随机 或者 海龟汤 编号')
-                if not 0 <= src < len(turtle_soup):
-                    raise ValueError(f'❌ 编号超出范围，当前可用编号：0 - {len(turtle_soup) - 1}')
-            res += f"编号：{src}\n游戏已开始，祝你好运!\n\n"
+                soup_id = soup_number_to_id(soup_number, len(turtle_soup))
+                if soup_id is None:
+                    raise ValueError(f'❌ 编号超出范围，当前可用编号：1 - {len(turtle_soup)}')
+            res += f"编号：{soup_id_to_number(soup_id)}\n游戏已开始，祝你好运!\n\n"
             state.data['group'][gruop_id]['times'] += 1
-            state.data['group'][gruop_id]['turtle'] = await construct_turtle_soup(src, user_id)
+            state.data['group'][gruop_id]['turtle'] = await construct_turtle_soup(soup_id, user_id)
             res += f"【汤面】\n{turtle_soup[state.data['group'][gruop_id]['turtle']['soup_id']]['story']}"
             history_msg = await construct_turtle_soup_history(bot.self_id, bot_nick, res)
             state.data['group'][gruop_id]['turtle']['history'].append(history_msg)
