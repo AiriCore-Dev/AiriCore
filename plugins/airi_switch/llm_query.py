@@ -3,7 +3,7 @@ import re
 from datetime import date, datetime, timedelta
 from typing import Dict, Optional, Tuple
 
-from utils import llm_usage
+from utils import llm
 
 USAGE_TEXT = "用法：airillmquery [N|YYYY-MM-DD|YYYY-MM|YYYY]"
 _DAY_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
@@ -15,7 +15,7 @@ def parse_scope(
     raw: str,
     today: Optional[date] = None,
 ) -> Tuple[date, date, str]:
-    current = today or datetime.now(llm_usage.UTC_PLUS_8).date()
+    current = today or datetime.now(llm.UTC_PLUS_8).date()
     text = str(raw or "").strip()
     try:
         if not text:
@@ -48,7 +48,7 @@ def render_query(
     today: Optional[date] = None,
 ) -> str:
     start, end, label = parse_scope(raw, today)
-    snapshot = llm_usage.get_snapshot() if stats is None else stats
+    snapshot = llm.get_usage_snapshot() if stats is None else stats
     aggregate: Dict[str, Dict[str, int]] = {}
     start_key = start.isoformat()
     end_key = end.isoformat()
@@ -56,7 +56,7 @@ def render_query(
         if not start_key <= day <= end_key:
             continue
         for source, models in sources.items():
-            if source not in llm_usage.SOURCE_ORDER:
+            if source not in llm.SOURCE_ORDER:
                 continue
             target = aggregate.setdefault(source, {})
             for model, count in models.items():
@@ -67,7 +67,7 @@ def render_query(
         lines.append("暂无成功调用记录。")
         return "\n".join(lines)
     lines.append(f"成功调用：{total} 次")
-    for source in llm_usage.SOURCE_ORDER:
+    for source in llm.SOURCE_ORDER:
         models = aggregate.get(source)
         if not models:
             continue

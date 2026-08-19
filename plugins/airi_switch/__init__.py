@@ -22,6 +22,7 @@ from nonebot.adapters.onebot.v11.event import GroupMessageEvent, PrivateMessageE
 from datetime import datetime, timezone, timedelta
 
 from utils.onebot_query import bot_name, bot_profile, group_name, latest_api_latency
+from utils import llm
 
 from . import counter
 from . import cache
@@ -220,6 +221,40 @@ async def _():
 airi_query_accounts = on_fullmatch('airiquery', priority=5, block=True, permission=SUPERUSER)
 
 airi_llm_query = on_command("airillmquery", priority=5, block=True, permission=SUPERUSER)
+airi_llm_switch = on_command("airiccswitch", priority=5, block=True, permission=SUPERUSER)
+
+
+def _format_llm_profile(info: dict[str, object], profiles: list[str]) -> str:
+    auxiliary = str(info.get("other_model") or "未配置")
+    available = "、".join(profiles) if profiles else "无"
+    return "\n".join(
+        (
+            f"当前LLM配置：{info.get('name', '')}",
+            f"Base URL：{info.get('base_url', '')}",
+            f"Token：{info.get('token', '')}",
+            f"对话模型：{info.get('chat_model', '')}",
+            f"文本模型：{info.get('chat_text_model', '')}",
+            f"辅助模型：{auxiliary}",
+            f"可用配置：{available}",
+        )
+    )
+
+
+@airi_llm_switch.handle()
+async def _(args: Message = CommandArg()):
+    profile_name = str(args).strip()
+    try:
+        if profile_name:
+            info = await llm.switch_profile(profile_name)
+            profiles = llm.list_profiles()
+            result = "LLM 配置已切换。\n" + _format_llm_profile(info, profiles)
+        else:
+            info = llm.inspect_active()
+            result = _format_llm_profile(info, llm.list_profiles())
+    except Exception as e:
+        logger.warning(f"LLM 配置切换失败: {e}")
+        result = f"LLM 配置操作失败：{e}"
+    await airi_llm_switch.finish(result)
 
 
 @airi_llm_query.handle()
