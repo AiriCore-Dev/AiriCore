@@ -14,6 +14,8 @@ tmp/
 .worktrees/
 /plugins/airi_game_server/
 /plugins/airi_security_monitor/
+data/LLM/default.conf
+data/LLM/active
 
 # Django/Database
 *.pk
