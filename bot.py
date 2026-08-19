@@ -474,6 +474,7 @@ async def _stop_loop_monitor():
 if __name__ == "__main__":
     _compile_utils()
     nonebot.load_plugin("nonebot_plugin_localstore")
+    nonebot.load_plugin("nonebot_plugin_alconna")
     nonebot.load_plugins("plugins")
     run_kwargs = {"app": "__mp_main__:app"}
     enable_ssl = str(getattr(driver.config, "enable_ssl", False)).lower() in {
