@@ -34,6 +34,8 @@ _PROFILE_NAME_RE = re.compile(r"^[\w\u0080-\uffff .-]+$", re.UNICODE)
 MODEL_DOWN_TTL_SECS = 600
 _MODEL_DOWN_MARKERS = ("model_not_found", "no available channel", "无可用渠道")
 _MODEL_DOWN: dict[str, float] = {}
+_MODEL_DOWN_SCOPE: dict[str, int] = {}
+_CURRENT_GENERATION_SEQUENCE = 0
 
 SOURCE_CHAT = "对话"
 SOURCE_MECHANISM = "对话机制"
@@ -58,6 +60,8 @@ _usage_lock = threading.Lock()
 _stats: dict[str, dict[str, dict[str, int]]] = {}
 _last_flush = 0.0
 _dirty = False
+_writer_stop = threading.Event()
+_writer_thread: threading.Thread | None = None
 
 CHAT_MAX_TOKENS = 8000
 CHAT_TEMPERATURE = 1.0
@@ -91,6 +95,7 @@ class _GenerationState:
     references: int = 0
     retired: bool = False
     closed: bool = False
+    cooldown: dict[str, float] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -112,6 +117,10 @@ class RuntimeGeneration:
     @property
     def closed(self) -> bool:
         return self._state.closed
+
+    @property
+    def cooldown(self) -> dict[str, float]:
+        return self._state.cooldown
 
 
 _active_generation: RuntimeGeneration | None = None
@@ -388,7 +397,7 @@ def acquire() -> _GenerationLease:
 
 
 async def initialize(profile_dir: str | Path | None = None) -> dict[str, object]:
-    global _active_generation, _runtime_profile_dir
+    global _active_generation, _runtime_profile_dir, _CURRENT_GENERATION_SEQUENCE
     directory = _profile_path(profile_dir)
     async with _get_switch_lock():
         name = read_active_name(profile_dir=directory)
@@ -397,13 +406,15 @@ async def initialize(profile_dir: str | Path | None = None) -> dict[str, object]
         previous = _active_generation
         _runtime_profile_dir = directory
         _active_generation = replacement
+        _CURRENT_GENERATION_SEQUENCE = replacement.sequence
         _MODEL_DOWN.clear()
+        _MODEL_DOWN_SCOPE.clear()
         await _retire_generation(previous)
         return _inspect_generation(replacement)
 
 
 async def switch_profile(name: str, profile_dir: str | Path | None = None) -> dict[str, object]:
-    global _active_generation, _runtime_profile_dir
+    global _active_generation, _runtime_profile_dir, _CURRENT_GENERATION_SEQUENCE
     async with _get_switch_lock():
         directory = _profile_path(profile_dir) if profile_dir is not None else _runtime_profile_dir
         stem = validate_profile_name(name)
@@ -417,7 +428,9 @@ async def switch_profile(name: str, profile_dir: str | Path | None = None) -> di
         previous = _active_generation
         _runtime_profile_dir = directory
         _active_generation = replacement
+        _CURRENT_GENERATION_SEQUENCE = replacement.sequence
         _MODEL_DOWN.clear()
+        _MODEL_DOWN_SCOPE.clear()
         await _retire_generation(previous)
         return _inspect_generation(replacement)
 
@@ -430,36 +443,54 @@ def parse_model_list(raw: Any) -> list[str]:
     return [str(model).strip() for model in raw if str(model).strip()]
 
 
-def _purge_down(now: float | None = None) -> None:
+def _purge_down(now: float | None = None, generation: int | None = None) -> None:
     current = now if now is not None else time.time()
-    expired = [model for model, started in _MODEL_DOWN.items() if current - started > MODEL_DOWN_TTL_SECS]
+    scope = _CURRENT_GENERATION_SEQUENCE if generation is None else generation
+    expired = [
+        model for model, started in _MODEL_DOWN.items()
+        if _MODEL_DOWN_SCOPE.get(model, scope) != scope or current - started > MODEL_DOWN_TTL_SECS
+    ]
     for model in expired:
         _MODEL_DOWN.pop(model, None)
+        _MODEL_DOWN_SCOPE.pop(model, None)
 
 
-def build_chain(primary: str, fallback: Any) -> list[str]:
+def build_chain(primary: str, fallback: Any, generation: int | None = None) -> list[str]:
     chain = [primary] if primary else []
     for model in parse_model_list(fallback):
         if model not in chain:
             chain.append(model)
     if not chain:
         return []
-    _purge_down()
-    available = [model for model in chain if model not in _MODEL_DOWN]
+    _purge_down(generation=generation)
+    scope = _CURRENT_GENERATION_SEQUENCE if generation is None else generation
+    available = [
+        model for model in chain
+        if model not in _MODEL_DOWN or _MODEL_DOWN_SCOPE.get(model, scope) != scope
+    ]
     return available or chain
 
 
-def mark_if_unavailable(model: str, error: Exception) -> bool:
+def mark_if_unavailable(model: str, error: Exception, generation: int | None = None) -> bool:
     text = str(error).lower()
     if not any(marker in text for marker in _MODEL_DOWN_MARKERS):
         return False
+    scope = _CURRENT_GENERATION_SEQUENCE if generation is None else generation
     _MODEL_DOWN[model] = time.time()
+    _MODEL_DOWN_SCOPE[model] = scope
     logger.warning("模型 %s 上游不可用，%s 分钟内改用备用模型", model, MODEL_DOWN_TTL_SECS // 60)
     return True
 
 
-def log_attempt_failed(model: str, chain: list[str], index: int, error: Exception, tag: str = "") -> None:
-    mark_if_unavailable(model, error)
+def log_attempt_failed(
+    model: str,
+    chain: list[str],
+    index: int,
+    error: Exception,
+    tag: str = "",
+    generation: int | None = None,
+) -> None:
+    mark_if_unavailable(model, error, generation=generation)
     prefix = f"[{tag}] " if tag else ""
     if index + 1 < len(chain):
         logger.warning("%s模型 %s 调用失败，切换到备用模型 %s：%s", prefix, model, chain[index + 1], error)
@@ -487,10 +518,27 @@ def _today() -> str:
 
 
 def _usage_snapshot_unlocked() -> dict[str, dict[str, dict[str, int]]]:
-    return {
-        day: {source: dict(models) for source, models in sources.items()}
-        for day, sources in _stats.items()
-    }
+    snapshot: dict[str, dict[str, dict[str, int]]] = {}
+    for day, sources in _stats.items():
+        if not isinstance(day, str) or not isinstance(sources, dict):
+            continue
+        clean_sources: dict[str, dict[str, int]] = {}
+        for source, models in sources.items():
+            if not isinstance(source, str) or not isinstance(models, dict):
+                continue
+            clean_models = {
+                str(model): int(count)
+                for model, count in models.items()
+                if isinstance(model, str)
+                and isinstance(count, int)
+                and not isinstance(count, bool)
+                and count >= 0
+            }
+            if clean_models:
+                clean_sources[source] = clean_models
+        if clean_sources:
+            snapshot[day] = clean_sources
+    return snapshot
 
 
 def get_usage_snapshot() -> dict[str, dict[str, dict[str, int]]]:
@@ -530,7 +578,29 @@ def _load_usage() -> None:
             loaded = pickle.load(stream)
         if not isinstance(loaded, dict):
             raise ValueError("统计文件结构无效")
-        _stats = loaded
+        cleaned: dict[str, dict[str, dict[str, int]]] = {}
+        for day, sources in loaded.items():
+            if not isinstance(day, str) or not isinstance(sources, dict):
+                continue
+            clean_sources: dict[str, dict[str, int]] = {}
+            for source, models in sources.items():
+                if not isinstance(source, str) or not isinstance(models, dict):
+                    continue
+                clean_models: dict[str, int] = {}
+                for model, count in models.items():
+                    if not isinstance(model, str) or isinstance(count, bool):
+                        continue
+                    try:
+                        value = int(count)
+                    except (TypeError, ValueError, OverflowError):
+                        continue
+                    if value >= 0:
+                        clean_models[model] = value
+                if clean_models:
+                    clean_sources[source] = clean_models
+            if clean_sources:
+                cleaned[day] = clean_sources
+        _stats = cleaned
     except Exception as exc:
         try:
             _STATS_FILE.replace(_corrupt_usage_path())
@@ -570,8 +640,7 @@ def flush() -> None:
 
 
 def _usage_writer_loop() -> None:
-    while True:
-        time.sleep(_FLUSH_INTERVAL)
+    while not _writer_stop.wait(_FLUSH_INTERVAL):
         try:
             _flush_usage()
         except Exception:
@@ -599,7 +668,7 @@ async def call_chat(
     async with acquire() as generation:
         profile = generation.profile
         primary = profile.chat_model if img_b64_list else profile.chat_text_model
-        chain = build_chain(primary, profile.chat_fallback)
+        chain = build_chain(primary, profile.chat_fallback, generation=generation.sequence)
         for index, model in enumerate(chain):
             try:
                 completion = await generation.client.chat.completions.create(
@@ -624,7 +693,7 @@ async def call_chat(
                 logger.warning("模型 %s 返回空内容，尝试下一个备用模型", model)
             except Exception as exc:
                 last_error = exc
-                log_attempt_failed(model, chain, index, exc, "airi_llm")
+                log_attempt_failed(model, chain, index, exc, "airi_llm", generation=generation.sequence)
     logger.error("调用LLM失败，%s 个模型全部不可用: %s", len(chain), last_error)
     return ""
 
@@ -676,10 +745,10 @@ async def _create_structured(
         record_success(SOURCE_MECHANISM, model)
     except Exception as exc:
         if use_response_format:
-            mark_if_unavailable(model, exc)
+            mark_if_unavailable(model, exc, generation=generation.sequence)
             logger.warning("结构化LLM调用失败(response_format=True): %s", exc)
         else:
-            log_attempt_failed(model, chain, index, exc, "airi_llm")
+            log_attempt_failed(model, chain, index, exc, "airi_llm", generation=generation.sequence)
         return None
     try:
         choice = completion.choices[0]
@@ -711,7 +780,7 @@ async def call_structured(
     async with acquire() as generation:
         profile = generation.profile
         primary = profile.chat_model if img_b64_list else profile.chat_text_model
-        chain = build_chain(primary, profile.chat_fallback)
+        chain = build_chain(primary, profile.chat_fallback, generation=generation.sequence)
         for index, model in enumerate(chain):
             text = await _create_structured(generation, model, messages, chain, index, True)
             if text is None:
@@ -735,7 +804,11 @@ async def call_auxiliary(
     **kwargs: Any,
 ) -> Any:
     async with acquire() as generation:
-        models = list(chain) if chain is not None else other_model_chain(generation.profile)
+        models = list(chain) if chain is not None else build_chain(
+            generation.profile.other_model,
+            generation.profile.other_fallback,
+            generation=generation.sequence,
+        )
         if not models:
             logger.error("[%s] 未配置模型，无法调用", tag)
             raise RuntimeError("未配置模型")
@@ -755,7 +828,7 @@ async def call_auxiliary(
                     raise RuntimeError("返回内容为空")
             except Exception as exc:
                 last_error = exc
-                log_attempt_failed(model, models, index, exc, tag)
+                log_attempt_failed(model, models, index, exc, tag, generation=generation.sequence)
                 continue
             if validate is None:
                 return text
@@ -792,7 +865,10 @@ async def call_with_fallback(
 
 async def shutdown() -> None:
     global _active_generation
+    _writer_stop.set()
     flush_usage()
+    if _writer_thread is not None and _writer_thread.is_alive():
+        _writer_thread.join(timeout=max(1.0, _FLUSH_INTERVAL))
     async with _get_switch_lock():
         generation = _active_generation
         _active_generation = None
@@ -803,17 +879,26 @@ async def shutdown() -> None:
 
 
 _load_usage()
-threading.Thread(target=_usage_writer_loop, daemon=True, name="llm_usage_writer").start()
+_writer_thread = threading.Thread(target=_usage_writer_loop, daemon=True, name="llm_usage_writer")
+_writer_thread.start()
 
 try:
     from nonebot import get_driver as _get_driver
 
     @_get_driver().on_startup
     async def _initialize_on_startup() -> None:
-        await initialize()
+        try:
+            await initialize()
+        except Exception:
+            logger.exception("LLM 运行时初始化失败")
+            raise
 
     @_get_driver().on_shutdown
     async def _shutdown_on_shutdown() -> None:
-        await shutdown()
+        try:
+            await shutdown()
+        except Exception:
+            logger.exception("LLM 运行时关闭失败")
+            raise
 except Exception:
-    pass
+    logger.warning("LLM 运行时无法注册 NoneBot 生命周期钩子")

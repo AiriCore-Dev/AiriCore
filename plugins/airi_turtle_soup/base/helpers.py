@@ -4,9 +4,8 @@ import re
 import time
 
 from nonebot import logger
-from openai import AsyncOpenAI
-from utils import llm_fallback, llm_usage
-from .constants import bot_nick, llm_api_key, llm_base_url
+from utils import llm
+from .constants import bot_nick
 from . import state
 from .tips import validate_turtle_soup_bank
 
@@ -46,14 +45,8 @@ turtle_soup_question_prompt = _read_text('turtle_soup_question_prompt.md')
 turtle_soup_truth_prompt = _read_text('turtle_soup_truth_prompt.md')
 turtle_soup = _read_json('turtle_soup.json')
 
-client = AsyncOpenAI(
-    api_key=llm_api_key,
-    base_url=llm_base_url
-)
-
 async def call_llm(prompt, input, deepseek):
-    return await llm_fallback.call_with_fallback(
-        client,
+    return await llm.call_with_fallback(
         [
             {
                 "role": "system",
@@ -65,7 +58,7 @@ async def call_llm(prompt, input, deepseek):
             }
         ],
         tag="turtle_soup",
-        usage_source=llm_usage.SOURCE_TURTLE_SOUP,
+        usage_source=llm.SOURCE_TURTLE_SOUP,
         max_completion_tokens=4096,
         temperature=0.1,
         top_p=0.3,

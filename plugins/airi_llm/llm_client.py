@@ -1,44 +1,9 @@
-import json
-from typing import Any, Dict, List, Optional
+from typing import Any, List, Optional
 
-from openai import AsyncOpenAI
-from nonebot import get_driver
-
-from utils import llm_fallback, llm_usage
-
+from utils import llm
 from utils.plugin_logger import get_logger
 
 logger = get_logger("airi_llm")
-
-driver = get_driver()
-
-LLM_MODEL_VISION = getattr(driver.config, "chat_llm_model", "")
-LLM_MODEL_TEXT = getattr(driver.config, "chat_llm_model_text", "") or LLM_MODEL_VISION
-LLM_MODEL = LLM_MODEL_VISION
-
-LLM_MODEL_FALLBACK = llm_fallback.parse_model_list(
-    getattr(driver.config, "chat_llm_model_fallback", None)
-)
-
-_MODEL_DOWN = llm_fallback._MODEL_DOWN
-MODEL_DOWN_TTL_SECS = llm_fallback.MODEL_DOWN_TTL_SECS
-
-
-def _pick_model(img_b64_list: Optional[List[str]]) -> str:
-    return LLM_MODEL_VISION if img_b64_list else LLM_MODEL_TEXT
-
-
-def _model_chain(img_b64_list: Optional[List[str]]) -> List[str]:
-    return llm_fallback.build_chain(_pick_model(img_b64_list), LLM_MODEL_FALLBACK)
-
-
-def _mark_if_unavailable(model: str, err: Exception) -> bool:
-    return llm_fallback.mark_if_unavailable(model, err)
-
-
-def _log_attempt_failed(model: str, chain: List[str], idx: int, err: Exception) -> None:
-    llm_fallback.log_attempt_failed(model, chain, idx, err, "airi_llm")
-
 
 LLM_MAX_TOKENS = 8000
 LLM_TEMPERATURE = 1.0
@@ -49,53 +14,34 @@ LLM_PRESENCE_PENALTY = 0.2
 BG_MAX_TOKENS = 4000
 BG_TEMPERATURE = 0.3
 
-client = AsyncOpenAI(
-    api_key=getattr(driver.config, "llm_api_key", ""),
-    base_url=getattr(driver.config, "llm_base_url", ""),
-)
+_MODEL_DOWN = llm._MODEL_DOWN
+MODEL_DOWN_TTL_SECS = llm.MODEL_DOWN_TTL_SECS
 
+
+def _pick_model(img_b64_list: Optional[List[str]]) -> str:
+    profile = llm.active_profile()
+    return profile.chat_model if img_b64_list else profile.chat_text_model
+
+
+def _model_chain(img_b64_list: Optional[List[str]]) -> List[str]:
+    profile = llm.active_profile()
+    primary = profile.chat_model if img_b64_list else profile.chat_text_model
+    return llm.build_chain(primary, profile.chat_fallback)
+
+
+def _mark_if_unavailable(model: str, err: Exception) -> bool:
+    return llm.mark_if_unavailable(model, err)
+
+
+def _log_attempt_failed(model: str, chain: List[str], idx: int, err: Exception) -> None:
+    llm.log_attempt_failed(model, chain, idx, err, "airi_llm")
 
 async def call_llm(
     system_prompt: str,
     user_input: str,
     img_b64_list: Optional[List[str]] = None,
 ) -> str:
-    content: List[Dict[str, Any]] = [{"type": "text", "text": user_input}]
-    for img_b64 in (img_b64_list or []):
-        content.append({
-            "type": "image_url",
-            "image_url": {"url": f"data:image/jpeg;base64,{img_b64}"},
-        })
-
-    last_err: Optional[Exception] = None
-    chain = _model_chain(img_b64_list)
-    for idx, model in enumerate(chain):
-        try:
-            completion = await client.chat.completions.create(
-                model=model,
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": content},
-                ],
-                max_completion_tokens=LLM_MAX_TOKENS,
-                temperature=LLM_TEMPERATURE,
-                top_p=LLM_TOP_P,
-                stream=False,
-                stop=None,
-                frequency_penalty=LLM_FREQ_PENALTY,
-                presence_penalty=LLM_PRESENCE_PENALTY,
-            )
-            llm_usage.record_success(llm_usage.SOURCE_CHAT, model)
-            text = (completion.choices[0].message.content or "").strip()
-            if text:
-                return text
-            last_err = RuntimeError("模型返回空内容")
-            logger.warning(f"模型 {model} 返回空内容，尝试下一个备用模型")
-        except Exception as e:
-            last_err = e
-            _log_attempt_failed(model, chain, idx, e)
-    logger.error(f"调用LLM失败，{len(chain)} 个模型全部不可用: {last_err}")
-    return ""
+    return await llm.call_chat(system_prompt, user_input, img_b64_list)
 
 
 async def call_llm_json(
@@ -103,94 +49,11 @@ async def call_llm_json(
     user_input: str,
     img_b64_list: Optional[List[str]] = None,
 ) -> Optional[Any]:
-    content: List[Dict[str, Any]] = [{"type": "text", "text": user_input}]
-    for img_b64 in (img_b64_list or []):
-        content.append({
-            "type": "image_url",
-            "image_url": {"url": f"data:image/jpeg;base64,{img_b64}"},
-        })
-    messages = [
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": content},
-    ]
-
-    chain = _model_chain(img_b64_list)
-    for idx, model in enumerate(chain):
-        text = await _create_json(model, messages, chain, idx, use_response_format=True)
-        if text is None:
-            text = await _create_json(model, messages, chain, idx, use_response_format=False)
-        if not text:
-            continue
-        parsed = _loads_lenient(text)
-        if parsed is not None:
-            return parsed
-        logger.warning(f"模型 {model} 结构化输出无法解析为JSON，原文前200字: {text[:200]!r}")
-    logger.error(f"结构化LLM调用失败，{len(chain)} 个模型全部未拿到可用结果")
-    return None
-
-
-async def _create_json(model, messages, chain, idx, use_response_format):
-    kwargs = dict(
-        model=model,
-        messages=messages,
-        max_completion_tokens=BG_MAX_TOKENS,
-        temperature=BG_TEMPERATURE,
-        stream=False,
-    )
-    if use_response_format:
-        kwargs["response_format"] = {"type": "json_object"}
-    try:
-        completion = await client.chat.completions.create(**kwargs)
-        llm_usage.record_success(llm_usage.SOURCE_MECHANISM, model)
-    except Exception as e:
-        if use_response_format:
-            _mark_if_unavailable(model, e)
-            logger.warning(f"结构化LLM调用失败(response_format=True): {e}")
-        else:
-            _log_attempt_failed(model, chain, idx, e)
-        return None
-    try:
-        choice = completion.choices[0]
-        msg = choice.message
-        text = (msg.content or "").strip()
-        finish = choice.finish_reason
-        if not text:
-            extra = msg.model_extra or {}
-            reasoning = (extra.get("reasoning_content") or "").strip()
-            if reasoning:
-                logger.info("content 为空，改用 reasoning_content 解析")
-                return reasoning
-            logger.warning(f"结构化输出内容为空 finish_reason={finish}（可能被max_tokens截断或被拒）")
-            return None
-        return text
-    except Exception as e:
-        logger.warning(f"解析结构化响应失败: {e}")
-        return None
+    return await llm.call_structured(system_prompt, user_input, img_b64_list)
 
 
 def _loads_lenient(text: str) -> Optional[Any]:
-    if not text:
-        return None
-    try:
-        return json.loads(text)
-    except Exception:
-        pass
-    stripped = text.strip().strip("`")
-    if stripped.startswith("json"):
-        stripped = stripped[4:].strip()
-    try:
-        return json.loads(stripped)
-    except Exception:
-        pass
-    for open_ch, close_ch in (("{", "}"), ("[", "]")):
-        start = text.find(open_ch)
-        end = text.rfind(close_ch)
-        if 0 <= start < end:
-            try:
-                return json.loads(text[start:end + 1])
-            except Exception:
-                continue
-    return None
+    return llm.loads_lenient(text)
 
 
 def _clamp_valence(v: Any) -> Optional[float]:

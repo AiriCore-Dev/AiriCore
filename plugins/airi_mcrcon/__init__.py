@@ -16,11 +16,10 @@ import traceback
 from pathlib import Path
 from utils.totp_2fa import totp_verify
 from .rcon_safe import SafeMCRcon, get_executor, shutdown_executor
-from openai import AsyncOpenAI
 from datetime import datetime
 from PIL import Image, ImageDraw
 from utils import cache as asset_cache
-from utils import llm_fallback, llm_usage
+from utils import llm
 from nonebot.rule import to_me
 from nonebot.permission import SUPERUSER
 from nonebot import get_driver, logger, on_startswith, require
@@ -33,8 +32,6 @@ rcon_host = str(getattr(driver.config, "rcon_host", "") or "127.0.0.1")
 rcon_port = int(getattr(driver.config, "rcon_port", 0) or 25575)
 RCON_TIMEOUT = 8
 _2fa_key = str(getattr(driver.config, "_2fa_key", "") or "").strip()
-llm_api_key = getattr(driver.config, "llm_api_key", "")
-llm_base_url = getattr(driver.config, "llm_base_url", "")
 timing = require("nonebot_plugin_apscheduler").scheduler
 data = {}
 translate_groups = {}
@@ -75,8 +72,6 @@ def require_mc_name(name: str) -> str:
         raise ValueError("玩家名不合法，只允许 3-16 位字母、数字和下划线")
     return name
 
-llm_client = AsyncOpenAI(api_key=llm_api_key, base_url=llm_base_url)
-
 TRANSLATE_PROMPT = '''你是一个 Minecraft 服务器控制台输出的翻译助手。请将用户给出的服务器原始输出翻译成自然流畅的简体中文。要求：
 1. 只输出翻译结果，不要添加任何解释、前缀或额外说明；
 2. 保留玩家名、坐标、维度 id、命令名等专有名词与数字原样；
@@ -88,14 +83,13 @@ async def translate_to_chinese(text):
     if not text or not text.strip():
         return text
     try:
-        return await llm_fallback.call_with_fallback(
-            llm_client,
+        return await llm.call_with_fallback(
             [
                 {"role": "system", "content": TRANSLATE_PROMPT},
                 {"role": "user", "content": text},
             ],
             tag="mcrcon_translate",
-            usage_source=llm_usage.SOURCE_RCON_TRANSLATION,
+            usage_source=llm.SOURCE_RCON_TRANSLATION,
             temperature=0.2,
             stream=False,
             stop=None,

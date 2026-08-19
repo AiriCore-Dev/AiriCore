@@ -1,15 +1,5 @@
 import os
-import nonebot
-from openai import AsyncOpenAI
-
-from utils import llm_fallback, llm_usage
-
-driver = nonebot.get_driver()
-
-client = AsyncOpenAI(
-    api_key = getattr(driver.config, "llm_api_key", ""),
-    base_url = getattr(driver.config, "llm_base_url", "")
-)
+from utils import llm
 
 with open(os.path.join(os.path.dirname(__file__), 'kokomi_NL2C.md'),'r',encoding='utf-8') as f:
     role_setup = f.read()
@@ -23,8 +13,7 @@ def _parse_nl2c(text):
 
 async def kokomi_llm(input_words):
     try:
-        return await llm_fallback.call_with_fallback(
-            client,
+        return await llm.call_with_fallback(
             [
                 {
                     "role": "system",
@@ -36,7 +25,7 @@ async def kokomi_llm(input_words):
                 }
             ],
             tag="kokomi_nl2c",
-            usage_source=llm_usage.SOURCE_WATER_METER,
+            usage_source=llm.SOURCE_WATER_METER,
             validate=_parse_nl2c,
             max_completion_tokens=4096,
             temperature=0,

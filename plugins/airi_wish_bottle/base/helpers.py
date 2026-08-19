@@ -7,9 +7,7 @@ import httpx
 
 from nonebot import logger
 from nonebot.adapters.onebot.v11 import Message, MessageSegment
-from openai import AsyncOpenAI
-
-from utils import llm_fallback, llm_usage
+from utils import llm
 from utils.network import is_public_url_async
 from utils.onebot_query import event_nickname
 
@@ -20,11 +18,6 @@ from .image_security import (
     validate_image_format,
 )
 from .image_store import delete_image_refs, read_image, record_image_refs
-
-client = AsyncOpenAI(
-    api_key=getattr(state.driver.config, "llm_api_key", ""),
-    base_url=getattr(state.driver.config, "llm_base_url", ""),
-)
 
 weijinci_prompt = '你是一个内容安全审核员。请判断用户输入的文本和图片（如有）是否包含违规内容（政治敏感、色情、暴力、违法犯罪、辱骂攻击、广告引流、涉及未成年人不良信息等）。如果包含任何违规内容，只回复数字1；如果内容合规，只回复数字0。不要输出任何其他文字。'
 
@@ -95,11 +88,10 @@ async def check_weijinci(text, images=None):
                 {"role": "system", "content": weijinci_prompt},
                 {"role": "user", "content": text},
             ]
-        answer = await llm_fallback.call_with_fallback(
-            client,
+        answer = await llm.call_with_fallback(
             messages,
             tag="wish_bottle_weijinci",
-            usage_source=llm_usage.SOURCE_WISH_BOTTLE,
+            usage_source=llm.SOURCE_WISH_BOTTLE,
             max_completion_tokens=4096,
             temperature=0.1,
             top_p=0.1,
