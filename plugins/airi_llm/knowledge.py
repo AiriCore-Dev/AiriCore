@@ -7,7 +7,7 @@ from . import llm_client
 if TYPE_CHECKING:
     from .memory import GroupContext
 
-from utils.plugin_logger import get_logger
+from utils.observability import get_logger
 
 logger = get_logger("airi_llm")
 

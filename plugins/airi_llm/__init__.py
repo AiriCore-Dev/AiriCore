@@ -30,7 +30,7 @@ from . import llm_client
 from .llm_client import call_llm
 
 driver = get_driver()
-from utils.plugin_logger import get_logger
+from utils.observability import get_logger
 from utils.network import download_public_bytes
 
 logger = get_logger("airi_llm")

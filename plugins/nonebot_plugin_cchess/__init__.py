@@ -28,7 +28,7 @@ from nonebot_plugin_alconna import (
 )
 
 from utils.onebot_query import event_nickname, session_key
-from utils.uniseg_target import capture_target, send_with_fallback
+from utils.messaging import capture_target, send_with_fallback
 
 from .board import MoveResult
 from .config import Config

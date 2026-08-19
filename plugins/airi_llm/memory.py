@@ -10,7 +10,7 @@ from typing import Any, Deque, Dict, List, Optional, Set
 from . import llm_client
 from .knowledge import KnowledgeEntry
 
-from utils.plugin_logger import get_logger
+from utils.observability import get_logger
 
 logger = get_logger("airi_llm")
 

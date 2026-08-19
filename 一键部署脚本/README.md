@@ -75,7 +75,7 @@ bash deploy_macos.command
 
 ### After deployment
 
-1. The wizard already walked you through the config during deployment. To change anything, re-run `python 一键部署脚本/_setup_env.py`, or edit `.env.prod` in the project root by hand. At minimum you need `SUPERUSERS`, `ONEBOT_ACCESS_TOKEN`, `nickname`, and the three LLM keys `llm_api_key` / `llm_base_url` / `chat_llm_model`.
+1. The wizard already walked you through the config during deployment. Re-run `python 一键部署脚本/_setup_env.py` to update it; LLM profiles live in `data/LLM/default.conf` and can be hot-switched with `airiccswitch <profile>`. `.env.prod` contains only bot and plugin business settings.
 2. Point your OneBot v11 client (NapCat / Lagrange, etc.) at the bot. It listens on `HOST=0.0.0.0` `PORT=15100` by default with the WebSocket route `/ws`; use `ws://` when `enable_ssl=false`, or `wss://` after changing it to `true`.
 3. Start from the project root: `./launch.sh` on Linux, `./launch.command` on macOS (double-clicking it in Finder works too), `launch.bat` on Windows (the deploy script already renamed your system's launch script to that name). `bot.py` supervises itself and restarts after a crash; press Ctrl+C to exit.
 

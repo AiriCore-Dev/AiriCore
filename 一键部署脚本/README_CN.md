@@ -75,7 +75,7 @@ bash deploy_macos.command
 
 ### 部署完成后
 
-1. 配置项在部署过程中已由向导问过一遍。想改随时重跑 `python 一键部署脚本/_setup_env.py`，或手动编辑项目根目录的 `.env.prod`。最少要有 `SUPERUSERS`、`ONEBOT_ACCESS_TOKEN`、`nickname` 以及 LLM 三项 `llm_api_key` / `llm_base_url` / `chat_llm_model`。
+1. 配置项在部署过程中已由向导问过一遍。想改随时重跑 `python 一键部署脚本/_setup_env.py`；LLM 配置保存在 `data/LLM/default.conf`，可通过 `airiccswitch <profile>` 热切换。`.env.prod` 只保留 Bot 与插件业务配置。
 2. 把 OneBot v11 客户端（NapCat / Lagrange 等）指向 bot。默认监听 `HOST=0.0.0.0` `PORT=15100`，WebSocket 路由 `/ws`；`enable_ssl=false` 时使用 `ws://`，改为 `true` 后使用 `wss://`。
 3. 从项目根目录启动：Linux 跑 `./launch.sh`，macOS 跑 `./launch.command`（也可在 Finder 里双击），Windows 跑 `launch.bat`（部署脚本已把对应系统的启动脚本改成这个名字）。`bot.py` 自带守护进程，崩溃后自动重启，按 Ctrl+C 退出。
 

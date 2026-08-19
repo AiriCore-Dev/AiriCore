@@ -2,13 +2,56 @@ import asyncio
 import threading
 import time
 
-from nonebot import logger
+from nonebot import logger as _logger
+
+
+class PrefixedLogger:
+    def __init__(self, name: str):
+        self._name = name
+        self._log = _logger.opt(depth=1)
+
+    def _fmt(self, msg):
+        return f"[{self._name}] {msg}"
+
+    def debug(self, msg, *args, **kwargs):
+        self._log.debug(self._fmt(msg))
+
+    def info(self, msg, *args, **kwargs):
+        self._log.info(self._fmt(msg))
+
+    def warning(self, msg, *args, **kwargs):
+        self._log.warning(self._fmt(msg))
+
+    warn = warning
+
+    def error(self, msg, *args, **kwargs):
+        self._log.error(self._fmt(msg))
+
+    def critical(self, msg, *args, **kwargs):
+        self._log.critical(self._fmt(msg))
+
+    def exception(self, msg, *args, **kwargs):
+        _logger.opt(depth=1, exception=True).error(self._fmt(msg))
+
+    def setLevel(self, level):
+        return None
+
+    def addHandler(self, handler):
+        return None
+
+    @property
+    def handlers(self):
+        return [None]
+
+
+def get_logger(name: str) -> PrefixedLogger:
+    return PrefixedLogger(name)
+
 
 SAMPLE_INTERVAL = 60.0
 REPORT_EVERY = 10
 LAG_WARN_SECS = 1.0
 TASK_WARN_COUNT = 200
-
 _task = None
 
 
@@ -24,7 +67,6 @@ async def measure_lag(samples: int = 5, delay: float = 0.2) -> float:
 def _process():
     try:
         import psutil
-
         return psutil.Process()
     except Exception:
         return None
@@ -49,13 +91,8 @@ def _rss_mb(proc) -> float:
 
 
 def snapshot(proc, lag: float) -> str:
-    return (
-        f"运行状态：事件循环延迟 {lag * 1000:.0f}ms，"
-        f"协程 {len(asyncio.all_tasks())} 个，"
-        f"线程 {threading.active_count()} 个，"
-        f"句柄 {_fd_count(proc)} 个，"
-        f"内存 {_rss_mb(proc):.0f}MB"
-    )
+    return (f"运行状态：事件循环延迟 {lag * 1000:.0f}ms，协程 {len(asyncio.all_tasks())} 个，"
+            f"线程 {threading.active_count()} 个，句柄 {_fd_count(proc)} 个，内存 {_rss_mb(proc):.0f}MB")
 
 
 async def _monitor() -> None:
@@ -69,13 +106,13 @@ async def _monitor() -> None:
             tasks = len(asyncio.all_tasks())
             line = snapshot(proc, lag)
             if lag >= LAG_WARN_SECS or tasks >= TASK_WARN_COUNT:
-                logger.warning(f"{line}；消息处理已开始积压，回复会明显变慢")
+                _logger.warning(f"{line}；消息处理已开始积压，回复会明显变慢")
             elif round_no % REPORT_EVERY == 0:
-                logger.info(line)
+                _logger.info(line)
         except asyncio.CancelledError:
             raise
         except Exception as e:
-            logger.warning(f"运行状态采样失败: {e}")
+            _logger.warning(f"运行状态采样失败: {e}")
 
 
 def start():

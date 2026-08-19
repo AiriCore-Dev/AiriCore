@@ -4,13 +4,14 @@ from nonebot.adapters.onebot.v11 import Bot
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 
 from utils.onebot_query import event_nickname, group_name
-from utils.notification import get_notification_bot
+from utils.messaging import get_notification_bot
 
 driver = get_driver()
 notification_account = str(getattr(driver.config, "notification_account", "") or "").strip()
 
 query_tmxx_status = on_message(priority=1, block=False)
 
+BLACKLIST_GROUP = [428328396]
 
 @query_tmxx_status.handle()
 async def query_tmxx_status_func(bot: Bot, ev: MessageEvent):
@@ -26,6 +27,8 @@ async def query_tmxx_status_func(bot: Bot, ev: MessageEvent):
         cur_time = datetime.datetime.now()
         qq_id = str(ev.user_id)
         group_id = int(ev.group_id)
+        if group_id in BLACKLIST_GROUP:
+            return
         user_nick = event_nickname(ev)
         current_group_name = await group_name(bot, group_id)
         body = msg.replace(f"[CQ:at,qq={notification_account}]", "@你")

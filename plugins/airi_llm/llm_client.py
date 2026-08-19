@@ -1,7 +1,7 @@
 from typing import Any, List, Optional
 
 from utils import llm
-from utils.plugin_logger import get_logger
+from utils.observability import get_logger
 
 logger = get_logger("airi_llm")
 

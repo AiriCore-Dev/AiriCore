@@ -379,70 +379,6 @@ STEP_LLM = {
     ],
     "items": [
         {
-            "key": "llm_base_url",
-            "type": "text",
-            "q": "大模型接口地址 (Base URL)",
-            "tip": ["就是服务商给你的那个 API 地址"],
-            "validate": v_url,
-            "required": True,
-            "example": "https://api.openai.com/v1",
-            "help": [
-                "在服务商后台一般写作 'API Base URL' 或 '接口地址'。",
-                "官方 OpenAI 是 https://api.openai.com/v1",
-                "用国内中转站的话, 复制它给你的地址, 通常也以 /v1 结尾。",
-                "注意别把结尾的 /chat/completions 也复制进来, 只要到 /v1。",
-            ],
-        },
-        {
-            "key": "llm_api_key",
-            "type": "secret",
-            "q": "大模型密钥 (API Key)",
-            "tip": ["通常是 sk- 开头的一长串"],
-            "required": True,
-            "example": "sk-xxxxxxxxxxxxxxxxxxxx",
-            "help": [
-                "在服务商后台的 'API Keys' 页面创建后复制过来。",
-                "这是收费凭证, 不要发给别人、不要截图发群里。",
-                "它只会写进本机的 .env.prod 文件, 不会上传到任何地方。",
-            ],
-        },
-        {
-            "key": "chat_llm_model",
-            "type": "text",
-            "q": "聊天用哪个模型?",
-            "tip": ["填模型名称, 服务商文档里能查到"],
-            "required": True,
-            "example": "gpt-4o",
-            "help": [
-                "模型名称必须和服务商支持的写法完全一致, 大小写和横杠都不能错。",
-                "常见的有 gpt-4o、gpt-4o-mini、deepseek-chat、gemini-2.5-flash 等。",
-                "不确定的话去服务商的 '模型列表' 页面复制一个。",
-            ],
-        },
-        {
-            "key": "chat_llm_model_text",
-            "type": "text",
-            "q": "只处理文字时用哪个模型?",
-            "tip": ["不懂就填和上一项一样的, 或直接回车"],
-            "example": "gpt-4o-mini",
-            "help": [
-                "上一项的模型要能看图片, 这一项只处理纯文字, 可以用便宜一点的模型省钱。",
-                "不想折腾就填成和聊天模型一样的名字。",
-            ],
-        },
-        {
-            "key": "other_llm_model",
-            "type": "text",
-            "q": "杂活用哪个模型? (翻译、违禁词检查等)",
-            "tip": ["建议填个便宜的小模型"],
-            "example": "gpt-4o-mini",
-            "help": [
-                "这些是后台默默干的活: 翻译服务器消息、检查许愿内容有没有违规。",
-                "对智力要求不高, 用便宜的小模型即可。",
-                "留空的话相关功能会退化 (比如翻译直接返回原文)。",
-            ],
-        },
-        {
             "key": "airi_char_name",
             "type": "text",
             "q": "Bot 的人设名字叫什么?",
@@ -769,12 +705,7 @@ SUMMARY_GROUPS = [
         ("enable_ssl", False),
         ("ONEBOT_ACCESS_TOKEN", True),
     ]),
-    ("AI 大模型", [
-        ("llm_base_url", False),
-        ("llm_api_key", True),
-        ("chat_llm_model", False),
-        ("other_llm_model", False),
-    ]),
+    ("AI 大模型", []),
     ("Minecraft", [
         ("rcon_host", False),
         ("rcon_port", False),
@@ -802,7 +733,45 @@ SUMMARY_KEYS = [kv for _, group in SUMMARY_GROUPS for kv in group]
 OPTIONAL_GROUPS = {"Minecraft": "MC", "邮件": "MAIL", "营销推送": "MARKET"}
 STEP_TAGS = {"MC": STEP_MC, "MAIL": STEP_MAIL, "MARKET": STEP_MARKET}
 
-REQUIRED_KEYS = ["SUPERUSERS", "llm_base_url", "llm_api_key", "chat_llm_model"]
+REQUIRED_KEYS = ["SUPERUSERS"]
+
+PROFILE_ITEMS = [
+    {"key": "base_url", "type": "text", "q": "LLM Base URL", "tip": ["兼容 OpenAI 接口的服务地址"], "required": True, "validate": v_url},
+    {"key": "token", "type": "secret", "q": "LLM API Key", "tip": ["密钥仅写入 data/LLM/default.conf"], "required": True},
+    {"key": "chat_model", "type": "text", "q": "聊天主模型", "tip": ["支持图片的聊天模型"], "required": True},
+    {"key": "chat_text_model", "type": "text", "q": "纯文本聊天模型", "tip": ["留空使用聊天主模型"]},
+    {"key": "chat_fallback", "type": "list", "q": "聊天备用模型列表", "tip": ["逗号分隔，可留空"]},
+    {"key": "other_model", "type": "text", "q": "辅助模型", "tip": ["翻译、审核等功能使用，可留空"]},
+    {"key": "other_fallback", "type": "list", "q": "辅助备用模型列表", "tip": ["逗号分隔，可留空"]},
+]
+
+
+def load_profile_values(root):
+    path = os.path.join(root, "data", "LLM", "default.conf")
+    values = {}
+    if not os.path.isfile(path):
+        return values
+    for line in read_text(path).splitlines():
+        if "=" not in line or line.lstrip().startswith(("#", ";")):
+            continue
+        key, value = line.split("=", 1)
+        values[key.strip().lower()] = value.strip().strip("'\"")
+    return values
+
+
+def write_profile(root, values):
+    directory = os.path.join(root, "data", "LLM")
+    os.makedirs(directory, exist_ok=True)
+    path = os.path.join(directory, "default.conf")
+    lines = []
+    for key in ("base_url", "token", "chat_model", "chat_text_model", "chat_fallback", "other_model", "other_fallback"):
+        value = values.get(key, "")
+        if isinstance(value, list):
+            value = ", ".join(value)
+        lines.append(f"{key} = {value}")
+    with open(path, "w", encoding="utf-8") as stream:
+        stream.write("\n".join(lines) + "\n")
+    out("    已写入 " + path)
 
 def read_text(path):
     with open(path, "r", encoding="utf-8", errors="replace") as f:
@@ -941,11 +910,17 @@ def run_wizard(root, values, records):
             step_no += 1
             current = values.get(item["key"], "")
             values[item["key"]] = ask_item(item, current, step_no, total)
+    profile_values = load_profile_values(root)
+    out("第二部分补充: LLM 配置档 (写入 data/LLM/default.conf)")
+    for item in PROFILE_ITEMS:
+        step_no += 1
+        profile_values[item["key"]] = ask_item(item, profile_values.get(item["key"], ""), step_no, total + len(PROFILE_ITEMS))
     print_summary(values, skipped)
     if not ask_yes_no("确认保存到 .env.prod 吗?", default_yes=True):
         out("已取消, 没有改动任何文件。")
         return 1
     write_target(root, records, values)
+    write_profile(root, profile_values)
     ensure_environment_file(root)
     out()
     rule("=")

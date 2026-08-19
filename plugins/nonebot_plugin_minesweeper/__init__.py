@@ -28,7 +28,7 @@ from nonebot_plugin_alconna import (
 )
 
 from utils.onebot_query import session_key
-from utils.uniseg_target import capture_target, send_with_fallback
+from utils.messaging import capture_target, send_with_fallback
 
 from .config import Config, minesweeper_config
 from .data_source import GameState, MarkResult, MineSweeper, OpenResult

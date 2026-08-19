@@ -7,7 +7,7 @@ from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 from nonebot import logger
 
 from utils.onebot_query import member_name
-from utils.notification import get_notification_bot
+from utils.messaging import get_notification_bot
 
 from ..base import state
 from ..base.matchers import rxyp, jxyp, plxyp, wdxyp, xgxyp, zyxyp, xhxyp, jbxyp

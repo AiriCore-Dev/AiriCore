@@ -454,9 +454,9 @@ async def _preload_caches_on_startup():
 @driver.on_startup
 async def _start_loop_monitor():
     try:
-        from utils import loop_monitor
+        from utils import observability
 
-        loop_monitor.start()
+        observability.start()
     except Exception as e:
         logger.warning(f"运行状态监控启动失败: {e}")
 
@@ -464,9 +464,9 @@ async def _start_loop_monitor():
 @driver.on_shutdown
 async def _stop_loop_monitor():
     try:
-        from utils import loop_monitor
+        from utils import observability
 
-        loop_monitor.stop()
+        observability.stop()
     except Exception:
         pass
 
