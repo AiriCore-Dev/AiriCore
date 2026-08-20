@@ -3,6 +3,23 @@ import threading
 import time
 
 from nonebot import logger as _logger
+from nonebot.adapters.onebot.v11.exception import ActionFailed, NetworkError
+
+
+def compact_api_timeout_traceback(record) -> bool:
+    message = str(record.get("message", ""))
+    if not message.startswith("Running Matcher(") or not message.endswith("failed."):
+        return False
+    exception = record.get("exception")
+    value = getattr(exception, "value", None)
+    if not isinstance(value, (ActionFailed, NetworkError)):
+        return False
+    text = f"{type(value).__name__} {value}".lower()
+    if "timeout" not in text and "timed out" not in text and "超时" not in text:
+        return False
+    record["message"] = f"{message} {value}"
+    record["exception"] = None
+    return True
 
 
 class PrefixedLogger:

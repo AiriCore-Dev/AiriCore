@@ -271,6 +271,7 @@ print_banner()
 
 import nonebot
 from nonebot.log import default_format, logger
+from utils.observability import compact_api_timeout_traceback
 
 BRAND_NAME = BRAND_LABEL
 _BRAND_PATTERN = re.compile(r"(?<![\w.])[Nn]one[Bb]ot(?![\w]|\.[A-Za-z_])")
@@ -289,6 +290,7 @@ def _brand_patcher(record):
     message = record.get("message")
     if message and "one" in message.lower():
         record["message"] = _BRAND_PATTERN.sub(BRAND_NAME, message)
+    compact_api_timeout_traceback(record)
 
 
 nonebot._log_patcher = _brand_patcher

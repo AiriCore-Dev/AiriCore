@@ -5,6 +5,7 @@ import time
 from collections import Counter, OrderedDict
 from dataclasses import dataclass
 
+from nonebot import logger
 from nonebot.adapters.onebot.v11 import Adapter as BaseAdapter, Bot, Event
 from nonebot.adapters.onebot.v11.event import (
     GroupAdminNoticeEvent,
@@ -14,6 +15,7 @@ from nonebot.adapters.onebot.v11.event import (
     MessageEvent,
 )
 from nonebot.adapters.onebot.v11.exception import NetworkError
+from nonebot.adapters.onebot.store import ResultStore
 from nonebot.message import event_preprocessor
 
 QUERY_TTL = 7200.0
@@ -59,6 +61,29 @@ _LATENCY_TRANSFER_SEGMENTS = {
     "audio",
     "forward",
 }
+
+
+class SafeResultStore(ResultStore):
+    def add_result(self, result: dict):
+        echo = result.get("echo")
+        if not isinstance(echo, str) or not echo.isdecimal():
+            return
+        future = self._futures.get(int(echo))
+        if future is not None and not future.done():
+            future.set_result(result)
+
+
+def _is_timeout_error(exception) -> bool:
+    text = f"{type(exception).__name__} {exception}".lower()
+    return "timeout" in text or "timed out" in text or "超时" in text
+
+
+@Bot.on_called_api
+async def _log_timeout_api_error(bot, exception, api: str, data: dict, result):
+    if exception is None or not _is_timeout_error(exception):
+        return
+    detail = str(exception).strip() or type(exception).__name__
+    logger.error(f"Bot {bot.self_id} 调用接口 {api} 超时: {detail}")
 
 
 def is_cached_query(api: str) -> bool:
@@ -487,6 +512,8 @@ async def bot_profile(bot: Bot) -> dict:
 
 
 class Adapter(BaseAdapter):
+    _result_store = SafeResultStore()
+
     async def _call_api(self, bot, api: str, **data):
         if not is_cached_query(api):
             if not is_latency_sample_api(api, data):
