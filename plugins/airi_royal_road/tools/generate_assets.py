@@ -1,15 +1,18 @@
 from __future__ import annotations
 
+import asyncio
 import base64
+import inspect
 import json
-import urllib.request
-from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any, Callable
+
+from openai import AsyncOpenAI
 
 
 CREDENTIAL_PATH = Path("/Users/liko/Store/credentials/gptimage2.key")
 MODEL_ID = "gpt-image-2"
+PROMPT_LIBRARY_PATH = Path(__file__).with_name("image_prompts.json")
 
 
 def _credentials(path: Path = CREDENTIAL_PATH) -> tuple[str, str]:
@@ -19,14 +22,14 @@ def _credentials(path: Path = CREDENTIAL_PATH) -> tuple[str, str]:
         if len(lines) >= 3:
             baseurl, apikey, model = lines[:3]
             if model == MODEL_ID:
-                return baseurl.rstrip("/"), apikey
+                return baseurl, apikey
         raise ValueError("生图凭据字段不完整或模型不是 gpt-image-2")
     for line in lines:
         if "=" not in line:
             continue
         key, value = line.split("=", 1)
         values[key.strip().lower()] = value.strip()
-    baseurl = values.get("baseurl", "").rstrip("/")
+    baseurl = values.get("baseurl", "")
     apikey = values.get("apikey", "")
     model = values.get("model") or values.get("model_id") or values.get("modelid")
     if not baseurl or not apikey or model != MODEL_ID:
@@ -34,31 +37,46 @@ def _credentials(path: Path = CREDENTIAL_PATH) -> tuple[str, str]:
     return baseurl, apikey
 
 
-def generate(
+def load_prompt_library(path: Path = PROMPT_LIBRARY_PATH) -> dict[str, Any]:
+    library = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(library, dict) or not isinstance(library.get("prompts"), dict):
+        raise ValueError("生图 prompt 库格式无效")
+    return library
+
+
+def build_prompt(template_name: str, values: dict[str, str], path: Path = PROMPT_LIBRARY_PATH) -> str:
+    library = load_prompt_library(path)
+    template = library["prompts"].get(template_name)
+    if not isinstance(template, str):
+        raise KeyError(f"未知生图 prompt 模板: {template_name}")
+    return template.format(
+        global_style=library["global_style"],
+        negative_prompt=library["negative_prompt"],
+        character_identity_rule=library["character_identity_rule"],
+        **values,
+    )
+
+
+async def generate(
     prompt: str,
     output_path: Path,
     credential_path: Path = CREDENTIAL_PATH,
-    opener: Callable[..., Any] | None = None,
-    request_factory: Callable[..., Any] = urllib.request.Request,
-    client_factory: Callable[..., Any] | None = None,
-    timeout: int = 120,
+    client_factory: Callable[..., Any] = AsyncOpenAI,
+    size: str = "1024x1024",
+    quality: str = "high",
 ) -> dict[str, str]:
     baseurl, apikey = _credentials(credential_path)
-    if client_factory is not None or opener is None:
-        if client_factory is None:
-            from openai import OpenAI
-
-            client_factory = OpenAI
-        client = client_factory(api_key=apikey, base_url=baseurl)
-        result = client.images.generate(model=MODEL_ID, prompt=str(prompt), size="1024x1024", quality="high", output_format="png", n=1)
+    client = client_factory(api_key=apikey, base_url=baseurl)
+    try:
+        result = await client.images.generate(model=MODEL_ID, prompt=str(prompt), size=size, quality=quality, output_format="png", n=1)
         first = result.data[0]
         encoded = first.get("b64_json") if isinstance(first, dict) else getattr(first, "b64_json", None)
-    else:
-        body = json.dumps({"model": MODEL_ID, "prompt": str(prompt), "size": "1024x1024"}).encode("utf-8")
-        request = request_factory(baseurl + "/images/generations", data=body, headers={"Authorization": f"Bearer {apikey}", "Content-Type": "application/json"}, method="POST")
-        with opener(request, timeout=timeout) as response:
-            payload = json.loads(response.read().decode("utf-8"))
-        encoded = payload.get("data", [{}])[0].get("b64_json")
+    finally:
+        close = getattr(client, "close", None)
+        if close is not None:
+            result = close()
+            if inspect.isawaitable(result):
+                await result
     if not isinstance(encoded, str) or not encoded:
         raise ValueError("生图响应缺少图片")
     image_bytes = base64.b64decode(encoded, validate=True)
@@ -69,17 +87,18 @@ def generate(
     return {"path": str(output_path), "model": MODEL_ID}
 
 
-def generate_batch(
+async def generate_batch(
     jobs: list[tuple[str, Path]],
     credential_path: Path = CREDENTIAL_PATH,
-    opener: Callable[..., Any] | None = None,
-    request_factory: Callable[..., Any] = urllib.request.Request,
-    client_factory: Callable[..., Any] | None = None,
+    client_factory: Callable[..., Any] = AsyncOpenAI,
     max_workers: int = 5,
 ) -> list[dict[str, str]]:
     if max_workers < 1:
         raise ValueError("并发数必须为正数")
-    worker_count = min(5, max_workers, max(1, len(jobs)))
-    with ThreadPoolExecutor(max_workers=worker_count) as executor:
-        futures = [executor.submit(generate, prompt, path, credential_path, opener, request_factory, client_factory) for prompt, path in jobs]
-        return [future.result() for future in futures]
+    semaphore = asyncio.Semaphore(min(5, max_workers, max(1, len(jobs))))
+
+    async def run_one(prompt: str, path: Path) -> dict[str, str]:
+        async with semaphore:
+            return await generate(prompt, path, credential_path, client_factory)
+
+    return await asyncio.gather(*(run_one(prompt, path) for prompt, path in jobs))
