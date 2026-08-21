@@ -16,6 +16,13 @@ _MANIFEST = json.loads((_ASSET_DIR / "manifest.json").read_text(encoding="utf-8"
 _ASSETS = {item["id"]: item for item in _MANIFEST["assets"]}
 
 
+def _fallback_id(kind: str) -> str:
+    candidate = f"fallback_{kind}"
+    if candidate in _ASSETS:
+        return candidate
+    return "fallback_icon"
+
+
 def _fit(text: str, width: int) -> str:
     return text if len(text) <= width else text[:max(1, width - 1)] + "…"
 
@@ -34,15 +41,30 @@ def compose(frame_kind: str, layer_records: list[dict[str, Any]], state_view: di
         x, y, width, height = slot
         asset = _ASSETS.get(str(record.get("id", "")))
         if asset is not None:
-            with Image.open(_ASSET_DIR / asset["path"]) as source:
-                layer = source.convert("RGBA")
-                if kind == "background":
-                    layer = layer.resize((width, height), Image.Resampling.LANCZOS)
-                    image.alpha_composite(layer, (x, y))
-                else:
-                    layer.thumbnail((width, height), Image.Resampling.LANCZOS)
-                    image.alpha_composite(layer, (x + (width - layer.width) // 2, y + (height - layer.height) // 2))
-            continue
+            try:
+                with Image.open(_ASSET_DIR / asset["path"]) as source:
+                    layer = source.convert("RGBA")
+                    if kind == "background":
+                        layer = layer.resize((width, height), Image.Resampling.LANCZOS)
+                        image.alpha_composite(layer, (x, y))
+                    else:
+                        layer.thumbnail((width, height), Image.Resampling.LANCZOS)
+                        image.alpha_composite(layer, (x + (width - layer.width) // 2, y + (height - layer.height) // 2))
+                continue
+            except (OSError, ValueError):
+                asset = _ASSETS.get(_fallback_id(kind))
+                if asset is not None:
+                    try:
+                        with Image.open(_ASSET_DIR / asset["path"]) as source:
+                            layer = source.convert("RGBA")
+                            if kind == "background":
+                                layer = layer.resize((width, height), Image.Resampling.LANCZOS)
+                            else:
+                                layer.thumbnail((width, height), Image.Resampling.LANCZOS)
+                            image.alpha_composite(layer, (x + (width - layer.width) // 2, y + (height - layer.height) // 2))
+                        continue
+                    except (OSError, ValueError):
+                        pass
         color = _COLORS.get(kind, _COLORS["icon"])
         draw.rounded_rectangle((x, y, x + width, y + height), radius=18, fill=color, outline=(255, 255, 255, 180), width=2)
         label = _fit(str(record.get("label", record.get("id", "王道征途"))), max(8, width // 18))
