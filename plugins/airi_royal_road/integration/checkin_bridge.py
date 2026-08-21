@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+from dataclasses import asdict
 
 from plugins.airi_daily_check.base.royal_road_bridge import apply_royal_road_credit
 
@@ -15,6 +16,8 @@ class SettlementService:
             raise ValueError("累计徽记不能为负")
         amount = min(total_emblems // 10, 10000)
         async with self._lock:
+            if not settlement_id or len(str(settlement_id)) > 160:
+                raise ValueError("结算凭证无效")
             record = self._records.setdefault(str(user_id), {"total_emblems": total_emblems, "amount": amount, "settlement_id": settlement_id, "status": "pending"})
             if record["status"] == "applied":
                 return dict(record)

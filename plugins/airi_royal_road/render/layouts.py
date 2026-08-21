@@ -6,6 +6,7 @@ LAYOUTS = {
     "partner": {"size": (960, 540), "slots": {"background": (0, 0, 960, 540), "character": (360, 60, 320, 360), "bubble": (120, 390, 720, 110)}},
     "journal": {"size": (960, 540), "slots": {"background": (0, 0, 960, 540), "journal": (110, 90, 740, 320)}},
     "weekly": {"size": (960, 540), "slots": {"background": (0, 0, 960, 540), "report": (80, 70, 800, 350)}},
+    "vote": {"size": (960, 540), "slots": {"background": (0, 0, 960, 540), "report": (80, 70, 800, 350)}},
     "final": {"size": (960, 540), "slots": {"background": (0, 0, 960, 540), "memorial": (80, 70, 800, 350)}}
 }
 

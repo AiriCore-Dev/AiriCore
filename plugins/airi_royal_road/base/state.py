@@ -22,7 +22,7 @@ def set_personal(state: PersonalState) -> PersonalState:
 
 
 def all_personal() -> dict[str, PersonalState]:
-    return _personal
+    return dict(_personal)
 
 
 def get_world() -> WorldState:
@@ -39,3 +39,9 @@ def clear_all() -> None:
     _personal.clear()
     _world.__dict__.clear()
     _world.__dict__.update(WorldState().__dict__)
+
+
+def replace_personal(states: dict[str, PersonalState]) -> None:
+    _personal.clear()
+    for key, value in states.items():
+        _personal[str(key)] = value

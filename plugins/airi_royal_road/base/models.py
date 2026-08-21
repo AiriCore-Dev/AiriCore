@@ -225,8 +225,12 @@ class PersonalState:
     event_ids: list[str] = field(default_factory=list)
     last_render_key: str | None = None
     settlement_status: str = "unsettled"
+    pending_choice: str | None = None
+    partner_action_dates: list[str] = field(default_factory=list)
+    settlement_id: str | None = None
+    settlement_amount: int = 0
 
-    FIELDS: ClassVar[set[str]] = {"user_id", "schema_version", "job", "bonds", "inventory", "weekly", "combat", "current_emblems", "total_emblems", "event_ids", "last_render_key", "settlement_status"}
+    FIELDS: ClassVar[set[str]] = {"user_id", "schema_version", "job", "bonds", "inventory", "weekly", "combat", "current_emblems", "total_emblems", "event_ids", "last_render_key", "settlement_status", "pending_choice", "partner_action_dates", "settlement_id", "settlement_amount"}
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -242,6 +246,10 @@ class PersonalState:
             "event_ids": list(self.event_ids),
             "last_render_key": self.last_render_key,
             "settlement_status": self.settlement_status,
+            "pending_choice": self.pending_choice,
+            "partner_action_dates": list(self.partner_action_dates),
+            "settlement_id": self.settlement_id,
+            "settlement_amount": self.settlement_amount,
         }
 
     @classmethod
@@ -255,7 +263,9 @@ class PersonalState:
         combat = data["combat"]
         if combat is not None:
             combat = CombatState.from_dict(combat)
-        return cls(_str(data["user_id"]), _int(data["schema_version"]), job, parsed_bonds, InventoryState.from_dict(data["inventory"]), WeeklyRun.from_dict(data["weekly"]), combat, _int(data["current_emblems"]), _int(data["total_emblems"]), _string_list(data["event_ids"]), data["last_render_key"] if data["last_render_key"] is None else _str(data["last_render_key"]), _str(data["settlement_status"]))
+        pending_choice = data["pending_choice"] if data["pending_choice"] is None else _str(data["pending_choice"])
+        settlement_id = data["settlement_id"] if data["settlement_id"] is None else _str(data["settlement_id"])
+        return cls(_str(data["user_id"]), _int(data["schema_version"]), job, parsed_bonds, InventoryState.from_dict(data["inventory"]), WeeklyRun.from_dict(data["weekly"]), combat, _int(data["current_emblems"]), _int(data["total_emblems"]), _string_list(data["event_ids"]), data["last_render_key"] if data["last_render_key"] is None else _str(data["last_render_key"]), _str(data["settlement_status"]), pending_choice, _string_list(data["partner_action_dates"]), settlement_id, _int(data["settlement_amount"]))
 
 
 @dataclass
@@ -277,4 +287,21 @@ class WorldState:
     def from_dict(cls, data: dict[str, Any]) -> "WorldState":
         data = _keys(data, cls.FIELDS)
         votes = _dict(data["votes"])
-        return cls(_int(data["schema_version"]), _string_dict(data["map_overlays"]), {key: VoteBox.from_dict(value) for key, value in votes.items()}, _string_list(data["completed_events"]), _dict(data["week_results"]), _string_list(data["event_ids"]), _bool(data["frozen"]))
+        results = _dict(data["week_results"])
+        if any(not isinstance(value, dict) or not _plain_result(value) for value in results.values()):
+            raise TypeError("周结果必须是纯对象")
+        return cls(_int(data["schema_version"]), _string_dict(data["map_overlays"]), {key: VoteBox.from_dict(value) for key, value in votes.items()}, _string_list(data["completed_events"]), results, _string_list(data["event_ids"]), _bool(data["frozen"]))
+
+
+def _plain_result(value: dict[str, Any]) -> bool:
+    if any(not isinstance(key, str) for key in value):
+        return False
+    for item in value.values():
+        if isinstance(item, (str, int, float, bool)) or item is None:
+            continue
+        if isinstance(item, list) and all(isinstance(entry, (str, int, float, bool)) or entry is None for entry in item):
+            continue
+        if isinstance(item, dict) and _plain_result(item):
+            continue
+        return False
+    return True

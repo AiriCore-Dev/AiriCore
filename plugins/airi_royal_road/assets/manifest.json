@@ -12,6 +12,7 @@
     "ui": 120
   },
   "assets": [
+    {"id": "lofoten_cover", "kind": "background", "path": "generated/lofoten_cover.png", "size": [960, 540], "anchor": [0, 0], "alpha": false, "variants": ["opening", "help", "memorial"], "fallback_kind": "background"},
     {"id": "fallback_background", "kind": "background", "path": "generated/fallback_background.png", "size": [960, 540], "anchor": [0, 0], "alpha": false, "variants": [], "fallback_kind": "background"},
     {"id": "fallback_character", "kind": "character", "path": "generated/fallback_character.png", "size": [320, 420], "anchor": [480, 480], "alpha": true, "variants": [], "fallback_kind": "character"},
     {"id": "fallback_enemy", "kind": "enemy", "path": "generated/fallback_enemy.png", "size": [300, 300], "anchor": [720, 360], "alpha": true, "variants": [], "fallback_kind": "enemy"},

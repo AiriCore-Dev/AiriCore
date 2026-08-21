@@ -32,3 +32,8 @@ for region in REGIONS:
     for index, location_id in enumerate(ids):
         LOCATIONS[location_id]["neighbors"] = tuple(ids[max(0, index - 1):index] + ids[index + 1:index + 2])
 LOCATIONS["hope_carriage"]["neighbors"] = tuple(f"harvest_plain_{index + 1:02d}" for index in range(3))
+LOCATIONS["harvest_plain_15"]["neighbors"] = ("harvest_plain_14", "fjord_coast_01")
+LOCATIONS["fjord_coast_15"]["neighbors"] = ("fjord_coast_14", "mist_isles_01")
+LOCATIONS["mist_isles_15"]["neighbors"] = ("mist_isles_14", "starlit_mountains_01")
+LOCATIONS["starlit_mountains_15"]["neighbors"] = ("starlit_mountains_14", "polar_snowfield_01")
+LOCATIONS["polar_snowfield_15"]["neighbors"] = ("polar_snowfield_14", "aurora_capital_01")
