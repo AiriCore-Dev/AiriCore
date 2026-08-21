@@ -10,28 +10,35 @@ from . import state
 from .persistence import DATA_FILE, _atomic_dump, _save_lock
 
 
-_settlement_ids: set[str] = set()
+_settlement_ids: dict[str, dict] = {}
 _bridge_lock = asyncio.Lock()
 _receipt_path = Path(DATA_FILE).with_name("royal_road_settlements.pk")
 
 
-def _load_receipts() -> set[str]:
+def _load_receipts() -> dict[str, dict]:
     try:
         with _receipt_path.open("rb") as stream:
             value = pickle.load(stream)
-        if isinstance(value, list) and all(isinstance(item, str) for item in value):
-            return set(value)
-    except Exception:
-        return set()
-    return set()
+    except FileNotFoundError:
+        return {}
+    except Exception as exc:
+        raise RuntimeError("王道结算凭证损坏，已停止入账") from exc
+    if isinstance(value, list) and all(isinstance(item, str) for item in value):
+        return {item: {"status": "applied"} for item in value}
+    if not isinstance(value, dict):
+        raise RuntimeError("王道结算凭证结构无效，已停止入账")
+    for key, record in value.items():
+        if not isinstance(key, str) or not isinstance(record, dict) or record.get("status") not in {"pending", "applied"}:
+            raise RuntimeError("王道结算凭证结构无效，已停止入账")
+    return value
 
 
-def _save_receipts(receipts: set[str]) -> None:
+def _save_receipts(receipts: dict[str, dict]) -> None:
     _receipt_path.parent.mkdir(parents=True, exist_ok=True)
     fd, temp_path = tempfile.mkstemp(dir=str(_receipt_path.parent), prefix=".royal-road-", suffix=".tmp")
     try:
         with os.fdopen(fd, "wb") as stream:
-            pickle.dump(sorted(receipts), stream, protocol=pickle.HIGHEST_PROTOCOL)
+            pickle.dump(receipts, stream, protocol=pickle.HIGHEST_PROTOCOL)
             stream.flush()
             os.fsync(stream.fileno())
         os.replace(temp_path, _receipt_path)
@@ -50,14 +57,45 @@ async def apply_royal_road_credit(user_id: str, amount: int, settlement_id: str)
     async with _bridge_lock:
         if not _settlement_ids:
             _settlement_ids.update(await asyncio.to_thread(_load_receipts))
-        if settlement_id in _settlement_ids:
+        record = _settlement_ids.get(settlement_id)
+        if record is not None and record.get("status") == "applied":
             return {"status": "duplicate", "amount": amount}
         async with _save_lock:
             account = state.data.get(user_id)
             if account is None:
                 return {"status": "unregistered", "amount": amount}
-            account["credits"] = int(account.get("credits", 0)) + amount
-            await asyncio.to_thread(_atomic_dump, DATA_FILE, state.data)
-            _settlement_ids.add(settlement_id)
-            await asyncio.to_thread(_save_receipts, _settlement_ids)
+            current = int(account.get("credits", 0))
+            if record is not None:
+                if record.get("user_id") != user_id or record.get("amount") != amount:
+                    raise RuntimeError("王道结算凭证与待处理事务不匹配")
+                before = int(record["before"])
+                after = int(record["after"])
+                if current == after:
+                    applied = {**record, "status": "applied"}
+                    receipts = {**_settlement_ids, settlement_id: applied}
+                    await asyncio.to_thread(_save_receipts, receipts)
+                    _settlement_ids.clear()
+                    _settlement_ids.update(receipts)
+                    return {"status": "duplicate", "amount": amount}
+                if current != before:
+                    raise RuntimeError("王道结算待处理事务需要人工核对")
+            else:
+                before = current
+                after = current + amount
+                record = {"status": "pending", "user_id": user_id, "amount": amount, "before": before, "after": after}
+                receipts = {**_settlement_ids, settlement_id: record}
+                await asyncio.to_thread(_save_receipts, receipts)
+                _settlement_ids.clear()
+                _settlement_ids.update(receipts)
+            account["credits"] = after
+            try:
+                await asyncio.to_thread(_atomic_dump, DATA_FILE, state.data)
+            except Exception:
+                account["credits"] = before
+                raise
+            applied = {**record, "status": "applied"}
+            receipts = {**_settlement_ids, settlement_id: applied}
+            await asyncio.to_thread(_save_receipts, receipts)
+            _settlement_ids.clear()
+            _settlement_ids.update(receipts)
             return {"status": "applied", "amount": amount}
