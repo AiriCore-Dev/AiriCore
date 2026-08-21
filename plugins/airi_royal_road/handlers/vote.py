@@ -6,7 +6,10 @@ from nonebot.adapters.onebot.v11 import MessageEvent
 
 @vote.handle()
 async def handle_vote(event: MessageEvent):
-    response = await service.vote_view(str(event.get_user_id()))
+    try:
+        response = await service.vote_view(str(event.get_user_id()))
+    except ValueError as exc:
+        await vote.finish(output.render_response(str(exc)))
     await vote.finish(output.text_fallback(response.fallback_text) + response.image)
 
 

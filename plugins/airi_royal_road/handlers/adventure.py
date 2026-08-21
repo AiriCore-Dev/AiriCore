@@ -6,7 +6,10 @@ from nonebot.adapters.onebot.v11 import MessageEvent
 
 @adventure.handle()
 async def handle_adventure(event: MessageEvent):
-    response = await service.start_or_resume(str(event.get_user_id()))
+    try:
+        response = await service.start_or_resume(str(event.get_user_id()))
+    except ValueError as exc:
+        await adventure.finish(output.render_response(str(exc)))
     await adventure.finish(output.text_fallback(response.fallback_text) + response.image)
 
 
@@ -22,5 +25,8 @@ async def handle_choice(event: MessageEvent):
 
 @partner.handle()
 async def handle_partner(event: MessageEvent):
-    response = await service.partner_talk(str(event.get_user_id()), event.get_plaintext().split(" ", 1)[1])
+    try:
+        response = await service.partner_talk(str(event.get_user_id()), event.get_plaintext().split(" ", 1)[1])
+    except (ValueError, IndexError):
+        await partner.finish(output.render_response("伙伴对话格式无效"))
     await partner.finish(output.text_fallback(response.fallback_text) + response.image)
