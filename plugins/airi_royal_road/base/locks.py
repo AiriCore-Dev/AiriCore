@@ -44,11 +44,13 @@ _settlements = _Registry()
 @asynccontextmanager
 async def _acquire(registry: _Registry, key: str):
     record = registry.record(str(key))
+    acquired = False
     try:
         await record.lock.acquire()
+        acquired = True
         yield
     finally:
-        if record.lock.locked():
+        if acquired:
             record.lock.release()
         record.waiters -= 1
         record.last_use = time.monotonic()

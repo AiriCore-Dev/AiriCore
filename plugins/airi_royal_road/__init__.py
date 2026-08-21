@@ -13,18 +13,22 @@ __plugin_meta__ = PluginMetadata(
     type="application",
 )
 
-driver = get_driver()
+try:
+    driver = get_driver()
+except ValueError:
+    driver = None
 
 
-@driver.on_startup
-async def _on_startup():
-    await personal_store.initialize({})
-    await world_store.initialize({})
-    await personal_store.load()
-    await world_store.load()
+if driver is not None:
+    @driver.on_startup
+    async def _on_startup():
+        await personal_store.initialize({})
+        await world_store.initialize({})
+        await personal_store.load()
+        await world_store.load()
 
 
-@driver.on_shutdown
-async def _on_shutdown():
-    await personal_store.flush()
-    await world_store.flush()
+    @driver.on_shutdown
+    async def _on_shutdown():
+        await personal_store.flush()
+        await world_store.flush()

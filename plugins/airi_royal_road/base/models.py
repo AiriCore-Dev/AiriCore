@@ -44,6 +44,13 @@ def _dict(value: Any) -> dict[str, Any]:
     return dict(value)
 
 
+def _string_dict(value: Any) -> dict[str, str]:
+    result = _dict(value)
+    if any(not isinstance(item, str) for item in result.values()):
+        raise TypeError("对象值必须是字符串")
+    return result
+
+
 def _string_list(value: Any) -> list[str]:
     result = _list(value)
     if any(not isinstance(item, str) for item in result):
@@ -181,7 +188,7 @@ class VoteBox:
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "VoteBox":
         data = _keys(data, cls.FIELDS)
-        return cls(_int(data["week_index"]), _string_list(data["eligible_users"]), _dict(data["choices"]), _bool(data["opened"]), _bool(data["closed"]), _str(data["hope_priority"]), _dict(data["result"]))
+        return cls(_int(data["week_index"]), _string_list(data["eligible_users"]), _string_dict(data["choices"]), _bool(data["opened"]), _bool(data["closed"]), _str(data["hope_priority"]), _dict(data["result"]))
 
 
 @dataclass
@@ -270,4 +277,4 @@ class WorldState:
     def from_dict(cls, data: dict[str, Any]) -> "WorldState":
         data = _keys(data, cls.FIELDS)
         votes = _dict(data["votes"])
-        return cls(_int(data["schema_version"]), _dict(data["map_overlays"]), {key: VoteBox.from_dict(value) for key, value in votes.items()}, _string_list(data["completed_events"]), _dict(data["week_results"]), _string_list(data["event_ids"]), _bool(data["frozen"]))
+        return cls(_int(data["schema_version"]), _string_dict(data["map_overlays"]), {key: VoteBox.from_dict(value) for key, value in votes.items()}, _string_list(data["completed_events"]), _dict(data["week_results"]), _string_list(data["event_ids"]), _bool(data["frozen"]))

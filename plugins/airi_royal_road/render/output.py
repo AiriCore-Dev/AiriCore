@@ -26,6 +26,12 @@ def message_image(image: Image.Image | bytes | str) -> MessageSegment:
     if isinstance(image, str):
         if not image.startswith("base64://") or len(image) <= len("base64://"):
             raise ValueError("图片必须使用 base64")
+        try:
+            decoded = base64.b64decode(image[len("base64://"):], validate=True)
+            if not decoded.startswith(b"\x89PNG\r\n\x1a\n"):
+                raise ValueError("图片格式无效")
+        except Exception as exc:
+            raise ValueError("图片格式无效") from exc
         value = image
     else:
         value = png_to_base64(image)
