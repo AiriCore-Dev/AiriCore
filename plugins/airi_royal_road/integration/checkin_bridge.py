@@ -2,8 +2,6 @@ from __future__ import annotations
 
 import asyncio
 
-from plugins.airi_daily_check.base import state
-from plugins.airi_daily_check.base.persistence import _save_lock
 from plugins.airi_daily_check.base.royal_road_bridge import apply_royal_road_credit
 
 
