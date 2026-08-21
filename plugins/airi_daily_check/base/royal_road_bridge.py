@@ -55,8 +55,6 @@ async def apply_royal_road_credit(user_id: str, amount: int, settlement_id: str)
         async with _save_lock:
             account = state.data.get(user_id)
             if account is None:
-                _settlement_ids.add(settlement_id)
-                await asyncio.to_thread(_save_receipts, _settlement_ids)
                 return {"status": "unregistered", "amount": amount}
             account["credits"] = int(account.get("credits", 0)) + amount
             await asyncio.to_thread(_atomic_dump, DATA_FILE, state.data)
