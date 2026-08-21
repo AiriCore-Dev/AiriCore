@@ -4,7 +4,6 @@ from nonebot.plugin import PluginMetadata
 from .base.persistence import personal_store, world_store
 from .base import matchers
 from .handlers import adventure, settlement, status, vote
-from . import scheduler
 
 
 __plugin_meta__ = PluginMetadata(
@@ -21,6 +20,8 @@ except ValueError:
 
 
 if driver is not None:
+    from . import scheduler
+
     @driver.on_startup
     async def _on_startup():
         await personal_store.initialize({})
