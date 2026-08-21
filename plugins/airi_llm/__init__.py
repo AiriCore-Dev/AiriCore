@@ -82,7 +82,7 @@ TYPING_MAX_SECS = 18.0
 TYPING_MIN_SECS = 1.8
 
 PROJECT_DIR = os.path.dirname(__file__)
-ROLE_SETUP_FILE = os.path.join(PROJECT_DIR, "airi_prompt_v3.md")
+ROLE_SETUP_FILE = os.path.join(PROJECT_DIR, "prompt.md")
 EMOJI_DIR = os.path.join(PROJECT_DIR, "emoji")
 EMOJI_MOOD_FILE = os.path.join(PROJECT_DIR, "emoji_moods.json")
 
