@@ -44,7 +44,8 @@ def generate(
 ) -> dict[str, str]:
     baseurl, apikey = _credentials(credential_path)
     body = json.dumps({"model": MODEL_ID, "prompt": str(prompt), "size": "1024x1024"}).encode("utf-8")
-    request = request_factory(baseurl + "/images/generations", data=body, headers={"Authorization": f"Bearer {apikey}", "Content-Type": "application/json"}, method="POST")
+    root_url = baseurl[:-3] if baseurl.lower().endswith("/v1") else baseurl
+    request = request_factory(root_url + "/images/generations", data=body, headers={"Authorization": f"Bearer {apikey}", "Content-Type": "application/json"}, method="POST")
     with opener(request, timeout=timeout) as response:
         payload = json.loads(response.read().decode("utf-8"))
     encoded = payload.get("data", [{}])[0].get("b64_json")
