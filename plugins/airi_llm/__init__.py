@@ -842,8 +842,7 @@ async def handle_airi_llm(bot: Bot, ev: MessageEvent):
             if due_mention is not None:
                 recall_snippet = (
                     f"{due_mention.get('nickname') or due_mention['uid']}"
-                    f"（{due_mention['uid']}）之前叫过你但你没回："
-                    f"「{due_mention['snippet']}」"
+                    f"[{due_mention['uid']}]：{due_mention['snippet']}"
                 )
             llm_input = memory.render_context(airi_state, group_id, knowledge_snippets,
                                               recall_snippet)

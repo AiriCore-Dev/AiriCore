@@ -340,10 +340,11 @@ def render_context(
     ctx = get_ctx(state, gid)
     entries = list(ctx.entries)
     parts: List[str] = []
+    background_parts: List[str] = []
 
     gmem = state.long_term.groups.get(gid)
     if gmem and gmem.summary:
-        parts.append(f"【群】{gmem.summary}")
+        background_parts.append(f"群背景：{gmem.summary}")
 
     present: List[str] = []
     seen: Set[str] = set()
@@ -373,35 +374,38 @@ def render_context(
         if line_parts:
             mem_lines.append(f"{display_name}: {'；'.join(line_parts)}")
     if mem_lines:
-        parts.append("【印象】\n" + "\n".join(mem_lines))
+        background_parts.append("成员信息：\n" + "\n".join(mem_lines))
 
     if ctx.rolling_summary:
-        parts.append(f"【概要】{ctx.rolling_summary}")
+        background_parts.append(f"较早记录：{ctx.rolling_summary}")
+    if knowledge_snippets:
+        background_parts.append("相关事实：" + "；".join(knowledge_snippets))
+    if background_parts:
+        parts.append(
+            "【只读背景，仅在当前消息直接相关时使用】\n"
+            + "\n".join(background_parts)
+        )
 
-    if ctx.active_topic:
-        parts.append(f"【话题】{ctx.active_topic}")
-
+    expression_parts: List[str] = []
     if ctx.speaking_style:
-        parts.append(f"【风格】{ctx.speaking_style}")
-
+        expression_parts.append(f"群内表达习惯：{ctx.speaking_style}")
     bot_mood_desc = _bot_mood_desc(ctx.bot_mood)
     arousal_desc = _arousal_desc(ctx.bot_arousal)
-    state_parts = []
     if bot_mood_desc:
-        state_parts.append(bot_mood_desc)
+        expression_parts.append(bot_mood_desc)
     if arousal_desc:
-        state_parts.append(arousal_desc)
+        expression_parts.append(arousal_desc)
     time_hint = _time_state_hint()
     if time_hint:
-        state_parts.append(time_hint)
-    if state_parts:
-        parts.append("；".join(state_parts))
-
-    if knowledge_snippets:
-        parts.append("【背景】" + "；".join(knowledge_snippets))
+        expression_parts.append(time_hint)
+    if expression_parts:
+        parts.append(
+            "【只影响措辞，不得成为回复内容】\n"
+            + "；".join(expression_parts)
+        )
 
     if recall_snippet:
-        parts.append("【想起】" + recall_snippet)
+        parts.append("【待回应消息】\n" + recall_snippet)
 
     if entries:
         parts.append("【最近的群聊】\n" + _entries_table(entries))
