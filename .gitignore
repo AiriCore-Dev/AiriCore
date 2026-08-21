@@ -14,7 +14,6 @@ tmp/
 .worktrees/
 /plugins/airi_game_server/
 /plugins/airi_security_monitor/
-/plugins/airi_royal_road/
 data/LLM/default.conf
 data/LLM/active
 
