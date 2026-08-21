@@ -170,7 +170,7 @@ class AdventureService:
                 action = ("attack", "skill", "defend", "item", "companion")[choice - 1]
                 if personal.combat is None:
                     raise ValueError("当前没有战斗")
-                personal.combat = resolve_turn(personal.combat, action, companion_action="support", job=personal.job, request_id=f"{pending}:{choice}")
+                personal.combat = resolve_turn(personal.combat, action, companion_action="support", job=personal.job, request_id=f"{pending}:{personal.combat.turn}:{choice}")
                 result = personal.combat.result
                 if personal.combat.resolved:
                     if result["status"] == "victory":

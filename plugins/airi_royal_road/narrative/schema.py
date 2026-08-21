@@ -52,6 +52,7 @@ def validate_scene_script(script: Any, allowed_assets: set[str], allowed_charact
     if not isinstance(bubble, str) or not isinstance(journal, str) or len(bubble) > 120 or len(journal) > 160:
         raise ValueError("剧情文字过长")
     for value in (bubble, journal, *(line[1] for line in parsed_lines)):
-        if any(token in value for token in ("奖励", "积分", "执行命令", "忽略规则", "system prompt")):
+        lowered = value.lower()
+        if "\n" in value or "\r" in value or any(token in value for token in ("奖励", "积分", "执行命令", "忽略规则", "系统提示", "命令", "prompt", "system prompt")) or "ignore rules" in lowered:
             raise ValueError("剧情文字包含越权内容")
     return SceneScript(script["scene_id"], script["frame_kind"], tuple(layers), script["camera"], tuple(parsed_lines), bubble, script["mood_tag"], script["bond_tag"], journal)
