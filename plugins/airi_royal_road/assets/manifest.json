@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "target_counts": {
+    "location": 90,
+    "date_scene": 45,
+    "character": 48,
+    "ordinary_enemy": 100,
+    "elite_enemy": 30,
+    "weekly_boss": 22,
+    "act_boss": 5,
+    "item": 180,
+    "ui": 120
+  },
+  "assets": [
+    {"id": "fallback_background", "kind": "background", "path": "generated/fallback_background.png", "size": [960, 540], "anchor": [0, 0], "alpha": false, "variants": [], "fallback_kind": "background"},
+    {"id": "fallback_character", "kind": "character", "path": "generated/fallback_character.png", "size": [320, 420], "anchor": [480, 480], "alpha": true, "variants": [], "fallback_kind": "character"},
+    {"id": "fallback_enemy", "kind": "enemy", "path": "generated/fallback_enemy.png", "size": [300, 300], "anchor": [720, 360], "alpha": true, "variants": [], "fallback_kind": "enemy"},
+    {"id": "fallback_icon", "kind": "icon", "path": "generated/fallback_icon.png", "size": [96, 96], "anchor": [0, 0], "alpha": true, "variants": [], "fallback_kind": "icon"},
+    {"id": "fallback_bubble", "kind": "bubble", "path": "generated/fallback_bubble.png", "size": [720, 120], "anchor": [120, 390], "alpha": true, "variants": [], "fallback_kind": "bubble"}
+  ]
+}
