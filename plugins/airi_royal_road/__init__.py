@@ -4,6 +4,7 @@ from nonebot.plugin import PluginMetadata
 from .base.persistence import personal_store, world_store
 from .base import matchers
 from .handlers import adventure, settlement, status, vote
+from . import scheduler
 
 
 __plugin_meta__ = PluginMetadata(

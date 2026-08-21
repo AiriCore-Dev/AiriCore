@@ -34,7 +34,7 @@ def apply_bond_delta(personal: PersonalState, member_id: str, delta: dict[str, i
 
 
 def start_week(personal: PersonalState, week_index: int) -> bool:
-    if personal.weekly.week_index == week_index and personal.weekly.fire == 3 and not personal.weekly.action_dates:
+    if personal.weekly.week_index == week_index:
         return False
     personal.weekly = WeeklyRun(week_index=week_index)
     personal.combat = None
