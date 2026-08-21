@@ -38,16 +38,27 @@ def generate(
     prompt: str,
     output_path: Path,
     credential_path: Path = CREDENTIAL_PATH,
-    opener: Callable[..., Any] = urllib.request.urlopen,
+    opener: Callable[..., Any] | None = None,
     request_factory: Callable[..., Any] = urllib.request.Request,
+    client_factory: Callable[..., Any] | None = None,
     timeout: int = 120,
 ) -> dict[str, str]:
     baseurl, apikey = _credentials(credential_path)
-    body = json.dumps({"model": MODEL_ID, "prompt": str(prompt), "size": "1024x1024"}).encode("utf-8")
-    request = request_factory(baseurl + "/images/generations", data=body, headers={"Authorization": f"Bearer {apikey}", "Content-Type": "application/json"}, method="POST")
-    with opener(request, timeout=timeout) as response:
-        payload = json.loads(response.read().decode("utf-8"))
-    encoded = payload.get("data", [{}])[0].get("b64_json")
+    if client_factory is not None or opener is None:
+        if client_factory is None:
+            from openai import OpenAI
+
+            client_factory = OpenAI
+        client = client_factory(api_key=apikey, base_url=baseurl)
+        result = client.images.generate(model=MODEL_ID, prompt=str(prompt), size="1024x1024", quality="high", output_format="png", n=1)
+        first = result.data[0]
+        encoded = first.get("b64_json") if isinstance(first, dict) else getattr(first, "b64_json", None)
+    else:
+        body = json.dumps({"model": MODEL_ID, "prompt": str(prompt), "size": "1024x1024"}).encode("utf-8")
+        request = request_factory(baseurl + "/images/generations", data=body, headers={"Authorization": f"Bearer {apikey}", "Content-Type": "application/json"}, method="POST")
+        with opener(request, timeout=timeout) as response:
+            payload = json.loads(response.read().decode("utf-8"))
+        encoded = payload.get("data", [{}])[0].get("b64_json")
     if not isinstance(encoded, str) or not encoded:
         raise ValueError("生图响应缺少图片")
     image_bytes = base64.b64decode(encoded, validate=True)
@@ -61,13 +72,14 @@ def generate(
 def generate_batch(
     jobs: list[tuple[str, Path]],
     credential_path: Path = CREDENTIAL_PATH,
-    opener: Callable[..., Any] = urllib.request.urlopen,
+    opener: Callable[..., Any] | None = None,
     request_factory: Callable[..., Any] = urllib.request.Request,
+    client_factory: Callable[..., Any] | None = None,
     max_workers: int = 5,
 ) -> list[dict[str, str]]:
     if max_workers < 1:
         raise ValueError("并发数必须为正数")
     worker_count = min(5, max_workers, max(1, len(jobs)))
     with ThreadPoolExecutor(max_workers=worker_count) as executor:
-        futures = [executor.submit(generate, prompt, path, credential_path, opener, request_factory) for prompt, path in jobs]
+        futures = [executor.submit(generate, prompt, path, credential_path, opener, request_factory, client_factory) for prompt, path in jobs]
         return [future.result() for future in futures]
