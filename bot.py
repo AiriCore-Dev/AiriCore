@@ -299,11 +299,16 @@ logger.configure(patcher=_brand_patcher)
 nonebot.init()
 app = nonebot.get_asgi()
 
-from utils.onebot_query import Adapter as ONEBOT_V11Adapter, install_event_observer
+from utils.onebot_query import (
+    Adapter as ONEBOT_V11Adapter,
+    install_event_observer,
+    install_transport_diagnostics,
+)
 
 driver = nonebot.get_driver()
 driver.register_adapter(ONEBOT_V11Adapter)
 install_event_observer()
+install_transport_diagnostics(driver)
 config = driver.config
 config.nb2_path = Path(__file__).parent
 

@@ -61,6 +61,7 @@ _LATENCY_TRANSFER_SEGMENTS = {
     "audio",
     "forward",
 }
+_MISSING_API_ROOT_WARNED = set()
 
 
 class SafeResultStore(ResultStore):
@@ -76,6 +77,63 @@ class SafeResultStore(ResultStore):
 def _is_timeout_error(exception) -> bool:
     text = f"{type(exception).__name__} {exception}".lower()
     return "timeout" in text or "timed out" in text or "超时" in text
+
+
+def configured_api_root(config, bot_id: str):
+    roots = getattr(config, "onebot_api_roots", None) or {}
+    value = roots.get(str(bot_id))
+    if value is None:
+        return None
+    value = str(value).strip()
+    return value or None
+
+
+def transport_snapshot(adapter, bot_id: str, transport=None) -> dict:
+    bot_id = str(bot_id)
+    api_root = configured_api_root(adapter.onebot_config, bot_id)
+    if transport is not None:
+        selected_transport = transport
+    elif getattr(adapter, "connections", {}).get(bot_id):
+        selected_transport = "WebSocket"
+    elif api_root:
+        selected_transport = "HTTP"
+    else:
+        selected_transport = "未配置"
+    return {
+        "bot_id": bot_id,
+        "transport": selected_transport,
+        "api_root": api_root,
+    }
+
+
+def log_transport_snapshot(adapter, bot_id: str, level="info", transport=None) -> None:
+    snapshot = transport_snapshot(adapter, bot_id, transport)
+    api_root = snapshot["api_root"] or "未配置"
+    message = (
+        f"OneBot Bot {snapshot['bot_id']} 传输方式={snapshot['transport']} "
+        f"API 地址={api_root}"
+    )
+    getattr(logger, level)(message)
+
+
+def install_transport_diagnostics(driver) -> None:
+    @driver.on_bot_connect
+    def _on_bot_connect(bot):
+        adapter = getattr(bot, "adapter", None)
+        if adapter is not None:
+            _MISSING_API_ROOT_WARNED.discard(str(bot.self_id))
+            log_transport_snapshot(adapter, bot.self_id, transport="WebSocket")
+
+    @driver.on_bot_disconnect
+    def _on_bot_disconnect(bot):
+        adapter = getattr(bot, "adapter", None)
+        if adapter is not None:
+            log_transport_snapshot(
+                adapter,
+                bot.self_id,
+                "warning",
+                transport="WebSocket 已断开",
+            )
 
 
 @Bot.on_called_api
@@ -515,6 +573,19 @@ class Adapter(BaseAdapter):
     _result_store = SafeResultStore()
 
     async def _call_api(self, bot, api: str, **data):
+        bot_id = str(bot.self_id)
+        if not self.connections.get(bot_id) and not configured_api_root(
+            self.onebot_config, bot_id
+        ):
+            if bot_id not in _MISSING_API_ROOT_WARNED:
+                _MISSING_API_ROOT_WARNED.add(bot_id)
+                logger.error(
+                    f"Bot {bot_id} 的 WebSocket 已断开，且未配置 OneBot HTTP API 地址，"
+                    f"无法调用接口 {api}"
+                )
+            raise NetworkError(
+                f"Bot {bot_id} 的 WebSocket 已断开，未配置 OneBot HTTP API 地址"
+            )
         if not is_cached_query(api):
             if not is_latency_sample_api(api, data):
                 return await super()._call_api(bot, api, **data)

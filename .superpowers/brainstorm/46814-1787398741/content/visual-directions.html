@@ -1,0 +1,77 @@
+<style>
+  :root { --ink: #102238; --muted: #6a7a8d; --line: rgba(255,255,255,.72); --cream: #f7f1e7; --blue: #1d4161; --coral: #f27d69; --gold: #f5c969; --cyan: #86d2d4; }
+  .visual-intro { margin-bottom: 20px; }
+  .visual-intro p { max-width: 920px; }
+  .directions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .direction { overflow: hidden; padding: 0; border: 1px solid #d9d3ca; background: #fffdf9; cursor: pointer; }
+  .direction:hover { border-color: #e18b72; transform: translateY(-2px); }
+  .screen { position: relative; aspect-ratio: 16 / 9; overflow: hidden; color: var(--cream); background: #1b3857; }
+  .screen::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 76% 18%, rgba(255,230,151,.72), transparent 24%), linear-gradient(138deg, #1a3857 0%, #2d7180 47%, #eaa77a 100%); opacity: .92; }
+  .screen::after { content: ''; position: absolute; left: -5%; right: -5%; bottom: -14%; height: 45%; border-radius: 50% 50% 0 0; background: rgba(15,45,68,.52); transform: rotate(-4deg); }
+  .screen > * { position: relative; z-index: 1; }
+  .topline { display: flex; justify-content: space-between; padding: 10px 12px; font-size: 9px; letter-spacing: .04em; }
+  .brand { font-weight: 700; color: #fff2c8; }
+  .pill { display: inline-flex; align-items: center; gap: 4px; padding: 4px 7px; border-radius: 999px; background: rgba(10,28,46,.52); color: #fff; }
+  .route-map { position: absolute; inset: 42px 16px 34px; }
+  .route-map .path { position: absolute; left: 10%; right: 10%; top: 46%; height: 3px; background: #f5c969; box-shadow: 0 0 10px rgba(245,201,105,.75); transform: rotate(-5deg); }
+  .node { position: absolute; width: 23px; height: 23px; border: 3px solid #fff3c2; border-radius: 50%; background: var(--coral); box-shadow: 0 3px 10px rgba(4,23,35,.3); }
+  .node span { position: absolute; top: 28px; left: 50%; width: 72px; transform: translateX(-50%); text-align: center; font-size: 8px; color: #fff; }
+  .node.one { left: 5%; top: 50%; } .node.two { left: 33%; top: 36%; background: var(--cyan); } .node.three { left: 62%; top: 47%; background: var(--gold); } .node.four { right: 4%; top: 28%; background: #fff; }
+  .route-card { position: absolute; left: 12px; right: 12px; bottom: 9px; padding: 8px 10px; border: 1px solid rgba(255,255,255,.5); border-radius: 9px; background: rgba(10,29,47,.76); font-size: 9px; }
+  .route-card strong { display: block; color: #ffe9a9; margin-bottom: 3px; }
+  .combat-ui .portrait { position: absolute; left: 15px; bottom: 36px; width: 88px; height: 122px; border: 2px solid #fff5d0; border-radius: 8px 8px 2px 2px; background: linear-gradient(160deg, #f6c7a9, #c75c5f 48%, #173b5b 49%); box-shadow: 0 4px 14px rgba(0,0,0,.25); }
+  .combat-ui .enemy { position: absolute; right: 24px; top: 56px; width: 130px; height: 130px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #f7bb86 0 12%, #a04d65 13% 36%, #2b2d54 37%); box-shadow: 0 0 0 8px rgba(242,125,105,.24), 0 8px 25px rgba(0,0,0,.3); }
+  .hp { height: 7px; border-radius: 10px; background: rgba(255,255,255,.25); overflow: hidden; }
+  .hp i { display: block; height: 100%; width: 68%; background: var(--coral); }
+  .enemy-hp { position: absolute; right: 20px; top: 35px; width: 150px; }
+  .enemy-hp i { width: 42%; background: var(--gold); }
+  .combat-status { position: absolute; left: 112px; bottom: 104px; width: 150px; font-size: 8px; }
+  .actions { position: absolute; left: 112px; right: 16px; bottom: 42px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
+  .action { min-height: 28px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.7); border-radius: 6px; background: rgba(15,40,60,.78); color: #fff4c8; font-size: 8px; }
+  .dialogue { position: absolute; left: 12px; right: 12px; bottom: 8px; padding: 7px 9px; border: 1px solid rgba(255,255,255,.7); border-radius: 7px; background: rgba(255,250,236,.9); color: var(--ink); font-size: 8px; }
+  .journal-ui::before { background: linear-gradient(150deg, #e8c78e, #9b7f63 52%, #244660); }
+  .journal { position: absolute; left: 28px; right: 28px; top: 45px; bottom: 28px; padding: 16px; border: 1px solid rgba(255,250,235,.86); border-radius: 4px; background: rgba(248,241,224,.94); color: var(--ink); box-shadow: 0 12px 25px rgba(18,35,51,.28); }
+  .journal h4 { margin: 0 0 9px; font-size: 12px; color: #9a4c43; }
+  .journal p { margin: 0 0 8px; font-size: 9px; line-height: 1.55; }
+  .journal .stamp { display: inline-block; margin-top: 10px; padding: 4px 7px; border: 1px solid #d87969; color: #b04b42; font-size: 8px; transform: rotate(-4deg); }
+  .direction-body { padding: 13px 14px 15px; text-align: left; }
+  .direction-body h3 { margin: 0 0 5px; color: var(--ink); }
+  .direction-body p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+  .tag { display: inline-block; margin-top: 10px; padding: 4px 7px; border-radius: 99px; background: #f3e5d5; color: #9b5147; font-size: 10px; }
+  @media (max-width: 900px) { .directions { grid-template-columns: 1fr; } }
+</style>
+
+<div class="visual-intro">
+  <h2>王道征途 · UI 美术革新方向</h2>
+  <p class="subtitle">三种路线都保持明亮日系王道 JRPG 与 16:9 横屏。请比较它们的“游戏 APP 截图感”、信息密度和动态内容承载能力。</p>
+</div>
+
+<div class="directions">
+  <div class="direction" data-choice="game-hud" onclick="toggleSelect(this)">
+    <div class="screen">
+      <div class="topline"><span class="brand">Airi · 王道征途</span><span class="pill">第 01 日　徽记 320</span></div>
+      <div class="route-map"><div class="path"></div><div class="node one"><span>希望号</span></div><div class="node two"><span>晨麦坡</span></div><div class="node three"><span>风车驿道</span></div><div class="node four"><span>星灯路口</span></div></div>
+      <div class="route-card"><strong>今日路线 · 风车驿道</strong>沿着补给留下的路标，稳稳收拢行囊　·　风险 2</div>
+    </div>
+    <div class="direction-body"><h3>A · 完整网游 HUD（推荐）</h3><p>每一帧都像游戏内截图：背景、角色、敌人、资源、状态、按钮、路线和叙事层统一组成。</p><span class="tag">动态信息最完整</span></div>
+  </div>
+
+  <div class="direction" data-choice="scene-first" onclick="toggleSelect(this)">
+    <div class="screen combat-ui">
+      <div class="topline"><span class="brand">星辉山地 · 第 63 日</span><span class="pill">火种 2 / 3</span></div>
+      <div class="enemy-hp"><div class="hp"><i></i></div><small>雾铸兽 · 破绽显现</small></div>
+      <div class="enemy"></div><div class="portrait"></div><div class="combat-status"><div class="hp"><i></i></div><div>先锋　专注 3　守势</div></div>
+      <div class="actions"><div class="action">进击</div><div class="action">战技</div><div class="action">守势</div><div class="action">道具</div><div class="action">协力</div></div>
+      <div class="dialogue"><b>诗旅者</b>　风还没有停。我们再向前一步。</div>
+    </div>
+    <div class="direction-body"><h3>B · 叙事舞台优先</h3><p>重点是氛围和角色对白，HUD 收敛为半透明层，适合伙伴、回忆和日期事件。</p><span class="tag">叙事表现最强</span></div>
+  </div>
+
+  <div class="direction" data-choice="journal-first" onclick="toggleSelect(this)">
+    <div class="screen journal-ui">
+      <div class="topline"><span class="brand">Airi · 远征手账</span><span class="pill">第 126 日</span></div>
+      <div class="journal"><h4>向晨光而行</h4><p>晨雾沿着旧石阶退去，营火旁还留着昨夜的歌。有人把地图重新折好，压在手账的最后一页。</p><p>前方的路没有催促。星灯亮着，便足够继续。</p><span class="stamp">本日远征已记下</span></div>
+    </div>
+    <div class="direction-body"><h3>C · 纪念手账优先</h3><p>每张图像一张精致活动卡，适合日记、投票、结算和纪念册，但战斗信息承载较弱。</p><span class="tag">文学气息最强</span></div>
+  </div>
+</div>
