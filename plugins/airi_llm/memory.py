@@ -1,4 +1,5 @@
 import os
+import re
 import time
 import pickle
 import asyncio
@@ -62,6 +63,8 @@ RETRY_BACKOFF_SECS = 300
 INACTIVE_GROUP_TTL_DAYS = 90
 INACTIVE_USER_TTL_DAYS = 180
 MAX_LOCK_DICT_SIZE = 500
+RETRIEVAL_MAX_CANDIDATES = 24
+RETRIEVAL_MAX_CONTENT_CHARS = 300
 
 SCHEMA_VERSION = 1
 _long_term_load_failed = False
@@ -331,11 +334,101 @@ def replyable_msg_ids(state: Any, gid: str) -> Set[str]:
     return {e.msg_id for e in ctx.entries if e.msg_id and not e.is_self}
 
 
+def _retrieval_terms(text: str) -> Set[str]:
+    terms: Set[str] = set()
+    for token in re.findall(r"[0-9A-Za-z_]+|[\u4e00-\u9fff]{2,}", text.lower()):
+        terms.add(token)
+        if len(token) > 3 and all("\u4e00" <= char <= "\u9fff" for char in token):
+            terms.update(token[index:index + 2] for index in range(len(token) - 1))
+    return terms
+
+
+def _retrieval_candidate(candidate_id: str, source: str, content: str, score: int = 0) -> dict:
+    return {
+        "id": candidate_id,
+        "source": source,
+        "content": str(content).strip()[:RETRIEVAL_MAX_CONTENT_CHARS],
+        "score": score,
+    }
+
+
+def build_retrieval_candidates(
+    state: Any,
+    gid: str,
+    query: str,
+    user_id: str = "",
+) -> List[dict]:
+    ctx = get_ctx(state, gid)
+    query_terms = _retrieval_terms(query)
+    candidates: List[dict] = []
+
+    knowledge_pool = []
+    for entry in ctx.knowledge:
+        searchable = " ".join([entry.content, *(entry.tags or [])])
+        score = len(query_terms & _retrieval_terms(searchable))
+        knowledge_pool.append((score, entry.hit_count, entry.updated_at, entry))
+    knowledge_pool.sort(key=lambda item: (item[0], item[1], item[2]), reverse=True)
+    for score, hit_count, _, entry in knowledge_pool[:8]:
+        candidates.append(_retrieval_candidate(
+            f"knowledge:{entry.entry_id}", "knowledge", entry.content,
+            score + min(hit_count, 3) + 3,
+        ))
+
+    recent_entries = list(ctx.entries)[-12:]
+    recent_user_ids = {entry.user_id for entry in recent_entries if not entry.is_self}
+    for uid, umem in state.long_term.users.items():
+        names = [umem.nickname, umem.card_name, umem.group_alias, umem.notes]
+        searchable = " ".join(str(value or "") for value in names)
+        score = len(query_terms & _retrieval_terms(searchable))
+        if uid == user_id or uid in recent_user_ids or score:
+            content = (
+                f"昵称：{umem.nickname or uid}；群内称呼：{umem.group_alias or '无'}；"
+                f"印象：{umem.notes or '无'}；关系：{_affinity_tag(_decayed_affinity(umem)) or '普通'}"
+            )
+            candidates.append(_retrieval_candidate(f"user_memory:{uid}", "user_memory", content, score + 4))
+
+    group_memory = state.long_term.groups.get(gid)
+    if group_memory and group_memory.summary:
+        score = len(query_terms & _retrieval_terms(group_memory.summary))
+        candidates.append(_retrieval_candidate(f"group_memory:{gid}", "group_memory", group_memory.summary, score + 2))
+    if ctx.rolling_summary:
+        score = len(query_terms & _retrieval_terms(ctx.rolling_summary))
+        candidates.append(_retrieval_candidate(f"rolling_summary:{gid}", "rolling_summary", ctx.rolling_summary, score + 2))
+
+    for index, entry in enumerate(recent_entries):
+        content = f"{entry.nickname}：{entry.content}"
+        score = len(query_terms & _retrieval_terms(content))
+        if entry.msg_id:
+            candidate_id = f"recent_dialogue:{entry.msg_id}"
+        else:
+            candidate_id = f"recent_dialogue:{index}"
+        candidates.append(_retrieval_candidate(candidate_id, "recent_dialogue", content, score + 5 + index))
+
+    if ctx.active_topic:
+        score = len(query_terms & _retrieval_terms(ctx.active_topic))
+        candidates.append(_retrieval_candidate(f"active_topic:{gid}", "active_topic", ctx.active_topic, score + 1))
+    if ctx.speaking_style:
+        candidates.append(_retrieval_candidate(f"speaking_style:{gid}", "speaking_style", ctx.speaking_style, 0))
+    bot_state = "；".join(filter(None, [_bot_mood_desc(ctx.bot_mood), _arousal_desc(ctx.bot_arousal)]))
+    if bot_state:
+        candidates.append(_retrieval_candidate(f"bot_state:{gid}", "bot_state", bot_state, 0))
+    time_state = _time_state_hint()
+    if time_state:
+        candidates.append(_retrieval_candidate("time_state:current", "time_state", time_state, 0))
+
+    candidates = [candidate for candidate in candidates if candidate["content"]]
+    candidates.sort(key=lambda candidate: (candidate["score"], candidate["id"]), reverse=True)
+    for candidate in candidates:
+        candidate.pop("score", None)
+    return candidates[:RETRIEVAL_MAX_CANDIDATES]
+
+
 def render_context(
     state: Any,
     gid: str,
     knowledge_snippets: Optional[List[str]] = None,
     recall_snippet: Optional[str] = None,
+    retrieval_candidates: Optional[List[dict]] = None,
 ) -> str:
     ctx = get_ctx(state, gid)
     entries = list(ctx.entries)
@@ -380,6 +473,14 @@ def render_context(
         background_parts.append(f"较早记录：{ctx.rolling_summary}")
     if knowledge_snippets:
         background_parts.append("相关事实：" + "；".join(knowledge_snippets))
+    if retrieval_candidates:
+        candidate_lines = [
+            f"[{item.get('id')}] {item.get('source')}: {item.get('content')}"
+            for item in retrieval_candidates
+            if item.get("id") and item.get("content")
+        ]
+        if candidate_lines:
+            background_parts.append("候选背景（只在相关时使用）：\n" + "\n".join(candidate_lines))
     if background_parts:
         parts.append(
             "【只读背景，仅在当前消息直接相关时使用】\n"

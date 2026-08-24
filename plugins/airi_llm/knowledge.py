@@ -32,6 +32,27 @@ class KnowledgeEntry:
     hit_count: int = 0
 
 
+def mark_used_context(ctx: "GroupContext", gid: str, state: Any, used_ids: List[str]) -> None:
+    if not used_ids:
+        return
+    wanted = {item for item in used_ids if isinstance(item, str) and item.startswith("knowledge:")}
+    if not wanted:
+        return
+    now = time.time()
+    changed = False
+    for entry in ctx.knowledge:
+        if f"knowledge:{entry.entry_id}" in wanted:
+            entry.hit_count += 1
+            entry.updated_at = now
+            changed = True
+    if changed:
+        dirty = getattr(state, "dirty", None)
+        if not isinstance(dirty, set):
+            dirty = set()
+            state.dirty = dirty
+        dirty.add(gid)
+
+
 def _knowledge_index_summary(entries: List[KnowledgeEntry]) -> str:
     if not entries:
         return ""
@@ -136,7 +157,11 @@ async def retrieve_for_reply(ctx: "GroupContext", gid: str, state: Any, message_
 
     candidates = _tag_prefilter(ctx.knowledge, message_text)
     if not candidates:
-        return []
+        candidates = sorted(
+            ctx.knowledge,
+            key=lambda entry: (entry.hit_count, entry.updated_at),
+            reverse=True,
+        )[:KNOWLEDGE_RETRIEVE_TOP_K]
 
     now = time.time()
     if len(candidates) <= 2:

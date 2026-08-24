@@ -52,6 +52,51 @@ async def call_llm_json(
     return await llm.call_structured(system_prompt, user_input, img_b64_list)
 
 
+def normalize_dialogue_result(result: Any) -> Optional[dict]:
+    if not isinstance(result, dict) or not isinstance(result.get("addressed"), bool):
+        return None
+    addressed_reply = result.get("addressed_reply")
+    passive_reply = result.get("passive_reply")
+    if not isinstance(addressed_reply, str) or not isinstance(passive_reply, str):
+        return None
+
+    def normalize_reply_to(value: Any) -> Optional[str]:
+        if value is None:
+            return ""
+        if isinstance(value, int) and not isinstance(value, bool):
+            return str(value)
+        if isinstance(value, str):
+            return value.strip()
+        return None
+
+    addressed_reply_to = normalize_reply_to(result.get("addressed_reply_to", ""))
+    passive_reply_to = normalize_reply_to(result.get("passive_reply_to", ""))
+    if addressed_reply_to is None or passive_reply_to is None:
+        return None
+    used_context = result.get("used_context", [])
+    if not isinstance(used_context, list):
+        return None
+    if any(not isinstance(item, str) for item in used_context):
+        return None
+    return {
+        "addressed": result["addressed"],
+        "addressed_reply": addressed_reply.strip()[:1000],
+        "addressed_reply_to": addressed_reply_to,
+        "passive_reply": passive_reply.strip()[:1000],
+        "passive_reply_to": passive_reply_to,
+        "used_context": [item.strip() for item in used_context if item.strip()],
+    }
+
+
+async def generate_dialogue(
+    system_prompt: str,
+    user_input: str,
+    img_b64_list: Optional[List[str]] = None,
+) -> Optional[dict]:
+    result = await call_llm_json(system_prompt, user_input, img_b64_list)
+    return normalize_dialogue_result(result)
+
+
 def _loads_lenient(text: str) -> Optional[Any]:
     return llm.loads_lenient(text)
 

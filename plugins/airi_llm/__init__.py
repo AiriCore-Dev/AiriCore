@@ -5,7 +5,8 @@ import random
 import base64
 import asyncio
 import traceback
-from typing import Dict, List, Optional, Any, Set
+from dataclasses import dataclass
+from typing import Dict, List, Optional, Any, Set, Tuple
 
 import nonebot
 from utils import cache as asset_cache
@@ -27,7 +28,7 @@ from nonebot.adapters.onebot.v11 import (
 
 from . import memory
 from . import llm_client
-from .llm_client import call_llm
+from . import knowledge
 
 driver = get_driver()
 from utils.observability import get_logger
@@ -43,7 +44,7 @@ NEGATIVE_SPEAK_TOKENS_INIT = 50
 NEGATIVE_SPEAK_TOKENS_DEDUCT = 5
 ADDRESSED_TOKENS_BONUS = 2
 
-BASE_SPEAK_PROB = 1 / 200
+BASE_SPEAK_PROB = 1 / 120
 REPLY_MENTION_PROB = 0.4
 ADDRESSED_PROB = 0.9
 HARD_COOLDOWN_SECS = 25
@@ -80,6 +81,7 @@ TYPING_CHARS_PER_SEC_BASE = 3.5
 TYPING_CHARS_PER_SEC_JITTER = 1.2
 TYPING_MAX_SECS = 18.0
 TYPING_MIN_SECS = 1.8
+MESSAGE_BATCH_WAIT_SECS = 10.0
 
 PROJECT_DIR = os.path.dirname(__file__)
 ROLE_SETUP_FILE = os.path.join(PROJECT_DIR, "prompt.md")
@@ -219,6 +221,21 @@ class AiriState:
             json.dump(self.emoji_moods, f, ensure_ascii=False, indent=2)
 
 
+@dataclass
+class PendingMessage:
+    group_id: str
+    user_id: str
+    bot: Bot
+    event: MessageEvent
+    content: str
+    msg_id: str
+    reply_to_id: Optional[str]
+    nickname: str
+    qq_nickname: str
+    message: Any
+    ts: float
+
+
 airi_state = AiriState()
 try:
     airi_state.flush_prompt()
@@ -240,6 +257,7 @@ async def _on_startup() -> None:
 @driver.on_shutdown
 async def _on_shutdown() -> None:
     try:
+        await _cancel_pending_batches()
         await memory.save_all(airi_state)
     except Exception as e:
         logger.error(f"关闭时保存记忆失败: {e}")
@@ -455,22 +473,23 @@ def _was_addressed(bot: Bot, ev: MessageEvent, msg_text: str) -> bool:
     return any([
         _at_self(ev, bot.self_id),
         _reply_to_self(ev, bot.self_id),
-        _alias_mentioned(msg_text),
         msg_text.startswith("."),
     ])
 
 
-async def decide_speak(bot: Bot, ev: MessageEvent, group_id: str, user_id: str) -> bool:
-    tokens = airi_state.negative_speaking_tokens.get(group_id, 0)
-    msg_text = str(ev.message)
-    dot_prefixed = msg_text.startswith(".")
-    if dot_prefixed and user_id in SUPERUSERS:
-        return True
-    dot_triggered = dot_prefixed and tokens > 0
+def _effective_addressed(model_addressed: bool, explicit_addressed: bool) -> bool:
+    return bool(model_addressed or explicit_addressed)
 
-    directly_addressed = _at_self(ev, bot.self_id) or _reply_to_self(ev, bot.self_id)
-    alias_triggered = _alias_mentioned(msg_text) and tokens > 0
-    addressed = directly_addressed or alias_triggered or dot_triggered
+
+def _is_superuser_dot_batch(batch: List[PendingMessage]) -> bool:
+    return any(
+        item.user_id in SUPERUSERS and str(item.event.message).lstrip().startswith(".")
+        for item in batch
+    )
+
+
+async def decide_speak(bot: Bot, group_id: str, user_id: str, addressed: bool) -> bool:
+    tokens = airi_state.negative_speaking_tokens.get(group_id, 0)
 
     now = time.time()
     last_speak = airi_state.last_speak_time_group.get(group_id, 0)
@@ -534,6 +553,49 @@ def _spawn(coro, label: str) -> None:
     task.add_done_callback(_done)
 
 
+_pending_batches: Dict[Tuple[str, str], List[PendingMessage]] = {}
+_pending_batch_tasks: Dict[Tuple[str, str], asyncio.Task] = {}
+
+
+async def _wait_and_process_batch(key: Tuple[str, str]) -> None:
+    try:
+        await asyncio.sleep(MESSAGE_BATCH_WAIT_SECS)
+        batch = _pending_batches.pop(key, [])
+        current = asyncio.current_task()
+        if _pending_batch_tasks.get(key) is current:
+            _pending_batch_tasks.pop(key, None)
+        if batch:
+            await _process_message_batch(batch)
+    except asyncio.CancelledError:
+        return
+    except Exception as e:
+        logger.warning(f"消息批次处理失败: {e}")
+    finally:
+        current = asyncio.current_task()
+        if _pending_batch_tasks.get(key) is current:
+            _pending_batch_tasks.pop(key, None)
+
+
+def _queue_message(message: PendingMessage) -> None:
+    key = (message.group_id, message.user_id)
+    _pending_batches.setdefault(key, []).append(message)
+    old_task = _pending_batch_tasks.get(key)
+    if old_task is not None:
+        old_task.cancel()
+    task = asyncio.create_task(_wait_and_process_batch(key))
+    _pending_batch_tasks[key] = task
+
+
+async def _cancel_pending_batches() -> None:
+    tasks = list(_pending_batch_tasks.values())
+    _pending_batch_tasks.clear()
+    _pending_batches.clear()
+    for task in tasks:
+        task.cancel()
+    if tasks:
+        await asyncio.gather(*tasks, return_exceptions=True)
+
+
 REPLY_MARK_RE = re.compile(r"[\[［]\s*(?:回复|reply)\s*[:：]\s*(\d{1,20})\s*[\]］]",
                            re.IGNORECASE)
 
@@ -550,6 +612,24 @@ def _extract_reply_target(text: str, valid_ids: Set[str]) -> tuple:
     return cleaned, picked
 
 
+def _select_dialogue_candidate(
+    result: dict, addressed: bool, valid_ids: Set[str]
+) -> tuple:
+    mode = "addressed" if addressed else "passive"
+    reply_key = f"{mode}_reply"
+    target_key = f"{mode}_reply_to"
+    reply = result.get(reply_key, "")
+    if not isinstance(reply, str):
+        return "", None, mode
+    requested_id = result.get(target_key, "")
+    if not isinstance(requested_id, str) or requested_id not in valid_ids:
+        requested_id = None
+    reply, picked_id = _extract_reply_target(reply, valid_ids)
+    if not reply:
+        return "", None, mode
+    return reply, requested_id or picked_id, mode
+
+
 async def send_llm_reply(msg_content: str, reply_to_msg_id: Optional[str] = None,
                          bot: Optional[Bot] = None, group_id: Optional[str] = None) -> None:
     async def _out(payload) -> None:
@@ -558,13 +638,13 @@ async def send_llm_reply(msg_content: str, reply_to_msg_id: Optional[str] = None
         else:
             await airi_llm.send(payload)
 
-    punct_pattern = re.compile(r"[，。！？；：～]+")
+    punct_pattern = re.compile(r"[，。！？；：～,.!?;:~]+")
     msg_segments: list = []
     last_end = 0
     for m in punct_pattern.finditer(msg_content):
         body = msg_content[last_end:m.start()].strip()
         last_end = m.end()
-        keep = "".join(c for c in m.group(0) if c in "！？")
+        keep = "".join(c for c in m.group(0) if c in "！？!?～~")
         if body:
             msg_segments.append(body + keep)
         elif keep and msg_segments:
@@ -668,16 +748,31 @@ async def passive_speaking(bot: Bot, group_id: str, mode: int = 1) -> None:
         reply = None
         reply_to_msg_id = None
         async with lock:
-            llm_input = memory.render_context(airi_state, group_id)
+            candidates = memory.build_retrieval_candidates(airi_state, group_id, "")
+            llm_input = memory.render_context(
+                airi_state, group_id, retrieval_candidates=candidates
+            )
             valid_reply_ids = memory.replyable_msg_ids(airi_state, group_id)
-            reply = await call_llm(airi_state.role_setup, llm_input, [])
+            result = await llm_client.generate_dialogue(
+                _passive_system_prompt(), llm_input, []
+            )
+            if result is None:
+                return
+
+            reply = result["passive_reply"]
+            requested_id = result["passive_reply_to"]
+            if requested_id in valid_reply_ids:
+                reply_to_msg_id = requested_id
+            reply, picked_id = _extract_reply_target(reply, valid_reply_ids)
+            if picked_id:
+                reply_to_msg_id = picked_id
             if not reply:
                 return
 
-            reply, reply_to_msg_id = _extract_reply_target(reply, valid_reply_ids)
-            if not reply:
-                return
-
+            knowledge.mark_used_context(
+                memory.get_ctx(airi_state, group_id), group_id,
+                airi_state, result["used_context"],
+            )
             reply = _strip_chinese_parentheticals(reply)
             memory.save_context_entry(
                 airi_state, group_id,
@@ -747,6 +842,161 @@ async def handle_emoji_build(bot: Bot, ev: MessageEvent):
     await emoji_build.finish(f"表情情绪档案完成：本次成功 {done} 个，共 {len(airi_state.emoji_moods)} 条")
 
 
+def _batch_input(batch: List[PendingMessage], context: str) -> str:
+    lines = []
+    for item in batch:
+        markers = []
+        if _at_self(item.event, item.bot.self_id):
+            markers.append("直接@你")
+        if _reply_to_self(item.event, item.bot.self_id):
+            markers.append("回复你的消息")
+        if str(item.event.message).lstrip().startswith("."):
+            markers.append("点号触发")
+        marker = f"（{'、'.join(markers)}）" if markers else ""
+        lines.append(f"[{item.msg_id}] {item.nickname}（{item.user_id}）{marker}：{item.content}")
+    return "【当前待处理消息批次】\n" + "\n".join(lines) + "\n\n" + context
+
+
+def _dialogue_system_prompt() -> str:
+    return airi_state.role_setup + (
+        "\n\n【内部对话协议】\n"
+        "你需要结合当前待处理消息批次和最近群聊，判断这些话是不是在对你说，并同时准备两种候选回复。"
+        "直接@你、回复你的消息、自然承接你刚才的话是受话线索；只提到你的名字、转述你、讨论你的身份或角色，不等于在对你说。"
+        "当 addressed=true 时，addressed_reply 必须针对当前批次中实际指向你的具体内容、问题或情绪直接回复；"
+        "当 addressed=false 时，passive_reply 必须像主动插话一样，从近期对话里挑一个具体内容自然带过，"
+        "不得回答、不得复述、不得确认当前待处理消息，也不得假装对方是在和你说话；没有自然插话点时 passive_reply 留空。"
+        "两种候选都要根据当前上下文自然生成，但程序只会选择最终受话状态对应的那一种。"
+        "请同时判断背景候选是否真的与当前内容有关。"
+        "严格只返回 JSON，不要返回 Markdown 或解释："
+        '{"addressed": true, "addressed_reply": "受话时的直接回复正文", '
+        '"addressed_reply_to": "受话时要引用的消息ID或空字符串", '
+        '"passive_reply": "未受话时的主动插话正文或空字符串", '
+        '"passive_reply_to": "主动插话要引用的消息ID或空字符串", '
+        '"used_context": ["实际使用的候选ID"]}。addressed 必须是布尔值。'
+        "两个 reply_to 只能填写最近群聊表中的非你消息ID；没有必要引用时留空。"
+        "used_context 只能填写候选背景中出现的ID。"
+    )
+
+
+def _passive_system_prompt() -> str:
+    return airi_state.role_setup + (
+        "\n\n【主动插话协议】\n"
+        "这是一次主动插话，不需要判断是否有人在对你说话。请从最近群聊中挑一个具体内容自然接话，"
+        "严格只返回 JSON：{\"addressed\": false, \"addressed_reply\": \"\", "
+        "\"addressed_reply_to\": \"\", \"passive_reply\": \"主动插话正文\", "
+        "\"passive_reply_to\": \"要引用的消息ID或空字符串\", "
+        "\"used_context\": [\"实际使用的候选ID\"]}。"
+        "passive_reply_to 只能填写最近群聊表中的非你消息ID；used_context 只能填写候选背景中的ID。"
+    )
+
+
+async def _process_message_batch(batch: List[PendingMessage]) -> None:
+    if not batch:
+        return
+    first = batch[0]
+    bot = first.bot
+    group_id = first.group_id
+    user_id = first.user_id
+    live = nonebot.get_bots().get(str(bot.self_id))
+    if live is None:
+        logger.warning(f"处理消息批次时 bot {bot.self_id} 已断线")
+        return
+
+    explicit_addressed = any(
+        _was_addressed(bot, item.event, str(item.event.message)) for item in batch
+    )
+    combined_content = "\n".join(item.content for item in batch if item.content).strip()
+    due_mention = _peek_due_missed_mention(airi_state, group_id)
+    lock = memory._get_lock(airi_state, group_id)
+    if lock.locked():
+        if explicit_addressed and combined_content:
+            _maybe_save_missed_mention(airi_state, group_id, user_id, combined_content,
+                                       first.nickname, force=True)
+        return
+
+    reply = None
+    reply_to_msg_id = None
+    async with lock:
+        if airi_state.negative_speaking_tokens.get(group_id, 0) == 0:
+            airi_state.negative_speaking_tokens[group_id] = NEGATIVE_SPEAK_TOKENS_INIT
+
+        ctx = memory.get_ctx(airi_state, group_id)
+        candidates = memory.build_retrieval_candidates(
+            airi_state, group_id, combined_content, user_id
+        )
+        recall_snippet = None
+        if due_mention is not None:
+            recall_snippet = (
+                f"{due_mention.get('nickname') or due_mention['uid']}"
+                f"[{due_mention['uid']}]：{due_mention['snippet']}"
+            )
+        llm_input = memory.render_context(
+            airi_state, group_id, recall_snippet=recall_snippet,
+            retrieval_candidates=candidates,
+        )
+        llm_input = _batch_input(batch, llm_input)
+        images = []
+        for item in batch:
+            if len(images) >= MAX_IMAGES_PER_MSG:
+                break
+            images.extend(await get_image_base64_list(item.message))
+        images = images[:MAX_IMAGES_PER_MSG]
+        result = await llm_client.generate_dialogue(
+            _dialogue_system_prompt(), llm_input, images
+        )
+        if result is None:
+            logger.warning(
+                f"群 {group_id} 的结构化对话结果无效，本轮不发言（显式受话={explicit_addressed}）"
+            )
+            return
+
+        if due_mention is not None:
+            _drop_missed_mention(airi_state, due_mention)
+
+        effective_addressed = _effective_addressed(
+            result["addressed"], explicit_addressed or due_mention is not None
+        )
+        force_superuser_dot = _is_superuser_dot_batch(batch)
+        should_speak = (
+            force_superuser_dot
+            or due_mention is not None
+            or await decide_speak(bot, group_id, user_id, effective_addressed)
+        )
+        if not should_speak:
+            if explicit_addressed and combined_content:
+                _maybe_save_missed_mention(airi_state, group_id, user_id, combined_content,
+                                           first.nickname)
+            return
+
+        valid_reply_ids = memory.replyable_msg_ids(airi_state, group_id)
+        reply, reply_to_msg_id, selected_mode = _select_dialogue_candidate(
+            result, effective_addressed, valid_reply_ids
+        )
+        logger.info(
+            f"群 {group_id} 批次受话判断：模型={result['addressed']}，"
+            f"最终={effective_addressed}，显式={explicit_addressed}，"
+            f"superuser点号={force_superuser_dot}，候选={selected_mode}，"
+            f"回复={'有' if reply else '空'}"
+        )
+        if not reply:
+            return
+
+        knowledge.mark_used_context(ctx, group_id, airi_state, result["used_context"])
+        reply = _strip_chinese_parentheticals(reply)
+        memory.save_context_entry(
+            airi_state, group_id,
+            memory.ContextEntry(ts=time.time(), user_id=bot.self_id,
+                                nickname="（我）", content=reply, is_self=True),
+        )
+        airi_state.last_speak_time_group[group_id] = time.time()
+
+    try:
+        async with _get_send_lock(group_id):
+            await send_llm_reply(reply, reply_to_msg_id, bot=live, group_id=group_id)
+    except Exception as e:
+        logger.warning(f"回复发送失败: {e}")
+
+
 @airi_llm.handle()
 async def handle_airi_llm(bot: Bot, ev: MessageEvent):
     try:
@@ -808,73 +1058,19 @@ async def handle_airi_llm(bot: Bot, ev: MessageEvent):
 
         if is_sibling_bot:
             return
-
-        msg_text = str(ev.message)
-        was_addressed = _was_addressed(bot, ev, msg_text)
-
-        due_mention = _peek_due_missed_mention(airi_state, group_id)
-        force_speak = due_mention is not None
-
-        if not force_speak and not await decide_speak(bot, ev, group_id, user_id):
-            if was_addressed and content:
-                _maybe_save_missed_mention(airi_state, group_id, user_id, content, user_nick)
-            return
-
-        img_b64_list = await get_image_base64_list(ev.get_message())
-
-        lock = memory._get_lock(airi_state, group_id)
-        if lock.locked():
-            if was_addressed and content:
-                _maybe_save_missed_mention(airi_state, group_id, user_id, content,
-                                           user_nick, force=True)
-            return
-        llm_reply = None
-        reply_to_msg_id = None
-        async with lock:
-            if airi_state.negative_speaking_tokens.get(group_id, 0) == 0:
-                airi_state.negative_speaking_tokens[group_id] = NEGATIVE_SPEAK_TOKENS_INIT
-
-            need_reply = random.random() < REPLY_MENTION_PROB
-            valid_reply_ids = memory.replyable_msg_ids(airi_state, group_id)
-
-            knowledge_snippets = await memory.retrieve_knowledge(airi_state, group_id, content or "")
-            recall_snippet = None
-            if due_mention is not None:
-                recall_snippet = (
-                    f"{due_mention.get('nickname') or due_mention['uid']}"
-                    f"[{due_mention['uid']}]：{due_mention['snippet']}"
-                )
-            llm_input = memory.render_context(airi_state, group_id, knowledge_snippets,
-                                              recall_snippet)
-            if due_mention is not None:
-                _drop_missed_mention(airi_state, due_mention)
-            llm_reply = await call_llm(airi_state.role_setup, llm_input, img_b64_list)
-            if not llm_reply:
-                logger.warning(f"群 {group_id} 的 LLM 回复为空，本轮不发言")
-                return
-
-            llm_reply, picked_id = _extract_reply_target(llm_reply, valid_reply_ids)
-            if not llm_reply:
-                logger.warning(f"群 {group_id} 的 LLM 回复只有引用标记，本轮不发言")
-                return
-            if picked_id:
-                reply_to_msg_id = picked_id
-            elif need_reply:
-                reply_to_msg_id = msg_id
-
-            llm_reply = _strip_chinese_parentheticals(llm_reply)
-            memory.save_context_entry(
-                airi_state, group_id,
-                memory.ContextEntry(ts=time.time(), user_id=bot.self_id,
-                                    nickname="（我）", content=llm_reply, is_self=True),
-            )
-            airi_state.last_speak_time_group[group_id] = time.time()
-
-        try:
-            async with _get_send_lock(group_id):
-                await send_llm_reply(llm_reply, reply_to_msg_id)
-        except Exception as e:
-            logger.warning(f"回复发送失败: {e}")
+        _queue_message(PendingMessage(
+            group_id=group_id,
+            user_id=uid_str,
+            bot=bot,
+            event=ev,
+            content=content,
+            msg_id=msg_id,
+            reply_to_id=reply_to_id,
+            nickname=user_nick,
+            qq_nickname=qq_nickname,
+            message=ev.get_message(),
+            ts=time.time(),
+        ))
 
     except Exception as err:
         logger.error(f"消息处理失败: {err}\n{traceback.format_exc()}")
