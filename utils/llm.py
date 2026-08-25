@@ -55,6 +55,7 @@ SOURCE_ORDER = (
 UTC_PLUS_8 = timezone(timedelta(hours=8))
 _DATA_DIR = Path(__file__).resolve().parents[1] / "data" / "airi_llm"
 _STATS_FILE = _DATA_DIR / "usage_stats.pk"
+_BUDGET_FILE = _DATA_DIR / "daily_budget.pk"
 _FLUSH_INTERVAL = 15.0
 _usage_lock = threading.Lock()
 _stats: dict[str, dict[str, dict[str, int]]] = {}
@@ -62,6 +63,15 @@ _last_flush = 0.0
 _dirty = False
 _writer_stop = threading.Event()
 _writer_thread: threading.Thread | None = None
+
+DAILY_CALL_BUDGET = 900
+DAILY_SOURCE_BUDGETS = {
+    SOURCE_CHAT: 650,
+    SOURCE_MECHANISM: 250,
+}
+_budget_day = ""
+_budget_reserved: dict[str, int] = {}
+_budget_warned: set[tuple[str, str]] = set()
 
 CHAT_MAX_TOKENS = 8000
 CHAT_TEMPERATURE = 1.0
@@ -517,6 +527,72 @@ def _today() -> str:
     return datetime.now(UTC_PLUS_8).strftime("%Y-%m-%d")
 
 
+def _write_budget_unlocked() -> None:
+    _BUDGET_FILE.parent.mkdir(parents=True, exist_ok=True)
+    temporary = _BUDGET_FILE.with_suffix(_BUDGET_FILE.suffix + ".tmp")
+    with temporary.open("wb") as stream:
+        pickle.dump(
+            {"day": _budget_day, "reserved": dict(_budget_reserved)},
+            stream,
+            protocol=pickle.HIGHEST_PROTOCOL,
+        )
+    temporary.replace(_BUDGET_FILE)
+
+
+def _load_budget_unlocked(today: str) -> None:
+    global _budget_day, _budget_reserved
+    if _budget_day == today:
+        return
+    loaded_day = ""
+    loaded_reserved: dict[str, int] = {}
+    try:
+        if _BUDGET_FILE.is_file():
+            with _BUDGET_FILE.open("rb") as stream:
+                loaded = pickle.load(stream)
+            if isinstance(loaded, dict):
+                loaded_day = str(loaded.get("day", ""))
+                raw_reserved = loaded.get("reserved", {})
+                if isinstance(raw_reserved, dict):
+                    loaded_reserved = {
+                        str(source): max(0, int(count))
+                        for source, count in raw_reserved.items()
+                        if str(source) in DAILY_SOURCE_BUDGETS
+                    }
+    except Exception as exc:
+        logger.warning("LLM 每日预算读取失败，重新开始计数: %s", exc)
+    _budget_day = today
+    _budget_reserved = loaded_reserved if loaded_day == today else {}
+    if loaded_day != today:
+        try:
+            _write_budget_unlocked()
+        except Exception as exc:
+            logger.warning("LLM 每日预算初始化失败: %s", exc)
+
+
+def reserve_call(source: str) -> bool:
+    if source not in DAILY_SOURCE_BUDGETS:
+        return True
+    today = _today()
+    with _usage_lock:
+        _load_budget_unlocked(today)
+        total = sum(_budget_reserved.values())
+        source_count = _budget_reserved.get(source, 0)
+        if total >= DAILY_CALL_BUDGET or source_count >= DAILY_SOURCE_BUDGETS[source]:
+            marker = (today, source)
+            if marker not in _budget_warned:
+                _budget_warned.add(marker)
+                logger.warning("LLM 每日预算已耗尽，跳过来源：%s", source)
+            return False
+        _budget_reserved[source] = source_count + 1
+        try:
+            _write_budget_unlocked()
+        except Exception as exc:
+            _budget_reserved[source] = source_count
+            logger.warning("LLM 每日预算写入失败，拒绝本次调用：%s", exc)
+            return False
+        return True
+
+
 def _usage_snapshot_unlocked() -> dict[str, dict[str, dict[str, int]]]:
     snapshot: dict[str, dict[str, dict[str, int]]] = {}
     for day, sources in _stats.items():
@@ -670,6 +746,8 @@ async def call_chat(
         primary = profile.chat_model if img_b64_list else profile.chat_text_model
         chain = build_chain(primary, profile.chat_fallback, generation=generation.sequence)
         for index, model in enumerate(chain):
+            if not reserve_call(SOURCE_CHAT):
+                return ""
             try:
                 completion = await generation.client.chat.completions.create(
                     model=model,
@@ -732,6 +810,8 @@ async def _create_structured(
     use_response_format: bool,
     usage_source: str,
 ) -> str | None:
+    if not reserve_call(usage_source):
+        return None
     kwargs: dict[str, Any] = {
         "model": model,
         "messages": messages,

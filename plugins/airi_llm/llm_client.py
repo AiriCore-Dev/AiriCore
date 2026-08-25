@@ -254,6 +254,34 @@ async def analyze_mood_and_topic(convo_text: str) -> Optional[dict]:
     return None
 
 
+async def analyze_group_state(convo_text: str) -> Optional[dict]:
+    if not convo_text.strip():
+        return None
+    system_prompt = (
+        "你是群聊状态分析器。阅读最近群聊，同时完成四项判断：\n"
+        "1. 群聊整体情绪 mood；2. 当前核心话题 topic；"
+        "3. Airi 的心情 bot_mood；4. Airi 的精力和话欲 arousal。\n"
+        "所有数值范围均为 -1 到 1，topic 不超过15字，没有明确话题则为空。"
+        '严格返回 JSON：{"mood": 数值, "topic": "话题或空字符串", '
+        '"bot_mood": 数值, "arousal": 数值}。只返回 JSON。'
+    )
+    result = await call_llm_json(system_prompt, f"【最近群聊】\n{convo_text}")
+    if not isinstance(result, dict):
+        return None
+    mood = _clamp_valence(result.get("mood"))
+    bot_mood = _clamp_valence(result.get("bot_mood"))
+    arousal = _clamp_valence(result.get("arousal"))
+    topic = str(result.get("topic", "")).strip()[:30]
+    if mood is None and bot_mood is None and arousal is None and not topic:
+        return None
+    return {
+        "mood": mood,
+        "topic": topic,
+        "bot_mood": bot_mood,
+        "arousal": arousal,
+    }
+
+
 async def analyze_user_full(
     user_lines: str,
     full_convo: str,
@@ -282,3 +310,48 @@ async def analyze_user_full(
     if isinstance(result, dict):
         return result
     return None
+
+
+async def analyze_group_memory(
+    convo_text: str,
+    existing_group_summary: str,
+    users: List[dict],
+    char_name: str = "角色",
+) -> Optional[dict]:
+    if not convo_text.strip():
+        return None
+    system_prompt = (
+        f"你是{char_name}的长期记忆整理器，一次完成群印象和群友印象更新。"
+        "群印象保留常聊话题、氛围、常客和群内梗；群友印象保留性格、喜好和关系。"
+        "没有新信息时保留原内容，不要编造。alias 只记录群里实际使用的特殊称呼，"
+        "affinity_delta 范围为 -0.5 到 0.5，普通互动接近0。"
+        f"群印象不超过{200}字，群友 notes 不超过{120}字。"
+        '严格返回 JSON：{"group_summary": "...", "users": [{'
+        '"user_id": "...", "notes": "...", "alias": "", "affinity_delta": 数值'
+        '}]}。只返回 JSON。'
+    )
+    user_lines = []
+    for user in users:
+        user_lines.append(
+            f"【用户】{user.get('user_id', '')} {user.get('display', '')}\n"
+            f"【已有印象】{user.get('existing_notes', '') or '（无）'}\n"
+            f"【已知称呼】{user.get('existing_alias', '') or '（未知）'}\n"
+            f"【TA的发言】\n{user.get('user_lines', '')}"
+        )
+    user_block = "\n\n".join(user_lines) or "（无）"
+    user_input = (
+        f"【已有群印象】\n{existing_group_summary or '（无）'}\n\n"
+        f"【群友分析对象】\n{user_block}\n\n"
+        f"【最近对话】\n{convo_text}"
+    )
+    result = await call_llm_json(system_prompt, user_input)
+    if not isinstance(result, dict):
+        return None
+    group_summary = str(result.get("group_summary", "")).strip()
+    raw_users = result.get("users", [])
+    if not isinstance(raw_users, list):
+        raw_users = []
+    return {
+        "group_summary": group_summary[:200],
+        "users": [item for item in raw_users if isinstance(item, dict)],
+    }

@@ -58,6 +58,7 @@ MAX_UNADDRESSED_PROB = 0.15
 PASSIVE_SPEAK_DELAY_RANGE = (301, 7200)
 PASSIVE_SPEAK_TRIGGER_PROB = 1 / 400
 PASSIVE_SPEAK_MIN_GAP = 300
+AMBIENT_DIALOGUE_PROBE_PROB = 1 / 8
 
 EMOJI_RANDOM_PROB = 1 / 10
 FINAL_EMOJI_PROB = 1 / 5
@@ -276,7 +277,7 @@ async def _cleanup_job() -> None:
 
 
 timings.add_job(_flush_job, "interval", minutes=2, misfire_grace_time=600, coalesce=True)
-timings.add_job(_extraction_job, "interval", minutes=450, misfire_grace_time=600, coalesce=True)
+timings.add_job(_extraction_job, "interval", hours=12, misfire_grace_time=600, coalesce=True)
 timings.add_job(_cleanup_job, "interval", hours=6, misfire_grace_time=600, coalesce=True)
 
 
@@ -477,6 +478,24 @@ def _was_addressed(bot: Bot, ev: MessageEvent, msg_text: str) -> bool:
     ])
 
 
+def _should_probe_dialogue(
+    bot: Bot,
+    group_id: str,
+    msg_text: str,
+    ev: MessageEvent,
+) -> bool:
+    if _was_addressed(bot, ev, msg_text):
+        return True
+    if _alias_mentioned(msg_text):
+        tokens = airi_state.negative_speaking_tokens.get(group_id, 0)
+        if tokens > 0:
+            return True
+    last_speak = airi_state.last_speak_time_group.get(group_id, 0)
+    if last_speak and time.time() - last_speak < MOMENTUM_WINDOW_SECS:
+        return True
+    return random.random() < AMBIENT_DIALOGUE_PROBE_PROB
+
+
 def _effective_addressed(model_addressed: bool, explicit_addressed: bool) -> bool:
     return bool(model_addressed or explicit_addressed)
 
@@ -553,11 +572,11 @@ def _spawn(coro, label: str) -> None:
     task.add_done_callback(_done)
 
 
-_pending_batches: Dict[Tuple[str, str], List[PendingMessage]] = {}
-_pending_batch_tasks: Dict[Tuple[str, str], asyncio.Task] = {}
+_pending_batches: Dict[str, List[PendingMessage]] = {}
+_pending_batch_tasks: Dict[str, asyncio.Task] = {}
 
 
-async def _wait_and_process_batch(key: Tuple[str, str]) -> None:
+async def _wait_and_process_batch(key: str) -> None:
     try:
         await asyncio.sleep(MESSAGE_BATCH_WAIT_SECS)
         batch = _pending_batches.pop(key, [])
@@ -577,7 +596,7 @@ async def _wait_and_process_batch(key: Tuple[str, str]) -> None:
 
 
 def _queue_message(message: PendingMessage) -> None:
-    key = (message.group_id, message.user_id)
+    key = message.group_id
     _pending_batches.setdefault(key, []).append(message)
     old_task = _pending_batch_tasks.get(key)
     if old_task is not None:
@@ -598,6 +617,13 @@ async def _cancel_pending_batches() -> None:
 
 REPLY_MARK_RE = re.compile(r"[\[［]\s*(?:回复|reply)\s*[:：]\s*(\d{1,20})\s*[\]］]",
                            re.IGNORECASE)
+
+
+def _batch_user_id(batch: List[PendingMessage]) -> str:
+    for item in batch:
+        if _was_addressed(item.bot, item.event, str(item.event.message)):
+            return item.user_id
+    return batch[-1].user_id
 
 
 def _extract_reply_target(text: str, valid_ids: Set[str]) -> tuple:
@@ -896,7 +922,7 @@ async def _process_message_batch(batch: List[PendingMessage]) -> None:
     first = batch[0]
     bot = first.bot
     group_id = first.group_id
-    user_id = first.user_id
+    user_id = _batch_user_id(batch)
     live = nonebot.get_bots().get(str(bot.self_id))
     if live is None:
         logger.warning(f"处理消息批次时 bot {bot.self_id} 已断线")
@@ -1051,12 +1077,18 @@ async def handle_airi_llm(bot: Bot, ev: MessageEvent):
             _spawn(passive_speaking(bot, group_id, 1), "passive_speaking")
 
         _spawn(memory.maybe_distill(airi_state, group_id), "distill")
-        _spawn(memory.maybe_refresh_mood_and_topic(airi_state, group_id), "mood_topic")
+        _spawn(memory.maybe_refresh_group_state(airi_state, group_id), "group_state")
         _spawn(memory.maybe_refresh_speaking_style(airi_state, group_id), "speaking_style")
-        _spawn(memory.maybe_refresh_bot_state(airi_state, group_id), "bot_state")
         _spawn(memory.maybe_extract_knowledge(airi_state, group_id), "extract_knowledge")
 
         if is_sibling_bot:
+            return
+        if not _should_probe_dialogue(
+            bot,
+            group_id,
+            str(ev.message),
+            ev,
+        ):
             return
         _queue_message(PendingMessage(
             group_id=group_id,

@@ -28,7 +28,7 @@ DISTILL_MIN_NEW = RAW_CONTEXT_MAX
 DISTILL_KEEP_RECENT = 15
 ROLLING_SUMMARY_MAX_CHARS = 150
 
-MIN_ENTRIES_FOR_EXTRACTION = 12
+MIN_ENTRIES_FOR_EXTRACTION = 30
 ACTIVE_WINDOW_SECS = 2 * 3600
 EXTRACTION_TOP_USERS = 5
 USER_MIN_LINES = 3
@@ -59,6 +59,10 @@ AFFINITY_DECAY_DAYS = 14
 AFFINITY_DECAY_PER_DAY = 0.04
 
 RETRY_BACKOFF_SECS = 300
+
+GROUP_STATE_TTL_SECS = 6 * 3600
+GROUP_STATE_MIN_ENTRIES = 5
+GROUP_STATE_ANALYZE_ENTRIES = 15
 
 INACTIVE_GROUP_TTL_DAYS = 90
 INACTIVE_USER_TTL_DAYS = 180
@@ -704,6 +708,46 @@ async def maybe_refresh_bot_state(state: Any, gid: str) -> None:
     state.dirty.add(gid)
 
 
+async def maybe_refresh_group_state(state: Any, gid: str) -> None:
+    ctx = get_ctx(state, gid)
+    now = time.time()
+    updated_at = max(ctx.mood_topic_updated_at, ctx.bot_state_updated_at)
+    if now - updated_at < GROUP_STATE_TTL_SECS:
+        return
+    if len(ctx.entries) < GROUP_STATE_MIN_ENTRIES:
+        return
+
+    recent = list(ctx.entries)[-GROUP_STATE_ANALYZE_ENTRIES:]
+    convo = _render_entries_plain(recent)
+    ctx.mood_topic_updated_at = now
+    ctx.bot_state_updated_at = now
+    result = await llm_client.analyze_group_state(convo)
+    if result is None:
+        retry_at = now - GROUP_STATE_TTL_SECS + RETRY_BACKOFF_SECS
+        ctx.mood_topic_updated_at = retry_at
+        ctx.bot_state_updated_at = retry_at
+        return
+
+    mood_val = result.get("mood")
+    if mood_val is not None:
+        ctx.mood = round(MOOD_EMA_ALPHA * mood_val + (1 - MOOD_EMA_ALPHA) * ctx.mood, 3)
+    topic = str(result.get("topic", "")).strip()
+    ctx.active_topic = topic
+    bot_mood = result.get("bot_mood")
+    if bot_mood is not None:
+        ctx.bot_mood = round(
+            BOT_MOOD_EMA_ALPHA * bot_mood + (1 - BOT_MOOD_EMA_ALPHA) * ctx.bot_mood,
+            3,
+        )
+    arousal = result.get("arousal")
+    if arousal is not None:
+        ctx.bot_arousal = round(
+            BOT_AROUSAL_EMA_ALPHA * arousal + (1 - BOT_AROUSAL_EMA_ALPHA) * ctx.bot_arousal,
+            3,
+        )
+    state.dirty.add(gid)
+
+
 def _decayed_affinity(umem: "UserMemory") -> float:
     aff = umem.affinity or 0.0
     if umem.affinity_updated_at <= 0:
@@ -835,21 +879,6 @@ async def _extract_one_group(state: Any, gid: str, ctx: GroupContext) -> None:
     convo = _render_entries_plain(entries)
 
     gmem = state.long_term.groups.get(gid) or GroupMemory(group_id=gid)
-    g_sys = (
-        "你在维护对一个群的长期印象。结合【已有印象】和【最近对话】，"
-        f"更新这个群的印象（常聊话题、氛围、常客、群内的梗），不超过{GROUP_MEMORY_MAX_CHARS}字。"
-        "没有新信息就基本保留原印象。"
-        '严格返回 JSON：{"summary": "印象文本"}'
-    )
-    g_user = f"【已有印象】\n{gmem.summary or '（无）'}\n\n【最近对话】\n{convo}"
-    g_res = await llm_client.call_llm_json(g_sys, g_user)
-    if isinstance(g_res, dict):
-        s = str(g_res.get("summary", "")).strip()
-        if s:
-            gmem.summary = s[:GROUP_MEMORY_MAX_CHARS]
-            gmem.updated_at = time.time()
-            state.long_term.groups[gid] = gmem
-
     counts: Dict[str, int] = {}
     names: Dict[str, str] = {}
     qq_names: Dict[str, str] = {}
@@ -869,27 +898,39 @@ async def _extract_one_group(state: Any, gid: str, ctx: GroupContext) -> None:
         umem = state.long_term.users.get(uid) or UserMemory(user_id=uid)
         _decay_affinity(umem)
         user_entries = [e for e in entries if e.user_id == uid]
-        prepared.append((uid, umem, _render_entries_plain(user_entries)))
+        prepared.append({
+            "user_id": uid,
+            "display": f"{names.get(uid, uid)}({uid})",
+            "existing_notes": umem.notes,
+            "existing_alias": umem.group_alias,
+            "user_lines": _render_entries_plain(user_entries),
+            "memory": umem,
+        })
 
-    results = await asyncio.gather(
-        *(
-            llm_client.analyze_user_full(
-                user_lines=user_lines,
-                full_convo=convo,
-                user_display=f"{names.get(uid, uid)}({uid})",
-                existing_notes=umem.notes,
-                existing_alias=umem.group_alias,
-                char_name=char_name,
-            )
-            for uid, umem, user_lines in prepared
-        ),
-        return_exceptions=True,
+    analysis = await llm_client.analyze_group_memory(
+        convo,
+        gmem.summary,
+        prepared,
+        char_name,
     )
 
-    for (uid, umem, _), u_res in zip(prepared, results):
-        if isinstance(u_res, Exception):
-            logger.warning(f"用户 {uid} 印象提炼失败: {u_res}")
-            continue
+    if not isinstance(analysis, dict):
+        return
+    summary = str(analysis.get("group_summary", "")).strip()
+    if summary:
+        gmem.summary = summary[:GROUP_MEMORY_MAX_CHARS]
+        gmem.updated_at = time.time()
+        state.long_term.groups[gid] = gmem
+
+    user_results = {
+        str(item.get("user_id", "")): item
+        for item in analysis.get("users", [])
+        if isinstance(item, dict) and item.get("user_id")
+    }
+    for prepared_user in prepared:
+        uid = prepared_user["user_id"]
+        umem = prepared_user["memory"]
+        u_res = user_results.get(uid)
         if not isinstance(u_res, dict):
             continue
 
