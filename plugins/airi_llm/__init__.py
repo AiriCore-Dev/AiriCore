@@ -886,15 +886,19 @@ def _batch_input(batch: List[PendingMessage], context: str) -> str:
 def _dialogue_system_prompt() -> str:
     return airi_state.role_setup + (
         "\n\n【内部对话协议】\n"
-        "你需要结合当前待处理消息批次和最近群聊，判断这些话是不是在对你说，并同时准备两种候选回复。"
+        "你需要结合当前发言者、待处理消息批次和最近群聊，先理解对方真正的意图与情绪，再判断这些话是不是在对你说，并同时准备两种候选回复。"
         "直接@你、回复你的消息、自然承接你刚才的话是受话线索；只提到你的名字、转述你、讨论你的身份或角色，不等于在对你说。"
+        "意图、情绪和回复策略只用于内部判断，不要写进回复正文；事实不确定时不要补造细节。"
         "当 addressed=true 时，addressed_reply 必须针对当前批次中实际指向你的具体内容、问题或情绪直接回复；"
         "当 addressed=false 时，passive_reply 必须像主动插话一样，从近期对话里挑一个具体内容自然带过，"
         "不得回答、不得复述、不得确认当前待处理消息，也不得假装对方是在和你说话；没有自然插话点时 passive_reply 留空。"
         "两种候选都要根据当前上下文自然生成，但程序只会选择最终受话状态对应的那一种。"
         "请同时判断背景候选是否真的与当前内容有关。"
         "严格只返回 JSON，不要返回 Markdown 或解释："
-        '{"addressed": true, "addressed_reply": "受话时的直接回复正文", '
+        '{"addressed": true, "intent": "question|request|share|vent|praise|complaint|greet|farewell|correction|tease|unknown", '
+        '"emotion": "positive|neutral|negative|tired|sad|anxious|angry|excited|embarrassed|unknown", '
+        '"reply_strategy": "answer|empathize|reassure|celebrate|clarify|react|boundary|decline|acknowledge|unknown", '
+        '"addressed_reply": "受话时的直接回复正文", '
         '"addressed_reply_to": "受话时要引用的消息ID或空字符串", '
         '"passive_reply": "未受话时的主动插话正文或空字符串", '
         '"passive_reply_to": "主动插话要引用的消息ID或空字符串", '
@@ -908,7 +912,9 @@ def _passive_system_prompt() -> str:
     return airi_state.role_setup + (
         "\n\n【主动插话协议】\n"
         "这是一次主动插话，不需要判断是否有人在对你说话。请从最近群聊中挑一个具体内容自然接话，"
-        "严格只返回 JSON：{\"addressed\": false, \"addressed_reply\": \"\", "
+        "严格只返回 JSON：{\"addressed\": false, \"intent\": \"unknown\", "
+        "\"emotion\": \"neutral\", \"reply_strategy\": \"react\", "
+        "\"addressed_reply\": \"\", "
         "\"addressed_reply_to\": \"\", \"passive_reply\": \"主动插话正文\", "
         "\"passive_reply_to\": \"要引用的消息ID或空字符串\", "
         "\"used_context\": [\"实际使用的候选ID\"]}。"
@@ -959,6 +965,7 @@ async def _process_message_batch(batch: List[PendingMessage]) -> None:
         llm_input = memory.render_context(
             airi_state, group_id, recall_snippet=recall_snippet,
             retrieval_candidates=candidates,
+            current_user_id=user_id,
         )
         llm_input = _batch_input(batch, llm_input)
         images = []
@@ -1001,6 +1008,7 @@ async def _process_message_batch(batch: List[PendingMessage]) -> None:
         logger.info(
             f"群 {group_id} 批次受话判断：模型={result['addressed']}，"
             f"最终={effective_addressed}，显式={explicit_addressed}，"
+            f"理解={result['intent']}/{result['emotion']}/{result['reply_strategy']}，"
             f"superuser点号={force_superuser_dot}，候选={selected_mode}，"
             f"回复={'有' if reply else '空'}"
         )

@@ -11,7 +11,7 @@ notification_account = str(getattr(driver.config, "notification_account", "") or
 
 query_tmxx_status = on_message(priority=1, block=False)
 
-BLACKLIST_GROUP = [428328396]
+BLACKLIST_GROUP = [428328396, 1018137315]
 
 @query_tmxx_status.handle()
 async def query_tmxx_status_func(bot: Bot, ev: MessageEvent):

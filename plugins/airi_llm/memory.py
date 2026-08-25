@@ -67,7 +67,7 @@ GROUP_STATE_ANALYZE_ENTRIES = 15
 INACTIVE_GROUP_TTL_DAYS = 90
 INACTIVE_USER_TTL_DAYS = 180
 MAX_LOCK_DICT_SIZE = 500
-RETRIEVAL_MAX_CANDIDATES = 24
+RETRIEVAL_MAX_CANDIDATES = 16
 RETRIEVAL_MAX_CONTENT_CHARS = 300
 
 SCHEMA_VERSION = 1
@@ -389,7 +389,10 @@ def build_retrieval_candidates(
                 f"昵称：{umem.nickname or uid}；群内称呼：{umem.group_alias or '无'}；"
                 f"印象：{umem.notes or '无'}；关系：{_affinity_tag(_decayed_affinity(umem)) or '普通'}"
             )
-            candidates.append(_retrieval_candidate(f"user_memory:{uid}", "user_memory", content, score + 4))
+            priority = 8 if uid == user_id else 4
+            candidates.append(_retrieval_candidate(
+                f"user_memory:{uid}", "user_memory", content, score + priority
+            ))
 
     group_memory = state.long_term.groups.get(gid)
     if group_memory and group_memory.summary:
@@ -402,6 +405,8 @@ def build_retrieval_candidates(
     for index, entry in enumerate(recent_entries):
         content = f"{entry.nickname}：{entry.content}"
         score = len(query_terms & _retrieval_terms(content))
+        if entry.user_id == user_id:
+            score += 6
         if entry.msg_id:
             candidate_id = f"recent_dialogue:{entry.msg_id}"
         else:
@@ -433,6 +438,7 @@ def render_context(
     knowledge_snippets: Optional[List[str]] = None,
     recall_snippet: Optional[str] = None,
     retrieval_candidates: Optional[List[dict]] = None,
+    current_user_id: str = "",
 ) -> str:
     ctx = get_ctx(state, gid)
     entries = list(ctx.entries)
@@ -489,6 +495,16 @@ def render_context(
         parts.append(
             "【只读背景，仅在当前消息直接相关时使用】\n"
             + "\n".join(background_parts)
+        )
+
+    if current_user_id:
+        current_memory = state.long_term.users.get(current_user_id)
+        current_name = (current_memory.nickname if current_memory else "") or current_user_id
+        current_alias = current_memory.group_alias if current_memory else ""
+        if current_alias and current_alias != current_name:
+            current_name = f"{current_alias}（{current_name}）"
+        parts.append(
+            f"【当前发言者】{current_name}[{current_user_id}]；优先理解TA这次发言的具体意图和情绪"
         )
 
     expression_parts: List[str] = []

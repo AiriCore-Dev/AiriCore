@@ -17,6 +17,19 @@ BG_TEMPERATURE = 0.3
 _MODEL_DOWN = llm._MODEL_DOWN
 MODEL_DOWN_TTL_SECS = llm.MODEL_DOWN_TTL_SECS
 
+DIALOGUE_INTENTS = frozenset({
+    "question", "request", "share", "vent", "praise", "complaint",
+    "greet", "farewell", "correction", "tease", "unknown",
+})
+DIALOGUE_EMOTIONS = frozenset({
+    "positive", "neutral", "negative", "tired", "sad", "anxious",
+    "angry", "excited", "embarrassed", "unknown",
+})
+DIALOGUE_STRATEGIES = frozenset({
+    "answer", "empathize", "reassure", "celebrate", "clarify", "react",
+    "boundary", "decline", "acknowledge", "unknown",
+})
+
 
 def _pick_model(img_b64_list: Optional[List[str]]) -> str:
     profile = llm.active_profile()
@@ -78,8 +91,20 @@ def normalize_dialogue_result(result: Any) -> Optional[dict]:
         return None
     if any(not isinstance(item, str) for item in used_context):
         return None
+
+    def normalize_label(value: Any, allowed: frozenset[str]) -> str:
+        if not isinstance(value, str):
+            return "unknown"
+        value = value.strip().lower()
+        return value if value in allowed else "unknown"
+
     return {
         "addressed": result["addressed"],
+        "intent": normalize_label(result.get("intent"), DIALOGUE_INTENTS),
+        "emotion": normalize_label(result.get("emotion"), DIALOGUE_EMOTIONS),
+        "reply_strategy": normalize_label(
+            result.get("reply_strategy"), DIALOGUE_STRATEGIES
+        ),
         "addressed_reply": addressed_reply.strip()[:1000],
         "addressed_reply_to": addressed_reply_to,
         "passive_reply": passive_reply.strip()[:1000],
