@@ -730,6 +730,7 @@ async def _create_structured(
     chain: list[str],
     index: int,
     use_response_format: bool,
+    usage_source: str,
 ) -> str | None:
     kwargs: dict[str, Any] = {
         "model": model,
@@ -742,7 +743,7 @@ async def _create_structured(
         kwargs["response_format"] = {"type": "json_object"}
     try:
         completion = await generation.client.chat.completions.create(**kwargs)
-        record_success(SOURCE_MECHANISM, model)
+        record_success(usage_source, model)
     except Exception as exc:
         if use_response_format:
             mark_if_unavailable(model, exc, generation=generation.sequence)
@@ -772,6 +773,7 @@ async def call_structured(
     system_prompt: str,
     user_input: str,
     img_b64_list: list[str] | None = None,
+    usage_source: str = SOURCE_MECHANISM,
 ) -> Any | None:
     messages = [
         {"role": "system", "content": system_prompt},
@@ -782,9 +784,25 @@ async def call_structured(
         primary = profile.chat_model if img_b64_list else profile.chat_text_model
         chain = build_chain(primary, profile.chat_fallback, generation=generation.sequence)
         for index, model in enumerate(chain):
-            text = await _create_structured(generation, model, messages, chain, index, True)
+            text = await _create_structured(
+                generation,
+                model,
+                messages,
+                chain,
+                index,
+                True,
+                usage_source,
+            )
             if text is None:
-                text = await _create_structured(generation, model, messages, chain, index, False)
+                text = await _create_structured(
+                    generation,
+                    model,
+                    messages,
+                    chain,
+                    index,
+                    False,
+                    usage_source,
+                )
             if not text:
                 continue
             parsed = loads_lenient(text)

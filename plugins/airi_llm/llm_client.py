@@ -93,7 +93,12 @@ async def generate_dialogue(
     user_input: str,
     img_b64_list: Optional[List[str]] = None,
 ) -> Optional[dict]:
-    result = await call_llm_json(system_prompt, user_input, img_b64_list)
+    result = await llm.call_structured(
+        system_prompt,
+        user_input,
+        img_b64_list,
+        usage_source=llm.SOURCE_CHAT,
+    )
     return normalize_dialogue_result(result)
 
 
