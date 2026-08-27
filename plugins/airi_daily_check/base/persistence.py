@@ -6,7 +6,6 @@ import pickle
 import tempfile
 import datetime
 
-import nonebot
 from nonebot import get_driver, logger, require
 from PIL import ImageDraw
 
@@ -146,14 +145,13 @@ def _has_savedata(user_data):
 
 
 async def daily_clear():
-    should_clear = bool(nonebot.get_bots())
     now = datetime.datetime.now()
     inactive_cutoff = (now - datetime.timedelta(days=90)).timestamp()
 
     to_remove = []
     for uid in state.data.keys():
         user_data = state.data[uid]
-        if not user_data['check_times_daily'] and should_clear:
+        if not user_data['check_times_daily']:
             user_data['checked_days'] = 0
         user_data['check_times_daily'] = 0
         user_data['receive_transfer_daily'] = 0
