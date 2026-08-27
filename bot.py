@@ -413,15 +413,15 @@ for level, rng in (
     _sinks.append(sink)
 
 
-@driver.on_shutdown
-async def _cancel_background_tasks():
+async def _shutdown_background_tasks():
     await registry.cancel_all()
-
-
-@driver.on_shutdown
-async def _flush_logs_on_shutdown():
     for sink in _sinks:
         sink.close()
+
+
+@driver.on_shutdown
+async def _shutdown_on_shutdown():
+    await _shutdown_background_tasks()
 
 
 def _compile_utils():
@@ -448,7 +448,18 @@ async def _preload_caches_on_startup():
 
     from utils.cache import run_and_log
 
-    registry.create(asyncio.to_thread(run_and_log), owner="bot", key="cache-preload")
+    async def _run_cache_preload():
+        thread_task = asyncio.create_task(asyncio.to_thread(run_and_log))
+        try:
+            await asyncio.shield(thread_task)
+        except asyncio.CancelledError:
+            try:
+                await asyncio.shield(thread_task)
+            except Exception as e:
+                logger.error(f"缓存预热任务异常: {e}")
+            raise
+
+    registry.create(_run_cache_preload(), owner="bot", key="cache-preload")
 
 
 @driver.on_startup
