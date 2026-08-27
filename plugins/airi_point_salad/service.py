@@ -6,6 +6,8 @@ import time
 from typing import Any
 import weakref
 
+from utils.coordination import registry
+
 from .game import (
     GameError,
     add_player,
@@ -34,7 +36,7 @@ class GameService:
         self.store = store or GameStore(Path("data/airi_point_salad/games.pk"))
         self.games: dict[str, GameState] = {}
         self.locks = weakref.WeakValueDictionary()
-        self.timers: dict[str, asyncio.TimerHandle] = {}
+        self.timers: dict[str, asyncio.Task] = {}
         self.timeout_callback = None
 
     async def load(self) -> None:
@@ -293,17 +295,32 @@ class GameService:
             return
         elapsed = time.time() - state.updated_at
         delay = max(0.0, self._timeout_for(state) - elapsed)
-        loop = asyncio.get_running_loop()
-        self.timers[group_id] = loop.call_later(
-            delay,
-            lambda: asyncio.create_task(self._expire(group_id)),
+        expected_state = state
+
+        async def run():
+            try:
+                await asyncio.sleep(delay)
+                await self._expire(group_id, expected_state)
+            except asyncio.CancelledError:
+                raise
+
+        self.timers[group_id] = registry.create(
+            run(),
+            owner=f"airi_point_salad:{group_id}",
+            key=group_id,
         )
 
-    async def _expire(self, group_id: str) -> None:
+    async def _expire(
+        self,
+        group_id: str,
+        expected_state: GameState | None = None,
+    ) -> None:
         lock = self.locks.setdefault(group_id, asyncio.Lock())
         async with lock:
             state = self.games.get(group_id)
             if state is None:
+                return
+            if expected_state is not None and state is not expected_state:
                 return
             remaining = self._timeout_for(state) - (time.time() - state.updated_at)
             if remaining > 0:
@@ -316,10 +333,17 @@ class GameService:
                 await self.store.save(self.games)
             except Exception:
                 self.games[group_id] = state
-                loop = asyncio.get_running_loop()
-                self.timers[group_id] = loop.call_later(
-                    60,
-                    lambda: asyncio.create_task(self._expire(group_id)),
+                async def retry():
+                    try:
+                        await asyncio.sleep(60)
+                        await self._expire(group_id, state)
+                    except asyncio.CancelledError:
+                        raise
+
+                self.timers[group_id] = registry.create(
+                    retry(),
+                    owner=f"airi_point_salad:{group_id}",
+                    key=(group_id, "retry"),
                 )
                 raise
         if self.timeout_callback is not None:

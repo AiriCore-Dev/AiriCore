@@ -17,6 +17,7 @@ from nonebot.adapters.onebot.v11.event import (
 from nonebot.adapters.onebot.v11.exception import NetworkError
 from nonebot.adapters.onebot.store import ResultStore
 from nonebot.message import event_preprocessor
+from utils.coordination import registry
 
 QUERY_TTL = 7200.0
 QUERY_TIMEOUT = 3.0
@@ -134,6 +135,11 @@ def install_transport_diagnostics(driver) -> None:
                 "warning",
                 transport="WebSocket 已断开",
             )
+        registry.create(
+            QUERY_STORE.cancel_bot(bot.self_id),
+            owner=f"onebot_query:{bot.self_id}",
+            key=("disconnect", str(bot.self_id)),
+        )
 
 
 @Bot.on_called_api
@@ -239,6 +245,7 @@ class QueryStore:
         self.clock = clock
         self.cache = OrderedDict()
         self.inflight = {}
+        self.inflight_bots = {}
         self.failures = {}
         self.bytes = 0
         self.metrics = Counter()
@@ -251,9 +258,22 @@ class QueryStore:
             task.cancel()
         self.cache.clear()
         self.inflight.clear()
+        self.inflight_bots.clear()
         self.failures.clear()
         self.metrics.clear()
         self.bytes = 0
+
+    async def cancel_bot(self, bot_id: str) -> None:
+        bot_id = str(bot_id)
+        tasks = [
+            task
+            for key, task in self.inflight.items()
+            if self.inflight_bots.get(key) == bot_id
+        ]
+        for task in tasks:
+            task.cancel()
+        if tasks:
+            await asyncio.gather(*tasks, return_exceptions=True)
 
     def _drop(self, key):
         entry = self.cache.pop(key, None)
@@ -338,6 +358,7 @@ class QueryStore:
             raise
         finally:
             self.inflight.pop(key, None)
+            self.inflight_bots.pop(key, None)
 
     async def run(self, bot_id: str, api: str, data: dict, caller):
         key = self.key(bot_id, api, data)
@@ -352,10 +373,13 @@ class QueryStore:
             self.failures.pop(key, None)
         task = self.inflight.get(key)
         if task is None:
-            task = asyncio.create_task(
-                self._fetch(key, str(bot_id), str(api), dict(data), caller)
+            task = registry.create(
+                self._fetch(key, str(bot_id), str(api), dict(data), caller),
+                owner=f"onebot_query:{bot_id}",
+                key=(str(api), _freeze(_params(data))),
             )
             self.inflight[key] = task
+            self.inflight_bots[key] = str(bot_id)
         else:
             self.metrics["singleflight_hit"] += 1
         return copy.deepcopy(await asyncio.shield(task))

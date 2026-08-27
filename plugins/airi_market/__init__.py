@@ -4,6 +4,7 @@ import asyncio
 import nonebot
 from nonebot.log import logger
 from nonebot.adapters.onebot.v11 import Bot
+from utils.coordination import registry
 
 from .base import state
 from .base.matchers import *
@@ -12,16 +13,17 @@ from . import handlers
 
 
 _invite_enabled = bool(getattr(state.driver.config, "market_invite_new_bots", False))
-_bg_tasks = set()
 
 
 @state.driver.on_bot_connect
 async def _on_bot_connect(bot: Bot):
     if not _invite_enabled:
         return
-    task = asyncio.create_task(_send_invite_if_new(bot))
-    _bg_tasks.add(task)
-    task.add_done_callback(_bg_tasks.discard)
+    registry.create(
+        _send_invite_if_new(bot),
+        owner="airi_market",
+        key=str(bot.self_id),
+    )
 
 
 async def _send_invite_if_new(bot: Bot):

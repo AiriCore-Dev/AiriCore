@@ -10,6 +10,7 @@ from typing import Dict, List, Optional, Any, Set, Tuple
 
 import nonebot
 from utils import cache as asset_cache
+from utils.coordination import registry
 from utils.onebot_query import member_name
 from utils.totp_2fa import totp_verify
 from nonebot import (
@@ -651,18 +652,9 @@ def _get_send_lock(group_id: str) -> asyncio.Lock:
 
 
 def _spawn(coro, label: str) -> None:
-    task = asyncio.create_task(coro)
+    task = registry.create(coro, owner="airi_llm", key=label)
     _bg_tasks.add(task)
-
-    def _done(t):
-        _bg_tasks.discard(t)
-        if t.cancelled():
-            return
-        exc = t.exception()
-        if exc is not None:
-            logger.warning(f"后台任务 {label} 异常: {exc}")
-
-    task.add_done_callback(_done)
+    task.add_done_callback(_bg_tasks.discard)
 
 
 _pending_batches: Dict[str, List[PendingMessage]] = {}
@@ -694,7 +686,11 @@ def _queue_message(message: PendingMessage) -> None:
     old_task = _pending_batch_tasks.get(key)
     if old_task is not None:
         old_task.cancel()
-    task = asyncio.create_task(_wait_and_process_batch(key))
+    task = registry.create(
+        _wait_and_process_batch(key),
+        owner="airi_llm",
+        key=("batch", key),
+    )
     _pending_batch_tasks[key] = task
 
 

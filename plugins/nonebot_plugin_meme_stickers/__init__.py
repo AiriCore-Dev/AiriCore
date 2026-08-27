@@ -1,8 +1,7 @@
 
-import asyncio
-
 from nonebot import get_driver, logger
 from nonebot.plugin import PluginMetadata, inherit_supported_adapters, require
+from utils.coordination import registry
 
 require("nonebot_plugin_alconna")
 require("nonebot_plugin_waiter")
@@ -46,4 +45,8 @@ async def _():
             for x in format_op(op).splitlines():
                 logger.success(x)
 
-        asyncio.create_task(do_update())
+        registry.create(
+            do_update(),
+            owner="nonebot_plugin_meme_stickers",
+            key="auto_update",
+        )

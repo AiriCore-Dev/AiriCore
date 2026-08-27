@@ -136,7 +136,9 @@ def start():
     global _task
     if _task is not None and not _task.done():
         return _task
-    _task = asyncio.create_task(_monitor())
+    from utils.coordination import registry
+
+    _task = registry.create(_monitor(), owner="observability", key="monitor")
     return _task
 
 
