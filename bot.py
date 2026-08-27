@@ -8,6 +8,7 @@ from pathlib import Path
 from datetime import datetime
 
 from utils.fontconfig import configure_fontconfig
+from utils.coordination import registry
 
 configure_fontconfig()
 
@@ -413,12 +414,14 @@ for level, rng in (
 
 
 @driver.on_shutdown
+async def _cancel_background_tasks():
+    await registry.cancel_all()
+
+
+@driver.on_shutdown
 async def _flush_logs_on_shutdown():
     for sink in _sinks:
         sink.close()
-
-
-_bg_tasks = set()
 
 
 def _compile_utils():
@@ -445,17 +448,7 @@ async def _preload_caches_on_startup():
 
     from utils.cache import run_and_log
 
-    task = asyncio.create_task(asyncio.to_thread(run_and_log))
-    _bg_tasks.add(task)
-
-    def _done(t):
-        _bg_tasks.discard(t)
-        try:
-            t.result()
-        except Exception as e:
-            logger.error(f"缓存预热任务异常: {e}")
-
-    task.add_done_callback(_done)
+    registry.create(asyncio.to_thread(run_and_log), owner="bot", key="cache-preload")
 
 
 @driver.on_startup
