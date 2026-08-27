@@ -270,6 +270,7 @@ class GameService:
                     self.games.pop(group_id, None)
                 else:
                     self.games[group_id] = before
+                    self._schedule_timeout(group_id)
                 raise
             self._schedule_timeout(group_id)
             return prepared

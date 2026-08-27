@@ -413,15 +413,25 @@ for level, rng in (
     _sinks.append(sink)
 
 
-async def _shutdown_background_tasks():
-    await registry.cancel_all()
+@driver.on_shutdown
+async def _shutdown_log_sinks():
     for sink in _sinks:
         sink.close()
 
 
-@driver.on_shutdown
-async def _shutdown_on_shutdown():
-    await _shutdown_background_tasks()
+_shutdown_lifecycle_registered = False
+
+
+def _register_shutdown_lifecycle():
+    global _shutdown_lifecycle_registered
+    if _shutdown_lifecycle_registered:
+        return
+
+    @driver.on_shutdown
+    async def _shutdown_registry_tasks():
+        await registry.cancel_all()
+
+    _shutdown_lifecycle_registered = True
 
 
 def _compile_utils():
@@ -487,6 +497,7 @@ if __name__ == "__main__":
     nonebot.load_plugin("nonebot_plugin_localstore")
     nonebot.load_plugin("nonebot_plugin_alconna")
     nonebot.load_plugins("plugins")
+    _register_shutdown_lifecycle()
     run_kwargs = {"app": "__mp_main__:app"}
     enable_ssl = str(getattr(driver.config, "enable_ssl", False)).lower() in {
         "1",
