@@ -139,21 +139,6 @@ def _clamp_valence(v: Any) -> Optional[float]:
     return max(-1.0, min(1.0, f))
 
 
-async def classify_reply_emotion(reply_text: str) -> Optional[float]:
-    if not reply_text.strip():
-        return None
-    system_prompt = (
-        "你是情绪打分器。给下面这句话所表达的情绪打一个分数。"
-        "开心、兴奋、得意、温柔偏正面（越强越接近1）；"
-        "生气、伤心、失落、无奈偏负面（越强越接近-1）；平静就是0。"
-        '严格返回 JSON：{"emotion": 数值}，范围 -1 到 1。只返回 JSON。'
-    )
-    result = await call_llm_json(system_prompt, f"【这句话】{reply_text}")
-    if isinstance(result, dict):
-        return _clamp_valence(result.get("emotion"))
-    return None
-
-
 async def classify_image_emotions(img_b64_list: List[str]) -> List[Optional[float]]:
     n = len(img_b64_list)
     if n == 0:

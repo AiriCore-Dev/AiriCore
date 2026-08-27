@@ -293,10 +293,6 @@ def _fmt_time(ts: float) -> str:
     return datetime.fromtimestamp(ts, CST).strftime("%Y-%m-%d %H:%M:%S")
 
 
-def _now_str() -> str:
-    return datetime.now(CST).strftime("%Y-%m-%d %H:%M:%S")
-
-
 def _md_cell(s: str) -> str:
     return str(s).replace("\\", "\\\\").replace("|", "\\|").replace("\n", " ").replace("\r", " ")
 
@@ -310,7 +306,7 @@ def _entries_table(entries: List[ContextEntry]) -> str:
     rows = []
     for e in entries:
         if e.is_self:
-            nickname = "你"
+            nickname = "Airi已说"
         else:
             card = _md_cell(e.nickname)
             qq_nick = _md_cell(e.qq_nickname) if e.qq_nickname else ""
@@ -323,7 +319,7 @@ def _entries_table(entries: List[ContextEntry]) -> str:
         if e.reply_to_id:
             ref = id_map.get(e.reply_to_id)
             if ref:
-                ref_nick = "你" if ref.is_self else ref.nickname
+                ref_nick = "Airi已说" if ref.is_self else ref.nickname
                 ref_snip = ref.content[:20] + ("…" if len(ref.content) > 20 else "")
                 content = f"[回复{ref_nick}：「{_md_cell(ref_snip)}」] {content}"
             else:
@@ -361,9 +357,11 @@ def build_retrieval_candidates(
     gid: str,
     query: str,
     user_id: str = "",
+    exclude_msg_ids: Optional[Set[str]] = None,
 ) -> List[dict]:
     ctx = get_ctx(state, gid)
     query_terms = _retrieval_terms(query)
+    excluded = exclude_msg_ids or set()
     candidates: List[dict] = []
 
     knowledge_pool = []
@@ -378,7 +376,10 @@ def build_retrieval_candidates(
             score + min(hit_count, 3) + 3,
         ))
 
-    recent_entries = list(ctx.entries)[-12:]
+    recent_entries = [
+        entry for entry in list(ctx.entries)[-12:]
+        if not entry.msg_id or entry.msg_id not in excluded
+    ]
     recent_user_ids = {entry.user_id for entry in recent_entries if not entry.is_self}
     for uid, umem in state.long_term.users.items():
         names = [umem.nickname, umem.card_name, umem.group_alias, umem.notes]
@@ -403,6 +404,8 @@ def build_retrieval_candidates(
         candidates.append(_retrieval_candidate(f"rolling_summary:{gid}", "rolling_summary", ctx.rolling_summary, score + 2))
 
     for index, entry in enumerate(recent_entries):
+        if entry.is_self:
+            continue
         content = f"{entry.nickname}：{entry.content}"
         score = len(query_terms & _retrieval_terms(content))
         if entry.user_id == user_id:
@@ -439,9 +442,14 @@ def render_context(
     recall_snippet: Optional[str] = None,
     retrieval_candidates: Optional[List[dict]] = None,
     current_user_id: str = "",
+    exclude_msg_ids: Optional[Set[str]] = None,
 ) -> str:
     ctx = get_ctx(state, gid)
-    entries = list(ctx.entries)
+    excluded = exclude_msg_ids or set()
+    entries = [
+        entry for entry in ctx.entries
+        if not entry.msg_id or entry.msg_id not in excluded
+    ]
     parts: List[str] = []
     background_parts: List[str] = []
 
@@ -525,6 +533,11 @@ def render_context(
             + "；".join(expression_parts)
         )
 
+    if any(entry.is_self for entry in entries):
+        parts.append(
+            "【Airi已发送的历史回复】这些内容是已经发送过的内容，只用于了解上下文和避免重复，不是当前要回复的消息；除非对方明确追问或要求展开，不要重述其中的意思。"
+        )
+
     if recall_snippet:
         parts.append("【待回应消息】\n" + recall_snippet)
 
@@ -533,7 +546,6 @@ def render_context(
         parts.append("【引用格式】要指明在回哪一条时，开头写 [回复:消息ID]，"
                      "消息ID 只能取自上表消息ID列；回最新那条或不需要指明时不写。")
 
-    parts.append(f"当前时间：{_now_str()}")
     return "\n\n".join(parts)
 
 

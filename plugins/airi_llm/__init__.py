@@ -64,10 +64,32 @@ EMOJI_RANDOM_PROB = 1 / 10
 FINAL_EMOJI_PROB = 1 / 5
 EMOJI_MOOD_TOLERANCE = 0.35
 EMOJI_MOOD_SOFTNESS = 0.25
+EMOJI_REPLY_EMOTIONS = frozenset({
+    "positive", "negative", "tired", "sad", "angry", "excited", "embarrassed"
+})
+EMOJI_REPLY_MOODS = {
+    "positive": 0.6,
+    "negative": -0.5,
+    "tired": -0.4,
+    "sad": -0.7,
+    "angry": -0.8,
+    "excited": 0.8,
+    "embarrassed": -0.2,
+}
 
 TRANSITION_SPLIT_RE = re.compile(
     r'(?<=[^\s])(?=对了|话说|不过|然后|而且|还有|哦对|诶对|对哦|哦哦|另外|说起来|对吧|诶|哦)'
 )
+REPLY_SPLIT_RE = re.compile(r"[，。！？；：～,.!?;:~]+")
+REPLY_PUNCT_TRANSLATION = str.maketrans({
+    ",": "，",
+    ".": "。",
+    "!": "！",
+    "?": "？",
+    ";": "；",
+    ":": "：",
+    "~": "～",
+})
 SEGMENT_MAX_LEN = 28
 PARENTHETICAL_RE = re.compile(r"[(（](.+?)[)）]")
 CHINESE_CHAR_RE = re.compile(r"[\u4e00-\u9fff]")
@@ -111,6 +133,77 @@ def _strip_chinese_parentheticals(text: str) -> str:
         lambda match: "" if CHINESE_CHAR_RE.search(match.group(1)) else match.group(0),
         text,
     )
+
+
+def _normalize_reply_text(text: str) -> str:
+    text = re.sub(r"\s+", "", str(text))
+    text = re.sub(r"[(（][^()（）]*[)）]", "", text)
+    text = text.replace("```", "").replace("**", "").replace("__", "")
+    return text.translate(REPLY_PUNCT_TRANSLATION).strip()[:80]
+
+
+def _reply_comparison_text(text: str) -> str:
+    return re.sub(r"[^0-9A-Za-z\u4e00-\u9fff]", "", _normalize_reply_text(text).lower())
+
+
+def _reply_repeats_recent_text(
+    reply: str,
+    entries: List[memory.ContextEntry],
+    incoming_contents: List[str],
+) -> bool:
+    reply_key = _reply_comparison_text(reply)
+    if len(reply_key) < 4:
+        return False
+    sources = [entry.content for entry in entries[-12:]] + incoming_contents
+    for source in sources:
+        source_key = _reply_comparison_text(source)
+        if reply_key == source_key:
+            return True
+        if len(reply_key) < 8 or len(source_key) < 8:
+            continue
+        if abs(len(reply_key) - len(source_key)) > max(len(reply_key), len(source_key)) * 0.2:
+            continue
+        reply_grams = {reply_key[index:index + 2] for index in range(len(reply_key) - 1)}
+        source_grams = {source_key[index:index + 2] for index in range(len(source_key) - 1)}
+        if reply_grams and len(reply_grams & source_grams) / len(reply_grams) >= 0.9:
+            return True
+    return False
+
+
+def _emoji_allowed_for_reply(reply_emotion: Optional[str]) -> bool:
+    return reply_emotion in EMOJI_REPLY_EMOTIONS
+
+
+def _split_reply_segments(msg_content: str) -> List[str]:
+    msg_segments: List[str] = []
+    last_end = 0
+    for match in REPLY_SPLIT_RE.finditer(msg_content):
+        body = msg_content[last_end:match.start()].strip()
+        last_end = match.end()
+        punctuation = "".join(
+            char for char in match.group(0) if char in "！？!?～~"
+        )
+        if body:
+            msg_segments.append(body + punctuation)
+        elif punctuation and msg_segments:
+            msg_segments[-1] = msg_segments[-1] + punctuation
+    tail = msg_content[last_end:].strip()
+    if tail:
+        msg_segments.append(tail)
+
+    if len(msg_segments) > 2 and all(
+        len(s.rstrip("。！？；")) == 1 for s in msg_segments
+    ):
+        msg_segments = ["！".join(s.rstrip("。！？；") for s in msg_segments) + "！"]
+
+    expanded: List[str] = []
+    for segment in msg_segments:
+        if len(segment) > SEGMENT_MAX_LEN:
+            parts = [part for part in TRANSITION_SPLIT_RE.split(segment) if part]
+            expanded.extend(parts if len(parts) > 1 else [segment])
+        else:
+            expanded.append(segment)
+    return expanded
 
 
 def _alias_mentioned(text: str) -> bool:
@@ -651,58 +744,33 @@ def _select_dialogue_candidate(
     if not isinstance(requested_id, str) or requested_id not in valid_ids:
         requested_id = None
     reply, picked_id = _extract_reply_target(reply, valid_ids)
+    reply = _normalize_reply_text(reply)
     if not reply:
         return "", None, mode
     return reply, requested_id or picked_id, mode
 
 
 async def send_llm_reply(msg_content: str, reply_to_msg_id: Optional[str] = None,
-                         bot: Optional[Bot] = None, group_id: Optional[str] = None) -> None:
+                         bot: Optional[Bot] = None, group_id: Optional[str] = None,
+                         reply_emotion: Optional[str] = None) -> None:
     async def _out(payload) -> None:
         if bot is not None and group_id:
             await bot.send_group_msg(group_id=int(group_id), message=payload)
         else:
             await airi_llm.send(payload)
 
-    punct_pattern = re.compile(r"[，。！？；：～,.!?;:~]+")
-    msg_segments: list = []
-    last_end = 0
-    for m in punct_pattern.finditer(msg_content):
-        body = msg_content[last_end:m.start()].strip()
-        last_end = m.end()
-        keep = "".join(c for c in m.group(0) if c in "！？!?～~")
-        if body:
-            msg_segments.append(body + keep)
-        elif keep and msg_segments:
-            msg_segments[-1] = msg_segments[-1] + keep
-    tail = msg_content[last_end:].strip()
-    if tail:
-        msg_segments.append(tail)
+    msg_segments = _split_reply_segments(_normalize_reply_text(msg_content))
 
     if not msg_segments:
         return
 
-    if len(msg_segments) > 2 and all(len(s.rstrip("！？")) == 1 for s in msg_segments):
-        merged = "！".join(s.rstrip("！？") for s in msg_segments)
-        msg_segments = [merged + "！"]
-
-    expanded: list = []
-    for seg in msg_segments:
-        if len(seg) > SEGMENT_MAX_LEN:
-            parts = [p for p in TRANSITION_SPLIT_RE.split(seg) if p]
-            expanded.extend(parts if len(parts) > 1 else [seg])
-        else:
-            expanded.append(seg)
-    msg_segments = expanded
-
-    send_lead = random.random() < EMOJI_RANDOM_PROB
-    send_tail = random.random() < FINAL_EMOJI_PROB
-    reply_mood: Optional[float] = None
-    if (send_lead or send_tail) and airi_state.emoji_moods:
-        try:
-            reply_mood = await llm_client.classify_reply_emotion(msg_content)
-        except Exception as e:
-            logger.warning(f"回复情绪打分失败: {e}")
+    send_emoji = (
+        _emoji_allowed_for_reply(reply_emotion)
+        and random.random() < max(EMOJI_RANDOM_PROB, FINAL_EMOJI_PROB) * 0.6
+    )
+    send_lead = send_emoji and random.random() < 0.35
+    send_tail = send_emoji and not send_lead
+    reply_mood = EMOJI_REPLY_MOODS.get(reply_emotion or "")
 
     if send_lead:
         try:
@@ -790,9 +858,13 @@ async def passive_speaking(bot: Bot, group_id: str, mode: int = 1) -> None:
             if requested_id in valid_reply_ids:
                 reply_to_msg_id = requested_id
             reply, picked_id = _extract_reply_target(reply, valid_reply_ids)
+            reply = _normalize_reply_text(reply)
             if picked_id:
                 reply_to_msg_id = picked_id
             if not reply:
+                return
+            if _reply_repeats_recent_text(reply, list(ctx.entries), []):
+                logger.info(f"群 {group_id} 主动插话候选与历史内容重复，放弃发送")
                 return
 
             knowledge.mark_used_context(
@@ -813,7 +885,13 @@ async def passive_speaking(bot: Bot, group_id: str, mode: int = 1) -> None:
             return
         try:
             async with _get_send_lock(group_id):
-                await send_llm_reply(reply, reply_to_msg_id, bot=live, group_id=group_id)
+                await send_llm_reply(
+                    reply,
+                    reply_to_msg_id,
+                    bot=live,
+                    group_id=group_id,
+                    reply_emotion=result.get("emotion"),
+                )
         except Exception as e:
             logger.warning(f"主动插话发送失败: {e}")
     except Exception as e:
@@ -870,7 +948,8 @@ async def handle_emoji_build(bot: Bot, ev: MessageEvent):
 
 def _batch_input(batch: List[PendingMessage], context: str) -> str:
     lines = []
-    for item in batch:
+    last_index = len(batch) - 1
+    for index, item in enumerate(batch):
         markers = []
         if _at_self(item.event, item.bot.self_id):
             markers.append("直接@你")
@@ -878,6 +957,8 @@ def _batch_input(batch: List[PendingMessage], context: str) -> str:
             markers.append("回复你的消息")
         if str(item.event.message).lstrip().startswith("."):
             markers.append("点号触发")
+        if index == last_index:
+            markers.append("最新消息")
         marker = f"（{'、'.join(markers)}）" if markers else ""
         lines.append(f"[{item.msg_id}] {item.nickname}（{item.user_id}）{marker}：{item.content}")
     return "【当前待处理消息批次】\n" + "\n".join(lines) + "\n\n" + context
@@ -889,6 +970,7 @@ def _dialogue_system_prompt() -> str:
         "你需要结合当前发言者、待处理消息批次和最近群聊，先理解对方真正的意图与情绪，再判断这些话是不是在对你说，并同时准备两种候选回复。"
         "直接@你、回复你的消息、自然承接你刚才的话是受话线索；只提到你的名字、转述你、讨论你的身份或角色，不等于在对你说。"
         "意图、情绪和回复策略只用于内部判断，不要写进回复正文；事实不确定时不要补造细节。"
+        "历史中标为Airi已说的内容是已经发送过的回复，只用于承接和避重复；除非对方明确追问或要求展开，不要再次表达同一个意思。"
         "当 addressed=true 时，addressed_reply 必须针对当前批次中实际指向你的具体内容、问题或情绪直接回复；"
         "当 addressed=false 时，passive_reply 必须像主动插话一样，从近期对话里挑一个具体内容自然带过，"
         "不得回答、不得复述、不得确认当前待处理消息，也不得假装对方是在和你说话；没有自然插话点时 passive_reply 留空。"
@@ -938,6 +1020,7 @@ async def _process_message_batch(batch: List[PendingMessage]) -> None:
         _was_addressed(bot, item.event, str(item.event.message)) for item in batch
     )
     combined_content = "\n".join(item.content for item in batch if item.content).strip()
+    batch_msg_ids = {item.msg_id for item in batch if item.msg_id}
     due_mention = _peek_due_missed_mention(airi_state, group_id)
     lock = memory._get_lock(airi_state, group_id)
     if lock.locked():
@@ -954,7 +1037,8 @@ async def _process_message_batch(batch: List[PendingMessage]) -> None:
 
         ctx = memory.get_ctx(airi_state, group_id)
         candidates = memory.build_retrieval_candidates(
-            airi_state, group_id, combined_content, user_id
+            airi_state, group_id, combined_content, user_id,
+            exclude_msg_ids=batch_msg_ids,
         )
         recall_snippet = None
         if due_mention is not None:
@@ -966,6 +1050,7 @@ async def _process_message_batch(batch: List[PendingMessage]) -> None:
             airi_state, group_id, recall_snippet=recall_snippet,
             retrieval_candidates=candidates,
             current_user_id=user_id,
+            exclude_msg_ids=batch_msg_ids,
         )
         llm_input = _batch_input(batch, llm_input)
         images = []
@@ -1014,6 +1099,13 @@ async def _process_message_batch(batch: List[PendingMessage]) -> None:
         )
         if not reply:
             return
+        if _reply_repeats_recent_text(
+            reply,
+            list(ctx.entries),
+            [item.content for item in batch if item.content],
+        ):
+            logger.info(f"群 {group_id} 回复候选与近期内容重复，本轮不发送")
+            return
 
         knowledge.mark_used_context(ctx, group_id, airi_state, result["used_context"])
         reply = _strip_chinese_parentheticals(reply)
@@ -1026,7 +1118,13 @@ async def _process_message_batch(batch: List[PendingMessage]) -> None:
 
     try:
         async with _get_send_lock(group_id):
-            await send_llm_reply(reply, reply_to_msg_id, bot=live, group_id=group_id)
+            await send_llm_reply(
+                reply,
+                reply_to_msg_id,
+                bot=live,
+                group_id=group_id,
+                reply_emotion=result.get("emotion"),
+            )
     except Exception as e:
         logger.warning(f"回复发送失败: {e}")
 
