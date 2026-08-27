@@ -45,3 +45,74 @@ Searches covered `asyncio.create_task`, lifecycle decorators, `nonebot.get_bots(
 ## Worktree preservation
 
 The pre-existing worktree was preserved. Only this report is intended as the Task 1 artifact; no production code was edited.
+
+## Revision evidence
+
+### Complete `create_task` inventory
+
+- `bot.py:448` cache preload uses `create_task(to_thread(...))`; task is retained in `_bg_tasks` and result is consumed by a callback.
+- `utils/onebot_query.py:355` schedules delayed query work; owner/cancellation behavior requires follow-up.
+- `utils/observability.py:139` starts the monitor task; `_task` is retained and stopped through the module lifecycle.
+- `plugins/nonebot_plugin_meme_stickers/__init__.py:49` schedules update work from startup; no local task handle is retained at the call site.
+- `plugins/nonebot_plugin_cchess/engine.py:62` schedules process reaping on the running loop; process lifecycle is coupled to engine instances.
+- `plugins/airi_market/__init__.py:22` schedules the invite task on bot connect; task ownership is separate from the connect hook.
+- `plugins/airi_blacklist/__init__.py:187` schedules periodic log saving during startup; shutdown persistence is separately registered.
+- `plugins/airi_point_salad/service.py:299,322` schedules per-room expiry tasks from callbacks; duplicate/late expiry cancellation needs audit.
+- `plugins/airi_llm/__init__.py:654` schedules a supplied coroutine and `:697` schedules batch processing; both are event-driven background work.
+
+### Complete direct `nonebot.get_bots()` inventory
+
+- `utils/messaging.py:20` global bot map used by broadcast messaging; routing impact is cross-plugin.
+- `plugins/airi_daily_check/base/persistence.py:149` checks whether any bot is online before clearing state.
+- `plugins/airi_new_group/__init__.py:71,227` selects/list-walks all bots for group broadcasts.
+- `plugins/airi_point_salad/__init__.py:316` iterates all bots for notifications.
+- `plugins/airi_mcrcon/__init__.py:520` selects from all bots for server notifications.
+- `plugins/airi_switch/dedup.py:163,190` reads the global map for dedup/profile operations.
+- `plugins/airi_switch/__init__.py:273,457` reads/list-walks all bots for status and management operations.
+- `plugins/airi_llm/__init__.py:834,882,1014` validates/looks up the event Bot in the global map.
+- `plugins/airi_market/handlers/commands.py:48` enumerates all bots for mail/article targeting.
+
+### Actionable pickle loader inventory
+
+| File:line | Trigger / data | Schema and error behavior | Reproducibility |
+|---|---|---|---|
+| `utils/llm.py:578` | startup/statistics read | loads stats pickle, catches load errors and falls back to empty state; schema migration is local | corrupt `daily_stats.pk` fixture |
+| `plugins/nonebot_plugin_memes/manager.py:133` | manager initialization | loads dict payload, validates keys and regenerates on corruption | malformed manager fixture |
+| `plugins/airi_switch/counter.py:55` | counter initialization | loads daily message stats; fallback/recovery handled by counter loader | malformed stats fixture |
+| `plugins/airi_switch/cache.py:88` | cache initialization | loads cache payload with fallback to empty cache | malformed cache fixture |
+| `plugins/nonebot_plugin_today_waifu/record.py:35` | startup record load | accepts persisted record shape and falls back when unreadable | corrupt/legacy record fixture |
+| `plugins/nonebot_plugin_today_waifu/cache.py:72` | startup avatar cache load | reads cache payload and recovers empty cache on failure | corrupt cache fixture |
+| `plugins/airi_turtle_soup/base/persistence.py:24` | startup game state | loads persisted game mapping with validation/fallback | corrupt state fixture |
+| `plugins/airi_market/base/cache.py:71` | cache startup | loads cache payload with fallback | corrupt cache fixture |
+| `plugins/airi_market/base/persistence.py:29` | market startup | loads market data and handles unreadable state | corrupt/legacy data fixture |
+| `plugins/nonebot_plugin_tarot/cache.py:74` | tarot cache startup | loads cache mapping; invalid data is discarded | corrupt cache fixture |
+| `plugins/nonebot_plugin_whateat_pic/cache.py:71` | image cache startup | loads cache metadata and falls back empty | corrupt cache fixture |
+| `plugins/airi_point_salad/persistence.py:110` | game startup/restore | restricted `_PlainUnpickler` plus `GameState.from_dict` schema validation; bad main/backup is quarantined/recovered | malformed and legacy v2 fixtures |
+| `plugins/airi_wish_bottle/base/persistence.py:27` | wish-bottle startup | loads persisted mapping with fallback and atomic save path | corrupt data fixture |
+| `plugins/airi_mcrcon/__init__.py:343` | RCON data startup | loads persisted configuration/state; loader fallback is owner-specific | corrupt data fixture |
+| `plugins/airi_llm/memory.py:179` | memory startup | loads memory store and falls back on invalid pickle | corrupt memory fixture |
+| `plugins/airi_llm/memory.py:215` | per-context memory read | loads context pickle; invalid context is skipped/recovered | corrupt context fixture |
+| `plugins/airi_daily_check/base/persistence.py:33` | daily state startup | loads state pickle with fallback | corrupt state fixture |
+| `plugins/airi_daily_check/base/persistence.py:91` | challenge state startup | loads challenge pickle and falls back/rebuilds | corrupt challenge fixture |
+| `plugins/airi_daily_check/base/royal_road_bridge.py:21` | settlement receipt read | loads receipt value; invalid receipt must not be treated as delivered | corrupt receipt fixture |
+| `plugins/airi_daily_check/base/cache.py:130` | image/cache startup | loads cache payload and falls back | corrupt cache fixture |
+
+These are all direct `pickle.load`/restricted-unpickler call sites found by the repository-wide search. Reproduction is deterministic with a temporary truncated/non-pickle file at each configured path; no fixtures were retained.
+
+### Clean-process plugin-load probe
+
+Probe command:
+
+```text
+PYTHONPATH=/Users/liko/Documents/GitHub/AiriCore /opt/homebrew/Caskroom/miniconda/base/envs/airidev/bin/python /tmp/airicore_plugin_probe.py
+```
+
+The probe called `nonebot.init()`, registered `nonebot.adapters.onebot.v11.Adapter`, loaded `nonebot_plugin_localstore` then `nonebot_plugin_alconna`, and called `nonebot.load_plugins("plugins")`. Result: dependency-first loads succeeded; 35 plugins loaded successfully; `airi_security_monitor` failed with `RuntimeError: airi_security_monitor 仅支持 Linux，当前平台为 darwin`. The loaded set included the locally present `airi_game_server`; the top-level directory count remains 36. Captured lifecycle order begins `startup`, `shutdown`, then LLM/scheduler/state/cache/game/server handlers in registration order; the full hook list is retained in the command output, with repeated `_run_tests` hooks from plugin imports. The probe file was deleted after execution.
+
+### `pyfairy_xiangqi` Ruff classification
+
+`python -c 'import utils.pyfairy_xiangqi'` returned `IMPORT_OK`. Running the module through `runpy.run_path(..., run_name="__main__")` also exited 0 because line 5 dynamically executes `pyfairy_xiangqi_core.py`, which defines `main`. Therefore `utils/pyfairy_xiangqi.py:8` is a Ruff static-analysis false positive caused by dynamic `exec`, not a runtime/import defect. It remains a baseline lint finding until the implementation is refactored or lint-excluded.
+
+## Fix report
+
+No production fixes were made in Task 1. This revision only expands the audit report with complete inventories and clean-process evidence. The only changed artifact is this report; existing LLM worktree changes remain untouched.
