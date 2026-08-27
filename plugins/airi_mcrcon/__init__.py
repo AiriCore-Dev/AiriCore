@@ -20,6 +20,7 @@ from datetime import datetime
 from PIL import Image, ImageDraw
 from utils import cache as asset_cache
 from utils import llm
+from utils.messaging import send_group_with_fallback
 from nonebot.rule import to_me
 from nonebot.permission import SUPERUSER
 from nonebot import get_driver, logger, on_startswith, require
@@ -517,7 +518,7 @@ def read_cpu_temp():
 async def _alert_high_temp(ctemp: float) -> None:
     if not alert_group_id:
         return
-    bots = list(nonebot.get_bots().values())
+    bots = nonebot.get_bots()
     if not bots:
         logger.warning("airi_mcrcon 高温告警无可用 bot 连接，已跳过")
         return
@@ -526,12 +527,12 @@ async def _alert_high_temp(ctemp: float) -> None:
         "请适当降低跑图频率，如果有高频红石或者科技正在运行也请歇一歇，"
         "公益开服，还请大家共同努力，维护服务器健康，谢谢大家！"
     )
-    for bot in bots:
-        try:
-            await bot.send_group_msg(group_id=int(alert_group_id), message=text)
-            return
-        except Exception as e:
-            logger.warning(f"airi_mcrcon 高温告警发送失败（{bot.self_id}）: {e}")
+    await send_group_with_fallback(
+        text,
+        group_id=int(alert_group_id),
+        bots=bots,
+        tag="airi_mcrcon 高温告警",
+    )
 
 
 async def clear_item():

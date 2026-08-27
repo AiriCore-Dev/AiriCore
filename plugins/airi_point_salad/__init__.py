@@ -9,6 +9,7 @@ from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 from nonebot.plugin import PluginMetadata
 
 from utils.cache import get_b64
+from utils.messaging import send_group_with_fallback
 
 from .commands import Command, CommandError, parse_command
 from .game import GameError
@@ -313,13 +314,13 @@ async def notify_timeout(group_id: str, phase: Phase) -> None:
         logger.opt(exception=error).error("得分沙拉网页房间清理失败")
     label = "大厅" if phase is Phase.LOBBY else "对局"
     message = f"得分沙拉{label}因长时间无人操作已自动关闭"
-    for bot in nonebot.get_bots().values():
-        try:
-            await bot.send_group_msg(group_id=int(group_id), message=message)
-            return
-        except Exception:
-            continue
-    logger.warning(f"得分沙拉超时通知未送达：群 {group_id}")
+    result = await send_group_with_fallback(
+        message,
+        group_id=int(group_id),
+        tag="得分沙拉超时通知",
+    )
+    if not result.sent:
+        logger.warning(f"得分沙拉超时通知未送达：群 {group_id}")
 
 
 service.timeout_callback = notify_timeout
