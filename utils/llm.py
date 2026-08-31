@@ -685,9 +685,9 @@ async def call_chat(
                     frequency_penalty=CHAT_FREQUENCY_PENALTY,
                     presence_penalty=CHAT_PRESENCE_PENALTY,
                 )
-                record_success(SOURCE_CHAT, model)
                 text = _message_text(completion)
                 if text:
+                    record_success(SOURCE_CHAT, model)
                     return text
                 last_error = RuntimeError("模型返回空内容")
                 logger.warning("模型 %s 返回空内容，尝试下一个备用模型", model)
@@ -743,7 +743,6 @@ async def _create_structured(
         kwargs["response_format"] = {"type": "json_object"}
     try:
         completion = await generation.client.chat.completions.create(**kwargs)
-        record_success(usage_source, model)
     except Exception as exc:
         if use_response_format:
             mark_if_unavailable(model, exc, generation=generation.sequence)
@@ -807,6 +806,7 @@ async def call_structured(
                 continue
             parsed = loads_lenient(text)
             if parsed is not None:
+                record_success(usage_source, model)
                 return parsed
             logger.warning("模型 %s 结构化输出无法解析为JSON，原文前200字: %r", model, text[:200])
     logger.error("结构化LLM调用失败，%s 个模型全部未拿到可用结果", len(chain))
@@ -839,8 +839,6 @@ async def call_auxiliary(
                     messages=messages,
                     **kwargs,
                 )
-                if usage_source:
-                    record_success(usage_source, model)
                 text = _message_text(completion)
                 if not text:
                     raise RuntimeError("返回内容为空")
@@ -849,9 +847,11 @@ async def call_auxiliary(
                 log_attempt_failed(model, models, index, exc, tag, generation=generation.sequence)
                 continue
             if validate is None:
+                if usage_source:
+                    record_success(usage_source, model)
                 return text
             try:
-                return validate(text)
+                result = validate(text)
             except Exception as exc:
                 last_error = exc
                 if index + 1 < len(models):
@@ -859,6 +859,10 @@ async def call_auxiliary(
                 else:
                     suffix = "，已无备用模型"
                 logger.warning("%s模型 %s 返回内容校验未通过%s：%s", prefix, model, suffix, exc)
+                continue
+            if usage_source:
+                record_success(usage_source, model)
+            return result
         logger.error("[%s] %s 个模型全部调用失败: %s", tag, len(models), last_error)
         raise last_error if last_error else RuntimeError("调用失败")
 

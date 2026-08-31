@@ -9,6 +9,7 @@ sdk_diff*
 logs/
 log/
 docs/
+tests/
 .superpowers/
 .ruff_cache/
 tmp/
