@@ -165,10 +165,12 @@ def revert_plan(expiries: dict, bot_id: str) -> bool:
 def format_plan_subscriptions(
     expiries: dict,
     permanent_bot_ids: set[str] | list[str] | tuple[str, ...] = (),
+    nicknames: dict[str, str] | None = None,
     *,
     now: int | float | None = None,
 ) -> str:
     current_time = _plan_now(now)
+    names = nicknames or {}
     temporary_lines = []
     for bot_id, expires_at in sorted(
         expiries.items(), key=lambda item: (str(item[0]), float(item[1]))
@@ -176,7 +178,7 @@ def format_plan_subscriptions(
         expiry = int(float(expires_at))
         status = "生效中" if expiry > current_time else "已过期"
         temporary_lines.append(
-            f"{bot_id}｜{status}｜有效期至：{datetime.fromtimestamp(expiry, tz=UTC_PLUS_8):%Y-%m-%d %H:%M:%S}"
+            f"{names.get(str(bot_id), str(bot_id))}({bot_id})｜{status}｜有效期至：{datetime.fromtimestamp(expiry, tz=UTC_PLUS_8):%Y-%m-%d %H:%M:%S}"
         )
 
     permanent_ids = sorted({str(bot_id).strip() for bot_id in permanent_bot_ids if str(bot_id).strip()})
@@ -184,7 +186,10 @@ def format_plan_subscriptions(
     lines.extend(temporary_lines or ["临时订阅：无"])
     if permanent_ids:
         lines.append("永久权限：")
-        lines.extend(f"{bot_id}｜永久权限" for bot_id in permanent_ids)
+        lines.extend(
+            f"{names.get(bot_id, bot_id)}({bot_id})｜永久权限"
+            for bot_id in permanent_ids
+        )
     return "\n".join(lines)
 
 

@@ -333,12 +333,30 @@ airi_llm_plan_confirm = on_fullmatch(
 
 
 @airi_llm_plan_query.handle()
-async def _():
+async def _(bot: Bot):
     permanent_bot_ids = getattr(driver.config, "airi_llm_whitelist_bot", None)
     if isinstance(permanent_bot_ids, str):
         permanent_bot_ids = permanent_bot_ids.split(",")
     async with _LLM_PLAN_LOCK:
-        result = format_plan_subscriptions(PLAN_EXPIRIES, permanent_bot_ids or ())
+        plan_expiries = dict(PLAN_EXPIRIES)
+        permanent_ids = tuple(permanent_bot_ids or ())
+    bot_ids = sorted(
+        set(plan_expiries) | {str(bot_id).strip() for bot_id in permanent_ids if str(bot_id).strip()}
+    )
+    nickname_results = await asyncio.gather(
+        *(bot.get_stranger_info(user_id=int(bot_id)) for bot_id in bot_ids),
+        return_exceptions=True,
+    )
+    nicknames = {}
+    for bot_id, info in zip(bot_ids, nickname_results):
+        if isinstance(info, dict):
+            nicknames[bot_id] = str(info.get("nickname") or info.get("nick") or bot_id)
+        else:
+            nicknames[bot_id] = bot_id
+    async with _LLM_PLAN_LOCK:
+        result = format_plan_subscriptions(
+            plan_expiries, permanent_ids, nicknames
+        )
     await airi_llm_plan_query.finish(result)
 
 
