@@ -171,7 +171,7 @@ emoji合成
 - Airi-LLM:
 Airi智能体 By AiriCore Dev.
 * Airi会随机回复群内消息
-（该功能仅对直营姬开放）
+* 订阅指令：llmplan
 
 - Airi-Status:
 显示AiriCore服务器状态 By AiriCore Dev.
