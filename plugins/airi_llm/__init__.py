@@ -13,6 +13,7 @@ from utils import cache as asset_cache
 from utils.coordination import registry
 from utils.onebot_query import member_name
 from utils.totp_2fa import totp_verify
+from utils.llm import PLAN_EXPIRIES, has_llm_access
 from nonebot import (
     get_driver,
     on_message,
@@ -241,7 +242,9 @@ def _reply_to_self(ev: MessageEvent, self_id: str) -> bool:
 _raw_whitelist_bot = getattr(driver.config, "airi_llm_whitelist_bot", None)
 if isinstance(_raw_whitelist_bot, str):
     _raw_whitelist_bot = [b.strip() for b in _raw_whitelist_bot.split(",")]
-WHITELIST_BOT = set(_raw_whitelist_bot) if _raw_whitelist_bot else set()
+WHITELIST_BOT = {
+    str(bot_id).strip() for bot_id in (_raw_whitelist_bot or []) if str(bot_id).strip()
+}
 
 _raw_blacklist_group = getattr(driver.config, "airi_llm_blacklist_group", None)
 if isinstance(_raw_blacklist_group, str):
@@ -1136,11 +1139,13 @@ async def handle_airi_llm(bot: Bot, ev: MessageEvent):
         if group_id in BLACKLIST_GROUP:
             return
 
-        if WHITELIST_BOT and bot.self_id not in WHITELIST_BOT:
+        if not has_llm_access(bot.self_id, WHITELIST_BOT, PLAN_EXPIRIES):
             return
 
         uid_str = str(ev.user_id)
-        is_sibling_bot = uid_str == str(bot.self_id) or uid_str in WHITELIST_BOT
+        is_sibling_bot = uid_str == str(bot.self_id) or has_llm_access(
+            uid_str, WHITELIST_BOT, PLAN_EXPIRIES
+        )
 
         tokens = airi_state.negative_speaking_tokens.get(group_id, 0) - NEGATIVE_SPEAK_TOKENS_DEDUCT
         airi_state.negative_speaking_tokens[group_id] = max(tokens, 0)

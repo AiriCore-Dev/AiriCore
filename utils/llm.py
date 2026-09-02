@@ -73,6 +73,258 @@ STRUCTURED_TEMPERATURE = 0.3
 
 
 @dataclass(frozen=True)
+class PlanSpec:
+    days: int
+    cost: int
+
+
+@dataclass(frozen=True)
+class PurchaseResult:
+    bot_id: str
+    plan_type: str
+    days: int
+    cost: int
+    expires_at: int
+
+
+class PlanError(ValueError):
+    pass
+
+
+PLAN_CATALOG = {
+    "日卡": PlanSpec(days=1, cost=2000),
+    "周卡": PlanSpec(days=7, cost=10000),
+    "月卡": PlanSpec(days=30, cost=31900),
+}
+
+
+def _plan_now(now: int | float | None) -> int:
+    return int(time.time() if now is None else now)
+
+
+def _normalize_plan_bot_id(bot_id: str) -> str:
+    normalized = str(bot_id).strip()
+    if not re.fullmatch(r"[1-9]\d{4,11}", normalized):
+        raise PlanError("QQ号格式不正确")
+    return normalized
+
+
+def parse_plan_request(text: str) -> tuple[str, str]:
+    parts = str(text).strip().split()
+    if len(parts) != 2:
+        raise PlanError("用法：llmplan BotQQ号 套餐类型\n套餐类型：日卡、周卡、月卡")
+    bot_id = _normalize_plan_bot_id(parts[0])
+    if parts[1] not in PLAN_CATALOG:
+        raise PlanError("套餐类型无效，可选：日卡、周卡、月卡")
+    return bot_id, parts[1]
+
+
+def parse_plan_admin_add_request(text: str) -> tuple[str, int]:
+    parts = str(text).strip().split()
+    if len(parts) != 2:
+        raise PlanError("用法：llmplanadd BotQQ 小时数")
+    bot_id = _normalize_plan_bot_id(parts[0])
+    if not re.fullmatch(r"[1-9]\d*", parts[1]):
+        raise PlanError("小时数必须是正整数")
+    try:
+        hours = int(parts[1])
+    except ValueError:
+        raise PlanError("小时数过大") from None
+    return bot_id, hours
+
+
+def parse_plan_admin_bot_request(text: str) -> str:
+    parts = str(text).strip().split()
+    if len(parts) != 1:
+        raise PlanError("用法：llmplanrevert BotQQ")
+    return _normalize_plan_bot_id(parts[0])
+
+
+def add_plan_hours(
+    expiries: dict,
+    bot_id: str,
+    hours: int,
+    *,
+    now: int | float | None = None,
+) -> int:
+    normalized_bot_id = _normalize_plan_bot_id(bot_id)
+    if isinstance(hours, bool) or int(hours) <= 0:
+        raise PlanError("小时数必须是正整数")
+    current_time = _plan_now(now)
+    expires_at = max(current_time, int(float(expiries.get(normalized_bot_id, 0))))
+    expires_at += int(hours) * 3600
+    expiries[normalized_bot_id] = expires_at
+    return expires_at
+
+
+def revert_plan(expiries: dict, bot_id: str) -> bool:
+    normalized_bot_id = _normalize_plan_bot_id(bot_id)
+    return expiries.pop(normalized_bot_id, None) is not None
+
+
+def format_plan_subscriptions(
+    expiries: dict,
+    permanent_bot_ids: set[str] | list[str] | tuple[str, ...] = (),
+    *,
+    now: int | float | None = None,
+) -> str:
+    current_time = _plan_now(now)
+    temporary_lines = []
+    for bot_id, expires_at in sorted(
+        expiries.items(), key=lambda item: (str(item[0]), float(item[1]))
+    ):
+        expiry = int(float(expires_at))
+        status = "生效中" if expiry > current_time else "已过期"
+        temporary_lines.append(
+            f"{bot_id}｜{status}｜有效期至：{datetime.fromtimestamp(expiry, tz=UTC_PLUS_8):%Y-%m-%d %H:%M:%S}"
+        )
+
+    permanent_ids = sorted({str(bot_id).strip() for bot_id in permanent_bot_ids if str(bot_id).strip()})
+    lines = ["当前订阅情况："]
+    lines.extend(temporary_lines or ["临时订阅：无"])
+    if permanent_ids:
+        lines.append("永久权限：")
+        lines.extend(f"{bot_id}｜永久权限" for bot_id in permanent_ids)
+    return "\n".join(lines)
+
+
+def format_plan_status(
+    bot_id: str,
+    expiries: dict,
+    permanent_bot_ids: set[str] | list[str] | tuple[str, ...] = (),
+    *,
+    now: int | float | None = None,
+) -> str:
+    normalized_bot_id = str(bot_id).strip()
+    current_time = _plan_now(now)
+    if has_permanent_llm_access(normalized_bot_id, permanent_bot_ids):
+        status = "永久权限"
+        expiry_line = "有效期：永久"
+    else:
+        expiry = int(float(expiries.get(normalized_bot_id, 0)))
+        if expiry > current_time:
+            status = "临时订阅生效中"
+            expiry_line = f"有效期至：{datetime.fromtimestamp(expiry, tz=UTC_PLUS_8):%Y-%m-%d %H:%M:%S}"
+        else:
+            status = "无订阅" if normalized_bot_id not in expiries else "临时订阅已过期"
+            expiry_line = "有效期：无"
+    return "\n".join(
+        (
+            "当前分布式订阅信息：",
+            f"订阅状态：{status}",
+            expiry_line,
+        )
+    )
+
+
+def purchase_plan(
+    accounts: dict,
+    expiries: dict,
+    bot_id: str,
+    plan_type: str,
+    *,
+    payer_id: str | None = None,
+    now: int | float | None = None,
+) -> PurchaseResult:
+    normalized_bot_id = _normalize_plan_bot_id(bot_id)
+    normalized_payer_id = _normalize_plan_bot_id(payer_id or normalized_bot_id)
+    spec = PLAN_CATALOG.get(str(plan_type).strip())
+    if spec is None:
+        raise PlanError("套餐类型无效，可选：日卡、周卡、月卡")
+
+    account = accounts.get(normalized_payer_id)
+    if account is None:
+        raise PlanError('付款人尚未注册，请先发送“签到”')
+
+    credits = int(account.get("credits", 0))
+    if credits < spec.cost:
+        raise PlanError(f"付款人积分不足：需要{spec.cost}积分，当前{credits}积分")
+
+    current_time = _plan_now(now)
+    previous_expiry = int(float(expiries.get(normalized_bot_id, 0)))
+    expires_at = max(current_time, previous_expiry) + spec.days * 86400
+    account["credits"] = credits - spec.cost
+    expiries[normalized_bot_id] = expires_at
+    return PurchaseResult(
+        bot_id=normalized_bot_id,
+        plan_type=str(plan_type).strip(),
+        days=spec.days,
+        cost=spec.cost,
+        expires_at=expires_at,
+    )
+
+
+def has_llm_access(
+    bot_id: str,
+    permanent_bot_ids: set[str],
+    expiries: dict,
+    *,
+    now: int | float | None = None,
+) -> bool:
+    normalized_bot_id = str(bot_id).strip()
+    if normalized_bot_id in {str(item).strip() for item in permanent_bot_ids}:
+        return True
+    return float(expiries.get(normalized_bot_id, 0)) > _plan_now(now)
+
+
+def has_permanent_llm_access(bot_id: str, permanent_bot_ids: set[str]) -> bool:
+    normalized_bot_id = str(bot_id).strip()
+    return normalized_bot_id in {str(item).strip() for item in permanent_bot_ids}
+
+
+def ensure_plan_target_is_temporary(
+    bot_id: str,
+    permanent_bot_ids: set[str] | list[str] | tuple[str, ...],
+) -> None:
+    if has_permanent_llm_access(bot_id, permanent_bot_ids):
+        raise PlanError("该 Bot 已配置为永久权限，不能进行普通订阅、增加或取消操作")
+
+
+def is_exact_llm_plan_command(command: tuple[str, ...] | None) -> bool:
+    return command == ("llmplan",)
+
+
+def load_plan_expiries(path: Path) -> dict[str, int]:
+    if not path.is_file():
+        return {}
+    try:
+        with path.open("rb") as stream:
+            raw = pickle.load(stream)
+        if not isinstance(raw, dict):
+            return {}
+        return {
+            str(bot_id): int(float(expires_at))
+            for bot_id, expires_at in raw.items()
+            if str(bot_id).strip() and float(expires_at) > 0
+        }
+    except (OSError, EOFError, TypeError, ValueError, pickle.PickleError):
+        return {}
+
+
+def save_plan_expiries(path: Path, expiries: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, temp_name = tempfile.mkstemp(
+        dir=str(path.parent), prefix=f".{path.name}.", suffix=".tmp"
+    )
+    try:
+        with os.fdopen(fd, "wb") as stream:
+            pickle.dump(expiries, stream)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temp_name, path)
+    except Exception:
+        try:
+            os.unlink(temp_name)
+        except OSError:
+            pass
+        raise
+
+
+PLAN_FILE = Path(__file__).resolve().parents[1] / "data" / "airi_switch" / "llm_plan.pk"
+PLAN_EXPIRIES = load_plan_expiries(PLAN_FILE)
+
+
+@dataclass(frozen=True)
 class LLMProfile:
     base_url: str
     token: str
