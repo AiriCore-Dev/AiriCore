@@ -684,12 +684,13 @@ STEP_OPS = {
         {
             "key": "_2fa_key",
             "type": "secret",
-            "q": "二步验证密钥 (进阶, 不用就回车跳过)",
-            "tip": ["用于高危指令的二次确认, 需要配合验证器 App"],
+            "q": "二步验证密钥 (SUPERUSER 管理功能必需)",
+            "tip": ["用于所有 SUPERUSER 管理指令, 需要配合验证器 App"],
             "help": [
                 "这是 TOTP 密钥 (Base32 格式), 配合 Google Authenticator 这类 App 用。",
-                "开启后执行危险指令要额外输入 6 位动态码。",
-                "不懂就直接回车留空, 不影响任何常规功能。",
+                "配置后执行 SUPERUSER 管理指令要额外输入 6 位动态码。",
+                "用法示例：airiflush 123456；也支持 123456 reboot。",
+                "留空时 SUPERUSER 管理指令将被拒绝。",
             ],
         },
     ],

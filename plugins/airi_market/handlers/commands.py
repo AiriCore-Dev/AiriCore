@@ -4,7 +4,6 @@ import traceback
 import nonebot
 from nonebot.adapters.onebot.v11 import Bot, MessageEvent
 from nonebot.log import logger
-from utils.totp_2fa import totp_verify
 from utils import email as mailer
 
 from ..base import state
@@ -272,15 +271,9 @@ async def handle_airimarketboost(bot: Bot, ev: MessageEvent):
 
 @airimarketsdebug.handle()
 async def handle_airimarketsdebug(bot: Bot, ev: MessageEvent):
-    if not str(state._2fa_key or "").strip():
-        await airimarketsdebug.finish("未配置 _2fa_key，调试通道已禁用")
     src = ev.get_plaintext()[6:].strip()
     while (tmpa := src.replace("  ", " ")) != src:
         src = tmpa
-    user_2fa_digit = src[:6]
-    if not totp_verify(state._2fa_key, user_2fa_digit):
-        await airimarketsdebug.finish("2fa verification failed")
-    src = src[6:].strip()
     if not src:
         await airimarketsdebug.finish("缺少要执行的表达式")
     if src == "save":

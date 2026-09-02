@@ -1,8 +1,8 @@
 from nonebot import on_startswith
 from nonebot.rule import to_me
-from nonebot.permission import SUPERUSER
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent
 from nonebot.adapters.onebot.v11.permission import GROUP
+from utils.superuser_2fa import SUPERUSER_2FA
 
 from . import state
 
@@ -12,7 +12,7 @@ async def _in_active_game(event: GroupMessageEvent) -> bool:
     return 'turtle' in state.data.get('group', {}).get(gid, {})
 
 
-superuser_debug = on_startswith('tdebug ', priority=5, block=True, rule=to_me(), permission=SUPERUSER)
+superuser_debug = on_startswith('tdebug ', priority=5, block=True, rule=to_me(), permission=SUPERUSER_2FA)
 turtle_soup_on = on_startswith('海龟汤', priority=5, block=True, permission=GROUP)
 query = on_startswith('提问', priority=5, block=True, permission=GROUP, rule=_in_active_game)
 truth = on_startswith('猜汤底', priority=5, block=True, permission=GROUP, rule=_in_active_game)

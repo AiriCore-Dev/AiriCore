@@ -14,7 +14,6 @@ import hashlib
 import tempfile
 import traceback
 from pathlib import Path
-from utils.totp_2fa import totp_verify
 from .rcon_safe import SafeMCRcon, get_executor, shutdown_executor
 from datetime import datetime
 from PIL import Image, ImageDraw
@@ -22,7 +21,8 @@ from utils import cache as asset_cache
 from utils import llm
 from utils.messaging import send_group_with_fallback
 from nonebot.rule import to_me
-from nonebot.permission import SUPERUSER
+from utils.superuser_2fa import SUPERUSER_2FA
+from utils.superuser_2fa import is_verified_superuser
 from nonebot import get_driver, logger, on_startswith, require
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import MessageEvent
@@ -32,7 +32,6 @@ rcon_password = getattr(driver.config, "rcon_password", "")
 rcon_host = str(getattr(driver.config, "rcon_host", "") or "127.0.0.1")
 rcon_port = int(getattr(driver.config, "rcon_port", 0) or 25575)
 RCON_TIMEOUT = 8
-_2fa_key = str(getattr(driver.config, "_2fa_key", "") or "").strip()
 timing = require("nonebot_plugin_apscheduler").scheduler
 data = {}
 translate_groups = {}
@@ -638,7 +637,7 @@ def _cq_unescape(text: str) -> str:
 
 
 rcon_handle = on_startswith('/', priority=10, rule=_in_whitelist_group)
-superuser_debug = on_startswith('mdebug ', priority=5, block=True, rule=to_me(), permission=SUPERUSER)
+superuser_debug = on_startswith('mdebug ', priority=5, block=True, rule=to_me(), permission=SUPERUSER_2FA)
 
 
 @rcon_handle.handle()
@@ -657,7 +656,7 @@ async def _(bot: Bot, ev: MessageEvent):
         except Exception as err:
             res = f"连接出错：{str(err)}"
         await rcon_handle.finish(res.strip())
-    elif is_superuser and src == 'disconnect':
+    elif is_superuser and is_verified_superuser(ev) and src == 'disconnect':
         try:
             mcr.force_close()
             res = 'RCON已下线'
@@ -666,7 +665,7 @@ async def _(bot: Bot, ev: MessageEvent):
         await rcon_handle.finish(res.strip())
     elif src == "help":
         await rcon_handle.finish(HELP_TEXT.strip())
-    elif is_superuser and src.startswith('translate'):
+    elif is_superuser and is_verified_superuser(ev) and src.startswith('translate'):
         try:
             arg = src[9:].strip().lower()
             if arg not in ['on', 'off']:
@@ -795,12 +794,14 @@ async def _(bot: Bot, ev: MessageEvent):
             res = await rcon(f'execute at {username} run locate {arg}'.strip())
         except Exception as err:
             res = f"{str(err)}"
-    elif is_superuser and src == "clearitem":
+    elif is_superuser and is_verified_superuser(ev) and src == "clearitem":
         try:
             res = await clear_item()
         except Exception as err:
             res = f"{str(err)}"
     elif is_superuser:
+        if not is_verified_superuser(ev):
+            return
         try:
             src = re.sub(
                 r'\[CQ:at,\s*qq=(\d+)\]',
@@ -823,18 +824,12 @@ async def _(bot: Bot, ev: MessageEvent):
 @superuser_debug.handle()
 async def _(bot: Bot, ev: MessageEvent):
     global data
-    if not _2fa_key:
-        await superuser_debug.finish('未配置 _2fa_key，调试通道已禁用')
-
     user_id, gruop_id = parse_session(ev)
 
     src = ev.get_plaintext()[6:].strip()
     while (tmpa := src.replace("  ", " ")) != src:
         src = tmpa
 
-    if not totp_verify(_2fa_key, src[:6]):
-        await superuser_debug.finish('2fa verification failed')
-    src = src[6:].strip()
     if not src:
         await superuser_debug.finish('缺少要执行的表达式')
 

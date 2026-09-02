@@ -7,8 +7,6 @@ from nonebot.log import logger
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 
-from utils.totp_2fa import totp_verify
-
 from .base import cache
 
 from .base import state
@@ -23,23 +21,15 @@ from .base.persistence import (
 from . import handlers
 
 driver = get_driver()
-_2fa_key = str(getattr(driver.config, "_2fa_key", "") or "").strip()
 
 
 @superuser_debug.handle()
 async def _(bot: Bot, ev: MessageEvent):
-    if not _2fa_key:
-        await superuser_debug.finish('未配置 _2fa_key，调试通道已禁用')
-
     user_id, group_id = parse_session(ev)
     src = ev.get_plaintext()[6:].strip()
     while (tmpa := src.replace("  ", " ")) != src:
         src = tmpa
 
-    user_2fa_digit = src[:6]
-    if not totp_verify(_2fa_key, user_2fa_digit):
-        await superuser_debug.finish('2fa verification failed')
-    src = src[6:].strip()
     if not src:
         await superuser_debug.finish('缺少要执行的表达式')
 

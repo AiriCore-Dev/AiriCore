@@ -5,15 +5,13 @@ import re
 import nonebot
 from utils.cache import get_b64
 from utils.network import download_public_bytes
-from utils.totp_2fa import totp_verify
 from nonebot import on_notice, on_command, get_driver, logger
-from nonebot.permission import SUPERUSER
+from utils.superuser_2fa import SUPERUSER_2FA
 from nonebot.params import CommandArg
 from nonebot.adapters.onebot.v11 import GroupIncreaseNoticeEvent, Message
 from nonebot.adapters.onebot.v11.bot import Bot, MessageSegment
 
 driver = get_driver()
-_2fa_key = str(getattr(driver.config, "_2fa_key", "") or "").strip()
 BROADCAST_INTERVAL = 2
 BROADCAST_MAX_GROUPS = 2000
 BROADCAST_MAX_IMAGE_BYTES = 5 * 1024 * 1024
@@ -91,7 +89,7 @@ async def handle_group_increase(bot: Bot, event: GroupIncreaseNoticeEvent):
         logger.warning(f"处理入群事件时发生错误：{e}")
 
 
-airi_full_group = on_command('airifullgroup', priority=5, block=True, permission=SUPERUSER)
+airi_full_group = on_command('airifullgroup', priority=5, block=True, permission=SUPERUSER_2FA)
 
 
 def _is_image_data(data: bytes) -> bool:
@@ -184,39 +182,24 @@ async def _image_as_base64(data: dict, bot: Bot) -> str | None:
     return None
 
 
-async def _parse_broadcast_argument(arg: Message, bot: Bot) -> tuple[str | None, list]:
-    digit = None
+async def _parse_broadcast_argument(arg: Message, bot: Bot) -> list:
     content = []
     for segment in arg:
         if segment.type == "text":
             value = str(segment.data.get("text", ""))
-            if digit is None:
-                match = re.match(r"\s*(\S+)", value)
-                if not match:
-                    continue
-                digit = match.group(1)
-                value = value[match.end():].lstrip()
             if value:
                 content.append(MessageSegment.text(value))
-        elif digit is not None and segment.type == "image":
+        elif segment.type == "image":
             image = await _image_as_base64(dict(segment.data), bot)
             if image is None:
-                return digit, []
+                return []
             content.append(MessageSegment.image(image))
-    return digit, content
+    return content
 
 
 @airi_full_group.handle()
 async def _(bot: Bot, arg: Message = CommandArg()):
-    if not _2fa_key:
-        await airi_full_group.finish("未配置 _2fa_key，全群广播已禁用。")
-
-    digit, content = await _parse_broadcast_argument(arg, bot)
-    if not digit:
-        await airi_full_group.finish("用法：airifullgroup <2FA验证码> [广播内容]")
-
-    if not totp_verify(_2fa_key, digit):
-        await airi_full_group.finish("2fa verification failed")
+    content = await _parse_broadcast_argument(arg, bot)
 
     if any(segment.type == "image" for segment in arg) and not content:
         await airi_full_group.finish("图片解析失败，广播未开始。")

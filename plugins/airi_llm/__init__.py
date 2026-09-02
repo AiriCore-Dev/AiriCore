@@ -12,7 +12,6 @@ import nonebot
 from utils import cache as asset_cache
 from utils.coordination import registry
 from utils.onebot_query import member_name
-from utils.totp_2fa import totp_verify
 from utils.llm import PLAN_EXPIRIES, has_llm_access
 from nonebot import (
     get_driver,
@@ -21,7 +20,7 @@ from nonebot import (
     on_startswith,
 )
 from nonebot.rule import to_me
-from nonebot.permission import SUPERUSER
+from utils.superuser_2fa import SUPERUSER_2FA
 from nonebot.adapters.onebot.v11 import (
     Bot,
     MessageSegment,
@@ -340,9 +339,6 @@ try:
 except Exception:
     logger.error("角色提示词加载失败，插件以空提示词启动，可用 ldebug 刷新")
 airi_state.init_emoji_list()
-
-_2fa_key = str(getattr(driver.config, "_2fa_key", "") or "").strip()
-
 
 @driver.on_startup
 async def _on_startup() -> None:
@@ -901,8 +897,8 @@ async def passive_speaking(bot: Bot, group_id: str, mode: int = 1) -> None:
 
 
 airi_llm = on_message(priority=50, block=False)
-superuser_debug = on_startswith("ldebug ", priority=5, block=True, rule=to_me(), permission=SUPERUSER)
-emoji_build = on_startswith("airibuildemoji", priority=5, block=True, permission=SUPERUSER)
+superuser_debug = on_startswith("ldebug ", priority=5, block=True, rule=to_me(), permission=SUPERUSER_2FA)
+emoji_build = on_startswith("airibuildemoji", priority=5, block=True, permission=SUPERUSER_2FA)
 
 
 @emoji_build.handle()
@@ -1219,17 +1215,10 @@ async def handle_airi_llm(bot: Bot, ev: MessageEvent):
 @superuser_debug.handle()
 async def handle_superuser_debug(bot: Bot, ev: MessageEvent):
     try:
-        if not _2fa_key:
-            await superuser_debug.send("未配置 _2fa_key，调试通道已禁用")
-            return
         src = ev.get_plaintext()[6:].strip()
         while (tmpa := src.replace("  ", " ")) != src:
             src = tmpa
-        user_2fa_digit = src[:6]
-        if not totp_verify(_2fa_key, user_2fa_digit):
-            await superuser_debug.send("2fa verification failed")
-            return
-        cmd = src[6:].strip()
+        cmd = src
         awaited = cmd.startswith("await ")
         if awaited:
             cmd = cmd[6:].lstrip()

@@ -3,7 +3,7 @@ import base64
 import time
 
 from nonebot.rule import Rule
-from nonebot.permission import SUPERUSER
+from utils.superuser_2fa import SUPERUSER_2FA
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 from nonebot import on_fullmatch, logger
@@ -34,7 +34,7 @@ status = on_fullmatch(
     ("status", "状态"),
     block=True,
     priority=20,
-    permission=SUPERUSER if plugin_config.only_superuser else None,
+    permission=SUPERUSER_2FA if plugin_config.only_superuser else None,
 )
 
 

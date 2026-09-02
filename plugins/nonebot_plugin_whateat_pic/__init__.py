@@ -6,7 +6,7 @@ from nonebot.adapters.onebot.v11 import (
     GroupMessageEvent,
 )
 from nonebot.adapters.onebot.v11.permission import GROUP_ADMIN, GROUP_OWNER
-from nonebot.permission import SUPERUSER
+from utils.superuser_2fa import SUPERUSER_2FA
 from nonebot.adapters.onebot.v11.helpers import extract_image_urls
 from nonebot.exception import ActionFailed
 from nonebot.plugin import on_regex, PluginMetadata
@@ -85,12 +85,12 @@ view_dish = on_regex(r"^(/)?查[看|寻]?(菜[单|品]|饮[料|品])[\s]?(.*)?",
 add_dish = on_regex(
     r"^(/)?添[加]?(菜[品|单]|饮[品|料])[\s]?(.*)?",
     priority=99,
-    permission=SUPERUSER,
+    permission=SUPERUSER_2FA,
 )
 del_dish = on_regex(
     r"^(/)?删[除]?(菜[品|单]|饮[品|料])[\s]?(.*)?",
     priority=5,
-    permission=SUPERUSER,
+    permission=SUPERUSER_2FA,
 )
 
 img_eat_path = Path(os.path.join(os.path.dirname(__file__), "eat_pic"))

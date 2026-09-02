@@ -8,11 +8,11 @@ from typing import Set, Dict, Any, Union, List
 import nonebot
 from nonebot import on_regex
 from nonebot.params import RegexDict
-from nonebot.permission import SUPERUSER
 from nonebot.plugin import PluginMetadata
 from nonebot.adapters import Bot
 from nonebot.adapters.onebot.v11 import GROUP, GroupMessageEvent, Message
 from nonebot.adapters.onebot.v11.permission import GROUP_OWNER, GROUP_ADMIN
+from utils.superuser_2fa import SUPERUSER_2FA
 
 from .config import Config
 from .record import get_group_record, save_group_record, construct_waifu_msg, clear_group_record, \
@@ -66,9 +66,9 @@ default_allow_change_waifu: bool = waifu_config.today_waifu_default_change_waifu
 default_limit_times: int = waifu_config.today_waifu_default_limit_times
 today_waifu_superuser_opt: bool = waifu_config.today_waifu_superuser_opt
 if today_waifu_superuser_opt:
-    permission_opt = SUPERUSER
+    permission_opt = SUPERUSER_2FA
 else:
-    permission_opt = SUPERUSER | GROUP_OWNER | GROUP_ADMIN
+    permission_opt = SUPERUSER_2FA | GROUP_OWNER | GROUP_ADMIN
 
 _group_locks = weakref.WeakValueDictionary()
 
@@ -93,14 +93,14 @@ PatternStr = '|'.join([__plugin_name__, ] + plugin_aliases)
 today_waifu = on_regex(
     pattern=rf'^\s*({PatternStr})\s*$',
     flags=re.S,
-    permission=GROUP | SUPERUSER,
+    permission=GROUP | SUPERUSER_2FA,
     priority=7,
     block=True,
 )
 
 today_waifu_refresh = on_regex(
     rf"^\s*(刷新|重置)(?P<name>{PatternStr})\s*$",
-    permission=SUPERUSER,
+    permission=SUPERUSER_2FA,
     priority=7,
     block=True
 )
@@ -108,7 +108,7 @@ today_waifu_refresh = on_regex(
 today_waifu_change = on_regex(
     pattern=r'^\s*(换老婆|hlp)\s*$',
     flags=re.S,
-    permission=GROUP | SUPERUSER,
+    permission=GROUP | SUPERUSER_2FA,
     priority=7,
     block=True,
 )
@@ -130,7 +130,7 @@ today_waifu_set_allow_change = on_regex(
 today_waifu_force = on_regex(
     pattern=r'^\s*强娶',
     flags=re.S,
-    permission=GROUP | SUPERUSER,
+    permission=GROUP | SUPERUSER_2FA,
     priority=7,
     block=True,
 )

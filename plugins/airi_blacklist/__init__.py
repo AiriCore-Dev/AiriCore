@@ -11,8 +11,8 @@ from nonebot import get_driver, logger, on_fullmatch, on_startswith
 from nonebot.adapters import Event
 from nonebot.adapters.onebot.v11 import Bot, GroupMessageEvent, MessageEvent
 from nonebot.message import event_preprocessor
-from nonebot.permission import SUPERUSER
 from nonebot.exception import IgnoredException
+from utils.superuser_2fa import SUPERUSER_2FA
 
 try:
     import ujson as json
@@ -405,7 +405,7 @@ def _not_prefixed_by(*prefixes):
 
 add_user_blacklist = on_startswith(
     ("拉黑", "添加黑名单"),
-    permission=SUPERUSER,
+    permission=SUPERUSER_2FA,
     priority=5,
     rule=_not_prefixed_by("拉黑群", "拉黑Bot"),
 )
@@ -417,7 +417,7 @@ async def add_user_black_list(event: MessageEvent):
     await add_user_blacklist.send(msg)
 
 
-add_user_whitelist = on_startswith(("添加白名单",), permission=SUPERUSER, priority=5)
+add_user_whitelist = on_startswith(("添加白名单",), permission=SUPERUSER_2FA, priority=5)
 
 
 @add_user_whitelist.handle()
@@ -426,7 +426,7 @@ async def add_user_white_list(event: MessageEvent):
     await add_user_whitelist.send(msg)
 
 
-del_user_blacklist = on_startswith(("删除黑名单", "解除黑名单"), permission=SUPERUSER, priority=5)
+del_user_blacklist = on_startswith(("删除黑名单", "解除黑名单"), permission=SUPERUSER_2FA, priority=5)
 
 
 @del_user_blacklist.handle()
@@ -435,7 +435,7 @@ async def del_user_black_list(event: MessageEvent):
     await del_user_blacklist.send(msg)
 
 
-del_user_whitelist = on_startswith(("删除白名单", "解除白名单"), permission=SUPERUSER, priority=5)
+del_user_whitelist = on_startswith(("删除白名单", "解除白名单"), permission=SUPERUSER_2FA, priority=5)
 
 
 @del_user_whitelist.handle()
@@ -444,7 +444,7 @@ async def del_user_white_list(event: MessageEvent):
     await del_user_whitelist.send(msg)
 
 
-add_group_blacklist = on_startswith(("拉黑群", "添加群黑名单"), permission=SUPERUSER, priority=1)
+add_group_blacklist = on_startswith(("拉黑群", "添加群黑名单"), permission=SUPERUSER_2FA, priority=1)
 
 
 @add_group_blacklist.handle()
@@ -453,7 +453,7 @@ async def add_group_black_list(event: MessageEvent):
     await add_group_blacklist.send(msg)
 
 
-add_group_whitelist = on_startswith(("添加群白名单",), permission=SUPERUSER, priority=1)
+add_group_whitelist = on_startswith(("添加群白名单",), permission=SUPERUSER_2FA, priority=1)
 
 
 @add_group_whitelist.handle()
@@ -462,7 +462,7 @@ async def add_group_white_list(event: MessageEvent):
     await add_group_whitelist.send(msg)
 
 
-del_group_blacklist = on_startswith(("删除群黑名单", "解除群黑名单"), permission=SUPERUSER, priority=1)
+del_group_blacklist = on_startswith(("删除群黑名单", "解除群黑名单"), permission=SUPERUSER_2FA, priority=1)
 
 
 @del_group_blacklist.handle()
@@ -471,7 +471,7 @@ async def del_group_black_list(event: MessageEvent):
     await del_group_blacklist.send(msg)
 
 
-del_group_whitelist = on_startswith(("删除群白名单", "解除群白名单"), permission=SUPERUSER, priority=1)
+del_group_whitelist = on_startswith(("删除群白名单", "解除群白名单"), permission=SUPERUSER_2FA, priority=1)
 
 
 @del_group_whitelist.handle()
@@ -480,7 +480,7 @@ async def del_group_white_list(event: MessageEvent):
     await del_group_whitelist.send(msg)
 
 
-add_bot_blacklist = on_startswith(("拉黑Bot", "添加Bot黑名单"), permission=SUPERUSER, priority=1, ignorecase=True)
+add_bot_blacklist = on_startswith(("拉黑Bot", "添加Bot黑名单"), permission=SUPERUSER_2FA, priority=1, ignorecase=True)
 
 
 @add_bot_blacklist.handle()
@@ -489,7 +489,7 @@ async def add_bot_black_list(event: MessageEvent):
     await add_bot_blacklist.send(msg)
 
 
-add_bot_whitelist = on_startswith(("添加Bot白名单",), permission=SUPERUSER, priority=1)
+add_bot_whitelist = on_startswith(("添加Bot白名单",), permission=SUPERUSER_2FA, priority=1)
 
 
 @add_bot_whitelist.handle()
@@ -498,7 +498,7 @@ async def add_bot_white_list(event: MessageEvent):
     await add_bot_whitelist.send(msg)
 
 
-del_bot_blacklist = on_startswith(("删除Bot黑名单", "解除Bot黑名单"), permission=SUPERUSER, priority=1, ignorecase=True)
+del_bot_blacklist = on_startswith(("删除Bot黑名单", "解除Bot黑名单"), permission=SUPERUSER_2FA, priority=1, ignorecase=True)
 
 
 @del_bot_blacklist.handle()
@@ -507,7 +507,7 @@ async def del_bot_black_list(event: MessageEvent):
     await del_bot_blacklist.send(msg)
 
 
-del_bot_whitelist = on_startswith(("删除Bot白名单", "解除Bot白名单"), permission=SUPERUSER, priority=1, ignorecase=True)
+del_bot_whitelist = on_startswith(("删除Bot白名单", "解除Bot白名单"), permission=SUPERUSER_2FA, priority=1, ignorecase=True)
 
 
 @del_bot_whitelist.handle()
@@ -516,7 +516,7 @@ async def del_bot_white_list(event: MessageEvent):
     await del_bot_whitelist.send(msg)
 
 
-check_user_blacklist = on_startswith(("查看黑名单", "查看黑名单用户"), permission=SUPERUSER, priority=5)
+check_user_blacklist = on_startswith(("查看黑名单", "查看黑名单用户"), permission=SUPERUSER_2FA, priority=5)
 
 
 @check_user_blacklist.handle()
@@ -524,7 +524,7 @@ async def check_user_black_list():
     await check_user_blacklist.send(f"当前用户黑名单: {', '.join(namelist['user_blacklist'])}")
 
 
-check_user_whitelist = on_startswith(("查看白名单", "查看白名单用户"), permission=SUPERUSER, priority=5)
+check_user_whitelist = on_startswith(("查看白名单", "查看白名单用户"), permission=SUPERUSER_2FA, priority=5)
 
 
 @check_user_whitelist.handle()
@@ -532,7 +532,7 @@ async def check_user_white_list():
     await check_user_whitelist.send(f"当前用户白名单: {', '.join(namelist['user_whitelist'])}")
 
 
-check_group_blacklist = on_startswith(("查看群黑名单",), permission=SUPERUSER, priority=1)
+check_group_blacklist = on_startswith(("查看群黑名单",), permission=SUPERUSER_2FA, priority=1)
 
 
 @check_group_blacklist.handle()
@@ -540,7 +540,7 @@ async def check_group_black_list():
     await check_group_blacklist.send(f"当前群黑名单: {', '.join(namelist['group_blacklist'])}")
 
 
-check_group_whitelist = on_startswith(("查看群白名单",), permission=SUPERUSER, priority=1)
+check_group_whitelist = on_startswith(("查看群白名单",), permission=SUPERUSER_2FA, priority=1)
 
 
 @check_group_whitelist.handle()
@@ -548,7 +548,7 @@ async def check_group_white_list():
     await check_group_whitelist.send(f"当前群白名单: {', '.join(namelist['group_whitelist'])}")
 
 
-check_bot_blacklist = on_startswith(("查看Bot黑名单",), permission=SUPERUSER, priority=1)
+check_bot_blacklist = on_startswith(("查看Bot黑名单",), permission=SUPERUSER_2FA, priority=1)
 
 
 @check_bot_blacklist.handle()
@@ -556,7 +556,7 @@ async def check_bot_black_list():
     await check_bot_blacklist.send(f"当前Bot黑名单: {', '.join(namelist['bot_blacklist'])}")
 
 
-check_bot_whitelist = on_startswith(("查看Bot白名单",), permission=SUPERUSER, priority=1)
+check_bot_whitelist = on_startswith(("查看Bot白名单",), permission=SUPERUSER_2FA, priority=1)
 
 
 @check_bot_whitelist.handle()
@@ -565,7 +565,7 @@ async def check_bot_white_list():
 
 
 change_namelist = on_fullmatch(
-    ("切换黑名单", "更改黑名单", "切换白名单", "更改白名单", "切换名单"), permission=SUPERUSER
+    ("切换黑名单", "更改黑名单", "切换白名单", "更改白名单", "切换名单"), permission=SUPERUSER_2FA
 )
 
 

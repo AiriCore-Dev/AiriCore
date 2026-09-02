@@ -7,10 +7,10 @@ from cookit.nonebot import exception_notify
 from cookit.nonebot.alconna import RecallContext
 from nonebot import logger
 from nonebot.adapters import Bot as BaseBot, Event as BaseEvent
-from nonebot.permission import SUPERUSER
 from nonebot.typing import T_State
 from nonebot_plugin_alconna import AlconnaMatcher, Query, UniMessage
 from nonebot_plugin_waiter import prompt
+from utils.superuser_2fa import SUPERUSER_2FA
 
 from ..config import config, data_dir
 from ..consts import PREVIEW_CACHE_DIR_NAME
@@ -57,7 +57,7 @@ async def _(
     q_all: Query[bool] = Query("~all.value", default=False),
 ):
     if q_online.result:
-        if not await SUPERUSER(bot, event):
+        if not await SUPERUSER_2FA(bot, event):
             return
 
         async with exception_notify("从 Hub 获取贴纸包信息失败"):
@@ -86,7 +86,7 @@ async def _(
             pic = save_image(draw_sticker_pack_grid(params), skia.kJPEG)
         await UniMessage.image(raw=pic).text("以上为 Hub 中可用的贴纸包列表").finish()
 
-    if q_all.result and not await SUPERUSER(bot, event):
+    if q_all.result and not await SUPERUSER_2FA(bot, event):
         return
 
     packs = pack_manager.packs if q_all.result else pack_manager.available_packs
@@ -106,7 +106,7 @@ alc.subcommand(
 )
 
 
-@m_cls.dispatch("~reload", permission=SUPERUSER).handle()
+@m_cls.dispatch("~reload", permission=SUPERUSER_2FA).handle()
 async def _(m: AlconnaMatcher):
     async with exception_notify("出现未知错误"):
         op = pack_manager.reload()
@@ -135,7 +135,7 @@ alc.subcommand(
 )
 
 
-@m_cls.dispatch("~install", permission=SUPERUSER).handle()
+@m_cls.dispatch("~install", permission=SUPERUSER_2FA).handle()
 async def _(
     m: AlconnaMatcher,
     q_packs: Query[list[str]] = Query("~packs"),
@@ -187,7 +187,7 @@ alc.subcommand(
 )
 
 
-@m_cls.dispatch("~update", permission=SUPERUSER).handle()
+@m_cls.dispatch("~update", permission=SUPERUSER_2FA).handle()
 async def _(
     m: AlconnaMatcher,
     q_packs: Query[Optional[list[str]]] = Query("~packs", None),
@@ -230,7 +230,7 @@ alc.subcommand(
 )
 
 
-@m_cls.dispatch("~delete", permission=SUPERUSER).handle()
+@m_cls.dispatch("~delete", permission=SUPERUSER_2FA).handle()
 async def _(
     m: AlconnaMatcher,
     q_packs: Query[list[str]] = Query("~packs"),
@@ -286,8 +286,8 @@ alc.subcommand(
 )
 
 
-@m_cls.dispatch("~enable", permission=SUPERUSER, state={"m_disable": False}).handle()
-@m_cls.dispatch("~disable", permission=SUPERUSER, state={"m_disable": True}).handle()
+@m_cls.dispatch("~enable", permission=SUPERUSER_2FA, state={"m_disable": False}).handle()
+@m_cls.dispatch("~disable", permission=SUPERUSER_2FA, state={"m_disable": True}).handle()
 async def _(
     m: AlconnaMatcher,
     state: T_State,

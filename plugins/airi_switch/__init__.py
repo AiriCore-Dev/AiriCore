@@ -16,7 +16,7 @@ from dotenv.parser import parse_stream
 from nonebot import on_command, on_fullmatch, on_startswith, require, get_driver, logger
 from nonebot.config import Config
 from nonebot.params import Command, CommandArg
-from nonebot.permission import SUPERUSER
+from utils.superuser_2fa import SUPERUSER_2FA
 from nonebot.adapters.onebot.v11 import Bot, Message, MessageSegment
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, PrivateMessageEvent, MessageEvent
 from datetime import datetime, timezone, timedelta
@@ -220,7 +220,7 @@ _CONFIG_ROOT = Path(
 _ENVIRONMENT = str(driver.env or "prod")
 _loaded_env_keys = _read_env_keys(_env_files(_CONFIG_ROOT, _ENVIRONMENT))
 
-airi_flush = on_fullmatch('airiflush', priority=5, block=True, permission=SUPERUSER)
+airi_flush = on_fullmatch('airiflush', priority=5, block=True, permission=SUPERUSER_2FA)
 
 
 @airi_flush.handle()
@@ -237,21 +237,21 @@ async def _():
         '配置已刷新。运行时动态读取的配置已生效，导入时固化的配置仍需重启。'
     )
 
-airi_query_accounts = on_fullmatch('airiquery', priority=5, block=True, permission=SUPERUSER)
+airi_query_accounts = on_fullmatch('airiquery', priority=5, block=True, permission=SUPERUSER_2FA)
 
-airi_llm_query = on_command("airillmquery", priority=5, block=True, permission=SUPERUSER)
-airi_llm_switch = on_command("airiccswitch", priority=5, block=True, permission=SUPERUSER)
+airi_llm_query = on_command("airillmquery", priority=5, block=True, permission=SUPERUSER_2FA)
+airi_llm_switch = on_command("airiccswitch", priority=5, block=True, permission=SUPERUSER_2FA)
 airi_llm_plan = on_command(
     "llmplan", priority=5, block=True, force_whitespace=True
 )
 airi_llm_plan_query = on_command(
-    "llmplanquery", priority=4, block=True, permission=SUPERUSER
+    "llmplanquery", priority=4, block=True, permission=SUPERUSER_2FA
 )
 airi_llm_plan_add = on_command(
-    "llmplanadd", priority=4, block=True, permission=SUPERUSER
+    "llmplanadd", priority=4, block=True, permission=SUPERUSER_2FA
 )
 airi_llm_plan_revert = on_command(
-    "llmplanrevert", priority=4, block=True, permission=SUPERUSER
+    "llmplanrevert", priority=4, block=True, permission=SUPERUSER_2FA
 )
 
 
@@ -757,7 +757,7 @@ async def _bot_cell(bot: Bot, self_id: str, nick: str, data: dict, avatars: dict
     )
 
 
-airi_analysis = on_startswith('airianalysis', priority=5, block=True, permission=SUPERUSER)
+airi_analysis = on_startswith('airianalysis', priority=5, block=True, permission=SUPERUSER_2FA)
 @airi_analysis.handle()
 async def _(bot: Bot, ev: MessageEvent):
     if not isinstance(ev, GroupMessageEvent):
@@ -862,7 +862,7 @@ def _reboot_preflight() -> str:
     return ''
 
 
-airi_force_reboot = on_fullmatch('force-reboot', priority=5, block=True, permission=SUPERUSER)
+airi_force_reboot = on_fullmatch('force-reboot', priority=5, block=True, permission=SUPERUSER_2FA)
 @airi_force_reboot.handle()
 async def _(bot: Bot, ev: MessageEvent):
     err = _reboot_preflight()
@@ -884,7 +884,7 @@ async def _(bot: Bot, ev: MessageEvent):
     await airi_force_reboot.send('已发出强制重启指令，AiriCore 即将重启。')
 
 
-airi_reboot = on_fullmatch('reboot', priority=5, block=True, permission=SUPERUSER)
+airi_reboot = on_fullmatch('reboot', priority=5, block=True, permission=SUPERUSER_2FA)
 @airi_reboot.handle()
 async def _(bot: Bot, ev: MessageEvent):
     err = _reboot_preflight()
@@ -921,7 +921,7 @@ def _ram_node(bot_id: str, name: str, content: str) -> dict:
     return {"type": "node", "data": {"name": name, "uin": bot_id, "content": content}}
 
 
-airi_ram = on_fullmatch('airiram', priority=5, block=True, permission=SUPERUSER)
+airi_ram = on_fullmatch('airiram', priority=5, block=True, permission=SUPERUSER_2FA)
 @airi_ram.handle()
 async def _(bot: Bot, ev: MessageEvent):
     if not isinstance(ev, GroupMessageEvent):

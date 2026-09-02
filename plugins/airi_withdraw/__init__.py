@@ -1,12 +1,12 @@
 from nonebot import on_fullmatch
-from nonebot.permission import SUPERUSER
 from nonebot.adapters.onebot.v11 import Bot, MessageEvent
 from nonebot.adapters.onebot.v11.exception import ActionFailed
 from nonebot.log import logger
+from utils.superuser_2fa import SUPERUSER_2FA
 
 withdraw = on_fullmatch(
     ("撤回",),
-    permission=SUPERUSER,
+    permission=SUPERUSER_2FA,
     priority=5,
     block=True,
 )
