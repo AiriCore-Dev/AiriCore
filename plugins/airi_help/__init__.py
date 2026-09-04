@@ -172,6 +172,7 @@ emoji合成
 - Airi-LLM:
 Airi智能体 By AiriCore Dev.
 * Airi会随机回复群内消息
+* 需要订阅后才能使用
 * 订阅指令：llmplan
 
 - Airi-Status:
@@ -234,30 +235,21 @@ https://github.com/AiriCore-Dev/AiriCore"""
 
 superhelp_msg = [
     make_node(
-        "SUPERUSER 使用说明",
-        """----- SUPERUSER 管理指令 -----
-
-以下指令仅限 SUPERUSER 使用，并且每次都需要附带 6 位 TOTP 动态码。
-用法示例：superhelp 123456、123456 airiflush
-本帮助本身也需要动态码：superhelp <6位动态码>""",
-    ),
-    make_node(
         "配置、运行与调试",
-        """airiflush                 刷新运行配置
-airiquery                 查询账号配置
-airillmquery              查询 LLM 配置
-airiccswitch              切换 LLM 账号
-llmplanquery              查询 Bot 订阅
-llmplanadd                添加 Bot 订阅
-llmplanrevert             取消 Bot 订阅
-airianalysis              查看群聊分析
-airiram                   查看内存占用
-force-reboot              强制重启
-reboot                    重启
-撤回                       撤回消息
-airifullgroup             向全部群发送广播
-airibuildemoji            构建 emoji
-status                    查看状态（仅在配置为仅限 SUPERUSER 时）""",
+        """airiflush
+airiquery
+airillmquery
+airiccswitch
+llmplanquery
+llmplanadd
+llmplanrevert
+airianalysis
+airiram
+force-reboot
+reboot
+撤回
+airifullgroup
+airibuildemoji""",
     ),
     make_node(
         "Python 调试通道",
@@ -270,14 +262,12 @@ bdebug <表达式或代码>""",
     ),
     make_node(
         "市场、名单与审核",
-        """【市场】
-airimarket <参数>
+        """airimarket <参数>
 airimarketlist
 airimarkettest <参数>
 airimarketcancel <参数>
 airimarketboost <参数>
 
-【黑名单与白名单】
 拉黑、添加黑名单、添加白名单
 删除黑名单、解除黑名单、删除白名单、解除白名单
 拉黑群、添加群黑名单、添加群白名单
@@ -288,18 +278,15 @@ airimarketboost <参数>
 查看Bot黑名单、查看Bot白名单
 切换黑名单、切换白名单、切换名单
 
-【心愿瓶审核】
 btapprove、btreject、plapprove、plreject、jbapprove、jbreject
 pending_bottle、pending_comment、pending_jb""",
     ),
     make_node(
         "其他插件管理",
-        """【今日老婆管理】
-刷新/重置今日老婆（及自定义别名）
+        """刷新/重置今日老婆（及自定义别名）
 设置换老婆次数、开启换老婆、关闭换老婆
 强娶、换老婆、hlp
 
-【贴纸管理】
 stickers list --online
 stickers list --all
 stickers reload
@@ -308,7 +295,6 @@ stickers update
 stickers delete
 stickers enable、stickers disable
 
-【表情与菜单管理】
 禁用表情、启用表情、全局禁用表情、全局启用表情
 添加菜品、添加饮品、删除菜品、删除饮品""",
     ),
@@ -317,7 +303,7 @@ stickers enable、stickers disable
         """/disconnect
 /translate on|off
 /clearitem
-/任意服务器指令（SUPERUSER 可直接执行）""",
+/任意服务器指令""",
     ),
 ]
 

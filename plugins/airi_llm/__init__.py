@@ -12,7 +12,7 @@ import nonebot
 from utils import cache as asset_cache
 from utils.coordination import registry
 from utils.onebot_query import member_name
-from utils.llm import PLAN_EXPIRIES, has_llm_access
+from .plan import PLAN_EXPIRIES, has_llm_access
 from nonebot import (
     get_driver,
     on_message,
