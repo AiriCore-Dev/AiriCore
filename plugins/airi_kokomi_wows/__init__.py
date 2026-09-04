@@ -28,6 +28,9 @@ from .command_select import select_funtion
 from .kokomi_chs import *
 from .kokomi_llm import kokomi_llm
 from .message_parser import parse_to_command
+from utils.copy import COPY
+from utils import credit
+from utils.credit import KOKOMI_WOWS_COST
 
 wws_bot = on_startswith(trigger_list + trigger_shortcut_list, ignorecase=True)
 
@@ -35,6 +38,7 @@ wws_bot = on_startswith(trigger_list + trigger_shortcut_list, ignorecase=True)
 async def main(bot: Bot, ev: MessageEvent):
     tot = 0
     while 1:
+        receipt = None
         try:
             session_id = str(ev.get_session_id())
             if 'group' in session_id:
@@ -45,7 +49,7 @@ async def main(bot: Bot, ev: MessageEvent):
                 qq_id = session_id
                 gruop_id = None
             if qq_id in Plugin_Config.BLACKLIST_USER:
-                await wws_bot.finish("数据请求异常，请稍后再试。", reply_message = True)
+                await wws_bot.finish(COPY["DATA_REQUEST_FAILED"], reply_message = True)
             if gruop_id:
                 if gruop_id in Plugin_Config.BLACKLIST:
                     return
@@ -76,6 +80,11 @@ async def main(bot: Bot, ev: MessageEvent):
                 channel_id='123456',
                 platform_data={}
             )
+            try:
+                receipt = await credit.charge(qq_id, KOKOMI_WOWS_COST)
+            except credit.ChargeRejected as error:
+                await wws_bot.send(str(error), reply_message=True)
+                return
             msg_res = MessageSegment.text(llm_msg if need_apply_llm else "")
             if fun['type'] == 'msg':
                 await wws_bot.send(msg_res + MessageSegment.text(fun['msg']),reply_message = True)
@@ -83,8 +92,10 @@ async def main(bot: Bot, ev: MessageEvent):
                 await wws_bot.send(msg_res + MessageSegment.image(fun['img']),reply_message = True)
             return
         except ActionFailed:
+            await credit.refund(receipt)
             return False
         except Exception as e:
+            await credit.refund(receipt)
             tot += 1
             if tot > 2:
                 logger.error(traceback.format_exc())

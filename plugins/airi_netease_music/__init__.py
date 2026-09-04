@@ -6,6 +6,8 @@ from nonebot import on_command, require
 from nonebot.params import CommandArg
 from nonebot.adapters.onebot.v11 import Bot, Message, MessageSegment
 from nonebot.adapters.onebot.v11.event import MessageEvent
+from utils import credit
+from utils.credit import NETEASE_MUSIC_COST, charge_or_finish
 
 require("nonebot_plugin_waiter")
 from nonebot_plugin_waiter import waiter
@@ -66,11 +68,17 @@ async def handle_netease_music(bot: Bot, ev: MessageEvent, arg: Message = Comman
     if not songs:
         await netease_music.finish(f"没有搜到「{keyword}」相关的歌曲呢~", reply_message=True)
 
+    receipt = await charge_or_finish(netease_music, ev.get_user_id(), NETEASE_MUSIC_COST)
+
     listing = "\n".join(format_song(i + 1, s) for i, s in enumerate(songs))
-    await netease_music.send(
-        f"为你找到以下歌曲，请在 {SELECT_TIMEOUT} 秒内回复序号选择：\n{listing}",
-        reply_message=True,
-    )
+    try:
+        await netease_music.send(
+            f"为你找到以下歌曲，请在 {SELECT_TIMEOUT} 秒内回复序号选择：\n{listing}",
+            reply_message=True,
+        )
+    except Exception:
+        await credit.refund(receipt)
+        raise
 
     @waiter(waits=["message"], keep_session=True, block=True)
     async def get_choice(event: MessageEvent):
@@ -78,14 +86,20 @@ async def handle_netease_music(bot: Bot, ev: MessageEvent, arg: Message = Comman
 
     resp = await get_choice.wait(timeout=SELECT_TIMEOUT)
     if resp is None:
+        await credit.refund(receipt)
         await netease_music.finish("超时啦，点歌已取消~")
     if not resp.isdigit() or not (1 <= int(resp) <= len(songs)):
+        await credit.refund(receipt)
         await netease_music.finish("序号无效，点歌已取消~")
 
     song = songs[int(resp) - 1]
     sid = song["id"]
 
-    await netease_music.send(MessageSegment.music("163", sid))
+    try:
+        await netease_music.send(MessageSegment.music("163", sid))
+    except Exception:
+        await credit.refund(receipt)
+        raise
 
     try:
         audio_b64, reason = await fetch_audio_b64(sid)
@@ -93,6 +107,7 @@ async def handle_netease_music(bot: Bot, ev: MessageEvent, arg: Message = Comman
         audio_b64, reason = None, "unavailable"
 
     if audio_b64 is None:
+        await credit.refund(receipt)
         if reason == "oversize":
             await netease_music.finish("这首歌文件过大，只能提供音乐卡片哦~")
         await netease_music.finish("这首歌可能受版权限制，无法获取音频哦~")
@@ -100,4 +115,5 @@ async def handle_netease_music(bot: Bot, ev: MessageEvent, arg: Message = Comman
     try:
         await netease_music.send(MessageSegment.record(f"base64://{audio_b64}"))
     except Exception:
+        await credit.refund(receipt)
         await netease_music.finish("语音发送失败了，可以直接点上面的音乐卡片收听~")

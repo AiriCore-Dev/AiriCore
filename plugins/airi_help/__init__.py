@@ -8,6 +8,7 @@ from nonebot.adapters.onebot.v11.permission import GROUP
 
 from utils.cache import get_b64, register_asset_group
 from utils.superuser_2fa import SUPERUSER_2FA
+from utils.copy import COPY
 
 PLUGIN_DIR = os.path.dirname(__file__)
 register_asset_group("airi_help 图片", PLUGIN_DIR, ("*.png", "*.jpg", "*.jpeg"), lambda path: len(get_b64(path) or ""))
@@ -53,6 +54,7 @@ msg = [
 - HarukiBot:
 PJSK综合查询 By NagiHina
 * 发送指令 pjskhelp 查看帮助
+$ 10积分 / 次
 
 - ena-pjsk-score:
 烤倍率/pt计算器 By 咖啡不甜
@@ -62,6 +64,7 @@ PJSK综合查询 By NagiHina
 战舰世界水表查询 By Maoyu，AiriCore Dev.
 * 使用 wws 触发
 * 发送 wws help 查看帮助
+$ 10积分 / 次
 
 - Airi-MCRcon:
 Airi Cobblemon Sever 服管 By AiriCore Dev.
@@ -77,17 +80,15 @@ Airi Cobblemon Sever 服管 By AiriCore Dev.
 * 常用指令：签到
 * 发送 签到帮助 查看帮助
 
-- Momoi Airi SEKAI Roguelike:
-勇闯未知SEKAI小游戏 By AiriCore Dev.
-* 网页端：https://www.airi.asia/game
-
 - Momoi Airi Wish Bottle:
 Airi心愿瓶（漂流瓶plus） By AiriCore Dev.
 * 发送 心愿瓶帮助 查看帮助
+$ 10积分 / 次
 
 - Momoi Airi Turtle Soup:
 Airi海龟汤 By AiriCore Dev.
 * 发送 海龟汤 查看帮助
+$ 开局：300积分 / 次
 
 - jrys:
 测测你的今日运势
@@ -96,18 +97,23 @@ Airi海龟汤 By AiriCore Dev.
 - tarot:
 塔罗牌占卜 By MinatoAquaCrews
 * 使用指令 占卜 触发
+$ 10积分 / 次
 
 - today-waifu:
 随即抓取群友做老婆 By glamorgan9826
 * 指令: jrlp、hlp、强娶
+$ jrlp、hlp：10积分 / 次
+$ 强娶：100积分 / 次
 
 - whateat-pic:
 今天吃什么 By Cvandia
 * 常用指令: 今天吃什么，今天喝什么
+$ 10积分 / 次
 
 - Minesweeper:
 扫雷游戏 By MeetWq
-* 发送 扫雷帮助 查看帮助""",
+* 发送 扫雷帮助 查看帮助
+$ 100积分 / 次""",
     ),
     make_node(
         "功能插件",
@@ -116,6 +122,7 @@ Airi海龟汤 By AiriCore Dev.
 - Airi-Netease-Music:
 网易云点歌 By AiriCore Dev.
 * 指令：点歌 歌曲名
+$ 10积分 / 次
 
 - Airi-Choice:
 随机挑选插件 By AiriCore Dev.
@@ -128,18 +135,22 @@ Airi海龟汤 By AiriCore Dev.
 - Airi-Attrwhich:
 英文缩写查询 By AiriCore Dev.
 * 指令：@Airi xxx是什么
+$ 10积分 / 次
 
 - Airi-PackPic:
 打包图片 By AiriCore Dev.
 * 引用一条合并转发消息并发送 packpic 指令，压缩打包其中所有的图片
+$ 10积分 / 次
 
 - Memes:
 表情包制作 By MeetWq
 * 发送 表情包制作 查看帮助
+$ 10积分 / 次
 
 - meme-stickers:
 PJSK&Arcaea 贴纸制作 By lgc-NB2Dev
 * 发送 pjskbq 或者 arcbq 查看说明
+$ 10积分 / 次
 
 - emojimix:
 emoji合成
@@ -154,17 +165,19 @@ emoji合成
 五子棋，黑白棋，围棋（PvP only）
 * 开局指令：五子棋，黑白棋，围棋
 * 常用指令：落子 坐标，悔棋，跳过回合，结束下棋，显示棋盘
+$ 开局：100积分 / 次
 
 - cchess:
 中国象棋（PvE & PvP）
 * 开局指令：@Airi 象棋人机lvX，@Airi 象棋对战
 * 落子指令：炮二平五（中文格式），b2e2（坐标格式）
 * 其他指令：结束下棋，显示棋盘，悔棋
+$ 开局：100积分 / 次
 
 - MORE MORE JUMP！Point Salad:
 得分沙拉桌游 By AiriCore Dev.
 * 发送 ,sl rl 查看玩法和完整指令
-* 网页端：https://www.airi.asia/salad/""",
+$ 开局：200积分 / 次""",
     ),
     make_node(
         "基础插件",
@@ -316,7 +329,7 @@ superhelp = on_fullmatch("superhelp", priority=99, permission=SUPERUSER_2FA)
 @Airi_help.handle()
 async def handle_help(bot: Bot, event: MessageEvent):
     if not isinstance(event, GroupMessageEvent):
-        await Airi_help.finish("帮助只能在群聊内查看哦~")
+        await Airi_help.finish(COPY["GROUP_ONLY"])
     nodes = copy.deepcopy(msg)
     for node in nodes:
         node["data"]["uin"] = bot.self_id
@@ -326,7 +339,7 @@ async def handle_help(bot: Bot, event: MessageEvent):
 @superhelp.handle()
 async def handle_superhelp(bot: Bot, event: MessageEvent):
     if not isinstance(event, GroupMessageEvent):
-        await superhelp.finish("超管帮助只能在群聊内查看哦~")
+        await superhelp.finish(COPY["GROUP_ONLY"])
     nodes = copy.deepcopy(superhelp_msg)
     for node in nodes:
         node["data"]["uin"] = bot.self_id

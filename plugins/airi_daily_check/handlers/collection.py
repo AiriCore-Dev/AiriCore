@@ -9,6 +9,7 @@ from nonebot import logger
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import MessageEvent
 from utils import credits
+from utils.copy import COPY
 
 from ..base import state
 from ..base import cache
@@ -246,7 +247,7 @@ async def _(bot: Bot, ev: MessageEvent):
             except ValueError:
                 pass
         logger.error(f"收藏抽卡出图失败，已回滚积分: {e}")
-        await chouka.finish('❌ 抽卡出图失败了，积分已退回，请稍后再试', reply_message=True)
+        await chouka.finish(f'❌ 抽卡出图失败了，积分已退回，{COPY["TRY_LATER"]}', reply_message=True)
 
     await chouka.send(MessageSegment.image(base64_img), reply_message=True)
     await check_all_achiv(user_id, bot, ev)

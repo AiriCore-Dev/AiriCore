@@ -3,6 +3,7 @@ import secrets
 import time
 
 from .models import GameMode, GameSpeed, Phase
+from utils.copy import COPY
 
 
 PRESENCE_TTL = 30
@@ -128,7 +129,7 @@ class WebRooms:
                 if room_id.startswith("web:") and state.phase is not Phase.FINISHED
             ]
             if len(active_rooms) >= MAX_WEB_ROOMS:
-                raise RoomLimitError("当前网页房间数量已达上限，请稍后再试")
+                raise RoomLimitError(f"当前网页房间数量已达上限，{COPY['TRY_LATER']}")
             user_rooms = sum(
                 1
                 for room_id in active_rooms
@@ -157,7 +158,7 @@ class WebRooms:
             self._drop_code(room_id)
             raise ValueError("房间不存在或已结束")
         if qq not in self.access.get(room_id, set()) and not any(player.user_id == qq for player in state.players):
-            raise ValueError("无权访问该房间码")
+            raise ValueError(COPY["ROOM_ACCESS_DENIED"])
         return await self._ensure_code(room_id, state)
 
     def _room_for_code(self, code):
@@ -191,7 +192,7 @@ class WebRooms:
 
     def heartbeat(self, room_id, qq):
         if not self.allowed(room_id, qq):
-            raise ValueError("无权访问该房间")
+            raise ValueError(COPY["ROOM_ACCESS_DENIED"])
         self.presence[(room_id, qq)] = time.time()
 
     def active(self, room_id, qq):
@@ -200,7 +201,7 @@ class WebRooms:
     def snapshot(self, room_id, qq):
         self._prune_finished()
         if not self.allowed(room_id, qq):
-            raise ValueError("无权访问该房间")
+            raise ValueError(COPY["ROOM_ACCESS_DENIED"])
         state = self.service.games.get(room_id)
         if state is None:
             record = self.finished.get(room_id)

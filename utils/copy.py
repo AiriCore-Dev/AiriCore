@@ -1,0 +1,38 @@
+COPY = {
+    "TRY_LATER": "请稍后再试",
+    "COMMAND_SUCCESS": "命令执行成功",
+    "CANCELLED": "已取消",
+    "MISSING_EXPRESSION": "缺少要执行的表达式",
+    "OPERATION_FAILED": "操作失败，请稍后再试",
+    "PROCESSING_FAILED": "处理失败，请稍后再试",
+    "PROCESSING_ERROR_LOGGED": "❌ 处理时出错了，已记录日志",
+    "PROCESSING_FAILED_WITH_SUBJECT": "{subject}处理失败，请稍后再试",
+    "DOWNLOAD_FAILED": "下载失败，请稍后再试",
+    "GROUP_MEMBERS_UNAVAILABLE": "群成员信息暂时不可用，请稍后再试",
+    "AI_REPLY_INVALID": "AI没有给出有效回复，请稍后再试\n（{action}次数已返还）",
+    "AI_BUSY": "AI繁忙，请稍后再试",
+    "GROUP_TRIALS_EXHAUSTED": "❌ 本场游戏的总轮询机会已用完",
+    "IMAGE_DOWNLOAD_FAILED": "图片下载失败，请稍后再试",
+    "IMAGE_SAVE_FAILED": "图片保存失败，请稍后再试",
+    "DATA_REQUEST_FAILED": "数据请求失败，请稍后再试",
+    "GROUP_ONLY": "该功能仅支持群聊",
+    "PRIVATE_CHAT_UNSUPPORTED": "该功能暂不支持私聊",
+    "ONLY_PLAYERS_CAN_END": "只有游戏参与者才能结束游戏",
+    "GAME_STARTED_AT": "游戏发起时间：",
+    "NEXT_PLAYER_LABEL": "下一手轮到：",
+    "UNDO_ACTION": "进行了悔棋",
+    "DRAW_RESULT": "，本局游戏平局\n",
+    "GAME_NOT_STARTED": "对局尚未开始",
+    "NOT_YOUR_TURN": "当前不是你的回合",
+    "PREVIOUS_MOVE_NOT_YOURS": "上一手棋不是你所下",
+    "NO_INTERRUPTED_GAME": "没有找到被中断的游戏",
+    "GAME_ENDED": "游戏已结束",
+    "GAME_ENDED_RELOAD": "游戏已结束，可发送“重载{game_name}棋局”继续下棋",
+    "UNAUTHENTICATED": "未登录或登录已过期",
+    "ROOM_ACCESS_DENIED": "无权访问该房间",
+    "INVALID_SWAP_RESPONSE": "交换响应参数无效",
+}
+
+
+def get_copy(key, **kwargs):
+    return COPY[key].format(**kwargs)

@@ -17,6 +17,7 @@ from nonebot.params import Command, CommandArg
 from PIL import Image, ImageDraw, ImageFont
 
 from utils import credits
+from utils.copy import COPY
 from utils.superuser_2fa import SUPERUSER_2FA
 
 
@@ -407,7 +408,7 @@ async def _add_plan(args: Message = CommandArg()):
             else:
                 PLAN_EXPIRIES.pop(bot_id, None)
             logger.error(f"llmplanadd 保存失败: {e}")
-            await airi_llm_plan_add.finish("❌ 添加订阅失败，请稍后重试", reply_message=True)
+            await airi_llm_plan_add.finish(f"❌ 添加订阅失败，{COPY['TRY_LATER']}", reply_message=True)
     await airi_llm_plan_add.finish(
         f"✅ 已为 Bot QQ号 {bot_id} 添加 {hours} 小时订阅。\n"
         f"有效期至：{_format_llm_plan_expiry(expires_at)}",
@@ -440,7 +441,7 @@ async def _revert_plan(args: Message = CommandArg()):
         except Exception as e:
             PLAN_EXPIRIES[bot_id] = previous_expiry
             logger.error(f"llmplanrevert 保存失败: {e}")
-            await airi_llm_plan_revert.finish("❌ 取消订阅失败，请稍后重试", reply_message=True)
+            await airi_llm_plan_revert.finish(f"❌ 取消订阅失败，{COPY['TRY_LATER']}", reply_message=True)
     await airi_llm_plan_revert.finish(f"✅ 已取消 Bot QQ号 {bot_id} 的临时订阅。", reply_message=True)
 
 
@@ -451,7 +452,7 @@ async def _confirm_llm_plan(matcher, bot: Bot, ev: MessageEvent):
         await matcher.finish("❌ 没有找到待确认的套餐订单，请重新发送 llmplan BotQQ号 套餐类型")
     decision = ev.get_plaintext().strip()
     if decision == "取消":
-        await matcher.finish("已取消本次套餐购买。")
+        await matcher.finish(COPY["CANCELLED"])
     async with _LLM_PLAN_LOCK:
         had_previous_expiry = pending["bot_id"] in PLAN_EXPIRIES
         previous_expiry = PLAN_EXPIRIES.get(pending["bot_id"])
@@ -475,7 +476,7 @@ async def _confirm_llm_plan(matcher, bot: Bot, ev: MessageEvent):
             else:
                 PLAN_EXPIRIES.pop(pending["bot_id"], None)
             logger.error(f"llmplan 购买保存失败: {e}")
-            await matcher.finish("❌ 套餐开通失败，积分未扣除，请稍后重试")
+            await matcher.finish(f"❌ 套餐开通失败，积分未扣除，{COPY['TRY_LATER']}")
     await matcher.finish(
         "✅ 套餐开通成功！\n"
         f"Bot QQ号：{result.bot_id}\n"

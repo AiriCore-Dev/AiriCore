@@ -12,6 +12,7 @@ import nonebot
 from utils import cache as asset_cache
 from utils.coordination import registry
 from utils.onebot_query import member_name
+from utils.copy import COPY
 from .plan import PLAN_EXPIRIES, has_llm_access
 from nonebot import (
     get_driver,
@@ -1234,7 +1235,7 @@ async def handle_superuser_debug(bot: Bot, ev: MessageEvent):
             exec(compile(cmd, "<ldebug>", "exec"))
             result = None
 
-        reply = "命令执行成功" if result is None else str(result)
+        reply = COPY["COMMAND_SUCCESS"] if result is None else str(result)
         await superuser_debug.send(reply, reply_message=True)
     except Exception:
         await superuser_debug.finish(traceback.format_exc(), reply_message=True)

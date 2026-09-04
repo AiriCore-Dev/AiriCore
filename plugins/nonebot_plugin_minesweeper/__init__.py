@@ -1,5 +1,6 @@
 import asyncio
 import re
+import weakref
 from pathlib import Path
 from asyncio import TimerHandle
 from typing import Annotated, Optional
@@ -31,6 +32,8 @@ from nonebot_plugin_alconna import (
 from utils.onebot_query import session_key
 from utils.messaging import capture_target, send_with_fallback
 from utils.cache import get_image, register_asset_group, value_bytes
+from utils.copy import COPY
+from utils import credit
 
 from .config import Config, minesweeper_config
 from .data_source import GameState, MarkResult, MineSweeper, OpenResult
@@ -55,6 +58,7 @@ help_msg = ''.join([
 
 games: dict[str, MineSweeper] = {}
 timers: dict[str, TimerHandle] = {}
+start_locks = weakref.WeakValueDictionary()
 
 
 def get_user_id(event: MessageEvent) -> str:
@@ -70,6 +74,10 @@ def game_is_running(user_id: UserId) -> bool:
 
 def game_not_running(user_id: UserId) -> bool:
     return user_id not in games
+
+
+def get_start_lock(user_id: str) -> asyncio.Lock:
+    return start_locks.setdefault(user_id, asyncio.Lock())
 
 
 minesweeper = on_alconna(
@@ -185,15 +193,27 @@ async def _(
     if skin.result not in skin_list:
         await matcher.finish("支持的皮肤：" + ", ".join(skin_list))
 
-    game = MineSweeper(rows.result, cols.result, nums.result, skin.result)
-    games[user_id] = game
-    set_timeout(matcher, user_id)
+    async with get_start_lock(user_id):
+        if user_id in games:
+            await matcher.finish("当前会话已有扫雷游戏")
+        game = MineSweeper(rows.result, cols.result, nums.result, skin.result)
+        try:
+            receipt = await credit.charge(user_id, credit.MINESWEEPER_START_COST)
+        except credit.ChargeRejected as error:
+            await matcher.finish(str(error))
+        games[user_id] = game
+        set_timeout(matcher, user_id)
 
-    msg = Text(
-        "使用 “挖开”+位置 挖开方块，使用 “标记”+位置 标记方块，"
-        "可同时加多个位置，如：“挖开 A1 B2”"
-    ) + Image(raw=await run_sync(game.draw)())
-    await msg.send()
+        try:
+            msg = Text(
+                "使用 “挖开”+位置 挖开方块，使用 “标记”+位置 标记方块，"
+                "可同时加多个位置，如：“挖开 A1 B2”"
+            ) + Image(raw=await run_sync(game.draw)())
+            await msg.send()
+        except Exception:
+            stop_game(user_id)
+            await credit.refund(receipt)
+            raise
 
 
 @minesweeper_show.handle()
@@ -207,7 +227,7 @@ async def _(matcher: Matcher, user_id: UserId):
 @minesweeper_stop.handle()
 async def _(matcher: Matcher, user_id: UserId):
     stop_game(user_id)
-    await matcher.finish("游戏已结束")
+    await matcher.finish(COPY["GAME_ENDED"])
 
 
 def check_position(position: str) -> Optional[tuple[int, int]]:

@@ -10,6 +10,8 @@ from nonebot.plugin import PluginMetadata
 
 from utils.cache import get_b64
 from utils.messaging import send_group_with_fallback
+from utils.copy import COPY
+from utils import credit
 
 from .commands import Command, CommandError, parse_command
 from .game import GameError
@@ -117,7 +119,7 @@ async def send_detailed_help(bot: Bot, group_id: int) -> tuple[str | None, str |
         )
     except Exception as error:
         logger.opt(exception=error).error("得分沙拉详细帮助发送失败")
-        return "得分沙拉详细帮助暂时无法发送，请稍后重试", None
+        return f"得分沙拉详细帮助发送失败，{COPY['TRY_LATER']}", None
     return None, receipt_message_id(receipt)
 
 
@@ -230,12 +232,13 @@ async def execute_command(
 @salad.handle()
 async def handle_salad(bot: Bot, event: MessageEvent):
     if not isinstance(event, GroupMessageEvent):
-        await salad.finish("该游戏仅支持群聊")
+        await salad.finish(COPY["GROUP_ONLY"])
     group_id = str(event.group_id)
     user_id = str(event.user_id)
     user_name = event.sender.card or event.sender.nickname or user_id
     is_admin = event.sender.role in {"owner", "admin"}
     token = message_retention.reserve(group_id, str(event.message_id))
+    charge_receipt = None
 
     async def delete(message_id):
         await bot.call_api(
@@ -266,6 +269,8 @@ async def handle_salad(bot: Bot, event: MessageEvent):
                 return
             response = CommandResponse(error_message)
         else:
+            if command.action == "create":
+                charge_receipt = await credit.charge(user_id, credit.POINT_SALAD_START_COST)
             response = await execute_command(
                 command,
                 group_id,
@@ -273,11 +278,18 @@ async def handle_salad(bot: Bot, event: MessageEvent):
                 user_name,
                 is_admin,
             )
+            charge_receipt = None
+    except credit.ChargeRejected as error:
+        response = CommandResponse(str(error))
     except (CommandError, GameError) as error:
+        await credit.refund(charge_receipt)
         response = CommandResponse(str(error))
     except Exception as error:
+        await credit.refund(charge_receipt)
         logger.opt(exception=error).error("得分沙拉指令处理失败")
-        response = CommandResponse("得分沙拉暂时无法处理这次操作，请稍后重试")
+        response = CommandResponse(
+            COPY["PROCESSING_FAILED_WITH_SUBJECT"].format(subject="得分沙拉指令")
+        )
     current = service.games.get(group_id)
     playing = current is not None and current.phase is Phase.PLAYING
     if playing and not was_playing:
@@ -285,6 +297,7 @@ async def handle_salad(bot: Bot, event: MessageEvent):
     try:
         receipt = await bot.send(event, response_message(response))
     except Exception as error:
+        await credit.refund(charge_receipt)
         logger.opt(exception=error).error("得分沙拉回复发送失败")
         if playing or was_playing:
             await message_retention.complete(group_id, token, None, delete)

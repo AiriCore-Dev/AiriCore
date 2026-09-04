@@ -24,6 +24,7 @@ from datetime import datetime, timezone, timedelta
 from utils.onebot_query import bot_name, bot_profile, group_name, latest_api_latency
 from utils.messaging import register_scene_membership_checker
 from utils import llm
+from utils.copy import COPY
 from . import counter
 from . import cache
 from . import dedup
@@ -265,7 +266,7 @@ async def _(args: Message = CommandArg()):
         result = str(e)
     except Exception as e:
         logger.warning(f"LLM 调用统计查询失败: {e}")
-        result = "LLM 调用统计读取失败，请稍后重试。"
+        result = f"LLM 调用统计读取失败，{COPY['TRY_LATER']}"
     await airi_llm_query.finish(result)
 
 

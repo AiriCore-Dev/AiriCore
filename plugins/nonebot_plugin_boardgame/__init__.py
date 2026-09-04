@@ -1,4 +1,5 @@
 import asyncio
+import weakref
 from asyncio import TimerHandle
 from typing import Annotated, Optional, Union
 
@@ -29,6 +30,8 @@ from nonebot_plugin_alconna import (
 
 from utils.onebot_query import event_nickname, session_key
 from utils.messaging import capture_target, send_with_fallback
+from utils.copy import COPY, get_copy
+from utils import credit
 
 from .game import Game, MoveResult, Player, Pos
 from .go import Go
@@ -51,6 +54,7 @@ __plugin_meta__ = PluginMetadata(
 
 games: dict[str, Game] = {}
 timers: dict[str, TimerHandle] = {}
+start_locks = weakref.WeakValueDictionary()
 
 
 def get_user_id(event: MessageEvent) -> str:
@@ -66,6 +70,10 @@ def game_is_running(user_id: UserId) -> bool:
 
 def game_not_running(user_id: UserId) -> bool:
     return user_id not in games
+
+
+def get_start_lock(user_id: str) -> asyncio.Lock:
+    return start_locks.setdefault(user_id, asyncio.Lock())
 
 
 boardgame = on_alconna(
@@ -228,7 +236,7 @@ async def _(
     white: Query[bool] = AlconnaQuery("white.value", False),
 ):
     if not isinstance(event, GroupMessageEvent):
-        await matcher.finish("棋类游戏暂不支持私聊")
+        await matcher.finish(COPY["PRIVATE_CHAT_UNSUPPORTED"])
 
     if rule.result == "go":
         Game = Go
@@ -241,20 +249,29 @@ async def _(
             "当前支持的规则：go（围棋）、gomoku（五子棋）、othello（黑白棋）"
         )
 
-    game = Game()
-    if user_id in games:
-        await matcher.finish("当前会话已有棋类对局")
-    games[user_id] = game
-    if white.result:
-        game.player_white = player
-    else:
-        game.player_black = player
+    async with get_start_lock(user_id):
+        game = Game()
+        if user_id in games:
+            await matcher.finish("当前会话已有棋类对局")
+        try:
+            receipt = await credit.charge(user_id, credit.CHESS_START_COST)
+        except credit.ChargeRejected as error:
+            await matcher.finish(str(error))
+        games[user_id] = game
+        if white.result:
+            game.player_white = player
+        else:
+            game.player_black = player
 
-    set_timeout(matcher, user_id)
-    await game.save_record(user_id)
-
-    msg = f"{player} 发起了游戏 {game.name}！\n发送“落子 字母+数字”下棋，如“落子 A1”"
-    await (Text(msg) + Image(raw=await game.draw())).send()
+        set_timeout(matcher, user_id)
+        try:
+            await game.save_record(user_id)
+            msg = f"{player} 发起了游戏 {game.name}！\n发送“落子 字母+数字”下棋，如“落子 A1”"
+            await (Text(msg) + Image(raw=await game.draw())).send()
+        except Exception:
+            stop_game(user_id)
+            await credit.refund(receipt)
+            raise
 
 
 @boardgame_show.handle()
@@ -272,9 +289,9 @@ async def _(matcher: Matcher, user_id: UserId, player: CurrentPlayer):
     if (not game.player_white or game.player_white != player) and (
         not game.player_black or game.player_black != player
     ):
-        await matcher.finish("只有游戏参与者才能结束游戏")
+        await matcher.finish(COPY["ONLY_PLAYERS_CAN_END"])
     stop_game(user_id)
-    await matcher.finish(f"游戏已结束，可发送“重载{game.name}棋局”继续下棋")
+    await matcher.finish(get_copy("GAME_ENDED_RELOAD", game_name=game.name))
 
 
 @boardgame_repent.handle()
@@ -283,12 +300,12 @@ async def _(matcher: Matcher, user_id: UserId, player: CurrentPlayer):
     set_timeout(matcher, user_id)
 
     if len(game.history) <= 1:
-        await matcher.finish("对局尚未开始")
+        await matcher.finish(COPY["GAME_NOT_STARTED"])
     if game.player_last and game.player_last != player:
-        await matcher.finish("上一手棋不是你所下")
+        await matcher.finish(COPY["PREVIOUS_MOVE_NOT_YOURS"])
     game.pop()
     await game.save_record(user_id)
-    msg = f"{player} 进行了悔棋"
+    msg = f"{player} {COPY['UNDO_ACTION']}"
     await (Text(msg) + Image(raw=await game.draw())).send()
 
 
@@ -300,7 +317,7 @@ async def _(matcher: Matcher, user_id: UserId, player: CurrentPlayer):
     if not game.allow_skip:
         await matcher.finish("当前游戏不允许跳过回合")
     if game.player_next and game.player_next != player:
-        await matcher.finish("当前不是你的回合")
+        await matcher.finish(COPY["NOT_YOUR_TURN"])
     result = game.update(Pos.null())
     if result == MoveResult.ILLEGAL:
         await matcher.finish("当前仍有合法落子，不能跳过回合")
@@ -330,15 +347,15 @@ async def _(
 
     game = await Game.load_record(user_id)
     if not game:
-        await matcher.finish("没有找到被中断的游戏")
+        await matcher.finish(COPY["NO_INTERRUPTED_GAME"])
     games[user_id] = game
     set_timeout(matcher, user_id)
 
     msg = (
-        f"游戏发起时间：{game.start_time.strftime('%Y-%m-%d %H:%M:%S')}\n"
+        f"{COPY['GAME_STARTED_AT']}{game.start_time.strftime('%Y-%m-%d %H:%M:%S')}\n"
         f"黑方：{game.player_black}\n"
         f"白方：{game.player_white}\n"
-        f"下一手轮到：{game.player_next}"
+        f"{COPY['NEXT_PLAYER_LABEL']}{game.player_next}"
     )
     await (Text(msg) + Image(raw=await game.draw())).send()
 
@@ -364,7 +381,7 @@ async def _(
     if (game.player_next and game.player_next != player) or (
         game.player_last and game.player_last == player
     ):
-        await matcher.finish("当前不是你的回合")
+        await matcher.finish(COPY["NOT_YOUR_TURN"])
 
     try:
         pos = Pos.from_str(position.result)
@@ -404,7 +421,7 @@ async def _(
         elif result == MoveResult.WHITE_WIN:
             msg += f"，恭喜 {game.player_white} 获胜！\n"
         elif result == MoveResult.DRAW:
-            msg += "，本局游戏平局\n"
+            msg += COPY["DRAW_RESULT"]
     else:
         if game.player_next:
             msg += f"，下一手轮到 {game.player_next}\n"

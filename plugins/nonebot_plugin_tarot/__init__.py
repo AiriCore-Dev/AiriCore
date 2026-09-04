@@ -3,6 +3,7 @@ from nonebot.adapters.onebot.v11 import Bot
 from nonebot.adapters.onebot.v11.event import MessageEvent
 from nonebot.matcher import Matcher
 from nonebot.plugin import PluginMetadata
+from utils import credit
 
 from .data_source import tarot_manager
 
@@ -33,7 +34,15 @@ async def general_divine(bot: Bot, matcher: Matcher, event: MessageEvent):
     if "帮助" in arg[-2:]:
         await matcher.finish(__tarot_usages__)
 
-    await tarot_manager.divine(bot, matcher, event, argd if len(argd := arg[2:].lstrip()) else '无牌阵')
+    try:
+        receipt = await credit.charge(event.get_user_id(), credit.TAROT_COST)
+    except credit.ChargeRejected as error:
+        await matcher.finish(str(error))
+    try:
+        await tarot_manager.divine(bot, matcher, event, argd if len(argd := arg[2:].lstrip()) else '无牌阵')
+    except Exception:
+        await credit.refund(receipt)
+        raise
 
 
 @tarot.handle()
@@ -43,5 +52,13 @@ async def _(matcher: Matcher, event: MessageEvent):
     if "帮助" in arg[-2:]:
         await matcher.finish(__tarot_usages__)
 
-    msg = await tarot_manager.onetime_divine()
-    await matcher.finish(msg, reply_message=True)
+    try:
+        receipt = await credit.charge(event.get_user_id(), credit.TAROT_COST)
+    except credit.ChargeRejected as error:
+        await matcher.finish(str(error))
+    try:
+        msg = await tarot_manager.onetime_divine()
+        await matcher.send(msg, reply_message=True)
+    except Exception:
+        await credit.refund(receipt)
+        raise

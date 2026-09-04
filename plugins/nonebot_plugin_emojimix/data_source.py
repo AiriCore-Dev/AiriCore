@@ -6,6 +6,7 @@ from nonebot.log import logger
 
 from .config import emoji_config
 from .emoji_data import dates, emojis
+from utils.copy import COPY
 
 API = "https://www.gstatic.com/android/keyboard/emojikitchen/"
 
@@ -51,4 +52,4 @@ async def mix_emoji(emoji_code1: str, emoji_code2: str) -> Union[str, bytes]:
             return "出错了，可能不支持该emoji组合"
     except Exception:
         logger.warning(traceback.format_exc())
-        return "下载出错，请稍后再试"
+        return COPY["DOWNLOAD_FAILED"]

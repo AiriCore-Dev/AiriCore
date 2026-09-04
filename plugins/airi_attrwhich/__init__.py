@@ -3,6 +3,7 @@ import aiohttp
 from nonebot.plugin import on_endswith
 from nonebot.adapters.onebot.v11 import Bot, Event
 from nonebot.rule import to_me
+from utils.credit import ATTRWHICH_COST, charge_or_finish
 
 TIMEOUT = aiohttp.ClientTimeout(total=10)
 
@@ -44,6 +45,7 @@ async def _(bot: Bot, event: Event):
     entry = data[0]
     if not isinstance(entry, dict) or "name" not in entry:
         await sx.finish(message=f"没有找到缩写 {msg} 的意思呢～")
+    await charge_or_finish(sx, event.get_user_id(), ATTRWHICH_COST)
     parts = []
     for key in ("trans", "inputting"):
         vals = entry.get(key)

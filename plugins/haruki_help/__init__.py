@@ -2,6 +2,8 @@ from nonebot import on_command
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import MessageEvent
 
+from .bridge import bridge as HARUKI_BRIDGE
+
 haruki_help = on_command("pjskhelp", priority=99)
 
 

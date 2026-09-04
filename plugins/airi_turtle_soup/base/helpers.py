@@ -229,9 +229,13 @@ async def end_game(
     return True
 
 
-async def _persist():
+async def _persist(raise_on_error=False):
     try:
         from . import persistence
         await persistence.save_to_json()
+        return True
     except Exception as e:
         logger.warning(f"海龟汤存档失败: {e}")
+        if raise_on_error:
+            raise
+        return False

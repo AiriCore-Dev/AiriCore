@@ -4,6 +4,7 @@ import traceback
 from nonebot import logger
 from nonebot.adapters.onebot.v11 import Bot
 from nonebot.adapters.onebot.v11.event import MessageEvent
+from utils.copy import COPY
 from utils.onebot_query import event_nickname
 from ..base.matchers import force_end, matcher
 from ..base.constants import min_turtle_minutes, max_group_trial
@@ -45,4 +46,4 @@ async def _(bot: Bot, ev: MessageEvent):
         await matcher.send(str(err), reply_message=True)
     except Exception:
         logger.error(f"海龟汤结束海龟汤处理失败:\n{traceback.format_exc()}")
-        await matcher.send('❌ 处理时出错了，已记录日志', reply_message=True)
+        await matcher.send(COPY["PROCESSING_ERROR_LOGGED"], reply_message=True)

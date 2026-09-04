@@ -3,6 +3,7 @@ import random
 import datetime
 import asyncio
 import weakref
+import copy
 from typing import Set, Dict, Any, Union, List
 
 import nonebot
@@ -13,6 +14,8 @@ from nonebot.adapters import Bot
 from nonebot.adapters.onebot.v11 import GROUP, GroupMessageEvent, Message
 from nonebot.adapters.onebot.v11.permission import GROUP_OWNER, GROUP_ADMIN
 from utils.superuser_2fa import SUPERUSER_2FA
+from utils.copy import COPY
+from utils import credit
 
 from .config import Config
 from .record import get_group_record, save_group_record, construct_waifu_msg, clear_group_record, \
@@ -181,6 +184,7 @@ async def _handle_waifu_change(bot: Bot, event: GroupMessageEvent):
     uid = str(event.user_id)
     today = str(datetime.date.today())
     group_record: Dict[str, Union[int, bool, Dict[str, Dict[str, int]]]] = get_group_record(gid)
+    old_group_record = copy.deepcopy(group_record)
     limit_times: int = group_record.setdefault('limit_times', default_limit_times)
     allow_change_waifu: bool = group_record.setdefault('allow_change_waifu', default_allow_change_waifu)
     if today not in group_record.keys() or uid not in group_record[today].keys():
@@ -197,7 +201,7 @@ async def _handle_waifu_change(bot: Bot, event: GroupMessageEvent):
         try:
             all_member: list = await bot.get_group_member_list(group_id=gid)
         except Exception:
-            await today_waifu_change.finish('群成员信息暂时不可用，请稍后再试')
+            await today_waifu_change.finish(COPY["GROUP_MEMBERS_UNAVAILABLE"])
         members_by_id = _member_map(all_member)
         id_set: Set[int] = set(i['user_id'] for i in all_member) - set(
             i['waifu_id'] for i in group_today_record.values()) - ban_id
@@ -206,20 +210,31 @@ async def _handle_waifu_change(bot: Bot, event: GroupMessageEvent):
             new_waifu_id: int = random.choice(list(id_set))
         else:
             new_waifu_id: int = int(bot.self_id)
-    group_today_record[uid] = {
-        'waifu_id': new_waifu_id,
-        'times': old_times if new_waifu_id == -1 else old_times + 1
-    }
-    save_group_record(gid, group_record)
+    try:
+        receipt = await credit.charge(uid, credit.TODAY_WAIFU_COST)
+    except credit.ChargeRejected as error:
+        await today_waifu_change.finish(str(error), at_sender=True)
     member_info = members_by_id.get(new_waifu_id, {})
     if not member_info and new_waifu_id not in (-1, int(bot.self_id)):
         try:
             member_info = await bot.get_group_member_info(group_id=gid, user_id=new_waifu_id)
         except Exception:
             member_info = {}
-    message: Message = await construct_change_waifu_msg(member_info, new_waifu_id, int(bot.self_id), old_times,
-                                                        limit_times)
-    await today_waifu_change.finish(message, at_sender=True)
+    try:
+        message: Message = await construct_change_waifu_msg(member_info, new_waifu_id, int(bot.self_id), old_times,
+                                                            limit_times)
+        group_today_record[uid] = {
+            'waifu_id': new_waifu_id,
+            'times': old_times if new_waifu_id == -1 else old_times + 1
+        }
+        save_group_record(gid, group_record)
+        await today_waifu_change.send(message, at_sender=True)
+    except Exception:
+        group_record.clear()
+        group_record.update(old_group_record)
+        save_group_record(gid, group_record)
+        await credit.refund(receipt)
+        raise
 
 
 @today_waifu_change.handle()
@@ -233,6 +248,7 @@ async def _handle_today_waifu(bot: Bot, event: GroupMessageEvent):
     uid = str(event.user_id)
     today = str(datetime.date.today())
     group_record: Dict[str, Union[int, bool, Dict[str, Dict[str, int]]]] = get_group_record(gid)
+    old_group_record = copy.deepcopy(group_record)
     limit_times: int = group_record.setdefault('limit_times', default_limit_times)
     allow_change_waifu: bool = group_record.setdefault('allow_change_waifu', default_allow_change_waifu)
     save = False
@@ -249,11 +265,17 @@ async def _handle_today_waifu(bot: Bot, event: GroupMessageEvent):
     if uid in group_today_record.keys():
         waifu_id: int = group_today_record[uid].get('waifu_id', 1234567)
         is_first = False
+        try:
+            receipt = await credit.charge(uid, credit.TODAY_WAIFU_COST)
+        except credit.ChargeRejected as error:
+            group_record.clear()
+            group_record.update(old_group_record)
+            await today_waifu.finish(str(error), at_sender=True)
     else:
         try:
             all_member: list = await bot.get_group_member_list(group_id=gid)
         except Exception:
-            await today_waifu.finish('群成员信息暂时不可用，请稍后再试')
+            await today_waifu.finish(COPY["GROUP_MEMBERS_UNAVAILABLE"])
         members_by_id = _member_map(all_member)
         id_set: Set[int] = set(i['user_id'] for i in all_member) - set(
             i['waifu_id'] for i in group_today_record.values()) - ban_id
@@ -262,22 +284,35 @@ async def _handle_today_waifu(bot: Bot, event: GroupMessageEvent):
             waifu_id: int = random.choice(list(id_set))
         else:
             waifu_id: int = int(bot.self_id)
-        group_today_record[uid] = {
-            'waifu_id': waifu_id,
-            'times': 0,
-        }
+        try:
+            receipt = await credit.charge(uid, credit.TODAY_WAIFU_COST)
+        except credit.ChargeRejected as error:
+            group_record.clear()
+            group_record.update(old_group_record)
+            await today_waifu.finish(str(error), at_sender=True)
         save = True
         is_first = True
-    if save:
-        save_group_record(gid, group_record)
     member_info = members_by_id.get(waifu_id, {})
     if not member_info:
         try:
             member_info = await bot.get_group_member_info(group_id=gid, user_id=waifu_id)
         except Exception:
             member_info = {}
-    message: Message = await construct_waifu_msg(member_info, waifu_id, int(bot.self_id), is_first)
-    await today_waifu.finish(message, at_sender=True)
+    try:
+        message: Message = await construct_waifu_msg(member_info, waifu_id, int(bot.self_id), is_first)
+        if save:
+            group_today_record[uid] = {
+                'waifu_id': waifu_id,
+                'times': 0,
+            }
+            save_group_record(gid, group_record)
+        await today_waifu.send(message, at_sender=True)
+    except Exception:
+        group_record.clear()
+        group_record.update(old_group_record)
+        save_group_record(gid, group_record)
+        await credit.refund(receipt)
+        raise
 
 
 @today_waifu.handle()
@@ -319,6 +354,7 @@ async def _handle_waifu_force(bot: Bot, event: GroupMessageEvent):
         await today_waifu_force.finish('该用户不在本群', at_sender=True)
 
     group_record: Dict[str, Union[int, bool, Dict[str, Dict[str, int]]]] = get_group_record(gid)
+    old_group_record = copy.deepcopy(group_record)
     limit_times: int = group_record.setdefault('limit_times', default_limit_times)
     allow_change_waifu: bool = group_record.setdefault('allow_change_waifu', default_allow_change_waifu)
 
@@ -342,15 +378,27 @@ async def _handle_waifu_force(bot: Bot, event: GroupMessageEvent):
             message: Message = await construct_force_waifu_taken_msg(owner_info, owner_uid)
             await today_waifu_force.finish(message, at_sender=True)
 
-    group_today_record[uid] = {
-        'waifu_id': target_id,
-        'times': limit_times,
-        'force_married': True,
-    }
-    save_group_record(gid, group_record)
-
-    message: Message = await construct_force_waifu_msg(member_info, target_id, int(bot.self_id))
-    await today_waifu_force.finish(message, at_sender=True)
+    try:
+        receipt = await credit.charge(uid, credit.TODAY_WAIFU_FORCE_COST)
+    except credit.ChargeRejected as error:
+        group_record.clear()
+        group_record.update(old_group_record)
+        await today_waifu_force.finish(str(error), at_sender=True)
+    try:
+        message: Message = await construct_force_waifu_msg(member_info, target_id, int(bot.self_id))
+        group_today_record[uid] = {
+            'waifu_id': target_id,
+            'times': limit_times,
+            'force_married': True,
+        }
+        save_group_record(gid, group_record)
+        await today_waifu_force.send(message, at_sender=True)
+    except Exception:
+        group_record.clear()
+        group_record.update(old_group_record)
+        save_group_record(gid, group_record)
+        await credit.refund(receipt)
+        raise
 
 
 @today_waifu_force.handle()

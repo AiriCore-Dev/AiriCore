@@ -31,6 +31,8 @@ from nonebot.log import logger
 from nonebot.matcher import Matcher
 from nonebot.typing import T_Handler, T_State
 from nonebot.utils import run_sync
+from utils.copy import COPY
+from utils import credit
 from nonebot_plugin_alconna import (
     AlcMatches,
     Alconna,
@@ -91,7 +93,7 @@ async def process(
         await matcher.finish("当前平台可能不支持下载图片")
     except AdapterException:
         logger.warning(traceback.format_exc())
-        await matcher.finish("图片下载出错")
+        await matcher.finish(COPY["IMAGE_DOWNLOAD_FAILED"])
 
     result = await run_sync(meme.generate)(meme_images, texts, options)
 
@@ -124,14 +126,22 @@ async def process(
     elif isinstance(result, MemeFeedback):
         await matcher.finish(result.feedback)
 
-    await record_meme_generation(session, meme.key)
+    try:
+        receipt = await credit.charge(event.get_user_id(), credit.MEMES_COST)
+    except credit.ChargeRejected as error:
+        await matcher.finish(str(error))
 
-    msg = UniMessage()
-    if show_info:
-        keywords = "、".join([f'"{keyword}"' for keyword in meme.info.keywords])
-        msg += f"关键词：{keywords}"
-    msg += UniMessage.image(raw=result)
-    await msg.finish()
+    try:
+        await record_meme_generation(session, meme.key)
+        msg = UniMessage()
+        if show_info:
+            keywords = "、".join([f'"{keyword}"' for keyword in meme.info.keywords])
+            msg += f"关键词：{keywords}"
+        msg += UniMessage.image(raw=result)
+        await msg.send()
+    except Exception:
+        await credit.refund(receipt)
+        raise
 
 
 T_MemeParams = Union[Text, Image, At]

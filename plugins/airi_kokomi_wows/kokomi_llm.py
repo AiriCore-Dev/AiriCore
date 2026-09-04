@@ -1,5 +1,6 @@
 import os
 from utils import llm
+from utils.copy import COPY
 
 with open(os.path.join(os.path.dirname(__file__), 'kokomi_NL2C.md'),'r',encoding='utf-8') as f:
     role_setup = f.read()
@@ -7,7 +8,7 @@ with open(os.path.join(os.path.dirname(__file__), 'kokomi_NL2C.md'),'r',encoding
 def _parse_nl2c(text):
     msg_list = text.split(':')
     if len(msg_list) != 2:
-        raise ValueError("服务器繁忙，请稍后再试")
+        raise ValueError(COPY["TRY_LATER"])
     return [int(msg_list[0]), msg_list[1]]
 
 

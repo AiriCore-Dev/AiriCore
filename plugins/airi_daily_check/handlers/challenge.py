@@ -5,6 +5,7 @@ import datetime
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import MessageEvent
 from utils import credits
+from utils.copy import COPY
 
 from ..base import state
 from ..base.constants import DIFFICULTY, CREDIT_BY_DIFF, asset
@@ -35,7 +36,7 @@ async def _(bot: Bot, ev: MessageEvent):
     await ensure_registered(flag_submit, user_id)
 
     if not any(str(state.game_ans[i] or '').strip() for i in range(1, 4)):
-        await flag_submit.finish('⛔ 今日挑战还未生成，请稍后再试', reply_message=True)
+        await flag_submit.finish(f'⛔ 今日挑战还未生成，{COPY["TRY_LATER"]}', reply_message=True)
 
     for i in range(1, 4):
         answer = str(state.game_ans[i] or '').strip()

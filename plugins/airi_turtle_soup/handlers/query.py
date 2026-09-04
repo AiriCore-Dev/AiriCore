@@ -5,6 +5,7 @@ from nonebot import logger
 from nonebot.adapters.onebot.v11 import Bot
 from nonebot.adapters.onebot.v11.event import MessageEvent
 from utils.onebot_query import event_nickname
+from utils.copy import COPY, get_copy
 from ..base.matchers import query, matcher
 from ..base.constants import max_player_query_trial, max_group_trial
 from ..base import state
@@ -34,7 +35,7 @@ async def _(bot: Bot, ev: MessageEvent):
             if player['query_trial'] >= max_player_query_trial:
                 raise ValueError("❌ 你的提问机会已用完")
             if turtle['trial'] >= max_group_trial:
-                raise ValueError("❌ 本场游戏的总轮询机会已用完")
+                raise ValueError(COPY["GROUP_TRIALS_EXHAUSTED"])
             player['query_trial'] += 1
             turtle['trial'] += 1
             add_pending_trial(turtle, user_id, 'query')
@@ -59,13 +60,13 @@ async def _(bot: Bot, ev: MessageEvent):
                         return
                     logger.warning(f"海龟汤提问 LLM 调用失败（第 {attempt + 1}/{LLM_MAX_ATTEMPTS} 次）: {err}")
                     if attempt + 1 >= LLM_MAX_ATTEMPTS:
-                        await matcher.send('AI繁忙，请过一分钟后再试\n（提问次数已返还）', reply_message=True)
+                        await matcher.send(f'{COPY["AI_BUSY"]}\n（提问次数已返还）', reply_message=True)
                         return
                     await asyncio.sleep(LLM_RETRY_DELAY)
                 else:
                     break
             if not llm_answer:
-                await matcher.send('AI没有给出有效回复，请稍后再试\n（提问次数已返还）', reply_message=True)
+                await matcher.send(get_copy("AI_REPLY_INVALID", action="提问"), reply_message=True)
                 return
             history_text += f'\n\n答：{llm_answer}'
             history_msg = await construct_turtle_soup_history(user_id, user_nick, history_text)
@@ -99,7 +100,7 @@ async def _(bot: Bot, ev: MessageEvent):
         await matcher.send(str(err), reply_message=True)
     except Exception:
         logger.error(f"海龟汤提问处理失败:\n{traceback.format_exc()}")
-        await matcher.send('❌ 处理提问时出错了，已记录日志', reply_message=True)
+        await matcher.send(COPY["PROCESSING_ERROR_LOGGED"], reply_message=True)
     finally:
         if reserved_turtle is not None and not trial_kept:
             current = state.data.get('group', {}).get(gruop_id, {}).get('turtle')

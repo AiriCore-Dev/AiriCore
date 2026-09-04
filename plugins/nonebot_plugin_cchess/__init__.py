@@ -1,4 +1,5 @@
 import asyncio
+import weakref
 from pathlib import Path
 from asyncio import TimerHandle
 from typing import Annotated, Any, Optional, Union
@@ -30,6 +31,8 @@ from nonebot_plugin_alconna import (
 
 from utils.onebot_query import event_nickname, session_key
 from utils.messaging import capture_target, send_with_fallback
+from utils.copy import COPY, get_copy
+from utils import credit
 from utils.cache import get_image, register_asset_group, value_bytes
 
 from .board import MoveResult
@@ -58,6 +61,7 @@ __plugin_meta__ = PluginMetadata(
 
 games: dict[str, Game] = {}
 timers: dict[str, TimerHandle] = {}
+start_locks = weakref.WeakValueDictionary()
 
 
 def get_user_id(event: MessageEvent) -> str:
@@ -73,6 +77,10 @@ def game_is_running(user_id: UserId) -> bool:
 
 def game_not_running(user_id: UserId) -> bool:
     return user_id not in games
+
+
+def get_start_lock(user_id: str) -> asyncio.Lock:
+    return start_locks.setdefault(user_id, asyncio.Lock())
 
 
 cchess = on_alconna(
@@ -196,48 +204,67 @@ async def _(
     if battle.result and not isinstance(event, GroupMessageEvent):
         await matcher.finish("私聊不支持对战模式")
 
-    game = Game()
-    if user_id in games:
-        await matcher.finish("当前会话已有象棋对局")
-    games[user_id] = game
-    if black.result:
-        game.player_black = player
-    else:
-        game.player_red = player
-
-    msg = (
-        f"{player} 发起了游戏 象棋！\n"
-        "发送 中文纵线格式如“炮二平五” 或 起始坐标格式如“h2e2” 下棋\n"
-    )
-
-    if not battle.result:
+    async with get_start_lock(user_id):
+        game = Game()
+        if user_id in games:
+            await matcher.finish("当前会话已有象棋对局")
         try:
-            ai_player = AiPlayer(level.result)
-            await ai_player.engine.open()
-        except EngineError as e:
-            games.pop(user_id, None)
-            await matcher.finish(f"象棋引擎加载失败：{e.message}")
-
+            receipt = await credit.charge(user_id, credit.CCHESS_START_COST)
+        except credit.ChargeRejected as error:
+            await matcher.finish(str(error))
+        games[user_id] = game
         if black.result:
-            game.player_red = ai_player
+            game.player_black = player
         else:
-            game.player_black = ai_player
+            game.player_red = player
 
-        if black.result:
+        msg = (
+            f"{player} 发起了游戏 象棋！\n"
+            "发送 中文纵线格式如“炮二平五” 或 起始坐标格式如“h2e2” 下棋\n"
+        )
+
+        if not battle.result:
             try:
-                move = await ai_player.get_move(game.position())
+                ai_player = AiPlayer(level.result)
+                if black.result:
+                    game.player_red = ai_player
+                else:
+                    game.player_black = ai_player
+                await ai_player.engine.open()
             except EngineError as e:
                 stop_game(user_id)
-                await matcher.finish(f"象棋引擎出错：{e.message}")
+                await credit.refund(receipt)
+                await matcher.finish(f"象棋引擎加载失败：{e.message}")
+            except Exception:
+                stop_game(user_id)
+                await credit.refund(receipt)
+                raise
 
-            move_str = move.chinese(game)
-            game.push(move)
-            msg += f"{ai_player} 下出 {move_str}\n"
+            if black.result:
+                try:
+                    move = await ai_player.get_move(game.position())
+                except EngineError as e:
+                    stop_game(user_id)
+                    await credit.refund(receipt)
+                    await matcher.finish(f"象棋引擎出错：{e.message}")
+                except Exception:
+                    stop_game(user_id)
+                    await credit.refund(receipt)
+                    raise
 
-    set_timeout(matcher, user_id)
+                move_str = move.chinese(game)
+                game.push(move)
+                msg += f"{ai_player} 下出 {move_str}\n"
 
-    await game.save_record(user_id)
-    await (Text(msg) + Image(raw=await run_sync(game.draw)())).send()
+        set_timeout(matcher, user_id)
+
+        try:
+            await game.save_record(user_id)
+            await (Text(msg) + Image(raw=await run_sync(game.draw)())).send()
+        except Exception:
+            stop_game(user_id)
+            await credit.refund(receipt)
+            raise
 
 
 @cchess_show.handle()
@@ -255,9 +282,9 @@ async def _(matcher: Matcher, user_id: UserId, player: CurrentPlayer):
     if (not game.player_red or game.player_red != player) and (
         not game.player_black or game.player_black != player
     ):
-        await matcher.finish("只有游戏参与者才能结束游戏")
+        await matcher.finish(COPY["ONLY_PLAYERS_CAN_END"])
     stop_game(user_id)
-    await matcher.finish("游戏已结束，可发送“重载象棋棋局”继续下棋")
+    await matcher.finish(get_copy("GAME_ENDED_RELOAD", game_name="象棋"))
 
 
 @cchess_repent.handle()
@@ -266,19 +293,19 @@ async def _(matcher: Matcher, user_id: UserId, player: CurrentPlayer):
     set_timeout(matcher, user_id)
 
     if len(game.history) <= 1 or not game.player_next:
-        await matcher.finish("对局尚未开始")
+        await matcher.finish(COPY["GAME_NOT_STARTED"])
 
     if game.is_battle:
         if game.player_last and game.player_last != player:
-            await matcher.finish("上一手棋不是你所下")
+            await matcher.finish(COPY["PREVIOUS_MOVE_NOT_YOURS"])
         game.pop()
     else:
         if len(game.history) <= 2 and game.player_last != player:
-            await matcher.finish("上一手棋不是你所下")
+            await matcher.finish(COPY["PREVIOUS_MOVE_NOT_YOURS"])
         game.pop()
         game.pop()
     await game.save_record(user_id)
-    msg = f"{player} 进行了悔棋\n"
+    msg = f"{player} {COPY['UNDO_ACTION']}\n"
     await (Text(msg) + Image(raw=await run_sync(game.draw)())).send()
 
 
@@ -290,15 +317,15 @@ async def _(matcher: Matcher, user_id: UserId):
         await matcher.finish(f"象棋引擎加载失败：{e.message}")
 
     if not game:
-        await matcher.finish("没有找到被中断的游戏")
+        await matcher.finish(COPY["NO_INTERRUPTED_GAME"])
     games[user_id] = game
     set_timeout(matcher, user_id)
 
     msg = (
-        f"游戏发起时间：{game.start_time.strftime('%Y-%m-%d %H:%M:%S')}\n"
+        f"{COPY['GAME_STARTED_AT']}{game.start_time.strftime('%Y-%m-%d %H:%M:%S')}\n"
         f"红方：{game.player_red}\n"
         f"黑方：{game.player_black}\n"
-        f"下一手轮到：{game.player_next}\n"
+        f"{COPY['NEXT_PLAYER_LABEL']}{game.player_next}\n"
     )
     await (Text(msg) + Image(raw=await run_sync(game.draw)())).send()
 
@@ -324,7 +351,7 @@ async def _(
     if (game.player_next and game.player_next != player) or (
         game.player_last and game.player_last == player
     ):
-        await matcher.finish("当前不是你的回合")
+        await matcher.finish(COPY["NOT_YOUR_TURN"])
 
     move = str(matched["move"])
     try:
@@ -359,7 +386,7 @@ async def _(
     if result:
         stop_game(user_id)
         if result == MoveResult.DRAW:
-            msg += "，本局游戏平局\n"
+            msg += COPY["DRAW_RESULT"]
         else:
             winner = (
                 game.player_red if result == MoveResult.RED_WIN else game.player_black
@@ -396,7 +423,7 @@ async def _(
             if result == MoveResult.CHECKED:
                 msg += "，恭喜你赢了！\n"
             elif result == MoveResult.DRAW:
-                msg += "，本局游戏平局\n"
+                msg += COPY["DRAW_RESULT"]
             else:
                 winner = (
                     game.player_red

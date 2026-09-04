@@ -2,6 +2,7 @@ import traceback
 from nonebot import logger
 from nonebot.adapters.onebot.v11 import Bot
 from nonebot.adapters.onebot.v11.event import MessageEvent
+from utils.copy import COPY
 from ..base.matchers import history, matcher
 from ..base import state
 from ..base.helpers import get_ids, check_data_existance
@@ -20,4 +21,4 @@ async def _(bot: Bot, ev: MessageEvent):
         await matcher.send(str(err), reply_message=True)
     except Exception:
         logger.error(f"海龟汤历史记录处理失败:\n{traceback.format_exc()}")
-        await matcher.send('❌ 处理时出错了，已记录日志', reply_message=True)
+        await matcher.send(COPY["PROCESSING_ERROR_LOGGED"], reply_message=True)

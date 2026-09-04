@@ -1,6 +1,7 @@
 from .cards import build_decks
 from .missions import TurnSummary
 from .models import Character, GameMode, GameSpeed, GameState, Phase, PlayerState
+from utils.copy import COPY
 
 
 class GameError(ValueError):
@@ -85,7 +86,7 @@ def request_player_swap(
 def respond_player_swap(state: GameState, user_id: str, accept: bool, now: float) -> None:
     require_lobby(state)
     if type(accept) is not bool:
-        raise GameError("交换响应参数无效")
+        raise GameError(COPY["INVALID_SWAP_RESPONSE"])
     request = state.player_swap_request
     if not request:
         raise GameError("当前没有待处理的交换请求")

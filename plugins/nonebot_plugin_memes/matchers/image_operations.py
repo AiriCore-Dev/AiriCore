@@ -22,6 +22,7 @@ from nonebot_plugin_alconna import (
 )
 from nonebot_plugin_alconna.builtins.extensions.reply import ReplyMergeExtension
 from nonebot_plugin_alconna.uniseg.tools import image_fetch
+from utils.copy import COPY
 
 from .utils import send_multiple_images
 
@@ -245,7 +246,7 @@ def create_matcher(command: Command):
                 await matcher.finish("当前平台可能不支持下载图片")
             except AdapterException:
                 logger.warning(traceback.format_exc())
-                await matcher.finish("图片下载出错")
+                await matcher.finish(COPY["IMAGE_DOWNLOAD_FAILED"])
 
         args = alc_matches.all_matched_args
         if image := args.get("img"):

@@ -5,7 +5,9 @@ from arclet.alconna import Arg, Args, Option, store_true
 from cookit.nonebot import exception_notify
 from cookit.pyd import model_copy
 from nonebot_plugin_alconna import AlconnaMatcher, Query, UniMessage
+from nonebot.adapters.onebot.v11 import MessageEvent
 from nonebot_plugin_waiter import prompt
+from utils import credit
 
 from ..config import config, resolve_color_to_tuple
 from ..consts import RELATIVE_FLOAT_PARAM
@@ -131,6 +133,7 @@ async def prompt_sticker_text() -> str:
 @m_cls.dispatch("~generate").handle()
 async def _(
     m: AlconnaMatcher,
+    event: MessageEvent,
     q_pack: Query[Optional[str]] = Query("~pack", None),
     q_sticker: Query[Optional[str]] = Query("~sticker", None),
     q_text: Query[Optional[str]] = Query("~text", None),
@@ -253,5 +256,13 @@ async def _(
         ),
         image_format,
     )
-    msg = UniMessage.image(raw=img)
-    await msg.finish()
+    try:
+        receipt = await credit.charge(event.get_user_id(), credit.MEME_STICKERS_COST)
+    except credit.ChargeRejected as error:
+        await m.finish(str(error))
+    try:
+        msg = UniMessage.image(raw=img)
+        await msg.send()
+    except Exception:
+        await credit.refund(receipt)
+        raise

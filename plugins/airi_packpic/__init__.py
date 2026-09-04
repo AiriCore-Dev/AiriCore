@@ -11,6 +11,9 @@ from nonebot.log import logger
 
 from utils.network import is_public_url_async
 from utils.network import download_public_bytes
+from utils.copy import COPY
+from utils import credit
+from utils.credit import PACKPIC_COST, charge_or_finish
 
 MAX_IMAGES = 200
 MAX_IMAGE_BYTES = 20 * 1024 * 1024
@@ -38,9 +41,9 @@ async def handle_packpic(bot: Bot, event: GroupMessageEvent):
 
     try:
         forward = await bot.get_forward_msg(id=forward_id)
-    except ActionFailed as e:
+    except Exception as e:
         logger.opt(exception=e).error("获取合并转发消息失败")
-        await packpic.finish("获取合并转发消息失败，请稍后再试。")
+        await packpic.finish(f"获取合并转发消息失败，{COPY['TRY_LATER']}")
 
     urls: list[str] = []
     await _extract_images(bot, forward.get("messages", []), urls, set(), 0)
@@ -73,6 +76,7 @@ async def handle_packpic(bot: Bot, event: GroupMessageEvent):
             f"打包结果 {len(zip_bytes) // 1048576}MB 超过上限，请减少图片数量后重试。"
         )
 
+    receipt = await charge_or_finish(packpic, event.get_user_id(), PACKPIC_COST)
     b64 = base64.b64encode(zip_bytes).decode()
     filename = f"pack_{datetime.now():%Y%m%d_%H%M%S}.zip"
     try:
@@ -81,7 +85,8 @@ async def handle_packpic(bot: Bot, event: GroupMessageEvent):
             file=f"base64://{b64}",
             name=filename,
         )
-    except ActionFailed as e:
+    except Exception as e:
+        await credit.refund(receipt)
         logger.opt(exception=e).error("上传群文件失败")
         await packpic.finish(
             "打包完成，但上传群文件失败。请确认协议端支持 base64 上传文件。"

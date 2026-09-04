@@ -6,6 +6,7 @@ from nonebot import get_driver
 from nonebot.log import logger
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
+from utils.copy import COPY
 
 from .base import cache
 
@@ -31,23 +32,23 @@ async def _(bot: Bot, ev: MessageEvent):
         src = tmpa
 
     if not src:
-        await superuser_debug.finish('缺少要执行的表达式')
+        await superuser_debug.finish(COPY["MISSING_EXPRESSION"])
 
     if src == 'reset':
         await daily_clear()
-        res = '刷新一天：命令执行成功'
+        res = f'刷新一天：{COPY["COMMAND_SUCCESS"]}'
     elif src == 'save':
         await save_to_json()
-        res = '存档：命令执行成功'
+        res = f'存档：{COPY["COMMAND_SUCCESS"]}'
     elif src == 'backup':
         await save_data_backup()
-        res = '备份：命令执行成功'
+        res = f'备份：{COPY["COMMAND_SUCCESS"]}'
     elif src == 'load':
         await load_json()
-        res = '读档：命令执行成功'
+        res = f'读档：{COPY["COMMAND_SUCCESS"]}'
     elif src == 'rdc':
         await asyncio.to_thread(reset_daily_challenge)
-        res = '重置每日挑战：命令执行成功'
+        res = f'重置每日挑战：{COPY["COMMAND_SUCCESS"]}'
     else:
         ctx = {**globals(), 'bot': bot, 'ev': ev}
         try:
@@ -58,5 +59,5 @@ async def _(bot: Bot, ev: MessageEvent):
         except Exception:
             res = traceback.format_exc()
         else:
-            res = '命令执行成功' if not res else str(res)
+            res = COPY["COMMAND_SUCCESS"] if not res else str(res)
     await superuser_debug.finish(res, reply_message=True)

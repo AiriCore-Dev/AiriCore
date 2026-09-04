@@ -10,6 +10,7 @@ from ..base.constants import max_player_truth_trial, max_group_trial
 from ..base import state
 from ..base.helpers import get_ids, check_data_existance, construct_turtle_soup_history, call_llm, turtle_soup_truth_prompt, turtle_soup, end_game, strip_cq, _persist, add_pending_trial, remove_pending_trial
 from ..base.tips import serialize_tips
+from utils.copy import COPY, get_copy
 
 LLM_MAX_ATTEMPTS = 3
 LLM_RETRY_DELAY = 2
@@ -34,7 +35,7 @@ async def _(bot: Bot, ev: MessageEvent):
             if player['truth_trial'] >= max_player_truth_trial:
                 raise ValueError("❌ 你的猜汤底机会已用完")
             if turtle['trial'] >= max_group_trial:
-                raise ValueError("❌ 本场游戏的总轮询机会已用完")
+                raise ValueError(COPY["GROUP_TRIALS_EXHAUSTED"])
             player['truth_trial'] += 1
             turtle['trial'] += 1
             add_pending_trial(turtle, user_id, 'truth')
@@ -60,7 +61,7 @@ async def _(bot: Bot, ev: MessageEvent):
                         return
                     logger.warning(f"海龟汤猜汤底 LLM 调用失败（第 {attempt + 1}/{LLM_MAX_ATTEMPTS} 次）: {err}")
                     if attempt + 1 >= LLM_MAX_ATTEMPTS:
-                        await matcher.send('AI繁忙，请过一分钟后再试\n（猜汤底次数已返还）', reply_message=True)
+                        await matcher.send(f'{COPY["AI_BUSY"]}\n（猜汤底次数已返还）', reply_message=True)
                         return
                     await asyncio.sleep(LLM_RETRY_DELAY)
                 else:
@@ -68,7 +69,7 @@ async def _(bot: Bot, ev: MessageEvent):
                         is_tg = 1
                     break
             if not llm_answer:
-                await matcher.send('AI没有给出有效回复，请稍后再试\n（猜汤底次数已返还）', reply_message=True)
+                await matcher.send(get_copy("AI_REPLY_INVALID", action="猜汤底"), reply_message=True)
                 return
             history_text += f'\n\n答：{llm_answer}'
             history_msg = await construct_turtle_soup_history(user_id, user_nick, history_text)
@@ -113,7 +114,7 @@ async def _(bot: Bot, ev: MessageEvent):
         await matcher.send(str(err), reply_message=True)
     except Exception:
         logger.error(f"海龟汤猜汤底处理失败:\n{traceback.format_exc()}")
-        await matcher.send('❌ 处理猜汤底时出错了，已记录日志', reply_message=True)
+        await matcher.send(COPY["PROCESSING_ERROR_LOGGED"], reply_message=True)
     finally:
         if reserved_turtle is not None and not trial_kept:
             current = state.data.get('group', {}).get(gruop_id, {}).get('turtle')

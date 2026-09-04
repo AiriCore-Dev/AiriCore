@@ -5,6 +5,7 @@ import nonebot
 from nonebot.adapters.onebot.v11 import Bot, MessageEvent
 from nonebot.log import logger
 from utils import email as mailer
+from utils.copy import COPY
 
 from ..base import state
 from ..base.matchers import airimarket, airimarketlist, airimarkettest, airimarketcancel, airimarketboost, airimarketsdebug
@@ -110,7 +111,7 @@ async def handle_airimarkettest(bot: Bot, ev: MessageEvent):
     if result is True:
         await airimarkettest.finish(f"测试邮件已发送至 {dest_email}")
     elif result == "throttled":
-        await airimarkettest.finish("当前发信受限（550），请稍后再试")
+        await airimarkettest.finish(f"当前发信受限（550），{COPY['TRY_LATER']}")
     else:
         await airimarkettest.finish(f"发送失败，请检查日志")
 
@@ -275,19 +276,19 @@ async def handle_airimarketsdebug(bot: Bot, ev: MessageEvent):
     while (tmpa := src.replace("  ", " ")) != src:
         src = tmpa
     if not src:
-        await airimarketsdebug.finish("缺少要执行的表达式")
+        await airimarketsdebug.finish(COPY["MISSING_EXPRESSION"])
     if src == "save":
         await save_data()
-        res = "存档：命令执行成功"
+        res = f"存档：{COPY['COMMAND_SUCCESS']}"
     elif src == "reset":
         state.data["sent_today"] = 0
         state.data["sent_date"] = ""
         await save_data()
-        res = "重置今日发送计数：命令执行成功"
+        res = f"重置今日发送计数：{COPY['COMMAND_SUCCESS']}"
     elif src == "unthrottle":
         mailer.set_throttled_until(None)
         await save_data()
-        res = "已清除限流状态：命令执行成功"
+        res = f"已清除限流状态：{COPY['COMMAND_SUCCESS']}"
     else:
         awaited = src[:6] == "await "
         expr = src[6:].lstrip() if awaited else src
@@ -302,5 +303,5 @@ async def handle_airimarketsdebug(bot: Bot, ev: MessageEvent):
         except Exception:
             res = traceback.format_exc()
         else:
-            res = "命令执行成功" if not res else str(res)
+            res = COPY["COMMAND_SUCCESS"] if not res else str(res)
     await airimarketsdebug.finish(res, reply_message=True)

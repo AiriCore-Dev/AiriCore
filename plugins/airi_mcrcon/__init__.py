@@ -20,6 +20,7 @@ from PIL import Image, ImageDraw
 from utils import cache as asset_cache
 from utils import llm
 from utils.messaging import send_group_with_fallback
+from utils.copy import COPY
 from nonebot.rule import to_me
 from utils.superuser_2fa import SUPERUSER_2FA
 from utils.superuser_2fa import is_verified_superuser
@@ -831,7 +832,7 @@ async def _(bot: Bot, ev: MessageEvent):
         src = tmpa
 
     if not src:
-        await superuser_debug.finish('缺少要执行的表达式')
+        await superuser_debug.finish(COPY["MISSING_EXPRESSION"])
 
     is_await = src[:6] == 'await '
     expr = src[6:].lstrip() if is_await else src
@@ -845,7 +846,7 @@ async def _(bot: Bot, ev: MessageEvent):
             res = exec(code, ctx)
         if is_await and hasattr(res, '__await__'):
             res = await res
-        res = '命令执行成功' if not res else str(res)
+        res = COPY["COMMAND_SUCCESS"] if not res else str(res)
     except Exception:
         res = traceback.format_exc()
 

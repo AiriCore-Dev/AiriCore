@@ -33,6 +33,8 @@ from httpx import AsyncClient
 import random
 
 from utils.onebot_query import bot_name
+from utils.copy import COPY
+from utils import credit
 
 
 @nonebot.get_driver().on_shutdown
@@ -139,7 +141,7 @@ async def got_dish_name(state: T_State, matcher: Matcher, args:Tuple[Any,...] = 
 @del_dish.got("name", prompt="请告诉我你要删除哪个菜品或饮料,发送“取消”可取消操作")
 async def del_(state: T_State, name: Message = Arg()):
     if str(name) == "取消":
-        await del_dish.finish("已取消")
+        await del_dish.finish(COPY["CANCELLED"])
     if state["type"] in ["菜单", "菜品"]:
         img = img_eat_path / (str(name) + ".jpg")
     elif state["type"] in ["饮料", "饮品"]:
@@ -164,16 +166,16 @@ async def got_dish_name(matcher: Matcher, state: T_State, args:Tuple[Any,...] = 
 async def got(state: T_State, dish_name: Message = Arg()):
     state["name"] = str(dish_name)
     if str(dish_name) == "取消":
-        await add_dish.finish("已取消")
+        await add_dish.finish(COPY["CANCELLED"])
 
 
 @add_dish.got("img", prompt="⭐图片也发给我吧\n发送“取消”可取消添加")
 async def handle(state: T_State, img: Message = Arg()):
     if str(img) == "取消":
-        await add_dish.finish("已取消")
+        await add_dish.finish(COPY["CANCELLED"])
     img_url = extract_image_urls(img)
     if not img_url:
-        await add_dish.finish("没有找到图片(╯▔皿▔)╯，请稍后重试", at_sender=True)
+        await add_dish.finish(f"没有找到图片(╯▔皿▔)╯，{COPY['TRY_LATER']}", at_sender=True)
 
     if state["type"] in ["菜品", "菜单"]:
         path = img_eat_path
@@ -188,7 +190,7 @@ async def handle(state: T_State, img: Message = Arg()):
             f"成功添加{state['type']}:{state['name']}\n" + MessageSegment.image(img_url)
         )
     except Exception:
-        await add_dish.finish("添加失败，请稍后重试", at_sender=True)
+        await add_dish.finish(f"添加失败，{COPY['TRY_LATER']}", at_sender=True)
 
 
 @view_dish.handle()
@@ -248,6 +250,7 @@ user_count = {}
 @what_drink.handle()
 async def wtd(bot: Bot, msg: MessageEvent):
     global time, user_count
+    user_id = msg.get_user_id()
     check_result, remain_time, new_last_time = check_cd(time)
     if not check_result:
         time = new_last_time
@@ -267,14 +270,20 @@ async def wtd(bot: Bot, msg: MessageEvent):
             await what_drink.finish("出错啦！没有找到好喝的~")
         msg = f"\n{get_nickname(bot)}建议你喝: \n⭐{img.stem}⭐\n" + MessageSegment.image(base64_str)
         try:
+            receipt = await credit.charge(user_id, credit.WHATEAT_PIC_COST)
+        except credit.ChargeRejected as error:
+            await what_drink.finish(str(error))
+        try:
             await what_drink.send(msg, at_sender=True)
-        except ActionFailed:
+        except Exception:
+            await credit.refund(receipt)
             await what_drink.finish("出错啦！没有找到好喝的~")
 
 
 @what_eat.handle()
 async def wte(bot: Bot, msg: MessageEvent):
     global time, user_count
+    user_id = msg.get_user_id()
     check_result, remain_time, new_last_time = check_cd(time)
     if not check_result:
         time = new_last_time
@@ -294,8 +303,13 @@ async def wte(bot: Bot, msg: MessageEvent):
             await what_eat.finish("出错啦！没有找到好吃的~")
         msg = f"\n{get_nickname(bot)}建议你吃: \n⭐{img.stem}⭐\n" + MessageSegment.image(base64_str)
         try:
+            receipt = await credit.charge(user_id, credit.WHATEAT_PIC_COST)
+        except credit.ChargeRejected as error:
+            await what_eat.finish(str(error))
+        try:
             await what_eat.send(msg, at_sender=True)
-        except ActionFailed:
+        except Exception:
+            await credit.refund(receipt)
             await what_eat.finish("出错啦！没有找到好吃的~")
 
 
