@@ -10,7 +10,6 @@ from pathlib import Path
 
 
 DATA_FILE = Path("data/credits/data.pk")
-MIGRATION_MARKER = Path("data/credits/migration_v1")
 
 
 class CreditsError(RuntimeError):
@@ -208,38 +207,6 @@ async def transfer(
             sender_balance=_balances[sender],
             receiver_balance=_balances[receiver],
         )
-
-
-async def migrate_legacy_accounts(legacy_accounts: dict) -> None:
-    if not isinstance(legacy_accounts, dict):
-        return
-    async with _lock:
-        _load_locked()
-        if Path(MIGRATION_MARKER).exists():
-            return
-        before = dict(_balances)
-        for user_id, account in legacy_accounts.items():
-            if not isinstance(account, dict):
-                continue
-            try:
-                normalized = normalize_user_id(user_id)
-                old_balance = account.get("credits", 0)
-                if isinstance(old_balance, bool):
-                    continue
-                old_balance = int(old_balance)
-            except (TypeError, ValueError, OverflowError):
-                continue
-            if normalized not in _balances:
-                _balances[normalized] = old_balance
-        try:
-            await _persist_locked()
-            marker = Path(MIGRATION_MARKER)
-            marker.parent.mkdir(parents=True, exist_ok=True)
-            await asyncio.to_thread(marker.touch)
-        except Exception:
-            _balances.clear()
-            _balances.update(before)
-            raise
 
 
 async def flush() -> None:

@@ -194,18 +194,6 @@ async def shutdown():
     await save_block_log()
 
 
-def migrate_old_data():
-    if "blacklist" in namelist and "user_blacklist" not in namelist:
-        namelist["user_blacklist"] = namelist.pop("blacklist", [])
-        namelist["user_whitelist"] = namelist.pop("whitelist", [])
-        namelist["group_blacklist"] = []
-        namelist["group_whitelist"] = []
-        namelist["bot_blacklist"] = []
-        namelist["bot_whitelist"] = []
-        save_namelist()
-        logger.info("已迁移旧版黑白名单数据")
-
-
 def is_blacklist() -> bool:
     return namelist["type"] == "blacklist"
 
@@ -301,9 +289,6 @@ def handle_bot_namelist(
     namelist[type] = [bid for bid in namelist[type] if bid not in bids]
     save_namelist()
     return f"已删除 {len(bids)} 个Bot{_type}: {', '.join(bids)}"
-
-
-migrate_old_data()
 
 
 @driver.on_bot_connect

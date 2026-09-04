@@ -1,7 +1,7 @@
 import asyncio
 import os
-import shutil
 import pickle
+import shutil
 import tempfile
 
 from nonebot import logger, require
@@ -9,7 +9,7 @@ from nonebot import logger, require
 from utils import email as mailer
 
 from . import state
-from .image_store import cleanup_orphans, has_legacy_images, migrate_records
+from .image_store import cleanup_orphans
 from .state import driver
 
 timings = require("nonebot_plugin_apscheduler").scheduler
@@ -37,18 +37,15 @@ async def load_json():
     os.makedirs(DATA_DIR, exist_ok=True)
 
     loaded = None
-    loaded_path = None
     if os.path.exists(DATA_PATH):
         try:
             loaded = _try_load(DATA_PATH)
-            loaded_path = DATA_PATH
         except Exception as e:
             logger.error(f"airi_wish_bottle 存档读取失败: {e}")
             bak = DATA_PATH + '.bak'
             if os.path.exists(bak):
                 try:
                     loaded = _try_load(bak)
-                    loaded_path = bak
                     logger.warning("airi_wish_bottle 已从 .bak 备份恢复存档")
                 except Exception as e2:
                     logger.error(f"airi_wish_bottle 备份也无法读取: {e2}")
@@ -68,23 +65,7 @@ async def load_json():
         state.data.update(loaded)
         sync_bottle()
         logger.info("airi_wish_bottle collections 索引已重建")
-        if has_legacy_images(state.data):
-            migration_backup = DATA_PATH + '.pre-image-files.bak'
-            try:
-                if not os.path.exists(migration_backup):
-                    await asyncio.to_thread(
-                        shutil.copyfile,
-                        loaded_path,
-                        migration_backup,
-                    )
-            except Exception as e:
-                logger.warning(f"airi_wish_bottle 图片迁移前备份失败，已跳过迁移: {e}")
-                return
-            changed = await migrate_records(state.data)
-            if changed and await save_to_json():
-                await cleanup_orphans(state.data)
-        else:
-            await cleanup_orphans(state.data)
+        await cleanup_orphans(state.data)
     elif not _load_failed:
         state.data.clear()
         state.data.update({

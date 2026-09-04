@@ -14,10 +14,6 @@ from .models import GameState
 PAYLOAD_VERSION = 2
 
 
-class _LegacyPayload(ValueError):
-    pass
-
-
 class _PlainUnpickler(pickle.Unpickler):
     def find_class(self, module: str, name: str):
         raise pickle.UnpicklingError(f"存档包含不允许的对象：{module}.{name}")
@@ -27,14 +23,9 @@ class GameStore:
     def __init__(self, path: Path):
         self.path = path
         self.backup_path = path.with_suffix(path.suffix + ".bak")
-        self.legacy_path = path.with_suffix(".json")
-        self.legacy_backup_path = self.legacy_path.with_suffix(
-            self.legacy_path.suffix + ".bak"
-        )
         self._save_lock = asyncio.Lock()
 
     async def load(self) -> dict[str, GameState]:
-        await self._delete_legacy_json_files()
         if self.path.exists() or self.backup_path.exists():
             return await self._load_current()
         return {}
@@ -44,10 +35,7 @@ class GameStore:
         if self.path.exists():
             try:
                 games = await asyncio.to_thread(self._read_pickle, self.path)
-                await self._delete_legacy_pickle(self.backup_path)
                 return games
-            except _LegacyPayload:
-                await self._delete_file(self.path, "旧版主存档")
             except Exception as error:
                 primary_error = error
                 logger.error(f"得分沙拉主存档读取失败：{error}")
@@ -60,33 +48,11 @@ class GameStore:
                     await self._quarantine(self.path, self.path.suffix)
                 logger.warning("得分沙拉已从备份存档恢复")
                 return games
-            except _LegacyPayload:
-                await self._delete_file(self.backup_path, "旧版备份存档")
             except Exception as backup_error:
                 logger.error(f"得分沙拉备份存档读取失败：{backup_error}")
         if primary_error is not None:
             await self._quarantine(self.path, self.path.suffix)
         return {}
-
-    async def _delete_legacy_json_files(self) -> None:
-        await self._delete_file(self.legacy_path, "旧版 JSON 主存档")
-        await self._delete_file(self.legacy_backup_path, "旧版 JSON 备份存档")
-
-    async def _delete_legacy_pickle(self, path: Path) -> None:
-        if not path.exists():
-            return
-        try:
-            await asyncio.to_thread(self._read_pickle, path)
-        except _LegacyPayload:
-            await self._delete_file(path, "旧版备份存档")
-        except Exception:
-            return
-
-    async def _delete_file(self, path: Path, label: str) -> None:
-        if not path.exists():
-            return
-        await asyncio.to_thread(path.unlink)
-        logger.warning(f"得分沙拉{label}已删除")
 
     async def _quarantine(self, path: Path, suffix: str) -> None:
         if not path.exists():
@@ -113,12 +79,6 @@ class GameStore:
     def _decode(self, payload) -> dict[str, GameState]:
         if type(payload) is not dict:
             raise TypeError("存档根节点必须是对象")
-        if "schema_version" not in payload and "games" not in payload:
-            if all(
-                type(group_id) is str and type(state) is dict
-                for group_id, state in payload.items()
-            ):
-                raise _LegacyPayload("检测到旧版存档")
         if set(payload) != {"schema_version", "games"}:
             raise ValueError("存档根节点字段不匹配")
         if type(payload["schema_version"]) is not int:

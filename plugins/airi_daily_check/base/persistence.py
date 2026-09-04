@@ -71,22 +71,11 @@ async def load_json():
         _load_failed = False
         state.data.clear()
         state.data.update(loaded)
-        _backfill_last_check_time()
     elif not _load_failed:
         await save_to_json()
 
-    if not _load_failed:
-        await credits.migrate_legacy_accounts(state.data)
-
     await asyncio.to_thread(_restore_or_reset_challenge)
     gc.collect()
-
-
-def _backfill_last_check_time():
-    now_ts = datetime.datetime.now().timestamp()
-    for uid in state.data.keys():
-        if 'last_check_time' not in state.data[uid]:
-            state.data[uid]['last_check_time'] = now_ts
 
 
 def _restore_or_reset_challenge():

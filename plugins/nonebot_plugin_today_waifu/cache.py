@@ -23,7 +23,6 @@ _persist: dict = {}
 _persist_loaded = False
 _last_flush = 0.0
 _dirty = False
-_legacy_oversized = False
 
 
 def _entry_bytes(entry) -> int:
@@ -55,7 +54,7 @@ def _purge_unlocked() -> None:
 
 
 def _ensure_loaded() -> None:
-    global _persist, _persist_loaded, _legacy_oversized
+    global _persist, _persist_loaded
     if _persist_loaded:
         return
     _persist_loaded = True
@@ -65,8 +64,7 @@ def _ensure_loaded() -> None:
     if _CACHE_FILE.is_file():
         try:
             if _MAX_PERSIST_BYTES and _CACHE_FILE.stat().st_size > _MAX_PERSIST_BYTES:
-                _legacy_oversized = True
-                logger.warning("today_waifu cache.pk 超过缓存上限，跳过旧缓存并在下次写入时收敛")
+                logger.warning("today_waifu cache.pk 超过缓存上限，跳过加载")
                 return
             with open(_CACHE_FILE, "rb") as f:
                 _persist = pickle.load(f)
@@ -106,8 +104,6 @@ def preload(max_bytes: int = 0):
         return 0, 0
     with _lock:
         _ensure_loaded()
-        if _legacy_oversized:
-            return 0, 0
         bucket = _persist.get("avatar", {}) or {}
         used = 0
         for entry in bucket.values():
