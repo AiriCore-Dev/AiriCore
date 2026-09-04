@@ -9,6 +9,7 @@ import datetime
 import nonebot
 from nonebot import get_driver, logger, require
 from PIL import ImageDraw
+from utils import credits
 
 from . import state
 from . import cache
@@ -74,6 +75,9 @@ async def load_json():
     elif not _load_failed:
         await save_to_json()
 
+    if not _load_failed:
+        await credits.migrate_legacy_accounts(state.data)
+
     await asyncio.to_thread(_restore_or_reset_challenge)
     gc.collect()
 
@@ -129,12 +133,11 @@ async def save_to_json():
         except Exception as e:
             logger.error(f"airi_daily_check 存档写入失败: {e}")
         cache.flush()
+        await credits.flush()
 
 
 def _has_savedata(user_data):
     if user_data.get('collections'):
-        return True
-    if user_data.get('credits', 0) > 0:
         return True
     if user_data.get('checked_days', 0) > 0:
         return True
@@ -166,7 +169,8 @@ async def daily_clear():
             and last_check < inactive_cutoff
             and not _has_savedata(user_data)
         ):
-            to_remove.append(uid)
+            if await credits.get_balance(uid) <= 0:
+                to_remove.append(uid)
 
     for uid in to_remove:
         state.data.pop(uid, None)

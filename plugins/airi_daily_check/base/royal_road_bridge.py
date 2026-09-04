@@ -6,13 +6,12 @@ import pickle
 import tempfile
 from pathlib import Path
 
-from . import state
-from .persistence import DATA_FILE, _atomic_dump, _save_lock
+from utils import credits
 
 
 _settlement_ids: dict[str, dict] = {}
 _bridge_lock = asyncio.Lock()
-_receipt_path = Path(DATA_FILE).with_name("royal_road_settlements.pk")
+_receipt_path = Path(credits.DATA_FILE).with_name("royal_road_settlements.pk")
 
 
 def _load_receipts() -> dict[str, dict]:
@@ -60,42 +59,36 @@ async def apply_royal_road_credit(user_id: str, amount: int, settlement_id: str)
         record = _settlement_ids.get(settlement_id)
         if record is not None and record.get("status") == "applied":
             return {"status": "duplicate", "amount": amount}
-        async with _save_lock:
-            account = state.data.get(user_id)
-            if account is None:
-                return {"status": "unregistered", "amount": amount}
-            current = int(account.get("credits", 0))
-            if record is not None:
-                if record.get("user_id") != user_id or record.get("amount") != amount:
-                    raise RuntimeError("王道结算凭证与待处理事务不匹配")
-                before = int(record["before"])
-                after = int(record["after"])
-                if current == after:
-                    applied = {**record, "status": "applied"}
-                    receipts = {**_settlement_ids, settlement_id: applied}
-                    await asyncio.to_thread(_save_receipts, receipts)
-                    _settlement_ids.clear()
-                    _settlement_ids.update(receipts)
-                    return {"status": "duplicate", "amount": amount}
-                if current != before:
-                    raise RuntimeError("王道结算待处理事务需要人工核对")
-            else:
-                before = current
-                after = current + amount
-                record = {"status": "pending", "user_id": user_id, "amount": amount, "before": before, "after": after}
-                receipts = {**_settlement_ids, settlement_id: record}
+        if not await credits.has_account(user_id):
+            return {"status": "unregistered", "amount": amount}
+        current = await credits.get_balance(user_id)
+        if record is not None:
+            if record.get("user_id") != user_id or record.get("amount") != amount:
+                raise RuntimeError("王道结算凭证与待处理事务不匹配")
+            before = int(record["before"])
+            after = int(record["after"])
+            if current == after:
+                applied = {**record, "status": "applied"}
+                receipts = {**_settlement_ids, settlement_id: applied}
                 await asyncio.to_thread(_save_receipts, receipts)
                 _settlement_ids.clear()
                 _settlement_ids.update(receipts)
-            account["credits"] = after
-            try:
-                await asyncio.to_thread(_atomic_dump, DATA_FILE, state.data)
-            except Exception:
-                account["credits"] = before
-                raise
-            applied = {**record, "status": "applied"}
-            receipts = {**_settlement_ids, settlement_id: applied}
+                return {"status": "duplicate", "amount": amount}
+            if current != before:
+                raise RuntimeError("王道结算待处理事务需要人工核对")
+        else:
+            before = current
+            after = current + amount
+            record = {"status": "pending", "user_id": user_id, "amount": amount, "before": before, "after": after}
+            receipts = {**_settlement_ids, settlement_id: record}
             await asyncio.to_thread(_save_receipts, receipts)
             _settlement_ids.clear()
             _settlement_ids.update(receipts)
-            return {"status": "applied", "amount": amount}
+        if amount:
+            await credits.credit(user_id, amount)
+        applied = {**record, "status": "applied"}
+        receipts = {**_settlement_ids, settlement_id: applied}
+        await asyncio.to_thread(_save_receipts, receipts)
+        _settlement_ids.clear()
+        _settlement_ids.update(receipts)
+        return {"status": "applied", "amount": amount}

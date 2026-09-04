@@ -3,6 +3,7 @@ import datetime
 
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import MessageEvent
+from utils import credits
 
 from ..base import state
 from ..base.constants import (
@@ -35,7 +36,7 @@ async def _(bot: Bot, ev: MessageEvent):
         while rand_sticker in hidden_stickers:
             rand_sticker = random.randint(1, 100)
         random_credit = 2000 if random.randint(1, 100) == 1 else random.randint(100, 200)
-        state.data[user_id]['credits'] += random_credit
+        await credits.credit(user_id, random_credit)
         random_like = 0
         nows = datetime.datetime.now()
         res += '🗓️ {}年{}月{}日 今日已签到！\n'.format(nows.year, nows.month, nows.day)
@@ -51,14 +52,14 @@ async def _(bot: Bot, ev: MessageEvent):
                 + MessageSegment.image(new_sticker)
         else:
             get_repeat_credit = 50
-            state.data[user_id]['credits'] += 50
+            await credits.credit(user_id, 50)
             stk = await get_sticker(rand_sticker, user_id)
             stk_b64 = await localpath_to_base64(stk)
             msg += MessageSegment.text('📦 获得第{}号收藏品\n♻️ 重复辣，转化为50积分\n'.format(rand_sticker)) \
                 + MessageSegment.image(stk_b64)
 
         msg += MessageSegment.text(
-            '✅ 获得 {} 积分\n📥 当前拥有 {} 积分'.format(random_credit + get_repeat_credit, state.data[user_id]['credits'])
+            '✅ 获得 {} 积分\n📥 当前拥有 {} 积分'.format(random_credit + get_repeat_credit, await credits.get_balance(user_id))
         )
 
         random_jrys = random.choice(['💫 来看看今天的运势！', '🔥 我的回合，抽签！', '✨今日运势✨'])
@@ -66,7 +67,7 @@ async def _(bot: Bot, ev: MessageEvent):
         stk_b64 = await localpath_to_base64(jrys_img)
         msg += MessageSegment.text(f'\n\n{random_jrys}\n') + MessageSegment.image(stk_b64)
 
-        if state.data[user_id]['credits'] >= 2000 and acquire_sticker(user_id, 20):
+        if await credits.get_balance(user_id) >= 2000 and acquire_sticker(user_id, 20):
             msg += await unlock_segment(
                 user_id, 20,
                 '\n\n⭐ 隐藏成就解锁！\n🎖️ 积分达到2000：解锁隐藏收藏品20！\n🎉是NEW，好耶！🎉\n',
@@ -80,9 +81,10 @@ async def _(bot: Bot, ev: MessageEvent):
             msg += MessageSegment.text('\n\n' + random.choice(SECRET_MESSAGES))
     else:
         res += '❌ 重复签到{}次！\n'.format(state.data[user_id]['check_times_daily'])
-        penalty = min(random.randint(10, 20), max(0, state.data[user_id]['credits']))
-        state.data[user_id]['credits'] -= penalty
-        res += '⛔ 已扣除 {} 积分\n📥 当前拥有 {} 积分'.format(penalty, state.data[user_id]['credits'])
+        penalty = min(random.randint(10, 20), max(0, await credits.get_balance(user_id)))
+        if penalty:
+            await credits.debit(user_id, penalty)
+        res += '⛔ 已扣除 {} 积分\n📥 当前拥有 {} 积分'.format(penalty, await credits.get_balance(user_id))
         msg = MessageSegment.text(res)
 
         if state.data[user_id]['check_times_daily'] == 1 and acquire_sticker(user_id, 13):

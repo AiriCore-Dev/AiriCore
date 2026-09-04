@@ -16,6 +16,7 @@ from nonebot.adapters.onebot.v11.event import MessageEvent
 from nonebot.params import Command, CommandArg
 from PIL import Image, ImageDraw, ImageFont
 
+from utils import credits
 from utils.superuser_2fa import SUPERUSER_2FA
 
 
@@ -175,31 +176,34 @@ def format_plan_status(
     return "\n".join(("当前分布式订阅信息：", f"订阅状态：{status}", expiry_line))
 
 
-def purchase_plan(
-    accounts: dict,
+async def purchase_plan_with_credits(
+    payer_id: str,
     expiries: dict,
     bot_id: str,
     plan_type: str,
     *,
-    payer_id: str | None = None,
     now: int | float | None = None,
 ) -> PurchaseResult:
+    normalized_payer_id = str(payer_id).strip()
     normalized_bot_id = _normalize_plan_bot_id(bot_id)
-    normalized_payer_id = _normalize_plan_bot_id(payer_id or normalized_bot_id)
     spec = PLAN_CATALOG.get(str(plan_type).strip())
     if spec is None:
         raise PlanError("套餐类型无效，可选：日卡、周卡、月卡")
-    account = accounts.get(normalized_payer_id)
-    if account is None:
-        raise PlanError('付款人尚未注册，请先发送“签到”')
-    credits = int(account.get("credits", 0))
-    if credits < spec.cost:
-        raise PlanError(f"付款人积分不足：需要{spec.cost}积分，当前{credits}积分")
+    balance = await credits.get_balance(normalized_payer_id)
+    if balance < spec.cost:
+        raise PlanError(f"付款人积分不足：需要{spec.cost}积分，当前{balance}积分")
     current_time = _plan_now(now)
     previous_expiry = int(float(expiries.get(normalized_bot_id, 0)))
     expires_at = max(current_time, previous_expiry) + spec.days * 86400
-    account["credits"] = credits - spec.cost
-    expiries[normalized_bot_id] = expires_at
+    try:
+        await credits.debit(normalized_payer_id, spec.cost)
+    except credits.InsufficientCreditsError:
+        raise PlanError(f"付款人积分不足：需要{spec.cost}积分，当前{balance}积分") from None
+    try:
+        expiries[normalized_bot_id] = expires_at
+    except Exception:
+        await credits.credit(normalized_payer_id, spec.cost)
+        raise
     return PurchaseResult(
         bot_id=normalized_bot_id,
         plan_type=str(plan_type).strip(),
@@ -448,36 +452,28 @@ async def _confirm_llm_plan(matcher, bot: Bot, ev: MessageEvent):
     decision = ev.get_plaintext().strip()
     if decision == "取消":
         await matcher.finish("已取消本次套餐购买。")
-    from plugins.airi_daily_check.base import state as daily_state
-    from plugins.airi_daily_check.base.persistence import save_to_json
     async with _LLM_PLAN_LOCK:
-        account = daily_state.data.get(pending["payer_id"])
-        previous_credits = account.get("credits") if account else None
         had_previous_expiry = pending["bot_id"] in PLAN_EXPIRIES
         previous_expiry = PLAN_EXPIRIES.get(pending["bot_id"])
         try:
-            result = purchase_plan(
-                daily_state.data,
+            result = await purchase_plan_with_credits(
+                pending["payer_id"],
                 PLAN_EXPIRIES,
                 pending["bot_id"],
                 pending["plan_type"],
-                payer_id=pending["payer_id"],
             )
-            await save_to_json()
             save_plan_expiries(PLAN_FILE, PLAN_EXPIRIES)
         except PlanError as e:
             await matcher.finish(f"❌ {e}")
         except Exception as e:
-            if account is not None and previous_credits is not None:
-                account["credits"] = previous_credits
+            try:
+                await credits.credit(pending["payer_id"], PLAN_CATALOG[pending["plan_type"]].cost)
+            except Exception:
+                pass
             if had_previous_expiry:
                 PLAN_EXPIRIES[pending["bot_id"]] = previous_expiry
             else:
                 PLAN_EXPIRIES.pop(pending["bot_id"], None)
-            try:
-                await save_to_json()
-            except Exception:
-                pass
             logger.error(f"llmplan 购买保存失败: {e}")
             await matcher.finish("❌ 套餐开通失败，积分未扣除，请稍后重试")
     await matcher.finish(
@@ -485,7 +481,7 @@ async def _confirm_llm_plan(matcher, bot: Bot, ev: MessageEvent):
         f"Bot QQ号：{result.bot_id}\n"
         f"套餐：{result.plan_type}（{result.days}天）\n"
         f"扣除付款人积分：{result.cost}\n"
-        f"付款人剩余积分：{daily_state.data[pending['payer_id']]['credits']}\n"
+        f"付款人剩余积分：{await credits.get_balance(pending['payer_id'])}\n"
         f"有效期至：{_format_llm_plan_expiry(result.expires_at)}"
     )
 
@@ -525,16 +521,12 @@ async def _plan(
             "❌ 该 Bot 已在 .env.prod 中配置为永久权限，不能进行普通订阅。",
             reply_message=True,
         )
-    from plugins.airi_daily_check.base import state as daily_state
     payer_id = str(ev.user_id)
-    account = daily_state.data.get(payer_id)
-    if account is None:
-        await airi_llm_plan.finish('❌ 付款人尚未注册，请先发送“签到”', reply_message=True)
     cost = PLAN_CATALOG[plan_type].cost
-    credits = int(account.get("credits", 0))
-    if credits < cost:
+    balance = await credits.get_balance(payer_id)
+    if balance < cost:
         await airi_llm_plan.finish(
-            f"❌ 付款人积分不足：需要{cost}积分，当前{credits}积分",
+            f"❌ 付款人积分不足：需要{cost}积分，当前{balance}积分",
             reply_message=True,
         )
     now = int(time.time())
@@ -551,7 +543,7 @@ async def _plan(
         f"Bot QQ号：{bot_id}\n"
         f"套餐：{plan_type}（{PLAN_CATALOG[plan_type].days}天）\n"
         f"扣除付款人积分：{cost}\n"
-        f"付款人当前积分：{credits}\n"
+        f"付款人当前积分：{balance}\n"
         f"有效期至：{_format_llm_plan_expiry(preview_expiry)}\n\n"
         "请回复“确认”完成购买，回复“取消”放弃。",
         reply_message=True,

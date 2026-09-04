@@ -8,6 +8,7 @@ from PIL import Image, ImageDraw
 from nonebot import logger
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import MessageEvent
+from utils import credits
 
 from ..base import state
 from ..base import cache
@@ -29,11 +30,12 @@ async def _(bot: Bot, ev: MessageEvent):
     await ensure_registered(shoucang, user_id)
     user_nick = ev.sender.card or ev.sender.nickname or user_id
     avater_bytes = await download_avatar(user_id)
-    base64_img = await asyncio.to_thread(_render_info, user_id, user_nick, avater_bytes)
+    balance = await credits.get_balance(user_id)
+    base64_img = await asyncio.to_thread(_render_info, user_id, user_nick, avater_bytes, balance)
     await xinxi.send(MessageSegment.image(base64_img), reply_message=True)
 
 
-def _render_info(user_id, user_nick, avater_bytes):
+def _render_info(user_id, user_nick, avater_bytes, balance):
     if os.path.isdir(asset('info_bg', user_id)):
         backg = cache.get_image_copy(
             pick_random_image(asset('info_bg', user_id), asset('info_bg', 'default.png'))
@@ -71,7 +73,7 @@ def _render_info(user_id, user_nick, avater_bytes):
     avater_mask = cache.get_image(asset('resources', 'avater_mask.png'))
     backg.paste(avater, (435, 192), mask=avater_mask.split()[3])
 
-    draw.text(xy=(200 - draw.textlength((tmpdraw := str(state.data[user_id]["credits"])), font_louxing) // 2, 426), text=tmpdraw, fill=(0, 0, 0), font=font_louxing)
+    draw.text(xy=(200 - draw.textlength((tmpdraw := str(balance)), font_louxing) // 2, 426), text=tmpdraw, fill=(0, 0, 0), font=font_louxing)
     draw.text(xy=(520 - draw.textlength((tmpdraw := str(state.data[user_id]["checked_days"])), font_louxing) // 2, 426), text=tmpdraw, fill=(0, 0, 0), font=font_louxing)
     draw.text(xy=(900 - draw.textlength((tmpdraw := str(max(0, TRANSFER_DAILY_MAX - state.data[user_id]["receive_transfer_daily"]))), font_louxing) // 2, 426), text=tmpdraw, fill=(0, 0, 0), font=font_louxing)
     draw.text(xy=(1220 - draw.textlength((tmpdraw := str(state.data[user_id]["reborn_times"])), font_louxing) // 2, 426), text=tmpdraw, fill=(0, 0, 0), font=font_louxing)
@@ -191,12 +193,13 @@ async def _(bot: Bot, ev: MessageEvent):
         except:
             await chouka.finish('❌ 抽卡次数错误！\n抽卡次数可为：1-10次', reply_message=True)
 
-    if state.data[user_id]['credits'] < chouka_times * 100:
-        await chouka.finish('❌ 积分不够辣！>_<\n需要积分：{}\n现有积分：{}'.format(chouka_times * 100, state.data[user_id]['credits']), reply_message=True)
+    balance = await credits.get_balance(user_id)
+    if balance < chouka_times * 100:
+        await chouka.finish('❌ 积分不够辣！>_<\n需要积分：{}\n现有积分：{}'.format(chouka_times * 100, balance), reply_message=True)
 
     user_nick = ev.sender.card or ev.sender.nickname or user_id
-    credits_before = state.data[user_id]['credits']
-    state.data[user_id]['credits'] -= chouka_times * 100
+    credits_before = balance
+    await credits.debit(user_id, chouka_times * 100)
     draws = []
     new_ids = []
     tot_repeat = 0
@@ -216,10 +219,9 @@ async def _(bot: Bot, ev: MessageEvent):
         if is_new:
             new_ids.append(rand_sticker)
         else:
-            state.data[user_id]['credits'] += 50
+            await credits.credit(user_id, 50)
             tot_repeat += 1
-    credits_delta = state.data[user_id]['credits'] - credits_before
-    remaining_credits = state.data[user_id]['credits']
+    remaining_credits = await credits.get_balance(user_id)
     need_reborn = state.data[user_id]['need_reborn']
 
     try:
@@ -232,7 +234,12 @@ async def _(bot: Bot, ev: MessageEvent):
             need_reborn,
         )
     except Exception as e:
-        state.data[user_id]['credits'] -= credits_delta
+        rollback_target = credits_before
+        current_balance = await credits.get_balance(user_id)
+        if current_balance < rollback_target:
+            await credits.credit(user_id, rollback_target - current_balance)
+        elif current_balance > rollback_target:
+            await credits.debit(user_id, current_balance - rollback_target)
         for sticker_id in new_ids:
             try:
                 state.data[user_id]['collections'].remove(sticker_id)
