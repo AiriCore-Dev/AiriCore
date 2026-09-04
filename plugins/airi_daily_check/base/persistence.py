@@ -9,6 +9,7 @@ import datetime
 import nonebot
 from nonebot import get_driver, logger, require
 from PIL import ImageDraw
+from utils import credits
 
 from . import state
 from . import cache
@@ -74,6 +75,9 @@ async def load_json():
     elif not _load_failed:
         await save_to_json()
 
+    if not _load_failed:
+        await credits.migrate_legacy_accounts(state.data)
+
     await asyncio.to_thread(_restore_or_reset_challenge)
     gc.collect()
 
@@ -129,6 +133,7 @@ async def save_to_json():
         except Exception as e:
             logger.error(f"airi_daily_check 存档写入失败: {e}")
         cache.flush()
+        await credits.flush()
 
 
 def _has_savedata(user_data):

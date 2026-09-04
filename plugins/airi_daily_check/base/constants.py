@@ -27,7 +27,6 @@ def asset(*parts):
 
 def new_account():
     return {
-        'credits': 0,
         'checked_days': 0,
         'collections': [],
         'check_times_daily': 0,
