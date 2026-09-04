@@ -139,8 +139,6 @@ async def save_to_json():
 def _has_savedata(user_data):
     if user_data.get('collections'):
         return True
-    if user_data.get('credits', 0) > 0:
-        return True
     if user_data.get('checked_days', 0) > 0:
         return True
     if user_data.get('reborn_times', 0) > 0:
