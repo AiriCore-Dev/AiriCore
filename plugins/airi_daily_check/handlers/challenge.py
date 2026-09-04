@@ -4,7 +4,7 @@ import datetime
 
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import MessageEvent
-from utils import credits
+from utils import credit
 from utils.copy import COPY
 
 from ..base import state
@@ -45,9 +45,9 @@ async def _(bot: Bot, ev: MessageEvent):
         hash_res = hmac.new(user_id.encode(), answer.encode(), hashlib.md5).hexdigest()
         if hmac.compare_digest(src, hash_res):
             if not state.data[user_id]['daily_challenge'][i]:
-                await credits.credit(user_id, CREDIT_BY_DIFF[i])
+                await credit.credit(user_id, CREDIT_BY_DIFF[i])
                 state.data[user_id]['daily_challenge'][i] = 1
-                balance = await credits.get_balance(user_id)
+                balance = await credit.get_balance(user_id)
                 msg = MessageSegment.text(
                     f'\n✅ 提交成功！\n恭喜你解出了每日挑战{DIFFICULTY[i]}难度，获得{CREDIT_BY_DIFF[i]}积分奖励！\n当前积分：{balance}'
                 )

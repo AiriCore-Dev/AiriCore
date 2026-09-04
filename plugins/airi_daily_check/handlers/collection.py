@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw
 from nonebot import logger
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import MessageEvent
-from utils import credits
+from utils import credit
 from utils.copy import COPY
 
 from ..base import state
@@ -31,7 +31,7 @@ async def _(bot: Bot, ev: MessageEvent):
     await ensure_registered(shoucang, user_id)
     user_nick = ev.sender.card or ev.sender.nickname or user_id
     avater_bytes = await download_avatar(user_id)
-    balance = await credits.get_balance(user_id)
+    balance = await credit.get_balance(user_id)
     base64_img = await asyncio.to_thread(_render_info, user_id, user_nick, avater_bytes, balance)
     await xinxi.send(MessageSegment.image(base64_img), reply_message=True)
 
@@ -194,13 +194,13 @@ async def _(bot: Bot, ev: MessageEvent):
         except:
             await chouka.finish('❌ 抽卡次数错误！\n抽卡次数可为：1-10次', reply_message=True)
 
-    balance = await credits.get_balance(user_id)
+    balance = await credit.get_balance(user_id)
     if balance < chouka_times * 100:
         await chouka.finish('❌ 积分不够辣！>_<\n需要积分：{}\n现有积分：{}'.format(chouka_times * 100, balance), reply_message=True)
 
     user_nick = ev.sender.card or ev.sender.nickname or user_id
     credits_before = balance
-    await credits.debit(user_id, chouka_times * 100)
+    await credit.debit(user_id, chouka_times * 100)
     draws = []
     new_ids = []
     tot_repeat = 0
@@ -220,9 +220,9 @@ async def _(bot: Bot, ev: MessageEvent):
         if is_new:
             new_ids.append(rand_sticker)
         else:
-            await credits.credit(user_id, 50)
+            await credit.credit(user_id, 50)
             tot_repeat += 1
-    remaining_credits = await credits.get_balance(user_id)
+    remaining_credits = await credit.get_balance(user_id)
     need_reborn = state.data[user_id]['need_reborn']
 
     try:
@@ -236,11 +236,11 @@ async def _(bot: Bot, ev: MessageEvent):
         )
     except Exception as e:
         rollback_target = credits_before
-        current_balance = await credits.get_balance(user_id)
+        current_balance = await credit.get_balance(user_id)
         if current_balance < rollback_target:
-            await credits.credit(user_id, rollback_target - current_balance)
+            await credit.credit(user_id, rollback_target - current_balance)
         elif current_balance > rollback_target:
-            await credits.debit(user_id, current_balance - rollback_target)
+            await credit.debit(user_id, current_balance - rollback_target)
         for sticker_id in new_ids:
             try:
                 state.data[user_id]['collections'].remove(sticker_id)

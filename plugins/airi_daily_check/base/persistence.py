@@ -9,7 +9,7 @@ import datetime
 import nonebot
 from nonebot import get_driver, logger, require
 from PIL import ImageDraw
-from utils import credits
+from utils import credit
 
 from . import state
 from . import cache
@@ -122,7 +122,7 @@ async def save_to_json():
         except Exception as e:
             logger.error(f"airi_daily_check 存档写入失败: {e}")
         cache.flush()
-        await credits.flush()
+        await credit.flush()
 
 
 def _has_savedata(user_data):
@@ -158,7 +158,7 @@ async def daily_clear():
             and last_check < inactive_cutoff
             and not _has_savedata(user_data)
         ):
-            if await credits.get_balance(uid) <= 0:
+            if await credit.get_balance(uid) <= 0:
                 to_remove.append(uid)
 
     for uid in to_remove:

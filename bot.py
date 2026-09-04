@@ -6,11 +6,7 @@ import shutil
 import threading
 from pathlib import Path
 from datetime import datetime
-
-from utils.fontconfig import configure_fontconfig
 from utils.coordination import registry
-
-configure_fontconfig()
 
 CHILD_ARG = "--airicore-child"
 

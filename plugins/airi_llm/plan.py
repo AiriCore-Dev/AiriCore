@@ -16,7 +16,7 @@ from nonebot.adapters.onebot.v11.event import MessageEvent
 from nonebot.params import Command, CommandArg
 from PIL import Image, ImageDraw, ImageFont
 
-from utils import credits
+from utils import credit
 from utils.copy import COPY
 from utils.superuser_2fa import SUPERUSER_2FA
 
@@ -190,20 +190,20 @@ async def purchase_plan_with_credits(
     spec = PLAN_CATALOG.get(str(plan_type).strip())
     if spec is None:
         raise PlanError("套餐类型无效，可选：日卡、周卡、月卡")
-    balance = await credits.get_balance(normalized_payer_id)
+    balance = await credit.get_balance(normalized_payer_id)
     if balance < spec.cost:
         raise PlanError(f"付款人积分不足：需要{spec.cost}积分，当前{balance}积分")
     current_time = _plan_now(now)
     previous_expiry = int(float(expiries.get(normalized_bot_id, 0)))
     expires_at = max(current_time, previous_expiry) + spec.days * 86400
     try:
-        await credits.debit(normalized_payer_id, spec.cost)
-    except credits.InsufficientCreditsError:
+        await credit.debit(normalized_payer_id, spec.cost)
+    except credit.InsufficientCreditsError:
         raise PlanError(f"付款人积分不足：需要{spec.cost}积分，当前{balance}积分") from None
     try:
         expiries[normalized_bot_id] = expires_at
     except Exception:
-        await credits.credit(normalized_payer_id, spec.cost)
+        await credit.credit(normalized_payer_id, spec.cost)
         raise
     return PurchaseResult(
         bot_id=normalized_bot_id,
@@ -468,7 +468,7 @@ async def _confirm_llm_plan(matcher, bot: Bot, ev: MessageEvent):
             await matcher.finish(f"❌ {e}")
         except Exception as e:
             try:
-                await credits.credit(pending["payer_id"], PLAN_CATALOG[pending["plan_type"]].cost)
+                await credit.credit(pending["payer_id"], PLAN_CATALOG[pending["plan_type"]].cost)
             except Exception:
                 pass
             if had_previous_expiry:
@@ -482,7 +482,7 @@ async def _confirm_llm_plan(matcher, bot: Bot, ev: MessageEvent):
         f"Bot QQ号：{result.bot_id}\n"
         f"套餐：{result.plan_type}（{result.days}天）\n"
         f"扣除付款人积分：{result.cost}\n"
-        f"付款人剩余积分：{await credits.get_balance(pending['payer_id'])}\n"
+        f"付款人剩余积分：{await credit.get_balance(pending['payer_id'])}\n"
         f"有效期至：{_format_llm_plan_expiry(result.expires_at)}"
     )
 
@@ -524,7 +524,7 @@ async def _plan(
         )
     payer_id = str(ev.user_id)
     cost = PLAN_CATALOG[plan_type].cost
-    balance = await credits.get_balance(payer_id)
+    balance = await credit.get_balance(payer_id)
     if balance < cost:
         await airi_llm_plan.finish(
             f"❌ 付款人积分不足：需要{cost}积分，当前{balance}积分",

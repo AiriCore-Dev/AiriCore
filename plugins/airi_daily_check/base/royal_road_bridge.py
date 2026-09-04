@@ -6,12 +6,12 @@ import pickle
 import tempfile
 from pathlib import Path
 
-from utils import credits
+from utils import credit
 
 
 _settlement_ids: dict[str, dict] = {}
 _bridge_lock = asyncio.Lock()
-_receipt_path = Path(credits.DATA_FILE).with_name("royal_road_settlements.pk")
+_receipt_path = Path(credit.DATA_FILE).with_name("royal_road_settlements.pk")
 
 
 def _load_receipts() -> dict[str, dict]:
@@ -59,9 +59,9 @@ async def apply_royal_road_credit(user_id: str, amount: int, settlement_id: str)
         record = _settlement_ids.get(settlement_id)
         if record is not None and record.get("status") == "applied":
             return {"status": "duplicate", "amount": amount}
-        if not await credits.has_account(user_id):
+        if not await credit.has_account(user_id):
             return {"status": "unregistered", "amount": amount}
-        current = await credits.get_balance(user_id)
+        current = await credit.get_balance(user_id)
         if record is not None:
             if record.get("user_id") != user_id or record.get("amount") != amount:
                 raise RuntimeError("王道结算凭证与待处理事务不匹配")
@@ -85,7 +85,7 @@ async def apply_royal_road_credit(user_id: str, amount: int, settlement_id: str)
             _settlement_ids.clear()
             _settlement_ids.update(receipts)
         if amount:
-            await credits.credit(user_id, amount)
+            await credit.credit(user_id, amount)
         applied = {**record, "status": "applied"}
         receipts = {**_settlement_ids, settlement_id: applied}
         await asyncio.to_thread(_save_receipts, receipts)

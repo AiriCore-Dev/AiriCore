@@ -4,7 +4,7 @@ import random
 
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import MessageEvent
-from utils import credits
+from utils import credit
 
 from utils.onebot_query import member_name
 
@@ -50,9 +50,9 @@ async def _(bot: Bot, ev: MessageEvent):
         await transcation.finish('❌ 已超出今日转出限额！\n账户转出限额：{}积分/天\n今日已转出：{}'.format(TRANSFER_DAILY_MAX, sent_today), reply_message=True)
 
     try:
-        result = await credits.transfer(user_id, transfer_id, transfer_num)
-    except credits.InsufficientCreditsError:
-        await transcation.finish('❌ 你的积分余额不足！\n现有积分：{}\n需要积分(含税)：{}'.format(await credits.get_balance(user_id), transfer_num + taxs), reply_message=True)
+        result = await credit.transfer(user_id, transfer_id, transfer_num)
+    except credit.InsufficientCreditsError:
+        await transcation.finish('❌ 你的积分余额不足！\n现有积分：{}\n需要积分(含税)：{}'.format(await credit.get_balance(user_id), transfer_num + taxs), reply_message=True)
     state.data[user_id]['receive_transfer_daily'] += transfer_num
     await transcation.send('✅ 交易成功！\n你已向{}转出了{}积分\nAiri从中收取了{}点手续费(10%)\n剩余积分：{}'.format(user_nick, transfer_num, result.fee, result.sender_balance), reply_message=True)
 
@@ -91,12 +91,12 @@ async def _(bot: Bot, ev: MessageEvent):
 ⛔ 存在错字、漏字等情况将不会执行重生操作。'
         await reborn.finish(msg, at_sender=True, reply_message=True)
     elif src == '重生 {} 我已阅读重生说明，请帮我重置账户。'.format(user_id):
-        if await credits.get_balance(user_id) < 0:
+        if await credit.get_balance(user_id) < 0:
             await reborn.finish('😡 捡漏失败：积分<0还想重置账户？爬爬爬！', reply_message=True)
         await check_all_achiv(user_id, bot, ev)
-        current_balance = await credits.get_balance(user_id)
+        current_balance = await credit.get_balance(user_id)
         if current_balance > 0:
-            await credits.debit(user_id, current_balance)
+            await credit.debit(user_id, current_balance)
         state.data[user_id]['collections'] = [i for i in range(101, 106) if i in state.data[user_id]['collections']]
         if state.data[user_id]['need_reborn']:
             state.data[user_id]['need_reborn'] = 0
@@ -111,11 +111,11 @@ async def _(bot: Bot, ev: MessageEvent):
     user_id, group_id = parse_session(ev)
     await ensure_registered(buy_tip, user_id)
 
-    if await credits.get_balance(user_id) < 500:
+    if await credit.get_balance(user_id) < 500:
         await buy_tip.finish('😡 500积分都拿不出来的吗！', reply_message=True)
     else:
-        await credits.debit(user_id, 500)
+        await credit.debit(user_id, 500)
         await buy_tip.finish(
-            f'{random.choice(SECRET_MESSAGES)}\n\n剩余积分：{await credits.get_balance(user_id)}',
+            f'{random.choice(SECRET_MESSAGES)}\n\n剩余积分：{await credit.get_balance(user_id)}',
             reply_message=True,
         )
