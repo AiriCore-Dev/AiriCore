@@ -169,7 +169,8 @@ async def daily_clear():
             and last_check < inactive_cutoff
             and not _has_savedata(user_data)
         ):
-            to_remove.append(uid)
+            if await credits.get_balance(uid) <= 0:
+                to_remove.append(uid)
 
     for uid in to_remove:
         state.data.pop(uid, None)
