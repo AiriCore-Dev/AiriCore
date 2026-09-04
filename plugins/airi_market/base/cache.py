@@ -6,7 +6,7 @@ from typing import Optional
 
 from nonebot.log import logger
 
-from utils.cache import is_disk
+from utils.cache import is_disk, register_preload
 
 _DATA_DIR = Path(__file__).resolve().parents[3] / "data" / "airi_market"
 _CACHE_FILE = _DATA_DIR / "cache.pk"
@@ -158,3 +158,6 @@ def invalidate_article(article_name: str) -> None:
         if _persist.get("articles", {}).pop(article_name, None) is not None:
             _dirty = True
             _flush()
+
+
+register_preload("airi_market 文章", preload)

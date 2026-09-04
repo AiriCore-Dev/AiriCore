@@ -1,6 +1,7 @@
 import asyncio
 import base64
 import time
+from pathlib import Path
 
 from nonebot.rule import Rule
 from utils.superuser_2fa import SUPERUSER_2FA
@@ -12,6 +13,9 @@ from .config import config as plugin_config
 
 from .drawer import draw
 from utils.onebot_query import bot_name
+from utils.cache import get_image, register_asset_group, value_bytes
+
+register_asset_group("airi_status 素材", Path(__file__).resolve().parent / "resources" / "images", ("*.png", "*.jpg", "*.jpeg"), lambda path: value_bytes(get_image(path)))
 
 COOLDOWN = 0
 _last_call: dict = {}

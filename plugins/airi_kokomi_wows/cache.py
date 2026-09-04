@@ -11,12 +11,22 @@ from utils.cache import (
     is_ram,
     register_cache,
 )
+from utils.cache import register_asset_group
 from utils.cache import ByteLRU
 
 _lock = threading.Lock()
 _arrays = ByteLRU(get_cache_budget_bytes("arrays"), owner="kokomi.arrays")
 
 register_cache("kokomi.arrays", _arrays)
+
+
+def _preload_array(path):
+    return int(get_array(path).nbytes)
+
+
+_RESOURCE_ROOT = os.path.dirname(__file__)
+for _name in ("ship_icon", "nation", "achievement", "achievement_plus", "clan", "list", "cw"):
+    register_asset_group(f"kokomi {_name}", os.path.join(_RESOURCE_ROOT, "png", _name), ("*.png", "*.jpg", "*.jpeg"), _preload_array)
 
 
 def _signature(path):

@@ -3,7 +3,7 @@ import asyncio
 import base64
 import re
 import nonebot
-from utils.cache import get_b64
+from utils.cache import get_b64, register_asset_group
 from utils.network import download_public_bytes
 from nonebot import on_notice, on_command, get_driver, logger
 from utils.superuser_2fa import SUPERUSER_2FA
@@ -12,6 +12,7 @@ from nonebot.adapters.onebot.v11 import GroupIncreaseNoticeEvent, Message
 from nonebot.adapters.onebot.v11.bot import Bot, MessageSegment
 
 driver = get_driver()
+register_asset_group("airi_new_group 素材", os.path.dirname(__file__), ("*.jpg", "*.png", "*.wav"), lambda path: len(get_b64(path) or ""))
 BROADCAST_INTERVAL = 2
 BROADCAST_MAX_GROUPS = 2000
 BROADCAST_MAX_IMAGE_BYTES = 5 * 1024 * 1024

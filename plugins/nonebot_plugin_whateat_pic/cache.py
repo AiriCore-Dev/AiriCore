@@ -7,7 +7,7 @@ from typing import Optional
 
 from nonebot.log import logger
 
-from utils.cache import is_disk
+from utils.cache import is_disk, register_asset_group, register_preload
 
 _DATA_DIR = Path(__file__).resolve().parents[2] / "data" / "nonebot_plugin_whateat_pic"
 _CACHE_FILE = _DATA_DIR / "cache.pk"
@@ -165,3 +165,8 @@ def invalidate(path) -> None:
         if _persist.get("img", {}).pop(key, None) is not None:
             _dirty = True
             _flush()
+
+
+register_preload("whateat_pic 图片", preload)
+register_asset_group("whateat 图片", Path(__file__).resolve().parent / "eat_pic", ("*.png", "*.jpg", "*.jpeg"), lambda path: len(get_b64(path) or ""))
+register_asset_group("whateat 饮品", Path(__file__).resolve().parent / "drink_pic", ("*.png", "*.jpg", "*.jpeg"), lambda path: len(get_b64(path) or ""))

@@ -6,6 +6,14 @@ from nonebot.matcher import Matcher
 from nonebot_plugin_alconna import Target, UniMessage, get_target
 
 
+_scene_membership_checker = None
+
+
+def register_scene_membership_checker(callback):
+    global _scene_membership_checker
+    _scene_membership_checker = callback
+
+
 def choose_notification_bot(bots, configured_account):
     if not bots:
         return None
@@ -105,9 +113,11 @@ def get_notification_bot(fallback=None):
 
 
 def _known_in_scene(bot_id: str, scene: str) -> bool:
+    checker = _scene_membership_checker
+    if checker is None:
+        return True
     try:
-        from plugins.airi_switch import dedup
-        return dedup.in_group(bot_id, scene) is not False
+        return checker(bot_id, scene) is not False
     except Exception:
         return True
 

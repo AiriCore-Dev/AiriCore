@@ -25,7 +25,7 @@ async def kokomi_llm(input_words):
                 }
             ],
             tag="kokomi_nl2c",
-            usage_source=llm.SOURCE_WATER_METER,
+            usage_source="水表",
             validate=_parse_nl2c,
             max_completion_tokens=4096,
             temperature=0,

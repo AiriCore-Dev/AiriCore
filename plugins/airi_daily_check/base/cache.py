@@ -17,6 +17,7 @@ from utils.cache import (
     register_cache,
 )
 from utils.cache import ByteLRU, value_bytes
+from utils.cache import get_b64, get_image, register_asset_group, register_preload
 
 TTL_AVATAR = 7 * 24 * 3600
 
@@ -341,3 +342,13 @@ def get_font(path: str, size: int):
     with _lock:
         _fonts.put(key, (signature, f), 256 * 1024)
     return f
+
+
+register_preload("airi_daily_check 产物", preload)
+
+_RESOURCE_ROOT = Path(__file__).resolve().parents[1] / "resources"
+register_asset_group("daily_check 通用素材", _RESOURCE_ROOT, ("*.png", "*.jpg", "*.jpeg"), lambda path: value_bytes(get_image(path)), recursive=False)
+register_asset_group("daily_check 数独素材", _RESOURCE_ROOT / "sudoku", ("*.png",), lambda path: value_bytes(get_image(path)))
+register_asset_group("daily_check 抽卡底图", _RESOURCE_ROOT / "gacha", ("*.png", "*.jpg", "*.jpeg"), lambda path: value_bytes(get_image(path)))
+register_asset_group("daily_check 运势图", _RESOURCE_ROOT / "jrys", ("*.png",), lambda path: len(get_b64(path) or ""))
+register_asset_group("daily_check 默认背景", Path(__file__).resolve().parents[1] / "info_bg", ("*.png", "*.jpg", "*.jpeg"), lambda path: value_bytes(get_image(path)), recursive=True)

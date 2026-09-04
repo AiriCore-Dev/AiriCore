@@ -1,4 +1,5 @@
 import asyncio
+from pathlib import Path
 from asyncio import TimerHandle
 from typing import Annotated, Any, Optional, Union
 
@@ -29,12 +30,15 @@ from nonebot_plugin_alconna import (
 
 from utils.onebot_query import event_nickname, session_key
 from utils.messaging import capture_target, send_with_fallback
+from utils.cache import get_image, register_asset_group, value_bytes
 
 from .board import MoveResult
 from .config import Config
 from .engine import EngineError
 from .game import AiPlayer, Game, Player
 from .move import Move
+
+register_asset_group("cchess 棋盘棋子", Path(__file__).resolve().parent / "resources" / "images", ("*.png", "*.jpg", "*.jpeg"), lambda path: value_bytes(get_image(path)))
 
 __plugin_meta__ = PluginMetadata(
     name="象棋",

@@ -10,7 +10,7 @@ _ROOT_DIR = SCRIPT_DIR.parent.parent
 if str(_ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(_ROOT_DIR))
 
-from utils import email as et
+from .base import email_components as et
 
 
 def render_marketing_email(article_info, unsubscribe_url):

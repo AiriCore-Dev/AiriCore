@@ -19,7 +19,7 @@ async def _(bot: Bot, ev: MessageEvent):
     nows = datetime.datetime.now()
     res = MessageSegment.text('㊙️ 快来挑战今日份数独题目吧！\n{}年{}月{}日\n'.format(nows.year, nows.month, nows.day))
     for i in range(1, 4):
-        stk = asset('utils', 'sudoku', f'sdk_diff_{i}.jpg')
+        stk = asset('resources', 'sudoku', f'sdk_diff_{i}.jpg')
         stk_b64 = await localpath_to_base64(stk)
         res += MessageSegment.text(f'\n{DIFFICULTY[i]}难度 - {CREDIT_BY_DIFF[i]}积分')
         res += MessageSegment.image(stk_b64)

@@ -9,7 +9,7 @@ from typing import Any, Dict, Optional
 
 from nonebot import logger
 
-from utils.cache import is_disk
+from utils.cache import is_disk, register_preload
 
 TTL_NAME = 2 * 3600
 TTL_AVATAR = 7 * 24 * 3600
@@ -168,3 +168,4 @@ def preload(max_bytes: int = 0):
 
 
 _load()
+register_preload("airi_switch 元信息", preload)

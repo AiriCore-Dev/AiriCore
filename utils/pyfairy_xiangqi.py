@@ -1,8 +1,12 @@
+import importlib.util
 from pathlib import Path
 
-_core = Path(__file__).with_name("pyfairy_xiangqi_core.py")
-if _core.is_file():
-    exec(compile(_core.read_text(encoding="utf-8"), str(_core), "exec"), globals())
+
+_core = Path(__file__).resolve().parents[1] / "plugins" / "nonebot_plugin_cchess" / "engine_runtime" / "core.py"
+_spec = importlib.util.spec_from_file_location("airi_cchess_engine_core", _core)
+_module = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_module)
+main = _module.main
 
 if __name__ == "__main__":
     main()

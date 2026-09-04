@@ -58,7 +58,7 @@ async def download_url(url: str) -> bytes:
 
 
 def fallback_avatar():
-    return cache.get_image_copy(asset('utils', 'airi.png')).resize((200, 200))
+    return cache.get_image_copy(asset('resources', 'airi.png')).resize((200, 200))
 
 
 def image_to_base64(img) -> str:
@@ -79,7 +79,7 @@ async def localpath_to_base64(pth):
 async def acquire_jrys(user_id):
     if not state.data[user_id]['jrys']:
         state.data[user_id]['jrys'] = random.randint(1, 80)
-    return asset('utils', 'jrys', f'{state.data[user_id]["jrys"]}.png')
+    return asset('resources', 'jrys', f'{state.data[user_id]["jrys"]}.png')
 
 
 async def get_sticker(x, user_id, mode=1):
@@ -166,7 +166,7 @@ def list_subdirs(dir_path):
 
 
 def _build_new_sticker(stk, mode):
-    new_mask = cache.get_image(asset('utils', 'new.png'))
+    new_mask = cache.get_image(asset('resources', 'new.png'))
     if mode:
         meme, _ = _make_250px_kernel(cache.get_image(stk), 1)
     else:

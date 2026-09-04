@@ -22,6 +22,7 @@ from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 from datetime import datetime, timezone, timedelta
 
 from utils.onebot_query import bot_name, bot_profile, group_name, latest_api_latency
+from utils.messaging import register_scene_membership_checker
 from utils import llm
 from . import counter
 from . import cache
@@ -29,6 +30,8 @@ from . import dedup
 from . import ram_inspector
 from .charts import draw_pies_vstack, draw_summary, render_bot_cell, draw_grid
 from .llm_query import render_query
+
+register_scene_membership_checker(dedup.in_group)
 
 def decimal_to_quaternary(decimal_num: int) -> str:
     if decimal_num <= 0:

@@ -91,7 +91,7 @@ async def check_weijinci(text, images=None):
         answer = await llm.call_with_fallback(
             messages,
             tag="wish_bottle_weijinci",
-            usage_source=llm.SOURCE_WISH_BOTTLE,
+            usage_source="心愿瓶审核",
             max_completion_tokens=4096,
             temperature=0.1,
             top_p=0.1,

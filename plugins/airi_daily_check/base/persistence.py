@@ -90,7 +90,7 @@ def _restore_or_reset_challenge():
         with open(CHALLENGE_FILE, 'rb') as f:
             saved = pickle.load(f)
         images_exist = all(
-            os.path.exists(asset('utils', 'sudoku', f'sdk_diff_{i}.jpg'))
+            os.path.exists(asset('resources', 'sudoku', f'sdk_diff_{i}.jpg'))
             for i in range(1, 4)
         )
         if saved.get('date') == _today_str() and images_exist:
@@ -181,22 +181,22 @@ def reset_daily_challenge():
     puzzles, answers = sudoku.generate_daily()
     state.game_ans[:] = answers
 
-    font = cache.get_font(asset('utils', 'font.ttc'), 60)
+    font = cache.get_font(asset('resources', 'font.ttc'), 60)
     nows = datetime.datetime.now()
     nows = '{}-{}-{}'.format(nows.year, nows.month, nows.day)
     for i in range(1, 4):
-        sdk_bg = cache.get_image_copy(asset('utils', 'sudoku', f'sdk_bg_{i}.png'))
+        sdk_bg = cache.get_image_copy(asset('resources', 'sudoku', f'sdk_bg_{i}.png'))
         board = puzzles[i]
         for j in range(81):
             digit = board[j]
             if digit:
                 x1 = 155 + j % 9 * 150
                 y1 = 155 + j // 9 * 150
-                numj = cache.get_image(asset('utils', 'sudoku', f'{digit}.png'))
+                numj = cache.get_image(asset('resources', 'sudoku', f'{digit}.png'))
                 sdk_bg.paste(numj, (x1, y1), mask=numj.split()[3])
         draw = ImageDraw.Draw(sdk_bg)
         draw.text(xy=(50, 1560), text=nows, fill=(0, 0, 0), font=font)
-        sdk_bg.convert('RGB').save(asset('utils', 'sudoku', f'sdk_diff_{i}.jpg'), format='JPEG', quality=95)
+        sdk_bg.convert('RGB').save(asset('resources', 'sudoku', f'sdk_diff_{i}.jpg'), format='JPEG', quality=95)
 
     try:
         _atomic_dump(CHALLENGE_FILE, {'date': _today_str(), 'answers': list(state.game_ans)})

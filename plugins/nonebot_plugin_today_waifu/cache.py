@@ -6,7 +6,7 @@ from typing import Optional
 
 from nonebot.log import logger
 
-from utils.cache import is_disk
+from utils.cache import is_disk, register_preload
 
 TTL_AVATAR = 3 * 24 * 3600
 
@@ -147,3 +147,6 @@ def put_avatar(uid: str, data: bytes) -> None:
         _purge_unlocked()
         _dirty = True
         _flush()
+
+
+register_preload("today_waifu 头像", preload)

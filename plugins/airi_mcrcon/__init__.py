@@ -89,7 +89,7 @@ async def translate_to_chinese(text):
                 {"role": "user", "content": text},
             ],
             tag="mcrcon_translate",
-            usage_source=llm.SOURCE_RCON_TRANSLATION,
+            usage_source="RCON翻译",
             temperature=0.2,
             stream=False,
             stop=None,
@@ -110,7 +110,7 @@ whitelist_group_list = _cfg_list("mc_whitelist_groups", ["740774974", "466470972
 alert_group_id = str(getattr(driver.config, "mc_alert_group", "") or (whitelist_group_list[0] if whitelist_group_list else ""))
 
 BASE_DIR = os.path.dirname(__file__)
-FONT_PATH = os.path.join(BASE_DIR, "utils", "font.ttf")
+FONT_PATH = os.path.join(BASE_DIR, "resources", "font.ttf")
 
 
 
@@ -161,7 +161,7 @@ async def generate_minecraft_head(username):
 
 def _create_pokemon_card_sync(pokemon_list):
     AVATAR_DIR = os.path.join(BASE_DIR, "poke_avater")
-    GENDER_DIR = os.path.join(BASE_DIR, "utils")
+    GENDER_DIR = os.path.join(BASE_DIR, "resources")
     ITEM_DIR = os.path.join(BASE_DIR, "item")
 
     def create_blank(size=(320, 320)):

@@ -9,6 +9,7 @@ from typing import Any, Dict
 from nonebot import logger
 from nonebot.adapters.onebot.v11 import Bot
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
+from utils.cache import register_preload
 
 UTC_PLUS_8 = timezone(timedelta(hours=8))
 
@@ -141,6 +142,7 @@ def preload(max_bytes: int = 0):
 
 _load()
 _writer_thread.start()
+register_preload("airi_switch 收发统计", preload)
 
 try:
     from nonebot import get_driver as _get_driver

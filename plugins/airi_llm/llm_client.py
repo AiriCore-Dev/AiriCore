@@ -54,7 +54,7 @@ async def call_llm(
     user_input: str,
     img_b64_list: Optional[List[str]] = None,
 ) -> str:
-    return await llm.call_chat(system_prompt, user_input, img_b64_list)
+    return await llm.call_chat(system_prompt, user_input, img_b64_list, "对话")
 
 
 async def call_llm_json(
@@ -62,7 +62,7 @@ async def call_llm_json(
     user_input: str,
     img_b64_list: Optional[List[str]] = None,
 ) -> Optional[Any]:
-    return await llm.call_structured(system_prompt, user_input, img_b64_list)
+    return await llm.call_structured(system_prompt, user_input, img_b64_list, "对话机制")
 
 
 def normalize_dialogue_result(result: Any) -> Optional[dict]:
@@ -122,7 +122,7 @@ async def generate_dialogue(
         system_prompt,
         user_input,
         img_b64_list,
-        usage_source=llm.SOURCE_CHAT,
+        usage_source="对话",
     )
     return normalize_dialogue_result(result)
 

@@ -1,5 +1,6 @@
 import asyncio
 import re
+from pathlib import Path
 from asyncio import TimerHandle
 from typing import Annotated, Optional
 
@@ -29,10 +30,13 @@ from nonebot_plugin_alconna import (
 
 from utils.onebot_query import session_key
 from utils.messaging import capture_target, send_with_fallback
+from utils.cache import get_image, register_asset_group, value_bytes
 
 from .config import Config, minesweeper_config
 from .data_source import GameState, MarkResult, MineSweeper, OpenResult
 from .utils import skin_list
+
+register_asset_group("minesweeper 皮肤", Path(__file__).resolve().parent / "resources" / "skins", ("*.bmp",), lambda path: value_bytes(get_image(path)))
 
 default_skin = minesweeper_config.minesweeper_default_skin
 

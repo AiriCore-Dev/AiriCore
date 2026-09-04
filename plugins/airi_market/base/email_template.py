@@ -1,4 +1,4 @@
-from utils import email as et
+from . import email_components as et
 
 
 def render_marketing_email(article_info, qq, unsubscribe_url):

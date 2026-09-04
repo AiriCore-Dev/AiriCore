@@ -46,12 +46,12 @@ def _render_info(user_id, user_nick, avater_bytes):
         backg = cache.get_image_copy(asset('info_bg', 'default.png'))
 
     overlay_name = 'info_bg_1.png' if state.data[user_id]['check_times_daily'] else 'info_bg_0.png'
-    backg_2 = cache.get_image(asset('utils', overlay_name))
+    backg_2 = cache.get_image(asset('resources', overlay_name))
     backg.paste(backg_2, (0, 0), mask=backg_2.split()[3])
 
-    font_sakura = cache.get_font(asset('utils', 'sakura.ttf'), 36)
-    font_louxing = cache.get_font(asset('utils', 'louxing.ttf'), 60)
-    font_skc = cache.get_font(asset('utils', 'skc.ttf'), 48)
+    font_sakura = cache.get_font(asset('resources', 'sakura.ttf'), 36)
+    font_louxing = cache.get_font(asset('resources', 'louxing.ttf'), 60)
+    font_skc = cache.get_font(asset('resources', 'skc.ttf'), 48)
     draw = ImageDraw.Draw(backg)
 
     nick_len = draw.textlength(user_nick, font_skc)
@@ -68,17 +68,17 @@ def _render_info(user_id, user_nick, avater_bytes):
         avater = Image.open(BytesIO(avater_bytes)).convert('RGBA').resize((200, 200))
     except Exception:
         avater = fallback_avatar()
-    avater_mask = cache.get_image(asset('utils', 'avater_mask.png'))
+    avater_mask = cache.get_image(asset('resources', 'avater_mask.png'))
     backg.paste(avater, (435, 192), mask=avater_mask.split()[3])
 
     draw.text(xy=(200 - draw.textlength((tmpdraw := str(state.data[user_id]["credits"])), font_louxing) // 2, 426), text=tmpdraw, fill=(0, 0, 0), font=font_louxing)
     draw.text(xy=(520 - draw.textlength((tmpdraw := str(state.data[user_id]["checked_days"])), font_louxing) // 2, 426), text=tmpdraw, fill=(0, 0, 0), font=font_louxing)
     draw.text(xy=(900 - draw.textlength((tmpdraw := str(max(0, TRANSFER_DAILY_MAX - state.data[user_id]["receive_transfer_daily"]))), font_louxing) // 2, 426), text=tmpdraw, fill=(0, 0, 0), font=font_louxing)
     draw.text(xy=(1220 - draw.textlength((tmpdraw := str(state.data[user_id]["reborn_times"])), font_louxing) // 2, 426), text=tmpdraw, fill=(0, 0, 0), font=font_louxing)
-    font_louxing = cache.get_font(asset('utils', 'louxing.ttf'), 48)
+    font_louxing = cache.get_font(asset('resources', 'louxing.ttf'), 48)
     draw.text(xy=(1046 - draw.textlength((tmpdraw := str(state.data[user_id]["theme"])), font_louxing) // 2, 266), text=tmpdraw, fill=(0, 0, 0), font=font_louxing)
 
-    clcp = cache.get_image(asset('utils', 'complete.png'))
+    clcp = cache.get_image(asset('resources', 'complete.png'))
     cordx = [0, 792, 988, 1183]
     for i in range(1, 4):
         if state.data[user_id]["daily_challenge"][i]:
@@ -86,21 +86,21 @@ def _render_info(user_id, user_nick, avater_bytes):
 
     cl_n = sum(1 for i in range(101) if i in state.data[user_id]['collections'])
     cl_ur = sum(1 for i in range(101, 106) if i in state.data[user_id]['collections'])
-    font_louxing = cache.get_font(asset('utils', 'louxing.ttf'), 100)
+    font_louxing = cache.get_font(asset('resources', 'louxing.ttf'), 100)
     draw.text(xy=(374 - draw.textlength((tmpdraw := str(cl_n).zfill(3) + '/100'), font_louxing) // 2, 710), text=tmpdraw, fill=(0, 0, 0), font=font_louxing)
-    font_louxing = cache.get_font(asset('utils', 'louxing.ttf'), 120)
+    font_louxing = cache.get_font(asset('resources', 'louxing.ttf'), 120)
     draw.text(xy=(374 - draw.textlength((tmpdraw := str(cl_ur) + '/5'), font_louxing) // 2, 972), text=tmpdraw, fill=(0, 0, 0), font=font_louxing)
 
-    airi_head = cache.get_image(asset('utils', 'airi.png'))
+    airi_head = cache.get_image(asset('resources', 'airi.png'))
     pgr = Image.new('RGBA', (564, 25), (255 if (rt := (100 - cl_n) * 255 // 50) > 255 else rt, 255 if (gt := cl_n * 255 // 50) > 255 else gt, 0, 0))
-    pgr_mask = cache.get_image(asset('utils', 'pgr_mask.png'))
+    pgr_mask = cache.get_image(asset('resources', 'pgr_mask.png'))
     pgr = pgr.crop((0, 0, 564 * cl_n // 100, 25))
     pgr_mask = pgr_mask.crop((0, 0, 564 * cl_n // 100, 25))
     backg.paste(pgr, (105, 890), mask=pgr_mask.split()[3])
     backg.paste(airi_head, (105 - 37 + 564 * cl_n // 100, 890 - 15), mask=airi_head.split()[3])
 
     pgr = Image.new('RGBA', (564, 25), (255 if (rt := (50 - cl_ur * 10) * 255 // 25) > 255 else rt, 255 if (gt := cl_n * 2550 // 25) > 255 else gt, 0, 0))
-    pgr_mask = cache.get_image(asset('utils', 'pgr_mask.png'))
+    pgr_mask = cache.get_image(asset('resources', 'pgr_mask.png'))
     pgr = pgr.crop((0, 0, 564 * cl_ur // 5, 25))
     pgr_mask = pgr_mask.crop((0, 0, 564 * cl_ur // 5, 25))
     backg.paste(pgr, (105, 1168), mask=pgr_mask.split()[3])
@@ -143,10 +143,10 @@ def _render_collection(user_id, user_nick):
     if True:
         backg = cache.get_image_copy(asset('stickers', state.data[user_id]['theme'], 'bg.png'))
         mask = cache.get_image(asset('stickers', state.data[user_id]['theme'], 'mask.png'))
-        unk = cache.get_image(asset('utils', 'unknown.png'))
+        unk = cache.get_image(asset('resources', 'unknown.png'))
         unk_mask = unk.split()[3]
         draw = ImageDraw.Draw(backg)
-        font = cache.get_font(asset('utils', 'font.ttc'), 48)
+        font = cache.get_font(asset('resources', 'font.ttc'), 48)
         draw.text(xy=(1843, 2783), text=user_nick if len(user_nick) <= 15 else user_nick[:15] + '...', fill=(0, 0, 0), font=font)
         draw.text(xy=(2046, 2841), text=user_id, fill=(0, 0, 0), font=font)
         draw.text(xy=(1816, 2898), text=str(datetime.datetime.now()), fill=(0, 0, 0), font=font)
@@ -247,11 +247,11 @@ async def _(bot: Bot, ev: MessageEvent):
 
 def _render_gacha(user_id, user_nick, draws, remaining_credits, need_reborn):
     tot_repeat = sum(1 for _, is_new in draws if not is_new)
-    backg = cache.get_image_copy(pick_random_image(asset('utils', 'gacha')))
-    new_mask = cache.get_image(asset('utils', 'new_mask.png'))
-    own_mask = cache.get_image(asset('utils', 'own_mask.png'))
+    backg = cache.get_image_copy(pick_random_image(asset('resources', 'gacha')))
+    new_mask = cache.get_image(asset('resources', 'new_mask.png'))
+    own_mask = cache.get_image(asset('resources', 'own_mask.png'))
     draw = ImageDraw.Draw(backg)
-    font = cache.get_font(asset('utils', 'sakura.ttf'), 56)
+    font = cache.get_font(asset('resources', 'sakura.ttf'), 56)
     draw.text(xy=(380, 1110), text=user_nick if len(user_nick) <= 15 else user_nick[:15] + '...', fill=(0, 0, 0), font=font)
     draw.text(xy=(540, 1179), text=user_id, fill=(0, 0, 0), font=font)
     draw.text(xy=(351, 1248), text=str(datetime.datetime.now()), fill=(0, 0, 0), font=font)

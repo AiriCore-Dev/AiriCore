@@ -10,7 +10,7 @@ from typing import Optional
 from nonebot.log import logger
 from PIL import Image
 
-from utils.cache import is_disk
+from utils.cache import is_disk, register_preload
 
 _DATA_DIR = Path(__file__).resolve().parents[2] / "data" / "nonebot_plugin_tarot"
 _CACHE_FILE = _DATA_DIR / "cache.pk"
@@ -173,3 +173,6 @@ def get_card_b64(path, reversed_: bool) -> Optional[str]:
         _dirty = True
         _flush()
     return b64
+
+
+register_preload("tarot 牌面", preload)

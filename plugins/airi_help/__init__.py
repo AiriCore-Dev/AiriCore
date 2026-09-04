@@ -6,10 +6,11 @@ from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 from nonebot.adapters.onebot.v11.permission import GROUP
 
-from utils.cache import get_b64
+from utils.cache import get_b64, register_asset_group
 from utils.superuser_2fa import SUPERUSER_2FA
 
 PLUGIN_DIR = os.path.dirname(__file__)
+register_asset_group("airi_help 图片", PLUGIN_DIR, ("*.png", "*.jpg", "*.jpeg"), lambda path: len(get_b64(path) or ""))
 
 driver = get_driver()
 airicore_version = getattr(driver.config, "airicore_version", "")

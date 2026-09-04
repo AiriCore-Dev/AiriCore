@@ -1,10 +1,14 @@
 import os
 import time
+from pathlib import Path
 from nonebot import on_startswith
 from nonebot.adapters.onebot.v11 import Bot, MessageSegment
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, MessageEvent
 
 from utils.cache import get_b64
+from utils.cache import register_asset_group
+
+register_asset_group("airi_reply 语音", Path(__file__).resolve().parent, ("*.wav",), lambda path: len(get_b64(path) or ""))
 
 reply_interval = 60
 last_notice: dict = {}

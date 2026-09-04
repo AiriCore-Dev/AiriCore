@@ -37,23 +37,8 @@ _MODEL_DOWN: dict[str, float] = {}
 _MODEL_DOWN_SCOPE: dict[str, int] = {}
 _CURRENT_GENERATION_SEQUENCE = 0
 
-SOURCE_CHAT = "对话"
-SOURCE_MECHANISM = "对话机制"
-SOURCE_TURTLE_SOUP = "海龟汤"
-SOURCE_WATER_METER = "水表"
-SOURCE_WISH_BOTTLE = "心愿瓶审核"
-SOURCE_RCON_TRANSLATION = "RCON翻译"
-SOURCE_ORDER = (
-    SOURCE_CHAT,
-    SOURCE_MECHANISM,
-    SOURCE_TURTLE_SOUP,
-    SOURCE_WATER_METER,
-    SOURCE_WISH_BOTTLE,
-    SOURCE_RCON_TRANSLATION,
-)
-
 UTC_PLUS_8 = timezone(timedelta(hours=8))
-_DATA_DIR = Path(__file__).resolve().parents[1] / "data" / "airi_llm"
+_DATA_DIR = Path(__file__).resolve().parents[1] / "data" / "LLM"
 _STATS_FILE = _DATA_DIR / "usage_stats.pk"
 _FLUSH_INTERVAL = 15.0
 _usage_lock = threading.Lock()
@@ -662,6 +647,7 @@ async def call_chat(
     system_prompt: str,
     user_input: str,
     img_b64_list: list[str] | None = None,
+    usage_source: str = "",
 ) -> str:
     content = _chat_content(user_input, img_b64_list)
     last_error: Exception | None = None
@@ -687,13 +673,14 @@ async def call_chat(
                 )
                 text = _message_text(completion)
                 if text:
-                    record_success(SOURCE_CHAT, model)
+                    if usage_source:
+                        record_success(usage_source, model)
                     return text
                 last_error = RuntimeError("模型返回空内容")
                 logger.warning("模型 %s 返回空内容，尝试下一个备用模型", model)
             except Exception as exc:
                 last_error = exc
-                log_attempt_failed(model, chain, index, exc, "airi_llm", generation=generation.sequence)
+                log_attempt_failed(model, chain, index, exc, "llm", generation=generation.sequence)
     logger.error("调用LLM失败，%s 个模型全部不可用: %s", len(chain), last_error)
     return ""
 
@@ -748,7 +735,7 @@ async def _create_structured(
             mark_if_unavailable(model, exc, generation=generation.sequence)
             logger.warning("结构化LLM调用失败(response_format=True): %s", exc)
         else:
-            log_attempt_failed(model, chain, index, exc, "airi_llm", generation=generation.sequence)
+            log_attempt_failed(model, chain, index, exc, "llm", generation=generation.sequence)
         return None
     try:
         choice = completion.choices[0]
@@ -772,7 +759,7 @@ async def call_structured(
     system_prompt: str,
     user_input: str,
     img_b64_list: list[str] | None = None,
-    usage_source: str = SOURCE_MECHANISM,
+    usage_source: str = "",
 ) -> Any | None:
     messages = [
         {"role": "system", "content": system_prompt},

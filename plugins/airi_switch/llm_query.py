@@ -4,6 +4,7 @@ from datetime import date, datetime, timedelta
 from typing import Dict, Optional, Tuple
 
 from utils import llm
+SOURCE_ORDER = ("对话", "对话机制", "海龟汤", "水表", "心愿瓶审核", "RCON翻译")
 
 USAGE_TEXT = "用法：airillmquery [N|YYYY-MM-DD|YYYY-MM|YYYY]"
 _DAY_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
@@ -56,7 +57,7 @@ def render_query(
         if not start_key <= day <= end_key:
             continue
         for source, models in sources.items():
-            if source not in llm.SOURCE_ORDER:
+            if source not in SOURCE_ORDER:
                 continue
             target = aggregate.setdefault(source, {})
             for model, count in models.items():
@@ -67,7 +68,7 @@ def render_query(
         lines.append("暂无成功调用记录。")
         return "\n".join(lines)
     lines.append(f"成功调用：{total} 次")
-    for source in llm.SOURCE_ORDER:
+    for source in SOURCE_ORDER:
         models = aggregate.get(source)
         if not models:
             continue

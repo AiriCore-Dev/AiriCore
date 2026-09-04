@@ -9,7 +9,7 @@ from .constants import bot_nick
 from . import state
 from .tips import validate_turtle_soup_bank
 
-_UTILS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'utils')
+_UTILS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources')
 _CQ_RE = re.compile(r"\[CQ:[^\]]*\]")
 
 
@@ -58,7 +58,7 @@ async def call_llm(prompt, input, deepseek):
             }
         ],
         tag="turtle_soup",
-        usage_source=llm.SOURCE_TURTLE_SOUP,
+        usage_source="海龟汤",
         max_completion_tokens=4096,
         temperature=0.1,
         top_p=0.3,
