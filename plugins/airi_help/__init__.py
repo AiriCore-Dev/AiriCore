@@ -54,7 +54,6 @@ msg = [
 - HarukiBot:
 PJSK综合查询 By NagiHina
 * 发送指令 pjskhelp 查看帮助
-$ 10积分 / 次
 
 - ena-pjsk-score:
 烤倍率/pt计算器 By 咖啡不甜

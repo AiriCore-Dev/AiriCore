@@ -18,7 +18,7 @@ async def query_tmxx_status_func(bot: Bot, ev: MessageEvent):
     if not notification_account:
         return
     msg = str(ev.message)
-    keywords = ['tmxx',f'[CQ:at,qq={notification_account}]',"田麻小溪","葡萄柚"]
+    keywords = ['tmxx',f'[CQ:at,qq={notification_account}]',"田麻小溪"]
     if not any(k in msg for k in keywords):
         return
     if not isinstance(ev, GroupMessageEvent):
