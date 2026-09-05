@@ -126,7 +126,7 @@ def install_transport_diagnostics(driver) -> None:
             log_transport_snapshot(adapter, bot.self_id, transport="WebSocket")
 
     @driver.on_bot_disconnect
-    def _on_bot_disconnect(bot):
+    async def _on_bot_disconnect(bot):
         adapter = getattr(bot, "adapter", None)
         if adapter is not None:
             log_transport_snapshot(
@@ -135,11 +135,7 @@ def install_transport_diagnostics(driver) -> None:
                 "warning",
                 transport="WebSocket 已断开",
             )
-        registry.create(
-            QUERY_STORE.cancel_bot(bot.self_id),
-            owner=f"onebot_query:{bot.self_id}",
-            key=("disconnect", str(bot.self_id)),
-        )
+        await QUERY_STORE.cancel_bot(bot.self_id)
 
 
 @Bot.on_called_api
