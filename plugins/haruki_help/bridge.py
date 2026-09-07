@@ -13,6 +13,7 @@ from nonebot.message import event_preprocessor
 
 from utils import credit
 from utils.coordination import registry
+from .helpers import normalize_action, normalize_bot_whitelist, select_whitelisted_bots
 
 
 DEFAULT_WS_LINK = "ws://localhost:2345/ws"
@@ -33,6 +34,11 @@ def get_ws_link(config: Any) -> str:
     raw = config.get("haruki_ws_link", "") if isinstance(config, dict) else getattr(config, "haruki_ws_link", "")
     value = str(raw or "").strip()
     return value or DEFAULT_WS_LINK
+
+
+def get_bot_whitelist(config: Any) -> tuple[str, ...]:
+    raw = config.get("haruki_bot_whitelist", ()) if isinstance(config, dict) else getattr(config, "haruki_bot_whitelist", ())
+    return normalize_bot_whitelist(raw)
 
 
 def _event_payload(event: Event) -> dict:
@@ -64,7 +70,7 @@ def _json_safe(value):
 
 class HarukiBridge:
 
-    def __init__(self, bot_selector: Callable[[dict[str, Bot]], Bot | None] | None = None, ws_link: str = DEFAULT_WS_LINK):
+    def __init__(self, bot_selector: Callable[[dict[str, Bot]], Bot | None] | None = None, ws_link: str = DEFAULT_WS_LINK, bot_whitelist=()):
         self.ws_link = ws_link
         self._bot_selector = bot_selector or self._default_bot_selector
         self._socket = None
@@ -72,9 +78,10 @@ class HarukiBridge:
         self._stopping = False
         self._last_bot_id = ""
         self._contexts = OrderedDict()
+        self.bot_whitelist = normalize_bot_whitelist(bot_whitelist)
 
     def select_bot(self) -> Bot | None:
-        return self._bot_selector(nonebot.get_bots())
+        return self._bot_selector(select_whitelisted_bots(nonebot.get_bots(), self.bot_whitelist))
 
     @staticmethod
     def _default_bot_selector(bots: dict[str, Bot]) -> Bot | None:
@@ -84,6 +91,8 @@ class HarukiBridge:
 
     async def broadcast_event(self, event: Event) -> None:
         event_bot_id = getattr(event, "self_id", None)
+        if self.bot_whitelist and str(event_bot_id or "").strip() not in self.bot_whitelist:
+            return
         event_user_id = getattr(event, "user_id", None)
         if event_user_id is None:
             sender = getattr(event, "sender", None)
@@ -117,6 +126,7 @@ class HarukiBridge:
         params = request.get("params")
         if not isinstance(params, dict):
             params = {}
+        action, params = normalize_action(action, params)
         echo = request.get("echo")
         if action not in MESSAGE_ACTIONS:
             return self._failed("不支持的 OneBot 操作", echo)
@@ -138,14 +148,7 @@ class HarukiBridge:
             await self._refund(user_id)
             return self._failed("当前没有可用的 Airi Bot", echo)
         try:
-            call_params = dict(params)
-            for key in ("sender_id", "operator_id"):
-                call_params.pop(key, None)
-            call_params.pop("self_id", None)
-            if action in {"send_group_msg", "send_group_forward_msg"}:
-                call_params.pop("user_id", None)
-                call_params.pop("message_type", None)
-            data = await bot.call_api(action, **call_params)
+            data = await bot.call_api(action, **params)
         except Exception as exc:
             await self._refund(user_id)
             return self._failed(f"消息发送失败: {exc}", echo)
@@ -241,7 +244,7 @@ class HarukiBridge:
         requested = request.get("self_id")
         if requested is None and isinstance(request.get("params"), dict):
             requested = request["params"].get("self_id")
-        bots = nonebot.get_bots()
+        bots = select_whitelisted_bots(nonebot.get_bots(), self.bot_whitelist)
         if requested is not None:
             selected = {str(key): value for key, value in bots.items()}.get(str(requested))
             if selected is not None:
@@ -297,7 +300,7 @@ class HarukiBridge:
 
 
 driver = get_driver()
-bridge = HarukiBridge(ws_link=get_ws_link(driver.config))
+bridge = HarukiBridge(ws_link=get_ws_link(driver.config), bot_whitelist=get_bot_whitelist(driver.config))
 
 
 @event_preprocessor
