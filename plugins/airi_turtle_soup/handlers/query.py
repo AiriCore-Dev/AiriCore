@@ -1,4 +1,3 @@
-import asyncio
 import traceback
 
 from nonebot import logger
@@ -12,8 +11,6 @@ from ..base import state
 from ..base.helpers import get_ids, check_data_existance, construct_turtle_soup_history, call_llm, turtle_soup_question_prompt, turtle_soup, end_game, strip_cq, _persist, add_pending_trial, remove_pending_trial
 from ..base.tips import serialize_tips
 
-LLM_MAX_ATTEMPTS = 3
-LLM_RETRY_DELAY = 2
 
 
 @query.handle()
@@ -45,26 +42,21 @@ async def _(bot: Bot, ev: MessageEvent):
             history_text = f"提问：{src}"
             soup = turtle_soup[turtle['soup_id']]
             llm_answer = None
-            for attempt in range(LLM_MAX_ATTEMPTS):
-                try:
-                    llm_answer = await call_llm(
-                        turtle_soup_question_prompt.format(
-                            soup['story'], soup['truth'], serialize_tips(soup['tips'])
-                        ),
-                        src, 0,
-                    )
-                except Exception as err:
-                    text = str(err)
-                    if 'Moderation Block' in text:
-                        await matcher.send('语言因被AI检测到违反公序良俗而被拦截，请修改措辞后重新发送\n（提问次数已返还）', reply_message=True)
-                        return
-                    logger.warning(f"海龟汤提问 LLM 调用失败（第 {attempt + 1}/{LLM_MAX_ATTEMPTS} 次）: {err}")
-                    if attempt + 1 >= LLM_MAX_ATTEMPTS:
-                        await matcher.send(f'{COPY["AI_BUSY"]}\n（提问次数已返还）', reply_message=True)
-                        return
-                    await asyncio.sleep(LLM_RETRY_DELAY)
-                else:
-                    break
+            try:
+                llm_answer = await call_llm(
+                    turtle_soup_question_prompt.format(
+                        soup['story'], soup['truth'], serialize_tips(soup['tips'])
+                    ),
+                    src, 0,
+                )
+            except Exception as err:
+                text = str(err)
+                if 'Moderation Block' in text:
+                    await matcher.send('语言因被AI检测到违反公序良俗而被拦截，请修改措辞后重新发送\n（提问次数已返还）', reply_message=True)
+                    return
+                logger.warning(f"海龟汤提问 LLM 调用失败: {err}")
+                await matcher.send(f'{COPY["AI_BUSY"]}\n（提问次数已返还）', reply_message=True)
+                return
             if not llm_answer:
                 await matcher.send(get_copy("AI_REPLY_INVALID", action="提问"), reply_message=True)
                 return

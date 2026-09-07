@@ -4,7 +4,6 @@ __pycache__/
 record/
 .env.prod
 CLAUDE.md
-AGENTS.md
 sdk_diff*
 logs/
 log/

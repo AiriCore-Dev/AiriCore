@@ -11,6 +11,7 @@ import re
 import tempfile
 import threading
 import time
+from collections import deque
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -32,7 +33,10 @@ _KNOWN_KEYS = {
 }
 _PROFILE_NAME_RE = re.compile(r"^[\w\u0080-\uffff .-]+$", re.UNICODE)
 MODEL_DOWN_TTL_SECS = 600
-_MODEL_DOWN_MARKERS = ("model_not_found", "no available channel", "无可用渠道")
+_MODEL_DOWN_MARKERS = (
+    "model_not_found", "no available channel", "无可用渠道", "429", "rate limit",
+    "too many requests", "请求过于频繁", "限流",
+)
 _MODEL_DOWN: dict[str, float] = {}
 _MODEL_DOWN_SCOPE: dict[str, int] = {}
 _CURRENT_GENERATION_SEQUENCE = 0
@@ -55,6 +59,96 @@ CHAT_FREQUENCY_PENALTY = 0.3
 CHAT_PRESENCE_PENALTY = 0.2
 STRUCTURED_MAX_TOKENS = 4000
 STRUCTURED_TEMPERATURE = 0.3
+
+
+def _env_int(*names: str, default: int, minimum: int = 0) -> int:
+    for name in names:
+        raw = os.getenv(name)
+        if raw is None:
+            continue
+        try:
+            return max(minimum, int(raw.strip()))
+        except (TypeError, ValueError):
+            logger.warning("LLM 配置 %s=%r 无效，使用默认值 %s", name, raw, default)
+    return default
+
+
+LLM_RPM = _env_int("LLM_RPM", "llm_rpm", "airi_llm_rpm", default=80, minimum=1)
+LLM_MAX_CONCURRENCY = _env_int(
+    "LLM_MAX_CONCURRENCY", "llm_max_concurrency", default=4, minimum=1
+)
+_RPM_WINDOW_SECS = 60.0
+_rpm_lock = asyncio.Lock()
+_rpm_timestamps: deque[float] = deque()
+_llm_semaphore = asyncio.Semaphore(LLM_MAX_CONCURRENCY)
+_RETRYABLE_STATUS_CODES = {408, 409, 429, 500, 502, 503, 504}
+_NON_RETRYABLE_MARKERS = (
+    "invalid api key", "incorrect api key", "authentication", "insufficient_quota",
+    "model_not_found", "no available channel", "无可用渠道", "moderation block",
+    "content policy", "余额不足", "账号封禁", "account banned",
+)
+
+
+async def _acquire_request_slot() -> None:
+    """Apply both concurrency and a process-wide sliding-window RPM limit."""
+    await _llm_semaphore.acquire()
+    try:
+        while True:
+            async with _rpm_lock:
+                now = time.monotonic()
+                while _rpm_timestamps and now - _rpm_timestamps[0] >= _RPM_WINDOW_SECS:
+                    _rpm_timestamps.popleft()
+                if len(_rpm_timestamps) < LLM_RPM:
+                    _rpm_timestamps.append(now)
+                    return
+                wait_for = _RPM_WINDOW_SECS - (now - _rpm_timestamps[0])
+            await asyncio.sleep(max(0.05, wait_for))
+    except BaseException:
+        _llm_semaphore.release()
+        raise
+
+
+def _release_request_slot() -> None:
+    _llm_semaphore.release()
+
+
+def _error_status(error: Exception) -> int | None:
+    value = getattr(error, "status_code", None)
+    if value is None:
+        response = getattr(error, "response", None)
+        value = getattr(response, "status_code", None)
+    try:
+        return int(value) if value is not None else None
+    except (TypeError, ValueError):
+        return None
+
+
+def is_retryable_error(error: Exception) -> bool:
+    status = _error_status(error)
+    if status in _RETRYABLE_STATUS_CODES:
+        return not any(marker in str(error).lower() for marker in _NON_RETRYABLE_MARKERS)
+    text = str(error).lower()
+    if any(marker in text for marker in _NON_RETRYABLE_MARKERS):
+        return False
+    return any(marker in text for marker in ("timeout", "timed out", "connection reset", "temporarily unavailable"))
+
+
+def should_try_next_model(error: Exception) -> bool:
+    text = str(error).lower()
+    if any(marker in text for marker in ("invalid api key", "incorrect api key", "authentication", "insufficient_quota", "余额不足", "账号封禁", "account banned", "moderation block", "content policy")):
+        return False
+    status = _error_status(error)
+    if status is not None:
+        return is_retryable_error(error)
+    return True
+
+
+async def _create_completion(client: Any, **kwargs: Any) -> Any:
+    await _acquire_request_slot()
+    try:
+        return await client.chat.completions.create(**kwargs)
+    finally:
+        _release_request_slot()
 
 
 @dataclass(frozen=True)
@@ -657,7 +751,7 @@ async def call_chat(
         chain = build_chain(primary, profile.chat_fallback, generation=generation.sequence)
         for index, model in enumerate(chain):
             try:
-                completion = await generation.client.chat.completions.create(
+                completion = await _create_completion(generation.client,
                     model=model,
                     messages=[
                         {"role": "system", "content": system_prompt},
@@ -681,6 +775,8 @@ async def call_chat(
             except Exception as exc:
                 last_error = exc
                 log_attempt_failed(model, chain, index, exc, "llm", generation=generation.sequence)
+                if not should_try_next_model(exc):
+                    break
     logger.error("调用LLM失败，%s 个模型全部不可用: %s", len(chain), last_error)
     return ""
 
@@ -729,13 +825,15 @@ async def _create_structured(
     if use_response_format:
         kwargs["response_format"] = {"type": "json_object"}
     try:
-        completion = await generation.client.chat.completions.create(**kwargs)
+        completion = await _create_completion(generation.client, **kwargs)
     except Exception as exc:
         if use_response_format:
             mark_if_unavailable(model, exc, generation=generation.sequence)
             logger.warning("结构化LLM调用失败(response_format=True): %s", exc)
         else:
             log_attempt_failed(model, chain, index, exc, "llm", generation=generation.sequence)
+        if not should_try_next_model(exc):
+            return None
         return None
     try:
         choice = completion.choices[0]
@@ -821,7 +919,7 @@ async def call_auxiliary(
         prefix = f"[{tag}] " if tag else ""
         for index, model in enumerate(models):
             try:
-                completion = await generation.client.chat.completions.create(
+                completion = await _create_completion(generation.client,
                     model=model,
                     messages=messages,
                     **kwargs,
@@ -832,6 +930,8 @@ async def call_auxiliary(
             except Exception as exc:
                 last_error = exc
                 log_attempt_failed(model, models, index, exc, tag, generation=generation.sequence)
+                if not should_try_next_model(exc):
+                    break
                 continue
             if validate is None:
                 if usage_source:
