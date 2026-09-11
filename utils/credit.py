@@ -256,7 +256,7 @@ class ChargeReceipt:
 async def charge(user_id: str, amount: int) -> ChargeReceipt:
     normalized = str(user_id).strip()
     if not await has_account(normalized):
-        raise ChargeRejected('❌ 账号未注册！\n请先签到一次！\n发送"签到"即可')
+        raise ChargeRejected('使用AiriCore功能需要积分\n发送"签到"获取积分')
     try:
         await debit(normalized, amount)
     except InsufficientCreditsError:
