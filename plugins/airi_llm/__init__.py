@@ -5,6 +5,7 @@ import random
 import base64
 import asyncio
 import traceback
+import hashlib
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Any, Set, Tuple
 
@@ -21,11 +22,15 @@ from nonebot import (
     on_startswith,
 )
 from nonebot.rule import to_me
+from nonebot.matcher import current_event, current_matcher
+from nonebot.message import event_preprocessor
+from nonebot.typing import T_State
 from utils.superuser_2fa import SUPERUSER_2FA
 from nonebot.adapters.onebot.v11 import (
     Bot,
     MessageSegment,
     MessageEvent,
+    GroupMessageEvent,
 )
 
 from . import memory
@@ -897,7 +902,59 @@ async def passive_speaking(bot: Bot, group_id: str, mode: int = 1) -> None:
             airi_state.passive_speaking_group_tamed.pop(group_id, None)
 
 
-airi_llm = on_message(priority=50, block=False)
+_llm_routing_events = asset_cache.ByteLRU(1024 * 1024, owner="airi_llm.routing")
+asset_cache.register_cache("airi_llm.routing", _llm_routing_events)
+
+
+@event_preprocessor
+async def _prepare_llm_routing(bot: Bot, event: GroupMessageEvent, state: T_State):
+    key = (
+        event.group_id, event.user_id, event.time,
+        hashlib.sha256(str(event.original_message).encode("utf-8")).digest(),
+    )
+    bot_id = str(bot.self_id)
+    now = time.monotonic()
+    routing = _llm_routing_events.get(key)
+    if (
+        routing is None
+        or now - routing["created"] > 15.0
+        or routing["messages"].get(bot_id, event.message_id) != event.message_id
+    ):
+        routing = {"responded": False, "created": now, "messages": {}}
+    routing["messages"][bot_id] = event.message_id
+    cost = (
+        asset_cache.value_bytes(key) + asset_cache.value_bytes(routing)
+        + asset_cache.value_bytes(routing["messages"])
+        + sum(asset_cache.value_bytes(item) for item in routing["messages"].items())
+    )
+    _llm_routing_events.put(key, routing, cost=cost)
+    state["_airi_llm_routing"] = routing
+
+
+@Bot.on_called_api
+async def _track_plugin_response(bot, exception, api: str, data: dict, result):
+    if exception is not None or api not in {
+        "send_msg", "send_group_msg", "send_group_forward_msg",
+    }:
+        return
+    event = current_event.get(None)
+    matcher = current_matcher.get(None)
+    if not isinstance(event, GroupMessageEvent) or matcher is None:
+        return
+    if type(matcher) is airi_llm or data.get("message_type") == "private":
+        return
+    if str(data.get("group_id")) != str(event.group_id):
+        return
+    routing = matcher.state.get("_airi_llm_routing")
+    if routing is not None:
+        routing["responded"] = True
+
+
+async def _allow_llm_routing(state: T_State) -> bool:
+    return not state.get("_airi_llm_routing", {}).get("responded", False)
+
+
+airi_llm = on_message(priority=100, block=False, rule=_allow_llm_routing)
 superuser_debug = on_startswith("ldebug ", priority=5, block=True, rule=to_me(), permission=SUPERUSER_2FA)
 emoji_build = on_startswith("airibuildemoji", priority=5, block=True, permission=SUPERUSER_2FA)
 

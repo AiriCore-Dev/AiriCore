@@ -59,6 +59,10 @@ CHAT_FREQUENCY_PENALTY = 0.3
 CHAT_PRESENCE_PENALTY = 0.2
 STRUCTURED_MAX_TOKENS = 4000
 STRUCTURED_TEMPERATURE = 0.3
+_BROWSER_USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+)
 
 
 def _env_int(*names: str, default: int, minimum: int = 0) -> int:
@@ -416,7 +420,11 @@ def _get_switch_lock() -> asyncio.Lock:
 
 def _new_generation(name: str, profile: LLMProfile) -> RuntimeGeneration:
     global _generation_sequence
-    client = AsyncOpenAI(api_key=profile.token, base_url=profile.base_url)
+    client = AsyncOpenAI(
+        api_key=profile.token,
+        base_url=profile.base_url,
+        default_headers={"User-Agent": _BROWSER_USER_AGENT},
+    )
     _generation_sequence += 1
     return RuntimeGeneration(name, profile, client, _generation_sequence)
 
