@@ -144,7 +144,7 @@ async def handle_anan_says(event: Event, result: Arparma):
             await anan_says_handler.send(UniMessage.image(raw=image_bytes, mimetype="image/png"))
     except ChargeRejected as error:
         await anan_says_handler.finish(str(error))
-    await anan_says_handler.finish()
+    return
 
 
 @trail_handler.handle()
@@ -180,7 +180,7 @@ async def handle_trail(bot: Bot, event: Event):
             await trail_handler.send(await UniMessage.image(raw=image_bytes, mimetype="image/png").export(bot))
     except ChargeRejected as error:
         await trail_handler.finish(str(error))
-    await trail_handler.finish()
+    return
 
 
 @switch_character_handler.handle()
