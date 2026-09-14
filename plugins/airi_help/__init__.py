@@ -157,12 +157,10 @@ emoji合成
 * 指令：任意emoji+任意emoji
 (需为系统自带的emoji而不是qq的emoji)
 
-- 魔裁表情包:
-魔法少女的魔法审判表情包与立绘 By zhaomaoniu，AiriCore Dev.
-* 安安说 文本 [表情]；魔裁切换角色 角色名
-* 【疑问/反驳/伪证/赞同/魔法:角色名】选项文本
-* 魔裁立绘 角色名；发送 manohelp 查看帮助
-$ 制作：10积分 / 次；立绘选择表、翻页及后续编辑免费""",
+- manosaba-memes:
+魔裁表情包制作 By zhaomaoniu
+* 发送 manohelp 查看帮助
+$ 10积分 / 次""",
     ),
     make_node(
         "棋类插件",
