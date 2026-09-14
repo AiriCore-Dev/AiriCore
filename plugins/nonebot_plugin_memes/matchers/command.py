@@ -487,6 +487,8 @@ async def _uni_message(bot: Bot, event: Event, state: T_State) -> Optional[UniMe
 
 
 def _candidates(text: str) -> list[tuple[Alconna, T_Handler]]:
+    if text.lstrip().lower().startswith(("安安说", "anan说", "anansays")):
+        return []
     lowered = text.lower()
     picked: list[tuple[int, Alconna, T_Handler]] = []
     for keyword, command, handler in _keyword_entries:
