@@ -14,6 +14,7 @@ from nonebot_plugin_alconna import (
 
 from ..utils import CHARACTER_NAME_MAP, CHARACTER_NAMES
 from ..runtime import run_sync
+from ..billing import production_charge
 from .assets import (
     prefab_asset_root,
     prefab_asset_status,
@@ -39,9 +40,10 @@ CHARACTER_BY_VALUE = {
     character.value: name for name, character in CHARACTER_NAME_MAP.items()
 }
 SPRITE_HELP = f"""创建立绘
-  立绘 <角色名>
+  魔裁立绘 <角色名>
   支持角色：{"、".join(CHARACTER_NAMES)}
   创建后会先发送官方预设选择表，不会直接生成默认立绘。
+  首次选择预设成图收费 10 积分；选择表、翻页和后续回复编辑免费。
 
 选择图片
   回复选择表发送 P、H、E、I、M、A 或 D 加图片编号，例如 H2、I12。
@@ -66,7 +68,7 @@ SPRITE_HELP = f"""创建立绘
   例如梅露露 P1 的固定短码是 #CFAMVMR9LZ，可以发送：
   #CFAMVMR9LZ 表情
   #CFAMVMR9LZ 配方
-  只发送该短码会直接生成立绘，随后可回复该图继续编辑。
+  只发送该短码会直接生成立绘，收费 10 积分，随后可免费回复该图继续编辑。
   普通聊天中的 P1、表情 等文字不会启动编辑。
 
 内容与历史
@@ -105,7 +107,6 @@ def _initialize_runtime() -> None:
     )
     _RENDERER = SpriteRenderer(
         _CATALOG,
-        localstore.get_plugin_cache_dir() / "sprite_previews",
         asset_root=asset_root,
     )
     _CODEC = RecipeCodec(_CATALOG, _RENDERER.prefab)
@@ -334,7 +335,7 @@ async def _send_picker(
     )
 
 
-async def _send_sprite(bot: Bot, event: Event, code: str) -> None:
+async def _send_sprite(bot: Bot, event: Event, code: str, *, paid: bool = False) -> None:
     stored = await _session_store().get_sprite(code)
     if stored is None:
         return
@@ -345,12 +346,13 @@ async def _send_sprite(bot: Bot, event: Event, code: str) -> None:
         f"#{code} · {CHARACTER_BY_VALUE.get(stored.character, stored.character)}\n"
         "回复：头型 / 表情 / 眼睛 / 嘴巴 / 手臂 / 细节 / 配方"
     )
-    await _send_tracked(
-        bot,
-        event,
-        UniMessage.image(raw=image, mimetype="image/png").text(f"\n{caption}"),
-        MessageContext(kind="sprite", character=stored.character, sprite=code),
-    )
+    async with production_charge(event.get_user_id(), paid=paid):
+        await _send_tracked(
+            bot,
+            event,
+            UniMessage.image(raw=image, mimetype="image/png").text(f"\n{caption}"),
+            MessageContext(kind="sprite", character=stored.character, sprite=code),
+        )
 
 
 async def _context_from_input(
@@ -381,10 +383,12 @@ async def _apply_recipe(
     event: Event,
     character: str,
     recipe: SpriteRecipe,
+    *,
+    paid: bool = False,
 ) -> None:
     code = await run_sync(_recipe_codec().encode, character, recipe)
     await _session_store().put_sprite(character, recipe, code=code)
-    await _send_sprite(bot, event, code)
+    await _send_sprite(bot, event, code, paid=paid)
 
 
 async def _picker_choice(
@@ -421,7 +425,7 @@ async def _picker_choice(
         )
         return
     recipe = _renderer().recipe_with_choice(base_recipe, picker, choices[index])
-    await _apply_recipe(bot, event, context.character, recipe)
+    await _apply_recipe(bot, event, context.character, recipe, paid=picker == "preset" and base_code is None)
 
 
 def _modifier_choice(character: str, recipe: SpriteRecipe, command: str) -> str | None:
@@ -442,7 +446,7 @@ def _modifier_choice(character: str, recipe: SpriteRecipe, command: str) -> str 
 async def handle_sprite(bot: Bot, event: Event, result: Arparma) -> None:
     character_name = result["character"]
     if not character_name:
-        await UniMessage.text("用法：立绘 <角色名>\n发送 立绘 -h 查看完整帮助。").send(
+        await UniMessage.text("用法：魔裁立绘 <角色名>\n发送 魔裁立绘 -h 查看完整帮助。").send(
             target=event, bot=bot
         )
         return
@@ -504,7 +508,7 @@ async def handle_sprite_followup(
 
     if command is None:
         assert context.sprite is not None
-        await _send_sprite(bot, event, context.sprite)
+        await _send_sprite(bot, event, context.sprite, paid=True)
         return
 
     if re.fullmatch(PICKER_CHOICE_PATTERN, command):
