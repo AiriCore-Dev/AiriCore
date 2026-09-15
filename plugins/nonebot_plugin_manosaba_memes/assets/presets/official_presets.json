@@ -84284,6 +84284,208 @@
         ],
         "frequency": 1
       }
+    ],
+    "Yuki": [
+      {
+        "id": "yuki-state-01",
+        "nodes": [
+          "Part01"
+        ],
+        "appearance": [
+          "State01"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "yuki-state-02",
+        "nodes": [
+          "Part02"
+        ],
+        "appearance": [
+          "State02"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "yuki-state-03",
+        "nodes": [
+          "Part03"
+        ],
+        "appearance": [
+          "State03"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "yuki-state-04",
+        "nodes": [
+          "Part04"
+        ],
+        "appearance": [
+          "State04"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "yuki-state-05",
+        "nodes": [
+          "Part05"
+        ],
+        "appearance": [
+          "State05"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "yuki-state-06",
+        "nodes": [
+          "Part06"
+        ],
+        "appearance": [
+          "State06"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "yuki-state-07",
+        "nodes": [
+          "Part07"
+        ],
+        "appearance": [
+          "State07"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "yuki-state-08",
+        "nodes": [
+          "Part08"
+        ],
+        "appearance": [
+          "State08"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "yuki-state-09",
+        "nodes": [
+          "Part09"
+        ],
+        "appearance": [
+          "State09"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "yuki-state-10",
+        "nodes": [
+          "Part10"
+        ],
+        "appearance": [
+          "State10"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "yuki-state-11",
+        "nodes": [
+          "Part11"
+        ],
+        "appearance": [
+          "State11"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "yuki-state-12",
+        "nodes": [
+          "Part12"
+        ],
+        "appearance": [
+          "State12"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "yuki-state-13",
+        "nodes": [
+          "Part13"
+        ],
+        "appearance": [
+          "State13"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "yuki-state-14",
+        "nodes": [
+          "Part14"
+        ],
+        "appearance": [
+          "State14"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "yuki-state-15",
+        "nodes": [
+          "Part15"
+        ],
+        "appearance": [
+          "State15"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "yuki-state-16",
+        "nodes": [
+          "Part16"
+        ],
+        "appearance": [
+          "State16"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "yuki-state-17",
+        "nodes": [
+          "Part17"
+        ],
+        "appearance": [
+          "State17"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "yuki-state-18",
+        "nodes": [
+          "Part18"
+        ],
+        "appearance": [
+          "State18"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "yuki-state-19",
+        "nodes": [
+          "Part19"
+        ],
+        "appearance": [
+          "State19"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "yuki-state-20",
+        "nodes": [
+          "Part20"
+        ],
+        "appearance": [
+          "State20"
+        ],
+        "frequency": 0
+      }
     ]
   }
 }

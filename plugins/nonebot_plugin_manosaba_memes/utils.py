@@ -17,6 +17,8 @@ CHARACTER_NAME_MAP = {
     "可可": Character.COCO,
     "希罗": Character.HIRO,
     "蕾雅": Character.LEIA,
+    "雪": Character.YUKI,
+    "Yuki": Character.YUKI,
 }
 CHARACTER_NAMES = tuple(CHARACTER_NAME_MAP)
 
@@ -45,6 +47,7 @@ def get_magic_statement(text: str) -> Statement:
         "可可": Statement.MAGIC_SENRIGAN,
         "希罗": Statement.MAGIC_SHINIMODORI,
         "蕾雅": Statement.MAGIC_SHISENYUUDOU,
+        "雪": Statement.MAGIC_SHISENYUUDOU,
     }
     return mapping[text]
 

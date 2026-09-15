@@ -21,6 +21,7 @@ class Character(StrEnum):
     COCO = "Coco"
     HIRO = "Hiro"
     LEIA = "Leia"
+    YUKI = "Yuki"
 
 
 class Statement(StrEnum):

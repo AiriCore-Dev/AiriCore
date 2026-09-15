@@ -1,0 +1,89 @@
+{
+  "defaultAppearance": "State02",
+  "compositionMap": [
+    {
+      "Key": "Body",
+      "Composition": "Part02"
+    },
+    {
+      "Key": "State01",
+      "Composition": "Part01"
+    },
+    {
+      "Key": "State02",
+      "Composition": "Part02"
+    },
+    {
+      "Key": "State03",
+      "Composition": "Part03"
+    },
+    {
+      "Key": "State04",
+      "Composition": "Part04"
+    },
+    {
+      "Key": "State05",
+      "Composition": "Part05"
+    },
+    {
+      "Key": "State06",
+      "Composition": "Part06"
+    },
+    {
+      "Key": "State07",
+      "Composition": "Part07"
+    },
+    {
+      "Key": "State08",
+      "Composition": "Part08"
+    },
+    {
+      "Key": "State09",
+      "Composition": "Part09"
+    },
+    {
+      "Key": "State10",
+      "Composition": "Part10"
+    },
+    {
+      "Key": "State11",
+      "Composition": "Part11"
+    },
+    {
+      "Key": "State12",
+      "Composition": "Part12"
+    },
+    {
+      "Key": "State13",
+      "Composition": "Part13"
+    },
+    {
+      "Key": "State14",
+      "Composition": "Part14"
+    },
+    {
+      "Key": "State15",
+      "Composition": "Part15"
+    },
+    {
+      "Key": "State16",
+      "Composition": "Part16"
+    },
+    {
+      "Key": "State17",
+      "Composition": "Part17"
+    },
+    {
+      "Key": "State18",
+      "Composition": "Part18"
+    },
+    {
+      "Key": "State19",
+      "Composition": "Part19"
+    },
+    {
+      "Key": "State20",
+      "Composition": "Part20"
+    }
+  ]
+}
