@@ -38,7 +38,7 @@ def draw_anan(text: str, face: str | None = None) -> bytes:
     if not text.strip() or len(text) > 500:
         raise ValueError("请输入 1～500 字的文本")
 
-    fonts = get_fonts(PLUGIN_PATH / "assets/fonts/JingNanJunJunTi-Bold.ttf")
+    fonts = get_fonts(PLUGIN_PATH / "assets/fonts/cjkfonts.ttf")
     drawer = Drawer.from_image(get_source(get_anan_base_image(face)), fonts)
     drawer.layer(
         Layer("text").text(
