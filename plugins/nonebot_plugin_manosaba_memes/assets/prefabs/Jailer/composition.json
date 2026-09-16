@@ -1,0 +1,37 @@
+{
+  "defaultAppearance": "State01",
+  "compositionMap": [
+    {
+      "Key": "Body",
+      "Composition": ">Part01"
+    },
+    {
+      "Key": "State01",
+      "Composition": ">Part01"
+    },
+    {
+      "Key": "State02",
+      "Composition": ">Part02"
+    },
+    {
+      "Key": "State03",
+      "Composition": ">Part03"
+    },
+    {
+      "Key": "State04",
+      "Composition": ">Part04"
+    },
+    {
+      "Key": "State05",
+      "Composition": ">Part05"
+    },
+    {
+      "Key": "State06",
+      "Composition": ">Part06"
+    },
+    {
+      "Key": "State07",
+      "Composition": ">Part07"
+    }
+  ]
+}

@@ -5,7 +5,9 @@ from pathlib import Path
 
 
 CATEGORIES = ("场景", "插图", "特效")
-PAGE_SIZE = 9
+GRID_COLUMNS = 5
+GRID_ROWS = 5
+PAGE_SIZE = GRID_COLUMNS * GRID_ROWS
 
 
 @dataclass(frozen=True, slots=True)

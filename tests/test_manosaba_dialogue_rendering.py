@@ -68,9 +68,14 @@ class DialogueRenderingTests(unittest.TestCase):
         entry = catalog.get("@BG001")
         with Image.open(io.BytesIO(self.rendering.render_background(entry))) as image:
             self.assertGreater(image.width, 1000)
-        with Image.open(io.BytesIO(self.rendering.render_background_picker(catalog.entries("场景")[:9], 0))) as image:
-            self.assertEqual(image.size, (1536, 1008))
-            self.assertIsNotNone(image.getbbox())
+        with Image.open(io.BytesIO(self.rendering.render_background_picker(catalog.entries("场景")[:25], 0))) as image:
+            self.assertEqual(image.size, (2560, 1680))
+            for row in range(5):
+                for column in range(5):
+                    tile = image.crop((column * 512 + 8, row * 336 + 8, column * 512 + 504, row * 336 + 288))
+                    self.assertIsNone(tile.getcolors(maxcolors=1))
+        with self.assertRaises(ValueError):
+            self.rendering.render_background_picker(catalog.entries("场景")[:26], 0)
 
     def test_picker_font_has_all_short_code_glyphs(self):
         font = self.rendering._font(26, self.rendering.PICKER_FONT)

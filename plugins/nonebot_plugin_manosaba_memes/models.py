@@ -22,6 +22,8 @@ class Character(StrEnum):
     HIRO = "Hiro"
     LEIA = "Leia"
     YUKI = "Yuki"
+    WARDEN = "Warden"
+    JAILER = "Jailer"
 
 
 class Statement(StrEnum):

@@ -28,7 +28,7 @@ from .state import (
     replace_override,
 )
 
-FONT_PATH = Path(__file__).parent.parent / "assets" / "fonts" / "PickerLabels.otf"
+FONT_PATH = Path(__file__).parent.parent / "assets" / "fonts" / "SourceHanSansSC-Bold.otf"
 
 
 def picker_fonts() -> FontSet:

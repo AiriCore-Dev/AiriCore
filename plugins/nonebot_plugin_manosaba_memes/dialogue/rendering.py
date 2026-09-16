@@ -12,7 +12,7 @@ from ..prefab import Prefab
 from ..sprite_editor.codec import RecipeCodec
 from ..sprite_editor.presets import PresetCatalog
 from ..sprite_editor.rendering import SpriteRenderer
-from .catalog import BackgroundCatalog
+from .catalog import GRID_COLUMNS, GRID_ROWS, PAGE_SIZE, BackgroundCatalog
 
 
 ASSETS = Path(__file__).resolve().parent.parent / "assets"
@@ -244,18 +244,19 @@ def render_background(entry):
 
 
 def render_background_picker(entries, start):
-    if not entries or len(entries) > 9 or start < 0:
+    if not entries or len(entries) > PAGE_SIZE or start < 0:
         raise ValueError("背景选择表的页码或数量无效")
-    descriptor = json.dumps({"kind": "background-picker", "layout": 1, "start": start,
+    descriptor = json.dumps({"kind": "background-picker", "layout": 2, "start": start,
+        "grid": (GRID_COLUMNS, GRID_ROWS),
         "entries": [(entry.code, entry.name, _signature(entry.path)) for entry in entries],
         "font": _signature(PICKER_FONT)}, ensure_ascii=False)
 
     def render():
-        canvas = Image.new("RGB", (1536, 1008), (24, 26, 32))
+        canvas = Image.new("RGB", (GRID_COLUMNS * 512, GRID_ROWS * 336), (24, 26, 32))
         draw = ImageDraw.Draw(canvas)
         font = _font(26, PICKER_FONT)
         for index, entry in enumerate(entries):
-            x, y = (index % 3) * 512, (index // 3) * 336
+            x, y = (index % GRID_COLUMNS) * 512, (index // GRID_COLUMNS) * 336
             image = ImageOps.contain(_image(entry.path), (496, 280), Image.Resampling.LANCZOS)
             canvas.paste(image, (x + (512 - image.width) // 2, y + 8 + (280 - image.height) // 2), image)
             draw.text((x + 14, y + 296), f"B{start + index + 1}  {entry.code}", font=font, fill="white")

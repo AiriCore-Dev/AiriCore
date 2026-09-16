@@ -19,6 +19,10 @@ CHARACTER_NAME_MAP = {
     "蕾雅": Character.LEIA,
     "雪": Character.YUKI,
     "Yuki": Character.YUKI,
+    "典狱长": Character.WARDEN,
+    "Warden": Character.WARDEN,
+    "看守": Character.JAILER,
+    "Jailer": Character.JAILER,
 }
 CHARACTER_NAMES = tuple(CHARACTER_NAME_MAP)
 

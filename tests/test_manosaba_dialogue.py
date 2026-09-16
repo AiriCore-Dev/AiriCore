@@ -110,8 +110,8 @@ class BackgroundCatalogTests(unittest.TestCase):
         self.addCleanup(self.directory.cleanup)
         self.root = Path(self.directory.name)
         backgrounds = []
-        for index in range(1, 12):
-            category = "场景" if index <= 10 else "插图"
+        for index in range(1, 28):
+            category = "场景" if index <= 26 else "插图"
             backgrounds.append(
                 {
                     "code": f"@BG{index:03d}",
@@ -127,12 +127,15 @@ class BackgroundCatalogTests(unittest.TestCase):
         self.catalog = self.catalog_module.BackgroundCatalog(self.root)
 
     def test_entries_filter_lookup_and_page_with_global_numbers(self):
-        self.assertEqual(len(self.catalog.entries()), 11)
-        self.assertEqual(len(self.catalog.entries("场景")), 10)
-        self.assertEqual(self.catalog.get("@bg011").name, "背景 11")
+        self.assertEqual(len(self.catalog.entries()), 27)
+        self.assertEqual(len(self.catalog.entries("场景")), 26)
+        self.assertEqual(self.catalog.get("@bg027").name, "背景 27")
+        first = self.catalog.page("场景", 1)
+        self.assertEqual(len(first.entries), 25)
+        self.assertEqual(first.entries[-1].code, "@BG025")
         page = self.catalog.page("场景", 2)
-        self.assertEqual([entry.code for entry in page.entries], ["@BG010"])
-        self.assertEqual((page.page, page.total_pages, page.start), (2, 2, 9))
+        self.assertEqual([entry.code for entry in page.entries], ["@BG026"])
+        self.assertEqual((page.page, page.total_pages, page.start), (2, 2, 25))
 
     def test_invalid_category_unknown_code_and_bad_manifest_are_rejected(self):
         with self.assertRaises(ValueError):
@@ -224,15 +227,16 @@ class BackgroundInteractionTests(unittest.TestCase):
                 self.interaction.parse_background_command(value)
 
     def test_picker_choice_uses_cross_page_numbering(self):
-        codes = [f"@BG{index:03d}" for index in range(1, 12)]
-        self.assertEqual(self.interaction.background_choice(codes, "B10"), "@BG010")
+        codes = [f"@BG{index:03d}" for index in range(1, 27)]
+        self.assertEqual(self.interaction.background_choice(codes, "B26"), "@BG026")
         with self.assertRaises(ValueError):
-            self.interaction.background_choice(codes, "B12")
+            self.interaction.background_choice(codes, "B27")
 
     def test_page_navigation_is_bounded(self):
-        self.assertEqual(self.interaction.next_page(1, 10, "下一页"), 2)
-        self.assertEqual(self.interaction.next_page(2, 10, "下一页"), 2)
-        self.assertEqual(self.interaction.next_page(1, 10, "上一页"), 1)
+        self.assertEqual(self.interaction.next_page(1, 25, "下一页"), 1)
+        self.assertEqual(self.interaction.next_page(1, 26, "下一页"), 2)
+        self.assertEqual(self.interaction.next_page(2, 26, "下一页"), 2)
+        self.assertEqual(self.interaction.next_page(1, 26, "上一页"), 1)
 
 
 class _PlainText:

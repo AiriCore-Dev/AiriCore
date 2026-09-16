@@ -1,0 +1,100 @@
+{
+  "character": "Jailer",
+  "canvas": [
+    3328,
+    3541
+  ],
+  "sprites": [
+    {
+      "node": "Part01",
+      "bundle": "naninovel-characters_assets_naninovel/characters/jailer.bundle",
+      "sha256": "a43ee1046cf275761d7d450c678fba4b3ac184c4e4b59c1201e52e10b039e125",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/JailerA.asset",
+      "sprite": "1",
+      "path_id": 1397144450521131234,
+      "blocks": 1297,
+      "size": [
+        3328,
+        3541
+      ]
+    },
+    {
+      "node": "Part02",
+      "bundle": "naninovel-characters_assets_naninovel/characters/jailer.bundle",
+      "sha256": "a43ee1046cf275761d7d450c678fba4b3ac184c4e4b59c1201e52e10b039e125",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/JailerA.asset",
+      "sprite": "2",
+      "path_id": 3990618153744099554,
+      "blocks": 1353,
+      "size": [
+        3328,
+        3541
+      ]
+    },
+    {
+      "node": "Part03",
+      "bundle": "naninovel-characters_assets_naninovel/characters/jailer.bundle",
+      "sha256": "a43ee1046cf275761d7d450c678fba4b3ac184c4e4b59c1201e52e10b039e125",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/JailerA.asset",
+      "sprite": "3",
+      "path_id": 7567631071175534818,
+      "blocks": 1292,
+      "size": [
+        3328,
+        3541
+      ]
+    },
+    {
+      "node": "Part04",
+      "bundle": "naninovel-characters_assets_naninovel/characters/jailer.bundle",
+      "sha256": "a43ee1046cf275761d7d450c678fba4b3ac184c4e4b59c1201e52e10b039e125",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/JailerA.asset",
+      "sprite": "4",
+      "path_id": 1372855128419166434,
+      "blocks": 1297,
+      "size": [
+        3328,
+        3541
+      ]
+    },
+    {
+      "node": "Part05",
+      "bundle": "naninovel-characters_assets_naninovel/characters/jailer.bundle",
+      "sha256": "a43ee1046cf275761d7d450c678fba4b3ac184c4e4b59c1201e52e10b039e125",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/JailerA.asset",
+      "sprite": "5",
+      "path_id": -2816039259065194270,
+      "blocks": 1314,
+      "size": [
+        3328,
+        3541
+      ]
+    },
+    {
+      "node": "Part06",
+      "bundle": "naninovel-characters_assets_naninovel/characters/jailerb.bundle",
+      "sha256": "327c3dfd68a89c21b28320088211e881ba7e91916e315b380ee3411c77bd1979",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/JailerB.asset",
+      "sprite": "1",
+      "path_id": -8754825182536706220,
+      "blocks": 832,
+      "size": [
+        3084,
+        3385
+      ]
+    },
+    {
+      "node": "Part07",
+      "bundle": "naninovel-characters_assets_naninovel/characters/jailerc.bundle",
+      "sha256": "13ef2934303697cca6ff30cfabcb18561c7632f96d06090f871679774abe38dc",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/JailerC.asset",
+      "sprite": "1",
+      "path_id": -7565735943309418249,
+      "blocks": 973,
+      "size": [
+        2031,
+        3307
+      ]
+    }
+  ]
+}

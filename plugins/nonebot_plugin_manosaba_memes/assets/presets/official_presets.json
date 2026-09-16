@@ -84486,6 +84486,210 @@
         ],
         "frequency": 0
       }
+    ],
+    "Warden": [
+      {
+        "id": "warden-state-01",
+        "nodes": [
+          "Part01"
+        ],
+        "appearance": [
+          "State01"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "warden-state-02",
+        "nodes": [
+          "Part02"
+        ],
+        "appearance": [
+          "State02"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "warden-state-03",
+        "nodes": [
+          "Part03"
+        ],
+        "appearance": [
+          "State03"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "warden-state-04",
+        "nodes": [
+          "Part04"
+        ],
+        "appearance": [
+          "State04"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "warden-state-05",
+        "nodes": [
+          "Part05"
+        ],
+        "appearance": [
+          "State05"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "warden-state-06",
+        "nodes": [
+          "Part06"
+        ],
+        "appearance": [
+          "State06"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "warden-state-07",
+        "nodes": [
+          "Part07"
+        ],
+        "appearance": [
+          "State07"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "warden-state-08",
+        "nodes": [
+          "Part08"
+        ],
+        "appearance": [
+          "State08"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "warden-state-09",
+        "nodes": [
+          "Part09"
+        ],
+        "appearance": [
+          "State09"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "warden-state-10",
+        "nodes": [
+          "Part10"
+        ],
+        "appearance": [
+          "State10"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "warden-state-11",
+        "nodes": [
+          "Part11"
+        ],
+        "appearance": [
+          "State11"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "warden-state-12",
+        "nodes": [
+          "Part12"
+        ],
+        "appearance": [
+          "State12"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "warden-state-13",
+        "nodes": [
+          "Part13"
+        ],
+        "appearance": [
+          "State13"
+        ],
+        "frequency": 0
+      }
+    ],
+    "Jailer": [
+      {
+        "id": "jailer-state-01",
+        "nodes": [
+          "Part01"
+        ],
+        "appearance": [
+          "State01"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "jailer-state-02",
+        "nodes": [
+          "Part02"
+        ],
+        "appearance": [
+          "State02"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "jailer-state-03",
+        "nodes": [
+          "Part03"
+        ],
+        "appearance": [
+          "State03"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "jailer-state-04",
+        "nodes": [
+          "Part04"
+        ],
+        "appearance": [
+          "State04"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "jailer-state-05",
+        "nodes": [
+          "Part05"
+        ],
+        "appearance": [
+          "State05"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "jailer-state-06",
+        "nodes": [
+          "Part06"
+        ],
+        "appearance": [
+          "State06"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "jailer-state-07",
+        "nodes": [
+          "Part07"
+        ],
+        "appearance": [
+          "State07"
+        ],
+        "frequency": 0
+      }
     ]
   }
 }

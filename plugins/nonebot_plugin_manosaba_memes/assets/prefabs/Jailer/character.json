@@ -1,0 +1,59 @@
+{
+  "character": "Jailer",
+  "nodes": [
+    {
+      "name": "Jailer",
+      "children": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "name": "Part01",
+      "sprite": {
+        "enabled": true
+      }
+    },
+    {
+      "name": "Part02",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part03",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part04",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part05",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part06",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part07",
+      "sprite": {
+        "enabled": false
+      }
+    }
+  ]
+}

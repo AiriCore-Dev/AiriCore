@@ -1,0 +1,178 @@
+{
+  "character": "Warden",
+  "canvas": [
+    2508,
+    2296
+  ],
+  "sprites": [
+    {
+      "node": "Part01",
+      "bundle": "naninovel-characters_assets_naninovel/characters/warden.bundle",
+      "sha256": "947af87e8487737b1070fb71e466f5527c04963a4f0de0ff1ed836280eb29938",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/Warden.asset",
+      "sprite": "1",
+      "path_id": 831519502845004091,
+      "blocks": 576,
+      "size": [
+        2508,
+        2296
+      ]
+    },
+    {
+      "node": "Part02",
+      "bundle": "naninovel-characters_assets_naninovel/characters/warden.bundle",
+      "sha256": "947af87e8487737b1070fb71e466f5527c04963a4f0de0ff1ed836280eb29938",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/Warden.asset",
+      "sprite": "2",
+      "path_id": 8753918479077132603,
+      "blocks": 635,
+      "size": [
+        2508,
+        2296
+      ]
+    },
+    {
+      "node": "Part03",
+      "bundle": "naninovel-characters_assets_naninovel/characters/warden.bundle",
+      "sha256": "947af87e8487737b1070fb71e466f5527c04963a4f0de0ff1ed836280eb29938",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/Warden.asset",
+      "sprite": "3",
+      "path_id": -3857036681704584901,
+      "blocks": 655,
+      "size": [
+        2508,
+        2296
+      ]
+    },
+    {
+      "node": "Part04",
+      "bundle": "naninovel-characters_assets_naninovel/characters/warden.bundle",
+      "sha256": "947af87e8487737b1070fb71e466f5527c04963a4f0de0ff1ed836280eb29938",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/Warden.asset",
+      "sprite": "4",
+      "path_id": 3843531975608420667,
+      "blocks": 635,
+      "size": [
+        2508,
+        2296
+      ]
+    },
+    {
+      "node": "Part05",
+      "bundle": "naninovel-characters_assets_naninovel/characters/warden.bundle",
+      "sha256": "947af87e8487737b1070fb71e466f5527c04963a4f0de0ff1ed836280eb29938",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/Warden.asset",
+      "sprite": "5",
+      "path_id": -779672991383107269,
+      "blocks": 635,
+      "size": [
+        2508,
+        2296
+      ]
+    },
+    {
+      "node": "Part06",
+      "bundle": "naninovel-characters_assets_naninovel/characters/warden.bundle",
+      "sha256": "947af87e8487737b1070fb71e466f5527c04963a4f0de0ff1ed836280eb29938",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/Warden.asset",
+      "sprite": "6",
+      "path_id": -1921700580090066629,
+      "blocks": 655,
+      "size": [
+        2508,
+        2296
+      ]
+    },
+    {
+      "node": "Part07",
+      "bundle": "naninovel-characters_assets_naninovel/characters/warden.bundle",
+      "sha256": "947af87e8487737b1070fb71e466f5527c04963a4f0de0ff1ed836280eb29938",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/Warden.asset",
+      "sprite": "7",
+      "path_id": -8638751878127433413,
+      "blocks": 635,
+      "size": [
+        2508,
+        2296
+      ]
+    },
+    {
+      "node": "Part08",
+      "bundle": "naninovel-characters_assets_naninovel/characters/warden.bundle",
+      "sha256": "947af87e8487737b1070fb71e466f5527c04963a4f0de0ff1ed836280eb29938",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/Warden.asset",
+      "sprite": "8",
+      "path_id": -1630796532506441413,
+      "blocks": 694,
+      "size": [
+        2508,
+        2296
+      ]
+    },
+    {
+      "node": "Part09",
+      "bundle": "naninovel-characters_assets_naninovel/characters/warden.bundle",
+      "sha256": "947af87e8487737b1070fb71e466f5527c04963a4f0de0ff1ed836280eb29938",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/Warden.asset",
+      "sprite": "9",
+      "path_id": -8627923642912093893,
+      "blocks": 576,
+      "size": [
+        2508,
+        2296
+      ]
+    },
+    {
+      "node": "Part10",
+      "bundle": "naninovel-characters_assets_naninovel/characters/warden.bundle",
+      "sha256": "947af87e8487737b1070fb71e466f5527c04963a4f0de0ff1ed836280eb29938",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/Warden.asset",
+      "sprite": "10",
+      "path_id": 4475192061040838971,
+      "blocks": 576,
+      "size": [
+        2508,
+        2296
+      ]
+    },
+    {
+      "node": "Part11",
+      "bundle": "naninovel-characters_assets_naninovel/characters/warden.bundle",
+      "sha256": "947af87e8487737b1070fb71e466f5527c04963a4f0de0ff1ed836280eb29938",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/Warden.asset",
+      "sprite": "11",
+      "path_id": 3579550344356481339,
+      "blocks": 616,
+      "size": [
+        2508,
+        2296
+      ]
+    },
+    {
+      "node": "Part12",
+      "bundle": "naninovel-characters_assets_naninovel/characters/warden.bundle",
+      "sha256": "947af87e8487737b1070fb71e466f5527c04963a4f0de0ff1ed836280eb29938",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/Warden.asset",
+      "sprite": "12",
+      "path_id": -3702796646242858693,
+      "blocks": 694,
+      "size": [
+        2508,
+        2296
+      ]
+    },
+    {
+      "node": "Part13",
+      "bundle": "naninovel-characters_assets_naninovel/characters/warden.bundle",
+      "sha256": "947af87e8487737b1070fb71e466f5527c04963a4f0de0ff1ed836280eb29938",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/Warden.asset",
+      "sprite": "13",
+      "path_id": 3516157071749138747,
+      "blocks": 576,
+      "size": [
+        2508,
+        2296
+      ]
+    }
+  ]
+}
