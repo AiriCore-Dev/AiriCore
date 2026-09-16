@@ -31,13 +31,18 @@ from .sprite_editor.interaction import (
     handle_sprite,
     handle_sprite_followup,
 )
+from .dialogue.interaction import (
+    handle_background,
+    handle_background_followup,
+    handle_dialogue,
+)
 from .utils import CHARACTER_NAMES, get_character, get_statement
 
 CHARACTER_NAMES_TEXT = ", ".join(CHARACTER_NAMES)
 
 usage = f"""
 manohelp：查看图片帮助
-制作收费 10 积分；立绘选择表、翻页和后续编辑免费
+制作收费 10 积分；立绘与背景选择表、翻页和后续编辑免费
 安安说 [文本] [表情]
     表情可选：害羞, 生气, 病娇, 无语, 开心
 魔裁切换角色 [角色名]
@@ -49,6 +54,10 @@ manohelp：查看图片帮助
 魔裁立绘 [角色名]
     从官方预设开始生成立绘，并通过回复消息精细调整
     发送 魔裁立绘 -h 查看完整帮助
+魔裁背景 [场景/插图/特效] [页码]
+    免费查看官方背景，也可使用背景短码直接查看
+魔裁对话 @背景短码 [立绘短码] [*姓名] 正文
+    最多三个立绘，生成对话图收费 10 积分
 """.strip()
 
 __plugin_meta__ = PluginMetadata(
