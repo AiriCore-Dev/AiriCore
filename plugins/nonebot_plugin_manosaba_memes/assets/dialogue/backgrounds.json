@@ -1,0 +1,3041 @@
+{
+  "version": 1,
+  "backgrounds": [
+    {
+      "code": "@BG001",
+      "category": "场景",
+      "path": "backgrounds/BG001.webp",
+      "name": "场景 1-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/1_1.bundle:Background_001_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "4f75ac0febcefe72a10f9e7b69bd669afa3d9848b4ffa7f8774df601e8a957c0"
+    },
+    {
+      "code": "@BG002",
+      "category": "场景",
+      "path": "backgrounds/BG002.webp",
+      "name": "场景 1-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/1_2.bundle:Background_001_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "baac083a89933f05fade3a6008ddbaa3e3f0e1608257c84f49713d726423bbb7"
+    },
+    {
+      "code": "@BG003",
+      "category": "场景",
+      "path": "backgrounds/BG003.webp",
+      "name": "场景 2-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/2_1.bundle:Background_002_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "0ba9f69a6434256b461907f2dc8ea8168329d3d942c92c84231858b127d938c4"
+    },
+    {
+      "code": "@BG004",
+      "category": "场景",
+      "path": "backgrounds/BG004.webp",
+      "name": "场景 3-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/3_1.bundle:Background_003_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "322b3620d5275709cf8c6ff04489b4bc7218fcd426f7976fc709e7867e4a5a09"
+    },
+    {
+      "code": "@BG005",
+      "category": "场景",
+      "path": "backgrounds/BG005.webp",
+      "name": "场景 3-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/3_2.bundle:Background_003_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "0fbff0e6dcb54ce8e875e401c076165f502dc09587f47a380d4573b408da7be6"
+    },
+    {
+      "code": "@BG006",
+      "category": "场景",
+      "path": "backgrounds/BG006.webp",
+      "name": "场景 4-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/4_1.bundle:Background_004_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "91bb96e78095fa3d7c94134f96379f481ebf7b11b96060ab79f980e79b00202c"
+    },
+    {
+      "code": "@BG007",
+      "category": "场景",
+      "path": "backgrounds/BG007.webp",
+      "name": "场景 5-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/5_1.bundle:Background_005_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "4940706980485b9103bce6214d45a9ececc4f09193fc3fdf8d97b8b7593f850f"
+    },
+    {
+      "code": "@BG008",
+      "category": "场景",
+      "path": "backgrounds/BG008.webp",
+      "name": "场景 5-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/5_2.bundle:Background_005_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "6e6b57d45fcd459a6887da14953a3f64b266919098d1a07cc39661c3b5faf966"
+    },
+    {
+      "code": "@BG009",
+      "category": "场景",
+      "path": "backgrounds/BG009.webp",
+      "name": "场景 6-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/6_1.bundle:Background_006_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "8d8cc90c161326f7b3eeaf567b9c63278a2a932d2bd7a1dc5484d6df9e459ccb"
+    },
+    {
+      "code": "@BG010",
+      "category": "场景",
+      "path": "backgrounds/BG010.webp",
+      "name": "场景 7-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/7_1.bundle:Background_007_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "f5251efb7003b225550c6f6891e51e05b1ec75d8ef02a828341f0e6a4c3b859c"
+    },
+    {
+      "code": "@BG011",
+      "category": "场景",
+      "path": "backgrounds/BG011.webp",
+      "name": "场景 7-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/7_2.bundle:Background_007_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "3240e6bab8be6d47110c951cd9b79a560c3cb87a68282949db151fdd1cad87f8"
+    },
+    {
+      "code": "@BG012",
+      "category": "场景",
+      "path": "backgrounds/BG012.webp",
+      "name": "场景 9-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/9_1.bundle:Background_009_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "7d13c6aaf18ca393cd8431b7474876ab5cb5e0e030cd410d608c969e261391e1"
+    },
+    {
+      "code": "@BG013",
+      "category": "场景",
+      "path": "backgrounds/BG013.webp",
+      "name": "场景 9-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/9_2.bundle:Background_009_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "9980ddc5671ec28e0f17bf833fabdee6186f20679f744a9ee7246b7f6771c776"
+    },
+    {
+      "code": "@BG014",
+      "category": "场景",
+      "path": "backgrounds/BG014.webp",
+      "name": "场景 10-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/10_1.bundle:Background_010_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "cbf2960930fbc612fa90969dcbcec85f22d159481814083b2a8cfa868afeaa43"
+    },
+    {
+      "code": "@BG015",
+      "category": "场景",
+      "path": "backgrounds/BG015.webp",
+      "name": "场景 11-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/11_1.bundle:Background_011_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "88f3f9c1e418945c8320aaa36afc3dc779d0b0ca4b51c963a160d46be2538a26"
+    },
+    {
+      "code": "@BG016",
+      "category": "场景",
+      "path": "backgrounds/BG016.webp",
+      "name": "场景 12-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/12_1.bundle:Background_012_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "95f5db7a7758201405761adb86f51ceec1f4d9d9c3e92c4c60bf1efeebb9d3b4"
+    },
+    {
+      "code": "@BG017",
+      "category": "场景",
+      "path": "backgrounds/BG017.webp",
+      "name": "场景 13-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/13_1.bundle:Background_013_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "7a111d686882ca9895e5104a8ee41d8d1f7a6c869869166e71d8c9350ad8a56b"
+    },
+    {
+      "code": "@BG018",
+      "category": "场景",
+      "path": "backgrounds/BG018.webp",
+      "name": "场景 14-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/14_1.bundle:Background_014_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "69a394ec51a749817bfefb9ec8386c4edb214d4d0efe740f893917973436f579"
+    },
+    {
+      "code": "@BG019",
+      "category": "场景",
+      "path": "backgrounds/BG019.webp",
+      "name": "场景 16-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/16_1.bundle:Background_016_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a575ff97eea0b688ac3aea0b1f20258765d1624b4022e8c7e1454487789653a7"
+    },
+    {
+      "code": "@BG020",
+      "category": "场景",
+      "path": "backgrounds/BG020.webp",
+      "name": "场景 17-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/17_1.bundle:Background_017_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "8080d1d92225adabf9d4010e52f4f2c5725ee5475709a53684748d907b39c5d5"
+    },
+    {
+      "code": "@BG021",
+      "category": "场景",
+      "path": "backgrounds/BG021.webp",
+      "name": "场景 17-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/17_2.bundle:Background_017_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "7cb9dc77dc1f8a17f436540145b946efab4842200ee2856df3c47d47e934ef75"
+    },
+    {
+      "code": "@BG022",
+      "category": "场景",
+      "path": "backgrounds/BG022.webp",
+      "name": "场景 18-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/18_1.bundle:Background_018_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "91f1fee03e8192bfd191cb95b784fefe5325b7ba48b7d8af8c2b2c62949f5161"
+    },
+    {
+      "code": "@BG023",
+      "category": "场景",
+      "path": "backgrounds/BG023.webp",
+      "name": "场景 19-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/19_1.bundle:Background_019_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "1438f6ce1682f569138340cd335b600b191199a0b188eefa51b7a033e612583d"
+    },
+    {
+      "code": "@BG024",
+      "category": "场景",
+      "path": "backgrounds/BG024.webp",
+      "name": "场景 19-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/19_2.bundle:Background_019_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "73cff1a8f88e4aa2e41df60fc9aefddbd5d31cdc303b33c10caa077bf16368ac"
+    },
+    {
+      "code": "@BG025",
+      "category": "场景",
+      "path": "backgrounds/BG025.webp",
+      "name": "场景 20-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/20_1.bundle:Background_020_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "038895a432d05a23cd049c3c806bbfb0e743f71510a0ceab76fc7449e061e07c"
+    },
+    {
+      "code": "@BG026",
+      "category": "场景",
+      "path": "backgrounds/BG026.webp",
+      "name": "场景 21-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/21_1.bundle:Background_021_001",
+      "original_size": [
+        4096,
+        2098
+      ],
+      "sha256": "91bf9da3ede3875d91413cf2c4abafb7ba8d3148a7c2b851cda4d06a11dd1955"
+    },
+    {
+      "code": "@BG027",
+      "category": "场景",
+      "path": "backgrounds/BG027.webp",
+      "name": "场景 22-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/22_1.bundle:Background_022_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "330e7392349298e163291f7d166686e6815a58423e32ba377a8f7c2ca8feb20b"
+    },
+    {
+      "code": "@BG028",
+      "category": "场景",
+      "path": "backgrounds/BG028.webp",
+      "name": "场景 22-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/22_2.bundle:Background_022_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a4347b01e89d6657eb9eb1b80f080b66602b4fff61a3609ea00bdfcb02ae1d5d"
+    },
+    {
+      "code": "@BG029",
+      "category": "场景",
+      "path": "backgrounds/BG029.webp",
+      "name": "场景 22-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/22_3.bundle:Background_022_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "ead88d98c272933995cc9fc4c000b69e174ac12c411127753de2176fc44353b9"
+    },
+    {
+      "code": "@BG030",
+      "category": "场景",
+      "path": "backgrounds/BG030.webp",
+      "name": "场景 22-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/22_4.bundle:Background_022_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a601df3fa1078265fa6d6eee7f1bae2d5dc6c98d1e0a8b210f52dd211b613414"
+    },
+    {
+      "code": "@BG031",
+      "category": "场景",
+      "path": "backgrounds/BG031.webp",
+      "name": "场景 23-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/23_1.bundle:Background_023_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "24983069f7d49e6f770f9448ca4513174d697a12e83916a7918265614f2ab5b4"
+    },
+    {
+      "code": "@BG032",
+      "category": "场景",
+      "path": "backgrounds/BG032.webp",
+      "name": "场景 23-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/23_2.bundle:Background_023_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "b8e1357961793bd2fbd05729575a8342ad2735d41346db76446aa8ce90295268"
+    },
+    {
+      "code": "@BG033",
+      "category": "场景",
+      "path": "backgrounds/BG033.webp",
+      "name": "场景 23-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/23_3.bundle:Background_023_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "873db7c271b7e77c6d30eb8ca95534eb6efb646afdf2f029ee0e73c172351874"
+    },
+    {
+      "code": "@BG034",
+      "category": "场景",
+      "path": "backgrounds/BG034.webp",
+      "name": "场景 23-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/23_4.bundle:Background_023_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a91843a886d45ad8930cb7c5dd4c2c5278d0075acef368c0a7c23b70357c74b7"
+    },
+    {
+      "code": "@BG035",
+      "category": "场景",
+      "path": "backgrounds/BG035.webp",
+      "name": "场景 23-5",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/23_5.bundle:Background_023_005",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "c78e884d69bc6df1c280b9595c160fc1c3f77ec3ef4829a1526968d7688b907d"
+    },
+    {
+      "code": "@BG036",
+      "category": "场景",
+      "path": "backgrounds/BG036.webp",
+      "name": "场景 23-6",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/23_6.bundle:Background_023_006",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "5fb5f5270eca9bda3e236fd7e51eea33625e927e91faa20185506bfcfe3a928c"
+    },
+    {
+      "code": "@BG037",
+      "category": "场景",
+      "path": "backgrounds/BG037.webp",
+      "name": "场景 23-7",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/23_7.bundle:Background_023_007",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "61864e7363f9b8c32b6b3a37ae6e09d4d6b1b9ea54b95d2f50df9d8a5dcfbcea"
+    },
+    {
+      "code": "@BG038",
+      "category": "场景",
+      "path": "backgrounds/BG038.webp",
+      "name": "场景 23-8",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/23_8.bundle:Background_023_008",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "cf534140d2dbb6d9f6717939f99c55635d3ecfa71a519785ba7f6235ea43ad38"
+    },
+    {
+      "code": "@BG039",
+      "category": "场景",
+      "path": "backgrounds/BG039.webp",
+      "name": "场景 24-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/24_1.bundle:Background_024_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "4684ea82b5198b2022d412ad5e93c3365973800a742daac178e37728e4f3f266"
+    },
+    {
+      "code": "@BG040",
+      "category": "场景",
+      "path": "backgrounds/BG040.webp",
+      "name": "场景 24-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/24_2.bundle:Background_024_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "0f0c7a1247db7cda1e552efe8605ae37b06fddd59be9ba16ae390ea596863349"
+    },
+    {
+      "code": "@BG041",
+      "category": "场景",
+      "path": "backgrounds/BG041.webp",
+      "name": "场景 25-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/25_1.bundle:Background_025_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "c68b2f0f12c22e380d6b38a5fc0497335245d59e0291836efe8018481380c63d"
+    },
+    {
+      "code": "@BG042",
+      "category": "场景",
+      "path": "backgrounds/BG042.webp",
+      "name": "场景 25-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/25_2.bundle:Background_025_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "746477f024ba0a2bfe2d4f3694ed6322f1fb91b7322cadf097bd540fb059f1f5"
+    },
+    {
+      "code": "@BG043",
+      "category": "场景",
+      "path": "backgrounds/BG043.webp",
+      "name": "场景 26-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/26_1.bundle:Background_026_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "7f52af86f25a796052cb4620491fdc741ee4c51cbbbd826fa8ad4474e0d43fbf"
+    },
+    {
+      "code": "@BG044",
+      "category": "场景",
+      "path": "backgrounds/BG044.webp",
+      "name": "场景 27-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/27_1.bundle:Background_027_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "054cc3a341995a9f71b4271b1d6330785557d41d18f2934b9a2ea7e8650bdbdf"
+    },
+    {
+      "code": "@BG045",
+      "category": "场景",
+      "path": "backgrounds/BG045.webp",
+      "name": "场景 28-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/28_1.bundle:Background_028_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "865c9696039ec185d9e1bfaa0b934c197ff5e7a5d65206f8bd80c917c1b216f2"
+    },
+    {
+      "code": "@BG046",
+      "category": "场景",
+      "path": "backgrounds/BG046.webp",
+      "name": "场景 28-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/28_2.bundle:Background_028_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "66c5645f6cda9b44016f29e69d5acd1cd23d61ae0ee7a67953792648d4843d11"
+    },
+    {
+      "code": "@BG047",
+      "category": "场景",
+      "path": "backgrounds/BG047.webp",
+      "name": "场景 29-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/29_1.bundle:Background_029_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "76f91cf2836d52c1f19b4fe3755fd7232d7aed29a8e5b1815e10e05b2f750c7c"
+    },
+    {
+      "code": "@BG048",
+      "category": "场景",
+      "path": "backgrounds/BG048.webp",
+      "name": "场景 29-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/29_2.bundle:Background_029_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "c00aedd69f7b4a18d23450ffac7bb5de68a7d282fbec8a4f3b007ab0c601548d"
+    },
+    {
+      "code": "@BG049",
+      "category": "场景",
+      "path": "backgrounds/BG049.webp",
+      "name": "场景 30-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/30_1.bundle:Background_030_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "03f67c6eb39c43371394ef6481da185ea5c61d419c76090047e035d799d66da1"
+    },
+    {
+      "code": "@BG050",
+      "category": "场景",
+      "path": "backgrounds/BG050.webp",
+      "name": "场景 30-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/30_2.bundle:Background_030_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "479b072001ae26705f032b24d8ef6c7bb66c696f63b39fac301787de530b0267"
+    },
+    {
+      "code": "@BG051",
+      "category": "场景",
+      "path": "backgrounds/BG051.webp",
+      "name": "场景 31-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/31_1.bundle:Background_031_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a26de3e08e3b559f3f09c3b5bcd5d059429de60797739ac8d3d63cd43f717fbc"
+    },
+    {
+      "code": "@BG052",
+      "category": "场景",
+      "path": "backgrounds/BG052.webp",
+      "name": "场景 31-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/31_2.bundle:Background_031_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "e033c24f2557e556bc9f3529f0715a20ced6a0087e1a4550837d4df9f5b6b928"
+    },
+    {
+      "code": "@BG053",
+      "category": "场景",
+      "path": "backgrounds/BG053.webp",
+      "name": "场景 31-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/31_3.bundle:Background_031_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "91566d3f50ca300152484cd07cf09213ed042f570d0c4833ff03f2095475197d"
+    },
+    {
+      "code": "@BG054",
+      "category": "场景",
+      "path": "backgrounds/BG054.webp",
+      "name": "场景 31-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/31_4.bundle:Background_031_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "58f2a8928a60ce9b02e450e7e4b42c68fe64fc0304454ca72e6d080287bdbff6"
+    },
+    {
+      "code": "@BG055",
+      "category": "场景",
+      "path": "backgrounds/BG055.webp",
+      "name": "场景 31-5",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/31_5.bundle:Background_031_005",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "23e39c0e9312bd24cf610e960606c033e1c3989cdae9db65131ae9d0a66ea4d1"
+    },
+    {
+      "code": "@BG056",
+      "category": "场景",
+      "path": "backgrounds/BG056.webp",
+      "name": "场景 32-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/32_1.bundle:Background_032_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a4bee59f5ab1540a2909edb80fd06e3ee542c425f78e1b9ae3d14b6c0406f593"
+    },
+    {
+      "code": "@BG057",
+      "category": "场景",
+      "path": "backgrounds/BG057.webp",
+      "name": "场景 33-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/33_1.bundle:Background_033_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "e5229f1737aa0ef9e20ba1f89518ad62d30073f0594900012b5790754b67afdc"
+    },
+    {
+      "code": "@BG058",
+      "category": "场景",
+      "path": "backgrounds/BG058.webp",
+      "name": "场景 34-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/34_1.bundle:Background_034_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "b466bd0cd07d7a8a7192c7e024b5b69676bf9ca82d87986324c4fb165f26b719"
+    },
+    {
+      "code": "@BG059",
+      "category": "场景",
+      "path": "backgrounds/BG059.webp",
+      "name": "场景 grid-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/grid_1.bundle:Grid_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a09dda85f9d80850c38a7d442eb8745bda73b0f8c12eb1419dc5be8e317dcf0d"
+    },
+    {
+      "code": "@BG060",
+      "category": "场景",
+      "path": "backgrounds/BG060.webp",
+      "name": "场景 grid-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/grid_2.bundle:Grid_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a6ac3927318d3008bb6c4a0aa7c1a03d315b54c87621ead36e4d1e02085c37a6"
+    },
+    {
+      "code": "@BG061",
+      "category": "场景",
+      "path": "backgrounds/BG061.webp",
+      "name": "场景 solidcolor",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/solidcolor.bundle:SolidColor",
+      "original_size": [
+        2560,
+        1440
+      ],
+      "sha256": "8c982010fa9678e61e62ec2685823426e5084b39661bf3ced48f282cb3333194"
+    },
+    {
+      "code": "@BG062",
+      "category": "场景",
+      "path": "backgrounds/BG062.webp",
+      "name": "场景 transparent",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/mainbackground/transparent.bundle:Transparent",
+      "original_size": [
+        2560,
+        1440
+      ],
+      "sha256": "739b72f95f70d336730d2e55c8da6ae515ea283e6c7f4611d6fcec6829ca108f"
+    },
+    {
+      "code": "@BG063",
+      "category": "插图",
+      "path": "backgrounds/BG063.webp",
+      "name": "插图 1-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/1_1.bundle:Still_001_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "17093100adf167c4f417498744980445914c33069b551c35e79aa0428e944722"
+    },
+    {
+      "code": "@BG064",
+      "category": "插图",
+      "path": "backgrounds/BG064.webp",
+      "name": "插图 2-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/2_1.bundle:Still_002_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "2adfec06b356eddcd504101a6e042244418f69c33d43caccbf25afa2bbf1d187"
+    },
+    {
+      "code": "@BG065",
+      "category": "插图",
+      "path": "backgrounds/BG065.webp",
+      "name": "插图 10-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/10_1.bundle:Still_010_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "0db13cb1ce36ebc0c1a19e3092fa3365c5e2a0a213f3b7359519780ea4b1d068"
+    },
+    {
+      "code": "@BG066",
+      "category": "插图",
+      "path": "backgrounds/BG066.webp",
+      "name": "插图 10-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/10_2.bundle:Still_010_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "c5a5e751b4c26aeb27cc58a811ec3be6fd4fa1fb883bbc283af37e5d8d47c9e6"
+    },
+    {
+      "code": "@BG067",
+      "category": "插图",
+      "path": "backgrounds/BG067.webp",
+      "name": "插图 10-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/10_3.bundle:Still_010_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "39fc780e1938db4cbb35e0a0a14fbbff91353550092bafb796baf5b15c2a2115"
+    },
+    {
+      "code": "@BG068",
+      "category": "插图",
+      "path": "backgrounds/BG068.webp",
+      "name": "插图 10-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/10_4.bundle:Still_010_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "dd0224ace0c05fc373b71e3a22a9baec5b54a776c3c3a3a7bdcba25970b3eaf4"
+    },
+    {
+      "code": "@BG069",
+      "category": "插图",
+      "path": "backgrounds/BG069.webp",
+      "name": "插图 10-5",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/10_5.bundle:Still_010_005",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "72454eb15ee28de1d8ffcd4defa5e294dd1c15e83c302cb7c66ffc6665408a5d"
+    },
+    {
+      "code": "@BG070",
+      "category": "插图",
+      "path": "backgrounds/BG070.webp",
+      "name": "插图 20-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/20_1.bundle:Still_020_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "282d892779c3100d7cd507a4fa52a43842a71b34c0920ebf8a673a6092fbd0ca"
+    },
+    {
+      "code": "@BG071",
+      "category": "插图",
+      "path": "backgrounds/BG071.webp",
+      "name": "插图 20-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/20_2.bundle:Still_020_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a0910bfada9fefe22219ff3018938defa0bc2b0f9ae387bebb75363d4e811a14"
+    },
+    {
+      "code": "@BG072",
+      "category": "插图",
+      "path": "backgrounds/BG072.webp",
+      "name": "插图 30-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/30_1.bundle:Still_030_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "f633c166f053de6ae560f0de067e0d8beea18810d088d0aa1966d65f6a4177ca"
+    },
+    {
+      "code": "@BG073",
+      "category": "插图",
+      "path": "backgrounds/BG073.webp",
+      "name": "插图 40-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/40_1.bundle:Still_040_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a342baf7c7e604d61419fbb699107bb019aa64f368620b85814ae0cfadc386a3"
+    },
+    {
+      "code": "@BG074",
+      "category": "插图",
+      "path": "backgrounds/BG074.webp",
+      "name": "插图 50-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/50_1.bundle:Still_050_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "ae096169437542e556048de0d067ba9c282264c97cbbf2b74909927891cd1c54"
+    },
+    {
+      "code": "@BG075",
+      "category": "插图",
+      "path": "backgrounds/BG075.webp",
+      "name": "插图 50-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/50_2.bundle:Still_050_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "13c6b1dc61d085bcf3a15a65bf5a79abbdf6bd03335526102bcda6d8e019d1cc"
+    },
+    {
+      "code": "@BG076",
+      "category": "插图",
+      "path": "backgrounds/BG076.webp",
+      "name": "插图 50-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/50_3.bundle:Still_050_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "9e597ae8b38ba3e1b41eabbbcce7bc1f2736ee7bd78f09bbfae1c5ec5b7d9f3a"
+    },
+    {
+      "code": "@BG077",
+      "category": "插图",
+      "path": "backgrounds/BG077.webp",
+      "name": "插图 50-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/50_4.bundle:Still_050_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "bb99d2d7db7d0c3aa2a25c9668aa87f30f1f2eefb2566db9d6ec6a75766784f6"
+    },
+    {
+      "code": "@BG078",
+      "category": "插图",
+      "path": "backgrounds/BG078.webp",
+      "name": "插图 80-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/80_1.bundle:Still_080_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "762d9f23297afa95e5428bead06b1f99d6873d7a5e8c4f4fe7c4df583000bbe0"
+    },
+    {
+      "code": "@BG079",
+      "category": "插图",
+      "path": "backgrounds/BG079.webp",
+      "name": "插图 100-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/100_1.bundle:Still_100_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "ae1e737622cc64649af2861fb0ed14b5076c4e41283bc8c4d67daa186386a026"
+    },
+    {
+      "code": "@BG080",
+      "category": "插图",
+      "path": "backgrounds/BG080.webp",
+      "name": "插图 110-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/110_1.bundle:Still_110_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "4eab4fb2eb0fe6950745b89b8e04cc4bbc39c9ab066c3cf18e32a4a20ebf8ff9"
+    },
+    {
+      "code": "@BG081",
+      "category": "插图",
+      "path": "backgrounds/BG081.webp",
+      "name": "插图 120-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/120_1.bundle:Still_120_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "3872d42eb9bb84cbae0c57d0cb5dc5c295586b0e7a92218defb26c2b72a26901"
+    },
+    {
+      "code": "@BG082",
+      "category": "插图",
+      "path": "backgrounds/BG082.webp",
+      "name": "插图 130-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/130_1.bundle:Still_130_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "09590df9107227b10f43a6bb988390bf3298cdd6ff2f3a4575c6607520082307"
+    },
+    {
+      "code": "@BG083",
+      "category": "插图",
+      "path": "backgrounds/BG083.webp",
+      "name": "插图 140-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/140_1.bundle:Still_140_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "16d35cf0b1be56de175a04e41b236ba9aaccc1e7f4b632c2676da747dbd19248"
+    },
+    {
+      "code": "@BG084",
+      "category": "插图",
+      "path": "backgrounds/BG084.webp",
+      "name": "插图 140-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/140_2.bundle:Still_140_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "fec7b7ad71e81c4c52b3d62790e30b44e040f8be0f23c08fa668379e69d4ea7c"
+    },
+    {
+      "code": "@BG085",
+      "category": "插图",
+      "path": "backgrounds/BG085.webp",
+      "name": "插图 140-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/140_3.bundle:Still_140_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "2fffbe4102ffbfa1e7beb4bdeadc313b8e7b9deb3cb227580e663220e66e10bd"
+    },
+    {
+      "code": "@BG086",
+      "category": "插图",
+      "path": "backgrounds/BG086.webp",
+      "name": "插图 140-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/140_4.bundle:Still_140_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "8d923b2ec12d5226459dc9341dcc78a789b627e93d40111912f06a601c736e6f"
+    },
+    {
+      "code": "@BG087",
+      "category": "插图",
+      "path": "backgrounds/BG087.webp",
+      "name": "插图 150-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/150_1.bundle:Still_150_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "715dc2f91934b2cf6ad9a208ba35901f4bc27c0f7015a1da1d53beacaaf47a8d"
+    },
+    {
+      "code": "@BG088",
+      "category": "插图",
+      "path": "backgrounds/BG088.webp",
+      "name": "插图 150-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/150_2.bundle:Still_150_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "1b0826faeae1003c11a87a25052d8a94bbbaad622bc3f6370959621458bc4f94"
+    },
+    {
+      "code": "@BG089",
+      "category": "插图",
+      "path": "backgrounds/BG089.webp",
+      "name": "插图 160-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/160_1.bundle:Still_160_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "d2555bc4e3dd5fe192a7cce8fc955027399165f09615efece928d5334e6e3509"
+    },
+    {
+      "code": "@BG090",
+      "category": "插图",
+      "path": "backgrounds/BG090.webp",
+      "name": "插图 170-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/170_1.bundle:Still_170_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "6f233cd0033a85bc453c91092be987c166a905c4166d1310747ed0aabffc7fb9"
+    },
+    {
+      "code": "@BG091",
+      "category": "插图",
+      "path": "backgrounds/BG091.webp",
+      "name": "插图 180-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/180_1.bundle:Still_180_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "f41e018fa5c82feac2c673bac16731b1c50e0e51850ad89e10a38a69d4d66ee4"
+    },
+    {
+      "code": "@BG092",
+      "category": "插图",
+      "path": "backgrounds/BG092.webp",
+      "name": "插图 190-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/190_1.bundle:Still_190_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "76f0b7f67123699db29a7bbda21f99f3cd29d34074490b9dba81c97bd4beb01e"
+    },
+    {
+      "code": "@BG093",
+      "category": "插图",
+      "path": "backgrounds/BG093.webp",
+      "name": "插图 200-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/200_1.bundle:Still_200_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "f1b6e79b62d0e61df9b8557f1a66f79705ec8b168e235cb005ee9334deffb314"
+    },
+    {
+      "code": "@BG094",
+      "category": "插图",
+      "path": "backgrounds/BG094.webp",
+      "name": "插图 200-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/200_2.bundle:Still_200_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "6df41c9350cf280b8575ea2024a0eeff57ac92b08d29567cee41f7c0f47bd337"
+    },
+    {
+      "code": "@BG095",
+      "category": "插图",
+      "path": "backgrounds/BG095.webp",
+      "name": "插图 200-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/200_3.bundle:Still_200_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "b72800d24768275dc75f9c05185f7f3669576573b6764c4942f5b7118a27c638"
+    },
+    {
+      "code": "@BG096",
+      "category": "插图",
+      "path": "backgrounds/BG096.webp",
+      "name": "插图 200-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/200_4.bundle:Still_200_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "cd6e9dd8a0f24acd147ed4f0b8424358b9b12ca8ba1b18fb56f30b5272e45d8e"
+    },
+    {
+      "code": "@BG097",
+      "category": "插图",
+      "path": "backgrounds/BG097.webp",
+      "name": "插图 200-5",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/200_5.bundle:Still_200_005",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "2d60322b0a80792f62be713a8cfff0b6fc6b5030ad388aa308b1bebde894b587"
+    },
+    {
+      "code": "@BG098",
+      "category": "插图",
+      "path": "backgrounds/BG098.webp",
+      "name": "插图 210-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/210_1.bundle:Still_210_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "149e1dd163a4b397ac54676f2e230c164dc89254a81dfee5b617d08d2fb82941"
+    },
+    {
+      "code": "@BG099",
+      "category": "插图",
+      "path": "backgrounds/BG099.webp",
+      "name": "插图 220-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/220_1.bundle:Still_220_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "17ccb0891057a827367255f0b818d6d328be943b6a15b07a241c0258e2823c00"
+    },
+    {
+      "code": "@BG100",
+      "category": "插图",
+      "path": "backgrounds/BG100.webp",
+      "name": "插图 220-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/220_2.bundle:Still_220_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "396cab1340e1eee21d9d0a2e2d31e2bff692ebdd1b32fde03ace772b444396f6"
+    },
+    {
+      "code": "@BG101",
+      "category": "插图",
+      "path": "backgrounds/BG101.webp",
+      "name": "插图 230-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/230_1.bundle:Still_230_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a840d9c4f90db8a04a5d5aa0d60747b4ffbf0e5f21b3828adc5412297f9479df"
+    },
+    {
+      "code": "@BG102",
+      "category": "插图",
+      "path": "backgrounds/BG102.webp",
+      "name": "插图 240-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/240_1.bundle:Still_240_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "1aca27558544565599d5a9aba10f4ef75bed6c1ac59dfdbbbecd673577a87555"
+    },
+    {
+      "code": "@BG103",
+      "category": "插图",
+      "path": "backgrounds/BG103.webp",
+      "name": "插图 250-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/250_1.bundle:Still_250_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "e7fdc84604c07b7277c4ec2c3d8f9a925bb798dc09316cd9b8ff0124061a055d"
+    },
+    {
+      "code": "@BG104",
+      "category": "插图",
+      "path": "backgrounds/BG104.webp",
+      "name": "插图 260-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/260_1.bundle:Still_260_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "5dcd23c1297842c8d918771737eeb4309099aca1fcfc57b2a1499f8176432ba2"
+    },
+    {
+      "code": "@BG105",
+      "category": "插图",
+      "path": "backgrounds/BG105.webp",
+      "name": "插图 270-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/270_1.bundle:Still_270_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "6c08a45302458aa129de817f919f6974913c81f2ca3cc3109d1da1101269ad81"
+    },
+    {
+      "code": "@BG106",
+      "category": "插图",
+      "path": "backgrounds/BG106.webp",
+      "name": "插图 270-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/270_2.bundle:Still_270_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "82d44ca28a8dc7d69eb0abaeb04b508d96d8d98cefa9be8edd5071eb6b4f5022"
+    },
+    {
+      "code": "@BG107",
+      "category": "插图",
+      "path": "backgrounds/BG107.webp",
+      "name": "插图 280-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/280_1.bundle:Still_280_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "d010bb23722d861258cf42936d14c96a51de4d583678990b7afa397ef13bfe48"
+    },
+    {
+      "code": "@BG108",
+      "category": "插图",
+      "path": "backgrounds/BG108.webp",
+      "name": "插图 290-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/290_1.bundle:Still_290_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "d868ca9dd0d4a06c322bed1b057a2d0872cce9cb4a3049cb28da367f35a73c1c"
+    },
+    {
+      "code": "@BG109",
+      "category": "插图",
+      "path": "backgrounds/BG109.webp",
+      "name": "插图 290-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/290_2.bundle:Still_290_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "f011ea8003624ce30689051a502554c953bdba270b267123e4ec27ef628dcd32"
+    },
+    {
+      "code": "@BG110",
+      "category": "插图",
+      "path": "backgrounds/BG110.webp",
+      "name": "插图 300-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/300_1.bundle:Still_300_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "35efc8938cfa079d7d85b1ce2b132ea5842b3604878b065f54d79109bf2b9b54"
+    },
+    {
+      "code": "@BG111",
+      "category": "插图",
+      "path": "backgrounds/BG111.webp",
+      "name": "插图 310-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/310_1.bundle:Still_310_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "d2c9d88c52ea868cd178fb6985290b977a4afccb8ddd7cf096a0d969ead0a826"
+    },
+    {
+      "code": "@BG112",
+      "category": "插图",
+      "path": "backgrounds/BG112.webp",
+      "name": "插图 320-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/320_1.bundle:Still_320_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a408aa0de047eed4d60b5c89dbeb25312def72835b3e1df7afe413703b1bbfcf"
+    },
+    {
+      "code": "@BG113",
+      "category": "插图",
+      "path": "backgrounds/BG113.webp",
+      "name": "插图 330-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/330_1.bundle:Still_330_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "e2cee8645d0b15bcbdc4faf2a2e47c23fffefac39d2de415de1fac0eb1a56a84"
+    },
+    {
+      "code": "@BG114",
+      "category": "插图",
+      "path": "backgrounds/BG114.webp",
+      "name": "插图 340-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/340_1.bundle:Still_340_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "fc384b313edf84873ba895bcb145a1fc0d47ed013d8324ccdc34f80d947f53dd"
+    },
+    {
+      "code": "@BG115",
+      "category": "插图",
+      "path": "backgrounds/BG115.webp",
+      "name": "插图 340-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/340_2.bundle:Still_340_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "b629ba7ac0608cb2dac5cbba03854dee97b7be71b60e9325562be257f4bf8c0c"
+    },
+    {
+      "code": "@BG116",
+      "category": "插图",
+      "path": "backgrounds/BG116.webp",
+      "name": "插图 350-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/350_1.bundle:Still_350_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "8f26bbfeb1c91df6d5615e7a8694d7d7291828566297b7e23e181142458a9742"
+    },
+    {
+      "code": "@BG117",
+      "category": "插图",
+      "path": "backgrounds/BG117.webp",
+      "name": "插图 360-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/360_1.bundle:Still_360_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "bb39c3aca375f24d5e5790653fd7234b133f9a220e892cedd9ae3751ba8db15a"
+    },
+    {
+      "code": "@BG118",
+      "category": "插图",
+      "path": "backgrounds/BG118.webp",
+      "name": "插图 360-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/360_2.bundle:Still_360_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "3e469258eee1b20a7cf5fa51ef2e3dbe2615da69a82b1a69fda33f86668b4617"
+    },
+    {
+      "code": "@BG119",
+      "category": "插图",
+      "path": "backgrounds/BG119.webp",
+      "name": "插图 370-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/370_1.bundle:Still_370_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "0aa46a9e99616e6e0ba36762ec2f4d13a5f45611e23308a9f7bba2288db5e2c4"
+    },
+    {
+      "code": "@BG120",
+      "category": "插图",
+      "path": "backgrounds/BG120.webp",
+      "name": "插图 370-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/370_2.bundle:Still_370_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "f9d60d5716a46c20d59d001ae4bbc76052381b3a9a23a66f3e93f9d4d9ab7421"
+    },
+    {
+      "code": "@BG121",
+      "category": "插图",
+      "path": "backgrounds/BG121.webp",
+      "name": "插图 380-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/380_1.bundle:Still_380_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "2b1c3fdf8678927ab1296ba38056f53edd0b9bd1ef8f3f0bfb0c5fc6f03eaec9"
+    },
+    {
+      "code": "@BG122",
+      "category": "插图",
+      "path": "backgrounds/BG122.webp",
+      "name": "插图 400-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/400_1.bundle:Still_400_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "9a10815fb247d08f35fb6ed92c38a2ee3c462350a053d7a0ad86393c388e573a"
+    },
+    {
+      "code": "@BG123",
+      "category": "插图",
+      "path": "backgrounds/BG123.webp",
+      "name": "插图 400-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/400_2.bundle:Still_400_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "f6beee4ff97f2a520d2cf3b0afe5bac5aa18c625b0702fe7436dc5b1c3d00211"
+    },
+    {
+      "code": "@BG124",
+      "category": "插图",
+      "path": "backgrounds/BG124.webp",
+      "name": "插图 400-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/400_3.bundle:Still_400_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "8b63d506cb3e39f8e5503e49ca53e77a64aac11f615d94f246d0d3dc65ec6ae6"
+    },
+    {
+      "code": "@BG125",
+      "category": "插图",
+      "path": "backgrounds/BG125.webp",
+      "name": "插图 410-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/410_1.bundle:Still_410_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "5eeb012340a0f3b9228be85748e4902544e1271101d10ef9cef90acbce9ad55a"
+    },
+    {
+      "code": "@BG126",
+      "category": "插图",
+      "path": "backgrounds/BG126.webp",
+      "name": "插图 410-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/410_2.bundle:Still_410_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "b323b4a17f830bc06be45254051da49a13e999e9cbc9c04d0c29c71a7e9ef5e2"
+    },
+    {
+      "code": "@BG127",
+      "category": "插图",
+      "path": "backgrounds/BG127.webp",
+      "name": "插图 410-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/410_3.bundle:Still_410_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "b9276ccc44031aef672482b23a69098deefe6eb7e5b2dee86d65d879984faa22"
+    },
+    {
+      "code": "@BG128",
+      "category": "插图",
+      "path": "backgrounds/BG128.webp",
+      "name": "插图 410-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/410_4.bundle:Still_410_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "824775ccc72ff7a674ade5b21e117ec40f65dda194cfdcd65d16c973946dd6d4"
+    },
+    {
+      "code": "@BG129",
+      "category": "插图",
+      "path": "backgrounds/BG129.webp",
+      "name": "插图 420-0",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/420_0.bundle:Still_420_000",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "8529fee23e94728be536739b7df1160eb786c451e4512217fbf9439f3c0542b9"
+    },
+    {
+      "code": "@BG130",
+      "category": "插图",
+      "path": "backgrounds/BG130.webp",
+      "name": "插图 420-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/420_1.bundle:Still_420_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "6951082b5c1c72ced6a309f08c61bd6483043f85b88f8b37f678c8ef842d7305"
+    },
+    {
+      "code": "@BG131",
+      "category": "插图",
+      "path": "backgrounds/BG131.webp",
+      "name": "插图 420-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/420_2.bundle:Still_420_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "40d3bcf5436f517e24e95129b02aa3c4ca0edf0c320a8dcc5d0a52d799a4160d"
+    },
+    {
+      "code": "@BG132",
+      "category": "插图",
+      "path": "backgrounds/BG132.webp",
+      "name": "插图 420-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/420_3.bundle:Still_420_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "adda8ecf188fd06ae6b681dd9d791bc8828548380816b350487fcbc9183facb8"
+    },
+    {
+      "code": "@BG133",
+      "category": "插图",
+      "path": "backgrounds/BG133.webp",
+      "name": "插图 420-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/420_4.bundle:Still_420_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "f12cadf719e12bfc197f80e163b877d7646b9b1190166934a9b7261029c41efe"
+    },
+    {
+      "code": "@BG134",
+      "category": "插图",
+      "path": "backgrounds/BG134.webp",
+      "name": "插图 421-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/421_1.bundle:Still_421_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "b5421f38973ca2fd032f21c4ac72143c9cc4e86ef3c3149706bf5042f28dc3d2"
+    },
+    {
+      "code": "@BG135",
+      "category": "插图",
+      "path": "backgrounds/BG135.webp",
+      "name": "插图 421-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/421_2.bundle:Still_421_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "2fd47bf97a7fb6e3c97e64299d055c8d7793f3dc2a19d736bfa6d1a569edd9bb"
+    },
+    {
+      "code": "@BG136",
+      "category": "插图",
+      "path": "backgrounds/BG136.webp",
+      "name": "插图 421-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/421_3.bundle:Still_421_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "4c014306534f7b816dc3a6aacc681067edc5ff230f4bc861c750ca9da887f732"
+    },
+    {
+      "code": "@BG137",
+      "category": "插图",
+      "path": "backgrounds/BG137.webp",
+      "name": "插图 421-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/421_4.bundle:Still_421_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "861bd8bb3ff6d8f209bd93f4460b4d38edecf7da781946455f45088a624c1101"
+    },
+    {
+      "code": "@BG138",
+      "category": "插图",
+      "path": "backgrounds/BG138.webp",
+      "name": "插图 421-5",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/421_5.bundle:Still_421_005",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "4ba7c43358490cbe63e3751e61a0f8740b0ca9e538bd62059c41e183e8b67cb4"
+    },
+    {
+      "code": "@BG139",
+      "category": "插图",
+      "path": "backgrounds/BG139.webp",
+      "name": "插图 421-6",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/421_6.bundle:Still_421_006",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "5a3b86349d518d90c7061876288a96be918248611008fc72b700afe9e6146b92"
+    },
+    {
+      "code": "@BG140",
+      "category": "插图",
+      "path": "backgrounds/BG140.webp",
+      "name": "插图 421-7",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/421_7.bundle:Still_421_007",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "4fdde19dd6ebc80f047c7a1c25aed9a627a238f8c38c6c98e454f9c7901a687e"
+    },
+    {
+      "code": "@BG141",
+      "category": "插图",
+      "path": "backgrounds/BG141.webp",
+      "name": "插图 421-8",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/421_8.bundle:Still_421_008",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "8b1e0faa4dcdad2a4e363fb5592952fec6ec14fe9cd7f63c400cb02fcda6d450"
+    },
+    {
+      "code": "@BG142",
+      "category": "插图",
+      "path": "backgrounds/BG142.webp",
+      "name": "插图 421-9",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/421_9.bundle:Still_421_009",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "06376aef5357a660038b8f8485b4b389d22764ad0554ab1827cfc414e0cc9d38"
+    },
+    {
+      "code": "@BG143",
+      "category": "插图",
+      "path": "backgrounds/BG143.webp",
+      "name": "插图 430-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/430_1.bundle:Still_430_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "c90eb2d43c0d4e79833c22b78f7a5c6de6d61564ad35da6f4cc1a24dfc88d8db"
+    },
+    {
+      "code": "@BG144",
+      "category": "插图",
+      "path": "backgrounds/BG144.webp",
+      "name": "插图 430-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/430_2.bundle:Still_430_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a105e69fc8eba2953d56099344db37826eed080e9abe3d4f62e7ffc973159554"
+    },
+    {
+      "code": "@BG145",
+      "category": "插图",
+      "path": "backgrounds/BG145.webp",
+      "name": "插图 430-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/430_3.bundle:Still_430_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "fbb54fdd0b9a560e799dbabb6a683a978372c10ce12ef8525fc17c05bafe1b2a"
+    },
+    {
+      "code": "@BG146",
+      "category": "插图",
+      "path": "backgrounds/BG146.webp",
+      "name": "插图 440-0",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_0.bundle:Still_440_000",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "161357a4059ec352b99f3b3fd2ff1c5fd6e51e41d558649460dc097171b43ce7"
+    },
+    {
+      "code": "@BG147",
+      "category": "插图",
+      "path": "backgrounds/BG147.webp",
+      "name": "插图 440-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_1.bundle:Still_440_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "53f7786cf321ed6cf051389ca3629cf27b05a5d1ea5ee997fa470afd690ce3f6"
+    },
+    {
+      "code": "@BG148",
+      "category": "插图",
+      "path": "backgrounds/BG148.webp",
+      "name": "插图 440-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_2.bundle:Still_440_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "cbadc709c61b929c3eb84f182a6bca4159184f50a142bcd997db12099356b8fb"
+    },
+    {
+      "code": "@BG149",
+      "category": "插图",
+      "path": "backgrounds/BG149.webp",
+      "name": "插图 440-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_3.bundle:Still_440_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "32d6042c3f26b159fb3e38bf94dbc3ff51e98cef5c15129cca7945e26c778fb2"
+    },
+    {
+      "code": "@BG150",
+      "category": "插图",
+      "path": "backgrounds/BG150.webp",
+      "name": "插图 440-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_4.bundle:Still_440_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "3cd64931f6459c60742ca176d6a4c01a762800ff615e69a3761bf42765adbc3e"
+    },
+    {
+      "code": "@BG151",
+      "category": "插图",
+      "path": "backgrounds/BG151.webp",
+      "name": "插图 440-5",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_5.bundle:Still_440_005",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "c32bb2a377660309328eb9d6681276ffdbb52040dbee8ad1f2c249e3ebb09de0"
+    },
+    {
+      "code": "@BG152",
+      "category": "插图",
+      "path": "backgrounds/BG152.webp",
+      "name": "插图 440-6",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_6.bundle:Still_440_006",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "3e4a46f6559bed9323952c8e66079bc7315e579f9c75becd7a95f952a8679fc9"
+    },
+    {
+      "code": "@BG153",
+      "category": "插图",
+      "path": "backgrounds/BG153.webp",
+      "name": "插图 440-7",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_7.bundle:Still_440_007",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "940b5a58a2347e171c346a93af46df9861440207b6abe411f97041e8f40894e0"
+    },
+    {
+      "code": "@BG154",
+      "category": "插图",
+      "path": "backgrounds/BG154.webp",
+      "name": "插图 440-8",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_8.bundle:Still_440_008",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "88c7ba24acc910c0b03bdfdae0612e7c4f1879be2ee684183c0844efa8c6dee6"
+    },
+    {
+      "code": "@BG155",
+      "category": "插图",
+      "path": "backgrounds/BG155.webp",
+      "name": "插图 440-9",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_9.bundle:Still_440_009",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "6c808652f47fb458267041962dffb0ead282a831501d5b8c83495d1d60e7874e"
+    },
+    {
+      "code": "@BG156",
+      "category": "插图",
+      "path": "backgrounds/BG156.webp",
+      "name": "插图 440-10",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_10.bundle:Still_440_010",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "078570e4ed068ac8957a4a4ab55a08059714d15cfba02eb20430aea535738a4c"
+    },
+    {
+      "code": "@BG157",
+      "category": "插图",
+      "path": "backgrounds/BG157.webp",
+      "name": "插图 440-11",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_11.bundle:Still_440_011",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "134ce95bb30977329fc5f371da97d8578a2c5f7d2afa3504491a28873d4ad814"
+    },
+    {
+      "code": "@BG158",
+      "category": "插图",
+      "path": "backgrounds/BG158.webp",
+      "name": "插图 440-12",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_12.bundle:Still_440_012",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "ef24c4e5245b534587febdbd5f84f96d33280741f577ee8a4952e0892ad2daec"
+    },
+    {
+      "code": "@BG159",
+      "category": "插图",
+      "path": "backgrounds/BG159.webp",
+      "name": "插图 450-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/450_1.bundle:Still_450_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "eddd35a50ced26105e1b4c4e7065098ea812e5990bb41f4afea21c89008e633c"
+    },
+    {
+      "code": "@BG160",
+      "category": "插图",
+      "path": "backgrounds/BG160.webp",
+      "name": "插图 450-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/450_2.bundle:Still_450_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "bb5f24d747392007266f452dd1779d916b479b77d513ae7a971d004ca2853e77"
+    },
+    {
+      "code": "@BG161",
+      "category": "插图",
+      "path": "backgrounds/BG161.webp",
+      "name": "插图 450-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/450_3.bundle:Still_450_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "7958881b2aac3db6e6478aeff4e86e9c00ff05d58d5f5489627c26116a682993"
+    },
+    {
+      "code": "@BG162",
+      "category": "插图",
+      "path": "backgrounds/BG162.webp",
+      "name": "插图 450-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/450_4.bundle:Still_450_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "3baedd7da89439043374be874446c0d6b5c40723e00b0c4d3c1930ce33133dc3"
+    },
+    {
+      "code": "@BG163",
+      "category": "插图",
+      "path": "backgrounds/BG163.webp",
+      "name": "插图 450-5",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/450_5.bundle:Still_450_005",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "75144495475208bc8f9e7f4aa34716de4bc92793a28a6c8b2c76de6803954e68"
+    },
+    {
+      "code": "@BG164",
+      "category": "插图",
+      "path": "backgrounds/BG164.webp",
+      "name": "插图 451-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/451_1.bundle:Still_451_001",
+      "original_size": [
+        4096,
+        1816
+      ],
+      "sha256": "d8daa9fcaf139112b38fed5c373eb5fdcbdc4e0dfacc8c9c5fb55eda2c79466e"
+    },
+    {
+      "code": "@BG165",
+      "category": "插图",
+      "path": "backgrounds/BG165.webp",
+      "name": "插图 451-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/451_2.bundle:Still_451_002",
+      "original_size": [
+        4096,
+        1816
+      ],
+      "sha256": "7c2b7e0ad7f7671ff4ef10c09125ddebded2c552997665eaee0ac08a942a0cf8"
+    },
+    {
+      "code": "@BG166",
+      "category": "插图",
+      "path": "backgrounds/BG166.webp",
+      "name": "插图 451-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/451_3.bundle:Still_451_003",
+      "original_size": [
+        4096,
+        1816
+      ],
+      "sha256": "e6d3f8888984ef22e6ffaf0becb11f152baeb0b8d2696bec62e133f9c1d07fa8"
+    },
+    {
+      "code": "@BG167",
+      "category": "插图",
+      "path": "backgrounds/BG167.webp",
+      "name": "插图 451-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/451_4.bundle:Still_451_004",
+      "original_size": [
+        4096,
+        1816
+      ],
+      "sha256": "759ecfae3261133eb94ba7f9f3fb9bc0871e7c9e2b21d92086fa1d599926b99e"
+    },
+    {
+      "code": "@BG168",
+      "category": "插图",
+      "path": "backgrounds/BG168.webp",
+      "name": "插图 451-5",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/451_5.bundle:Still_451_005",
+      "original_size": [
+        4096,
+        1816
+      ],
+      "sha256": "d47e7ecf0acbad94d80c0667452a70226b875b8e67a48f785d7d598737e74d34"
+    },
+    {
+      "code": "@BG169",
+      "category": "插图",
+      "path": "backgrounds/BG169.webp",
+      "name": "插图 451-6",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/451_6.bundle:Still_451_006",
+      "original_size": [
+        4096,
+        1816
+      ],
+      "sha256": "c0a47b070e92353fd124a586611274adb440808f17040e451c88909d8d75852f"
+    },
+    {
+      "code": "@BG170",
+      "category": "插图",
+      "path": "backgrounds/BG170.webp",
+      "name": "插图 451-7",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/451_7.bundle:Still_451_007",
+      "original_size": [
+        4096,
+        1816
+      ],
+      "sha256": "3f85ca37213dad79eeae57a7a54e2f9e0dfd12e354a1553b4f88910fa3da5ae5"
+    },
+    {
+      "code": "@BG171",
+      "category": "插图",
+      "path": "backgrounds/BG171.webp",
+      "name": "插图 460-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/460_1.bundle:Still_460_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "d435f684bbd33c77671a4008dbdd36696a4d76b6161e10cde7ac8b04e3af20bb"
+    },
+    {
+      "code": "@BG172",
+      "category": "插图",
+      "path": "backgrounds/BG172.webp",
+      "name": "插图 460-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/460_2.bundle:Still_460_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "9cb2920f3a50f77687a6d9b20072e78a326987f8f14c0b639ccd43add7b1fb72"
+    },
+    {
+      "code": "@BG173",
+      "category": "插图",
+      "path": "backgrounds/BG173.webp",
+      "name": "插图 460-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/460_3.bundle:Still_460_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "9376a975b223ee05c4a31c5162128872f3e052a98840411a26d715e042c6f03f"
+    },
+    {
+      "code": "@BG174",
+      "category": "插图",
+      "path": "backgrounds/BG174.webp",
+      "name": "插图 460-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/460_4.bundle:Still_460_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "d8ed6d7e382f067dd717ee84e04739a81b9f2299230ef463d3b4b94bf9326d35"
+    },
+    {
+      "code": "@BG175",
+      "category": "插图",
+      "path": "backgrounds/BG175.webp",
+      "name": "插图 460-5",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/460_5.bundle:Still_460_005",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "ef73bcfce445fe8b0edf8d027ffaea8c30f31c91ebc63fda3bde32a6b5b0ccce"
+    },
+    {
+      "code": "@BG176",
+      "category": "插图",
+      "path": "backgrounds/BG176.webp",
+      "name": "插图 460-6",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/460_6.bundle:Still_460_006",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "5abe6830b795545ad6d132e8aaed271832cbcf8ad9055923acaa24fc385a442d"
+    },
+    {
+      "code": "@BG177",
+      "category": "插图",
+      "path": "backgrounds/BG177.webp",
+      "name": "插图 460-7",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/460_7.bundle:Still_460_007",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "33ddc18f9803dd2e7fd4ecb142a8ede969026fde7d853bf23fc9e03aa7bf0975"
+    },
+    {
+      "code": "@BG178",
+      "category": "插图",
+      "path": "backgrounds/BG178.webp",
+      "name": "插图 460-8",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/460_8.bundle:Still_460_008",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "9de46866f5bb73fc4e1757b41d87639ac1274b7c49ee048cade8f1f6bb2e20bc"
+    },
+    {
+      "code": "@BG179",
+      "category": "插图",
+      "path": "backgrounds/BG179.webp",
+      "name": "插图 460-9",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/460_9.bundle:Still_460_009",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "15b186b599d6b51300b438ae37782a7d8473083d5feca1cab122f87dafa0f97c"
+    },
+    {
+      "code": "@BG180",
+      "category": "插图",
+      "path": "backgrounds/BG180.webp",
+      "name": "插图 460-10",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/460_10.bundle:Still_460_010",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "1c608013249851b681c5bc5f7270830223a8eda7b59e6b0ecbfc7b9fb3a32af0"
+    },
+    {
+      "code": "@BG181",
+      "category": "插图",
+      "path": "backgrounds/BG181.webp",
+      "name": "插图 460-11",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/460_11.bundle:Still_460_011",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "ea3705de51ccf4b9c039c64ca8cdb2b677046f3719da303e0c4741514f780d09"
+    },
+    {
+      "code": "@BG182",
+      "category": "插图",
+      "path": "backgrounds/BG182.webp",
+      "name": "插图 470-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/470_1.bundle:Still_470_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "90667331abadc323f5d32d89e37d9e3eecc8d87c6efcbc3c6ca37d0624183814"
+    },
+    {
+      "code": "@BG183",
+      "category": "插图",
+      "path": "backgrounds/BG183.webp",
+      "name": "插图 470-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/470_2.bundle:Still_470_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "b16307629ce9e72ab85562c8ae82426b8ecbb28343fdaac9b93957467465db86"
+    },
+    {
+      "code": "@BG184",
+      "category": "插图",
+      "path": "backgrounds/BG184.webp",
+      "name": "插图 470-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/470_3.bundle:Still_470_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "e0845b3d63894d22cd5857f15161b5ea8abdafa0fad4da3feed90e911f7861bd"
+    },
+    {
+      "code": "@BG185",
+      "category": "插图",
+      "path": "backgrounds/BG185.webp",
+      "name": "插图 470-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/470_4.bundle:Still_470_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "768019a9d17318fbb89ced2d4d9073df04a0c8f416c6871993bac6c8ced322dc"
+    },
+    {
+      "code": "@BG186",
+      "category": "插图",
+      "path": "backgrounds/BG186.webp",
+      "name": "插图 470-5",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/470_5.bundle:Still_470_005",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "b20f971cfb42015e9dc5819f761fd2a7a360b9d649bd751b3b5b186e4832d95d"
+    },
+    {
+      "code": "@BG187",
+      "category": "插图",
+      "path": "backgrounds/BG187.webp",
+      "name": "插图 470-6",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/470_6.bundle:Still_470_006",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "3f40eac3ebefbcff91a98f6b7f1f8986dba95bbe51f185a30e6c7726d1485a4e"
+    },
+    {
+      "code": "@BG188",
+      "category": "插图",
+      "path": "backgrounds/BG188.webp",
+      "name": "插图 470-7",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/470_7.bundle:Still_470_007",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "e49b54651283bebedc52246ee45df74c8066a2a92f14981460d95f5a44917e4d"
+    },
+    {
+      "code": "@BG189",
+      "category": "插图",
+      "path": "backgrounds/BG189.webp",
+      "name": "插图 470-8",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/470_8.bundle:Still_470_008",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "8fc903d9cc0e1a6324013eb3c5f0edf0f2c358ed8dc2a6495911bf6ad4969f76"
+    },
+    {
+      "code": "@BG190",
+      "category": "插图",
+      "path": "backgrounds/BG190.webp",
+      "name": "插图 470-9",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/470_9.bundle:Still_470_009",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "b05ff7863f31b9e26deaca991d8bb62108b160fd4c0524ce2ab4928268066248"
+    },
+    {
+      "code": "@BG191",
+      "category": "插图",
+      "path": "backgrounds/BG191.webp",
+      "name": "插图 470-10",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/470_10.bundle:Still_470_010",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "993afca7b4ae5857678ac4ab1d25af130e68bf5fb4d82a3f2097f4264e0d87be"
+    },
+    {
+      "code": "@BG192",
+      "category": "插图",
+      "path": "backgrounds/BG192.webp",
+      "name": "插图 480-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/480_1.bundle:Still_480_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "ef129320a4780bcb944ab4c420aa2587782017bf78e1571794f15205f8261663"
+    },
+    {
+      "code": "@BG193",
+      "category": "插图",
+      "path": "backgrounds/BG193.webp",
+      "name": "插图 480-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/480_2.bundle:Still_480_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "06bcd317fc6d5da6d2dfa40bbc8db5bb88dddc55e4164c850b2085432f404eb0"
+    },
+    {
+      "code": "@BG194",
+      "category": "插图",
+      "path": "backgrounds/BG194.webp",
+      "name": "插图 480-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/480_3.bundle:Still_480_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "f4f5b364dceee2cf8559e877231ae33cf8c225e6272d22c074ccd4e015c8b138"
+    },
+    {
+      "code": "@BG195",
+      "category": "插图",
+      "path": "backgrounds/BG195.webp",
+      "name": "插图 480-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/480_4.bundle:Still_480_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "d235c16924e5850f980499ea56f9d567f9a7d334d698edebb6969a2ae6555f43"
+    },
+    {
+      "code": "@BG196",
+      "category": "插图",
+      "path": "backgrounds/BG196.webp",
+      "name": "插图 480-5",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/480_5.bundle:Still_480_005",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "46964748f6f742b4a28d87cb8316bb9949afc166d36ddc002a9cdb08259e1407"
+    },
+    {
+      "code": "@BG197",
+      "category": "插图",
+      "path": "backgrounds/BG197.webp",
+      "name": "插图 490-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/490_1.bundle:Still_490_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "cee158c2338d2f0b43232a86ba5a4206a8686de64e208d8c771fbdb223bbf129"
+    },
+    {
+      "code": "@BG198",
+      "category": "插图",
+      "path": "backgrounds/BG198.webp",
+      "name": "插图 500-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/500_1.bundle:Still_500_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a134659c16d14e9bbea041a5e9996350b0a6ee114b29a117fb253e70f93f76f6"
+    },
+    {
+      "code": "@BG199",
+      "category": "插图",
+      "path": "backgrounds/BG199.webp",
+      "name": "插图 510-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/510_1.bundle:Still_510_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "52cc54ad1463bb3b6fa1604f0ff7591d51d1170b36191573955abb05729d8e97"
+    },
+    {
+      "code": "@BG200",
+      "category": "插图",
+      "path": "backgrounds/BG200.webp",
+      "name": "插图 520-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/520_1.bundle:Still_520_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "33dbd22d618fa9af39dd25321d0ed4c2c28ca984580c4fee4a7b2eb0461e954e"
+    },
+    {
+      "code": "@BG201",
+      "category": "插图",
+      "path": "backgrounds/BG201.webp",
+      "name": "插图 530-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/530_1.bundle:Still_530_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "4113a8ed0a99bcd90ad578abdff53cc2e28b1a8fab06c594a06013f48f72698d"
+    },
+    {
+      "code": "@BG202",
+      "category": "插图",
+      "path": "backgrounds/BG202.webp",
+      "name": "插图 540-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/540_1.bundle:Still_540_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "0e63bf99a66af851af48c5fc4158e41f1e8fcb6517e4bfa6a3d650e03bf9b7ff"
+    },
+    {
+      "code": "@BG203",
+      "category": "插图",
+      "path": "backgrounds/BG203.webp",
+      "name": "插图 550-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/550_1.bundle:Still_550_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a187d5d4fd547cfbd74a33f47d1129bea33c527ac948206f6339319abbac02ac"
+    },
+    {
+      "code": "@BG204",
+      "category": "插图",
+      "path": "backgrounds/BG204.webp",
+      "name": "插图 550-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/550_2.bundle:Still_550_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "559e38e202ca7d9f7f2c60d0a2b96bfd2ae6d4ae10ec66934dd59107d72922af"
+    },
+    {
+      "code": "@BG205",
+      "category": "插图",
+      "path": "backgrounds/BG205.webp",
+      "name": "插图 560-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/560_1.bundle:Still_560_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "7fbd637fa0b53775f8a752a03943526a00c17591eedf30ea9725f2b55789a212"
+    },
+    {
+      "code": "@BG206",
+      "category": "插图",
+      "path": "backgrounds/BG206.webp",
+      "name": "插图 570-0",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_0.bundle:Still_570_000",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a4bb7157dc470f19882affe2e4839595635f9a92fc75949b06841b2f9bf71c87"
+    },
+    {
+      "code": "@BG207",
+      "category": "插图",
+      "path": "backgrounds/BG207.webp",
+      "name": "插图 570-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_1.bundle:Still_570_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "82412c59c1684fc111a519d4cddd059cb8afe21354854f9e455bed5af32c7489"
+    },
+    {
+      "code": "@BG208",
+      "category": "插图",
+      "path": "backgrounds/BG208.webp",
+      "name": "插图 570-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_2.bundle:Still_570_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "ecc36d16daa5e43e307786339a8305f52497c0a33355f02557d0d7011b6b234e"
+    },
+    {
+      "code": "@BG209",
+      "category": "插图",
+      "path": "backgrounds/BG209.webp",
+      "name": "插图 570-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_3.bundle:Still_570_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "721399501cbbcd8704fe2bf7bd8a4d679ebd8897e81ac9fccdf9948f846287be"
+    },
+    {
+      "code": "@BG210",
+      "category": "插图",
+      "path": "backgrounds/BG210.webp",
+      "name": "插图 570-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_4.bundle:Still_570_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "bcdc2b132bf46cabae7ec7d0319dc196f59d891aaae6e1b89cd644a1746b0521"
+    },
+    {
+      "code": "@BG211",
+      "category": "插图",
+      "path": "backgrounds/BG211.webp",
+      "name": "插图 570-5",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_5.bundle:Still_570_005",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "057e2ee249c8d43690893a2be4c9e069081c233416266f8b1a6574334c9fded7"
+    },
+    {
+      "code": "@BG212",
+      "category": "插图",
+      "path": "backgrounds/BG212.webp",
+      "name": "插图 570-6",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_6.bundle:Still_570_006",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "68003015b73b92acbbe09dcafdd749523068a47e4105fc0f5fc49597037e6f61"
+    },
+    {
+      "code": "@BG213",
+      "category": "插图",
+      "path": "backgrounds/BG213.webp",
+      "name": "插图 570-7",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_7.bundle:Still_570_007",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "fdbe0718221a38e02d500de43c43d5d45aff52290a65c372cbac0c55a7eb8332"
+    },
+    {
+      "code": "@BG214",
+      "category": "插图",
+      "path": "backgrounds/BG214.webp",
+      "name": "插图 570-8",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_8.bundle:Still_570_008",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a8d7994d2e27ae95baf022d2f86f11fa5d399ee1f863139b7c9bd8b023a8ebaf"
+    },
+    {
+      "code": "@BG215",
+      "category": "插图",
+      "path": "backgrounds/BG215.webp",
+      "name": "插图 570-9",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_9.bundle:Still_570_009",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "bae3e853faba22ff42959d02f654651ac45df1d7e1a58fa52e2b9944f5bb6ad3"
+    },
+    {
+      "code": "@BG216",
+      "category": "插图",
+      "path": "backgrounds/BG216.webp",
+      "name": "插图 570-10",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_10.bundle:Still_570_010",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "24d50086b1691b96652530e1fe3f5237229d6d9bf14ce1b92e78dc99f109a97c"
+    },
+    {
+      "code": "@BG217",
+      "category": "插图",
+      "path": "backgrounds/BG217.webp",
+      "name": "插图 570-11",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_11.bundle:Still_570_011",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "5af60fdff16a6c8d87d8c5d28aa4255548ea0181ec7055de70d55dc764e3ce6b"
+    },
+    {
+      "code": "@BG218",
+      "category": "插图",
+      "path": "backgrounds/BG218.webp",
+      "name": "插图 570-12",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_12.bundle:Still_570_012",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "13c75c758438455a6c1abd596fccd4e6e27dcaa9d49b77d0d37ee8c8e6d8d5c7"
+    },
+    {
+      "code": "@BG219",
+      "category": "插图",
+      "path": "backgrounds/BG219.webp",
+      "name": "插图 570-13",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_13.bundle:Still_570_013",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "8b83fdc80e2d71c5551e90ef7281b9b1770d3ea9ca0f00a51afb2d7f41cc4b55"
+    },
+    {
+      "code": "@BG220",
+      "category": "插图",
+      "path": "backgrounds/BG220.webp",
+      "name": "插图 570-14",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_14.bundle:Still_570_014",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "99013109278dc87237bb205626e7cfc1b6dfa4b115e20fed20f8269b60116567"
+    },
+    {
+      "code": "@BG221",
+      "category": "插图",
+      "path": "backgrounds/BG221.webp",
+      "name": "插图 570-15",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_15.bundle:Still_570_015",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "fca10b348d4e6263b815eee8ed5a2c98f49c1b0f8c98a6a19a8c77679b82c14e"
+    },
+    {
+      "code": "@BG222",
+      "category": "插图",
+      "path": "backgrounds/BG222.webp",
+      "name": "插图 580-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/580_1.bundle:Still_580_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "833722c23d479b3722270507fb46021c904435e3a865e4326f6b8dec9ba9dd56"
+    },
+    {
+      "code": "@BG223",
+      "category": "插图",
+      "path": "backgrounds/BG223.webp",
+      "name": "插图 580-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/580_2.bundle:Still_580_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "4822dad5b8d798ee7488332c06bbcb36195cbf9e924dd54262a5769784a8f8eb"
+    },
+    {
+      "code": "@BG224",
+      "category": "插图",
+      "path": "backgrounds/BG224.webp",
+      "name": "插图 580-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/580_3.bundle:Still_580_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "24db8dbc6d58c08d94e9cf1a2aaf9dd7a32b48ee881436b1cc48beb698d4f4a8"
+    },
+    {
+      "code": "@BG225",
+      "category": "插图",
+      "path": "backgrounds/BG225.webp",
+      "name": "插图 590-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/590_1.bundle:Still_590_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "303cfb861912df02eb136e2db8dd0ce021cb97780b839fdbf4ff08ae081cee4c"
+    },
+    {
+      "code": "@BG226",
+      "category": "插图",
+      "path": "backgrounds/BG226.webp",
+      "name": "插图 590-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/590_2.bundle:Still_590_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "b71ea669363b7ead757e9b96b2c7c77c5d8a1dc96d338575650254057aef9470"
+    },
+    {
+      "code": "@BG227",
+      "category": "插图",
+      "path": "backgrounds/BG227.webp",
+      "name": "插图 590-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/590_3.bundle:Still_590_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "e13d3f7f5702a91606ee87f7e1696c6dcdf2d3ba547f743ec207ad81e615581e"
+    },
+    {
+      "code": "@BG228",
+      "category": "插图",
+      "path": "backgrounds/BG228.webp",
+      "name": "插图 590-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/590_4.bundle:Still_590_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "e239d6fe2d1e12530232573e86b5d84b068a99316037af460284473573becd6c"
+    },
+    {
+      "code": "@BG229",
+      "category": "插图",
+      "path": "backgrounds/BG229.webp",
+      "name": "插图 690-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/690_1.bundle:Still_690_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "be3fb50373380300e47ab403c91cf73de2a4f5f79f2db807ac4c3378cfc3cd5b"
+    },
+    {
+      "code": "@BG230",
+      "category": "插图",
+      "path": "backgrounds/BG230.webp",
+      "name": "插图 700-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/700_1.bundle:Still_700_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "71d1077d6b4adc52f8bfa54e2135a4729aa25eea8b4d5401c63fbadfaa76525b"
+    },
+    {
+      "code": "@BG231",
+      "category": "插图",
+      "path": "backgrounds/BG231.webp",
+      "name": "插图 700-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/700_2.bundle:Still_700_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a3388d93064890b8eab02f2e1048ac47ce690bb88e91e2cdbcbfcd19211076f6"
+    },
+    {
+      "code": "@BG232",
+      "category": "插图",
+      "path": "backgrounds/BG232.webp",
+      "name": "插图 700-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/700_3.bundle:Still_700_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "52d6aa220a7dc4e5292d49d69119bf27072a64d2f5819bb51e3dd160bf02b240"
+    },
+    {
+      "code": "@BG233",
+      "category": "插图",
+      "path": "backgrounds/BG233.webp",
+      "name": "插图 700-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/700_4.bundle:Still_700_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "23bdae66ca0abbd715766066d66e5c1ec470ec9bc418eba31115c7cd235c9fa7"
+    },
+    {
+      "code": "@BG234",
+      "category": "插图",
+      "path": "backgrounds/BG234.webp",
+      "name": "插图 700-6",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/700_6.bundle:Still_700_006",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "378458dfa03283e4e7c15840b8fe4ede1773c7064b3d4c67d89cfc3404ba9adf"
+    },
+    {
+      "code": "@BG235",
+      "category": "特效",
+      "path": "backgrounds/BG235.webp",
+      "name": "特效 1-7-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/tricks/1_7_1.bundle:Trick_001_007_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "0e69dbbab030c6749e0f23206f4357b521f5d99ba13fbc70b9029746feb25c51"
+    },
+    {
+      "code": "@BG236",
+      "category": "特效",
+      "path": "backgrounds/BG236.webp",
+      "name": "特效 1-7-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/tricks/1_7_2.bundle:Trick_001_007_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "ebd4738c70cbc8e5ef5c4e53cbc11b5028002ce8b7409ad9d48d945d83832f53"
+    },
+    {
+      "code": "@BG237",
+      "category": "特效",
+      "path": "backgrounds/BG237.webp",
+      "name": "特效 1-13-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/tricks/1_13_1.bundle:Trick_001_013_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "63bd23128a0de45e80757116cfdb8f4f45dc66f4f35ad5a6b5641c4b46ed3bbe"
+    },
+    {
+      "code": "@BG238",
+      "category": "特效",
+      "path": "backgrounds/BG238.webp",
+      "name": "特效 1-13-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/tricks/1_13_2.bundle:Trick_001_013_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "78aafcec130051963b955434b94d3d5a7ce7bf051b6447901e3a68338b4ed12c"
+    },
+    {
+      "code": "@BG239",
+      "category": "特效",
+      "path": "backgrounds/BG239.webp",
+      "name": "特效 1-13-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/tricks/1_13_3.bundle:Trick_001_013_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "af028531f5a32451f49f9be26b7acbe1563942492803b4084b89ca1e64d97145"
+    },
+    {
+      "code": "@BG240",
+      "category": "特效",
+      "path": "backgrounds/BG240.webp",
+      "name": "特效 1-13-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/tricks/1_13_4.bundle:Trick_001_013_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a523f2c6dbfdb757e55d46dcf15bc54eb87956d82a3616eb6fcf25cff21a6d1e"
+    },
+    {
+      "code": "@BG241",
+      "category": "特效",
+      "path": "backgrounds/BG241.webp",
+      "name": "特效 5-3-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/tricks/5_3_1.bundle:Trick_005_003_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "ae4b4fb481f0169f5aafd4805ef9cb39fe5788bfd10faede1818835130337b95"
+    },
+    {
+      "code": "@BG242",
+      "category": "特效",
+      "path": "backgrounds/BG242.webp",
+      "name": "特效 5-3-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/tricks/5_3_2.bundle:Trick_005_003_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "9064cc415b40ce8a33e27d721d9b633cb5a342cf58644ee2b1a9bc33f6da1c6b"
+    },
+    {
+      "code": "@BG243",
+      "category": "特效",
+      "path": "backgrounds/BG243.webp",
+      "name": "特效 5-3-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/tricks/5_3_3.bundle:Trick_005_003_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "4cdf3eeae7d7b5fa0e2ce84eae803a62011cec2f0d6b3addbecc4e598f2899c8"
+    },
+    {
+      "code": "@BG244",
+      "category": "特效",
+      "path": "backgrounds/BG244.webp",
+      "name": "特效 6-9-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/tricks/6_9_1.bundle:Trick_006_009_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "189e6560bedd697491b1e6521da19c77a2ed7ffb421ad2c9115b8cfaff440019"
+    },
+    {
+      "code": "@BG245",
+      "category": "特效",
+      "path": "backgrounds/BG245.webp",
+      "name": "特效 6-9-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/tricks/6_9_2.bundle:Trick_006_009_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "19292749cc2544f62c51ea0ed3e49f77ac8d05a60b098fe6401f7c318b01153a"
+    },
+    {
+      "code": "@BG246",
+      "category": "特效",
+      "path": "backgrounds/BG246.webp",
+      "name": "特效 6-9-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/tricks/6_9_3.bundle:Trick_006_009_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "88b678c9f4615202674181db7963ab2f207271e720ce438e70c556e109e202b0"
+    },
+    {
+      "code": "@BG247",
+      "category": "特效",
+      "path": "backgrounds/BG247.webp",
+      "name": "特效 6-9-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/tricks/6_9_4.bundle:Trick_006_009_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "b3fe4ac4d1860c54cdd04dbda6a3ad21b7056283734377c1d8958ff24bfad5d4"
+    },
+    {
+      "code": "@BG248",
+      "category": "特效",
+      "path": "backgrounds/BG248.webp",
+      "name": "特效 6-9-5",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/tricks/6_9_5.bundle:Trick_006_009_005",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "56835ad3a1b9a1e5ca086b8014cd10a1137a4c4fc083b0a60efc58dec5a55acb"
+    },
+    {
+      "code": "@BG249",
+      "category": "特效",
+      "path": "backgrounds/BG249.webp",
+      "name": "特效 6-9-6",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/tricks/6_9_6.bundle:Trick_006_009_006",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "145daa32263037e8d6b3c6c00b5110da66a3d7f43001d36781a42e4103e7c6a6"
+    },
+    {
+      "code": "@BG250",
+      "category": "特效",
+      "path": "backgrounds/BG250.webp",
+      "name": "特效 9-6-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/tricks/9_6_1.bundle:Trick_009_006_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "ec470cb4b0b13b3d09d875b6ca4b1632e476866bd4a93314e98bbb666b7e5d62"
+    },
+    {
+      "code": "@BG251",
+      "category": "特效",
+      "path": "backgrounds/BG251.webp",
+      "name": "特效 9-6-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/tricks/9_6_2.bundle:Trick_009_006_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "06288fbf36d9a19466aa913ec55c531c8091705470eaa112ecfe46a99f5c1fa1"
+    },
+    {
+      "code": "@BG252",
+      "category": "特效",
+      "path": "backgrounds/BG252.webp",
+      "name": "特效 9-6-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/tricks/9_6_3.bundle:Trick_009_006_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "c86618270fc76010158d0cd9daf96e6edd0cb46c35108f8a37e8e4dbbd8879a6"
+    },
+    {
+      "code": "@BG253",
+      "category": "特效",
+      "path": "backgrounds/BG253.webp",
+      "name": "特效 9-6-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/tricks/9_6_4.bundle:Trick_009_006_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "45c7279340070d5da94e2731a74372cef33170277048b7cf58a442717f702f40"
+    }
+  ]
+}

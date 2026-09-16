@@ -1,0 +1,436 @@
+{
+  "Ema": {
+    "template": "<color=%COLOR%><size=136>樱</size></color><space=4><voffset=-2><size=73>羽</size></voffset><space=4><size=118>艾</size><space=4><voffset=-2><size=75>玛</size></voffset>",
+    "color": [
+      255,
+      146,
+      180,
+      255
+    ],
+    "pivot": [
+      0.5,
+      0.6949999928474426
+    ],
+    "scale": 1.0
+  },
+  "Hiro": {
+    "template": "<color=%COLOR%><size=136>二</size></color><space=4><voffset=-2><size=73>阶堂</size></voffset><space=4><size=118>希</size><space=4><voffset=-2><size=75>罗</size></voffset>",
+    "color": [
+      242,
+      80,
+      84,
+      255
+    ],
+    "pivot": [
+      0.5799999833106995,
+      0.6949999928474426
+    ],
+    "scale": 1.0
+  },
+  "Meruru": {
+    "template": "<color=%COLOR%><size=136>冰</size></color><space=4><voffset=-2><size=73>上</size></voffset><space=4><size=118>梅</size><space=4><voffset=-2><size=75>露露</size></voffset>",
+    "color": [
+      230,
+      188,
+      180,
+      255
+    ],
+    "pivot": [
+      0.5009999871253967,
+      0.6759999990463257
+    ],
+    "scale": 1.0
+  },
+  "Hanna": {
+    "template": "<color=%COLOR%><size=136>远</size></color><space=4><voffset=-2><size=73>野</size></voffset><space=4><size=118>汉</size><space=4><voffset=-2><size=75>娜</size></voffset>",
+    "color": [
+      170,
+      202,
+      31,
+      255
+    ],
+    "pivot": [
+      0.5,
+      0.6549999713897705
+    ],
+    "scale": 1.0
+  },
+  "Sherry": {
+    "template": "<color=%COLOR%><size=136>橘</size></color><space=4><size=118>雪</size><space=4><voffset=-2><size=75>莉</size></voffset>",
+    "color": [
+      138,
+      180,
+      255,
+      255
+    ],
+    "pivot": [
+      0.5,
+      0.6549999713897705
+    ],
+    "scale": 1.0
+  },
+  "AnAn": {
+    "template": "<color=%COLOR%><size=136>夏</size></color><space=4><voffset=-2><size=73>目</size></voffset><space=4><size=118>安</size><space=4><voffset=-2><size=75>安</size></voffset>",
+    "color": [
+      161,
+      147,
+      252,
+      255
+    ],
+    "pivot": [
+      0.5,
+      0.6899999976158142
+    ],
+    "scale": 1.0
+  },
+  "Leia": {
+    "template": "<color=%COLOR%><size=136>莲</size></color><space=4><voffset=-2><size=73>见</size></voffset><space=4><size=118>蕾</size><space=4><voffset=-2><size=75>雅</size></voffset>",
+    "color": [
+      255,
+      180,
+      88,
+      255
+    ],
+    "pivot": [
+      0.5,
+      0.75
+    ],
+    "scale": 1.0
+  },
+  "Coco": {
+    "template": "<color=%COLOR%><size=136>泽</size></color><space=4><voffset=-2><size=73>渡</size></voffset><space=4><size=118>可</size><space=4><voffset=-2><size=75>可</size></voffset>",
+    "color": [
+      253,
+      115,
+      80,
+      255
+    ],
+    "pivot": [
+      0.5,
+      0.6949999928474426
+    ],
+    "scale": 1.0
+  },
+  "Miria": {
+    "template": "<color=%COLOR%><size=136>佐</size></color><space=4><voffset=-2><size=73>伯</size></voffset><space=4><size=118>米</size><space=4><voffset=-2><size=75>莉亚</size></voffset>",
+    "color": [
+      236,
+      210,
+      143,
+      255
+    ],
+    "pivot": [
+      0.5,
+      0.6850000023841858
+    ],
+    "scale": 1.0
+  },
+  "Margo": {
+    "template": "<color=%COLOR%><size=136>宝</size></color><space=4><voffset=-2><size=73>生</size></voffset><space=4><size=118>玛</size><space=4><voffset=-2><size=75>格</size></voffset>",
+    "color": [
+      188,
+      125,
+      239,
+      255
+    ],
+    "pivot": [
+      0.5,
+      0.6850000023841858
+    ],
+    "scale": 1.0
+  },
+  "Noah": {
+    "template": "<color=%COLOR%><size=136>城</size></color><space=4><voffset=-2><size=73>崎</size></voffset><space=4><size=118>诺</size><space=4><voffset=-2><size=75>亚</size></voffset>",
+    "color": [
+      104,
+      227,
+      235,
+      255
+    ],
+    "pivot": [
+      0.5,
+      0.699999988079071
+    ],
+    "scale": 1.0
+  },
+  "Nanoka": {
+    "template": "<color=%COLOR%><size=136>黑</size></color><space=4><voffset=-2><size=73>部</size></voffset><space=4><size=118>奈</size><space=4><voffset=-2><size=75>叶香</size></voffset>",
+    "color": [
+      133,
+      145,
+      154,
+      255
+    ],
+    "pivot": [
+      0.46000000834465027,
+      0.6549999713897705
+    ],
+    "scale": 1.0
+  },
+  "Yuki": {
+    "template": "<color=%COLOR%><size=136>月</size></color><space=4><voffset=-2><size=73>代</size></voffset><space=4><size=118>雪</size>",
+    "color": [
+      197,
+      212,
+      235,
+      255
+    ],
+    "pivot": [
+      0.48500001430511475,
+      0.675000011920929
+    ],
+    "scale": 0.6000000238418579
+  },
+  "Alisa": {
+    "template": "<color=%COLOR%><size=136>紫</size></color><space=4><voffset=-2><size=73>藤</size></voffset><space=4><size=118>亚</size><space=4><voffset=-2><size=75>里沙</size></voffset>",
+    "color": [
+      237,
+      76,
+      61,
+      255
+    ],
+    "pivot": [
+      0.5,
+      0.7049999833106995
+    ],
+    "scale": 1.0
+  },
+  "Warden": {
+    "template": "<color=%COLOR%><size=136>典</size></color><space=4><voffset=-2><size=73>狱长</size></voffset>",
+    "color": [
+      180,
+      177,
+      198,
+      255
+    ],
+    "pivot": [
+      0.48500001430511475,
+      0.5199999809265137
+    ],
+    "scale": 0.4000000059604645
+  },
+  "Jailer": {
+    "template": "<color=%COLOR%><size=136>看</size></color><space=4><voffset=-2><size=73>守</size></voffset>",
+    "color": [
+      180,
+      177,
+      198,
+      255
+    ],
+    "pivot": [
+      0.41999998688697815,
+      0.5899999737739563
+    ],
+    "scale": 0.6000000238418579
+  },
+  "CreatureEma": {
+    "template": "<color=%COLOR%><size=136>樱</size></color><space=4><voffset=-2><size=73>羽</size></voffset><space=4><size=118>艾</size><space=4><voffset=-2><size=75>玛</size></voffset>",
+    "color": [
+      255,
+      146,
+      180,
+      255
+    ],
+    "pivot": [
+      0.49799999594688416,
+      0.7390000224113464
+    ],
+    "scale": 0.6000000238418579
+  },
+  "CreatureHiro": {
+    "template": "<color=%COLOR%><size=136>二</size></color><space=4><voffset=-2><size=73>阶堂</size></voffset><space=4><size=118>希</size><space=4><voffset=-2><size=75>罗</size></voffset>",
+    "color": [
+      242,
+      80,
+      84,
+      255
+    ],
+    "pivot": [
+      0.492000013589859,
+      0.7400000095367432
+    ],
+    "scale": 0.6000000238418579
+  },
+  "CreatureMeruru": {
+    "template": "<color=%COLOR%><size=136>冰</size></color><space=4><voffset=-2><size=73>上</size></voffset><space=4><size=118>梅</size><space=4><voffset=-2><size=75>露露</size></voffset>",
+    "color": [
+      230,
+      188,
+      180,
+      255
+    ],
+    "pivot": [
+      0.48500001430511475,
+      0.7149999737739563
+    ],
+    "scale": 0.6000000238418579
+  },
+  "CreatureHanna": {
+    "template": "<color=%COLOR%><size=136>远</size></color><space=4><voffset=-2><size=73>野</size></voffset><space=4><size=118>汉</size><space=4><voffset=-2><size=75>娜</size></voffset>",
+    "color": [
+      170,
+      202,
+      31,
+      255
+    ],
+    "pivot": [
+      0.4959999918937683,
+      0.703000009059906
+    ],
+    "scale": 0.5400000214576721
+  },
+  "CreatureSherry": {
+    "template": "<color=%COLOR%><size=136>橘</size></color><space=4><size=118>雪</size><space=4><voffset=-2><size=75>莉</size></voffset>",
+    "color": [
+      138,
+      180,
+      255,
+      255
+    ],
+    "pivot": [
+      0.4749999940395355,
+      0.6940000057220459
+    ],
+    "scale": 0.6000000238418579
+  },
+  "CreatureAnAn": {
+    "template": "<color=%COLOR%><size=136>夏</size></color><space=4><voffset=-2><size=73>目</size></voffset><space=4><size=118>安</size><space=4><voffset=-2><size=75>安</size></voffset>",
+    "color": [
+      161,
+      147,
+      252,
+      255
+    ],
+    "pivot": [
+      0.4729999899864197,
+      0.6800000071525574
+    ],
+    "scale": 0.6000000238418579
+  },
+  "CreatureLeia": {
+    "template": "<color=%COLOR%><size=136>莲</size></color><space=4><voffset=-2><size=73>见</size></voffset><space=4><size=118>蕾</size><space=4><voffset=-2><size=75>雅</size></voffset>",
+    "color": [
+      255,
+      180,
+      88,
+      255
+    ],
+    "pivot": [
+      0.5059999823570251,
+      0.7419999837875366
+    ],
+    "scale": 0.75
+  },
+  "CreatureCoco": {
+    "template": "<color=%COLOR%><size=136>泽</size></color><space=4><voffset=-2><size=73>渡</size></voffset><space=4><size=118>可</size><space=4><voffset=-2><size=75>可</size></voffset>",
+    "color": [
+      253,
+      115,
+      80,
+      255
+    ],
+    "pivot": [
+      0.48399999737739563,
+      0.7360000014305115
+    ],
+    "scale": 0.6000000238418579
+  },
+  "CreatureMiria": {
+    "template": "<color=%COLOR%><size=136>佐</size></color><space=4><voffset=-2><size=73>伯</size></voffset><space=4><size=118>米</size><space=4><voffset=-2><size=75>莉亚</size></voffset>",
+    "color": [
+      236,
+      210,
+      143,
+      255
+    ],
+    "pivot": [
+      0.4950000047683716,
+      0.7070000171661377
+    ],
+    "scale": 0.6600000262260437
+  },
+  "CreatureMargo": {
+    "template": "<color=%COLOR%><size=136>宝</size></color><space=4><voffset=-2><size=73>生</size></voffset><space=4><size=118>玛</size><space=4><voffset=-2><size=75>格</size></voffset>",
+    "color": [
+      188,
+      125,
+      239,
+      255
+    ],
+    "pivot": [
+      0.5009999871253967,
+      0.7149999737739563
+    ],
+    "scale": 0.6430000066757202
+  },
+  "CreatureNoah": {
+    "template": "<color=%COLOR%><size=136>城</size></color><space=4><voffset=-2><size=73>崎</size></voffset><space=4><size=118>诺</size><space=4><voffset=-2><size=75>亚</size></voffset>",
+    "color": [
+      104,
+      227,
+      235,
+      255
+    ],
+    "pivot": [
+      0.5019999742507935,
+      0.7350000143051147
+    ],
+    "scale": 0.5879999995231628
+  },
+  "CreatureNanoka": {
+    "template": "<color=%COLOR%><size=136>黑</size></color><space=4><voffset=-2><size=73>部</size></voffset><space=4><size=118>奈</size><space=4><voffset=-2><size=75>叶香</size></voffset>",
+    "color": [
+      133,
+      145,
+      154,
+      255
+    ],
+    "pivot": [
+      0.4880000054836273,
+      0.6899999976158142
+    ],
+    "scale": 0.6000000238418579
+  },
+  "CreatureAlisa": {
+    "template": "<color=%COLOR%><size=136>紫</size></color><space=4><voffset=-2><size=73>藤</size></voffset><space=4><size=118>亚</size><space=4><voffset=-2><size=75>里沙</size></voffset>",
+    "color": [
+      237,
+      76,
+      61,
+      255
+    ],
+    "pivot": [
+      0.4950000047683716,
+      0.7459999918937683
+    ],
+    "scale": 0.6000000238418579
+  },
+  "Unknown": {
+    "template": "<cspace=-1><space=40><size=136>？</size><space=-40><voffset=-2><size=73>？？</size></voffset></cspace>",
+    "color": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "pivot": [
+      0.5,
+      0.0
+    ],
+    "scale": 1.0
+  },
+  "EmaFake": {
+    "template": "<size=136>樱</size></color><space=4><voffset=-2><size=73>羽</size></voffset><space=4><size=118>艾</size><space=4><voffset=-2><size=75>玛？</size></voffset>",
+    "color": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "pivot": [
+      0.5,
+      0.0
+    ],
+    "scale": 1.0
+  }
+}
