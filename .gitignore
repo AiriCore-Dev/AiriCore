@@ -29,6 +29,7 @@ data/LLM/active
 *.pem
 *.key
 *.txt
+!/requirements.txt
 *.psd
 *.zip
 
