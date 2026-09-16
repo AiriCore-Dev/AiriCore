@@ -2,7 +2,6 @@ import asyncio
 import math
 import re
 
-import nonebot_plugin_localstore as localstore
 from nonebot.internal.adapter import Bot, Event
 from nonebot_plugin_alconna import (
     Arparma,
@@ -13,7 +12,7 @@ from nonebot_plugin_alconna import (
 )
 
 from ..utils import CHARACTER_NAME_MAP, CHARACTER_NAMES
-from ..runtime import run_sync
+from ..runtime import run_image, run_sync, session_file
 from ..billing import production_charge
 from .assets import (
     prefab_asset_root,
@@ -103,7 +102,7 @@ def _initialize_runtime() -> None:
     asset_root = prefab_asset_root()
     _CATALOG = PresetCatalog(asset_root=asset_root)
     _SESSION_STORE = SessionStore(
-        localstore.get_plugin_data_file("sprite_sessions.json")
+        session_file("sprite_sessions.json")
     )
     _RENDERER = SpriteRenderer(
         _CATALOG,
@@ -296,7 +295,7 @@ async def _send_picker(
     first_number = page * PAGE_SIZE + 1
     last_number = first_number + len(shown) - 1
     labels = [f"{prefix}{index}" for index in range(first_number, last_number + 1)]
-    image = await run_sync(
+    image = await run_image(
         _renderer().render_picker,
         character,
         picker,
@@ -339,7 +338,7 @@ async def _send_sprite(bot: Bot, event: Event, code: str, *, paid: bool = False)
     stored = await _session_store().get_sprite(code)
     if stored is None:
         return
-    image = await run_sync(
+    image = await run_image(
         _renderer().render_recipe, stored.character, stored.recipe
     )
     caption = (

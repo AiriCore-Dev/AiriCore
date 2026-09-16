@@ -152,15 +152,15 @@ PJSK&Arcaea 贴纸制作 By lgc-NB2Dev
 * 发送 pjskbq 或者 arcbq 查看说明
 $ 10积分 / 次
 
+- Airi-Manosaba-Memes:
+魔裁表情包制作 By AiriCore dev., zhaomaoniu
+* 发送 manohelp 查看帮助
+$ 10积分 / 次
+
 - emojimix:
 emoji合成
 * 指令：任意emoji+任意emoji
-(需为系统自带的emoji而不是qq的emoji)
-
-- manosaba-memes:
-魔裁表情包制作 By zhaomaoniu
-* 发送 manohelp 查看帮助
-$ 10积分 / 次""",
+(需为系统自带的emoji而不是qq的emoji)""",
     ),
     make_node(
         "棋类插件",

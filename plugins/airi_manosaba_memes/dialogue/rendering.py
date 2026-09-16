@@ -228,7 +228,7 @@ def render_dialogue(request):
         for name, position in UI_LAYERS:
             canvas.alpha_composite(_image(ROOT / "ui" / (name + ".png")), position)
         auto_font = _font(37)
-        _draw_text(canvas, [((131 - auto_font.getlength("Auto") / 2, 1370), "Auto", auto_font, (255, 255, 255, 255))])
+        _draw_text(canvas, [((141 - auto_font.getlength("Auto") / 2, 1370), "Auto", auto_font, (255, 255, 255, 255))])
         if request.author is not None:
             _nameplate(canvas, request.author)
         font = _font(BODY_FONT_SIZE)

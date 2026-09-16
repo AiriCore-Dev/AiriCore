@@ -21,9 +21,9 @@ from nonebot_plugin_alconna import (
 
 from .drawer import draw_anan, draw_trial
 from .billing import production_charge
-from utils.cache import get_b64, register_asset_group
+from .asset_cache import get_source
 from utils.credit import ChargeRejected
-from .runtime import run_sync
+from .runtime import run_image
 from .models import Option
 from .sprite_editor.interaction import (
     FOLLOWUP_RE,
@@ -126,17 +126,14 @@ sprite_followup_handler = on_regex(
 
 manohelp_handler = on_command("manohelp", block=True)
 HELP_PATH = Path(__file__).parent / "assets" / "help.jpg"
-register_asset_group("魔裁帮助图片", HELP_PATH.parent, ("help.jpg",), lambda path: len(get_b64(path) or ""))
 
 
 @manohelp_handler.handle()
 async def handle_manohelp():
-    payload = get_b64(HELP_PATH)
-    if payload is None:
+    if not HELP_PATH.is_file():
         await manohelp_handler.finish("魔裁帮助图片缺失，请联系管理员")
-    from nonebot.adapters.onebot.v11 import MessageSegment
-
-    await manohelp_handler.finish(MessageSegment.image(payload))
+    payload = await run_image(get_source, HELP_PATH)
+    await UniMessage.image(raw=payload, mimetype="image/png").finish()
 
 
 @anan_says_handler.handle()
@@ -145,7 +142,7 @@ async def handle_anan_says(event: Event, result: Arparma):
     face = result["face"]
     text = user_result.replace("\\n", "\n")
     try:
-        image_bytes = await run_sync(draw_anan, text, face)
+        image_bytes = await run_image(draw_anan, text, face)
     except ValueError as error:
         await anan_says_handler.finish(str(error))
     try:
@@ -181,7 +178,7 @@ async def handle_trail(bot: Bot, event: Event):
         options.append(Option(statement_enum, text))
 
     try:
-        image_bytes = await run_sync(draw_trial, CHARACTER_MAP[event.get_user_id()], options)
+        image_bytes = await run_image(draw_trial, CHARACTER_MAP[event.get_user_id()], options)
     except (OverflowError, ValueError) as error:
         await trail_handler.finish(str(error))
     try:

@@ -8,7 +8,7 @@ from nonebot.params import CommandArg
 from nonebot_plugin_alconna import OriginalUniMsg, Reply, UniMessage, get_target
 
 from ..billing import production_charge
-from ..runtime import run_sync
+from ..runtime import run_image, session_file
 from utils.credit import ChargeRejected
 from .catalog import CATEGORIES, PAGE_SIZE, BackgroundCatalog, BackgroundEntry
 from .parser import parse_dialogue
@@ -48,10 +48,8 @@ def _catalog() -> BackgroundCatalog:
 def _session_store() -> BackgroundSessionStore:
     global _SESSION_STORE
     if _SESSION_STORE is None:
-        import nonebot_plugin_localstore as localstore
-
         _SESSION_STORE = BackgroundSessionStore(
-            localstore.get_plugin_data_file("background_sessions.json")
+            session_file("background_sessions.json")
         )
     return _SESSION_STORE
 
@@ -149,7 +147,7 @@ async def _send_picker(
             target=event, bot=bot
         )
         return
-    image = await run_sync(render_background_picker, shown, offset)
+    image = await run_image(render_background_picker, shown, offset)
     last = offset + len(shown)
     caption = (
         f"{category}背景 {bounded}/{total_pages}\n"
@@ -172,7 +170,7 @@ async def _send_picker(
 async def _send_background(bot: Bot, event: Event, entry: BackgroundEntry) -> None:
     from .rendering import render_background
 
-    image = await run_sync(render_background, entry)
+    image = await run_image(render_background, entry)
     await UniMessage.image(raw=image, mimetype="image/png").text(
         f"\n{entry.code} · {entry.name}"
     ).send(target=event, bot=bot)
@@ -195,7 +193,7 @@ async def handle_dialogue(
     try:
         request = parse_dialogue(text)
         _catalog().get(request.background)
-        image = await run_sync(render_dialogue, request)
+        image = await run_image(render_dialogue, request)
         async with production_charge(event.get_user_id()):
             await UniMessage.image(raw=image, mimetype="image/png").send(
                 target=event, bot=bot
