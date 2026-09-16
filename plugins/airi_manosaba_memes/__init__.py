@@ -1,13 +1,14 @@
 import re
-from collections import defaultdict
-from pathlib import Path
 
 from nonebot import on_command, on_regex, require
 from nonebot.internal.adapter import Bot, Event
+from nonebot.adapters import Message
+from nonebot.params import CommandArg
 from nonebot.plugin import PluginMetadata, inherit_supported_adapters
 
 require("nonebot_plugin_alconna")
 require("nonebot_plugin_localstore")
+require("nonebot_plugin_htmlrender")
 
 from nonebot_plugin_alconna import (
     Alconna,
@@ -21,10 +22,10 @@ from nonebot_plugin_alconna import (
 
 from .drawer import draw_anan, draw_trial
 from .billing import production_charge
-from .asset_cache import get_source
+from .help import render_help
 from utils.credit import ChargeRejected
-from .runtime import run_image
-from .models import Option
+from .runtime import logger, run_image
+from .trial import TRIAL_HELP, parse_trial
 from .sprite_editor.interaction import (
     FOLLOWUP_RE,
     SPRITE_HELP,
@@ -36,7 +37,7 @@ from .dialogue.interaction import (
     handle_background_followup,
     handle_dialogue,
 )
-from .utils import CHARACTER_NAMES, get_character, get_statement
+from .utils import CHARACTER_NAMES
 
 CHARACTER_NAMES_TEXT = ", ".join(CHARACTER_NAMES)
 
@@ -45,12 +46,11 @@ manohelp：查看图片帮助
 制作收费 10 积分；立绘与背景选择表、翻页和后续编辑免费
 安安说 [文本] [表情]
     表情可选：害羞, 生气, 病娇, 无语, 开心
-魔裁切换角色 [角色名]
+魔裁鸭梨 角色名
+【疑问/反驳/伪证/赞同/魔法:角色名】这是一个选项文本
+    角色名与选项写在同一条消息中，每行一个选项，支持 1～6 个选项
     角色名可选：{CHARACTER_NAMES_TEXT}
-发送格式如下的消息以生成审判表情包：
-【疑问/反驳/伪证/赞同/魔法:[角色名]】这是一个选项文本
-    角色名可选：{CHARACTER_NAMES_TEXT}
-    可发送多行以添加多个选项
+    发送 魔裁鸭梨 -h 查看完整帮助
 魔裁立绘 [角色名]
     从官方预设开始生成立绘，并通过回复消息精细调整
     发送 魔裁立绘 -h 查看完整帮助
@@ -69,9 +69,6 @@ __plugin_meta__ = PluginMetadata(
     supported_adapters=inherit_supported_adapters("nonebot_plugin_alconna"),
 )
 
-CHARACTER_MAP = defaultdict(lambda: get_character("艾玛"))
-
-
 anan_says_handler = on_alconna(
     Alconna(
         "安安说",
@@ -85,21 +82,7 @@ anan_says_handler = on_alconna(
     aliases={"anan说", "anansays"},
     use_cmd_start=True,
 )
-trail_handler = on_regex(
-    r"^【(疑问|反驳|伪证|赞同|魔法)(?:[:：]([^】]*))?】(.+)$", flags=re.MULTILINE
-)
-switch_character_handler = on_alconna(
-    Alconna(
-        "魔裁切换角色",
-        Args["character", str],
-        meta=CommandMeta(
-            description="切换审判选择中的角色",
-            usage=f"魔裁切换角色 [角色名]\n角色名可选：{CHARACTER_NAMES_TEXT}",
-            example="魔裁切换角色 希罗",
-        ),
-    ),
-    use_cmd_start=True,
-)
+trial_handler = on_command("魔裁鸭梨", block=True)
 sprite_handler = on_alconna(
     Alconna(
         "魔裁立绘",
@@ -125,14 +108,17 @@ sprite_followup_handler = on_regex(
 )
 
 manohelp_handler = on_command("manohelp", block=True)
-HELP_PATH = Path(__file__).parent / "assets" / "help.jpg"
 
 
 @manohelp_handler.handle()
 async def handle_manohelp():
-    if not HELP_PATH.is_file():
-        await manohelp_handler.finish("魔裁帮助图片缺失，请联系管理员")
-    payload = await run_image(get_source, HELP_PATH)
+    try:
+        payload = await render_help()
+    except ValueError as error:
+        await manohelp_handler.finish(str(error))
+    except Exception:
+        logger.exception("魔裁帮助图片渲染失败")
+        await manohelp_handler.finish("魔裁帮助图片渲染失败，请稍后再试或联系管理员")
     await UniMessage.image(raw=payload, mimetype="image/png").finish()
 
 
@@ -153,52 +139,22 @@ async def handle_anan_says(event: Event, result: Arparma):
     return
 
 
-@trail_handler.handle()
-async def handle_trail(bot: Bot, event: Event):
-    matches = re.findall(
-        r"^【(疑问|反驳|伪证|赞同|魔法)(?:[:：]([^】]*))?】(.+)$",
-        event.get_message().extract_plain_text(),
-        flags=re.MULTILINE,
-    )
-
-    options = []
-    for statement_type, arg, text in matches:
-        try:
-            statement_enum = get_statement(statement_type, arg)
-        except KeyError:
-            if arg:
-                await trail_handler.finish(
-                    f"角色 {arg} 无效，请从以下选项中选择：{CHARACTER_NAMES_TEXT}"
-                )
-            else:
-                await trail_handler.finish(
-                    "魔法类型无效，请输入【魔法:角色】格式。可选的角色有："
-                    f"{CHARACTER_NAMES_TEXT}"
-                )
-        options.append(Option(statement_enum, text))
-
+@trial_handler.handle()
+async def handle_trial(bot: Bot, event: Event, argument: Message = CommandArg()):
+    text = argument.extract_plain_text().strip()
+    if not text or text in {"-h", "--help", "帮助"}:
+        await trial_handler.finish(TRIAL_HELP)
     try:
-        image_bytes = await run_image(draw_trial, CHARACTER_MAP[event.get_user_id()], options)
+        character, options = parse_trial(text)
+        image_bytes = await run_image(draw_trial, character, options)
     except (OverflowError, ValueError) as error:
-        await trail_handler.finish(str(error))
+        await trial_handler.finish(str(error))
     try:
         async with production_charge(event.get_user_id()):
-            await trail_handler.send(await UniMessage.image(raw=image_bytes, mimetype="image/png").export(bot))
+            await trial_handler.send(await UniMessage.image(raw=image_bytes, mimetype="image/png").export(bot))
     except ChargeRejected as error:
-        await trail_handler.finish(str(error))
+        await trial_handler.finish(str(error))
     return
-
-
-@switch_character_handler.handle()
-async def handle_switch_character(evemt: Event, result: Arparma):
-    character_name = result["character"]
-    try:
-        CHARACTER_MAP[evemt.get_user_id()] = get_character(character_name)
-        await switch_character_handler.finish(f"已切换角色为 {character_name}")
-    except KeyError:
-        await switch_character_handler.finish(
-            f"角色名 {character_name} 无效，请选择：{CHARACTER_NAMES_TEXT}"
-        )
 
 
 @sprite_handler.handle()

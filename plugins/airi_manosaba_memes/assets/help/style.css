@@ -1,0 +1,24 @@
+@font-face {
+  font-family: "ManosabaHelp";
+  src: url("__HELP_FONT__") format("opentype");
+  font-display: block;
+}
+* { box-sizing: border-box; letter-spacing: 0; }
+html, body { margin: 0; padding: 0; background: #ffffff; color: #28282b; }
+body { font-family: "ManosabaHelp", sans-serif; font-size: 21px; line-height: 1.65; }
+main { width: 100%; padding: 40px 48px 56px; overflow-wrap: anywhere; }
+h1 { margin: 0 0 14px; font-size: 36px; line-height: 1.35; }
+h2 { margin: 38px 0 18px; padding-bottom: 8px; border-bottom: 2px solid #e4e5e7; font-size: 28px; color: #922844; }
+h3 { margin: 22px 0 10px; font-size: 23px; }
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0; padding-left: 30px; }
+li { margin: 5px 0; }
+code { font-family: "ManosabaHelp", monospace; font-size: 0.95em; background: #f2f3f5; padding: 1px 5px; }
+pre { margin: 16px 0; padding: 15px 20px; border-left: 4px solid #a43451; background: #f5f6f8; white-space: pre-wrap; overflow-wrap: anywhere; }
+pre code { padding: 0; background: transparent; }
+img { display: block; max-width: 100%; max-height: 560px; width: auto; height: auto; margin: 20px auto 24px; object-fit: contain; }
+table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 19px; }
+th, td { border-bottom: 1px solid #dedfe2; padding: 9px 12px; text-align: left; }
+th { background: #f3f4f6; }
+a { color: #245c91; text-decoration: none; }
+blockquote { margin: 16px 0; padding-left: 18px; border-left: 3px solid #c7cbd2; color: #555960; }
