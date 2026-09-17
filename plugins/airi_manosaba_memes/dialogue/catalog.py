@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
-CATEGORIES = ("场景", "插图", "特效")
+CATEGORIES = ("场景", "插图", "特效", "CG")
 GRID_COLUMNS = 5
 GRID_ROWS = 5
 PAGE_SIZE = GRID_COLUMNS * GRID_ROWS
@@ -106,6 +106,7 @@ class BackgroundCatalog:
 def re_fullmatch_background(code: str) -> bool:
     return (
         len(code) == 6
-        and code.startswith("@BG")
+        and code.startswith(("@BG", "@CG"))
+        and code[3:].isascii()
         and code[3:].isdigit()
     )

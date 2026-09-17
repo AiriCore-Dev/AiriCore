@@ -125,6 +125,7 @@ def render_debate(request):
         "text": request.text, "background": _signature(background), "layout": _signature(ROOT / "layout.json"),
         "font": _signature(FONT), "authors": _signature(ASSETS / "dialogue/authors.json"),
         "presets": _signature(ASSETS / "presets/official_presets.json"),
+        "shortcodes": _signature(ASSETS / "presets/sprite_shortcodes.json"),
         "prefabs": _tree_signature(ASSETS / "prefabs")}, ensure_ascii=False, sort_keys=True)
 
     def render():

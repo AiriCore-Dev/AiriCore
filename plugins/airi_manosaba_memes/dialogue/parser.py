@@ -1,12 +1,12 @@
 import re
 from dataclasses import dataclass
 
-from ..sprite_editor.state import CODE_ALPHABET, CODE_LENGTH
+from ..sprite_editor.state import SPRITE_CODE_PATTERN
 from ..utils import CHARACTER_NAME_MAP
 
 
-SPRITE_RE = re.compile(rf"#[{CODE_ALPHABET}]{{{CODE_LENGTH}}}", re.IGNORECASE)
-BACKGROUND_RE = re.compile(r"@BG[0-9]{3}", re.IGNORECASE)
+SPRITE_RE = re.compile(rf"#{SPRITE_CODE_PATTERN}", re.IGNORECASE)
+BACKGROUND_RE = re.compile(r"@(?:BG|CG)[0-9]{3}", re.IGNORECASE)
 
 
 @dataclass(frozen=True, slots=True)

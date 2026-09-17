@@ -1,209 +1,124 @@
-import hashlib
-from collections.abc import Callable, Iterable
-from dataclasses import dataclass
+import json
+import re
+import threading
+from pathlib import Path
 
-from ..models import Character
-from ..prefab import Prefab
-from .presets import PresetCatalog
+from ..runtime import session_file
+from .legacy_codec import LegacyRecipeCodec
 from .state import (
-    CODE_ALPHABET,
-    CODE_LENGTH,
+    CHARACTER_PREFIXES,
+    SHORT_CODE_PATTERN,
+    SCHEMA_VERSION,
+    SessionStore,
     SpriteRecipe,
+    SpriteSessionData,
+    StoredSprite,
     canonical_recipe,
-    override_category,
     parse_ref,
 )
 
-CODE_PREFIX = "C"
-CHECKSUM_BITS = 6
-INDEX_BITS = (CODE_LENGTH - 1) * 5 - CHECKSUM_BITS
-CATEGORY_ORDER = ("arms", "expression", "eyes", "mouth", "cheeks", "sweat", "pale")
-_CHECKSUM_SALT = b"manosaba-sprite-recipe-v1"
-_INDEX_MASK = int.from_bytes(
-    hashlib.sha256(_CHECKSUM_SALT + b"-mask").digest()[:5], "big"
-) & ((1 << INDEX_BITS) - 1)
 
-
-@dataclass(frozen=True)
-class CharacterRecipeRegistry:
-    character: str
-    presets: tuple[str, ...]
-    choices: tuple[tuple[str, tuple[str, ...]], ...]
-    space: int
-
-
-def _unique(values: Iterable[str]) -> tuple[str, ...]:
-    return tuple(sorted(set(values)))
+_LOCK = threading.RLock()
 
 
 class RecipeCodec:
-
-
-    def __init__(
-        self,
-        catalog: PresetCatalog,
-        prefab_loader: Callable[[str], Prefab],
-    ):
+    def __init__(self, catalog, prefab_loader, *, storage_path=None):
         self.catalog = catalog
-        self.prefab_loader = prefab_loader
-        self._registries: tuple[CharacterRecipeRegistry, ...] | None = None
+        self.legacy = LegacyRecipeCodec(catalog, prefab_loader)
+        self.storage_path = Path(storage_path) if storage_path is not None else None
+        self._official = self._load_official()
+        self._by_preset = {sprite.recipe.base_preset: code for code, sprite in self._official.items()}
 
-    @property
-    def registries(self) -> tuple[CharacterRecipeRegistry, ...]:
-        if self._registries is None:
-            self._registries = tuple(
-                self._build_registry(character.value) for character in Character
-            )
-            total_space = sum(registry.space for registry in self._registries)
-            if len(CODE_ALPHABET) != 32 or total_space > 1 << INDEX_BITS:
-                raise RuntimeError("sprite recipe registry exceeds shortcode capacity")
-        return self._registries
-
-    def _build_registry(self, character: str) -> CharacterRecipeRegistry:
-        prefab = self.prefab_loader(character)
-
-
-        presets = tuple(sorted(preset.id for preset in self.catalog.presets(character)))
-        expressions = _unique(
-            [
-                *self.catalog.expression_choices(prefab),
-                *self.catalog.head_choices(character, prefab),
-            ]
-        )
-        details = self.catalog.detail_choices(prefab)
-        values = {
-            "arms": tuple(sorted(self.catalog.arm_choices(character))),
-            "expression": expressions,
-            "eyes": tuple(
-                sorted(self.catalog.face_part_choices(character, prefab, "eyes"))
-            ),
-            "mouth": tuple(
-                sorted(self.catalog.face_part_choices(character, prefab, "mouth"))
-            ),
-            **{
-                category: tuple(
-                    sorted(
-                        choice
-                        for choice in details
-                        if override_category(choice) == category
-                    )
-                )
-                for category in ("cheeks", "sweat", "pale")
-            },
-        }
-        choices = tuple((category, values[category]) for category in CATEGORY_ORDER)
-        space = len(presets)
-        for _, category_choices in choices:
-            space *= len(category_choices) + 1
-        return CharacterRecipeRegistry(
-            character=character,
-            presets=presets,
-            choices=choices,
-            space=space,
-        )
-
-    def encode(self, character: str, recipe: SpriteRecipe) -> str:
-        canonical = canonical_recipe(recipe)
-        offset = 0
-        registry = None
-        for candidate in self.registries:
-            if candidate.character == character:
-                registry = candidate
-                break
-            offset += candidate.space
-        if registry is None:
-            raise ValueError(f"unsupported sprite character: {character}")
-
+    def _load_official(self):
+        path = self.catalog.path.with_name("sprite_shortcodes.json")
+        owners = {preset.id: character for character, presets in self.catalog.data.characters.items() for preset in presets}
         try:
-            value = registry.presets.index(canonical.base_preset)
-        except ValueError as error:
-            raise ValueError(
-                f"preset is not encodable for {character}: {canonical.base_preset}"
-            ) from error
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            if payload["schema_version"] != 1 or not isinstance(payload["presets"], dict):
+                raise ValueError
+            mapping = payload["presets"]
+        except (OSError, ValueError, KeyError, TypeError) as error:
+            raise ValueError("官方立绘短码目录无法读取，请恢复短码资源文件") from error
+        entries = {}
+        seen = set()
+        for code, preset in mapping.items():
+            if not isinstance(preset, str):
+                raise ValueError("官方立绘短码目录无效")
+            character = owners.get(preset)
+            if (character is None or preset in seen or re.fullmatch(SHORT_CODE_PATTERN, code) is None
+                    or code[:-3] != CHARACTER_PREFIXES[character]):
+                raise ValueError("官方立绘短码目录无效，请同步预设和短码资源")
+            seen.add(preset)
+            entries[code] = StoredSprite(character=character, recipe=SpriteRecipe(base_preset=preset))
+        if seen != set(owners):
+            raise ValueError("官方立绘短码目录缺少预设，请同步短码资源")
+        return entries
 
-        by_category: dict[str, str] = {}
-        for override in canonical.overrides:
-            category = override_category(override)
-            if category not in CATEGORY_ORDER:
-                raise ValueError(f"override is not encodable: {override}")
-            by_category[category] = override
+    def _store(self):
+        path = self.storage_path if self.storage_path is not None else session_file("sprite_shortcodes.json")
+        return SessionStore(path)
 
-        multiplier = len(registry.presets)
-        for category, choices in registry.choices:
-            override = by_category.get(category)
+    def _load_custom(self, store):
+        if not store.path.exists():
+            return SpriteSessionData()
+        try:
+            payload = json.loads(store.path.read_text(encoding="utf-8"))
+            if not isinstance(payload, dict) or payload.get("schema_version") != SCHEMA_VERSION:
+                raise ValueError
+            if not isinstance(payload.get("sprites"), dict):
+                raise ValueError
+            data = SpriteSessionData.model_validate(payload)
+            for code, sprite in data.sprites.items():
+                if (re.fullmatch(SHORT_CODE_PATTERN, code) is None or code in self._official
+                        or code[:-3] != CHARACTER_PREFIXES.get(sprite.character)
+                        or sprite.recipe.base_preset not in self._by_preset
+                        or self._official[self._by_preset[sprite.recipe.base_preset]].character != sprite.character):
+                    raise ValueError
+            return data
+        except (OSError, ValueError, TypeError) as error:
+            raise ValueError("自定义立绘短码记录无法读取，已保留原文件，请修复或恢复备份") from error
+
+    def encode(self, character, recipe):
+        canonical = canonical_recipe(recipe)
+        code = self._by_preset.get(canonical.base_preset)
+        if code is None or self._official[code].character != character:
+            raise ValueError("角色与官方立绘预设不匹配")
+        if not canonical.overrides:
+            return code
+        try:
+            self.legacy.encode(character, canonical)
+        except (ValueError, RuntimeError) as error:
+            raise ValueError("立绘配方无效，无法生成短码") from error
+        sprite = StoredSprite(character=character, recipe=canonical)
+        with _LOCK:
+            store = self._store()
+            data = self._load_custom(store)
+            for existing_code, existing in data.sprites.items():
+                if existing == sprite:
+                    return existing_code
+            prefix = CHARACTER_PREFIXES[character]
+            code = next((f"{prefix}{number:03d}" for number in range(1, 1000)
+                         if f"{prefix}{number:03d}" not in self._official
+                         and f"{prefix}{number:03d}" not in data.sprites), None)
+            if code is None:
+                raise ValueError("该角色的 999 个立绘短码已用满，无法保存新的组合；已有短码仍可使用")
+            data.sprites[code] = sprite
             try:
-                digit = 0 if override is None else choices.index(override) + 1
-            except ValueError as error:
-                raise ValueError(
-                    f"{category} override is not encodable for {character}: {override}"
-                ) from error
-            value += multiplier * digit
-            multiplier *= len(choices) + 1
+                store._write_atomic(data.model_dump_json(indent=2))
+            except OSError as error:
+                raise ValueError("自定义立绘短码保存失败，请稍后重试") from error
+            return code
 
-        global_index = offset + value
-        encoded_index = global_index ^ _INDEX_MASK
-        body = (encoded_index << CHECKSUM_BITS) | self._checksum(global_index)
-        return CODE_PREFIX + self._encode_integer(body, CODE_LENGTH - 1)
-
-    def decode(self, value: str) -> tuple[str, SpriteRecipe] | None:
+    def decode(self, value):
         code = parse_ref(value)
-        if code is None or not code.startswith(CODE_PREFIX):
+        if code is None:
             return None
-        body = self._decode_integer(code[1:])
-        global_index = (body >> CHECKSUM_BITS) ^ _INDEX_MASK
-        if body & ((1 << CHECKSUM_BITS) - 1) != self._checksum(global_index):
+        if re.fullmatch(SHORT_CODE_PATTERN, code) is None:
+            return self.legacy.decode(code)
+        sprite = self._official.get(code)
+        if sprite is None:
+            with _LOCK:
+                sprite = self._load_custom(self._store()).sprites.get(code)
+        if sprite is None:
             return None
-
-        offset = 0
-        registry = None
-        for candidate in self.registries:
-            if global_index < offset + candidate.space:
-                registry = candidate
-                break
-            offset += candidate.space
-        if registry is None:
-            return None
-
-        local = global_index - offset
-        preset_index = local % len(registry.presets)
-        local //= len(registry.presets)
-        overrides: list[str] = []
-        for _, choices in registry.choices:
-            radix = len(choices) + 1
-            digit = local % radix
-            local //= radix
-            if digit:
-                overrides.append(choices[digit - 1])
-        if local:
-            return None
-        return (
-            registry.character,
-            canonical_recipe(
-                SpriteRecipe(
-                    base_preset=registry.presets[preset_index],
-                    overrides=overrides,
-                )
-            ),
-        )
-
-    @staticmethod
-    def _checksum(global_index: int) -> int:
-        payload = global_index.to_bytes(8, "big") + _CHECKSUM_SALT
-        return hashlib.sha256(payload).digest()[0] & ((1 << CHECKSUM_BITS) - 1)
-
-    @staticmethod
-    def _encode_integer(value: int, length: int) -> str:
-        characters = []
-        for _ in range(length):
-            value, remainder = divmod(value, len(CODE_ALPHABET))
-            characters.append(CODE_ALPHABET[remainder])
-        if value:
-            raise ValueError("value exceeds shortcode capacity")
-        return "".join(reversed(characters))
-
-    @staticmethod
-    def _decode_integer(value: str) -> int:
-        result = 0
-        for character in value:
-            result = result * len(CODE_ALPHABET) + CODE_ALPHABET.index(character)
-        return result
+        return sprite.character, sprite.recipe.model_copy(deep=True)

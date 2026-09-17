@@ -18,13 +18,32 @@ CHARACTER_NAME_MAP = {
     "希罗": Character.HIRO,
     "蕾雅": Character.LEIA,
     "雪": Character.YUKI,
-    "Yuki": Character.YUKI,
     "典狱长": Character.WARDEN,
-    "Warden": Character.WARDEN,
     "看守": Character.JAILER,
-    "Jailer": Character.JAILER,
 }
 CHARACTER_NAMES = tuple(CHARACTER_NAME_MAP)
+CHARACTER_DISPLAY_NAMES = {
+    character.value: name for name, character in CHARACTER_NAME_MAP.items()
+}
+CHARACTER_NAME_MAP.update({
+    "樱羽艾玛": Character.EMA,
+    "二阶堂希罗": Character.HIRO,
+    "夏目安安": Character.ANAN,
+    "城崎诺亚": Character.NOAH,
+    "莲见蕾雅": Character.LEIA,
+    "佐伯米莉亚": Character.MIRIA,
+    "宝生玛格": Character.MARGO,
+    "黑部奈叶香": Character.NANOKA,
+    "紫藤亚里沙": Character.ALISA,
+    "橘雪莉": Character.SHERRY,
+    "远野汉娜": Character.HANNA,
+    "泽渡可可": Character.COCO,
+    "冰上梅露露": Character.MERURU,
+    "月代雪": Character.YUKI,
+    "Yuki": Character.YUKI,
+    "Warden": Character.WARDEN,
+    "Jailer": Character.JAILER,
+})
 
 
 def get_png_size(file_path: Path) -> tuple[int, int]:
@@ -53,7 +72,7 @@ def get_magic_statement(text: str) -> Statement:
         "蕾雅": Statement.MAGIC_SHISENYUUDOU,
         "雪": Statement.MAGIC_SHISENYUUDOU,
     }
-    return mapping[text]
+    return mapping[CHARACTER_DISPLAY_NAMES[get_character(text).value]]
 
 
 def get_statement(statement: str, arg: str | None = None) -> Statement:

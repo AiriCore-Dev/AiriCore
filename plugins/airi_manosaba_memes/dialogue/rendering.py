@@ -184,6 +184,7 @@ def _sprite_runtime():
         renderer = _DialogueSpriteRenderer(catalog, asset_root=ASSETS / "prefabs")
         return renderer, RecipeCodec(catalog, renderer.prefab)
     return get_metadata(("dialogue-sprites", _tree_signature(ASSETS / "prefabs"),
+                         _signature(ASSETS / "presets/sprite_shortcodes.json"),
                          _signature(ASSETS / "presets/official_presets.json")), initialize)
 
 
@@ -216,6 +217,7 @@ def render_dialogue(request):
         "sprites": request.sprites, "author": request.author, "text": request.text,
         "font": _signature(FONT), "authors": _signature(ROOT / "authors.json"),
         "catalog": _signature(ASSETS / "presets/official_presets.json"),
+        "shortcodes": _signature(ASSETS / "presets/sprite_shortcodes.json"),
         "prefabs": _tree_signature(ASSETS / "prefabs"),
         "ui": [_signature(ROOT / "ui" / (name + ".png")) for name, _ in UI_LAYERS] + [_signature(ROOT / "ui/NamePlateBase.png")]}, ensure_ascii=False, sort_keys=True)
 

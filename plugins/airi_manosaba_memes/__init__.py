@@ -53,11 +53,11 @@ manohelp：查看图片帮助
     角色名与选项写在同一条消息中，每行一个选项，支持 1～6 个选项
     角色名可选：{CHARACTER_NAMES_TEXT}
     发送 魔裁鸭梨 -h 查看完整帮助
-魔裁立绘 [角色名]
+魔裁立绘 [角色名或立绘短码]
     从官方预设开始生成立绘，并通过回复消息精细调整
     发送 魔裁立绘 -h 查看完整帮助
-魔裁背景 [场景/插图/特效] [页码]
-    免费查看官方背景，也可使用背景短码直接查看
+魔裁背景 [场景/插图/特效/CG] [页码]
+    免费查看官方背景与 CG，也可使用 @BGxxx 或 @CGxxx 直接查看
 魔裁对话 @背景短码 [立绘短码] [*姓名] 正文
     最多三个立绘，生成对话图收费 10 积分
 魔裁审问 立绘短码 -左/-右 文字
@@ -98,8 +98,8 @@ sprite_handler = on_alconna(
             example=(
                 "魔裁立绘 梅露露\n"
                 "P1\n"
-                "#CFAMVMR9LZ\n"
-                "#CFAMVMR9LZ 眼睛"
+                "魔裁立绘 #MLL001\n"
+                "#MLL001 眼睛"
             ),
         ),
     ),
@@ -168,7 +168,10 @@ async def handle_trial(bot: Bot, event: Event, argument: Message = CommandArg(),
 
 @sprite_handler.handle()
 async def handle_sprite_entry(bot: Bot, event: Event, result: Arparma) -> None:
-    await handle_sprite(bot, event, result)
+    try:
+        await handle_sprite(bot, event, result)
+    except (ChargeRejected, ValueError) as error:
+        await sprite_handler.finish(str(error))
 
 
 @sprite_followup_handler.handle()
@@ -177,5 +180,5 @@ async def handle_sprite_followup_entry(
 ) -> None:
     try:
         await handle_sprite_followup(bot, event, message)
-    except ChargeRejected as error:
+    except (ChargeRejected, ValueError) as error:
         await sprite_followup_handler.finish(str(error))

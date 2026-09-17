@@ -21,8 +21,9 @@ DIALOGUE_HELP = """用法：魔裁对话 @背景短码 [立绘短码...] [*姓�
 *none 隐藏姓名牌，*? 使用未知人物姓名牌。
 正文可用 \\n 换行，\\\\n 保留为字面量。
 正文中的参数字样请使用引号包裹或反斜线转义。"""
-BACKGROUND_HELP = """用法：魔裁背景 [场景/插图/特效] [页码]
+BACKGROUND_HELP = """用法：魔裁背景 [场景/插图/特效/CG] [页码]
 也可发送：魔裁背景 @背景短码
+普通背景短码为 @BGxxx，CG 短码为 @CGxxx。
 回复选择表发送 B编号、上一页 或 下一页。"""
 HELP_ARGUMENTS = {"-h", "--help", "帮助"}
 
@@ -61,15 +62,16 @@ def parse_background_command(text: str) -> tuple[str, str, int | None]:
         return "picker", "场景", 1
     if len(values) == 1 and values[0].startswith("@"):
         code = values[0].upper()
-        if not re.fullmatch(r"@BG[0-9]{3}", code):
+        if not re.fullmatch(r"@(?:BG|CG)[0-9]{3}", code):
             raise ValueError(f"背景短码无效：{values[0]}")
         return "background", code, None
     if len(values) > 2:
-        raise ValueError("用法：魔裁背景 [场景/插图/特效] [页码] 或 魔裁背景 @背景短码")
+        raise ValueError("用法：魔裁背景 [场景/插图/特效/CG] [页码] 或 魔裁背景 @背景短码")
     category = "场景"
     category_seen = False
     page_text = None
     for value in values:
+        value = value.upper()
         if value in CATEGORIES:
             if category_seen:
                 raise ValueError("只能指定一个背景分类")

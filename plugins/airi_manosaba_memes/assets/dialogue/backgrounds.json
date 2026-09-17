@@ -3036,6 +3036,2070 @@
         2048
       ],
       "sha256": "45c7279340070d5da94e2731a74372cef33170277048b7cf58a442717f702f40"
+    },
+    {
+      "code": "@CG001",
+      "category": "CG",
+      "path": "backgrounds/BG063.webp",
+      "name": "CG 1-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/1_1.bundle:Still_001_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "17093100adf167c4f417498744980445914c33069b551c35e79aa0428e944722"
+    },
+    {
+      "code": "@CG002",
+      "category": "CG",
+      "path": "backgrounds/BG064.webp",
+      "name": "CG 2-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/2_1.bundle:Still_002_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "2adfec06b356eddcd504101a6e042244418f69c33d43caccbf25afa2bbf1d187"
+    },
+    {
+      "code": "@CG003",
+      "category": "CG",
+      "path": "backgrounds/BG065.webp",
+      "name": "CG 10-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/10_1.bundle:Still_010_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "0db13cb1ce36ebc0c1a19e3092fa3365c5e2a0a213f3b7359519780ea4b1d068"
+    },
+    {
+      "code": "@CG004",
+      "category": "CG",
+      "path": "backgrounds/BG066.webp",
+      "name": "CG 10-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/10_2.bundle:Still_010_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "c5a5e751b4c26aeb27cc58a811ec3be6fd4fa1fb883bbc283af37e5d8d47c9e6"
+    },
+    {
+      "code": "@CG005",
+      "category": "CG",
+      "path": "backgrounds/BG067.webp",
+      "name": "CG 10-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/10_3.bundle:Still_010_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "39fc780e1938db4cbb35e0a0a14fbbff91353550092bafb796baf5b15c2a2115"
+    },
+    {
+      "code": "@CG006",
+      "category": "CG",
+      "path": "backgrounds/BG068.webp",
+      "name": "CG 10-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/10_4.bundle:Still_010_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "dd0224ace0c05fc373b71e3a22a9baec5b54a776c3c3a3a7bdcba25970b3eaf4"
+    },
+    {
+      "code": "@CG007",
+      "category": "CG",
+      "path": "backgrounds/BG069.webp",
+      "name": "CG 10-5",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/10_5.bundle:Still_010_005",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "72454eb15ee28de1d8ffcd4defa5e294dd1c15e83c302cb7c66ffc6665408a5d"
+    },
+    {
+      "code": "@CG008",
+      "category": "CG",
+      "path": "backgrounds/BG070.webp",
+      "name": "CG 20-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/20_1.bundle:Still_020_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "282d892779c3100d7cd507a4fa52a43842a71b34c0920ebf8a673a6092fbd0ca"
+    },
+    {
+      "code": "@CG009",
+      "category": "CG",
+      "path": "backgrounds/BG071.webp",
+      "name": "CG 20-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/20_2.bundle:Still_020_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a0910bfada9fefe22219ff3018938defa0bc2b0f9ae387bebb75363d4e811a14"
+    },
+    {
+      "code": "@CG010",
+      "category": "CG",
+      "path": "backgrounds/BG072.webp",
+      "name": "CG 30-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/30_1.bundle:Still_030_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "f633c166f053de6ae560f0de067e0d8beea18810d088d0aa1966d65f6a4177ca"
+    },
+    {
+      "code": "@CG011",
+      "category": "CG",
+      "path": "backgrounds/BG073.webp",
+      "name": "CG 40-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/40_1.bundle:Still_040_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a342baf7c7e604d61419fbb699107bb019aa64f368620b85814ae0cfadc386a3"
+    },
+    {
+      "code": "@CG012",
+      "category": "CG",
+      "path": "backgrounds/BG074.webp",
+      "name": "CG 50-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/50_1.bundle:Still_050_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "ae096169437542e556048de0d067ba9c282264c97cbbf2b74909927891cd1c54"
+    },
+    {
+      "code": "@CG013",
+      "category": "CG",
+      "path": "backgrounds/BG075.webp",
+      "name": "CG 50-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/50_2.bundle:Still_050_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "13c6b1dc61d085bcf3a15a65bf5a79abbdf6bd03335526102bcda6d8e019d1cc"
+    },
+    {
+      "code": "@CG014",
+      "category": "CG",
+      "path": "backgrounds/BG076.webp",
+      "name": "CG 50-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/50_3.bundle:Still_050_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "9e597ae8b38ba3e1b41eabbbcce7bc1f2736ee7bd78f09bbfae1c5ec5b7d9f3a"
+    },
+    {
+      "code": "@CG015",
+      "category": "CG",
+      "path": "backgrounds/BG077.webp",
+      "name": "CG 50-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/50_4.bundle:Still_050_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "bb99d2d7db7d0c3aa2a25c9668aa87f30f1f2eefb2566db9d6ec6a75766784f6"
+    },
+    {
+      "code": "@CG016",
+      "category": "CG",
+      "path": "backgrounds/BG078.webp",
+      "name": "CG 80-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/80_1.bundle:Still_080_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "762d9f23297afa95e5428bead06b1f99d6873d7a5e8c4f4fe7c4df583000bbe0"
+    },
+    {
+      "code": "@CG017",
+      "category": "CG",
+      "path": "backgrounds/BG079.webp",
+      "name": "CG 100-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/100_1.bundle:Still_100_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "ae1e737622cc64649af2861fb0ed14b5076c4e41283bc8c4d67daa186386a026"
+    },
+    {
+      "code": "@CG018",
+      "category": "CG",
+      "path": "backgrounds/BG080.webp",
+      "name": "CG 110-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/110_1.bundle:Still_110_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "4eab4fb2eb0fe6950745b89b8e04cc4bbc39c9ab066c3cf18e32a4a20ebf8ff9"
+    },
+    {
+      "code": "@CG019",
+      "category": "CG",
+      "path": "backgrounds/BG081.webp",
+      "name": "CG 120-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/120_1.bundle:Still_120_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "3872d42eb9bb84cbae0c57d0cb5dc5c295586b0e7a92218defb26c2b72a26901"
+    },
+    {
+      "code": "@CG020",
+      "category": "CG",
+      "path": "backgrounds/BG082.webp",
+      "name": "CG 130-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/130_1.bundle:Still_130_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "09590df9107227b10f43a6bb988390bf3298cdd6ff2f3a4575c6607520082307"
+    },
+    {
+      "code": "@CG021",
+      "category": "CG",
+      "path": "backgrounds/BG083.webp",
+      "name": "CG 140-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/140_1.bundle:Still_140_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "16d35cf0b1be56de175a04e41b236ba9aaccc1e7f4b632c2676da747dbd19248"
+    },
+    {
+      "code": "@CG022",
+      "category": "CG",
+      "path": "backgrounds/BG084.webp",
+      "name": "CG 140-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/140_2.bundle:Still_140_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "fec7b7ad71e81c4c52b3d62790e30b44e040f8be0f23c08fa668379e69d4ea7c"
+    },
+    {
+      "code": "@CG023",
+      "category": "CG",
+      "path": "backgrounds/BG085.webp",
+      "name": "CG 140-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/140_3.bundle:Still_140_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "2fffbe4102ffbfa1e7beb4bdeadc313b8e7b9deb3cb227580e663220e66e10bd"
+    },
+    {
+      "code": "@CG024",
+      "category": "CG",
+      "path": "backgrounds/BG086.webp",
+      "name": "CG 140-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/140_4.bundle:Still_140_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "8d923b2ec12d5226459dc9341dcc78a789b627e93d40111912f06a601c736e6f"
+    },
+    {
+      "code": "@CG025",
+      "category": "CG",
+      "path": "backgrounds/BG087.webp",
+      "name": "CG 150-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/150_1.bundle:Still_150_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "715dc2f91934b2cf6ad9a208ba35901f4bc27c0f7015a1da1d53beacaaf47a8d"
+    },
+    {
+      "code": "@CG026",
+      "category": "CG",
+      "path": "backgrounds/BG088.webp",
+      "name": "CG 150-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/150_2.bundle:Still_150_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "1b0826faeae1003c11a87a25052d8a94bbbaad622bc3f6370959621458bc4f94"
+    },
+    {
+      "code": "@CG027",
+      "category": "CG",
+      "path": "backgrounds/BG089.webp",
+      "name": "CG 160-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/160_1.bundle:Still_160_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "d2555bc4e3dd5fe192a7cce8fc955027399165f09615efece928d5334e6e3509"
+    },
+    {
+      "code": "@CG028",
+      "category": "CG",
+      "path": "backgrounds/BG090.webp",
+      "name": "CG 170-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/170_1.bundle:Still_170_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "6f233cd0033a85bc453c91092be987c166a905c4166d1310747ed0aabffc7fb9"
+    },
+    {
+      "code": "@CG029",
+      "category": "CG",
+      "path": "backgrounds/BG091.webp",
+      "name": "CG 180-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/180_1.bundle:Still_180_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "f41e018fa5c82feac2c673bac16731b1c50e0e51850ad89e10a38a69d4d66ee4"
+    },
+    {
+      "code": "@CG030",
+      "category": "CG",
+      "path": "backgrounds/BG092.webp",
+      "name": "CG 190-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/190_1.bundle:Still_190_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "76f0b7f67123699db29a7bbda21f99f3cd29d34074490b9dba81c97bd4beb01e"
+    },
+    {
+      "code": "@CG031",
+      "category": "CG",
+      "path": "backgrounds/BG093.webp",
+      "name": "CG 200-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/200_1.bundle:Still_200_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "f1b6e79b62d0e61df9b8557f1a66f79705ec8b168e235cb005ee9334deffb314"
+    },
+    {
+      "code": "@CG032",
+      "category": "CG",
+      "path": "backgrounds/BG094.webp",
+      "name": "CG 200-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/200_2.bundle:Still_200_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "6df41c9350cf280b8575ea2024a0eeff57ac92b08d29567cee41f7c0f47bd337"
+    },
+    {
+      "code": "@CG033",
+      "category": "CG",
+      "path": "backgrounds/BG095.webp",
+      "name": "CG 200-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/200_3.bundle:Still_200_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "b72800d24768275dc75f9c05185f7f3669576573b6764c4942f5b7118a27c638"
+    },
+    {
+      "code": "@CG034",
+      "category": "CG",
+      "path": "backgrounds/BG096.webp",
+      "name": "CG 200-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/200_4.bundle:Still_200_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "cd6e9dd8a0f24acd147ed4f0b8424358b9b12ca8ba1b18fb56f30b5272e45d8e"
+    },
+    {
+      "code": "@CG035",
+      "category": "CG",
+      "path": "backgrounds/BG097.webp",
+      "name": "CG 200-5",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/200_5.bundle:Still_200_005",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "2d60322b0a80792f62be713a8cfff0b6fc6b5030ad388aa308b1bebde894b587"
+    },
+    {
+      "code": "@CG036",
+      "category": "CG",
+      "path": "backgrounds/BG098.webp",
+      "name": "CG 210-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/210_1.bundle:Still_210_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "149e1dd163a4b397ac54676f2e230c164dc89254a81dfee5b617d08d2fb82941"
+    },
+    {
+      "code": "@CG037",
+      "category": "CG",
+      "path": "backgrounds/BG099.webp",
+      "name": "CG 220-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/220_1.bundle:Still_220_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "17ccb0891057a827367255f0b818d6d328be943b6a15b07a241c0258e2823c00"
+    },
+    {
+      "code": "@CG038",
+      "category": "CG",
+      "path": "backgrounds/BG100.webp",
+      "name": "CG 220-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/220_2.bundle:Still_220_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "396cab1340e1eee21d9d0a2e2d31e2bff692ebdd1b32fde03ace772b444396f6"
+    },
+    {
+      "code": "@CG039",
+      "category": "CG",
+      "path": "backgrounds/BG101.webp",
+      "name": "CG 230-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/230_1.bundle:Still_230_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a840d9c4f90db8a04a5d5aa0d60747b4ffbf0e5f21b3828adc5412297f9479df"
+    },
+    {
+      "code": "@CG040",
+      "category": "CG",
+      "path": "backgrounds/BG102.webp",
+      "name": "CG 240-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/240_1.bundle:Still_240_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "1aca27558544565599d5a9aba10f4ef75bed6c1ac59dfdbbbecd673577a87555"
+    },
+    {
+      "code": "@CG041",
+      "category": "CG",
+      "path": "backgrounds/BG103.webp",
+      "name": "CG 250-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/250_1.bundle:Still_250_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "e7fdc84604c07b7277c4ec2c3d8f9a925bb798dc09316cd9b8ff0124061a055d"
+    },
+    {
+      "code": "@CG042",
+      "category": "CG",
+      "path": "backgrounds/BG104.webp",
+      "name": "CG 260-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/260_1.bundle:Still_260_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "5dcd23c1297842c8d918771737eeb4309099aca1fcfc57b2a1499f8176432ba2"
+    },
+    {
+      "code": "@CG043",
+      "category": "CG",
+      "path": "backgrounds/BG105.webp",
+      "name": "CG 270-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/270_1.bundle:Still_270_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "6c08a45302458aa129de817f919f6974913c81f2ca3cc3109d1da1101269ad81"
+    },
+    {
+      "code": "@CG044",
+      "category": "CG",
+      "path": "backgrounds/BG106.webp",
+      "name": "CG 270-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/270_2.bundle:Still_270_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "82d44ca28a8dc7d69eb0abaeb04b508d96d8d98cefa9be8edd5071eb6b4f5022"
+    },
+    {
+      "code": "@CG045",
+      "category": "CG",
+      "path": "backgrounds/BG107.webp",
+      "name": "CG 280-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/280_1.bundle:Still_280_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "d010bb23722d861258cf42936d14c96a51de4d583678990b7afa397ef13bfe48"
+    },
+    {
+      "code": "@CG046",
+      "category": "CG",
+      "path": "backgrounds/BG108.webp",
+      "name": "CG 290-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/290_1.bundle:Still_290_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "d868ca9dd0d4a06c322bed1b057a2d0872cce9cb4a3049cb28da367f35a73c1c"
+    },
+    {
+      "code": "@CG047",
+      "category": "CG",
+      "path": "backgrounds/BG109.webp",
+      "name": "CG 290-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/290_2.bundle:Still_290_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "f011ea8003624ce30689051a502554c953bdba270b267123e4ec27ef628dcd32"
+    },
+    {
+      "code": "@CG048",
+      "category": "CG",
+      "path": "backgrounds/BG110.webp",
+      "name": "CG 300-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/300_1.bundle:Still_300_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "35efc8938cfa079d7d85b1ce2b132ea5842b3604878b065f54d79109bf2b9b54"
+    },
+    {
+      "code": "@CG049",
+      "category": "CG",
+      "path": "backgrounds/BG111.webp",
+      "name": "CG 310-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/310_1.bundle:Still_310_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "d2c9d88c52ea868cd178fb6985290b977a4afccb8ddd7cf096a0d969ead0a826"
+    },
+    {
+      "code": "@CG050",
+      "category": "CG",
+      "path": "backgrounds/BG112.webp",
+      "name": "CG 320-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/320_1.bundle:Still_320_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a408aa0de047eed4d60b5c89dbeb25312def72835b3e1df7afe413703b1bbfcf"
+    },
+    {
+      "code": "@CG051",
+      "category": "CG",
+      "path": "backgrounds/BG113.webp",
+      "name": "CG 330-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/330_1.bundle:Still_330_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "e2cee8645d0b15bcbdc4faf2a2e47c23fffefac39d2de415de1fac0eb1a56a84"
+    },
+    {
+      "code": "@CG052",
+      "category": "CG",
+      "path": "backgrounds/BG114.webp",
+      "name": "CG 340-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/340_1.bundle:Still_340_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "fc384b313edf84873ba895bcb145a1fc0d47ed013d8324ccdc34f80d947f53dd"
+    },
+    {
+      "code": "@CG053",
+      "category": "CG",
+      "path": "backgrounds/BG115.webp",
+      "name": "CG 340-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/340_2.bundle:Still_340_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "b629ba7ac0608cb2dac5cbba03854dee97b7be71b60e9325562be257f4bf8c0c"
+    },
+    {
+      "code": "@CG054",
+      "category": "CG",
+      "path": "backgrounds/BG116.webp",
+      "name": "CG 350-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/350_1.bundle:Still_350_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "8f26bbfeb1c91df6d5615e7a8694d7d7291828566297b7e23e181142458a9742"
+    },
+    {
+      "code": "@CG055",
+      "category": "CG",
+      "path": "backgrounds/BG117.webp",
+      "name": "CG 360-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/360_1.bundle:Still_360_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "bb39c3aca375f24d5e5790653fd7234b133f9a220e892cedd9ae3751ba8db15a"
+    },
+    {
+      "code": "@CG056",
+      "category": "CG",
+      "path": "backgrounds/BG118.webp",
+      "name": "CG 360-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/360_2.bundle:Still_360_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "3e469258eee1b20a7cf5fa51ef2e3dbe2615da69a82b1a69fda33f86668b4617"
+    },
+    {
+      "code": "@CG057",
+      "category": "CG",
+      "path": "backgrounds/BG119.webp",
+      "name": "CG 370-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/370_1.bundle:Still_370_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "0aa46a9e99616e6e0ba36762ec2f4d13a5f45611e23308a9f7bba2288db5e2c4"
+    },
+    {
+      "code": "@CG058",
+      "category": "CG",
+      "path": "backgrounds/BG120.webp",
+      "name": "CG 370-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/370_2.bundle:Still_370_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "f9d60d5716a46c20d59d001ae4bbc76052381b3a9a23a66f3e93f9d4d9ab7421"
+    },
+    {
+      "code": "@CG059",
+      "category": "CG",
+      "path": "backgrounds/BG121.webp",
+      "name": "CG 380-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/380_1.bundle:Still_380_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "2b1c3fdf8678927ab1296ba38056f53edd0b9bd1ef8f3f0bfb0c5fc6f03eaec9"
+    },
+    {
+      "code": "@CG060",
+      "category": "CG",
+      "path": "backgrounds/BG122.webp",
+      "name": "CG 400-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/400_1.bundle:Still_400_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "9a10815fb247d08f35fb6ed92c38a2ee3c462350a053d7a0ad86393c388e573a"
+    },
+    {
+      "code": "@CG061",
+      "category": "CG",
+      "path": "backgrounds/BG123.webp",
+      "name": "CG 400-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/400_2.bundle:Still_400_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "f6beee4ff97f2a520d2cf3b0afe5bac5aa18c625b0702fe7436dc5b1c3d00211"
+    },
+    {
+      "code": "@CG062",
+      "category": "CG",
+      "path": "backgrounds/BG124.webp",
+      "name": "CG 400-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/400_3.bundle:Still_400_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "8b63d506cb3e39f8e5503e49ca53e77a64aac11f615d94f246d0d3dc65ec6ae6"
+    },
+    {
+      "code": "@CG063",
+      "category": "CG",
+      "path": "backgrounds/BG125.webp",
+      "name": "CG 410-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/410_1.bundle:Still_410_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "5eeb012340a0f3b9228be85748e4902544e1271101d10ef9cef90acbce9ad55a"
+    },
+    {
+      "code": "@CG064",
+      "category": "CG",
+      "path": "backgrounds/BG126.webp",
+      "name": "CG 410-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/410_2.bundle:Still_410_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "b323b4a17f830bc06be45254051da49a13e999e9cbc9c04d0c29c71a7e9ef5e2"
+    },
+    {
+      "code": "@CG065",
+      "category": "CG",
+      "path": "backgrounds/BG127.webp",
+      "name": "CG 410-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/410_3.bundle:Still_410_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "b9276ccc44031aef672482b23a69098deefe6eb7e5b2dee86d65d879984faa22"
+    },
+    {
+      "code": "@CG066",
+      "category": "CG",
+      "path": "backgrounds/BG128.webp",
+      "name": "CG 410-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/410_4.bundle:Still_410_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "824775ccc72ff7a674ade5b21e117ec40f65dda194cfdcd65d16c973946dd6d4"
+    },
+    {
+      "code": "@CG067",
+      "category": "CG",
+      "path": "backgrounds/BG129.webp",
+      "name": "CG 420-0",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/420_0.bundle:Still_420_000",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "8529fee23e94728be536739b7df1160eb786c451e4512217fbf9439f3c0542b9"
+    },
+    {
+      "code": "@CG068",
+      "category": "CG",
+      "path": "backgrounds/BG130.webp",
+      "name": "CG 420-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/420_1.bundle:Still_420_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "6951082b5c1c72ced6a309f08c61bd6483043f85b88f8b37f678c8ef842d7305"
+    },
+    {
+      "code": "@CG069",
+      "category": "CG",
+      "path": "backgrounds/BG131.webp",
+      "name": "CG 420-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/420_2.bundle:Still_420_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "40d3bcf5436f517e24e95129b02aa3c4ca0edf0c320a8dcc5d0a52d799a4160d"
+    },
+    {
+      "code": "@CG070",
+      "category": "CG",
+      "path": "backgrounds/BG132.webp",
+      "name": "CG 420-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/420_3.bundle:Still_420_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "adda8ecf188fd06ae6b681dd9d791bc8828548380816b350487fcbc9183facb8"
+    },
+    {
+      "code": "@CG071",
+      "category": "CG",
+      "path": "backgrounds/BG133.webp",
+      "name": "CG 420-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/420_4.bundle:Still_420_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "f12cadf719e12bfc197f80e163b877d7646b9b1190166934a9b7261029c41efe"
+    },
+    {
+      "code": "@CG072",
+      "category": "CG",
+      "path": "backgrounds/BG134.webp",
+      "name": "CG 421-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/421_1.bundle:Still_421_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "b5421f38973ca2fd032f21c4ac72143c9cc4e86ef3c3149706bf5042f28dc3d2"
+    },
+    {
+      "code": "@CG073",
+      "category": "CG",
+      "path": "backgrounds/BG135.webp",
+      "name": "CG 421-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/421_2.bundle:Still_421_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "2fd47bf97a7fb6e3c97e64299d055c8d7793f3dc2a19d736bfa6d1a569edd9bb"
+    },
+    {
+      "code": "@CG074",
+      "category": "CG",
+      "path": "backgrounds/BG136.webp",
+      "name": "CG 421-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/421_3.bundle:Still_421_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "4c014306534f7b816dc3a6aacc681067edc5ff230f4bc861c750ca9da887f732"
+    },
+    {
+      "code": "@CG075",
+      "category": "CG",
+      "path": "backgrounds/BG137.webp",
+      "name": "CG 421-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/421_4.bundle:Still_421_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "861bd8bb3ff6d8f209bd93f4460b4d38edecf7da781946455f45088a624c1101"
+    },
+    {
+      "code": "@CG076",
+      "category": "CG",
+      "path": "backgrounds/BG138.webp",
+      "name": "CG 421-5",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/421_5.bundle:Still_421_005",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "4ba7c43358490cbe63e3751e61a0f8740b0ca9e538bd62059c41e183e8b67cb4"
+    },
+    {
+      "code": "@CG077",
+      "category": "CG",
+      "path": "backgrounds/BG139.webp",
+      "name": "CG 421-6",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/421_6.bundle:Still_421_006",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "5a3b86349d518d90c7061876288a96be918248611008fc72b700afe9e6146b92"
+    },
+    {
+      "code": "@CG078",
+      "category": "CG",
+      "path": "backgrounds/BG140.webp",
+      "name": "CG 421-7",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/421_7.bundle:Still_421_007",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "4fdde19dd6ebc80f047c7a1c25aed9a627a238f8c38c6c98e454f9c7901a687e"
+    },
+    {
+      "code": "@CG079",
+      "category": "CG",
+      "path": "backgrounds/BG141.webp",
+      "name": "CG 421-8",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/421_8.bundle:Still_421_008",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "8b1e0faa4dcdad2a4e363fb5592952fec6ec14fe9cd7f63c400cb02fcda6d450"
+    },
+    {
+      "code": "@CG080",
+      "category": "CG",
+      "path": "backgrounds/BG142.webp",
+      "name": "CG 421-9",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/421_9.bundle:Still_421_009",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "06376aef5357a660038b8f8485b4b389d22764ad0554ab1827cfc414e0cc9d38"
+    },
+    {
+      "code": "@CG081",
+      "category": "CG",
+      "path": "backgrounds/BG143.webp",
+      "name": "CG 430-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/430_1.bundle:Still_430_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "c90eb2d43c0d4e79833c22b78f7a5c6de6d61564ad35da6f4cc1a24dfc88d8db"
+    },
+    {
+      "code": "@CG082",
+      "category": "CG",
+      "path": "backgrounds/BG144.webp",
+      "name": "CG 430-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/430_2.bundle:Still_430_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a105e69fc8eba2953d56099344db37826eed080e9abe3d4f62e7ffc973159554"
+    },
+    {
+      "code": "@CG083",
+      "category": "CG",
+      "path": "backgrounds/BG145.webp",
+      "name": "CG 430-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/430_3.bundle:Still_430_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "fbb54fdd0b9a560e799dbabb6a683a978372c10ce12ef8525fc17c05bafe1b2a"
+    },
+    {
+      "code": "@CG084",
+      "category": "CG",
+      "path": "backgrounds/BG146.webp",
+      "name": "CG 440-0",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_0.bundle:Still_440_000",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "161357a4059ec352b99f3b3fd2ff1c5fd6e51e41d558649460dc097171b43ce7"
+    },
+    {
+      "code": "@CG085",
+      "category": "CG",
+      "path": "backgrounds/BG147.webp",
+      "name": "CG 440-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_1.bundle:Still_440_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "53f7786cf321ed6cf051389ca3629cf27b05a5d1ea5ee997fa470afd690ce3f6"
+    },
+    {
+      "code": "@CG086",
+      "category": "CG",
+      "path": "backgrounds/BG148.webp",
+      "name": "CG 440-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_2.bundle:Still_440_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "cbadc709c61b929c3eb84f182a6bca4159184f50a142bcd997db12099356b8fb"
+    },
+    {
+      "code": "@CG087",
+      "category": "CG",
+      "path": "backgrounds/BG149.webp",
+      "name": "CG 440-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_3.bundle:Still_440_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "32d6042c3f26b159fb3e38bf94dbc3ff51e98cef5c15129cca7945e26c778fb2"
+    },
+    {
+      "code": "@CG088",
+      "category": "CG",
+      "path": "backgrounds/BG150.webp",
+      "name": "CG 440-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_4.bundle:Still_440_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "3cd64931f6459c60742ca176d6a4c01a762800ff615e69a3761bf42765adbc3e"
+    },
+    {
+      "code": "@CG089",
+      "category": "CG",
+      "path": "backgrounds/BG151.webp",
+      "name": "CG 440-5",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_5.bundle:Still_440_005",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "c32bb2a377660309328eb9d6681276ffdbb52040dbee8ad1f2c249e3ebb09de0"
+    },
+    {
+      "code": "@CG090",
+      "category": "CG",
+      "path": "backgrounds/BG152.webp",
+      "name": "CG 440-6",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_6.bundle:Still_440_006",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "3e4a46f6559bed9323952c8e66079bc7315e579f9c75becd7a95f952a8679fc9"
+    },
+    {
+      "code": "@CG091",
+      "category": "CG",
+      "path": "backgrounds/BG153.webp",
+      "name": "CG 440-7",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_7.bundle:Still_440_007",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "940b5a58a2347e171c346a93af46df9861440207b6abe411f97041e8f40894e0"
+    },
+    {
+      "code": "@CG092",
+      "category": "CG",
+      "path": "backgrounds/BG154.webp",
+      "name": "CG 440-8",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_8.bundle:Still_440_008",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "88c7ba24acc910c0b03bdfdae0612e7c4f1879be2ee684183c0844efa8c6dee6"
+    },
+    {
+      "code": "@CG093",
+      "category": "CG",
+      "path": "backgrounds/BG155.webp",
+      "name": "CG 440-9",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_9.bundle:Still_440_009",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "6c808652f47fb458267041962dffb0ead282a831501d5b8c83495d1d60e7874e"
+    },
+    {
+      "code": "@CG094",
+      "category": "CG",
+      "path": "backgrounds/BG156.webp",
+      "name": "CG 440-10",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_10.bundle:Still_440_010",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "078570e4ed068ac8957a4a4ab55a08059714d15cfba02eb20430aea535738a4c"
+    },
+    {
+      "code": "@CG095",
+      "category": "CG",
+      "path": "backgrounds/BG157.webp",
+      "name": "CG 440-11",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_11.bundle:Still_440_011",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "134ce95bb30977329fc5f371da97d8578a2c5f7d2afa3504491a28873d4ad814"
+    },
+    {
+      "code": "@CG096",
+      "category": "CG",
+      "path": "backgrounds/BG158.webp",
+      "name": "CG 440-12",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/440_12.bundle:Still_440_012",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "ef24c4e5245b534587febdbd5f84f96d33280741f577ee8a4952e0892ad2daec"
+    },
+    {
+      "code": "@CG097",
+      "category": "CG",
+      "path": "backgrounds/BG159.webp",
+      "name": "CG 450-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/450_1.bundle:Still_450_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "eddd35a50ced26105e1b4c4e7065098ea812e5990bb41f4afea21c89008e633c"
+    },
+    {
+      "code": "@CG098",
+      "category": "CG",
+      "path": "backgrounds/BG160.webp",
+      "name": "CG 450-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/450_2.bundle:Still_450_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "bb5f24d747392007266f452dd1779d916b479b77d513ae7a971d004ca2853e77"
+    },
+    {
+      "code": "@CG099",
+      "category": "CG",
+      "path": "backgrounds/BG161.webp",
+      "name": "CG 450-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/450_3.bundle:Still_450_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "7958881b2aac3db6e6478aeff4e86e9c00ff05d58d5f5489627c26116a682993"
+    },
+    {
+      "code": "@CG100",
+      "category": "CG",
+      "path": "backgrounds/BG162.webp",
+      "name": "CG 450-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/450_4.bundle:Still_450_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "3baedd7da89439043374be874446c0d6b5c40723e00b0c4d3c1930ce33133dc3"
+    },
+    {
+      "code": "@CG101",
+      "category": "CG",
+      "path": "backgrounds/BG163.webp",
+      "name": "CG 450-5",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/450_5.bundle:Still_450_005",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "75144495475208bc8f9e7f4aa34716de4bc92793a28a6c8b2c76de6803954e68"
+    },
+    {
+      "code": "@CG102",
+      "category": "CG",
+      "path": "backgrounds/BG164.webp",
+      "name": "CG 451-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/451_1.bundle:Still_451_001",
+      "original_size": [
+        4096,
+        1816
+      ],
+      "sha256": "d8daa9fcaf139112b38fed5c373eb5fdcbdc4e0dfacc8c9c5fb55eda2c79466e"
+    },
+    {
+      "code": "@CG103",
+      "category": "CG",
+      "path": "backgrounds/BG165.webp",
+      "name": "CG 451-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/451_2.bundle:Still_451_002",
+      "original_size": [
+        4096,
+        1816
+      ],
+      "sha256": "7c2b7e0ad7f7671ff4ef10c09125ddebded2c552997665eaee0ac08a942a0cf8"
+    },
+    {
+      "code": "@CG104",
+      "category": "CG",
+      "path": "backgrounds/BG166.webp",
+      "name": "CG 451-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/451_3.bundle:Still_451_003",
+      "original_size": [
+        4096,
+        1816
+      ],
+      "sha256": "e6d3f8888984ef22e6ffaf0becb11f152baeb0b8d2696bec62e133f9c1d07fa8"
+    },
+    {
+      "code": "@CG105",
+      "category": "CG",
+      "path": "backgrounds/BG167.webp",
+      "name": "CG 451-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/451_4.bundle:Still_451_004",
+      "original_size": [
+        4096,
+        1816
+      ],
+      "sha256": "759ecfae3261133eb94ba7f9f3fb9bc0871e7c9e2b21d92086fa1d599926b99e"
+    },
+    {
+      "code": "@CG106",
+      "category": "CG",
+      "path": "backgrounds/BG168.webp",
+      "name": "CG 451-5",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/451_5.bundle:Still_451_005",
+      "original_size": [
+        4096,
+        1816
+      ],
+      "sha256": "d47e7ecf0acbad94d80c0667452a70226b875b8e67a48f785d7d598737e74d34"
+    },
+    {
+      "code": "@CG107",
+      "category": "CG",
+      "path": "backgrounds/BG169.webp",
+      "name": "CG 451-6",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/451_6.bundle:Still_451_006",
+      "original_size": [
+        4096,
+        1816
+      ],
+      "sha256": "c0a47b070e92353fd124a586611274adb440808f17040e451c88909d8d75852f"
+    },
+    {
+      "code": "@CG108",
+      "category": "CG",
+      "path": "backgrounds/BG170.webp",
+      "name": "CG 451-7",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/451_7.bundle:Still_451_007",
+      "original_size": [
+        4096,
+        1816
+      ],
+      "sha256": "3f85ca37213dad79eeae57a7a54e2f9e0dfd12e354a1553b4f88910fa3da5ae5"
+    },
+    {
+      "code": "@CG109",
+      "category": "CG",
+      "path": "backgrounds/BG171.webp",
+      "name": "CG 460-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/460_1.bundle:Still_460_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "d435f684bbd33c77671a4008dbdd36696a4d76b6161e10cde7ac8b04e3af20bb"
+    },
+    {
+      "code": "@CG110",
+      "category": "CG",
+      "path": "backgrounds/BG172.webp",
+      "name": "CG 460-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/460_2.bundle:Still_460_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "9cb2920f3a50f77687a6d9b20072e78a326987f8f14c0b639ccd43add7b1fb72"
+    },
+    {
+      "code": "@CG111",
+      "category": "CG",
+      "path": "backgrounds/BG173.webp",
+      "name": "CG 460-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/460_3.bundle:Still_460_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "9376a975b223ee05c4a31c5162128872f3e052a98840411a26d715e042c6f03f"
+    },
+    {
+      "code": "@CG112",
+      "category": "CG",
+      "path": "backgrounds/BG174.webp",
+      "name": "CG 460-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/460_4.bundle:Still_460_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "d8ed6d7e382f067dd717ee84e04739a81b9f2299230ef463d3b4b94bf9326d35"
+    },
+    {
+      "code": "@CG113",
+      "category": "CG",
+      "path": "backgrounds/BG175.webp",
+      "name": "CG 460-5",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/460_5.bundle:Still_460_005",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "ef73bcfce445fe8b0edf8d027ffaea8c30f31c91ebc63fda3bde32a6b5b0ccce"
+    },
+    {
+      "code": "@CG114",
+      "category": "CG",
+      "path": "backgrounds/BG176.webp",
+      "name": "CG 460-6",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/460_6.bundle:Still_460_006",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "5abe6830b795545ad6d132e8aaed271832cbcf8ad9055923acaa24fc385a442d"
+    },
+    {
+      "code": "@CG115",
+      "category": "CG",
+      "path": "backgrounds/BG177.webp",
+      "name": "CG 460-7",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/460_7.bundle:Still_460_007",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "33ddc18f9803dd2e7fd4ecb142a8ede969026fde7d853bf23fc9e03aa7bf0975"
+    },
+    {
+      "code": "@CG116",
+      "category": "CG",
+      "path": "backgrounds/BG178.webp",
+      "name": "CG 460-8",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/460_8.bundle:Still_460_008",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "9de46866f5bb73fc4e1757b41d87639ac1274b7c49ee048cade8f1f6bb2e20bc"
+    },
+    {
+      "code": "@CG117",
+      "category": "CG",
+      "path": "backgrounds/BG179.webp",
+      "name": "CG 460-9",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/460_9.bundle:Still_460_009",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "15b186b599d6b51300b438ae37782a7d8473083d5feca1cab122f87dafa0f97c"
+    },
+    {
+      "code": "@CG118",
+      "category": "CG",
+      "path": "backgrounds/BG180.webp",
+      "name": "CG 460-10",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/460_10.bundle:Still_460_010",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "1c608013249851b681c5bc5f7270830223a8eda7b59e6b0ecbfc7b9fb3a32af0"
+    },
+    {
+      "code": "@CG119",
+      "category": "CG",
+      "path": "backgrounds/BG181.webp",
+      "name": "CG 460-11",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/460_11.bundle:Still_460_011",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "ea3705de51ccf4b9c039c64ca8cdb2b677046f3719da303e0c4741514f780d09"
+    },
+    {
+      "code": "@CG120",
+      "category": "CG",
+      "path": "backgrounds/BG182.webp",
+      "name": "CG 470-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/470_1.bundle:Still_470_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "90667331abadc323f5d32d89e37d9e3eecc8d87c6efcbc3c6ca37d0624183814"
+    },
+    {
+      "code": "@CG121",
+      "category": "CG",
+      "path": "backgrounds/BG183.webp",
+      "name": "CG 470-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/470_2.bundle:Still_470_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "b16307629ce9e72ab85562c8ae82426b8ecbb28343fdaac9b93957467465db86"
+    },
+    {
+      "code": "@CG122",
+      "category": "CG",
+      "path": "backgrounds/BG184.webp",
+      "name": "CG 470-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/470_3.bundle:Still_470_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "e0845b3d63894d22cd5857f15161b5ea8abdafa0fad4da3feed90e911f7861bd"
+    },
+    {
+      "code": "@CG123",
+      "category": "CG",
+      "path": "backgrounds/BG185.webp",
+      "name": "CG 470-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/470_4.bundle:Still_470_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "768019a9d17318fbb89ced2d4d9073df04a0c8f416c6871993bac6c8ced322dc"
+    },
+    {
+      "code": "@CG124",
+      "category": "CG",
+      "path": "backgrounds/BG186.webp",
+      "name": "CG 470-5",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/470_5.bundle:Still_470_005",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "b20f971cfb42015e9dc5819f761fd2a7a360b9d649bd751b3b5b186e4832d95d"
+    },
+    {
+      "code": "@CG125",
+      "category": "CG",
+      "path": "backgrounds/BG187.webp",
+      "name": "CG 470-6",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/470_6.bundle:Still_470_006",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "3f40eac3ebefbcff91a98f6b7f1f8986dba95bbe51f185a30e6c7726d1485a4e"
+    },
+    {
+      "code": "@CG126",
+      "category": "CG",
+      "path": "backgrounds/BG188.webp",
+      "name": "CG 470-7",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/470_7.bundle:Still_470_007",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "e49b54651283bebedc52246ee45df74c8066a2a92f14981460d95f5a44917e4d"
+    },
+    {
+      "code": "@CG127",
+      "category": "CG",
+      "path": "backgrounds/BG189.webp",
+      "name": "CG 470-8",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/470_8.bundle:Still_470_008",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "8fc903d9cc0e1a6324013eb3c5f0edf0f2c358ed8dc2a6495911bf6ad4969f76"
+    },
+    {
+      "code": "@CG128",
+      "category": "CG",
+      "path": "backgrounds/BG190.webp",
+      "name": "CG 470-9",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/470_9.bundle:Still_470_009",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "b05ff7863f31b9e26deaca991d8bb62108b160fd4c0524ce2ab4928268066248"
+    },
+    {
+      "code": "@CG129",
+      "category": "CG",
+      "path": "backgrounds/BG191.webp",
+      "name": "CG 470-10",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/470_10.bundle:Still_470_010",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "993afca7b4ae5857678ac4ab1d25af130e68bf5fb4d82a3f2097f4264e0d87be"
+    },
+    {
+      "code": "@CG130",
+      "category": "CG",
+      "path": "backgrounds/BG192.webp",
+      "name": "CG 480-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/480_1.bundle:Still_480_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "ef129320a4780bcb944ab4c420aa2587782017bf78e1571794f15205f8261663"
+    },
+    {
+      "code": "@CG131",
+      "category": "CG",
+      "path": "backgrounds/BG193.webp",
+      "name": "CG 480-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/480_2.bundle:Still_480_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "06bcd317fc6d5da6d2dfa40bbc8db5bb88dddc55e4164c850b2085432f404eb0"
+    },
+    {
+      "code": "@CG132",
+      "category": "CG",
+      "path": "backgrounds/BG194.webp",
+      "name": "CG 480-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/480_3.bundle:Still_480_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "f4f5b364dceee2cf8559e877231ae33cf8c225e6272d22c074ccd4e015c8b138"
+    },
+    {
+      "code": "@CG133",
+      "category": "CG",
+      "path": "backgrounds/BG195.webp",
+      "name": "CG 480-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/480_4.bundle:Still_480_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "d235c16924e5850f980499ea56f9d567f9a7d334d698edebb6969a2ae6555f43"
+    },
+    {
+      "code": "@CG134",
+      "category": "CG",
+      "path": "backgrounds/BG196.webp",
+      "name": "CG 480-5",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/480_5.bundle:Still_480_005",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "46964748f6f742b4a28d87cb8316bb9949afc166d36ddc002a9cdb08259e1407"
+    },
+    {
+      "code": "@CG135",
+      "category": "CG",
+      "path": "backgrounds/BG197.webp",
+      "name": "CG 490-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/490_1.bundle:Still_490_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "cee158c2338d2f0b43232a86ba5a4206a8686de64e208d8c771fbdb223bbf129"
+    },
+    {
+      "code": "@CG136",
+      "category": "CG",
+      "path": "backgrounds/BG198.webp",
+      "name": "CG 500-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/500_1.bundle:Still_500_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a134659c16d14e9bbea041a5e9996350b0a6ee114b29a117fb253e70f93f76f6"
+    },
+    {
+      "code": "@CG137",
+      "category": "CG",
+      "path": "backgrounds/BG199.webp",
+      "name": "CG 510-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/510_1.bundle:Still_510_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "52cc54ad1463bb3b6fa1604f0ff7591d51d1170b36191573955abb05729d8e97"
+    },
+    {
+      "code": "@CG138",
+      "category": "CG",
+      "path": "backgrounds/BG200.webp",
+      "name": "CG 520-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/520_1.bundle:Still_520_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "33dbd22d618fa9af39dd25321d0ed4c2c28ca984580c4fee4a7b2eb0461e954e"
+    },
+    {
+      "code": "@CG139",
+      "category": "CG",
+      "path": "backgrounds/BG201.webp",
+      "name": "CG 530-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/530_1.bundle:Still_530_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "4113a8ed0a99bcd90ad578abdff53cc2e28b1a8fab06c594a06013f48f72698d"
+    },
+    {
+      "code": "@CG140",
+      "category": "CG",
+      "path": "backgrounds/BG202.webp",
+      "name": "CG 540-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/540_1.bundle:Still_540_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "0e63bf99a66af851af48c5fc4158e41f1e8fcb6517e4bfa6a3d650e03bf9b7ff"
+    },
+    {
+      "code": "@CG141",
+      "category": "CG",
+      "path": "backgrounds/BG203.webp",
+      "name": "CG 550-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/550_1.bundle:Still_550_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a187d5d4fd547cfbd74a33f47d1129bea33c527ac948206f6339319abbac02ac"
+    },
+    {
+      "code": "@CG142",
+      "category": "CG",
+      "path": "backgrounds/BG204.webp",
+      "name": "CG 550-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/550_2.bundle:Still_550_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "559e38e202ca7d9f7f2c60d0a2b96bfd2ae6d4ae10ec66934dd59107d72922af"
+    },
+    {
+      "code": "@CG143",
+      "category": "CG",
+      "path": "backgrounds/BG205.webp",
+      "name": "CG 560-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/560_1.bundle:Still_560_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "7fbd637fa0b53775f8a752a03943526a00c17591eedf30ea9725f2b55789a212"
+    },
+    {
+      "code": "@CG144",
+      "category": "CG",
+      "path": "backgrounds/BG206.webp",
+      "name": "CG 570-0",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_0.bundle:Still_570_000",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a4bb7157dc470f19882affe2e4839595635f9a92fc75949b06841b2f9bf71c87"
+    },
+    {
+      "code": "@CG145",
+      "category": "CG",
+      "path": "backgrounds/BG207.webp",
+      "name": "CG 570-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_1.bundle:Still_570_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "82412c59c1684fc111a519d4cddd059cb8afe21354854f9e455bed5af32c7489"
+    },
+    {
+      "code": "@CG146",
+      "category": "CG",
+      "path": "backgrounds/BG208.webp",
+      "name": "CG 570-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_2.bundle:Still_570_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "ecc36d16daa5e43e307786339a8305f52497c0a33355f02557d0d7011b6b234e"
+    },
+    {
+      "code": "@CG147",
+      "category": "CG",
+      "path": "backgrounds/BG209.webp",
+      "name": "CG 570-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_3.bundle:Still_570_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "721399501cbbcd8704fe2bf7bd8a4d679ebd8897e81ac9fccdf9948f846287be"
+    },
+    {
+      "code": "@CG148",
+      "category": "CG",
+      "path": "backgrounds/BG210.webp",
+      "name": "CG 570-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_4.bundle:Still_570_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "bcdc2b132bf46cabae7ec7d0319dc196f59d891aaae6e1b89cd644a1746b0521"
+    },
+    {
+      "code": "@CG149",
+      "category": "CG",
+      "path": "backgrounds/BG211.webp",
+      "name": "CG 570-5",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_5.bundle:Still_570_005",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "057e2ee249c8d43690893a2be4c9e069081c233416266f8b1a6574334c9fded7"
+    },
+    {
+      "code": "@CG150",
+      "category": "CG",
+      "path": "backgrounds/BG212.webp",
+      "name": "CG 570-6",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_6.bundle:Still_570_006",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "68003015b73b92acbbe09dcafdd749523068a47e4105fc0f5fc49597037e6f61"
+    },
+    {
+      "code": "@CG151",
+      "category": "CG",
+      "path": "backgrounds/BG213.webp",
+      "name": "CG 570-7",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_7.bundle:Still_570_007",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "fdbe0718221a38e02d500de43c43d5d45aff52290a65c372cbac0c55a7eb8332"
+    },
+    {
+      "code": "@CG152",
+      "category": "CG",
+      "path": "backgrounds/BG214.webp",
+      "name": "CG 570-8",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_8.bundle:Still_570_008",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a8d7994d2e27ae95baf022d2f86f11fa5d399ee1f863139b7c9bd8b023a8ebaf"
+    },
+    {
+      "code": "@CG153",
+      "category": "CG",
+      "path": "backgrounds/BG215.webp",
+      "name": "CG 570-9",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_9.bundle:Still_570_009",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "bae3e853faba22ff42959d02f654651ac45df1d7e1a58fa52e2b9944f5bb6ad3"
+    },
+    {
+      "code": "@CG154",
+      "category": "CG",
+      "path": "backgrounds/BG216.webp",
+      "name": "CG 570-10",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_10.bundle:Still_570_010",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "24d50086b1691b96652530e1fe3f5237229d6d9bf14ce1b92e78dc99f109a97c"
+    },
+    {
+      "code": "@CG155",
+      "category": "CG",
+      "path": "backgrounds/BG217.webp",
+      "name": "CG 570-11",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_11.bundle:Still_570_011",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "5af60fdff16a6c8d87d8c5d28aa4255548ea0181ec7055de70d55dc764e3ce6b"
+    },
+    {
+      "code": "@CG156",
+      "category": "CG",
+      "path": "backgrounds/BG218.webp",
+      "name": "CG 570-12",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_12.bundle:Still_570_012",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "13c75c758438455a6c1abd596fccd4e6e27dcaa9d49b77d0d37ee8c8e6d8d5c7"
+    },
+    {
+      "code": "@CG157",
+      "category": "CG",
+      "path": "backgrounds/BG219.webp",
+      "name": "CG 570-13",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_13.bundle:Still_570_013",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "8b83fdc80e2d71c5551e90ef7281b9b1770d3ea9ca0f00a51afb2d7f41cc4b55"
+    },
+    {
+      "code": "@CG158",
+      "category": "CG",
+      "path": "backgrounds/BG220.webp",
+      "name": "CG 570-14",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_14.bundle:Still_570_014",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "99013109278dc87237bb205626e7cfc1b6dfa4b115e20fed20f8269b60116567"
+    },
+    {
+      "code": "@CG159",
+      "category": "CG",
+      "path": "backgrounds/BG221.webp",
+      "name": "CG 570-15",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/570_15.bundle:Still_570_015",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "fca10b348d4e6263b815eee8ed5a2c98f49c1b0f8c98a6a19a8c77679b82c14e"
+    },
+    {
+      "code": "@CG160",
+      "category": "CG",
+      "path": "backgrounds/BG222.webp",
+      "name": "CG 580-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/580_1.bundle:Still_580_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "833722c23d479b3722270507fb46021c904435e3a865e4326f6b8dec9ba9dd56"
+    },
+    {
+      "code": "@CG161",
+      "category": "CG",
+      "path": "backgrounds/BG223.webp",
+      "name": "CG 580-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/580_2.bundle:Still_580_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "4822dad5b8d798ee7488332c06bbcb36195cbf9e924dd54262a5769784a8f8eb"
+    },
+    {
+      "code": "@CG162",
+      "category": "CG",
+      "path": "backgrounds/BG224.webp",
+      "name": "CG 580-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/580_3.bundle:Still_580_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "24db8dbc6d58c08d94e9cf1a2aaf9dd7a32b48ee881436b1cc48beb698d4f4a8"
+    },
+    {
+      "code": "@CG163",
+      "category": "CG",
+      "path": "backgrounds/BG225.webp",
+      "name": "CG 590-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/590_1.bundle:Still_590_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "303cfb861912df02eb136e2db8dd0ce021cb97780b839fdbf4ff08ae081cee4c"
+    },
+    {
+      "code": "@CG164",
+      "category": "CG",
+      "path": "backgrounds/BG226.webp",
+      "name": "CG 590-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/590_2.bundle:Still_590_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "b71ea669363b7ead757e9b96b2c7c77c5d8a1dc96d338575650254057aef9470"
+    },
+    {
+      "code": "@CG165",
+      "category": "CG",
+      "path": "backgrounds/BG227.webp",
+      "name": "CG 590-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/590_3.bundle:Still_590_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "e13d3f7f5702a91606ee87f7e1696c6dcdf2d3ba547f743ec207ad81e615581e"
+    },
+    {
+      "code": "@CG166",
+      "category": "CG",
+      "path": "backgrounds/BG228.webp",
+      "name": "CG 590-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/590_4.bundle:Still_590_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "e239d6fe2d1e12530232573e86b5d84b068a99316037af460284473573becd6c"
+    },
+    {
+      "code": "@CG167",
+      "category": "CG",
+      "path": "backgrounds/BG229.webp",
+      "name": "CG 690-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/690_1.bundle:Still_690_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "be3fb50373380300e47ab403c91cf73de2a4f5f79f2db807ac4c3378cfc3cd5b"
+    },
+    {
+      "code": "@CG168",
+      "category": "CG",
+      "path": "backgrounds/BG230.webp",
+      "name": "CG 700-1",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/700_1.bundle:Still_700_001",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "71d1077d6b4adc52f8bfa54e2135a4729aa25eea8b4d5401c63fbadfaa76525b"
+    },
+    {
+      "code": "@CG169",
+      "category": "CG",
+      "path": "backgrounds/BG231.webp",
+      "name": "CG 700-2",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/700_2.bundle:Still_700_002",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "a3388d93064890b8eab02f2e1048ac47ce690bb88e91e2cdbcbfcd19211076f6"
+    },
+    {
+      "code": "@CG170",
+      "category": "CG",
+      "path": "backgrounds/BG232.webp",
+      "name": "CG 700-3",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/700_3.bundle:Still_700_003",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "52d6aa220a7dc4e5292d49d69119bf27072a64d2f5819bb51e3dd160bf02b240"
+    },
+    {
+      "code": "@CG171",
+      "category": "CG",
+      "path": "backgrounds/BG233.webp",
+      "name": "CG 700-4",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/700_4.bundle:Still_700_004",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "23bdae66ca0abbd715766066d66e5c1ec470ec9bc418eba31115c7cd235c9fa7"
+    },
+    {
+      "code": "@CG172",
+      "category": "CG",
+      "path": "backgrounds/BG234.webp",
+      "name": "CG 700-6",
+      "source": "naninovel-backgrounds_assets_naninovel/backgrounds/stills/700_6.bundle:Still_700_006",
+      "original_size": [
+        4096,
+        2048
+      ],
+      "sha256": "378458dfa03283e4e7c15840b8fe4ede1773c7064b3d4c67d89cfc3404ba9adf"
     }
   ]
 }

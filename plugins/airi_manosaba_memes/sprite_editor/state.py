@@ -2,6 +2,7 @@ import asyncio
 import hashlib
 import json
 import os
+import re
 import secrets
 from datetime import datetime, timezone
 from pathlib import Path
@@ -14,6 +15,14 @@ from ..runtime import logger, run_storage
 SCHEMA_VERSION = 2
 CODE_ALPHABET = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ"
 CODE_LENGTH = 10
+CHARACTER_PREFIXES = {
+    "Meruru": "MLL", "Noah": "NY", "Hanna": "HN", "Nanoka": "NYX",
+    "Alisa": "YLS", "Miria": "MLY", "Sherry": "JXL", "Ema": "AM",
+    "Margo": "MG", "AnAn": "AA", "Coco": "KK", "Hiro": "XL",
+    "Leia": "LY", "Yuki": "X", "Warden": "DYZ", "Jailer": "KS",
+}
+SHORT_CODE_PATTERN = rf"(?:{'|'.join(CHARACTER_PREFIXES.values())})(?!000)[0-9]{{3}}"
+SPRITE_CODE_PATTERN = rf"(?:{SHORT_CODE_PATTERN}|[{CODE_ALPHABET}]{{{CODE_LENGTH}}})"
 PickerKind = Literal["preset", "head", "expression", "eyes", "mouth", "detail", "arm"]
 
 
@@ -98,7 +107,7 @@ def sprite_code(character: str, recipe: SpriteRecipe) -> str:
 
 def parse_ref(value: str) -> str | None:
     code = value.strip().upper().removeprefix("#")
-    if len(code) != CODE_LENGTH or any(char not in CODE_ALPHABET for char in code):
+    if re.fullmatch(SPRITE_CODE_PATTERN, code) is None:
         return None
     return code
 

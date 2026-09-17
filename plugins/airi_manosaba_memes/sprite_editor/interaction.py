@@ -1,4 +1,3 @@
-import asyncio
 import math
 import re
 
@@ -11,7 +10,7 @@ from nonebot_plugin_alconna import (
     get_target,
 )
 
-from ..utils import CHARACTER_NAME_MAP, CHARACTER_NAMES
+from ..utils import CHARACTER_DISPLAY_NAMES, CHARACTER_NAME_MAP, CHARACTER_NAMES
 from ..runtime import run_image, run_sync, session_file
 from ..billing import production_charge
 from .assets import (
@@ -23,7 +22,7 @@ from .codec import RecipeCodec
 from .presets import PresetCatalog
 from .rendering import SpriteRenderer
 from .state import (
-    CODE_ALPHABET,
+    SPRITE_CODE_PATTERN,
     CODE_LENGTH,
     MessageContext,
     PickerKind,
@@ -35,12 +34,10 @@ from .state import (
 )
 
 PAGE_SIZE = 9
-CHARACTER_BY_VALUE = {
-    character.value: name for name, character in CHARACTER_NAME_MAP.items()
-}
 SPRITE_HELP = f"""创建立绘
-  魔裁立绘 <角色名>
+  魔裁立绘 <角色名或立绘短码>
   支持角色：{"、".join(CHARACTER_NAMES)}
+  支持角色全名，例如 橘雪莉、樱羽艾玛、月代雪。
   创建后会先发送官方预设选择表，不会直接生成默认立绘。
   首次选择预设成图收费 10 积分；选择表、翻页和后续回复编辑免费。
 
@@ -63,26 +60,31 @@ SPRITE_HELP = f"""创建立绘
 
 回复与短码
   选择编号可以回复选择表或立绘；翻页必须回复对应的选择表。
-  每个短码都固定编码了角色和完整配方，不依赖本机保存记录。
-  例如梅露露 P1 的固定短码是 #CFAMVMR9LZ，可以发送：
-  #CFAMVMR9LZ 表情
-  #CFAMVMR9LZ 配方
-  只发送该短码会直接生成立绘，收费 10 积分，随后可免费回复该图继续编辑。
+  短码格式为 #角色拼音首字母大写加三位数字，雪莉使用 JXL，希罗使用 XL。
+  立绘成图消息同时显示新短码和旧短码，两者对应同一套立绘。
+  例如梅露露 P1 的固定短码是 #MLL001，可以发送：
+  魔裁立绘 #MLL001
+  #MLL001 表情
+  #MLL001 配方
+  使用 魔裁立绘 短码 调取立绘收费 10 积分，随后可免费回复该图继续编辑。
+  单独发送短码不会生成立绘。
   普通聊天中的 P1、表情 等文字不会启动编辑。
 
 内容与历史
   每张生成结果都是可以直接使用的完整立绘。
-  资源不变时，相同组合永远得到相同短码；换机器或清空记录后仍可解码。
+  官方预设编号固定；自定义组合持久保存，相同组合复用编号。
+  每位角色最多 999 个编号，官方预设占用其中一部分；用满后不覆盖已有编号。
+  自定义短码跨机器使用时需要迁移本机短码记录，清空记录后无法恢复自定义组合。
   回复旧图即可从旧组合继续编辑，不需要撤销或完成操作。
   回复上下文仍会在本机永久保存，不设过期时间。"""
-REF_PATTERN = rf"#[{CODE_ALPHABET}]{{{CODE_LENGTH}}}"
+REF_PATTERN = rf"#{SPRITE_CODE_PATTERN}"
 PICKER_CHOICE_PATTERN = r"[PHEIMAD][1-9][0-9]{0,3}"
 COMMAND_PATTERN = (
     rf"(?:{PICKER_CHOICE_PATTERN}|上一页|下一页|头型|表情|眼睛|嘴巴|手臂|细节|配方|"
     r"\+脸红|-脸红|\+汗|-汗)"
 )
 FOLLOWUP_RE = re.compile(
-    rf"^(?:(?P<ref>{REF_PATTERN})(?:\s+(?P<ref_command>{COMMAND_PATTERN}))?"
+    rf"^(?:(?P<ref>{REF_PATTERN})\s+(?P<ref_command>{COMMAND_PATTERN})"
     rf"|(?P<reply_command>{COMMAND_PATTERN}))$",
     re.IGNORECASE,
 )
@@ -261,15 +263,19 @@ async def _sprite_from_ref(value: str | None) -> tuple[str, StoredSprite] | None
     if not code:
         return None
     sprite = await _session_store().get_sprite(code)
-    if sprite is not None:
-        return code, sprite
-
-    decoded = await asyncio.to_thread(_recipe_codec().decode, code)
-    if decoded is None:
-        return None
-    character, recipe = decoded
-    await _session_store().put_sprite(character, recipe, code=code)
-    return code, StoredSprite(character=character, recipe=recipe)
+    if sprite is None:
+        decoded = await run_sync(_recipe_codec().decode, code)
+        if decoded is None:
+            return None
+        character, recipe = decoded
+        sprite = StoredSprite(character=character, recipe=recipe)
+    try:
+        code = await run_sync(_recipe_codec().encode, sprite.character, sprite.recipe)
+    except ValueError:
+        if len(code) != CODE_LENGTH:
+            raise
+    await _session_store().put_sprite(sprite.character, sprite.recipe, code=code)
+    return code, sprite
 
 
 async def _send_picker(
@@ -283,6 +289,8 @@ async def _send_picker(
     base_sprite: str | None,
 ) -> None:
     base = await _sprite_from_ref(base_sprite)
+    if base is not None:
+        base_sprite = base[0]
     recipe = base[1].recipe if base else None
     choices = _compatible_picker_choices(character, picker, choices, recipe)
     shown, page, total_pages = _page(choices, page)
@@ -341,8 +349,14 @@ async def _send_sprite(bot: Bot, event: Event, code: str, *, paid: bool = False)
     image = await run_image(
         _renderer().render_recipe, stored.character, stored.recipe
     )
+    legacy_code = await run_sync(
+        _recipe_codec().legacy.encode, stored.character, stored.recipe
+    )
+    new_code = f"#{code}" if len(code) != CODE_LENGTH else "暂不可用"
     caption = (
-        f"#{code} · {CHARACTER_BY_VALUE.get(stored.character, stored.character)}\n"
+        f"{CHARACTER_DISPLAY_NAMES[stored.character]}\n"
+        f"短码：{new_code}\n"
+        f"备用短码：#{legacy_code}\n"
         "回复：头型 / 表情 / 眼睛 / 嘴巴 / 手臂 / 细节 / 配方"
     )
     async with production_charge(event.get_user_id(), paid=paid):
@@ -445,9 +459,19 @@ def _modifier_choice(character: str, recipe: SpriteRecipe, command: str) -> str 
 async def handle_sprite(bot: Bot, event: Event, result: Arparma) -> None:
     character_name = result["character"]
     if not character_name:
-        await UniMessage.text("用法：魔裁立绘 <角色名>\n发送 魔裁立绘 -h 查看完整帮助。").send(
+        await UniMessage.text("用法：魔裁立绘 <角色名或立绘短码>\n发送 魔裁立绘 -h 查看完整帮助。").send(
             target=event, bot=bot
         )
+        return
+    if character_name.startswith("#") or parse_ref(character_name):
+        if not prefab_asset_status().available:
+            await UniMessage.text(prefab_unavailable_message()).send(target=event, bot=bot)
+            return
+        resolved = await _sprite_from_ref(character_name)
+        if resolved is None:
+            await UniMessage.text("没有找到这个立绘短码。").send(target=event, bot=bot)
+            return
+        await _send_sprite(bot, event, resolved[0], paid=True)
         return
     try:
         character = CHARACTER_NAME_MAP[character_name].value
@@ -503,11 +527,6 @@ async def handle_sprite_followup(
     if context is None:
         if explicit_ref:
             await UniMessage.text("没有找到这个立绘短码。 ").send(target=event, bot=bot)
-        return
-
-    if command is None:
-        assert context.sprite is not None
-        await _send_sprite(bot, event, context.sprite, paid=True)
         return
 
     if re.fullmatch(PICKER_CHOICE_PATTERN, command):
@@ -600,6 +619,6 @@ async def handle_sprite_followup(
         overrides = "、".join(recipe.overrides) if recipe.overrides else "无"
         appearance = ",".join(preset.appearance)
         await UniMessage.text(
-            f"短码：#{code}\n角色：{CHARACTER_BY_VALUE.get(stored.character, stored.character)}\n"
+            f"短码：#{code}\n角色：{CHARACTER_DISPLAY_NAMES[stored.character]}\n"
             f"基础预设：{recipe.base_preset}\n官方组合：{appearance}\n覆盖项：{overrides}"
         ).send(target=event, bot=bot)
