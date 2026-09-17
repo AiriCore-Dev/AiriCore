@@ -11,8 +11,8 @@ TOKEN_RE = re.compile(r'''\s*((?:[^\s"'\\]|\\[\s\S]|"(?:[^"\\]|\\[\s\S])*"|'(?:[
 @dataclass(frozen=True, slots=True)
 class EvidenceRequest:
     item: str | None
-    name: str
-    description: str
+    name: str | None
+    description: str | None
 
 
 def parse_evidence(text: str, image_count: int = 0) -> EvidenceRequest:
@@ -54,6 +54,8 @@ def parse_evidence(text: str, image_count: int = 0) -> EvidenceRequest:
         pending_separator += separator
     if item is None and not image_count:
         raise ValueError('请指定一个物品短码，或在同一条消息中发送一张图片')
+    if item is not None and name is None and not body:
+        return EvidenceRequest(item, None, None)
     if name is None:
         raise ValueError('请使用 *名称 指定证物名称')
     description = ''.join(body).strip()

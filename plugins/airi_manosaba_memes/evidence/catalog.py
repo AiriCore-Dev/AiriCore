@@ -14,6 +14,7 @@ class ItemEntry:
     code: str
     name: str
     path: Path
+    description: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -40,8 +41,12 @@ class ItemCatalog:
                 path = (self.root / relative).resolve()
                 if not isinstance(code, str) or not ITEM_RE.fullmatch(code) or code != code.upper() or code in seen or not isinstance(name, str) or not name.strip() or relative.is_absolute() or not path.is_relative_to(self.root) or '..' in relative.parts:
                     raise ValueError('物品目录条目无效')
+                versions = record.get('versions', [])
+                if not isinstance(versions, list) or any(not isinstance(version, dict) or not isinstance(version.get('version'), int) or any(not isinstance(version.get(key), str) or not version[key].strip() for key in ('name', 'description')) for version in versions):
+                    raise ValueError('物品原版文案格式无效')
+                latest = max(versions, key=lambda version: version['version']) if versions else None
                 seen.add(code)
-                entries.append(ItemEntry(code, name, path))
+                entries.append(ItemEntry(code, latest['name'] if latest else name, path, latest['description'] if latest else None))
             self._entries = tuple(entries)
             self._by_code = {entry.code: entry for entry in entries}
         except (OSError, KeyError, TypeError, ValueError) as error:

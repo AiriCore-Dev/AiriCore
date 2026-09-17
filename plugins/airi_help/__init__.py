@@ -66,6 +66,11 @@ $ 直营姬：10积分 / 次
 * 发送 wws help 查看帮助
 $ 10积分 / 次
 
+- Airi-Manosaba-Memes:
+魔裁DIY工具 By AiriCore dev., zhaomaoniu
+* 发送 manohelp 查看帮助
+$ 10积分 / 次
+
 - Airi-MCRcon:
 Airi Cobblemon Sever 服管 By AiriCore Dev.
 （该功能仅对部分群聊开放）
@@ -150,11 +155,6 @@ $ 10积分 / 次
 - meme-stickers:
 PJSK&Arcaea 贴纸制作 By lgc-NB2Dev
 * 发送 pjskbq 或者 arcbq 查看说明
-$ 10积分 / 次
-
-- Airi-Manosaba-Memes:
-魔裁表情包制作 By AiriCore dev., zhaomaoniu
-* 发送 manohelp 查看帮助
 $ 10积分 / 次
 
 - emojimix:
