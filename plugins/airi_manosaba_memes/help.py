@@ -58,5 +58,5 @@ async def render_help(path: Path = HELP_PATH) -> bytes:
             await page.set_content(document, wait_until="load")
             await page.evaluate("document.fonts.ready")
             await page.evaluate("Promise.all(Array.from(document.images, image => image.decode()))")
-            payload = await page.screenshot(type="png", full_page=True)
+            payload = await page.screenshot(type="jpeg", full_page=True)
         return await run_sync(add_watermark, payload)
