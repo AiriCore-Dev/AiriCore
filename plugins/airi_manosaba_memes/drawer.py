@@ -105,21 +105,24 @@ def get_option_coordinates(number: int) -> list[tuple[int, int]]:
         ]
 
 
-def draw_trial(character: Character, options: list[Option]) -> bytes:
+def draw_trial(character: Character, options: list[Option], *, transparent: bool = False) -> bytes:
     if not 1 <= len(options) <= 6:
         raise ValueError("审判选项数量须为 1～6 个")
     if any(not option.text.strip() or len(option.text) > 300 for option in options):
         raise ValueError("每个审判选项须为 1～300 字")
 
     fonts = get_fonts(PLUGIN_PATH / "assets/fonts/SourceHanSerifSC.otf")
-    drawer = Drawer.from_image(get_source(TRIAL_UI_PATH / "black.png"), fonts)
-    drawer.layer(
-        Layer("background").image_fit(
-            get_source(TRIAL_UI_PATH / "background.png"),
-            Region(0, 0, 1260, 1080),
-            scale=ScaleMode.Stretch,
+    if transparent:
+        drawer = Drawer(1260, 1080, fonts)
+    else:
+        drawer = Drawer.from_image(get_source(TRIAL_UI_PATH / "black.png"), fonts)
+        drawer.layer(
+            Layer("background").image_fit(
+                get_source(TRIAL_UI_PATH / "background.png"),
+                Region(0, 0, 1260, 1080),
+                scale=ScaleMode.Stretch,
+            )
         )
-    )
 
     character_image = TRIAL_CHARACTER_PATH / f"{character.value.lower()}.png"
     character_width, character_height = get_png_size(character_image)

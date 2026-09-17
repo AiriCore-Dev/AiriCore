@@ -1,0 +1,142 @@
+{
+  "description": "原作Court舞台0号位的左右NoRoll-Lvl1静态投影；保留原几何与纹理，未重建URP照明、后处理和动画。",
+  "sources": [
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\manosaba_game\\GameAssembly.dll",
+      "sha256": "d19a9d98abe1f5d120588f23f7fe0645b8b94a2777517f90338d640e0e934506",
+      "bytes": 53917696
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\manosaba_game\\manosaba_Data\\StreamingAssets\\aa\\StandaloneWindows64\\general-prefabs_assets_all.bundle",
+      "sha256": "af1be836daa62857ae854d010fbe5ac6d0a7edd99e3cd022dca87e6fa9a9d642",
+      "bytes": 17126617
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\manosaba_game\\manosaba_Data\\StreamingAssets\\aa\\StandaloneWindows64\\general-sprites_assets_all.bundle",
+      "sha256": "258574e79116ac032f097494509596cf3468c6fac9c25f71af801aa14d9b509a",
+      "bytes": 23236547
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\manosaba_game\\manosaba_Data\\StreamingAssets\\aa\\StandaloneWindows64\\naninovel-scripts_assets_naninovelscripts-system.bundle",
+      "sha256": "43bec2003af65c3bc03f0a32d79801e6a6dc13011d719ddb95b57e7132cee9de",
+      "bytes": 98584
+    },
+    {
+      "path": "D:\\Temp\\manosaba_debate_stage\\render_stage.py",
+      "sha256": "ef90cf11d9264e05280a67c6db6156ab82721c65e75b5863ad8cf2f78b9a6ba1",
+      "bytes": 6389
+    },
+    {
+      "path": "D:\\Temp\\manosaba_debate_stage\\stage_geometry.json",
+      "sha256": "8264c6cfc8d4c3f48d898ca784e1e368c268709ade4646da8e02e83f0c19f1c8",
+      "bytes": 105698
+    },
+    {
+      "path": "D:\\Temp\\manosaba_debate_stage\\Background_014_001.png",
+      "sha256": "ae40124e428cae10b2cef355e4fb36106fcd91fa2a98c3ff6eb553f9f98797aa",
+      "bytes": 2079628
+    },
+    {
+      "path": "D:\\Temp\\manosaba_debate_stage\\Carpet 4 BaseMap.png",
+      "sha256": "6c79beeab83cc681f0de05879af547caade428303eefd97106b97f89249f34be",
+      "bytes": 7498648
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\manosaba_game\\manosaba_Data\\StreamingAssets\\aa\\StandaloneWindows64\\naninovel-characters_assets_naninovel\\characters\\alisa.bundle",
+      "sha256": "2dc0b10d31fddb4e0ca83c5b3aebc48af0e931af08db5f64a542c3f94990c786",
+      "bytes": 9304302
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\manosaba_game\\manosaba_Data\\StreamingAssets\\aa\\StandaloneWindows64\\naninovel-characters_assets_naninovel\\characters\\anan.bundle",
+      "sha256": "05e393ae0bd945f70d075d9c1644b5f761a9f13fc0bf10e424faca1903cc8834",
+      "bytes": 16769389
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\manosaba_game\\manosaba_Data\\StreamingAssets\\aa\\StandaloneWindows64\\naninovel-characters_assets_naninovel\\characters\\coco.bundle",
+      "sha256": "88dc84554215bb2a06ea5665e1e7f93f1526ba146c60f8ac6549a92991056c42",
+      "bytes": 7326206
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\manosaba_game\\manosaba_Data\\StreamingAssets\\aa\\StandaloneWindows64\\naninovel-characters_assets_naninovel\\characters\\ema.bundle",
+      "sha256": "f7993c57c45e0db885778ee68a11e874ae2a0db5ba659d1b70c6f7de039f5d6d",
+      "bytes": 8620490
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\manosaba_game\\manosaba_Data\\StreamingAssets\\aa\\StandaloneWindows64\\naninovel-characters_assets_naninovel\\characters\\hanna.bundle",
+      "sha256": "5453e4f35af5b3c10192148fbc43e1291717a10f125144437e5ef04be3b67d50",
+      "bytes": 7308897
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\manosaba_game\\manosaba_Data\\StreamingAssets\\aa\\StandaloneWindows64\\naninovel-characters_assets_naninovel\\characters\\hiro.bundle",
+      "sha256": "92c1dbbe4efc3b3297d2eda44b1667650ac3389b5fa6b6042fc155c4f1fe89f5",
+      "bytes": 6923198
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\manosaba_game\\manosaba_Data\\StreamingAssets\\aa\\StandaloneWindows64\\naninovel-characters_assets_naninovel\\characters\\jailer.bundle",
+      "sha256": "a43ee1046cf275761d7d450c678fba4b3ac184c4e4b59c1201e52e10b039e125",
+      "bytes": 1611889
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\manosaba_game\\manosaba_Data\\StreamingAssets\\aa\\StandaloneWindows64\\naninovel-characters_assets_naninovel\\characters\\leia.bundle",
+      "sha256": "b35fabd6cc8754ec0f2c2ed24fedb15bfd77b6417f38d2558edd8371bbed14f4",
+      "bytes": 5710294
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\manosaba_game\\manosaba_Data\\StreamingAssets\\aa\\StandaloneWindows64\\naninovel-characters_assets_naninovel\\characters\\margo.bundle",
+      "sha256": "4ea3b6fb78b5099c043ecedc04e824b0335d2d91e1c792fdc8b5cbfeb2e7da2e",
+      "bytes": 9111226
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\manosaba_game\\manosaba_Data\\StreamingAssets\\aa\\StandaloneWindows64\\naninovel-characters_assets_naninovel\\characters\\meruru.bundle",
+      "sha256": "02d91b4497fe65c9bd8c3304f1804d6715d9b3474b7797149a947c85808cd381",
+      "bytes": 8381172
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\manosaba_game\\manosaba_Data\\StreamingAssets\\aa\\StandaloneWindows64\\naninovel-characters_assets_naninovel\\characters\\miria.bundle",
+      "sha256": "861cc0f19a0a9ce4c96b1218e371dd839464e19fdfc15e049e0c1638f62a4d6f",
+      "bytes": 6284989
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\manosaba_game\\manosaba_Data\\StreamingAssets\\aa\\StandaloneWindows64\\naninovel-characters_assets_naninovel\\characters\\nanoka.bundle",
+      "sha256": "a9a51087ff6904edb2c1357b96670faddfc720127e5588108ed44b50f6cea2c3",
+      "bytes": 6149580
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\manosaba_game\\manosaba_Data\\StreamingAssets\\aa\\StandaloneWindows64\\naninovel-characters_assets_naninovel\\characters\\noah.bundle",
+      "sha256": "b522a7b63d2a6b6d4748274f352a4ca1b202808148ec5f96b4221038332ff99e",
+      "bytes": 6596706
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\manosaba_game\\manosaba_Data\\StreamingAssets\\aa\\StandaloneWindows64\\naninovel-characters_assets_naninovel\\characters\\sherry.bundle",
+      "sha256": "133e4bbc3a2206a113128e9191e536abb3bfadb886155a02eedf7051ccbf4d49",
+      "bytes": 11397482
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\manosaba_game\\manosaba_Data\\StreamingAssets\\aa\\StandaloneWindows64\\naninovel-characters_assets_naninovel\\characters\\warden.bundle",
+      "sha256": "947af87e8487737b1070fb71e466f5527c04963a4f0de0ff1ed836280eb29938",
+      "bytes": 819311
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\manosaba_game\\manosaba_Data\\StreamingAssets\\aa\\StandaloneWindows64\\naninovel-characters_assets_naninovel\\characters\\yuki.bundle",
+      "sha256": "7fbae13d638006ac6da3157476cc6713b1ee977819963c007e80ac200a0fe17d",
+      "bytes": 2908595
+    }
+  ],
+  "outputs": [
+    {
+      "name": "court_left.webp",
+      "sha256": "3bc88446d1ea794b78fdd6a4c94f3f6f96f0c8710e1eba8780a86e83ae715c6a",
+      "bytes": 1248438
+    },
+    {
+      "name": "court_right.webp",
+      "sha256": "b8168cba0295b4b22c636bc2bad9de16354479dc308ea701f49b296fbba9b5cc",
+      "bytes": 1245032
+    },
+    {
+      "name": "layout.json",
+      "sha256": "9df0a9fb868823bfc4e930353fc64f2b637582dd313dea33b8964290bd449f8c",
+      "bytes": 4982
+    }
+  ]
+}

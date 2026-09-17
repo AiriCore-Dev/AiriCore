@@ -38,6 +38,8 @@ from .dialogue.interaction import (
     handle_dialogue,
 )
 from .utils import CHARACTER_NAMES
+from .debate.interaction import handle_debate, resolve_debate_reply
+from .debate.composition import render_debate_trial
 
 CHARACTER_NAMES_TEXT = ", ".join(CHARACTER_NAMES)
 
@@ -58,6 +60,9 @@ manohelp：查看图片帮助
     免费查看官方背景，也可使用背景短码直接查看
 魔裁对话 @背景短码 [立绘短码] [*姓名] 正文
     最多三个立绘，生成对话图收费 10 积分
+魔裁审问 立绘短码 -左/-右 文字
+    参数可乱序，**文字** 表示粉色强调，最多八行
+    回复审问图发送魔裁鸭梨，可生成半透明黑色底的叠加图
 """.strip()
 
 __plugin_meta__ = PluginMetadata(
@@ -140,13 +145,17 @@ async def handle_anan_says(event: Event, result: Arparma):
 
 
 @trial_handler.handle()
-async def handle_trial(bot: Bot, event: Event, argument: Message = CommandArg()):
+async def handle_trial(bot: Bot, event: Event, argument: Message = CommandArg(), message: OriginalUniMsg = None):
     text = argument.extract_plain_text().strip()
     if not text or text in {"-h", "--help", "帮助"}:
         await trial_handler.finish(TRIAL_HELP)
     try:
         character, options = parse_trial(text)
-        image_bytes = await run_image(draw_trial, character, options)
+        debate = await resolve_debate_reply(bot, event, message)
+        if debate is None:
+            image_bytes = await run_image(draw_trial, character, options)
+        else:
+            image_bytes = await run_image(render_debate_trial, debate, character, options)
     except (OverflowError, ValueError) as error:
         await trial_handler.finish(str(error))
     try:
