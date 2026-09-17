@@ -36,7 +36,7 @@ def validate_request(request: DebateRequest) -> DebateRequest:
 
 
 def parse_debate(text: str) -> DebateRequest:
-    text = text.replace("\r\n", "\n").replace("\r", "\n").replace("\\n", "<br>")
+    text = text.replace("\r\n", "\n").replace("\r", "\n")
     sprite = None
     side = None
     body = []

@@ -10,6 +10,7 @@ TRIAL_HELP = """用法：在同一条消息中发送
 【反驳】这是一个反驳
 
 每行一个选项，支持 1～6 个选项，每项最多 300 字。
+选项正文可用 \\n 换行，\\\\n 保留为字面量；选项之间仍用实际换行分隔。
 类型：疑问、反驳、伪证、赞同、魔法:角色名。
 例如：【魔法:艾玛】使用魔法
 制作收费 10 积分。
@@ -38,7 +39,7 @@ def parse_trial(text: str) -> tuple[Character, list[Option]]:
         kind, argument, body = match.groups()
         if kind != "魔法" and argument is not None:
             raise ValueError(f"第 {index} 个选项只有魔法类型可以指定角色，请使用【{kind}】正文格式")
-        body = body.strip()
+        body = re.sub(r"\\([\\n])", lambda match: "\n" if match[1] == "n" else "\\", body).strip()
         if not body or len(body) > 300:
             raise ValueError(f"第 {index} 个选项正文须为 1～300 字")
         try:

@@ -44,7 +44,7 @@ def _tokens(text: str) -> list[_Token]:
             index += 1
             if index >= len(text):
                 raise ValueError("反斜线后缺少要转义的字符")
-            value.append(text[index])
+            value.append("\n" if text[index] == "n" else text[index])
             protected = True
         elif quote is None and char in {'"', "'"}:
             quote = char
