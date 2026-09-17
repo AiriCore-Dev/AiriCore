@@ -124,7 +124,7 @@ async def handle_manohelp():
     except Exception:
         logger.exception("魔裁帮助图片渲染失败")
         await manohelp_handler.finish("魔裁帮助图片渲染失败，请稍后再试或联系管理员")
-    await UniMessage.image(raw=payload, mimetype="image/png").finish()
+    await UniMessage.image(raw=payload, mimetype="image/jpeg").finish()
 
 
 @anan_says_handler.handle()

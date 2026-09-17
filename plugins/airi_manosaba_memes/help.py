@@ -1,11 +1,13 @@
 import asyncio
 import base64
 import html
+import io
 import mimetypes
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 from markdown_it import MarkdownIt
+from PIL import Image
 
 from .asset_cache import get_source
 from .output import add_watermark
@@ -48,6 +50,13 @@ def build_help_html(path: Path = HELP_PATH) -> str:
     return f'<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><style>{css}</style><title>{html.escape("魔裁表情包帮助")}</title></head><body><main>{body}</main></body></html>'
 
 
+def compress_help(payload: bytes) -> bytes:
+    output = io.BytesIO()
+    with Image.open(io.BytesIO(add_watermark(payload))) as image:
+        image.convert("RGB").save(output, "JPEG", quality=80, subsampling=0, optimize=True)
+    return output.getvalue()
+
+
 async def render_help(path: Path = HELP_PATH) -> bytes:
     from nonebot_plugin_htmlrender import get_new_page
 
@@ -58,5 +67,5 @@ async def render_help(path: Path = HELP_PATH) -> bytes:
             await page.set_content(document, wait_until="load")
             await page.evaluate("document.fonts.ready")
             await page.evaluate("Promise.all(Array.from(document.images, image => image.decode()))")
-            payload = await page.screenshot(type="jpeg", full_page=True)
-        return await run_sync(add_watermark, payload)
+            payload = await page.screenshot(type="png", full_page=True)
+        return await run_sync(compress_help, payload)
