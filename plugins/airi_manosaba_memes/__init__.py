@@ -37,6 +37,7 @@ from .dialogue.interaction import (
     handle_background_followup,
     handle_dialogue,
 )
+from .evidence.interaction import handle_evidence, handle_item, handle_item_followup
 from .utils import CHARACTER_NAMES
 from .debate.interaction import handle_debate, resolve_debate_reply
 from .debate.composition import render_debate_trial
@@ -45,7 +46,7 @@ CHARACTER_NAMES_TEXT = ", ".join(CHARACTER_NAMES)
 
 usage = f"""
 manohelp：查看图片帮助
-制作收费 10 积分；立绘与背景选择表、翻页和后续编辑免费
+制作收费 10 积分；立绘、背景与物品选择表、翻页和后续编辑免费
 安安说 [文本] [表情]
     表情可选：害羞, 生气, 病娇, 无语, 开心
 魔裁鸭梨 角色名
@@ -60,6 +61,10 @@ manohelp：查看图片帮助
     免费查看官方背景与 CG，也可使用 @BGxxx 或 @CGxxx 直接查看
 魔裁对话 @背景短码 [立绘短码] [*姓名] 正文
     最多三个立绘，生成对话图收费 10 积分
+魔裁物品 [页码或%WP物品短码]
+    免费预览和查看官方物品，回复 W编号 或 上一页 / 下一页
+魔裁证物 %WP物品短码/图片 *名称 描述
+    参数可乱序，短码也可替换为同一条消息中的一张图片，制作收费 10 积分
 魔裁审问 立绘短码 -左/-右 文字
     参数可乱序，**文字** 表示粉色强调，最多八行
     回复审问图发送魔裁鸭梨，可生成半透明黑色底的叠加图

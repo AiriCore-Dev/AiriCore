@@ -15,7 +15,10 @@ from .parser import parse_dialogue
 from .state import BackgroundPickerContext, BackgroundSessionStore
 
 
-BACKGROUND_FOLLOWUP_RE = re.compile(r"^(?:B[1-9][0-9]{0,3}|上一页|下一页)$", re.IGNORECASE)
+PAGE_COMMAND_PATTERN = r"(?:第\s*([0-9]{1,4})\s*页|跳转\s*([0-9]{1,4}))"
+BACKGROUND_FOLLOWUP_RE = re.compile(
+    rf"^(?:B[1-9][0-9]{{0,3}}|{PAGE_COMMAND_PATTERN}|上一页|下一页)$", re.IGNORECASE
+)
 DIALOGUE_HELP = """用法：魔裁对话 @背景短码 [立绘短码...] [*姓名] 正文
 背景必须指定一个，立绘最多三个并按出现顺序排列。
 *none 隐藏姓名牌，*? 使用未知人物姓名牌。
@@ -24,7 +27,8 @@ DIALOGUE_HELP = """用法：魔裁对话 @背景短码 [立绘短码...] [*姓�
 BACKGROUND_HELP = """用法：魔裁背景 [场景/插图/特效/CG] [页码]
 也可发送：魔裁背景 @背景短码
 普通背景短码为 @BGxxx，CG 短码为 @CGxxx。
-回复选择表发送 B编号、上一页 或 下一页。"""
+回复选择表发送 B编号、上一页 或 下一页。
+回复 第N页 或 跳转 N 可直接选择当前分类的页码。"""
 HELP_ARGUMENTS = {"-h", "--help", "帮助"}
 
 dialogue_handler = on_command("魔裁对话", block=True)
@@ -154,7 +158,8 @@ async def _send_picker(
     last = offset + len(shown)
     caption = (
         f"{category}背景 {bounded}/{total_pages}\n"
-        f"请回复 B{offset + 1}～B{last} 选择；回复 上一页 / 下一页 翻页。"
+        f"请回复 B{offset + 1}～B{last} 选择；回复 上一页 / 下一页 翻页。\n"
+        f"回复 第N页 或 跳转 N 选择页码（1～{total_pages}），例如 第{min(3, total_pages)}页。"
     )
     receipt = await UniMessage.image(raw=image, mimetype="image/png").text(
         f"\n{caption}"
@@ -243,11 +248,22 @@ async def handle_background_followup(
         return
     command = event.get_message().extract_plain_text().strip()
     try:
-        if command in {"上一页", "下一页"}:
-            page = next_page(context.page, len(context.codes), command)
+        page_command = re.fullmatch(PAGE_COMMAND_PATTERN, command)
+        if command in {"上一页", "下一页"} or page_command:
+            if page_command:
+                total_pages = max(1, math.ceil(len(context.codes) / PAGE_SIZE))
+                page = int(next(value for value in page_command.groups() if value is not None))
+                if not 1 <= page <= total_pages:
+                    await _send_text(bot, event, f"页码超出范围，请回复 第1页～第{total_pages}页。")
+                    return
+            else:
+                page = next_page(context.page, len(context.codes), command)
             if page == context.page:
-                text = "已经是最后一页。" if command == "下一页" else "已经是第一页。"
-                await UniMessage.text(text).send(target=event, bot=bot)
+                text = (
+                    f"当前已经是第{context.page}页。" if page_command else
+                    "已经是最后一页。" if command == "下一页" else "已经是第一页。"
+                )
+                await _send_text(bot, event, text)
                 return
             entries = tuple(_catalog().get(code) for code in context.codes)
             await _send_picker(bot, event, context.category, page, entries)

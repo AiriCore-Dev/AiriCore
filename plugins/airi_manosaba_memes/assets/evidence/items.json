@@ -1,0 +1,1818 @@
+{
+  "version": 1,
+  "sources": {
+    "general-witchbook_assets_all.bundle": "e3ecd01b171a7f4ddd24518df3f489ee9bd254fb794187ba4d2037ffb5610441",
+    "general-data_assets_all.bundle": "c72b0e2320fa117f0438060db30af853002fbd89176a78469af36622d04965c2",
+    "general-sprites_assets_all.bundle": "258574e79116ac032f097494509596cf3468c6fac9c25f71af801aa14d9b509a"
+  },
+  "items": [
+    {
+      "code": "%WP001",
+      "name": "被拆解的零件",
+      "path": "items/WP001.png",
+      "source": "Clue_001_001",
+      "versions": [
+        {
+          "version": 1,
+          "name": "被拆解的零件",
+          "description": "装在走廊的桶里的机械零件。\n被拆解得十分零碎，难以修复。\n\n艾玛和梅露露确认其昨天傍晚还装在桶里。"
+        },
+        {
+          "version": 2,
+          "name": "被拆解的零件",
+          "description": "装在走廊的桶里的弩枪的零件。\n被拆解得十分零碎，难以修复。\n\n艾玛和梅露露确认其昨天傍晚还装在桶里。"
+        }
+      ]
+    },
+    {
+      "code": "%WP002",
+      "name": "安安的素描本",
+      "path": "items/WP002.png",
+      "source": "Clue_001_002",
+      "versions": [
+        {
+          "version": 1,
+          "name": "安安的素描本",
+          "description": "夏目安安展示过的素描本。\n上面画有蝴蝶的绘画。\n画的作者是诺亚，而蝴蝶似乎是留给安安的某种信息。"
+        }
+      ]
+    },
+    {
+      "code": "%WP003",
+      "name": "沾血的发带",
+      "path": "items/WP003.png",
+      "source": "Clue_001_003",
+      "versions": [
+        {
+          "version": 1,
+          "name": "沾血的发带",
+          "description": "亚里沙在湖边找到的发带。\n沾有血迹和状似颜料的痕迹。"
+        }
+      ]
+    },
+    {
+      "code": "%WP004",
+      "name": "扫帚",
+      "path": "items/WP004.png",
+      "source": "Clue_001_004",
+      "versions": [
+        {
+          "version": 1,
+          "name": "扫帚",
+          "description": "在靠近楼梯的清扫工具柜中找到的木制扫帚。\n组成部件可以拆卸。找到的时候握柄和刷毛的部分已经被拆卸下来了。"
+        }
+      ]
+    },
+    {
+      "code": "%WP005",
+      "name": "喷漆罐",
+      "path": "items/WP005.png",
+      "source": "Clue_001_005",
+      "versions": [
+        {
+          "version": 1,
+          "name": "喷漆罐",
+          "description": "发现城崎诺亚的尸体时，掉在旁边的喷漆罐。\n内部装有散发刺鼻异臭的白色颜料，需要较长时间晾干。\n\n背面写着注意事项。\n【使用本商品时请注意：如附着于木材之上，将无法冲洗分离】"
+        }
+      ]
+    },
+    {
+      "code": "%WP006",
+      "name": "水果的照片",
+      "path": "items/WP006.png",
+      "source": "Clue_001_006",
+      "versions": [
+        {
+          "version": 1,
+          "name": "水果的照片",
+          "description": "雪莉在试用手机的摄像功能时拍下的照片。\n照片里是摆好的水果盘。\n位于下方的苹果好像已经腐烂了。"
+        }
+      ]
+    },
+    {
+      "code": "%WP007",
+      "name": "直播回放",
+      "path": "items/WP007.png",
+      "source": "Clue_001_007",
+      "versions": [
+        {
+          "version": 1,
+          "name": "直播回放",
+          "description": "泽渡可可发起的直播的影片记录。\n佐伯米莉亚和莲见蕾雅有在直播中出场。"
+        }
+      ]
+    },
+    {
+      "code": "%WP008",
+      "name": "城崎诺亚的尸体照片",
+      "path": "items/WP008.png",
+      "source": "Clue_001_008",
+      "versions": [
+        {
+          "version": 1,
+          "name": "城崎诺亚的尸体照片",
+          "description": "城崎诺亚尸体的照片。\n在自己所属的房间内以仰躺姿倒地，流血身亡。\n\n胸口有细长物体造成的贯穿伤口。\n\n房间的地板上涂满了白色颜料。"
+        }
+      ]
+    },
+    {
+      "code": "%WP009",
+      "name": "地板的划痕",
+      "path": "items/WP009.png",
+      "source": "Clue_001_009",
+      "versions": [
+        {
+          "version": 1,
+          "name": "地板的划痕",
+          "description": "在尸体近处的地板上留下的，被某物刮出的划痕。\n这道划痕令白色颜料产生脱落的情况。"
+        }
+      ]
+    },
+    {
+      "code": "%WP010",
+      "name": "弩枪的箭矢",
+      "path": "items/WP010.png",
+      "source": "Clue_001_010",
+      "versions": [
+        {
+          "version": 1,
+          "name": "弩枪的箭矢",
+          "description": "在发现城崎诺亚尸体时，掉落在近处地板上的箭矢。\n尖头形状与尸体伤口吻合，并沾有血迹。\n箭身落地处几乎没沾到地板上的颜料。"
+        }
+      ]
+    },
+    {
+      "code": "%WP011",
+      "name": "画在地板上的蝴蝶",
+      "path": "items/WP011.png",
+      "source": "Clue_001_011",
+      "versions": [
+        {
+          "version": 1,
+          "name": "画在地板上的蝴蝶",
+          "description": "在发现城崎诺亚尸体时，画在地板上的状似蝴蝶的图案。\n是用大量的血液画成的。"
+        }
+      ]
+    },
+    {
+      "code": "%WP012",
+      "name": "未命名物品 1-13",
+      "path": "items/WP012.png",
+      "source": "Clue_001_013",
+      "versions": []
+    },
+    {
+      "code": "%WP013",
+      "name": "未命名物品 1-14",
+      "path": "items/WP013.png",
+      "source": "Clue_001_014",
+      "versions": []
+    },
+    {
+      "code": "%WP014",
+      "name": "拷问秀的邀请文",
+      "path": "items/WP014.png",
+      "source": "Clue_002_001",
+      "versions": [
+        {
+          "version": 1,
+          "name": "拷问秀的邀请文",
+          "description": "一张写着【20时 在惩罚室举行拷问秀】的便条纸。\n此前张贴在会客厅里。"
+        },
+        {
+          "version": 2,
+          "name": "拷问秀的邀请文",
+          "description": "一张写着【20时 在惩罚室举行拷问秀】的便条纸。\n此前张贴在会客厅里。\n\n典狱长否认自己与之相关。"
+        }
+      ]
+    },
+    {
+      "code": "%WP015",
+      "name": "坏掉的门锁",
+      "path": "items/WP015.png",
+      "source": "Clue_002_002",
+      "versions": [
+        {
+          "version": 1,
+          "name": "坏掉的门锁",
+          "description": "挂在惩罚室的门上的锁。\n用于在门外上锁。\n锁身颜色是黯淡的金色。\n由于橘雪莉在进房的时候将其扯破，现已严重变形，无法分辨出原貌。"
+        }
+      ]
+    },
+    {
+      "code": "%WP016",
+      "name": "小钥匙",
+      "path": "items/WP016.png",
+      "source": "Clue_002_003",
+      "versions": [
+        {
+          "version": 1,
+          "name": "小钥匙",
+          "description": "从佐伯米莉亚嘴里取出的钥匙。\n表面颜色是黯淡的金色。"
+        },
+        {
+          "version": 2,
+          "name": "小钥匙",
+          "description": "从佐伯米莉亚嘴里取出的钥匙。\n表面颜色是黯淡的金色。\n\n是监牢内某处收纳柜的钥匙，\n与惩罚室无关。"
+        }
+      ]
+    },
+    {
+      "code": "%WP017",
+      "name": "惩罚室的钥匙",
+      "path": "items/WP017.png",
+      "source": "Clue_002_004",
+      "versions": [
+        {
+          "version": 1,
+          "name": "惩罚室的钥匙",
+          "description": "一把钥匙。奈叶香将其作为证据提出。\n似乎是用于打开惩罚室的钥匙。\n它掉在惩罚室的地上，而奈叶香把它捡起来了。"
+        },
+        {
+          "version": 2,
+          "name": "惩罚室的钥匙",
+          "description": "一把钥匙。奈叶香将其作为证据提出。\n似乎是用于打开惩罚室的钥匙。\n它掉在惩罚室的地上，而奈叶香把它捡起来了。\n\n据典狱长称，这毫无疑问是惩罚室的钥匙。\n钥匙的管理由看守负责。"
+        }
+      ]
+    },
+    {
+      "code": "%WP018",
+      "name": "刀刃破损的小刀",
+      "path": "items/WP018.png",
+      "source": "Clue_002_005",
+      "versions": [
+        {
+          "version": 1,
+          "name": "刀刃破损的小刀",
+          "description": "一把锈迹斑斑、破旧不堪，但仍有切割力的小刀。\n刃口锋利，并沾有血迹。"
+        }
+      ]
+    },
+    {
+      "code": "%WP019",
+      "name": "汉娜的录音数据",
+      "path": "items/WP019.png",
+      "source": "Clue_002_006",
+      "versions": [
+        {
+          "version": 1,
+          "name": "汉娜的录音数据",
+          "description": "录制有对话的声音。\n\n「录音机……？不对……」\n「呀啊啊啊——！！」\n「噫！？」\n「是米莉亚的声音」\n「她在惨叫！？」\n「是拷问开始了吗」\n「怎么会这样……安安，你的脸色不太好」\n「……回去吧」"
+        }
+      ]
+    },
+    {
+      "code": "%WP020",
+      "name": "樱羽艾玛的手机",
+      "path": "items/WP020.png",
+      "source": "Clue_002_007",
+      "versions": [
+        {
+          "version": 1,
+          "name": "樱羽艾玛的手机",
+          "description": "分发给艾玛的智能手机。\n安装有以艾玛为原型设计的手机套。\n\n留有与佐伯米莉亚手机的通话记录。"
+        }
+      ]
+    },
+    {
+      "code": "%WP021",
+      "name": "佐伯米莉亚的手机",
+      "path": "items/WP021.png",
+      "source": "Clue_002_008",
+      "versions": [
+        {
+          "version": 1,
+          "name": "佐伯米莉亚的手机",
+          "description": "安安在凶杀现场找到的智能手机。\n安装有以米莉亚为原型设计的手机套。"
+        },
+        {
+          "version": 2,
+          "name": "佐伯米莉亚的手机",
+          "description": "安安在凶杀现场找到的智能手机。\n安装有以米莉亚为原型设计的手机套。\n\n数据已被全部清除，据称清除也需要接近30分钟的时间。\n只要知道手机专属的ID（识别号码），就可以互相取得联络。"
+        }
+      ]
+    },
+    {
+      "code": "%WP022",
+      "name": "佐伯米莉亚的尸体照片",
+      "path": "items/WP022.png",
+      "source": "Clue_002_009",
+      "versions": [
+        {
+          "version": 1,
+          "name": "佐伯米莉亚的尸体照片",
+          "description": "佐伯米莉亚尸体的照片。\n\n发现尸体时，佐伯米莉亚的尸体受到拘束，腹部遭到乱刀捅刺。\n死因为胸部的刺伤。"
+        },
+        {
+          "version": 2,
+          "name": "佐伯米莉亚的尸体照片",
+          "description": "佐伯米莉亚尸体的照片。\n\n发现尸体时，佐伯米莉亚的尸体受到拘束，腹部遭到乱刀捅刺。\n死因为胸部的刺伤。\n\n刺伤分布于胸部和腹部。"
+        }
+      ]
+    },
+    {
+      "code": "%WP023",
+      "name": "铲子",
+      "path": "items/WP023.png",
+      "source": "Clue_002_010",
+      "versions": [
+        {
+          "version": 1,
+          "name": "铲子",
+          "description": "金属制的铲子。\n此前存放于清扫工具柜内。"
+        }
+      ]
+    },
+    {
+      "code": "%WP024",
+      "name": "起火物",
+      "path": "items/WP024.png",
+      "source": "Clue_003_001",
+      "versions": [
+        {
+          "version": 1,
+          "name": "起火物",
+          "description": "存放在仓库里的能纵火的物品。\n有蜡烛、火柴、鞭炮等。"
+        }
+      ]
+    },
+    {
+      "code": "%WP025",
+      "name": "烧焦的痕迹",
+      "path": "items/WP025.png",
+      "source": "Clue_003_002",
+      "versions": [
+        {
+          "version": 1,
+          "name": "烧焦的痕迹",
+          "description": "某种可燃物燃烧后的痕迹。\n是在火精之室的室外近处发现的。\n据亚里沙的现场验证，起火点就在这个位置。"
+        }
+      ]
+    },
+    {
+      "code": "%WP026",
+      "name": "监牢的设计图",
+      "path": "items/WP026.png",
+      "source": "Clue_003_003",
+      "versions": [
+        {
+          "version": 1,
+          "name": "监牢的设计图",
+          "description": "似乎是监牢的老图纸。\n可在地图中确认其内容。"
+        }
+      ]
+    },
+    {
+      "code": "%WP027",
+      "name": "汉娜的尸体照片",
+      "path": "items/WP027.png",
+      "source": "Clue_003_004",
+      "versions": [
+        {
+          "version": 1,
+          "name": "汉娜的尸体照片",
+          "description": "尸体在起火的招待所中发现。\n其被悬挂于天花板的横梁上，脖子留有绳子的痕迹。\n并未发现其他外伤。"
+        }
+      ]
+    },
+    {
+      "code": "%WP028",
+      "name": "弹痕",
+      "path": "items/WP028.png",
+      "source": "Clue_003_005",
+      "versions": [
+        {
+          "version": 1,
+          "name": "弹痕",
+          "description": "位于仓库中的子弹射入痕迹。\n子弹是近期击发的，并留在了现场。\n周围没有血迹。"
+        }
+      ]
+    },
+    {
+      "code": "%WP029",
+      "name": "典狱长的雕像",
+      "path": "items/WP029.png",
+      "source": "Clue_003_006",
+      "versions": [
+        {
+          "version": 1,
+          "name": "典狱长的雕像",
+          "description": "放在招待所中的雕像。\n重心不稳定，容易倒下。\n此前笔直地放置在水精之室当中。"
+        }
+      ]
+    },
+    {
+      "code": "%WP030",
+      "name": "烧焦的人偶",
+      "path": "items/WP030.png",
+      "source": "Clue_003_007",
+      "versions": [
+        {
+          "version": 1,
+          "name": "烧焦的人偶",
+          "description": "汉娜制作的人偶。\n此前悬挂在尸体发现现场。"
+        }
+      ]
+    },
+    {
+      "code": "%WP031",
+      "name": "亚里沙的人偶",
+      "path": "items/WP031.png",
+      "source": "Clue_003_008",
+      "versions": [
+        {
+          "version": 1,
+          "name": "亚里沙的人偶",
+          "description": "汉娜制作的人偶。\n此前留在地精之室当中。"
+        },
+        {
+          "version": 2,
+          "name": "亚里沙的人偶",
+          "description": "汉娜制作的人偶。\n此前留在地精之室当中。\n\n附着有红色颜料。\n这道颜料是昨晚玛格在做魔法实验时附上的。"
+        }
+      ]
+    },
+    {
+      "code": "%WP032",
+      "name": "招待所",
+      "path": "items/WP032.png",
+      "source": "Clue_003_009",
+      "versions": [
+        {
+          "version": 1,
+          "name": "招待所",
+          "description": "在监牢用地中设置的招待所。按顺序排列，3栋房间分别是：\n火精之室、\n水精之室、\n地精之室。\n门上挂有描绘着各自纹章的板子，内部装修和结构均相同。"
+        }
+      ]
+    },
+    {
+      "code": "%WP033",
+      "name": "现场照片",
+      "path": "items/WP033.png",
+      "source": "Clue_003_010",
+      "versions": [
+        {
+          "version": 1,
+          "name": "现场照片",
+          "description": "发现尸体的火精之室的照片。是从入口处拍摄的。"
+        }
+      ]
+    },
+    {
+      "code": "%WP034",
+      "name": "石砖地面",
+      "path": "items/WP034.png",
+      "source": "Clue_003_011",
+      "versions": [
+        {
+          "version": 1,
+          "name": "石砖地面",
+          "description": "留在招待所门前的红色颜料。"
+        },
+        {
+          "version": 2,
+          "name": "石砖地面",
+          "description": "留在招待所门前的红色颜料。\n\n玛格在昨晚的魔法实验中用红色花制作了颜料，其余的花则丢弃了。"
+        }
+      ]
+    },
+    {
+      "code": "%WP035",
+      "name": "看守摄像头",
+      "path": "items/WP035.png",
+      "source": "Clue_003_012",
+      "versions": [
+        {
+          "version": 1,
+          "name": "看守摄像头",
+          "description": "安装在看守眼睛里的摄像头。\n录制有时长24小时的看守视角的录像。\n\n从昨晚的录像可知，门上锁后没有开锁过的迹象。钥匙也一直在看守手中。\n\n昨晚正要给火精之室上锁的瞬间，玛格她们三人从里面出来了。\n之后，还拍到了从外面给其他门上锁的画面。"
+        }
+      ]
+    },
+    {
+      "code": "%WP036",
+      "name": "昨晚的照片",
+      "path": "items/WP036.png",
+      "source": "Clue_003_013",
+      "versions": [
+        {
+          "version": 1,
+          "name": "昨晚的照片",
+          "description": "时间戳为21:45。\n没有拍到汉娜的尸体。\n是看守的摄像头从入口处拍到的。"
+        }
+      ]
+    },
+    {
+      "code": "%WP037",
+      "name": "绳子",
+      "path": "items/WP037.png",
+      "source": "Clue_003_014",
+      "versions": [
+        {
+          "version": 1,
+          "name": "绳子",
+          "description": "用于悬挂汉娜尸体。\n尽管有些发黑，但没有烧焦的痕迹。"
+        }
+      ]
+    },
+    {
+      "code": "%WP038",
+      "name": "蜡烛",
+      "path": "items/WP038.png",
+      "source": "Clue_004_001",
+      "versions": [
+        {
+          "version": 1,
+          "name": "蜡烛",
+          "description": "留在尸体现场近处的蜡烛。\n有使用过的迹象。"
+        }
+      ]
+    },
+    {
+      "code": "%WP039",
+      "name": "电椅",
+      "path": "items/WP039.png",
+      "source": "Clue_004_002",
+      "versions": [
+        {
+          "version": 1,
+          "name": "电椅",
+          "description": "处刑用的器具。\n背部设有2颗按钮。\n\n设有拘束坐在上面的人的机构。"
+        },
+        {
+          "version": 2,
+          "name": "电椅",
+          "description": "处刑用的器具。\n背部设有2颗按钮。\n\n按下拘束按钮后，会自动拘束坐在上面的人。\n在有人被拘束的情况下按下通电按钮后，会导通高压电流。\n但是需要密码才能启动。\n\n据典狱长称，由于存在故障，今日预定对其进行检修。"
+        }
+      ]
+    },
+    {
+      "code": "%WP040",
+      "name": "安眠药",
+      "path": "items/WP040.png",
+      "source": "Clue_004_003",
+      "versions": [
+        {
+          "version": 1,
+          "name": "安眠药",
+          "description": "和梅露露交给亚里沙的是同一种药物。\n因为是强效药，保管由梅露露负责，并且标签上写着梅露露的名字。"
+        }
+      ]
+    },
+    {
+      "code": "%WP041",
+      "name": "铝制瓶盖",
+      "path": "items/WP041.png",
+      "source": "Clue_004_004",
+      "versions": [
+        {
+          "version": 1,
+          "name": "铝制瓶盖",
+          "description": "部分融化的铝制瓶盖。\n刻有状似蝴蝶的图案。\n疑似承受过巨大外力，盖身已凹陷扭曲。"
+        }
+      ]
+    },
+    {
+      "code": "%WP042",
+      "name": "玻璃碎片",
+      "path": "items/WP042.png",
+      "source": "Clue_004_005",
+      "versions": [
+        {
+          "version": 1,
+          "name": "玻璃碎片",
+          "description": "掉落在亚里沙尸体脚下的，破碎的玻璃碎片。\n碎片散落得相当远，连几米外的地方都有。"
+        }
+      ]
+    },
+    {
+      "code": "%WP043",
+      "name": "地下冷冻室",
+      "path": "items/WP043.png",
+      "source": "Clue_004_006",
+      "versions": [
+        {
+          "version": 1,
+          "name": "地下冷冻室",
+          "description": "保管处刑后的尸体，以及受冻结刑的魔女化少女身体的地点。\n位于监牢的地下。"
+        }
+      ]
+    },
+    {
+      "code": "%WP044",
+      "name": "控制面板",
+      "path": "items/WP044.png",
+      "source": "Clue_004_007",
+      "versions": [
+        {
+          "version": 1,
+          "name": "控制面板",
+          "description": "位于地下的控制面板。\n可以用来操作处刑台。\n\n似乎也可以用来开关地下设施的门，但具体使用方法不明。"
+        }
+      ]
+    },
+    {
+      "code": "%WP045",
+      "name": "处刑台",
+      "path": "items/WP045.png",
+      "source": "Clue_004_008",
+      "versions": [
+        {
+          "version": 1,
+          "name": "处刑台",
+          "description": "位于审判庭中央的处刑台装置。\n目前中央设置有电椅。"
+        },
+        {
+          "version": 2,
+          "name": "处刑台",
+          "description": "位于审判庭中央的处刑台装置。\n目前中央设置有电椅。\n\n在替换设置在处刑台的处刑器具之时，会将周围的装置整体下降到地下冷冻室。\n\n据留存的记录可知，昨晚21时曾移动数次，今早9时也曾上升过。"
+        }
+      ]
+    },
+    {
+      "code": "%WP046",
+      "name": "亚里沙的尸体照片",
+      "path": "items/WP046.png",
+      "source": "Clue_004_009",
+      "versions": [
+        {
+          "version": 1,
+          "name": "亚里沙的尸体照片",
+          "description": "在审判庭的处刑台上，以坐在电椅上的状态被发现。\n脸上有疑似烧伤的蝴蝶形状伤痕。\n此外，身体各处有貌似魔女化征候的变异。\n\n头发和衣服沾湿了。"
+        }
+      ]
+    },
+    {
+      "code": "%WP047",
+      "name": "仪礼剑",
+      "path": "items/WP047.png",
+      "source": "Clue_005_001",
+      "versions": [
+        {
+          "version": 1,
+          "name": "仪礼剑",
+          "description": "一把装饰精美的剑。\n此前放在了保险箱中。\n\n没有使用过的迹象。"
+        }
+      ]
+    },
+    {
+      "code": "%WP048",
+      "name": "奈叶香的枪",
+      "path": "items/WP048.png",
+      "source": "Clue_005_002",
+      "versions": [
+        {
+          "version": 1,
+          "name": "奈叶香的枪",
+          "description": "在冷冻室找到的，奈叶香曾持有的枪支。\n\n最大装弹量为6发，残余弹数为3发。\n\n是过去存在于监牢内的少女用魔法制成的武器。\n在日期变更之时，会自动装填1发子弹。"
+        }
+      ]
+    },
+    {
+      "code": "%WP049",
+      "name": "弹痕",
+      "path": "items/WP049.png",
+      "source": "Clue_005_003",
+      "versions": [
+        {
+          "version": 1,
+          "name": "弹痕",
+          "description": "在地下冷冻室发现的弹痕。\n子弹打进了冰块之中，周围散落有小块的冰碎片。\n\n现场留有1发子弹。"
+        }
+      ]
+    },
+    {
+      "code": "%WP050",
+      "name": "液氮",
+      "path": "items/WP050.png",
+      "source": "Clue_005_004",
+      "versions": [
+        {
+          "version": 1,
+          "name": "液氮",
+          "description": "-196℃的液体。化学式为N2。\n\n由于会引起缺氧或冻伤，因此使用时需要注意。"
+        }
+      ]
+    },
+    {
+      "code": "%WP051",
+      "name": "透明的液体",
+      "path": "items/WP051.png",
+      "source": "Clue_005_005",
+      "versions": [
+        {
+          "version": 1,
+          "name": "透明的液体",
+          "description": "放在保险箱中的不明液体。\n有使用过的痕迹。"
+        }
+      ]
+    },
+    {
+      "code": "%WP052",
+      "name": "手枪",
+      "path": "items/WP052.png",
+      "source": "Clue_005_006",
+      "versions": [
+        {
+          "version": 1,
+          "name": "手枪",
+          "description": "放在保险箱中的手枪。\n装弹量为6发，没有使用过的迹象。"
+        }
+      ]
+    },
+    {
+      "code": "%WP053",
+      "name": "资料",
+      "path": "items/WP053.png",
+      "source": "Clue_005_007",
+      "versions": [
+        {
+          "version": 1,
+          "name": "资料",
+          "description": "写有岛外与宅邸的物资交易，以及在押少女们的情报的大量资料。\n上面也有艾玛她们所有人的人物资料和人脸照片。\n\n解读似乎需要耗费大量时间。"
+        }
+      ]
+    },
+    {
+      "code": "%WP054",
+      "name": "便条纸",
+      "path": "items/WP054.png",
+      "source": "Clue_005_008",
+      "versions": [
+        {
+          "version": 1,
+          "name": "便条纸",
+          "description": "奈叶香尸体的口袋中找到的便条。\n上面潦草写着【169231】这串数字。"
+        }
+      ]
+    },
+    {
+      "code": "%WP055",
+      "name": "处刑台通用门",
+      "path": "items/WP055.png",
+      "source": "Clue_005_009",
+      "versions": [
+        {
+          "version": 1,
+          "name": "巨大的门",
+          "description": "位于地下冷冻室深处的大门。\n靠人力不可能打开。\n\n下方设有小窗，往里探看可看见处刑台。\n小窗大小有限，只够小动物通过。"
+        },
+        {
+          "version": 2,
+          "name": "处刑台通用门",
+          "description": "位于地下冷冻室深处的大门。\n靠人力不可能打开。\n\n下方设有小窗，往里探看可看见处刑台。\n小窗大小有限，只够小动物通过。\n\n开启时会发出巨大声响，因此本次案件中没有开启过的迹象。"
+        }
+      ]
+    },
+    {
+      "code": "%WP056",
+      "name": "保险箱",
+      "path": "items/WP056.png",
+      "source": "Clue_005_010",
+      "versions": [
+        {
+          "version": 1,
+          "name": "保险箱",
+          "description": "被打开的保险箱。\n是数字密码锁，数字键盘处沾有血迹。"
+        }
+      ]
+    },
+    {
+      "code": "%WP057",
+      "name": "救急箱",
+      "path": "items/WP057.png",
+      "source": "Clue_005_011",
+      "versions": [
+        {
+          "version": 1,
+          "name": "救急箱",
+          "description": "存放消火栓和防灾用品的箱子。\n里面装着破门用的斧头，以及缝纫工具等。"
+        }
+      ]
+    },
+    {
+      "code": "%WP058",
+      "name": "通风口",
+      "path": "items/WP058.png",
+      "source": "Clue_005_012",
+      "versions": [
+        {
+          "version": 1,
+          "name": "通风口",
+          "description": "连结操作室与冷冻室的通风口。\n大小勉强可容纳一人通过。\n\n盖子的固定装置被破坏了。\n似乎是遭枪击破坏的，并留有1发子弹。"
+        }
+      ]
+    },
+    {
+      "code": "%WP059",
+      "name": "奈叶香的尸体照片",
+      "path": "items/WP059.png",
+      "source": "Clue_005_013",
+      "versions": [
+        {
+          "version": 1,
+          "name": "奈叶香的尸体照片",
+          "description": "在审判庭的处刑台上发现。\n\n身体表面有少许结冰。\n未观察到致命性的严重外伤。\n\n口腔上颚部分有疑似被利器割伤的痕迹，且有血液自口中渗出。\n\n此外，指尖也沾有血迹。"
+        }
+      ]
+    },
+    {
+      "code": "%WP060",
+      "name": "操作室",
+      "path": "items/WP060.png",
+      "source": "Clue_005_014",
+      "versions": [
+        {
+          "version": 1,
+          "name": "操作室",
+          "description": "用来操作地下设施和处刑台的房间。\n设置有处刑台的操作面板。\n非常冷。"
+        }
+      ]
+    },
+    {
+      "code": "%WP061",
+      "name": "地下冷冻室",
+      "path": "items/WP061.png",
+      "source": "Clue_005_015",
+      "versions": [
+        {
+          "version": 1,
+          "name": "地下冷冻室",
+          "description": "保管处刑后的尸体，以及受冻结刑的魔女化少女身体的地点。\n位于监牢的地下。"
+        }
+      ]
+    },
+    {
+      "code": "%WP062",
+      "name": "处刑台",
+      "path": "items/WP062.png",
+      "source": "Clue_005_016",
+      "versions": [
+        {
+          "version": 1,
+          "name": "处刑台",
+          "description": "位于审判庭中央的处刑台装置。\n目前中央设置有电椅。\n\n在替换设置在处刑台的处刑器具之时，会将周围的装置整体下降到地下冷冻室。\n\n据留存的记录可知，昨晚21时曾移动数次，今早9时也曾上升过。"
+        },
+        {
+          "version": 2,
+          "name": "处刑台",
+          "description": "位于审判庭中央的处刑台装置。\n目前中央设置有电椅。\n\n在替换设置在处刑台的处刑器具之时，会将周围的装置整体下降到地下冷冻室。\n\n据留存的记录可知，昨晚21时曾移动数次，今早9时也曾上升过。\n\n不可能自地下冷冻室一侧侵入。"
+        }
+      ]
+    },
+    {
+      "code": "%WP063",
+      "name": "控制面板",
+      "path": "items/WP063.png",
+      "source": "Clue_005_017",
+      "versions": [
+        {
+          "version": 1,
+          "name": "控制面板",
+          "description": "位于地下的控制面板。\n可以用来操作处刑台。\n\n似乎也可以用来开关地下设施的门，但具体使用方法不明。"
+        },
+        {
+          "version": 2,
+          "name": "控制面板",
+          "description": "位于地下的控制面板。\n可以用来操作处刑台。\n\n似乎也可以用来开关地下设施的门，但具体使用方法不明。\n\n昨天艾玛本应把它摔坏了，但现在已得到换新。"
+        }
+      ]
+    },
+    {
+      "code": "%WP064",
+      "name": "亚里沙的尸体照片",
+      "path": "items/WP064.png",
+      "source": "Clue_005_018",
+      "versions": [
+        {
+          "version": 1,
+          "name": "亚里沙的尸体照片",
+          "description": "在审判庭的处刑台上，以坐在电椅上的状态被发现。\n脸上有蝴蝶形状的烧伤痕，身体已呈现魔女化的征候。\n\n头发和衣服沾湿了。"
+        }
+      ]
+    },
+    {
+      "code": "%WP065",
+      "name": "未命名物品 5-19",
+      "path": "items/WP065.png",
+      "source": "Clue_005_019",
+      "versions": []
+    },
+    {
+      "code": "%WP066",
+      "name": "昏倒的希罗",
+      "path": "items/WP066.png",
+      "source": "Clue_006_001",
+      "versions": [
+        {
+          "version": 1,
+          "name": "昏倒的希罗",
+          "description": "发现尸体时，正失去意识昏倒在尸体发现现场中。\n有复数人目击到该情况。\n\n周围没有除梅露露和希罗以外的他人足迹."
+        }
+      ]
+    },
+    {
+      "code": "%WP067",
+      "name": "仪礼剑",
+      "path": "items/WP067.png",
+      "source": "Clue_006_002",
+      "versions": [
+        {
+          "version": 1,
+          "name": "仪礼剑",
+          "description": "插在梅露露胸口上的剑。应该是凶器。\n详情不明。"
+        },
+        {
+          "version": 2,
+          "name": "仪礼剑",
+          "description": "放在地下保险箱里的剑。"
+        }
+      ]
+    },
+    {
+      "code": "%WP068",
+      "name": "梅露露的尸体",
+      "path": "items/WP068.png",
+      "source": "Clue_006_003",
+      "versions": [
+        {
+          "version": 1,
+          "name": "梅露露的尸体",
+          "description": "在诺亚和安安的牢房中发现的尸体。\n\n死因为心脏的刺伤。\n喉咙、心脏有多次被刺伤的痕迹。\n\n发现尸体之时，死后已过20分钟～1小时。\n眼球已变成了宝石，但与死因无关。"
+        }
+      ]
+    },
+    {
+      "code": "%WP069",
+      "name": "安眠药",
+      "path": "items/WP069.png",
+      "source": "Clue_006_004",
+      "versions": [
+        {
+          "version": 1,
+          "name": "安眠药",
+          "description": "是梅露露准备的药品。\n盖子上刻有蝴蝶图案，标签上写着梅露露的名字。\n\n现场留有瓶子破裂后的碎片。\n\n外观为蓝色，有香甜气味。\n似乎雪莉和诺亚尝过味道了。"
+        }
+      ]
+    },
+    {
+      "code": "%WP070",
+      "name": "玻璃的声音",
+      "path": "items/WP070.png",
+      "source": "Clue_006_005",
+      "versions": [
+        {
+          "version": 1,
+          "name": "玻璃的声音",
+          "description": "在即将发现尸体的时候听见的声音。\n是短促的声音，像是玻璃破碎时发出的。\n\n听到声音的有：蕾雅、玛格、奈叶香、汉娜、可可、米莉亚。\n每个人都作证，是从诺亚和安安的牢房方向听见的。"
+        }
+      ]
+    },
+    {
+      "code": "%WP071",
+      "name": "梅露露的手机",
+      "path": "items/WP071.png",
+      "source": "Clue_006_006",
+      "versions": [
+        {
+          "version": 1,
+          "name": "梅露露的手机",
+          "description": "放进希罗衣服里的，不属于希罗的手机。\n从保护套和ID来看，应该是属于梅露露的。\n\n里面的数据已被清除。\n艾玛作证，她接到了这部手机拨出的电话。"
+        }
+      ]
+    },
+    {
+      "code": "%WP072",
+      "name": "大家的不在场证明",
+      "path": "items/WP072.png",
+      "source": "Clue_006_007",
+      "versions": [
+        {
+          "version": 1,
+          "name": "大家的不在场证明",
+          "description": "【诺亚、安安、艾玛】\n安安和诺亚、还有艾玛都在2楼。\n她们汇合的时间是发现尸体的30分钟前。\n没过多久，艾玛接到了电话，并与梅露露通话。\n安安和诺亚之后也一直一起待在2楼。\n艾玛在会客厅与雪莉她们汇合后，马上就去外面了。\n\n【汉娜、可可、米莉亚、蕾雅】\n她们四人待在米莉亚和蕾雅的牢房中。\n她们汇合的时间是发现尸体的1小时前。\n四人在收到发现尸体的报告前，没有走出过房间。\n\n【雪莉和亚里沙】\n两人都待在会客厅中。\n她们在发现尸体的1小时前汇合之后，一直都待在会客厅里。\n\n【奈叶香和玛格】\n在发现尸体的30分钟前，奈叶香从医务室来到会客厅，与他人汇合。\n在同一时刻，玛格和艾玛也汇合了。\n那之后，奈叶香和玛格与艾玛她们分开，一同回到自己的牢房中。\n那之后，她们都没走出过房间，直到发现尸体。"
+        }
+      ]
+    },
+    {
+      "code": "%WP073",
+      "name": "和梅露露的通话",
+      "path": "items/WP073.png",
+      "source": "Clue_006_008",
+      "versions": [
+        {
+          "version": 1,
+          "name": "和梅露露的通话",
+          "description": "发现尸体30分钟前，艾玛作证与梅露露曾通话。\n当时，她听到梅露露说她【被希罗袭击了】。"
+        },
+        {
+          "version": 2,
+          "name": "和梅露露的通话",
+          "description": "发现尸体30分钟前，艾玛作证与梅露露曾通话。\n当时，她听到梅露露说她【在医务室被希罗袭击了】。\n\n艾玛得知情况后，出去外面找她了。"
+        }
+      ]
+    },
+    {
+      "code": "%WP074",
+      "name": "蕾雅听见的声音",
+      "path": "items/WP074.png",
+      "source": "Clue_006_009",
+      "versions": [
+        {
+          "version": 1,
+          "name": "蕾雅听见的声音",
+          "description": "发现尸体约40分钟前听见的声音。\n她作证，那是音量微弱的，似乎是玻璃破碎的声音。\n\n当时蕾雅正在测试能重现远处声音和距离感的空间音效编辑功能，正竖起耳朵专心聆听周围的声音。"
+        }
+      ]
+    },
+    {
+      "code": "%WP075",
+      "name": "未命名物品 6-10",
+      "path": "items/WP075.png",
+      "source": "Clue_006_010",
+      "versions": []
+    },
+    {
+      "code": "%WP076",
+      "name": "可可的验尸结果",
+      "path": "items/WP076.png",
+      "source": "Clue_007_001",
+      "versions": [
+        {
+          "version": 1,
+          "name": "可可的验尸结果",
+          "description": "蕾雅作出的验尸结果。\n死因为额头中弹所致。\n子弹从正面射入，被害人当场死亡。\n\n推定死亡时间为发现尸体前不久。\n\n艾玛是尸体第一发现人，其主张在下雨时的中庭发现了凶器手枪以及尸体。\n周围有血蝴蝶在飞舞。"
+        }
+      ]
+    },
+    {
+      "code": "%WP077",
+      "name": "可可的手机",
+      "path": "items/WP077.png",
+      "source": "Clue_007_002",
+      "versions": [
+        {
+          "version": 1,
+          "name": "可可的手机",
+          "description": "可可持有的手机。\n从手机内容看，无疑是属于可可的。\n\n留有录音记录，内容是有关她用能力看见的事情。\n另外，还留有淋浴房的照片。"
+        }
+      ]
+    },
+    {
+      "code": "%WP078",
+      "name": "直播回放",
+      "path": "items/WP078.png",
+      "source": "Clue_007_003",
+      "versions": [
+        {
+          "version": 1,
+          "name": "直播回放",
+          "description": "是可可进行到死前一刻的那场直播。\n后方拍到了诺亚的画。"
+        }
+      ]
+    },
+    {
+      "code": "%WP079",
+      "name": "淋浴房",
+      "path": "items/WP079.png",
+      "source": "Clue_007_004",
+      "versions": [
+        {
+          "version": 1,
+          "name": "淋浴房",
+          "description": "用来淋浴的房间。\n在这里脱下的衣服要丢到垃圾滑槽里焚烧。\n\n隔音性能强。\n因此案件发生前，希罗喊艾玛过来这里，企图杀死她并伪装成事故。\n\n在案件发生前，诺亚曾在墙壁上涂鸦，并且和可可一起确认到这个事实。"
+        }
+      ]
+    },
+    {
+      "code": "%WP080",
+      "name": "焚烧炉室",
+      "path": "items/WP080.png",
+      "source": "Clue_007_005",
+      "versions": [
+        {
+          "version": 1,
+          "name": "焚烧炉室",
+          "description": "备有焚烧炉的地下房间。\n15时会自动开始燃烧。\n烟雾会经过分离处理，排出室外。\n\n房内光线昏暗，墙壁是鲜艳的绿色。\n地板上有血液流淌过的痕迹。"
+        }
+      ]
+    },
+    {
+      "code": "%WP081",
+      "name": "枪声",
+      "path": "items/WP081.png",
+      "source": "Clue_007_006",
+      "versions": [
+        {
+          "version": 1,
+          "name": "枪声",
+          "description": "艾玛在淋浴房里听见的声音。\n是在发现尸体的稍早前，希罗到场之前听见的。"
+        }
+      ]
+    },
+    {
+      "code": "%WP082",
+      "name": "垃圾滑槽",
+      "path": "items/WP082.png",
+      "source": "Clue_007_007",
+      "versions": [
+        {
+          "version": 1,
+          "name": "垃圾滑槽",
+          "description": "设置在淋浴房内的，联通着焚烧炉的垃圾弃置处。\n今早，希罗对看不见的内侧固定装置做了手脚。"
+        }
+      ]
+    },
+    {
+      "code": "%WP083",
+      "name": "衣物",
+      "path": "items/WP083.png",
+      "source": "Clue_007_008",
+      "versions": [
+        {
+          "version": 1,
+          "name": "衣物",
+          "description": "在焚烧炉中发现的，少女们脱下的衣服。\n其中一部分沾有血迹。"
+        }
+      ]
+    },
+    {
+      "code": "%WP084",
+      "name": "纸堆",
+      "path": "items/WP084.png",
+      "source": "Clue_007_009",
+      "versions": [
+        {
+          "version": 1,
+          "name": "纸堆",
+          "description": "在焚烧炉中发现的，大量的纸。\n其中一部分上面画着画。"
+        },
+        {
+          "version": 2,
+          "name": "纸堆",
+          "description": "在焚烧炉中发现的，大量的纸。\n其中一部分上面画着画。\n\n这些纸都是诺亚在画室里面丢弃的。"
+        }
+      ]
+    },
+    {
+      "code": "%WP085",
+      "name": "绳子",
+      "path": "items/WP085.png",
+      "source": "Clue_007_010",
+      "versions": [
+        {
+          "version": 1,
+          "name": "绳子",
+          "description": "在焚烧炉中找到的，近10米长的绳子。"
+        }
+      ]
+    },
+    {
+      "code": "%WP086",
+      "name": "垃圾滑槽",
+      "path": "items/WP086.png",
+      "source": "Clue_007_011",
+      "versions": [
+        {
+          "version": 1,
+          "name": "垃圾滑槽",
+          "description": "设置在淋浴房内的，联通着焚烧炉的垃圾弃置处。\n今早，希罗对看不见的内侧固定装置做了手脚。\n\n正如艾玛所作证的，米莉亚发现它案发后已经损坏了。\n盖子已脱落。"
+        }
+      ]
+    },
+    {
+      "code": "%WP087",
+      "name": "安安的验尸结果",
+      "path": "items/WP087.png",
+      "source": "Clue_008_001",
+      "versions": [
+        {
+          "version": 1,
+          "name": "安安的验尸结果",
+          "description": "蕾雅在中庭发现了尸体。\n背部受铁栅栏贯穿，当场死亡。\n附近有大量的血迹。\n推定死亡时间是发现尸体30分钟前至1小时以内。"
+        }
+      ]
+    },
+    {
+      "code": "%WP088",
+      "name": "铁栅栏",
+      "path": "items/WP088.png",
+      "source": "Clue_008_002",
+      "versions": [
+        {
+          "version": 1,
+          "name": "铁栅栏",
+          "description": "位于中庭的铁栅栏。尖端锐利。\n似乎很久没维护过了。\n包括刺中安安的那根铁栅栏在内，周围有几根栅栏都已经折断了。"
+        },
+        {
+          "version": 2,
+          "name": "铁栅栏",
+          "description": "位于中庭的铁栅栏。尖端锐利。\n似乎很久没维护过了。\n\n有几根已经折断或损坏。\n留有不自然地扭曲，且被移动过的痕迹。"
+        }
+      ]
+    },
+    {
+      "code": "%WP089",
+      "name": "中庭",
+      "path": "items/WP089.png",
+      "source": "Clue_008_003",
+      "versions": [
+        {
+          "version": 1,
+          "name": "中庭",
+          "description": "发现尸体的现场。\n位处会客厅和淋浴房之间，入口在淋浴房门前走廊上。\n\n中央有枯竭的喷泉，周围的地面泥泞不堪。\n\n附近残留着四分五裂的吊床碎片。\n吊床是亚里沙设置的。"
+        }
+      ]
+    },
+    {
+      "code": "%WP090",
+      "name": "诺亚的画室",
+      "path": "items/WP090.png",
+      "source": "Clue_008_004",
+      "versions": [
+        {
+          "version": 1,
+          "name": "诺亚的画室",
+          "description": "内部极为杂乱，放置着画笔和画布。\n从阳台处可俯视楼下的中庭。\n\n在安安死亡后，艾玛弄洒了红色油漆，后对其进行了清理。"
+        }
+      ]
+    },
+    {
+      "code": "%WP091",
+      "name": "安安的手机",
+      "path": "items/WP091.png",
+      "source": "Clue_008_005",
+      "versions": [
+        {
+          "version": 1,
+          "name": "安安的手机",
+          "description": "属于被害人的物品。\n垫在了尸体下面。"
+        }
+      ]
+    },
+    {
+      "code": "%WP092",
+      "name": "米莉亚的照片",
+      "path": "items/WP092.png",
+      "source": "Clue_008_006",
+      "versions": [
+        {
+          "version": 1,
+          "name": "米莉亚的照片",
+          "description": "米莉亚在发现尸体约30分钟前拍下的照片。\n是从2楼往下拍的，有拍到喷泉和阳台。\n\n阳台中出现了人影，但详细情况不明。\n\n发现安安尸体的地方被遮挡住，这个角度拍不到。"
+        }
+      ]
+    },
+    {
+      "code": "%WP093",
+      "name": "衣物",
+      "path": "items/WP093.png",
+      "source": "Clue_008_007",
+      "versions": [
+        {
+          "version": 1,
+          "name": "衣物",
+          "description": "汉娜晾在玄关前的衣物。\n因为忘记收回来，一直晾到了夜里，但目前已经晾干了。"
+        }
+      ]
+    },
+    {
+      "code": "%WP094",
+      "name": "可可的尸体照片",
+      "path": "items/WP094.png",
+      "source": "Clue_008_008",
+      "versions": [
+        {
+          "version": 1,
+          "name": "可可的尸体照片",
+          "description": "遭黑部奈叶香杀害的，泽渡可可的照片。\n\n死因为枪杀。\n额头有子弹正面击穿的痕迹，当场死亡。\n\n周围有许多血蝴蝶在飞舞。"
+        }
+      ]
+    },
+    {
+      "code": "%WP095",
+      "name": "艾玛的尸体照片",
+      "path": "items/WP095.png",
+      "source": "Clue_009_001",
+      "versions": [
+        {
+          "version": 1,
+          "name": "艾玛的尸体照片",
+          "description": "樱羽艾玛的尸体。推测死亡时间在一小时以内。\n在电梯内被发现。\n\n身穿礼服，身上有两处刺剑造成的刺伤。"
+        }
+      ]
+    },
+    {
+      "code": "%WP096",
+      "name": "刺剑",
+      "path": "items/WP096.png",
+      "source": "Clue_009_002",
+      "versions": [
+        {
+          "version": 1,
+          "name": "刺剑",
+          "description": "贯穿艾玛尸体的凶器。\n与蕾雅所持的剑是同一把。"
+        }
+      ]
+    },
+    {
+      "code": "%WP097",
+      "name": "礼服",
+      "path": "items/WP097.png",
+      "source": "Clue_009_003",
+      "versions": [
+        {
+          "version": 1,
+          "name": "礼服",
+          "description": "艾玛所穿的礼服。\n\n是一件白色底配金色刺绣的连衣裙，原本是用于舞台剧演出的。\n\n平时摆设在画室中，在发现尸体的约15分钟前，亚里沙曾目击到它还在画室里面。\n腹部穿了一个洞，应该是由于刺剑穿刺造成的。"
+        }
+      ]
+    },
+    {
+      "code": "%WP098",
+      "name": "蕾雅的尸体照片",
+      "path": "items/WP098.png",
+      "source": "Clue_009_004",
+      "versions": [
+        {
+          "version": 1,
+          "name": "蕾雅的尸体照片",
+          "description": "莲见蕾雅的尸体。推测死亡时间在一小时以内。\n后脑处有类似遭殴打的伤口。"
+        }
+      ]
+    },
+    {
+      "code": "%WP099",
+      "name": "王冠",
+      "path": "items/WP099.png",
+      "source": "Clue_009_005",
+      "versions": [
+        {
+          "version": 1,
+          "name": "王冠",
+          "description": "蕾雅尸体佩戴着的王冠。\n\n是米莉亚制作的舞台剧小道具。\n没有受外力冲击的痕迹。"
+        }
+      ]
+    },
+    {
+      "code": "%WP100",
+      "name": "人字梯",
+      "path": "items/WP100.png",
+      "source": "Clue_009_006",
+      "versions": [
+        {
+          "version": 1,
+          "name": "人字梯",
+          "description": "倚靠在电梯近地面一层的墙壁上的人字梯。\n上面覆盖着一层布，其上附有疑似血迹的痕迹。"
+        }
+      ]
+    },
+    {
+      "code": "%WP101",
+      "name": "电梯",
+      "path": "items/WP101.png",
+      "source": "Clue_009_007",
+      "versions": [
+        {
+          "version": 1,
+          "name": "电梯",
+          "description": "限载2人的电梯。\n\n在调查地下后，准备回去时只能载1个人了。\n\n电梯轿厢内留有疑似擦拭过血迹的痕迹。\n顶部入口的盖子之前遭雪莉破坏后，一直处于打开着的状态。"
+        },
+        {
+          "version": 2,
+          "name": "电梯",
+          "description": "受电脑限制，只可载2人的电梯。\n案件发生前后都没有解除过限制的迹象。\n\n在调查地下后，准备回去时只能载1个人了。\n\n电梯轿厢内留有疑似擦拭过血迹的痕迹。\n顶部入口的盖子之前遭雪莉破坏后，一直处于打开着的状态。"
+        }
+      ]
+    },
+    {
+      "code": "%WP102",
+      "name": "电梯顶部的空间",
+      "path": "items/WP102.png",
+      "source": "Clue_009_008",
+      "versions": [
+        {
+          "version": 1,
+          "name": "电梯顶部的空间",
+          "description": "电梯顶部上方的空间。\n是发现蕾亚尸体的地方。\n\n可能是因为地下冷冻仓库散热的缘故，这里热气积聚，十分闷热。"
+        }
+      ]
+    },
+    {
+      "code": "%WP103",
+      "name": "艾玛的衣服",
+      "path": "items/WP103.png",
+      "source": "Clue_009_009",
+      "versions": [
+        {
+          "version": 1,
+          "name": "艾玛的衣服",
+          "description": "艾玛平时穿的衣服。\n\n胸口穿了一个洞，应该是由于刺剑穿刺造成的。\n是雪莉在电梯的顶上找到的。"
+        }
+      ]
+    },
+    {
+      "code": "%WP104",
+      "name": "红色的液体",
+      "path": "items/WP104.png",
+      "source": "Clue_009_010",
+      "versions": [
+        {
+          "version": 1,
+          "name": "红色的液体",
+          "description": "流淌在顶盖上方的淡红色液体。\n从周围飞舞着蝴蝶这点来看，应该是变稀薄了的血液。"
+        }
+      ]
+    },
+    {
+      "code": "%WP105",
+      "name": "艾玛的人偶",
+      "path": "items/WP105.png",
+      "source": "Clue_009_011",
+      "versions": [
+        {
+          "version": 1,
+          "name": "艾玛的人偶",
+          "description": "汉娜制作的人偶。\n由艾玛持有。"
+        }
+      ]
+    },
+    {
+      "code": "%WP106",
+      "name": "地下的大门",
+      "path": "items/WP106.png",
+      "source": "Clue_009_012",
+      "versions": [
+        {
+          "version": 1,
+          "name": "地下的大门",
+          "description": "连结位于地下冷冻室的处刑台保管库的大门。\n没有短暂开启过的迹象。"
+        }
+      ]
+    },
+    {
+      "code": "%WP107",
+      "name": "未命名物品 9-13",
+      "path": "items/WP107.png",
+      "source": "Clue_009_013",
+      "versions": []
+    },
+    {
+      "code": "%WP108",
+      "name": "钢笔",
+      "path": "items/WP108.png",
+      "source": "Clue_010_001",
+      "versions": [
+        {
+          "version": 1,
+          "name": "希罗的钢笔",
+          "description": "二阶堂希罗原本持有的钢笔。"
+        },
+        {
+          "version": 2,
+          "name": "钢笔",
+          "description": "一支钢笔。是朋友所赠的礼物。"
+        },
+        {
+          "version": 3,
+          "name": "钢笔",
+          "description": "大魔女附身的咒物。"
+        }
+      ]
+    },
+    {
+      "code": "%WP109",
+      "name": "未命名物品 10-2",
+      "path": "items/WP109.png",
+      "source": "Clue_010_002",
+      "versions": []
+    },
+    {
+      "code": "%WP110",
+      "name": "未命名物品 10-3",
+      "path": "items/WP110.png",
+      "source": "Clue_010_003",
+      "versions": []
+    },
+    {
+      "code": "%WP111",
+      "name": "未命名物品 10-4",
+      "path": "items/WP111.png",
+      "source": "Clue_010_004",
+      "versions": []
+    },
+    {
+      "code": "%WP112",
+      "name": "未命名物品 10-5",
+      "path": "items/WP112.png",
+      "source": "Clue_010_005",
+      "versions": []
+    },
+    {
+      "code": "%WP113",
+      "name": "声音",
+      "path": "items/WP113.png",
+      "source": "Clue_010_007",
+      "versions": [
+        {
+          "version": 1,
+          "name": "声音",
+          "description": "我们并不期望复仇。\n我只是希望她能过得幸福。\n请你救救她吧。"
+        }
+      ]
+    },
+    {
+      "code": "%WP114",
+      "name": "未命名物品 10-11",
+      "path": "items/WP114.png",
+      "source": "Clue_010_011",
+      "versions": []
+    },
+    {
+      "code": "%WP115",
+      "name": "冰上梅露露凶杀案",
+      "path": "items/WP115.png",
+      "source": "Clue_010_016",
+      "versions": [
+        {
+          "version": 1,
+          "name": "冰上梅露露凶杀案",
+          "description": "宝生玛格受到了冰上梅露露的温柔关爱，于是杀害了她。"
+        }
+      ]
+    },
+    {
+      "code": "%WP116",
+      "name": "泽渡可可凶杀案",
+      "path": "items/WP116.png",
+      "source": "Clue_010_017",
+      "versions": [
+        {
+          "version": 1,
+          "name": "泽渡可可凶杀案",
+          "description": "黑部奈叶香企图保护姐姐不受泽渡可可伤害，于是将其杀害。"
+        }
+      ]
+    },
+    {
+      "code": "%WP117",
+      "name": "夏目安安凶杀案",
+      "path": "items/WP117.png",
+      "source": "Clue_010_018",
+      "versions": [
+        {
+          "version": 1,
+          "name": "夏目安安凶杀案",
+          "description": "城崎诺亚因为画被夏目安安看到，于是杀害了她。"
+        }
+      ]
+    },
+    {
+      "code": "%WP118",
+      "name": "莲见蕾雅凶杀案",
+      "path": "items/WP118.png",
+      "source": "Clue_010_019",
+      "versions": [
+        {
+          "version": 1,
+          "name": "莲见蕾雅凶杀案",
+          "description": "远野汉娜面对莲见蕾雅感到自卑，于是将其杀害。\n远野汉娜行凶时被樱羽艾玛看到，于是将其杀害。"
+        }
+      ]
+    },
+    {
+      "code": "%WP119",
+      "name": "城崎诺亚凶杀案",
+      "path": "items/WP119.png",
+      "source": "Clue_010_020",
+      "versions": [
+        {
+          "version": 1,
+          "name": "城崎诺亚凶杀案",
+          "description": "莲见蕾雅想要比城崎诺亚更受关注，于是将其杀害。"
+        }
+      ]
+    },
+    {
+      "code": "%WP120",
+      "name": "佐伯米莉亚凶杀案",
+      "path": "items/WP120.png",
+      "source": "Clue_010_021",
+      "versions": [
+        {
+          "version": 1,
+          "name": "佐伯米莉亚凶杀案",
+          "description": "夏目安安为了阻止佐伯米莉亚破坏她的安稳，于是将其杀害。"
+        }
+      ]
+    },
+    {
+      "code": "%WP121",
+      "name": "远野汉娜凶杀案",
+      "path": "items/WP121.png",
+      "source": "Clue_010_022",
+      "versions": [
+        {
+          "version": 1,
+          "name": "远野汉娜凶杀案",
+          "description": "橘雪莉为了实现远野汉娜的愿望，于是杀害了她。"
+        }
+      ]
+    },
+    {
+      "code": "%WP122",
+      "name": "紫藤亚里沙凶杀案",
+      "path": "items/WP122.png",
+      "source": "Clue_010_023",
+      "versions": [
+        {
+          "version": 1,
+          "name": "紫藤亚里沙凶杀案",
+          "description": "冰上梅露露盼望紫藤亚里沙得到幸福，于是杀害了她。"
+        }
+      ]
+    },
+    {
+      "code": "%WP123",
+      "name": "黑部奈叶香凶杀案",
+      "path": "items/WP123.png",
+      "source": "Clue_010_024",
+      "versions": [
+        {
+          "version": 1,
+          "name": "黑部奈叶香凶杀案",
+          "description": "冰上梅露露为了阻止黑部奈叶香的复仇，于是杀害了她。"
+        }
+      ]
+    },
+    {
+      "code": "%WP124",
+      "name": "原罪：受厌恶之人",
+      "path": "items/WP124.png",
+      "source": "Clue_010_025",
+      "versions": [
+        {
+          "version": 1,
+          "name": "原罪：受厌恶之人",
+          "description": "她是应受厌恶之人。\n而比任何人都厌恶她的，正是她本人。\n\n"
+        }
+      ]
+    },
+    {
+      "code": "%WP125",
+      "name": "原罪：正义的执行者",
+      "path": "items/WP125.png",
+      "source": "Clue_010_026",
+      "versions": [
+        {
+          "version": 1,
+          "name": "原罪：正义的执行者",
+          "description": "她至今走过的路，未曾有一星污点。\n在那个名为独善的理想乡中，容不得绞刑台这般异物的存在。\n\n"
+        }
+      ]
+    },
+    {
+      "code": "%WP126",
+      "name": "原罪：编织谎言的沉睡公主",
+      "path": "items/WP126.png",
+      "source": "Clue_010_027",
+      "versions": [
+        {
+          "version": 1,
+          "name": "原罪：编织谎言的沉睡公主",
+          "description": "她今天也独自沉睡着。\n因为只要不伤害任何人，那她自己也就不会受伤。\n\n"
+        }
+      ]
+    },
+    {
+      "code": "%WP127",
+      "name": "原罪：虚伪的艺术家",
+      "path": "items/WP127.png",
+      "source": "Clue_010_028",
+      "versions": [
+        {
+          "version": 1,
+          "name": "原罪：虚伪的艺术家",
+          "description": "她在痛苦中不断挣扎着。\n可是她却始终没有意识到，束缚着自己的锁链正是自己的尾巴。\n\n"
+        }
+      ]
+    },
+    {
+      "code": "%WP128",
+      "name": "原罪：舞台上的偶像",
+      "path": "items/WP128.png",
+      "source": "Clue_010_029",
+      "versions": [
+        {
+          "version": 1,
+          "name": "原罪：舞台上的偶像",
+          "description": "她那用以满足他人的形象，不知何时成为了能够倚靠的支柱。\n这根早已腐朽崩塌的柱子，今天也仍旧支撑着她。\n\n"
+        }
+      ]
+    },
+    {
+      "code": "%WP129",
+      "name": "原罪：高中出道辣妹",
+      "path": "items/WP129.png",
+      "source": "Clue_010_030",
+      "versions": [
+        {
+          "version": 1,
+          "name": "原罪：高中出道辣妹",
+          "description": "她被牵扯其中，一切都被公开暴露了。\n失去了所有的她，再也无法承受任何负担了。\n\n"
+        }
+      ]
+    },
+    {
+      "code": "%WP130",
+      "name": "原罪：知晓爱之人",
+      "path": "items/WP130.png",
+      "source": "Clue_010_031",
+      "versions": [
+        {
+          "version": 1,
+          "name": "原罪：知晓爱之人",
+          "description": "她知道一切爱的形状。\n而无法认知的事物，等同于不存在。\n\n"
+        }
+      ]
+    },
+    {
+      "code": "%WP131",
+      "name": "原罪：来自过去的狙击手",
+      "path": "items/WP131.png",
+      "source": "Clue_010_032",
+      "versions": [
+        {
+          "version": 1,
+          "name": "原罪：来自过去的狙击手",
+          "description": "她的目标是对过去的复仇。\n为了向无能为力的当初的自己报一箭之仇，她再次举起了枪。\n\n"
+        }
+      ]
+    },
+    {
+      "code": "%WP132",
+      "name": "原罪：自罚上瘾",
+      "path": "items/WP132.png",
+      "source": "Clue_010_033",
+      "versions": [
+        {
+          "version": 1,
+          "name": "原罪：自罚上瘾",
+          "description": "她还是得到了宽恕。\n为了追求甜蜜的惩罚，她将永远地向自己挥下鞭子。\n\n"
+        }
+      ]
+    },
+    {
+      "code": "%WP133",
+      "name": "原罪：毁灭侦探",
+      "path": "items/WP133.png",
+      "source": "Clue_010_034",
+      "versions": [
+        {
+          "version": 1,
+          "name": "原罪：毁灭侦探",
+          "description": "她毁灭了一切。\n不论是案件，还是人，甚至还有自己的心。\n\n"
+        }
+      ]
+    },
+    {
+      "code": "%WP134",
+      "name": "原罪：幻想千金",
+      "path": "items/WP134.png",
+      "source": "Clue_010_035",
+      "versions": [
+        {
+          "version": 1,
+          "name": "原罪：幻想千金",
+          "description": "她抛弃了现实，逃入了幻想之中。\n她再也不会将任何人抛下了。\n\n"
+        }
+      ]
+    },
+    {
+      "code": "%WP135",
+      "name": "原罪：孤独的直播主",
+      "path": "items/WP135.png",
+      "source": "Clue_010_036",
+      "versions": [
+        {
+          "version": 1,
+          "name": "原罪：孤独的直播主",
+          "description": "她始终活在被发现的恐惧之中。\n所以，她今天仍是孤独一人发声。\n只为了不被任何人找到。\n\n"
+        }
+      ]
+    },
+    {
+      "code": "%WP136",
+      "name": "原罪：胆怯的天使",
+      "path": "items/WP136.png",
+      "source": "Clue_010_037",
+      "versions": [
+        {
+          "version": 1,
+          "name": "原罪：胆怯的天使",
+          "description": "她所恐惧的，是被自己信仰的神明抛弃。\n明明她早就察觉到了，却只能选择视而不见。\n\n"
+        }
+      ]
+    }
+  ]
+}
