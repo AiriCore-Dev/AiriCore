@@ -1,0 +1,57 @@
+{
+  "defaultAppearance": "State01",
+  "compositionMap": [
+    {
+      "Key": "Body",
+      "Composition": ">Part01,Body+"
+    },
+    {
+      "Key": "State01",
+      "Composition": ">Part01,Body+"
+    },
+    {
+      "Key": "State02",
+      "Composition": ">Part02,Body+"
+    },
+    {
+      "Key": "State03",
+      "Composition": ">Part03,Body+"
+    },
+    {
+      "Key": "State04",
+      "Composition": ">Part04,Body+"
+    },
+    {
+      "Key": "State05",
+      "Composition": ">Part05,Body+"
+    },
+    {
+      "Key": "State06",
+      "Composition": ">Part06,Body+"
+    },
+    {
+      "Key": "State07",
+      "Composition": ">Part07,Body+"
+    },
+    {
+      "Key": "State08",
+      "Composition": ">Part08,Body+"
+    },
+    {
+      "Key": "State09",
+      "Composition": ">Part09,Body+"
+    },
+    {
+      "Key": "State10",
+      "Composition": ">Part10,Body+"
+    },
+    {
+      "Key": "State11",
+      "Composition": ">Part11,Body+"
+    },
+    {
+      "Key": "State12",
+      "Composition": ">Part12,Body+"
+    }
+  ]
+}

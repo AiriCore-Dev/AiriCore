@@ -57,6 +57,14 @@ class SketchbookRenderer:
             (target_width - crop_width * scale_factor) / 2 - crop_left * scale_factor,
             (target_height - crop_height * scale_factor) / 2 - crop_top * scale_factor,
         )
+        if self.prefab._character_data.flatten_before_resize:
+            width, height = self.prefab._sprite_size
+            layer = Layer("prefab").sprite_exact(
+                Bitmap.load(self.render(nodes)),
+                position=offset,
+                target_size=(width * scale_factor, height * scale_factor),
+            )
+            return Drawer(*target_size, FontSet()).layer(layer).render()
         return self._render_transformed(
             nodes,
             canvas_size=target_size,

@@ -31,14 +31,14 @@ def _canvas_sprite(sprite, prefab, canvas):
     return restored
 
 
-def _project_sprite(sprite, pivot, side):
+def _project_sprite(sprite, pivot, side, *, scale=1.0):
     layout = _layout()
     camera = layout["camera"]
     character = layout["character"]
     angle = math.radians(camera["yaw_degrees"] * (1 if side == "left" else -1))
     cosine, sine = math.cos(angle), math.sin(angle)
     focal = SIZE[1] / 2 / math.tan(math.radians(camera["field_of_view"] / 2))
-    unit = character["scale"] / character["pixels_per_unit"]
+    unit = character["scale"] * scale / character["pixels_per_unit"]
     distance = camera["distance"]
     depth = character["position"][2] - distance * cosine
     denominator = cosine + sine * SIZE[0] / (2 * focal)
@@ -121,7 +121,7 @@ def render_debate(request):
     if pivot is None:
         raise ValueError("该角色缺少审问场景定位数据")
     background = ROOT / f"court_{request.side}.webp"
-    descriptor = json.dumps({"kind": "debate", "version": 3, "sprite": request.sprite, "side": request.side,
+    descriptor = json.dumps({"kind": "debate", "version": 4, "sprite": request.sprite, "side": request.side,
         "text": request.text, "background": _signature(background), "layout": _signature(ROOT / "layout.json"),
         "font": _signature(FONT), "authors": _signature(ASSETS / "dialogue/authors.json"),
         "presets": _signature(ASSETS / "presets/official_presets.json"),
@@ -133,7 +133,8 @@ def render_debate(request):
         with Image.open(io.BytesIO(renderer.render_recipe(character, recipe))) as source:
             sprite = source.convert("RGBA")
         sprite = _canvas_sprite(sprite, renderer.prefab(character), _layout()["canvases"][character])
-        canvas.alpha_composite(_project_sprite(sprite, pivot, request.side))
+        scale = _layout().get("scales", {}).get(character, 1.0)
+        canvas.alpha_composite(_project_sprite(sprite, pivot, request.side, scale=scale))
         canvas.alpha_composite(text_layer, text_position)
         return _png(canvas.convert("RGB"))
 

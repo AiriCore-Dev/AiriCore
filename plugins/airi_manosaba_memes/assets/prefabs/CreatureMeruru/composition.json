@@ -1,0 +1,153 @@
+{
+  "defaultAppearance": "State01",
+  "compositionMap": [
+    {
+      "Key": "Body",
+      "Composition": ">Part01,Body+"
+    },
+    {
+      "Key": "State01",
+      "Composition": ">Part01,Body+"
+    },
+    {
+      "Key": "State02",
+      "Composition": ">Part02,Body+"
+    },
+    {
+      "Key": "State03",
+      "Composition": ">Part03,Body+"
+    },
+    {
+      "Key": "State04",
+      "Composition": ">Part04,Body+"
+    },
+    {
+      "Key": "State05",
+      "Composition": ">Part05,Body+"
+    },
+    {
+      "Key": "State06",
+      "Composition": ">Part06,Body+"
+    },
+    {
+      "Key": "State07",
+      "Composition": ">Part07,Body+"
+    },
+    {
+      "Key": "State08",
+      "Composition": ">Part08,Body+"
+    },
+    {
+      "Key": "State09",
+      "Composition": ">Part09,Body+"
+    },
+    {
+      "Key": "State10",
+      "Composition": ">Part10,Body+"
+    },
+    {
+      "Key": "State11",
+      "Composition": ">Part11,Body+"
+    },
+    {
+      "Key": "State12",
+      "Composition": ">Part12,Body+"
+    },
+    {
+      "Key": "State13",
+      "Composition": ">Part13,Body+"
+    },
+    {
+      "Key": "State14",
+      "Composition": ">Part14,Body+"
+    },
+    {
+      "Key": "State15",
+      "Composition": ">Part15,Body+"
+    },
+    {
+      "Key": "State16",
+      "Composition": ">Part16,Body+"
+    },
+    {
+      "Key": "State17",
+      "Composition": ">Part17,Body+"
+    },
+    {
+      "Key": "State18",
+      "Composition": ">Part18,Body+"
+    },
+    {
+      "Key": "State19",
+      "Composition": ">Part19,Body+"
+    },
+    {
+      "Key": "State20",
+      "Composition": ">Part20,Body+"
+    },
+    {
+      "Key": "State21",
+      "Composition": ">Part21,Body+"
+    },
+    {
+      "Key": "State22",
+      "Composition": ">Part22,Body+"
+    },
+    {
+      "Key": "State23",
+      "Composition": ">Part23,Body+"
+    },
+    {
+      "Key": "State24",
+      "Composition": ">Part24,Body+"
+    },
+    {
+      "Key": "State25",
+      "Composition": ">Part25,Body+"
+    },
+    {
+      "Key": "State26",
+      "Composition": ">Part26,Body+"
+    },
+    {
+      "Key": "State27",
+      "Composition": ">Part27,Body+"
+    },
+    {
+      "Key": "State28",
+      "Composition": ">Part28,Body+"
+    },
+    {
+      "Key": "State29",
+      "Composition": ">Part29,Body+"
+    },
+    {
+      "Key": "State30",
+      "Composition": ">Part30,Body+"
+    },
+    {
+      "Key": "State31",
+      "Composition": ">Part31,Body+"
+    },
+    {
+      "Key": "State32",
+      "Composition": ">Part32,Body+"
+    },
+    {
+      "Key": "State33",
+      "Composition": ">Part33,Body+"
+    },
+    {
+      "Key": "State34",
+      "Composition": ">Part34,Body+"
+    },
+    {
+      "Key": "State35",
+      "Composition": ">Part35,Body+"
+    },
+    {
+      "Key": "State36",
+      "Composition": ">Part36,Body+"
+    }
+  ]
+}

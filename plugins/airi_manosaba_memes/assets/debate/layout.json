@@ -317,6 +317,34 @@
         0.0,
         0.0
       ]
-    }
+    },
+    "CreatureMeruru": null,
+    "CreatureNoah": null,
+    "CreatureHanna": null,
+    "CreatureNanoka": null,
+    "CreatureAlisa": null,
+    "CreatureMiria": null,
+    "CreatureSherry": null,
+    "CreatureEma": null,
+    "CreatureMargo": null,
+    "CreatureAnAn": null,
+    "CreatureCoco": null,
+    "CreatureHiro": null,
+    "CreatureLeia": null
+  },
+  "scales": {
+    "CreatureMeruru": 0.6000000238418579,
+    "CreatureNoah": 0.5879999995231628,
+    "CreatureHanna": 0.5400000214576721,
+    "CreatureNanoka": 0.6000000238418579,
+    "CreatureAlisa": 0.6000000238418579,
+    "CreatureMiria": 0.6600000262260437,
+    "CreatureSherry": 0.6000000238418579,
+    "CreatureEma": 0.6000000238418579,
+    "CreatureMargo": 0.6430000066757202,
+    "CreatureAnAn": 0.6000000238418579,
+    "CreatureCoco": 0.6000000238418579,
+    "CreatureHiro": 0.6000000238418579,
+    "CreatureLeia": 0.75
   }
 }

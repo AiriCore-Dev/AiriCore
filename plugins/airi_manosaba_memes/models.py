@@ -24,6 +24,19 @@ class Character(StrEnum):
     YUKI = "Yuki"
     WARDEN = "Warden"
     JAILER = "Jailer"
+    CREATURE_MERURU = "CreatureMeruru"
+    CREATURE_NOAH = "CreatureNoah"
+    CREATURE_HANNA = "CreatureHanna"
+    CREATURE_NANOKA = "CreatureNanoka"
+    CREATURE_ALISA = "CreatureAlisa"
+    CREATURE_MIRIA = "CreatureMiria"
+    CREATURE_SHERRY = "CreatureSherry"
+    CREATURE_EMA = "CreatureEma"
+    CREATURE_MARGO = "CreatureMargo"
+    CREATURE_ANAN = "CreatureAnAn"
+    CREATURE_COCO = "CreatureCoco"
+    CREATURE_HIRO = "CreatureHiro"
+    CREATURE_LEIA = "CreatureLeia"
 
 
 class Statement(StrEnum):

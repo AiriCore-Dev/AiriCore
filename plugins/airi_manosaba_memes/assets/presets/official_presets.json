@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "source_digest": "6b6a72e4f707a2aa51e231fba165b840cf44a61d06c5049095ce63be9851fb2b",
+  "source_digest": "9744ac2283675d746c9f20c2dafd3048ac4bacf87e42bdf921ae5f4c4010d85b",
   "characters": {
     "Meruru": [
       {
@@ -84687,6 +84687,4399 @@
         ],
         "appearance": [
           "State07"
+        ],
+        "frequency": 0
+      }
+    ],
+    "CreatureMeruru": [
+      {
+        "id": "creaturemeruru-state-01",
+        "nodes": [
+          "Body",
+          "Part01"
+        ],
+        "appearance": [
+          "State01"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-02",
+        "nodes": [
+          "Body",
+          "Part02"
+        ],
+        "appearance": [
+          "State02"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-03",
+        "nodes": [
+          "Body",
+          "Part03"
+        ],
+        "appearance": [
+          "State03"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-04",
+        "nodes": [
+          "Body",
+          "Part04"
+        ],
+        "appearance": [
+          "State04"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-05",
+        "nodes": [
+          "Body",
+          "Part05"
+        ],
+        "appearance": [
+          "State05"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-06",
+        "nodes": [
+          "Body",
+          "Part06"
+        ],
+        "appearance": [
+          "State06"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-07",
+        "nodes": [
+          "Body",
+          "Part07"
+        ],
+        "appearance": [
+          "State07"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-08",
+        "nodes": [
+          "Body",
+          "Part08"
+        ],
+        "appearance": [
+          "State08"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-09",
+        "nodes": [
+          "Body",
+          "Part09"
+        ],
+        "appearance": [
+          "State09"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-10",
+        "nodes": [
+          "Body",
+          "Part10"
+        ],
+        "appearance": [
+          "State10"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-11",
+        "nodes": [
+          "Body",
+          "Part11"
+        ],
+        "appearance": [
+          "State11"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-12",
+        "nodes": [
+          "Body",
+          "Part12"
+        ],
+        "appearance": [
+          "State12"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-13",
+        "nodes": [
+          "Body",
+          "Part13"
+        ],
+        "appearance": [
+          "State13"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-14",
+        "nodes": [
+          "Body",
+          "Part14"
+        ],
+        "appearance": [
+          "State14"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-15",
+        "nodes": [
+          "Body",
+          "Part15"
+        ],
+        "appearance": [
+          "State15"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-16",
+        "nodes": [
+          "Body",
+          "Part16"
+        ],
+        "appearance": [
+          "State16"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-17",
+        "nodes": [
+          "Body",
+          "Part17"
+        ],
+        "appearance": [
+          "State17"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-18",
+        "nodes": [
+          "Body",
+          "Part18"
+        ],
+        "appearance": [
+          "State18"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-19",
+        "nodes": [
+          "Body",
+          "Part19"
+        ],
+        "appearance": [
+          "State19"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-20",
+        "nodes": [
+          "Body",
+          "Part20"
+        ],
+        "appearance": [
+          "State20"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-21",
+        "nodes": [
+          "Body",
+          "Part21"
+        ],
+        "appearance": [
+          "State21"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-22",
+        "nodes": [
+          "Body",
+          "Part22"
+        ],
+        "appearance": [
+          "State22"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-23",
+        "nodes": [
+          "Body",
+          "Part23"
+        ],
+        "appearance": [
+          "State23"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-24",
+        "nodes": [
+          "Body",
+          "Part24"
+        ],
+        "appearance": [
+          "State24"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-25",
+        "nodes": [
+          "Body",
+          "Part25"
+        ],
+        "appearance": [
+          "State25"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-26",
+        "nodes": [
+          "Body",
+          "Part26"
+        ],
+        "appearance": [
+          "State26"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-27",
+        "nodes": [
+          "Body",
+          "Part27"
+        ],
+        "appearance": [
+          "State27"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-28",
+        "nodes": [
+          "Body",
+          "Part28"
+        ],
+        "appearance": [
+          "State28"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-29",
+        "nodes": [
+          "Body",
+          "Part29"
+        ],
+        "appearance": [
+          "State29"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-30",
+        "nodes": [
+          "Body",
+          "Part30"
+        ],
+        "appearance": [
+          "State30"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-31",
+        "nodes": [
+          "Body",
+          "Part31"
+        ],
+        "appearance": [
+          "State31"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-32",
+        "nodes": [
+          "Body",
+          "Part32"
+        ],
+        "appearance": [
+          "State32"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-33",
+        "nodes": [
+          "Body",
+          "Part33"
+        ],
+        "appearance": [
+          "State33"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-34",
+        "nodes": [
+          "Body",
+          "Part34"
+        ],
+        "appearance": [
+          "State34"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-35",
+        "nodes": [
+          "Body",
+          "Part35"
+        ],
+        "appearance": [
+          "State35"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemeruru-state-36",
+        "nodes": [
+          "Body",
+          "Part36"
+        ],
+        "appearance": [
+          "State36"
+        ],
+        "frequency": 0
+      }
+    ],
+    "CreatureNoah": [
+      {
+        "id": "creaturenoah-state-01",
+        "nodes": [
+          "Body",
+          "Part01"
+        ],
+        "appearance": [
+          "State01"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenoah-state-02",
+        "nodes": [
+          "Body",
+          "Part02"
+        ],
+        "appearance": [
+          "State02"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenoah-state-03",
+        "nodes": [
+          "Body",
+          "Part03"
+        ],
+        "appearance": [
+          "State03"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenoah-state-04",
+        "nodes": [
+          "Body",
+          "Part04"
+        ],
+        "appearance": [
+          "State04"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenoah-state-05",
+        "nodes": [
+          "Body",
+          "Part05"
+        ],
+        "appearance": [
+          "State05"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenoah-state-06",
+        "nodes": [
+          "Body",
+          "Part06"
+        ],
+        "appearance": [
+          "State06"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenoah-state-07",
+        "nodes": [
+          "Body",
+          "Part07"
+        ],
+        "appearance": [
+          "State07"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenoah-state-08",
+        "nodes": [
+          "Body",
+          "Part08"
+        ],
+        "appearance": [
+          "State08"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenoah-state-09",
+        "nodes": [
+          "Body",
+          "Part09"
+        ],
+        "appearance": [
+          "State09"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenoah-state-10",
+        "nodes": [
+          "Body",
+          "Part10"
+        ],
+        "appearance": [
+          "State10"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenoah-state-11",
+        "nodes": [
+          "Body",
+          "Part11"
+        ],
+        "appearance": [
+          "State11"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenoah-state-12",
+        "nodes": [
+          "Body",
+          "Part12"
+        ],
+        "appearance": [
+          "State12"
+        ],
+        "frequency": 0
+      }
+    ],
+    "CreatureHanna": [
+      {
+        "id": "creaturehanna-state-01",
+        "nodes": [
+          "Body",
+          "Part01"
+        ],
+        "appearance": [
+          "State01"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-02",
+        "nodes": [
+          "Body",
+          "Part02"
+        ],
+        "appearance": [
+          "State02"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-03",
+        "nodes": [
+          "Body",
+          "Part03"
+        ],
+        "appearance": [
+          "State03"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-04",
+        "nodes": [
+          "Body",
+          "Part04"
+        ],
+        "appearance": [
+          "State04"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-05",
+        "nodes": [
+          "Body",
+          "Part05"
+        ],
+        "appearance": [
+          "State05"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-06",
+        "nodes": [
+          "Body",
+          "Part06"
+        ],
+        "appearance": [
+          "State06"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-07",
+        "nodes": [
+          "Body",
+          "Part07"
+        ],
+        "appearance": [
+          "State07"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-08",
+        "nodes": [
+          "Body",
+          "Part08"
+        ],
+        "appearance": [
+          "State08"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-09",
+        "nodes": [
+          "Body",
+          "Part09"
+        ],
+        "appearance": [
+          "State09"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-10",
+        "nodes": [
+          "Body",
+          "Part10"
+        ],
+        "appearance": [
+          "State10"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-11",
+        "nodes": [
+          "Body",
+          "Part11"
+        ],
+        "appearance": [
+          "State11"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-12",
+        "nodes": [
+          "Body",
+          "Part12"
+        ],
+        "appearance": [
+          "State12"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-13",
+        "nodes": [
+          "Body",
+          "Part13"
+        ],
+        "appearance": [
+          "State13"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-14",
+        "nodes": [
+          "Body",
+          "Part14"
+        ],
+        "appearance": [
+          "State14"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-15",
+        "nodes": [
+          "Body",
+          "Part15"
+        ],
+        "appearance": [
+          "State15"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-16",
+        "nodes": [
+          "Body",
+          "Part16"
+        ],
+        "appearance": [
+          "State16"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-17",
+        "nodes": [
+          "Body",
+          "Part17"
+        ],
+        "appearance": [
+          "State17"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-18",
+        "nodes": [
+          "Body",
+          "Part18"
+        ],
+        "appearance": [
+          "State18"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-19",
+        "nodes": [
+          "Body",
+          "Part19"
+        ],
+        "appearance": [
+          "State19"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-20",
+        "nodes": [
+          "Body",
+          "Part20"
+        ],
+        "appearance": [
+          "State20"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-21",
+        "nodes": [
+          "Body",
+          "Part21"
+        ],
+        "appearance": [
+          "State21"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-22",
+        "nodes": [
+          "Body",
+          "Part22"
+        ],
+        "appearance": [
+          "State22"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-23",
+        "nodes": [
+          "Body",
+          "Part23"
+        ],
+        "appearance": [
+          "State23"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-24",
+        "nodes": [
+          "Body",
+          "Part24"
+        ],
+        "appearance": [
+          "State24"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-25",
+        "nodes": [
+          "Body",
+          "Part25"
+        ],
+        "appearance": [
+          "State25"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-26",
+        "nodes": [
+          "Body",
+          "Part26"
+        ],
+        "appearance": [
+          "State26"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-27",
+        "nodes": [
+          "Body",
+          "Part27"
+        ],
+        "appearance": [
+          "State27"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-28",
+        "nodes": [
+          "Body",
+          "Part28"
+        ],
+        "appearance": [
+          "State28"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-29",
+        "nodes": [
+          "Body",
+          "Part29"
+        ],
+        "appearance": [
+          "State29"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehanna-state-30",
+        "nodes": [
+          "Body",
+          "Part30"
+        ],
+        "appearance": [
+          "State30"
+        ],
+        "frequency": 0
+      }
+    ],
+    "CreatureNanoka": [
+      {
+        "id": "creaturenanoka-state-01",
+        "nodes": [
+          "Body",
+          "Part01"
+        ],
+        "appearance": [
+          "State01"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenanoka-state-02",
+        "nodes": [
+          "Body",
+          "Part02"
+        ],
+        "appearance": [
+          "State02"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenanoka-state-03",
+        "nodes": [
+          "Body",
+          "Part03"
+        ],
+        "appearance": [
+          "State03"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenanoka-state-04",
+        "nodes": [
+          "Body",
+          "Part04"
+        ],
+        "appearance": [
+          "State04"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenanoka-state-05",
+        "nodes": [
+          "Body",
+          "Part05"
+        ],
+        "appearance": [
+          "State05"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenanoka-state-06",
+        "nodes": [
+          "Body",
+          "Part06"
+        ],
+        "appearance": [
+          "State06"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenanoka-state-07",
+        "nodes": [
+          "Body",
+          "Part07"
+        ],
+        "appearance": [
+          "State07"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenanoka-state-08",
+        "nodes": [
+          "Body",
+          "Part08"
+        ],
+        "appearance": [
+          "State08"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenanoka-state-09",
+        "nodes": [
+          "Body",
+          "Part09"
+        ],
+        "appearance": [
+          "State09"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenanoka-state-10",
+        "nodes": [
+          "Body",
+          "Part10"
+        ],
+        "appearance": [
+          "State10"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenanoka-state-11",
+        "nodes": [
+          "Body",
+          "Part11"
+        ],
+        "appearance": [
+          "State11"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenanoka-state-12",
+        "nodes": [
+          "Body",
+          "Part12"
+        ],
+        "appearance": [
+          "State12"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenanoka-state-13",
+        "nodes": [
+          "Body",
+          "Part13"
+        ],
+        "appearance": [
+          "State13"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenanoka-state-14",
+        "nodes": [
+          "Body",
+          "Part14"
+        ],
+        "appearance": [
+          "State14"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenanoka-state-15",
+        "nodes": [
+          "Body",
+          "Part15"
+        ],
+        "appearance": [
+          "State15"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenanoka-state-16",
+        "nodes": [
+          "Body",
+          "Part16"
+        ],
+        "appearance": [
+          "State16"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenanoka-state-17",
+        "nodes": [
+          "Body",
+          "Part17"
+        ],
+        "appearance": [
+          "State17"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenanoka-state-18",
+        "nodes": [
+          "Body",
+          "Part18"
+        ],
+        "appearance": [
+          "State18"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenanoka-state-19",
+        "nodes": [
+          "Body",
+          "Part19"
+        ],
+        "appearance": [
+          "State19"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenanoka-state-20",
+        "nodes": [
+          "Body",
+          "Part20"
+        ],
+        "appearance": [
+          "State20"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenanoka-state-21",
+        "nodes": [
+          "Body",
+          "Part21"
+        ],
+        "appearance": [
+          "State21"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenanoka-state-22",
+        "nodes": [
+          "Body",
+          "Part22"
+        ],
+        "appearance": [
+          "State22"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenanoka-state-23",
+        "nodes": [
+          "Body",
+          "Part23"
+        ],
+        "appearance": [
+          "State23"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturenanoka-state-24",
+        "nodes": [
+          "Body",
+          "Part24"
+        ],
+        "appearance": [
+          "State24"
+        ],
+        "frequency": 0
+      }
+    ],
+    "CreatureAlisa": [
+      {
+        "id": "creaturealisa-state-01",
+        "nodes": [
+          "Body",
+          "Part01"
+        ],
+        "appearance": [
+          "State01"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-02",
+        "nodes": [
+          "Body",
+          "Part02"
+        ],
+        "appearance": [
+          "State02"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-03",
+        "nodes": [
+          "Body",
+          "Part03"
+        ],
+        "appearance": [
+          "State03"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-04",
+        "nodes": [
+          "Body",
+          "Part04"
+        ],
+        "appearance": [
+          "State04"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-05",
+        "nodes": [
+          "Body",
+          "Part05"
+        ],
+        "appearance": [
+          "State05"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-06",
+        "nodes": [
+          "Body",
+          "Part06"
+        ],
+        "appearance": [
+          "State06"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-07",
+        "nodes": [
+          "Body",
+          "Part07"
+        ],
+        "appearance": [
+          "State07"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-08",
+        "nodes": [
+          "Body",
+          "Part08"
+        ],
+        "appearance": [
+          "State08"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-09",
+        "nodes": [
+          "Body",
+          "Part09"
+        ],
+        "appearance": [
+          "State09"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-10",
+        "nodes": [
+          "Body",
+          "Part10"
+        ],
+        "appearance": [
+          "State10"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-11",
+        "nodes": [
+          "Body",
+          "Part11"
+        ],
+        "appearance": [
+          "State11"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-12",
+        "nodes": [
+          "Body",
+          "Part12"
+        ],
+        "appearance": [
+          "State12"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-13",
+        "nodes": [
+          "Body",
+          "Part13"
+        ],
+        "appearance": [
+          "State13"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-14",
+        "nodes": [
+          "Body",
+          "Part14"
+        ],
+        "appearance": [
+          "State14"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-15",
+        "nodes": [
+          "Body",
+          "Part15"
+        ],
+        "appearance": [
+          "State15"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-16",
+        "nodes": [
+          "Body",
+          "Part16"
+        ],
+        "appearance": [
+          "State16"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-17",
+        "nodes": [
+          "Body",
+          "Part17"
+        ],
+        "appearance": [
+          "State17"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-18",
+        "nodes": [
+          "Body",
+          "Part18"
+        ],
+        "appearance": [
+          "State18"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-19",
+        "nodes": [
+          "Body",
+          "Part19"
+        ],
+        "appearance": [
+          "State19"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-20",
+        "nodes": [
+          "Body",
+          "Part20"
+        ],
+        "appearance": [
+          "State20"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-21",
+        "nodes": [
+          "Body",
+          "Part21"
+        ],
+        "appearance": [
+          "State21"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-22",
+        "nodes": [
+          "Body",
+          "Part22"
+        ],
+        "appearance": [
+          "State22"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-23",
+        "nodes": [
+          "Body",
+          "Part23"
+        ],
+        "appearance": [
+          "State23"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-24",
+        "nodes": [
+          "Body",
+          "Part24"
+        ],
+        "appearance": [
+          "State24"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-25",
+        "nodes": [
+          "Body",
+          "Part25"
+        ],
+        "appearance": [
+          "State25"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-26",
+        "nodes": [
+          "Body",
+          "Part26"
+        ],
+        "appearance": [
+          "State26"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-27",
+        "nodes": [
+          "Body",
+          "Part27"
+        ],
+        "appearance": [
+          "State27"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-28",
+        "nodes": [
+          "Body",
+          "Part28"
+        ],
+        "appearance": [
+          "State28"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-29",
+        "nodes": [
+          "Body",
+          "Part29"
+        ],
+        "appearance": [
+          "State29"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-30",
+        "nodes": [
+          "Body",
+          "Part30"
+        ],
+        "appearance": [
+          "State30"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-31",
+        "nodes": [
+          "Body",
+          "Part31"
+        ],
+        "appearance": [
+          "State31"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-32",
+        "nodes": [
+          "Body",
+          "Part32"
+        ],
+        "appearance": [
+          "State32"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-33",
+        "nodes": [
+          "Body",
+          "Part33"
+        ],
+        "appearance": [
+          "State33"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-34",
+        "nodes": [
+          "Body",
+          "Part34"
+        ],
+        "appearance": [
+          "State34"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-35",
+        "nodes": [
+          "Body",
+          "Part35"
+        ],
+        "appearance": [
+          "State35"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-36",
+        "nodes": [
+          "Body",
+          "Part36"
+        ],
+        "appearance": [
+          "State36"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-37",
+        "nodes": [
+          "Body",
+          "Part37"
+        ],
+        "appearance": [
+          "State37"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-38",
+        "nodes": [
+          "Body",
+          "Part38"
+        ],
+        "appearance": [
+          "State38"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-39",
+        "nodes": [
+          "Body",
+          "Part39"
+        ],
+        "appearance": [
+          "State39"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-40",
+        "nodes": [
+          "Body",
+          "Part40"
+        ],
+        "appearance": [
+          "State40"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-41",
+        "nodes": [
+          "Body",
+          "Part41"
+        ],
+        "appearance": [
+          "State41"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-42",
+        "nodes": [
+          "Body",
+          "Part42"
+        ],
+        "appearance": [
+          "State42"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-43",
+        "nodes": [
+          "Body",
+          "Part43"
+        ],
+        "appearance": [
+          "State43"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturealisa-state-44",
+        "nodes": [
+          "Body",
+          "Part44"
+        ],
+        "appearance": [
+          "State44"
+        ],
+        "frequency": 0
+      }
+    ],
+    "CreatureMiria": [
+      {
+        "id": "creaturemiria-state-01",
+        "nodes": [
+          "Body",
+          "Part01"
+        ],
+        "appearance": [
+          "State01"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemiria-state-02",
+        "nodes": [
+          "Body",
+          "Part02"
+        ],
+        "appearance": [
+          "State02"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemiria-state-03",
+        "nodes": [
+          "Body",
+          "Part03"
+        ],
+        "appearance": [
+          "State03"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemiria-state-04",
+        "nodes": [
+          "Body",
+          "Part04"
+        ],
+        "appearance": [
+          "State04"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemiria-state-05",
+        "nodes": [
+          "Body",
+          "Part05"
+        ],
+        "appearance": [
+          "State05"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemiria-state-06",
+        "nodes": [
+          "Body",
+          "Part06"
+        ],
+        "appearance": [
+          "State06"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemiria-state-07",
+        "nodes": [
+          "Body",
+          "Part07"
+        ],
+        "appearance": [
+          "State07"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemiria-state-08",
+        "nodes": [
+          "Body",
+          "Part08"
+        ],
+        "appearance": [
+          "State08"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemiria-state-09",
+        "nodes": [
+          "Body",
+          "Part09"
+        ],
+        "appearance": [
+          "State09"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemiria-state-10",
+        "nodes": [
+          "Body",
+          "Part10"
+        ],
+        "appearance": [
+          "State10"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemiria-state-11",
+        "nodes": [
+          "Body",
+          "Part11"
+        ],
+        "appearance": [
+          "State11"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemiria-state-12",
+        "nodes": [
+          "Body",
+          "Part12"
+        ],
+        "appearance": [
+          "State12"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemiria-state-13",
+        "nodes": [
+          "Body",
+          "Part13"
+        ],
+        "appearance": [
+          "State13"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemiria-state-14",
+        "nodes": [
+          "Body",
+          "Part14"
+        ],
+        "appearance": [
+          "State14"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemiria-state-15",
+        "nodes": [
+          "Body",
+          "Part15"
+        ],
+        "appearance": [
+          "State15"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemiria-state-16",
+        "nodes": [
+          "Body",
+          "Part16"
+        ],
+        "appearance": [
+          "State16"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemiria-state-17",
+        "nodes": [
+          "Body",
+          "Part17"
+        ],
+        "appearance": [
+          "State17"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemiria-state-18",
+        "nodes": [
+          "Body",
+          "Part18"
+        ],
+        "appearance": [
+          "State18"
+        ],
+        "frequency": 0
+      }
+    ],
+    "CreatureSherry": [
+      {
+        "id": "creaturesherry-state-01",
+        "nodes": [
+          "Body",
+          "Part01"
+        ],
+        "appearance": [
+          "State01"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturesherry-state-02",
+        "nodes": [
+          "Body",
+          "Part02"
+        ],
+        "appearance": [
+          "State02"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturesherry-state-03",
+        "nodes": [
+          "Body",
+          "Part03"
+        ],
+        "appearance": [
+          "State03"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturesherry-state-04",
+        "nodes": [
+          "Body",
+          "Part04"
+        ],
+        "appearance": [
+          "State04"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturesherry-state-05",
+        "nodes": [
+          "Body",
+          "Part05"
+        ],
+        "appearance": [
+          "State05"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturesherry-state-06",
+        "nodes": [
+          "Body",
+          "Part06"
+        ],
+        "appearance": [
+          "State06"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturesherry-state-07",
+        "nodes": [
+          "Body",
+          "Part07"
+        ],
+        "appearance": [
+          "State07"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturesherry-state-08",
+        "nodes": [
+          "Body",
+          "Part08"
+        ],
+        "appearance": [
+          "State08"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturesherry-state-09",
+        "nodes": [
+          "Body",
+          "Part09"
+        ],
+        "appearance": [
+          "State09"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturesherry-state-10",
+        "nodes": [
+          "Body",
+          "Part10"
+        ],
+        "appearance": [
+          "State10"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturesherry-state-11",
+        "nodes": [
+          "Body",
+          "Part11"
+        ],
+        "appearance": [
+          "State11"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturesherry-state-12",
+        "nodes": [
+          "Body",
+          "Part12"
+        ],
+        "appearance": [
+          "State12"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturesherry-state-13",
+        "nodes": [
+          "Body",
+          "Part13"
+        ],
+        "appearance": [
+          "State13"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturesherry-state-14",
+        "nodes": [
+          "Body",
+          "Part14"
+        ],
+        "appearance": [
+          "State14"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturesherry-state-15",
+        "nodes": [
+          "Body",
+          "Part15"
+        ],
+        "appearance": [
+          "State15"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturesherry-state-16",
+        "nodes": [
+          "Body",
+          "Part16"
+        ],
+        "appearance": [
+          "State16"
+        ],
+        "frequency": 0
+      }
+    ],
+    "CreatureEma": [
+      {
+        "id": "creatureema-state-01",
+        "nodes": [
+          "Body",
+          "Part01"
+        ],
+        "appearance": [
+          "State01"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureema-state-02",
+        "nodes": [
+          "Body",
+          "Part02"
+        ],
+        "appearance": [
+          "State02"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureema-state-03",
+        "nodes": [
+          "Body",
+          "Part03"
+        ],
+        "appearance": [
+          "State03"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureema-state-04",
+        "nodes": [
+          "Body",
+          "Part04"
+        ],
+        "appearance": [
+          "State04"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureema-state-05",
+        "nodes": [
+          "Body",
+          "Part05"
+        ],
+        "appearance": [
+          "State05"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureema-state-06",
+        "nodes": [
+          "Body",
+          "Part06"
+        ],
+        "appearance": [
+          "State06"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureema-state-07",
+        "nodes": [
+          "Body",
+          "Part07"
+        ],
+        "appearance": [
+          "State07"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureema-state-08",
+        "nodes": [
+          "Body",
+          "Part08"
+        ],
+        "appearance": [
+          "State08"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureema-state-09",
+        "nodes": [
+          "Body",
+          "Part09"
+        ],
+        "appearance": [
+          "State09"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureema-state-10",
+        "nodes": [
+          "Body",
+          "Part10"
+        ],
+        "appearance": [
+          "State10"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureema-state-11",
+        "nodes": [
+          "Body",
+          "Part11"
+        ],
+        "appearance": [
+          "State11"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureema-state-12",
+        "nodes": [
+          "Body",
+          "Part12"
+        ],
+        "appearance": [
+          "State12"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureema-state-13",
+        "nodes": [
+          "Body",
+          "Part13"
+        ],
+        "appearance": [
+          "State13"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureema-state-14",
+        "nodes": [
+          "Body",
+          "Part14"
+        ],
+        "appearance": [
+          "State14"
+        ],
+        "frequency": 0
+      }
+    ],
+    "CreatureMargo": [
+      {
+        "id": "creaturemargo-state-01",
+        "nodes": [
+          "Body",
+          "Part01"
+        ],
+        "appearance": [
+          "State01"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-02",
+        "nodes": [
+          "Body",
+          "Part02"
+        ],
+        "appearance": [
+          "State02"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-03",
+        "nodes": [
+          "Body",
+          "Part03"
+        ],
+        "appearance": [
+          "State03"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-04",
+        "nodes": [
+          "Body",
+          "Part04"
+        ],
+        "appearance": [
+          "State04"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-05",
+        "nodes": [
+          "Body",
+          "Part05"
+        ],
+        "appearance": [
+          "State05"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-06",
+        "nodes": [
+          "Body",
+          "Part06"
+        ],
+        "appearance": [
+          "State06"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-07",
+        "nodes": [
+          "Body",
+          "Part07"
+        ],
+        "appearance": [
+          "State07"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-08",
+        "nodes": [
+          "Body",
+          "Part08"
+        ],
+        "appearance": [
+          "State08"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-09",
+        "nodes": [
+          "Body",
+          "Part09"
+        ],
+        "appearance": [
+          "State09"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-10",
+        "nodes": [
+          "Body",
+          "Part10"
+        ],
+        "appearance": [
+          "State10"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-11",
+        "nodes": [
+          "Body",
+          "Part11"
+        ],
+        "appearance": [
+          "State11"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-12",
+        "nodes": [
+          "Body",
+          "Part12"
+        ],
+        "appearance": [
+          "State12"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-13",
+        "nodes": [
+          "Body",
+          "Part13"
+        ],
+        "appearance": [
+          "State13"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-14",
+        "nodes": [
+          "Body",
+          "Part14"
+        ],
+        "appearance": [
+          "State14"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-15",
+        "nodes": [
+          "Body",
+          "Part15"
+        ],
+        "appearance": [
+          "State15"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-16",
+        "nodes": [
+          "Body",
+          "Part16"
+        ],
+        "appearance": [
+          "State16"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-17",
+        "nodes": [
+          "Body",
+          "Part17"
+        ],
+        "appearance": [
+          "State17"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-18",
+        "nodes": [
+          "Body",
+          "Part18"
+        ],
+        "appearance": [
+          "State18"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-19",
+        "nodes": [
+          "Body",
+          "Part19"
+        ],
+        "appearance": [
+          "State19"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-20",
+        "nodes": [
+          "Body",
+          "Part20"
+        ],
+        "appearance": [
+          "State20"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-21",
+        "nodes": [
+          "Body",
+          "Part21"
+        ],
+        "appearance": [
+          "State21"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-22",
+        "nodes": [
+          "Body",
+          "Part22"
+        ],
+        "appearance": [
+          "State22"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-23",
+        "nodes": [
+          "Body",
+          "Part23"
+        ],
+        "appearance": [
+          "State23"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-24",
+        "nodes": [
+          "Body",
+          "Part24"
+        ],
+        "appearance": [
+          "State24"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-25",
+        "nodes": [
+          "Body",
+          "Part25"
+        ],
+        "appearance": [
+          "State25"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-26",
+        "nodes": [
+          "Body",
+          "Part26"
+        ],
+        "appearance": [
+          "State26"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-27",
+        "nodes": [
+          "Body",
+          "Part27"
+        ],
+        "appearance": [
+          "State27"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-28",
+        "nodes": [
+          "Body",
+          "Part28"
+        ],
+        "appearance": [
+          "State28"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-29",
+        "nodes": [
+          "Body",
+          "Part29"
+        ],
+        "appearance": [
+          "State29"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-30",
+        "nodes": [
+          "Body",
+          "Part30"
+        ],
+        "appearance": [
+          "State30"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-31",
+        "nodes": [
+          "Body",
+          "Part31"
+        ],
+        "appearance": [
+          "State31"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-32",
+        "nodes": [
+          "Body",
+          "Part32"
+        ],
+        "appearance": [
+          "State32"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-33",
+        "nodes": [
+          "Body",
+          "Part33"
+        ],
+        "appearance": [
+          "State33"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-34",
+        "nodes": [
+          "Body",
+          "Part34"
+        ],
+        "appearance": [
+          "State34"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-35",
+        "nodes": [
+          "Body",
+          "Part35"
+        ],
+        "appearance": [
+          "State35"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-36",
+        "nodes": [
+          "Body",
+          "Part36"
+        ],
+        "appearance": [
+          "State36"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-37",
+        "nodes": [
+          "Body",
+          "Part37"
+        ],
+        "appearance": [
+          "State37"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-38",
+        "nodes": [
+          "Body",
+          "Part38"
+        ],
+        "appearance": [
+          "State38"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-39",
+        "nodes": [
+          "Body",
+          "Part39"
+        ],
+        "appearance": [
+          "State39"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturemargo-state-40",
+        "nodes": [
+          "Body",
+          "Part40"
+        ],
+        "appearance": [
+          "State40"
+        ],
+        "frequency": 0
+      }
+    ],
+    "CreatureAnAn": [
+      {
+        "id": "creatureanan-state-01",
+        "nodes": [
+          "Body",
+          "Part01"
+        ],
+        "appearance": [
+          "State01"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureanan-state-02",
+        "nodes": [
+          "Body",
+          "Part02"
+        ],
+        "appearance": [
+          "State02"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureanan-state-03",
+        "nodes": [
+          "Body",
+          "Part03"
+        ],
+        "appearance": [
+          "State03"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureanan-state-04",
+        "nodes": [
+          "Body",
+          "Part04"
+        ],
+        "appearance": [
+          "State04"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureanan-state-05",
+        "nodes": [
+          "Body",
+          "Part05"
+        ],
+        "appearance": [
+          "State05"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureanan-state-06",
+        "nodes": [
+          "Body",
+          "Part06"
+        ],
+        "appearance": [
+          "State06"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureanan-state-07",
+        "nodes": [
+          "Body",
+          "Part07"
+        ],
+        "appearance": [
+          "State07"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureanan-state-08",
+        "nodes": [
+          "Body",
+          "Part08"
+        ],
+        "appearance": [
+          "State08"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureanan-state-09",
+        "nodes": [
+          "Body",
+          "Part09"
+        ],
+        "appearance": [
+          "State09"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureanan-state-10",
+        "nodes": [
+          "Body",
+          "Part10"
+        ],
+        "appearance": [
+          "State10"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureanan-state-11",
+        "nodes": [
+          "Body",
+          "Part11"
+        ],
+        "appearance": [
+          "State11"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureanan-state-12",
+        "nodes": [
+          "Body",
+          "Part12"
+        ],
+        "appearance": [
+          "State12"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureanan-state-13",
+        "nodes": [
+          "Body",
+          "Part13"
+        ],
+        "appearance": [
+          "State13"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureanan-state-14",
+        "nodes": [
+          "Body",
+          "Part14"
+        ],
+        "appearance": [
+          "State14"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureanan-state-15",
+        "nodes": [
+          "Body",
+          "Part15"
+        ],
+        "appearance": [
+          "State15"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureanan-state-16",
+        "nodes": [
+          "Body",
+          "Part16"
+        ],
+        "appearance": [
+          "State16"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureanan-state-17",
+        "nodes": [
+          "Body",
+          "Part17"
+        ],
+        "appearance": [
+          "State17"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureanan-state-18",
+        "nodes": [
+          "Body",
+          "Part18"
+        ],
+        "appearance": [
+          "State18"
+        ],
+        "frequency": 0
+      }
+    ],
+    "CreatureCoco": [
+      {
+        "id": "creaturecoco-state-01",
+        "nodes": [
+          "Body",
+          "Part01"
+        ],
+        "appearance": [
+          "State01"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-02",
+        "nodes": [
+          "Body",
+          "Part02"
+        ],
+        "appearance": [
+          "State02"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-03",
+        "nodes": [
+          "Body",
+          "Part03"
+        ],
+        "appearance": [
+          "State03"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-04",
+        "nodes": [
+          "Body",
+          "Part04"
+        ],
+        "appearance": [
+          "State04"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-05",
+        "nodes": [
+          "Body",
+          "Part05"
+        ],
+        "appearance": [
+          "State05"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-06",
+        "nodes": [
+          "Body",
+          "Part06"
+        ],
+        "appearance": [
+          "State06"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-07",
+        "nodes": [
+          "Body",
+          "Part07"
+        ],
+        "appearance": [
+          "State07"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-08",
+        "nodes": [
+          "Body",
+          "Part08"
+        ],
+        "appearance": [
+          "State08"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-09",
+        "nodes": [
+          "Body",
+          "Part09"
+        ],
+        "appearance": [
+          "State09"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-10",
+        "nodes": [
+          "Body",
+          "Part10"
+        ],
+        "appearance": [
+          "State10"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-11",
+        "nodes": [
+          "Body",
+          "Part11"
+        ],
+        "appearance": [
+          "State11"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-12",
+        "nodes": [
+          "Body",
+          "Part12"
+        ],
+        "appearance": [
+          "State12"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-13",
+        "nodes": [
+          "Body",
+          "Part13"
+        ],
+        "appearance": [
+          "State13"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-14",
+        "nodes": [
+          "Body",
+          "Part14"
+        ],
+        "appearance": [
+          "State14"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-15",
+        "nodes": [
+          "Body",
+          "Part15"
+        ],
+        "appearance": [
+          "State15"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-16",
+        "nodes": [
+          "Body",
+          "Part16"
+        ],
+        "appearance": [
+          "State16"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-17",
+        "nodes": [
+          "Body",
+          "Part17"
+        ],
+        "appearance": [
+          "State17"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-18",
+        "nodes": [
+          "Body",
+          "Part18"
+        ],
+        "appearance": [
+          "State18"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-19",
+        "nodes": [
+          "Body",
+          "Part19"
+        ],
+        "appearance": [
+          "State19"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-20",
+        "nodes": [
+          "Body",
+          "Part20"
+        ],
+        "appearance": [
+          "State20"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-21",
+        "nodes": [
+          "Body",
+          "Part21"
+        ],
+        "appearance": [
+          "State21"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-22",
+        "nodes": [
+          "Body",
+          "Part22"
+        ],
+        "appearance": [
+          "State22"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-23",
+        "nodes": [
+          "Body",
+          "Part23"
+        ],
+        "appearance": [
+          "State23"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-24",
+        "nodes": [
+          "Body",
+          "Part24"
+        ],
+        "appearance": [
+          "State24"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-25",
+        "nodes": [
+          "Body",
+          "Part25"
+        ],
+        "appearance": [
+          "State25"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-26",
+        "nodes": [
+          "Body",
+          "Part26"
+        ],
+        "appearance": [
+          "State26"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-27",
+        "nodes": [
+          "Body",
+          "Part27"
+        ],
+        "appearance": [
+          "State27"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-28",
+        "nodes": [
+          "Body",
+          "Part28"
+        ],
+        "appearance": [
+          "State28"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-29",
+        "nodes": [
+          "Body",
+          "Part29"
+        ],
+        "appearance": [
+          "State29"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-30",
+        "nodes": [
+          "Body",
+          "Part30"
+        ],
+        "appearance": [
+          "State30"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-31",
+        "nodes": [
+          "Body",
+          "Part31"
+        ],
+        "appearance": [
+          "State31"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-32",
+        "nodes": [
+          "Body",
+          "Part32"
+        ],
+        "appearance": [
+          "State32"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-33",
+        "nodes": [
+          "Body",
+          "Part33"
+        ],
+        "appearance": [
+          "State33"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-34",
+        "nodes": [
+          "Body",
+          "Part34"
+        ],
+        "appearance": [
+          "State34"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-35",
+        "nodes": [
+          "Body",
+          "Part35"
+        ],
+        "appearance": [
+          "State35"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-36",
+        "nodes": [
+          "Body",
+          "Part36"
+        ],
+        "appearance": [
+          "State36"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-37",
+        "nodes": [
+          "Body",
+          "Part37"
+        ],
+        "appearance": [
+          "State37"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-38",
+        "nodes": [
+          "Body",
+          "Part38"
+        ],
+        "appearance": [
+          "State38"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-39",
+        "nodes": [
+          "Body",
+          "Part39"
+        ],
+        "appearance": [
+          "State39"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-40",
+        "nodes": [
+          "Body",
+          "Part40"
+        ],
+        "appearance": [
+          "State40"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-41",
+        "nodes": [
+          "Body",
+          "Part41"
+        ],
+        "appearance": [
+          "State41"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-42",
+        "nodes": [
+          "Body",
+          "Part42"
+        ],
+        "appearance": [
+          "State42"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-43",
+        "nodes": [
+          "Body",
+          "Part43"
+        ],
+        "appearance": [
+          "State43"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-44",
+        "nodes": [
+          "Body",
+          "Part44"
+        ],
+        "appearance": [
+          "State44"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-45",
+        "nodes": [
+          "Body",
+          "Part45"
+        ],
+        "appearance": [
+          "State45"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-46",
+        "nodes": [
+          "Body",
+          "Part46"
+        ],
+        "appearance": [
+          "State46"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-47",
+        "nodes": [
+          "Body",
+          "Part47"
+        ],
+        "appearance": [
+          "State47"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-48",
+        "nodes": [
+          "Body",
+          "Part48"
+        ],
+        "appearance": [
+          "State48"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-49",
+        "nodes": [
+          "Body",
+          "Part49"
+        ],
+        "appearance": [
+          "State49"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-50",
+        "nodes": [
+          "Body",
+          "Part50"
+        ],
+        "appearance": [
+          "State50"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-51",
+        "nodes": [
+          "Body",
+          "Part51"
+        ],
+        "appearance": [
+          "State51"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-52",
+        "nodes": [
+          "Body",
+          "Part52"
+        ],
+        "appearance": [
+          "State52"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-53",
+        "nodes": [
+          "Body",
+          "Part53"
+        ],
+        "appearance": [
+          "State53"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-54",
+        "nodes": [
+          "Body",
+          "Part54"
+        ],
+        "appearance": [
+          "State54"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-55",
+        "nodes": [
+          "Body",
+          "Part55"
+        ],
+        "appearance": [
+          "State55"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-56",
+        "nodes": [
+          "Body",
+          "Part56"
+        ],
+        "appearance": [
+          "State56"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-57",
+        "nodes": [
+          "Body",
+          "Part57"
+        ],
+        "appearance": [
+          "State57"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-58",
+        "nodes": [
+          "Body",
+          "Part58"
+        ],
+        "appearance": [
+          "State58"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-59",
+        "nodes": [
+          "Body",
+          "Part59"
+        ],
+        "appearance": [
+          "State59"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-60",
+        "nodes": [
+          "Body",
+          "Part60"
+        ],
+        "appearance": [
+          "State60"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-61",
+        "nodes": [
+          "Body",
+          "Part61"
+        ],
+        "appearance": [
+          "State61"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-62",
+        "nodes": [
+          "Body",
+          "Part62"
+        ],
+        "appearance": [
+          "State62"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-63",
+        "nodes": [
+          "Body",
+          "Part63"
+        ],
+        "appearance": [
+          "State63"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-64",
+        "nodes": [
+          "Body",
+          "Part64"
+        ],
+        "appearance": [
+          "State64"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-65",
+        "nodes": [
+          "Body",
+          "Part65"
+        ],
+        "appearance": [
+          "State65"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturecoco-state-66",
+        "nodes": [
+          "Body",
+          "Part66"
+        ],
+        "appearance": [
+          "State66"
+        ],
+        "frequency": 0
+      }
+    ],
+    "CreatureHiro": [
+      {
+        "id": "creaturehiro-state-01",
+        "nodes": [
+          "Body",
+          "Part01"
+        ],
+        "appearance": [
+          "State01"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehiro-state-02",
+        "nodes": [
+          "Body",
+          "Part02"
+        ],
+        "appearance": [
+          "State02"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehiro-state-03",
+        "nodes": [
+          "Body",
+          "Part03"
+        ],
+        "appearance": [
+          "State03"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehiro-state-04",
+        "nodes": [
+          "Body",
+          "Part04"
+        ],
+        "appearance": [
+          "State04"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehiro-state-05",
+        "nodes": [
+          "Body",
+          "Part05"
+        ],
+        "appearance": [
+          "State05"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehiro-state-06",
+        "nodes": [
+          "Body",
+          "Part06"
+        ],
+        "appearance": [
+          "State06"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehiro-state-07",
+        "nodes": [
+          "Body",
+          "Part07"
+        ],
+        "appearance": [
+          "State07"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehiro-state-08",
+        "nodes": [
+          "Body",
+          "Part08"
+        ],
+        "appearance": [
+          "State08"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehiro-state-09",
+        "nodes": [
+          "Body",
+          "Part09"
+        ],
+        "appearance": [
+          "State09"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehiro-state-10",
+        "nodes": [
+          "Body",
+          "Part10"
+        ],
+        "appearance": [
+          "State10"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehiro-state-11",
+        "nodes": [
+          "Body",
+          "Part11"
+        ],
+        "appearance": [
+          "State11"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehiro-state-12",
+        "nodes": [
+          "Body",
+          "Part12"
+        ],
+        "appearance": [
+          "State12"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehiro-state-13",
+        "nodes": [
+          "Body",
+          "Part13"
+        ],
+        "appearance": [
+          "State13"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehiro-state-14",
+        "nodes": [
+          "Body",
+          "Part14"
+        ],
+        "appearance": [
+          "State14"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehiro-state-15",
+        "nodes": [
+          "Body",
+          "Part15"
+        ],
+        "appearance": [
+          "State15"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehiro-state-16",
+        "nodes": [
+          "Body",
+          "Part16"
+        ],
+        "appearance": [
+          "State16"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehiro-state-17",
+        "nodes": [
+          "Body",
+          "Part17"
+        ],
+        "appearance": [
+          "State17"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehiro-state-18",
+        "nodes": [
+          "Body",
+          "Part18"
+        ],
+        "appearance": [
+          "State18"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehiro-state-19",
+        "nodes": [
+          "Body",
+          "Part19"
+        ],
+        "appearance": [
+          "State19"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehiro-state-20",
+        "nodes": [
+          "Body",
+          "Part20"
+        ],
+        "appearance": [
+          "State20"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehiro-state-21",
+        "nodes": [
+          "Body",
+          "Part21"
+        ],
+        "appearance": [
+          "State21"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehiro-state-22",
+        "nodes": [
+          "Body",
+          "Part22"
+        ],
+        "appearance": [
+          "State22"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehiro-state-23",
+        "nodes": [
+          "Body",
+          "Part23"
+        ],
+        "appearance": [
+          "State23"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehiro-state-24",
+        "nodes": [
+          "Body",
+          "Part24"
+        ],
+        "appearance": [
+          "State24"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creaturehiro-state-25",
+        "nodes": [
+          "Body",
+          "Part25"
+        ],
+        "appearance": [
+          "State25"
+        ],
+        "frequency": 0
+      }
+    ],
+    "CreatureLeia": [
+      {
+        "id": "creatureleia-state-01",
+        "nodes": [
+          "Body",
+          "Part01"
+        ],
+        "appearance": [
+          "State01"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-02",
+        "nodes": [
+          "Body",
+          "Part02"
+        ],
+        "appearance": [
+          "State02"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-03",
+        "nodes": [
+          "Body",
+          "Part03"
+        ],
+        "appearance": [
+          "State03"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-04",
+        "nodes": [
+          "Body",
+          "Part04"
+        ],
+        "appearance": [
+          "State04"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-05",
+        "nodes": [
+          "Body",
+          "Part05"
+        ],
+        "appearance": [
+          "State05"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-06",
+        "nodes": [
+          "Body",
+          "Part06"
+        ],
+        "appearance": [
+          "State06"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-07",
+        "nodes": [
+          "Body",
+          "Part07"
+        ],
+        "appearance": [
+          "State07"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-08",
+        "nodes": [
+          "Body",
+          "Part08"
+        ],
+        "appearance": [
+          "State08"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-09",
+        "nodes": [
+          "Body",
+          "Part09"
+        ],
+        "appearance": [
+          "State09"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-10",
+        "nodes": [
+          "Body",
+          "Part10"
+        ],
+        "appearance": [
+          "State10"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-11",
+        "nodes": [
+          "Body",
+          "Part11"
+        ],
+        "appearance": [
+          "State11"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-12",
+        "nodes": [
+          "Body",
+          "Part12"
+        ],
+        "appearance": [
+          "State12"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-13",
+        "nodes": [
+          "Body",
+          "Part13"
+        ],
+        "appearance": [
+          "State13"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-14",
+        "nodes": [
+          "Body",
+          "Part14"
+        ],
+        "appearance": [
+          "State14"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-15",
+        "nodes": [
+          "Body",
+          "Part15"
+        ],
+        "appearance": [
+          "State15"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-16",
+        "nodes": [
+          "Body",
+          "Part16"
+        ],
+        "appearance": [
+          "State16"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-17",
+        "nodes": [
+          "Body",
+          "Part17"
+        ],
+        "appearance": [
+          "State17"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-18",
+        "nodes": [
+          "Body",
+          "Part18"
+        ],
+        "appearance": [
+          "State18"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-19",
+        "nodes": [
+          "Body",
+          "Part19"
+        ],
+        "appearance": [
+          "State19"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-20",
+        "nodes": [
+          "Body",
+          "Part20"
+        ],
+        "appearance": [
+          "State20"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-21",
+        "nodes": [
+          "Body",
+          "Part21"
+        ],
+        "appearance": [
+          "State21"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-22",
+        "nodes": [
+          "Body",
+          "Part22"
+        ],
+        "appearance": [
+          "State22"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-23",
+        "nodes": [
+          "Body",
+          "Part23"
+        ],
+        "appearance": [
+          "State23"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-24",
+        "nodes": [
+          "Body",
+          "Part24"
+        ],
+        "appearance": [
+          "State24"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-25",
+        "nodes": [
+          "Body",
+          "Part25"
+        ],
+        "appearance": [
+          "State25"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-26",
+        "nodes": [
+          "Body",
+          "Part26"
+        ],
+        "appearance": [
+          "State26"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-27",
+        "nodes": [
+          "Body",
+          "Part27"
+        ],
+        "appearance": [
+          "State27"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-28",
+        "nodes": [
+          "Body",
+          "Part28"
+        ],
+        "appearance": [
+          "State28"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-29",
+        "nodes": [
+          "Body",
+          "Part29"
+        ],
+        "appearance": [
+          "State29"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-30",
+        "nodes": [
+          "Body",
+          "Part30"
+        ],
+        "appearance": [
+          "State30"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-31",
+        "nodes": [
+          "Body",
+          "Part31"
+        ],
+        "appearance": [
+          "State31"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-32",
+        "nodes": [
+          "Body",
+          "Part32"
+        ],
+        "appearance": [
+          "State32"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-33",
+        "nodes": [
+          "Body",
+          "Part33"
+        ],
+        "appearance": [
+          "State33"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-34",
+        "nodes": [
+          "Body",
+          "Part34"
+        ],
+        "appearance": [
+          "State34"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-35",
+        "nodes": [
+          "Body",
+          "Part35"
+        ],
+        "appearance": [
+          "State35"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-36",
+        "nodes": [
+          "Body",
+          "Part36"
+        ],
+        "appearance": [
+          "State36"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-37",
+        "nodes": [
+          "Body",
+          "Part37"
+        ],
+        "appearance": [
+          "State37"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-38",
+        "nodes": [
+          "Body",
+          "Part38"
+        ],
+        "appearance": [
+          "State38"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-39",
+        "nodes": [
+          "Body",
+          "Part39"
+        ],
+        "appearance": [
+          "State39"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-40",
+        "nodes": [
+          "Body",
+          "Part40"
+        ],
+        "appearance": [
+          "State40"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-41",
+        "nodes": [
+          "Body",
+          "Part41"
+        ],
+        "appearance": [
+          "State41"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-42",
+        "nodes": [
+          "Body",
+          "Part42"
+        ],
+        "appearance": [
+          "State42"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-43",
+        "nodes": [
+          "Body",
+          "Part43"
+        ],
+        "appearance": [
+          "State43"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-44",
+        "nodes": [
+          "Body",
+          "Part44"
+        ],
+        "appearance": [
+          "State44"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-45",
+        "nodes": [
+          "Body",
+          "Part45"
+        ],
+        "appearance": [
+          "State45"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-46",
+        "nodes": [
+          "Body",
+          "Part46"
+        ],
+        "appearance": [
+          "State46"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-47",
+        "nodes": [
+          "Body",
+          "Part47"
+        ],
+        "appearance": [
+          "State47"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-48",
+        "nodes": [
+          "Body",
+          "Part48"
+        ],
+        "appearance": [
+          "State48"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-49",
+        "nodes": [
+          "Body",
+          "Part49"
+        ],
+        "appearance": [
+          "State49"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-50",
+        "nodes": [
+          "Body",
+          "Part50"
+        ],
+        "appearance": [
+          "State50"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-51",
+        "nodes": [
+          "Body",
+          "Part51"
+        ],
+        "appearance": [
+          "State51"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-52",
+        "nodes": [
+          "Body",
+          "Part52"
+        ],
+        "appearance": [
+          "State52"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-53",
+        "nodes": [
+          "Body",
+          "Part53"
+        ],
+        "appearance": [
+          "State53"
+        ],
+        "frequency": 0
+      },
+      {
+        "id": "creatureleia-state-54",
+        "nodes": [
+          "Body",
+          "Part54"
+        ],
+        "appearance": [
+          "State54"
         ],
         "frequency": 0
       }

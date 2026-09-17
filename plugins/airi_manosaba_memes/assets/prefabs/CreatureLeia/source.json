@@ -1,0 +1,820 @@
+{
+  "character": "CreatureLeia",
+  "canvas": [
+    2205,
+    3998
+  ],
+  "sprites": [
+    {
+      "node": "Part01",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "0-1",
+      "path_id": 7819360259085626900,
+      "blocks": 888,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "40065c419e8aeeaa194900aae16297395ad49208ff1200c65936bc39cd817e5a",
+      "rgba_sha256": "fca104e759750066755e4deb0b2c5919b705a16907c3c33ec9cc868354b24252"
+    },
+    {
+      "node": "Part02",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "0-2",
+      "path_id": 8187606776189283860,
+      "blocks": 888,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "5b3aea49ffd3a3e703307042b3dc6b151ef64d4083522831b4a6816519a845a0",
+      "rgba_sha256": "ec0dbd2a28cbe94eb59bf82ac4cb4dae0a79b4cbca6ca34ba516bff49bf44bf9"
+    },
+    {
+      "node": "Part03",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "0-3",
+      "path_id": -3914038758274175468,
+      "blocks": 888,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "750a1e294a958c68a49d892b6a2ae0c71354edf9c1fa80765e11d425592e8f6b",
+      "rgba_sha256": "761aeb1796c98fd3541c2c617600ab93b7a05428d0040c39d255e0f336a47441"
+    },
+    {
+      "node": "Part04",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "0-4",
+      "path_id": -4166788301308629484,
+      "blocks": 888,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "832c802075d763a2fae3401669003d09a2d36520b62c49781993513c8b21d45c",
+      "rgba_sha256": "111271c838164bb5f51e6f4273278f85fccfbb66182a451f79f54b2ef9e0e07b"
+    },
+    {
+      "node": "Part05",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "0-5",
+      "path_id": -9175186297213948396,
+      "blocks": 888,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "5b37c5ac86cb900f611c09c890531aebf7f3c98c0ec678fcf055f105e5bfcd53",
+      "rgba_sha256": "c67984f2ce38ec3088b80ff8d4fb6fa47165fb390c0ce48964dd3c4eb300306d"
+    },
+    {
+      "node": "Part06",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "0-6",
+      "path_id": -1576082881571066348,
+      "blocks": 888,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "2d28b0f599217b0b7f38376d58233aedfae70448ed485289941d2f9099140e17",
+      "rgba_sha256": "e639fd3f044ceb3d7b8e976eb16096494d66f5264eed71f020c86d13f41dde7b"
+    },
+    {
+      "node": "Part07",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "0-7",
+      "path_id": 3708651653250543124,
+      "blocks": 888,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "f2292fe994fe851fc76028ef2bce0405d9c354010a48831d11d48664211446c9",
+      "rgba_sha256": "65ff534bc09e6859b80c367e6e16ef7e390e228838412d89473122deb27c0b53"
+    },
+    {
+      "node": "Part08",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "0-8",
+      "path_id": 7805457891149344276,
+      "blocks": 888,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "f246ff67ff29aa7d9229d94ee46a3863e5aeffab32547247298b9697e487b1c6",
+      "rgba_sha256": "7188cf09be551313f97b6dbd99fa1a58e78d51319c59bc8b51f568c573a691ec"
+    },
+    {
+      "node": "Part09",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "0-9",
+      "path_id": -9055958346023899628,
+      "blocks": 888,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "0e1ba86cc5209dd4b259985eef1549fdd544ea474b16c020f28612bb485699e2",
+      "rgba_sha256": "039e93461f6595bfc5894a1526c4e1c3251fd190c7e0076fae25408fe3a4ad5a"
+    },
+    {
+      "node": "Part10",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "1-1",
+      "path_id": 2929207122572865044,
+      "blocks": 894,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "a5bb961fdfa7ed15baa8013b489052c0249a099f5ea83024078cc7fc1d38913c",
+      "rgba_sha256": "f632df67a5d3667027c061e3fcf1c6a6178d468946bb37246aa63a3c05a6a602"
+    },
+    {
+      "node": "Part11",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "1-2",
+      "path_id": 75983302832614932,
+      "blocks": 894,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "8e46df0750d3d55ee5a6172be3fa95035be29b3c481399d10fe99aa3cbb5d558",
+      "rgba_sha256": "dbf8757c976023bb373ef21ba15a48eed2759880a140897972e475a4c1174cef"
+    },
+    {
+      "node": "Part12",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "1-3",
+      "path_id": 3913525587407334932,
+      "blocks": 894,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "85423a18c2efbf9e1319fed60dbacc325474f4ca698bbf3b42f65de5ab7aba45",
+      "rgba_sha256": "b165104f76a113171881d3bc925ab12417d73167fbbc87254cae2227876b07e2"
+    },
+    {
+      "node": "Part13",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "1-4",
+      "path_id": -4438015889936224748,
+      "blocks": 894,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "412804ded61068173a5f8c8b1ed41276a943fbfb1291ee7dc6c1f120bd04564b",
+      "rgba_sha256": "6845cba36f109ab292d4a74e8a7d72acd07c57e1e50d07fafa83e82aa671b8cf"
+    },
+    {
+      "node": "Part14",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "1-5",
+      "path_id": 968253866450546196,
+      "blocks": 894,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "01c1a37c9b672112458f71d3a309285c1181f37e5c4ccf9c044e54d417a6efba",
+      "rgba_sha256": "6ac9507e3dd5d81e21a540d4aceabc9a7e452672828b5f40520551aa1ce137d9"
+    },
+    {
+      "node": "Part15",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "1-6",
+      "path_id": 6135889828787318292,
+      "blocks": 894,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "ba0d92a6eace17233191be347d7fbe4c44686dea3935798fc4e4d481b7bebc47",
+      "rgba_sha256": "9ae31a541485f99d75f3a081827addb2edbd96731ba9c954b1c1cd9c417a8466"
+    },
+    {
+      "node": "Part16",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "1-7",
+      "path_id": 4704439008152776212,
+      "blocks": 894,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "27eddeafe6c43258b58626c52c3f8fa4fd3195abface2285892abeaba3571b24",
+      "rgba_sha256": "a85c6bfe13b945591026a6d1517da36e20468b4c5a8b8e797a1609959ff472e9"
+    },
+    {
+      "node": "Part17",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "1-8",
+      "path_id": -8474260882573038060,
+      "blocks": 894,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "7fb9f1aaa4d75180d9d64268e1dfbced8b6f2b2b547b7af5ed5a477dc2f6aac1",
+      "rgba_sha256": "773e5abe91cb50ed00539f384ada2251cd3a1e24e95ba39f8ad4baa3b661a3d9"
+    },
+    {
+      "node": "Part18",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "1-9",
+      "path_id": -2576075154177200620,
+      "blocks": 894,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "9236f0722817aba402175d5fce1f9c05629d3ca285f22d5db85d2bab62d9e0e4",
+      "rgba_sha256": "36fea2c54527d565023614a42544c3333fcfa51472f405993ff6f127ef150c24"
+    },
+    {
+      "node": "Part19",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "2-1",
+      "path_id": 4537380017978732052,
+      "blocks": 824,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "77d80933c9caa82099c5964340f485bc1ca237b940ba21b64e2adcf33e324c86",
+      "rgba_sha256": "192098cd24adf7af8c4bccb9b9e9e59c5ac7334809fa84700a0e0eb5db2dccf9"
+    },
+    {
+      "node": "Part20",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "2-2",
+      "path_id": 2189972823559958036,
+      "blocks": 824,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "632788f21ace9d69b6647eebb005e9c0559c172eacfb4c671ca788f07da6606c",
+      "rgba_sha256": "d682a7a04eb1500162e92aaba4118a5b6b82b1de74af8ca67f997c73aba45b37"
+    },
+    {
+      "node": "Part21",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "2-3",
+      "path_id": -8704078542569083372,
+      "blocks": 824,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "396c2c1d5b05877dc723f101722953a64948d335e63071178b0f29b20fb5f597",
+      "rgba_sha256": "1b13506de1421f0c2a60d200f4c66e3e42dd8158034b0ea7be10cd006497a487"
+    },
+    {
+      "node": "Part22",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "2-4",
+      "path_id": -4148088043613589996,
+      "blocks": 824,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "76fe6c3100e932ae99a3b70f24152ee857b18f9b9ea402c1aeb03ba0609c5839",
+      "rgba_sha256": "75597179aa59b4b8ea3c064917bcf7daced219b8b86b9daee8c187ddd885ec33"
+    },
+    {
+      "node": "Part23",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "2-5",
+      "path_id": 6418942715932831252,
+      "blocks": 824,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "3b762bb28834d94213695b965d9e576dc7d17108e6c663bdadf14adfa5411c04",
+      "rgba_sha256": "922c38760e1794e371457faa79ad61d89c34e7784a8ba9f27674a47155cca54e"
+    },
+    {
+      "node": "Part24",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "2-6",
+      "path_id": 5675118541122104852,
+      "blocks": 824,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "75af1b896422fc56835e9f18d8d03950ca9391b7fbc8e34cd6e13d61724369cd",
+      "rgba_sha256": "420e22b375b5d3e8f0f737d24a20892a600137700deb37bfed001a926ca3c048"
+    },
+    {
+      "node": "Part25",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "2-7",
+      "path_id": -5705671191459533292,
+      "blocks": 824,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "cdbfdb7dc2864c241dcffad80c88778ba36a572e0b9d7d1724bcb888265aad3d",
+      "rgba_sha256": "e3da6ba3326ccb076baefc0ba1b2322b0d46994e2e63a0de19bd9cfb673aea2e"
+    },
+    {
+      "node": "Part26",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "2-8",
+      "path_id": 9207046837535501844,
+      "blocks": 824,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "8d12b523dea114b3e892d8f6ba909ad70bd873818158ed5152a12806e6943292",
+      "rgba_sha256": "c9eae2e0b365c4ef23462e12d00b7932358143552c73a45c0f2eb13ea9f35bbd"
+    },
+    {
+      "node": "Part27",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "2-9",
+      "path_id": -4969821415472959980,
+      "blocks": 824,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "c49c9c07495dbab68b883edd91a69c0b208fb02c91cabd9cabb653d14bad7235",
+      "rgba_sha256": "cc1f23ab0bee7ccb31be9d97b45ad16bc7ae3e4eadf41750caefb55cc962e9a7"
+    },
+    {
+      "node": "Part28",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "3-1",
+      "path_id": -360023249888219628,
+      "blocks": 864,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "3d4ea5be7184203dc1225926ba3a3e38504448a8d907836424d8165481dca815",
+      "rgba_sha256": "66fd49107faf2ae18b4a14d6f141e97853054fe89f1c76d2a2407e8c5e21c851"
+    },
+    {
+      "node": "Part29",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "3-2",
+      "path_id": -3942722965674594796,
+      "blocks": 864,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "593813f26a0b0b0bfde45921650f42109d129186e2e7266f45aa49eeeeb1ca4d",
+      "rgba_sha256": "42bdc1e1a36103f2c4d064fe0eb21421ba0960c48b1a7ade1912d4b03dcce25f"
+    },
+    {
+      "node": "Part30",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "3-3",
+      "path_id": -7814924523370844652,
+      "blocks": 864,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "dbe7fffc05f92bc6bffdce77f1f85d79c4583925cb17a5e1a3cb59b614335cbe",
+      "rgba_sha256": "bd5bad8217a2715def7f6b1c1c821b1a27b402c57575e914fdd3d31530be52e0"
+    },
+    {
+      "node": "Part31",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "3-4",
+      "path_id": 2153284716399095316,
+      "blocks": 864,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "2bcf2d23200137c229688d0b413fc23115660d8faa53d7352995496662fbb320",
+      "rgba_sha256": "c4eb27e96610bf8863c85681c294910b910ca6967358f7b9751b291d1db61330"
+    },
+    {
+      "node": "Part32",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "3-5",
+      "path_id": 6728914144821898772,
+      "blocks": 864,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "0d5fb7c6664fe0f76de3653e8c5fd99313f0bd3cee95c689153a70542b524e0c",
+      "rgba_sha256": "92f31d4203b042759b0b3d7abe17daf607d9fae4164393141bd3fb5c2f463083"
+    },
+    {
+      "node": "Part33",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "3-6",
+      "path_id": 7301795879808593428,
+      "blocks": 864,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "027f9c000749e40c9148cb6c28d0a8271a139f5db42fcb2205b77e01476c90b4",
+      "rgba_sha256": "e8f474fc248a4d2483531bea676747a8bc908d8ea35e3cf827fe8c5f284c9d91"
+    },
+    {
+      "node": "Part34",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "3-7",
+      "path_id": 1521048155367861780,
+      "blocks": 864,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "79b876fd891777439b496fc8ae9490ef373d028610f3d22a53988231857027b9",
+      "rgba_sha256": "740e8e0223f33c4422c346fb7200b38c91b0613a24126a45ce53aceaca3b4d34"
+    },
+    {
+      "node": "Part35",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "3-8",
+      "path_id": -7526112539098157548,
+      "blocks": 864,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "718f2fb09e0e4b1fe6098d003e5165f62cfc87b090fdfec0fad77374dd0ef164",
+      "rgba_sha256": "a6a97cfd9f28e580c3af8df6dc1607475cba01dac6bfe7f82f878e2a7aa17645"
+    },
+    {
+      "node": "Part36",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "3-9",
+      "path_id": -5796004343507587564,
+      "blocks": 864,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "232814b729b9b4d83319d61cfec2c64545ee9f5d9d769f640653ed88f737f196",
+      "rgba_sha256": "7a51827e89fa2ea962c45c4f3a4a55daf8a967930baf4529ea5a92147c4e5d2d"
+    },
+    {
+      "node": "Part37",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "4-1",
+      "path_id": -1411746734796706284,
+      "blocks": 868,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "f14e6d5f10e4089e80e3e96fff85cad57604c54c5e0a81cba75ff7191ff7def8",
+      "rgba_sha256": "4167161dd5883bb73a3fa77b38279c7c181a1fb611f5424a4c237f4792c28f5f"
+    },
+    {
+      "node": "Part38",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "4-2",
+      "path_id": -5990113759731651052,
+      "blocks": 868,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "e53b73ae90852d6bb656fac0486485551ad2b17b67447b9bd73a2a834258ec23",
+      "rgba_sha256": "9dee7783dc0f5cd8bed541b853ba065a723e7f7b9e4005c554fde199f98263cb"
+    },
+    {
+      "node": "Part39",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "4-3",
+      "path_id": -5183642437255500268,
+      "blocks": 868,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "f7c0edbd2d9b5fef88090087de04f13c12a1839c097fbf17be879508557d8364",
+      "rgba_sha256": "45ce8343cbf8c5d5ef000224c95de27c6cc206148fbf527e75446c0381129b88"
+    },
+    {
+      "node": "Part40",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "4-4",
+      "path_id": 4231300198223703572,
+      "blocks": 868,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "252702f746c9cbce7cfd399410975c4f524e9b921c20d5a017b194ebbd0520f0",
+      "rgba_sha256": "aa10829359661abcb369c62371620f80ec21ab56a81007ef8789f53d2012723f"
+    },
+    {
+      "node": "Part41",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "4-5",
+      "path_id": -787933563717620204,
+      "blocks": 868,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "3b374c57154b9553f0df888ed73b8a848e02cae295ed35e5bdb0af2023ebaf98",
+      "rgba_sha256": "cf69f0ed0c024c1e0681e6a3207b1f305a082047ffbb149b0dd24e48c3275c9d"
+    },
+    {
+      "node": "Part42",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "4-6",
+      "path_id": 6434224189908512276,
+      "blocks": 868,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "682a4ad70e8606dd231f61b2699c4be622906cd17ea5d286bf8a2a70c7fa4e7f",
+      "rgba_sha256": "c853c4921170461b737323e3c4dfd293a8464c0c3fb17536e5fa6bb57804ad45"
+    },
+    {
+      "node": "Part43",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "4-7",
+      "path_id": 994305296416501268,
+      "blocks": 868,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "90a262c8255215f0fb5f734032e3bcd179459993dd707bb0f2ce5a185bceb880",
+      "rgba_sha256": "7a7e41e468322afbb551f78d14aa3a854eac3a95ca8a1e08a0227655adb57270"
+    },
+    {
+      "node": "Part44",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "4-8",
+      "path_id": 7693551667388870164,
+      "blocks": 868,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "2583fbe5cf14f650c9f6dda80ed5af934080dceb0fcd4b974a47875ae937d883",
+      "rgba_sha256": "53d20599a9e969082234d8648738bcc789bfe625d726347c117221dbee0c993e"
+    },
+    {
+      "node": "Part45",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "4-9",
+      "path_id": -5840976691837932012,
+      "blocks": 868,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "48f2a1426e42c32353096b8a8d71dfb07206e26c1b1f62d27a18a5d6425359b8",
+      "rgba_sha256": "d98668cc26676f0d0fc084297c77970a6318976ccdef09e0a3f9463ecbfbf021"
+    },
+    {
+      "node": "Part46",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "5-1",
+      "path_id": 5003823641889467924,
+      "blocks": 840,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "7064a3b706a8db028e32d94d8146adf5d920d47a4cfcef4e2a57fa9a3cf14339",
+      "rgba_sha256": "d4cada8eaba0da9d7e72809246c486ccf0e129547859afc6a8caa20ef214d90c"
+    },
+    {
+      "node": "Part47",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "5-2",
+      "path_id": 1327882534558232084,
+      "blocks": 840,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "a32b6516f2d85ffa3074d617f3f60614a188deb5c5ccd974dc84f25e38c19b3a",
+      "rgba_sha256": "8d37d4811a9d77dc600c01d74b2c7c7f4d1bbca97dfda1883c9dff3a33a4a096"
+    },
+    {
+      "node": "Part48",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "5-3",
+      "path_id": 7162191996144053780,
+      "blocks": 840,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "b981cfa04a3beafaad1d7f8646ee02c132a09f1183654cd054de2135a240b1bc",
+      "rgba_sha256": "963bf9bda6e5917b6795f327eb64f7c6235b98a76db5dfd4a21ee2325184eeed"
+    },
+    {
+      "node": "Part49",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "5-4",
+      "path_id": 2483718400411037204,
+      "blocks": 840,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "b14dec33b2f42b2a5ae830e252b8f0f20c9279755a1c52e0f598bf16350d0f4c",
+      "rgba_sha256": "79e2182c89ba0bda1d96caa5e1f18e72db87e8faadc332dd41afdc7077ffeef5"
+    },
+    {
+      "node": "Part50",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "5-5",
+      "path_id": -9029365672400458220,
+      "blocks": 840,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "8ffd3a6d95acf11afb33eaedb6ae1746bbe27b0145b21054312559186944427c",
+      "rgba_sha256": "4cc745421063e0fed1ee3eee0adedb507b62d8d940802bef50a48282792ad1ec"
+    },
+    {
+      "node": "Part51",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "5-6",
+      "path_id": 432409345446702612,
+      "blocks": 840,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "1ba91e66129075ed54b788fa4567310a170db8db6f7d5493d006e8fa350273c3",
+      "rgba_sha256": "a0fc00d5abed1a4e746f1a917a410569ac314a7629e540fe6680e4f9dc9e9429"
+    },
+    {
+      "node": "Part52",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "5-7",
+      "path_id": -8599794615633973740,
+      "blocks": 840,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "74057b745a24928e05aeb8b9af1d2d765f6486c147b9d116b2351942f80e553e",
+      "rgba_sha256": "98e70eb306cce443b2e09c2adf37c3690e7de93f705a78c85034433d2cb1cff1"
+    },
+    {
+      "node": "Part53",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "5-8",
+      "path_id": -2952634577302721004,
+      "blocks": 840,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "8562f745d9529fef243158d3570b3d9d0a759eb405f9e56ed41ed2b8476709b4",
+      "rgba_sha256": "669ce1a6d4407dd988436a9fc68ee6254100041931130c964f9e6dcaed0e5da6"
+    },
+    {
+      "node": "Part54",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creatureleia.bundle",
+      "sha256": "4687780daa390115ea7d5562c042bdeeef638f8f63f444fd725d2fd5e450e4a4",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureLeia.asset",
+      "sprite": "5-9",
+      "path_id": 4867707535923342868,
+      "blocks": 840,
+      "size": [
+        2205,
+        3998
+      ],
+      "png_sha256": "a917c8068bb91ab171fc3a696a6554241d3c55b20cc94d18085e8c2559ebc29a",
+      "rgba_sha256": "56ff6ab315ddbe79138a6f3d1dd576fef73008a666952db17058e53a41eb44a3"
+    }
+  ],
+  "body_png_sha256": "796ee7ae3e1a3cb440945cf7485ad97d8c6abd6ab8d17d3722d8a44f7504b595"
+}

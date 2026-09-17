@@ -113,7 +113,7 @@ class SpriteRenderer:
                 "labels": labels,
                 "catalog": self.catalog.data.source_digest,
                 "font": picker_font_digest(),
-                "layout": 12,
+                "layout": 15,
                 "asset_root": str(self.asset_root),
             },
             ensure_ascii=False,
@@ -125,21 +125,26 @@ class SpriteRenderer:
         recipes = [
             self.recipe_with_choice(recipe, picker, choice) for choice in choices
         ]
+        characters = [
+            self.catalog.preset_character(item.base_preset) if picker == "preset" else character
+            for item in recipes
+        ]
         if picker in {"head", "expression", "eyes", "mouth", "detail"}:
             crop_boxes = [self._face_crop_box(character, item) for item in recipes]
         elif picker == "arm":
             crop_boxes = [self._arm_crop_box(character, item) for item in recipes]
         else:
             crop_boxes = [
-                self._composition_crop_box(character, item) for item in recipes
+                self._composition_crop_box(owner, item)
+                for owner, item in zip(characters, recipes, strict=True)
             ]
-        prefab = self.prefab(character)
-        nodes = [self.compose_recipe(character, item) for item in recipes]
+        nodes = [self.compose_recipe(owner, item) for owner, item in zip(characters, recipes, strict=True)]
         _, _, _, _, x_edges, y_edges = self._contact_sheet_layout(len(recipes))
         images = []
         for index, (selected, crop_box) in enumerate(
             zip(nodes, crop_boxes, strict=True)
         ):
+            prefab = self.prefab(characters[index])
             column, row = index % (len(x_edges) - 1), index // (len(x_edges) - 1)
             cell_width = x_edges[column + 1] - x_edges[column]
             cell_height = y_edges[row + 1] - y_edges[row]
@@ -451,7 +456,7 @@ class SpriteRenderer:
     ) -> tuple[int, int, int, int, list[int], list[int]]:
         if count <= 0:
             raise ValueError("a picker must contain at least one image")
-        columns = 2 if count == 4 else min(3, count)
+        columns = min(5, count)
         rows = math.ceil(count / columns)
         width = columns * 400
         height = round(rows * 1600 / 3)

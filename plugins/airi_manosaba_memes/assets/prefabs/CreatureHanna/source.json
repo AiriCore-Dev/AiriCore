@@ -1,0 +1,460 @@
+{
+  "character": "CreatureHanna",
+  "canvas": [
+    2894,
+    4093
+  ],
+  "sprites": [
+    {
+      "node": "Part01",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "0_1",
+      "path_id": 5592749592869584131,
+      "blocks": 1405,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "493adfc1887435dd98a6a2e88442a898b611666f136524855742adc184a73db9",
+      "rgba_sha256": "a01edd57ed04fed64758ba649389202f1320aedcf79d28a4cf1f73ae88898223"
+    },
+    {
+      "node": "Part02",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "0_2",
+      "path_id": 7903846574370372867,
+      "blocks": 1405,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "78375f8bda18bf724dec119ceed49d253bcb28dc8285ec2d9b9a2ec87aa0243f",
+      "rgba_sha256": "5a4b96bf347be1cfa4e67e982c6dbcd0877a21db900bc02deb888d13edd7e6c9"
+    },
+    {
+      "node": "Part03",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "0_3",
+      "path_id": 1357535749010734339,
+      "blocks": 1405,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "85e9685007a4a40c54fe36683d57d29361fca5bc40c0f940624b119dfc66ae29",
+      "rgba_sha256": "2d964afb67704aab45d4fe5b1c5f44e98f484ff99d3568fcc3c9393d21d943dc"
+    },
+    {
+      "node": "Part04",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "0_4",
+      "path_id": 600220831221988611,
+      "blocks": 1405,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "347cfdcd42608b58c724121bf43a98ae59414ac8b0dd7d26fc9778543ebb32c8",
+      "rgba_sha256": "ab07f8707811f9a06ad121a954c8e13d954c8fbfe95c1d1bd0184caae23e5867"
+    },
+    {
+      "node": "Part05",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "0_5",
+      "path_id": -7520174552545510141,
+      "blocks": 1405,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "e0f906a411396d7ae32aaadc20c948a39ff529909f7105dcb2a3c502e9cd97f0",
+      "rgba_sha256": "8a8e17352f628be5b19b042cac1046f3972e46b0bafcc3549b6519c501bd2460"
+    },
+    {
+      "node": "Part06",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "0_6",
+      "path_id": -3117637395238568701,
+      "blocks": 1405,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "adb3d13d4d8476c9ed79d40dc2aa4d574a9c478363029efd32bbe56ad045d5a4",
+      "rgba_sha256": "73c9219bc9817bf4af58c548770b1728a5abfe0f4be6e91d71cb068acf1ffee9"
+    },
+    {
+      "node": "Part07",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "0_7",
+      "path_id": 6456104001867201795,
+      "blocks": 1405,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "0d1a9a70e8f65b6c7a1da6e0196b36101c11c3c003dfbcb0bf50f6218987fac1",
+      "rgba_sha256": "1fb267d59a9243ecab7539d068a7e3abeb6cbac2c6759251a3165f156a9dce65"
+    },
+    {
+      "node": "Part08",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "0_8",
+      "path_id": 9057489268168572163,
+      "blocks": 1405,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "8c2cdb1acf60a8e3804051fb29649215f3a1e8ba8bb87fd5d6eb5039df6d3040",
+      "rgba_sha256": "eb522344c8f61b299750163206c48e14bc3755a22d8af9cbae16052b0b5e7d41"
+    },
+    {
+      "node": "Part09",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "0_9",
+      "path_id": 6366294246715211011,
+      "blocks": 1405,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "f52c76ce243071a3380313dd49b62eadb5bfb1e332302c5fc39bbe5de1befecc",
+      "rgba_sha256": "e4022d8a72d0f3e93f25f31a2956c861592e1aa2199a3bb1b069074311616610"
+    },
+    {
+      "node": "Part10",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "0_10",
+      "path_id": 6409317936509140227,
+      "blocks": 1405,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "fb60762be6b81d3c3e867a50b3c96d49b6d7cd8d940b8eb33ffbc9372846e61c",
+      "rgba_sha256": "03c8b81f6eb1e0ae3eee1fd30803417e87d4e4143ccc8c3c66159f47b20152f1"
+    },
+    {
+      "node": "Part11",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "1_1",
+      "path_id": -8902008615394165501,
+      "blocks": 1321,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "31e1a62a7cf591b805994f0e3993d5b6d571f3b378bbfe10b76cad4e1d39de67",
+      "rgba_sha256": "7d43a76839916406d903319849614e6bfd93f1dbf84de7215e8c11a46f2de9b7"
+    },
+    {
+      "node": "Part12",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "1_2",
+      "path_id": -5338846133701591805,
+      "blocks": 1321,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "fac02a58ae8aac7e44eca4be5858d9ddd1193761a901c579e598a1521db75c9d",
+      "rgba_sha256": "38a6eb998e85e6a229a1d5f2491f78719443946e14fec7dc3fc288806debc51c"
+    },
+    {
+      "node": "Part13",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "1_3",
+      "path_id": -6487381159955940093,
+      "blocks": 1321,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "5615375656b4338687898aa61e5137d4a973f52489d05794e2444db86bab93b1",
+      "rgba_sha256": "84badf911b7016a70c0fe7bd988b3533e26323442dc86998e7bb034ecfd542c0"
+    },
+    {
+      "node": "Part14",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "1_4",
+      "path_id": -7601048810791650045,
+      "blocks": 1321,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "a0ccee6ed60a8768380cb7cb7533c6240ba6a4393384e4b89e66dcef3155f0e9",
+      "rgba_sha256": "34e865e6ed920d3448d2b195c96ea42dbb4cd8301718ab9eb6ff1b8d68c7f04c"
+    },
+    {
+      "node": "Part15",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "1_5",
+      "path_id": 5996334256393141507,
+      "blocks": 1321,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "6b469ff22e164c4a8fbe92cc1e39675f8a7bc1920a44dfafbd5fd881b406c649",
+      "rgba_sha256": "95b6022ac86f5ab9c5407be6ecaed8882537e7a9bf9cd4fab7edf6091784e20d"
+    },
+    {
+      "node": "Part16",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "1_6",
+      "path_id": 2184134272744144131,
+      "blocks": 1321,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "981b7473a229668260f464cd555c737642699835787f7e4fb73100c1ea83e270",
+      "rgba_sha256": "a23284d4dcc88bb0c0af9de61b6296f372a4f5399cef140d82f7bec392d136d3"
+    },
+    {
+      "node": "Part17",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "1_7",
+      "path_id": 4358987568729799939,
+      "blocks": 1321,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "3f73fcc00255da2ad8b08d06fb9eca8973eb854aa3cd40d092eb56125b405681",
+      "rgba_sha256": "e5af663cdc8eaf248e17e444f285c96862cc274e16b8e4dd5d4769eb31ec3753"
+    },
+    {
+      "node": "Part18",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "1_8",
+      "path_id": 5961463287919852803,
+      "blocks": 1321,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "13d95be5ef3415953bfdb7a893dee30d095592394249742f8ed1b02bd0ddbaab",
+      "rgba_sha256": "2898c773550e4d0e924a9e8c96f644fc1ab6d4ffb2a8191ee36fb9cea8558c68"
+    },
+    {
+      "node": "Part19",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "1_9",
+      "path_id": 2140651212055624963,
+      "blocks": 1321,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "6911ab01c805117177b0bdc5a45f5cf0ece88b3a06577e52fa6ea59aa9940304",
+      "rgba_sha256": "740e5a19c0890fb218ff7e90645478e5046e953d075fd8a09e5c31acfa729133"
+    },
+    {
+      "node": "Part20",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "1_10",
+      "path_id": 1244020554608131331,
+      "blocks": 1321,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "48a6e308b03e3f7b8b93baf407012c66955660ff3610587b594982649e3471f4",
+      "rgba_sha256": "978d4a55631e946643502ff00e55dc2edd912cbcef159052a66fa0f7a45ca453"
+    },
+    {
+      "node": "Part21",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "2_1",
+      "path_id": -4879775449899025149,
+      "blocks": 1307,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "f27074edbf4f3f735ba408ee0476b899ab32cc1b8d025d5fc6f446913cd4fb07",
+      "rgba_sha256": "f371212da5d9a6cbcbf7511d138906315104e1bf8c939742dcb23a49682abe74"
+    },
+    {
+      "node": "Part22",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "2_2",
+      "path_id": -8259322028439061245,
+      "blocks": 1307,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "e23be6e34a3ce5dce82fc799d3df678695219682ecc0cd54ee0aeea71cc39dc5",
+      "rgba_sha256": "97eb47531aeefa27783ce56a9f9b5b378d66f108eedd99a012e42a59ccafc255"
+    },
+    {
+      "node": "Part23",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "2_3",
+      "path_id": 1655266816927972611,
+      "blocks": 1307,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "ecb14c521b28802f052ab5c38bbd674270069f417ff2c4d5bfb7698eb31d1905",
+      "rgba_sha256": "20b886b315ac0c75cdf469c2b3d5043f9d11f9f958d73be58e0b59ec10989bb1"
+    },
+    {
+      "node": "Part24",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "2_4",
+      "path_id": 2212256730339327235,
+      "blocks": 1307,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "4efab82c50a29fe000472b70aa74fd0124b5e10f6e51210f659feea55ecc9a5e",
+      "rgba_sha256": "24c65e3d92e9dcabed134202967db980385c5ee8556fd00280b1d82f32f305ab"
+    },
+    {
+      "node": "Part25",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "2_5",
+      "path_id": 6457306061589822723,
+      "blocks": 1307,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "c893dc331f194d8981a095e0c1e56b3d66c2f2cd2c2f7f950561cfffadc27bb6",
+      "rgba_sha256": "931790c7c5760111d885440acbc96422ae863f1f6a6527f87c6d1ea957c1ecfd"
+    },
+    {
+      "node": "Part26",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "2_6",
+      "path_id": -4222911502707737341,
+      "blocks": 1307,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "f7c755495d5f0ec45a95e22a4226de1ea70feb324db6e1f3235174b2d49bcbfe",
+      "rgba_sha256": "957ed4d434b64495ae14224d11304ec893de7f110fc42bb7cbf49de7c646eb67"
+    },
+    {
+      "node": "Part27",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "2_7",
+      "path_id": 9070436006846381315,
+      "blocks": 1307,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "cae55635de7489fa35433e26641c6d525f0edf3225a4783351b7eadc213920c7",
+      "rgba_sha256": "dd52aadd381471bcf3b30212ccbe880cb9ab70897f878fcbd66f062ce7834767"
+    },
+    {
+      "node": "Part28",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "2_8",
+      "path_id": -4237089279730729725,
+      "blocks": 1307,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "429be5aaf220b1325baa492d66c7f1faecfae598c3a49a02fb914c4bf06efbb3",
+      "rgba_sha256": "2f0008e6f71f5b0dccc072aff9d0296cbf0445038bc70802f162dab0db165053"
+    },
+    {
+      "node": "Part29",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "2_9",
+      "path_id": -8424430727388676861,
+      "blocks": 1307,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "993fa463a73614c43ab3b9df571d1d6c63c7de1e58fc664413d62c0d26654cac",
+      "rgba_sha256": "8c5258797dc6b69f563fec7d679242b1bbe7b955686e8251ef1cda8be545132f"
+    },
+    {
+      "node": "Part30",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturehanna.bundle",
+      "sha256": "e4b95c9224a7cf5a47b7383eb017e4460356be455bcc329fb2d718776cd13b88",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureHanna.asset",
+      "sprite": "2_10",
+      "path_id": -7001580639716262653,
+      "blocks": 1307,
+      "size": [
+        2894,
+        4093
+      ],
+      "png_sha256": "48041dabeed88b8416b3d505e3cdb11c2b6557fed333d590cb1fea94e52c789c",
+      "rgba_sha256": "30638e41f01d48c1321b10a7c2134f4ccd1bb94eac7f8d44309ce5e101e6cb58"
+    }
+  ],
+  "body_png_sha256": "55df11b325b49dcbdfc9632fffaa947feb9027e98bcfd30eb9d12804db0ae1f1"
+}

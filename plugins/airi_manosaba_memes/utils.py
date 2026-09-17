@@ -22,6 +22,15 @@ CHARACTER_NAME_MAP = {
     "看守": Character.JAILER,
 }
 CHARACTER_NAMES = tuple(CHARACTER_NAME_MAP)
+CREATURE_BASE_CHARACTERS = {
+    character: Character(character.value.removeprefix("Creature"))
+    for character in Character if character.value.startswith("Creature")
+}
+CHARACTER_NAME_MAP.update({
+    "黑化" + name: creature
+    for name, base in tuple(CHARACTER_NAME_MAP.items())
+    for creature, original in CREATURE_BASE_CHARACTERS.items() if base == original
+})
 CHARACTER_DISPLAY_NAMES = {
     character.value: name for name, character in CHARACTER_NAME_MAP.items()
 }
@@ -44,6 +53,12 @@ CHARACTER_NAME_MAP.update({
     "Warden": Character.WARDEN,
     "Jailer": Character.JAILER,
 })
+for creature, base in CREATURE_BASE_CHARACTERS.items():
+    CHARACTER_NAME_MAP[creature.value] = creature
+    for name, character in tuple(CHARACTER_NAME_MAP.items()):
+        if character == base:
+            for alias in ("黑化" + name, "魔女化" + name, name + "（黑化）"):
+                CHARACTER_NAME_MAP[alias] = creature
 
 
 def get_png_size(file_path: Path) -> tuple[int, int]:
@@ -72,7 +87,9 @@ def get_magic_statement(text: str) -> Statement:
         "蕾雅": Statement.MAGIC_SHISENYUUDOU,
         "雪": Statement.MAGIC_SHISENYUUDOU,
     }
-    return mapping[CHARACTER_DISPLAY_NAMES[get_character(text).value]]
+    character = get_character(text)
+    character = CREATURE_BASE_CHARACTERS.get(character, character)
+    return mapping[CHARACTER_DISPLAY_NAMES[character.value]]
 
 
 def get_statement(statement: str, arg: str | None = None) -> Statement:

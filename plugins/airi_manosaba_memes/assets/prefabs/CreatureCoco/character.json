@@ -1,0 +1,480 @@
+{
+  "character": "CreatureCoco",
+  "nodes": [
+    {
+      "name": "CreatureCoco",
+      "children": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67
+      ]
+    },
+    {
+      "name": "Part01",
+      "sprite": {
+        "enabled": true
+      }
+    },
+    {
+      "name": "Part02",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part03",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part04",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part05",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part06",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part07",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part08",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part09",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part10",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part11",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part12",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part13",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part14",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part15",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part16",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part17",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part18",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part19",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part20",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part21",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part22",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part23",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part24",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part25",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part26",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part27",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part28",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part29",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part30",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part31",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part32",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part33",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part34",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part35",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part36",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part37",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part38",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part39",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part40",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part41",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part42",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part43",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part44",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part45",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part46",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part47",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part48",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part49",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part50",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part51",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part52",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part53",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part54",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part55",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part56",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part57",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part58",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part59",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part60",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part61",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part62",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part63",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part64",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part65",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part66",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Body",
+      "sprite": {
+        "enabled": true
+      }
+    }
+  ],
+  "flatten_before_resize": true
+}

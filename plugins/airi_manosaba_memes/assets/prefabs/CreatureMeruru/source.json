@@ -1,0 +1,550 @@
+{
+  "character": "CreatureMeruru",
+  "canvas": [
+    2177,
+    4050
+  ],
+  "sprites": [
+    {
+      "node": "Part01",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "0-1",
+      "path_id": 426605580616514880,
+      "blocks": 1289,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "67c640ccd518ef79efe6f777f03078aa3c3d52dd12119fe46803684db34a9fe6",
+      "rgba_sha256": "e176e565813ba585a61d8d22fec3300a6f1eec69a078398b6d6d476978ee8db7"
+    },
+    {
+      "node": "Part02",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "0-2",
+      "path_id": 409679214226947392,
+      "blocks": 1289,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "d75e3e706808cd7665a89c412d1d9cb7f3a37b1522a2d27664a3577abfb5f445",
+      "rgba_sha256": "7c761d3e55f2bd80d07e86707dcdfa2bbe1baef2a35786a245afecd083a4cecf"
+    },
+    {
+      "node": "Part03",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "0-3",
+      "path_id": -6161124781232898752,
+      "blocks": 1289,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "ddfaae5651652e54b35ebf772e14646abbaa63ce6104b6af7462e549e167eb65",
+      "rgba_sha256": "3797a58d6266809d265b4f06576130f5675a9610260813e4878fc78d9dfd3377"
+    },
+    {
+      "node": "Part04",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "0-4",
+      "path_id": -7635296169909502656,
+      "blocks": 1289,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "dceef2ee55e248cb853ebfe0946533b81d3d3100a4155147b1286344dc3a4eb2",
+      "rgba_sha256": "6b43ab7449c5ad7e4f7c9189e3d957eda8198921f08a7df832c1209dec5dee69"
+    },
+    {
+      "node": "Part05",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "0-5",
+      "path_id": 7885712338651299136,
+      "blocks": 1289,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "079d2222a89d461dfe3667211d5a633c9fd0be99757d3efcfbc74a4277f0ef79",
+      "rgba_sha256": "4b1494b01178c27ddb2b5d803855801c823625403891bb4ea650f219ff61049d"
+    },
+    {
+      "node": "Part06",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "0-6",
+      "path_id": 5233226304727924032,
+      "blocks": 1289,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "44fc59937959f57b92019e01375e218c8ba754878682b54cbf52518986e626db",
+      "rgba_sha256": "795bb1e1218773ed079c9b6594047e303b237a3ca9c18f2d5815c416ad3bee00"
+    },
+    {
+      "node": "Part07",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "0-7",
+      "path_id": 6552011693130235200,
+      "blocks": 1289,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "e79a0693d7b7672cc0d40b4bdf4a9a64028e5d03e3b7a9a86caf338421341fce",
+      "rgba_sha256": "5599ef29d62ebd93229c335b2b75c9a7dd4d6fb1263ddc1c292f89da7b64004e"
+    },
+    {
+      "node": "Part08",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "0-8",
+      "path_id": 2861559452933668160,
+      "blocks": 1289,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "01f9256a2ba32a6c631ab91801a891c4e5da9afe4fc9dd6158e077e0615435a1",
+      "rgba_sha256": "e5aef1c0585fc594ce6f6334cda519bb457e244d2cc3b0304eb72fad2758c49a"
+    },
+    {
+      "node": "Part09",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "0-9",
+      "path_id": 8132983151155133760,
+      "blocks": 1289,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "587c073a03e3b0d7d4c9127962b7e28ca1fd3e9d341c210b231dab088d332800",
+      "rgba_sha256": "6e41c708497b30922df81b89f704535dbdb31b1c8bb5884d223802956e4d3429"
+    },
+    {
+      "node": "Part10",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "1-1",
+      "path_id": 3355979474892602688,
+      "blocks": 1254,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "1b0c99cdbc1f0dbd8d4eda806e12ab69d41805ee881e2ed3cf8be3286f02c1d8",
+      "rgba_sha256": "a471178e263e013aeb89a5500a7c3b658fb39c9c6dc3f1f7db36cc09b79a4d71"
+    },
+    {
+      "node": "Part11",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "1-2",
+      "path_id": 3883296108119964992,
+      "blocks": 1254,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "7ba09d41c00bf8a69a6bfc2c1f441ef3464f6c39cc36e45cfe16e20bc7f3b20a",
+      "rgba_sha256": "e3ea0fc47d6b2b116b56ff3a47c946cb3c06c1695faa3c6819dbde3a203c99ed"
+    },
+    {
+      "node": "Part12",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "1-3",
+      "path_id": 8494856996314266944,
+      "blocks": 1254,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "5b5fe6b990d3c9213a9244649f06865627b97d298eccc49f3d252bf3ba1b95ae",
+      "rgba_sha256": "4373fbbe0a4c62243c0de8f1664b4cce446fb2c3646f1743a87a41667b82c7b3"
+    },
+    {
+      "node": "Part13",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "1-4",
+      "path_id": 2706285186749545792,
+      "blocks": 1254,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "adc06c3dd0ed420b1f5537fc57b9b63c7373555bb61b55df4547c1ce9c20d553",
+      "rgba_sha256": "50953fe0dab15bf948980220e9c2897958171e2003f9f8b4b5dac136757c57fa"
+    },
+    {
+      "node": "Part14",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "1-5",
+      "path_id": -3140281855891161792,
+      "blocks": 1254,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "96c2a306e83913de38ce3bff6eb016376f8dbde016f992fe2b8f114c966a1e06",
+      "rgba_sha256": "0c385cd1ff5fcfd9f417bb3d78334d9727af8d0ab6121d2e037fe85e81b70173"
+    },
+    {
+      "node": "Part15",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "1-6",
+      "path_id": -7693485499484422848,
+      "blocks": 1254,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "742eca6161073865e3fb44a70a9d81f28db80837d8f9c36a2fbf57fed19d0dac",
+      "rgba_sha256": "ad41f84a27b79de8f5e7a658dc9ad9f3aeaa542d88059b3abaca86da9b890eac"
+    },
+    {
+      "node": "Part16",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "1-7",
+      "path_id": -1204756381851665088,
+      "blocks": 1254,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "9f93108d995cb96cb452dc65a35b457bdd3a2411fe0bf0f4e43f50cee21e15f1",
+      "rgba_sha256": "e297d5b60f98080e791679a676ae58d366426a2a6f08397a260f6f0778870040"
+    },
+    {
+      "node": "Part17",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "1-8",
+      "path_id": 2659586594512420160,
+      "blocks": 1254,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "46564f295a01f0b543e27e9a9a91f31dffbe0228448dc4be8784f18561f89be3",
+      "rgba_sha256": "d9ed9c9eeb4f7dcdc767537f17e7056a98d2ae57e63a81e95a7685e4a90e3f5e"
+    },
+    {
+      "node": "Part18",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "1-9",
+      "path_id": 8374148952470306112,
+      "blocks": 1254,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "b78b1e9fd82ad3155aed79472ea7b8b88406d874045f7e1df5f78d5944bc01f1",
+      "rgba_sha256": "2d8a505d300d0efbe0df9ae479ca9d478d056aecc2fd94abade28dbdce22abe8"
+    },
+    {
+      "node": "Part19",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "2-1",
+      "path_id": -4533120016234922688,
+      "blocks": 1244,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "911b161e5900a42232b1d640b1df284b9c0aaab6bcf8f0a60ec5965b7052f60f",
+      "rgba_sha256": "e9edb060533f4f9845f3e2fb4ec42be6636ebc7fbc6b1ca9a54ae2311c4b1cb5"
+    },
+    {
+      "node": "Part20",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "2-2",
+      "path_id": -6722925796675044032,
+      "blocks": 1244,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "86608dfcb055f84203d769959fd00220d5a56949dfe6303f730a6e0e9176d83d",
+      "rgba_sha256": "cb4fdc8570cb0b8c09ed5715a77523e42ac162b6df741dbad565d36881af1bdd"
+    },
+    {
+      "node": "Part21",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "2-3",
+      "path_id": 7164010890230807872,
+      "blocks": 1244,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "d7a22009010a6904726f403ef72457ef9b94637060e02121fcf90e1291cfeca4",
+      "rgba_sha256": "a3431c9415973d33c34a326b9ef87f70b10ab8fb6b4520cc6b4bba86e871d5a1"
+    },
+    {
+      "node": "Part22",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "2-4",
+      "path_id": -8237827609612272320,
+      "blocks": 1244,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "760c29b3804de29c5ec2b21e33c933f53234e1f658519f4f4e9c530d2cca8e7b",
+      "rgba_sha256": "e7758fc81411a204dceb0e5e2877e3c61532f77e62f4d2630eab676c5c0eb904"
+    },
+    {
+      "node": "Part23",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "2-5",
+      "path_id": 3444333902224997696,
+      "blocks": 1244,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "2fdc9b9d9597d33416c3dd4baca779b77fa304f06c01ea8919ef7fc5e4620777",
+      "rgba_sha256": "09b84fc1c19e7bb82938ec79d8c996b6f760e4ea4b5e64d014d0c5ac63bca415"
+    },
+    {
+      "node": "Part24",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "2-6",
+      "path_id": 2397158369934949696,
+      "blocks": 1244,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "2f188a85aca80e55bd1b0c8f543201b3b359bce3cfd7ff52e86e15e0f6af9cdf",
+      "rgba_sha256": "7a458087d02b8aa8a48e5cf64d514886af89c5c74d662ea1a29678b825e1b092"
+    },
+    {
+      "node": "Part25",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "2-7",
+      "path_id": -4162385308908274368,
+      "blocks": 1244,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "010d759112a939d6e76499e4b3581057f6ab5f33e9a7c634e8426438cbb4cdf9",
+      "rgba_sha256": "5484d668e25e4cc14d0abb1b56ed1a59e9edf8be4393b246ce4cce974784e527"
+    },
+    {
+      "node": "Part26",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "2-8",
+      "path_id": -7364793583894020800,
+      "blocks": 1244,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "cc44d6cc91a9c02964dfadb4f1018e02b97b297f459b204818cc715dee2fc9ee",
+      "rgba_sha256": "7514b48605066e242de83d72aff389d8951c53792cb0a0b85c5df7799787ff07"
+    },
+    {
+      "node": "Part27",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "2-9",
+      "path_id": 6356372658688671040,
+      "blocks": 1244,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "19f48024c2b1a4192a0b7144d268271b0c9008c1cdcac17f4f413910684c897c",
+      "rgba_sha256": "8a0d66a261d8d76e642a5031de16ab9f60b68d787b6a331d91bb2d25d181c795"
+    },
+    {
+      "node": "Part28",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "3-1",
+      "path_id": 7075685280309951808,
+      "blocks": 1244,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "6ccc40cf9d7c24deccdcb07374d2e5968d4047c9688b38720294e28efcce282c",
+      "rgba_sha256": "0cbeaa922d7e474e461e2f43e80a15e4365ad75c9555c30cac5c2a210ec09c17"
+    },
+    {
+      "node": "Part29",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "3-2",
+      "path_id": 4994127418150403392,
+      "blocks": 1244,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "622b8ef14628f1b0ae75320b4d3ba5a6438386a7595eaaefe6187b381d7b7db4",
+      "rgba_sha256": "f4cf125469eb49beedc6e220078a4f7c19fee069e2f4e41c9f1a96711b0eecef"
+    },
+    {
+      "node": "Part30",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "3-3",
+      "path_id": -2627481021033497280,
+      "blocks": 1244,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "6a7a819eb43d273a82f1dfdc2e80b0bb064f44c4b1791311ad7eedea85488760",
+      "rgba_sha256": "a7fa3320e81cfecfc9382df7769ffe75da740cc34de81676f07facaa54fc65da"
+    },
+    {
+      "node": "Part31",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "3-4",
+      "path_id": -7238900051499696832,
+      "blocks": 1244,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "6557717084b5be80bde0906b813dbec7c3560ea0f05ad426ad42cc3d9dbc6aed",
+      "rgba_sha256": "01e913701ecfaed6b6ceac5c1f87661b5512e1e27b946d9ad704094383dac57f"
+    },
+    {
+      "node": "Part32",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "3-5",
+      "path_id": 2368618832873700672,
+      "blocks": 1244,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "70a6ebedd2c04d10a1a6f8dfc3b5546354a32458239dee187c6edb98a1ba07dc",
+      "rgba_sha256": "c239de04927c8a06d00c96c5862a4eca53d20ecc07a32b3b5d2e7bd37343c901"
+    },
+    {
+      "node": "Part33",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "3-6",
+      "path_id": -3959825361619600064,
+      "blocks": 1244,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "d132deb07c96adc5eecfab84935d3d0d7bfda330ccd82d3b8425bf55ad6aac42",
+      "rgba_sha256": "b04dce9ec2a559f86685b0b44e01e2477575949fd761dbb5d0db68d35f0c0f98"
+    },
+    {
+      "node": "Part34",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "3-7",
+      "path_id": 2682192991997967680,
+      "blocks": 1244,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "6526a77ed10fff61e29d992d20d62bcf12b6e8ee5068086f9c0ee4884437fa1b",
+      "rgba_sha256": "ef62a6904d67b14b0cbc435c91ba3b33808d225d2c3f375924a82b3904cc7818"
+    },
+    {
+      "node": "Part35",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "3-8",
+      "path_id": 7584407135028297024,
+      "blocks": 1244,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "ab8407621588df5bbdf92dd3c4fdcafe9cc784554eeb5c075c034cdc4c0c5d25",
+      "rgba_sha256": "88f77876e2e4f8cc37780bd4241b7dee173f69460af86d6ba5a80af07dda3840"
+    },
+    {
+      "node": "Part36",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemeruru.bundle",
+      "sha256": "0b62bad2eb173eb5ffc382e35f1c2dc6ce02afa78cf59d55c3cf9f439eba501b",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMeruru.asset",
+      "sprite": "3-9",
+      "path_id": 5598047951317024064,
+      "blocks": 1244,
+      "size": [
+        2177,
+        4050
+      ],
+      "png_sha256": "af4d48abaff94b993e48f0750a17f3b21c45682ac0bb723309a1ec57ea9f384b",
+      "rgba_sha256": "48c921f141a80beca224e29f0a2f94311253e04a2fe407ec99b22452db332f98"
+    }
+  ],
+  "body_png_sha256": "a8eca761dd9203cb89da0837df1b7ed9f4471f83eeb93cf75e0b307975e979bf"
+}

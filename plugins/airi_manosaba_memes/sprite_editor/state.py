@@ -21,6 +21,11 @@ CHARACTER_PREFIXES = {
     "Margo": "MG", "AnAn": "AA", "Coco": "KK", "Hiro": "XL",
     "Leia": "LY", "Yuki": "X", "Warden": "DYZ", "Jailer": "KS",
 }
+CHARACTER_PREFIXES.update({
+    "Creature" + character: "HH" + prefix
+    for character, prefix in tuple(CHARACTER_PREFIXES.items())
+    if character not in {"Yuki", "Warden", "Jailer"}
+})
 SHORT_CODE_PATTERN = rf"(?:{'|'.join(CHARACTER_PREFIXES.values())})(?!000)[0-9]{{3}}"
 SPRITE_CODE_PATTERN = rf"(?:{SHORT_CODE_PATTERN}|[{CODE_ALPHABET}]{{{CODE_LENGTH}}})"
 PickerKind = Literal["preset", "head", "expression", "eyes", "mouth", "detail", "arm"]

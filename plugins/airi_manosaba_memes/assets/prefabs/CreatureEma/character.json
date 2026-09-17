@@ -1,0 +1,116 @@
+{
+  "character": "CreatureEma",
+  "nodes": [
+    {
+      "name": "CreatureEma",
+      "children": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "name": "Part01",
+      "sprite": {
+        "enabled": true
+      }
+    },
+    {
+      "name": "Part02",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part03",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part04",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part05",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part06",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part07",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part08",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part09",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part10",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part11",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part12",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part13",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Part14",
+      "sprite": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "Body",
+      "sprite": {
+        "enabled": true
+      }
+    }
+  ],
+  "flatten_before_resize": true
+}

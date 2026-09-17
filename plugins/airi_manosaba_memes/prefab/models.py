@@ -40,6 +40,7 @@ class CharacterData(BaseModel):
 
     character: str
     nodes: list[Node]
+    flatten_before_resize: bool = False
 
     model_config = ConfigDict(extra="allow")
 

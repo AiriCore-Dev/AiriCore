@@ -33,23 +33,25 @@ from .state import (
     replace_override,
 )
 
-PAGE_SIZE = 9
+PAGE_SIZE = 25
 SPRITE_HELP = f"""创建立绘
   魔裁立绘 <角色名或立绘短码>
   支持角色：{"、".join(CHARACTER_NAMES)}
   支持角色全名，例如 橘雪莉、樱羽艾玛、月代雪。
+  人物预设包含普通和魔女化立绘；魔女化预设排在普通预设之后，选择整套姿势和表情。
   创建后会先发送官方预设选择表，不会直接生成默认立绘。
   首次选择预设成图收费 10 积分；选择表、翻页和后续回复编辑免费。
 
 选择图片
   回复选择表发送 P、H、E、I、M、A 或 D 加图片编号，例如 H2、I12。
   P：初始官方预设；H：头型；E：表情；I：眼睛；M：嘴巴；A：手臂组合；D：脸红、汗等细节。
-  编号跨页连续：第一页 1～9、第二页 10～18；在后续页可直接回复前面页的编号。
+  每页最多 25 张，按 5×5 排列；编号跨页连续：第一页 1～25、第二页 26～50。
   熟悉编号后，也可以直接回复立绘发送 H1、H2、M1 等快速修改。
-  回复 上一页 / 下一页 可以翻页。
+  回复 上一页 / 下一页 可以翻页；回复 第3页 或 跳转 3 可直接选择页码。
 
 编辑立绘
   回复一张已生成的立绘发送以下命令：
+  预设  打开该人物的全部普通和魔女化预设
   头型  切换角色的备用头型；重置表情、眼嘴和头部细节，保留手臂
   表情  打开表情选择表；保留当前预设和细节
   眼睛 / 嘴巴  分开调整五官；选项也来自官方组合中的底层素材
@@ -79,8 +81,9 @@ SPRITE_HELP = f"""创建立绘
   回复上下文仍会在本机永久保存，不设过期时间。"""
 REF_PATTERN = rf"#{SPRITE_CODE_PATTERN}"
 PICKER_CHOICE_PATTERN = r"[PHEIMAD][1-9][0-9]{0,3}"
+PAGE_COMMAND_PATTERN = r"(?:第\s*([0-9]{1,4})\s*页|跳转\s*([0-9]{1,4}))"
 COMMAND_PATTERN = (
-    rf"(?:{PICKER_CHOICE_PATTERN}|上一页|下一页|头型|表情|眼睛|嘴巴|手臂|细节|配方|"
+    rf"(?:{PICKER_CHOICE_PATTERN}|{PAGE_COMMAND_PATTERN}|上一页|下一页|预设|头型|表情|眼睛|嘴巴|手臂|细节|配方|"
     r"\+脸红|-脸红|\+汗|-汗)"
 )
 FOLLOWUP_RE = re.compile(
@@ -222,7 +225,7 @@ def _picker_title(picker: PickerKind) -> str:
 
 def _choices_for_picker(character: str, picker: PickerKind) -> list[str]:
     if picker == "preset":
-        return [preset.id for preset in _catalog().presets(character)]
+        return [preset.id for preset in _catalog().picker_presets(character)]
     if picker == "arm":
         return _catalog().arm_choices(character)
     prefab = _renderer().prefab(character)
@@ -303,6 +306,11 @@ async def _send_picker(
     first_number = page * PAGE_SIZE + 1
     last_number = first_number + len(shown) - 1
     labels = [f"{prefix}{index}" for index in range(first_number, last_number + 1)]
+    if picker == "preset":
+        labels = [
+            label + (" 魔女化" if _catalog().preset_character(choice).startswith("Creature") else "")
+            for label, choice in zip(labels, shown, strict=True)
+        ]
     image = await run_image(
         _renderer().render_picker,
         character,
@@ -321,8 +329,14 @@ async def _send_picker(
         )
     caption = (
         f"{code_prefix}{_picker_title(picker)} {page + 1}/{total_pages}\n"
-        f"{selection_help}回复 上一页 / 下一页 翻页。"
+        f"{selection_help}回复 上一页 / 下一页 翻页。\n"
+        f"回复 第N页 或 跳转 N 选择页码（1～{total_pages}），例如 第{min(3, total_pages)}页。"
     )
+    if picker == "preset":
+        creature_numbers = [index for index, choice in enumerate(choices, 1)
+                            if _catalog().preset_character(choice).startswith("Creature")]
+        if creature_numbers:
+            caption += f"\n魔女化预设：P{creature_numbers[0]}～P{creature_numbers[-1]}，可直接回复编号选择。"
     context = MessageContext(
         kind="picker",
         character=character,
@@ -357,7 +371,7 @@ async def _send_sprite(bot: Bot, event: Event, code: str, *, paid: bool = False)
         f"{CHARACTER_DISPLAY_NAMES[stored.character]}\n"
         f"短码：{new_code}\n"
         f"备用短码：#{legacy_code}\n"
-        "回复：头型 / 表情 / 眼睛 / 嘴巴 / 手臂 / 细节 / 配方"
+        "回复：预设 / 头型 / 表情 / 眼睛 / 嘴巴 / 手臂 / 细节 / 配方"
     )
     async with production_charge(event.get_user_id(), paid=paid):
         await _send_tracked(
@@ -438,7 +452,8 @@ async def _picker_choice(
         )
         return
     recipe = _renderer().recipe_with_choice(base_recipe, picker, choices[index])
-    await _apply_recipe(bot, event, context.character, recipe, paid=picker == "preset" and base_code is None)
+    character = _catalog().preset_character(recipe.base_preset) if picker == "preset" else context.character
+    await _apply_recipe(bot, event, character, recipe, paid=picker == "preset" and base_code is None)
 
 
 def _modifier_choice(character: str, recipe: SpriteRecipe, command: str) -> str | None:
@@ -486,7 +501,8 @@ async def handle_sprite(bot: Bot, event: Event, result: Arparma) -> None:
             target=event, bot=bot
         )
         return
-    presets = _catalog().presets(character)
+    character = character.removeprefix("Creature")
+    presets = _catalog().picker_presets(character)
     if not presets:
         await UniMessage.text(f"{character_name} 暂无可用的官方预设。").send(
             target=event, bot=bot
@@ -533,7 +549,8 @@ async def handle_sprite_followup(
         await _picker_choice(bot, event, context, command)
         return
 
-    if command in {"上一页", "下一页"}:
+    page_command = re.fullmatch(PAGE_COMMAND_PATTERN, command)
+    if command in {"上一页", "下一页"} or page_command:
         if context.kind != "picker" or context.picker is None:
             await UniMessage.text("请回复一张选择表进行翻页。 ").send(
                 target=event, bot=bot
@@ -544,10 +561,18 @@ async def handle_sprite_followup(
             if context.global_numbering
             else _choices_for_picker(context.character, context.picker)
         )
-        next_page = context.page + (1 if command == "下一页" else -1)
+        total_pages = max(1, math.ceil(len(all_choices) / PAGE_SIZE))
+        if page_command:
+            next_page = int(next(value for value in page_command.groups() if value is not None)) - 1
+            if not 0 <= next_page < total_pages:
+                await UniMessage.text(f"页码超出范围，请回复 第1页～第{total_pages}页。").send(target=event, bot=bot)
+                return
+        else:
+            next_page = context.page + (1 if command == "下一页" else -1)
         _, bounded, _ = _page(all_choices, next_page)
         if bounded == context.page:
             await UniMessage.text(
+                f"当前已经是第{context.page + 1}页。" if page_command else
                 "已经是最后一页。" if command == "下一页" else "已经是第一页。"
             ).send(target=event, bot=bot)
             return
@@ -572,8 +597,9 @@ async def handle_sprite_followup(
 
     code, stored = base
     recipe = stored.recipe
-    if command in {"头型", "表情", "眼睛", "嘴巴", "手臂", "细节"}:
+    if command in {"预设", "头型", "表情", "眼睛", "嘴巴", "手臂", "细节"}:
         picker_by_command: dict[str, PickerKind] = {
+            "预设": "preset",
             "头型": "head",
             "表情": "expression",
             "眼睛": "eyes",

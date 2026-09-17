@@ -74,6 +74,11 @@ class PresetCatalog:
             for presets in self.data.characters.values()
             for preset in presets
         }
+        self._characters_by_preset = {
+            preset.id: character
+            for character, presets in self.data.characters.items()
+            for preset in presets
+        }
         self._ranked: dict[str, list[OfficialPreset]] = {}
         self._feature_groups: dict[str, dict[str, PresetFeatures]] = {}
         self._arm_choices: dict[str, list[str]] = {}
@@ -87,6 +92,13 @@ class PresetCatalog:
 
     def preset(self, preset_id: str) -> OfficialPreset:
         return self._by_id[preset_id]
+
+    def preset_character(self, preset_id: str) -> str:
+        return self._characters_by_preset[preset_id]
+
+    def picker_presets(self, character: str) -> list[OfficialPreset]:
+        character = character.removeprefix("Creature")
+        return [*self.presets(character), *self.presets("Creature" + character)]
 
     def _rank_presets(self, character: str) -> list[OfficialPreset]:
 

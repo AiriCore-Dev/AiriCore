@@ -1,0 +1,610 @@
+{
+  "character": "CreatureMargo",
+  "canvas": [
+    2894,
+    4147
+  ],
+  "sprites": [
+    {
+      "node": "Part01",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "0-1",
+      "path_id": -6158906657878460828,
+      "blocks": 1285,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "ceb894adf435f61022b0d469713c1df832d953a2c7d278d72f9dda4dc307770a",
+      "rgba_sha256": "b34cf86473bc9ad6a77c2eccbef389fd097d5524f163851e98f0b84d4f92066f"
+    },
+    {
+      "node": "Part02",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "0-2",
+      "path_id": 3463644951720539748,
+      "blocks": 1285,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "0cdce29d4a433ec5e501a496ae2b338753c88f06b8b0a5029c6404176ad821f5",
+      "rgba_sha256": "68b5f1340a171449d58f8607c7564e5fa9e2a4a956024ada920bd135a3a64490"
+    },
+    {
+      "node": "Part03",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "0-3",
+      "path_id": -7584875607025273244,
+      "blocks": 1285,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "e027bc54ce3454b6e2e8e065e4db58fb780a193f99ea35b687942b6510bdc571",
+      "rgba_sha256": "3118a36b6e0d455dd810cc3a7006942518189b3572f59e07bfaab512edf29dbc"
+    },
+    {
+      "node": "Part04",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "0-4",
+      "path_id": -8063743663308687772,
+      "blocks": 1285,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "9215e4240237f7b86121e031a7d81a47a37c968eb1144d2a14e72bce9cff272b",
+      "rgba_sha256": "6c32f3c2fd29d5de34537370795376cf78f5aef59504b4ba497cf843f228d29a"
+    },
+    {
+      "node": "Part05",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "0-5",
+      "path_id": 7016198259112588900,
+      "blocks": 1285,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "07736d49859d07e413b06d096f9d590dc836b74d6584be2f170007d94994f9ba",
+      "rgba_sha256": "d24ad047f9f27c0ec9e8937c4c8a1b1fb0fa37295799299184b64f658221f401"
+    },
+    {
+      "node": "Part06",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "0-6",
+      "path_id": -6361059428397107612,
+      "blocks": 1285,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "893d2ebf3ee0e4f749167d3919b7072fcdc1092aa5fea7ae9d964d9b8dbce840",
+      "rgba_sha256": "340eb68dcaa5307514dd26874f8a7c27bb35b0e0dd354f6078bc6bacaa16c88f"
+    },
+    {
+      "node": "Part07",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "0-7",
+      "path_id": 7757788780782663268,
+      "blocks": 1285,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "6aa44fce7391a11698327e680100768b2627539b02a382bece7b48c73c410e92",
+      "rgba_sha256": "8aed7f3895a4567eccd65df3df0d23991b2f00734cd7789834e88409fdf1f7d1"
+    },
+    {
+      "node": "Part08",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "0-8",
+      "path_id": 9092276088026674788,
+      "blocks": 1285,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "ba1db5a81df712b1fbc3ad21e15151ba2841bb62e6f0b654a3bb51a4002f7fc7",
+      "rgba_sha256": "d844d659ed9918680c306a75ab03a97bfe00ba59c2d4067320176f4d4ac7b51d"
+    },
+    {
+      "node": "Part09",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "0-9",
+      "path_id": 7993391834561361508,
+      "blocks": 1285,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "b305587654a9ee83f4a5d7be2223446ef78af7813e20a81a7f1bfdb9a962d9a0",
+      "rgba_sha256": "a463a5a7deadb92a0577a11bc1b99d43f352881784c90cda05d4ca1c3aee984f"
+    },
+    {
+      "node": "Part10",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "0-10",
+      "path_id": -6580936696251304348,
+      "blocks": 1285,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "c1cc3fe8e90e6765cd58067415731271353b37bb13b63a9aa8f48bd351fbd175",
+      "rgba_sha256": "b79fff63d9ed180197b07631b905844f5a29509eaae701012e67e70a216d9428"
+    },
+    {
+      "node": "Part11",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "1-1",
+      "path_id": 7218112641215149668,
+      "blocks": 986,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "c309cf3ea0094f0a5d336f6072142bd545239b298bf73494750c22f0313859ff",
+      "rgba_sha256": "90ec6653d702f5d380c3f32a89b12bdcd3dbfa7ddd83d718010b097690b31138"
+    },
+    {
+      "node": "Part12",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "1-2",
+      "path_id": -328548243153045916,
+      "blocks": 986,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "9530e9425adc1eb6c118f18214868096349da9dc11fd8617f2c54f72ec7bef97",
+      "rgba_sha256": "0388c5371f613727aff6b9569840b2ab123bf1111daa2cf7602542512c2ffbfb"
+    },
+    {
+      "node": "Part13",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "1-3",
+      "path_id": 1667382843300034148,
+      "blocks": 986,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "55e1e23c4ce75d9173660bec9e38cb0dd116756e286fdc81a2a7a81320017af2",
+      "rgba_sha256": "eeb83bf4498152572cf98b999c5b953959997546cf4685447e1b73897ada0151"
+    },
+    {
+      "node": "Part14",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "1-4",
+      "path_id": 3860448912239474276,
+      "blocks": 986,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "6369107eb0606cc97e59257f90712be4742db44cb4948e0f32a5fc850e576fdc",
+      "rgba_sha256": "2a3719fd363cbd4d574359a88280e0e9736e9733a57fb1151717c8d346e81e89"
+    },
+    {
+      "node": "Part15",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "1-5",
+      "path_id": -8100843731956222364,
+      "blocks": 986,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "da99dc1a47d5e84d8fb25fca703f2e305cbfaeae31f612719cf9306b57b74a85",
+      "rgba_sha256": "d6e7527c9d48267ccfc513477dc11c0204e456e13e149b99c4db5f6a7722429d"
+    },
+    {
+      "node": "Part16",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "1-6",
+      "path_id": 8033568875460540004,
+      "blocks": 986,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "536cdfd20925fc262c08b3654aa8fa02de877802166c3baf890b90203b08f5de",
+      "rgba_sha256": "cc6e32316e2c2918d21593e2a66d04762658ba80c36d2fca9fbf8d7fee5ec8f7"
+    },
+    {
+      "node": "Part17",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "1-7",
+      "path_id": 725333103743383140,
+      "blocks": 986,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "dcd16fd69929f97443691105fc12379317723831516e4392ce842efaff79bee3",
+      "rgba_sha256": "c6eca4875d6fdc3e3cabfe696ca73c0cb569cfc3cbeb158277ddec31edf1e1c3"
+    },
+    {
+      "node": "Part18",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "1-8",
+      "path_id": -1265798099780585884,
+      "blocks": 986,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "b1c81d67407792fcfe17be820a3f73061535030e323563e04b2149fff2096567",
+      "rgba_sha256": "07bfb6fb9cf744655ddc49863c1a2708c90e443f9717d88fe2f46522eb6e56d1"
+    },
+    {
+      "node": "Part19",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "1-9",
+      "path_id": 8826035504203085412,
+      "blocks": 986,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "9c5859690a240c46101fc3587416018d8a6333578db55cb2be77d9e04d483d1d",
+      "rgba_sha256": "6b9ab531d6957a2654297372975d8b4eeb6a65ed56c0381932f6fa1cee1aff97"
+    },
+    {
+      "node": "Part20",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "1-10",
+      "path_id": -384834411680778652,
+      "blocks": 986,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "ecf3b16a86fc80731e8f23b0643287783e1d1d1564e3e0fb86a2d4d825d1272c",
+      "rgba_sha256": "ca9f250c21d4d8a29c2e6238bd7eabd31856e7491e0eccb05aa2e11223b9370c"
+    },
+    {
+      "node": "Part21",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "2-1",
+      "path_id": 5507461794580969060,
+      "blocks": 1176,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "b321469412052d30765b13cb8fafb02a05177fe537a2e6afa01c3a84634ad35f",
+      "rgba_sha256": "cb9f9ba440bd4570ce70c35a344f048ec0bca3ba2d2ae05ec6d5b4ea71f579eb"
+    },
+    {
+      "node": "Part22",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "2-2",
+      "path_id": 5862439758357837412,
+      "blocks": 1176,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "b0fb8a9d74459aa40221606d3ea8c6cd53ef564a506bcdab40780125067b3155",
+      "rgba_sha256": "c0ea3e7170e31d4d976b7e3c75116d691b2c85c5b754b8e1a20f81e7fd8c6fa0"
+    },
+    {
+      "node": "Part23",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "2-3",
+      "path_id": 5690456102199735908,
+      "blocks": 1176,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "b285efb5f710edc04742869fef38bd39fa140e276bf29f5915b062f9e0d7e846",
+      "rgba_sha256": "6f5babde0092051513f8011d64aa2e6e8c1d46256e25b65b2d7bd02ca21d565f"
+    },
+    {
+      "node": "Part24",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "2-4",
+      "path_id": 7171718738105972324,
+      "blocks": 1176,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "e2faeb980dd8a1fb0ade9d42bd97d3cf940286e15c3e04d914eeab5a5170f372",
+      "rgba_sha256": "80ebdb613b11556181bc65476a3c362e9e008bdd2bf588e58c5fa44d7bd953d8"
+    },
+    {
+      "node": "Part25",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "2-5",
+      "path_id": -2967519780895803804,
+      "blocks": 1176,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "5339a78bb3281717315b6c8b8081653689c67201a8ba8d8e0afda317c88b0b4e",
+      "rgba_sha256": "f70a7e47e843e3c69287c88de940e0f4c4add914539db2f15e1d97db2c65b409"
+    },
+    {
+      "node": "Part26",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "2-6",
+      "path_id": -5779501876673202588,
+      "blocks": 1176,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "ecf57e0902d93d95391d2ed1d73e1704400c7c4f15249941c2ec484a2f5b31a0",
+      "rgba_sha256": "d5b56764555448c8684de91e7327afef3f1f18e3cad5617554444f49a2a32fac"
+    },
+    {
+      "node": "Part27",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "2-7",
+      "path_id": 1925852176881137252,
+      "blocks": 1176,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "e0c6809a12fd9fc416a3a445854719fb87a1ff2e95f829318196107000103669",
+      "rgba_sha256": "fde552b35bfd0d33c313af1659524e5863cdb0073eb684ae11749db986222ad0"
+    },
+    {
+      "node": "Part28",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "2-8",
+      "path_id": 8145030775182505572,
+      "blocks": 1176,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "22af032e66643488f1d618934bf5d6903238f3c79eb7b30411fadf61660cb467",
+      "rgba_sha256": "82a1355d6647bbd25378bee5500bdf4cc361ac7b7a4f8a968627485b6100898c"
+    },
+    {
+      "node": "Part29",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "2-9",
+      "path_id": -256885364411943324,
+      "blocks": 1176,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "2577e1ddbafba95fe26f414e3efc119977808bd919c70a3430e6e2d811ce6b1c",
+      "rgba_sha256": "766c3244d76f9724324bbda7f9e14a564229aba30e2d12d9001127636d59fba8"
+    },
+    {
+      "node": "Part30",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "2-10",
+      "path_id": 4411854762983011940,
+      "blocks": 1176,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "dff3e110b9f0fc33ca6b7a5aaef6a83c7c00be92d42fa6f26bf29a0b2cf2a995",
+      "rgba_sha256": "f972585a7a9fb9b3679d670e6268e426d8e0f6a1742c995e881898322219efc0"
+    },
+    {
+      "node": "Part31",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "3-1",
+      "path_id": 1994025083630040676,
+      "blocks": 1141,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "916beb3fee09053c6831ba0569ada17f571c07682865a32f0a51811767196c98",
+      "rgba_sha256": "5281a0f39df1b9972e5408c5e82139707edd2cd6807f07e6428b042c746acfd2"
+    },
+    {
+      "node": "Part32",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "3-2",
+      "path_id": -6416435839436999068,
+      "blocks": 1141,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "94441e76057357bef5e1046d2289fef9274e4eddd71db07da9ca7eb6d4a32ea4",
+      "rgba_sha256": "1b240d51e10bb89bd46badb3bdef54c37aa1a00a8a1ad8db84f437763f29e8a2"
+    },
+    {
+      "node": "Part33",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "3-3",
+      "path_id": -1286370738518444444,
+      "blocks": 1141,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "60ff9a08870262a5d6505355e3a3e05b1522710aac047dd7e7351b5f535dac6a",
+      "rgba_sha256": "6a5d39df01349fec739aa96a2976afb2a25146afd15ce9318351be9edc8ed1a4"
+    },
+    {
+      "node": "Part34",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "3-4",
+      "path_id": -3281380022086617500,
+      "blocks": 1141,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "bd7579dc7f013cb10643ef96eaf88191e6c4f1ffe1f641c51194366972483b3b",
+      "rgba_sha256": "4f2ad9321dde78763acc9ca36ae386ad79ab9242deae56c3d4e33a85944e4e4f"
+    },
+    {
+      "node": "Part35",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "3-5",
+      "path_id": 9007646429476533860,
+      "blocks": 1141,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "a9f0508fe630d3f29309daa1936c5bbb3b7e15ccabc5c8c1494bd649f919947f",
+      "rgba_sha256": "609e50fe14fe61e27bfd5e7cf60abefc09105735d6378baaeabf4dd8154ee082"
+    },
+    {
+      "node": "Part36",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "3-6",
+      "path_id": -1608909377686751644,
+      "blocks": 1141,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "1f4f24d8990ca92f4f42cac62219a32a11d99cc9f61a7e4ca3de91472292c9d8",
+      "rgba_sha256": "63d5f3f3cf72e972552aad19af8d72e838b8923d8b1efe3dbd07cb946c41dbc9"
+    },
+    {
+      "node": "Part37",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "3-7",
+      "path_id": -2196190347498834332,
+      "blocks": 1141,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "1d502e1404b26a2449def540d51261b502c1afaf446fcc8e6460ca0912844ca0",
+      "rgba_sha256": "999337b0a9ff17346c9b2a2e49255338ca88527c4c44e1de32a5b432af6d7d21"
+    },
+    {
+      "node": "Part38",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "3-8",
+      "path_id": 5210609380381931108,
+      "blocks": 1141,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "2c473842765d262fc217c2540790d5704df33ed506e1b7d517a0c59e8dd75710",
+      "rgba_sha256": "1e77882a52588bd13e567e1e960b75738b8d179947ae60772e233edbe41b9cca"
+    },
+    {
+      "node": "Part39",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "3-9",
+      "path_id": 6954234623624722020,
+      "blocks": 1141,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "63302214e63b6786482013776f71a9c1c0e95395a99e1dc051d6084f7e78f672",
+      "rgba_sha256": "eefac47eac26e3e8a603b3a2d8104ff286dd90a89978b5d61f78abdbb29fde29"
+    },
+    {
+      "node": "Part40",
+      "bundle": "naninovel-characters_assets_naninovel/characters/creaturemargo.bundle",
+      "sha256": "2510427340af739aa3f466de78592738ea288383b5ac8074f30fc67004365a48",
+      "asset": "Assets/#WitchTrials/Textures/Naninovel/Characters/DicedSpriteAtlases/CreatureMargo.asset",
+      "sprite": "3-10",
+      "path_id": -5208188035773516188,
+      "blocks": 1141,
+      "size": [
+        2894,
+        4147
+      ],
+      "png_sha256": "29efee8c14032d442eb99ff9f8bb840742a3d0bfd60e22ab443fb3e89a5f3e7b",
+      "rgba_sha256": "3a6200cf71599d705110e1f4516d9d9d189e3f349515fb376f35a364d1cc1b25"
+    }
+  ],
+  "body_png_sha256": "69df85fc929c0e13139e3b880cb253584db98318ec8eb85b6bab354165b96840"
+}
