@@ -66,14 +66,13 @@ EMOJI_RANDOM_PROB = 1 / 10
 FINAL_EMOJI_PROB = 1 / 5
 EMOJI_MOOD_TOLERANCE = 0.35
 EMOJI_MOOD_SOFTNESS = 0.25
-EMOJI_REPLY_EMOTIONS = frozenset({
-    "positive", "negative", "tired", "sad", "angry", "excited", "embarrassed"
-})
 EMOJI_REPLY_MOODS = {
     "positive": 0.6,
+    "neutral": 0.0,
     "negative": -0.5,
     "tired": -0.4,
     "sad": -0.7,
+    "anxious": -0.5,
     "angry": -0.8,
     "excited": 0.8,
     "embarrassed": -0.2,
@@ -170,10 +169,6 @@ def _reply_repeats_recent_text(
         if reply_grams and len(reply_grams & source_grams) / len(reply_grams) >= 0.9:
             return True
     return False
-
-
-def _emoji_allowed_for_reply(reply_emotion: Optional[str]) -> bool:
-    return reply_emotion in EMOJI_REPLY_EMOTIONS
 
 
 def _split_reply_segments(msg_content: str) -> List[str]:
@@ -760,10 +755,7 @@ async def send_llm_reply(msg_content: str, reply_to_msg_id: Optional[str] = None
     if not msg_segments:
         return
 
-    send_emoji = (
-        _emoji_allowed_for_reply(reply_emotion)
-        and random.random() < max(EMOJI_RANDOM_PROB, FINAL_EMOJI_PROB) * 0.6
-    )
+    send_emoji = random.random() < max(EMOJI_RANDOM_PROB, FINAL_EMOJI_PROB) * 0.6
     send_lead = send_emoji and random.random() < 0.35
     send_tail = send_emoji and not send_lead
     reply_mood = EMOJI_REPLY_MOODS.get(reply_emotion or "")
