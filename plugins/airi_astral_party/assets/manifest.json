@@ -3486,6 +3486,1661 @@
       "asset": "VAccountBackground_71421",
       "bundle": "ecc4807d5b9f1e3d2b22546366dc4782",
       "sha256": "4e2ea1b8af5108b0660ac7c1921813a4c23901fc039b12069c147e30f3633485"
+    },
+    "settlement/BattleSettlement/11p413x.png": {
+      "asset": "BattleSettlement/截图 底",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "8187040907d36d9e13edbe761dea6f8ae4f75c53bba619db78a8dad4817073e8"
+    },
+    "settlement/BattleSettlement/11p413y.png": {
+      "asset": "BattleSettlement/截图 相机",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "14f19838deb618e21855bfd3128f763b646bfc73b1e6b718ffd91c9794fc80b9"
+    },
+    "settlement/BattleSettlement/ch0q13z.png": {
+      "asset": "BattleSettlement/1",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "a068ef4ca931350bbd7692b032d86b62fa29b1fc43950b8eabfb534f3ca2379a"
+    },
+    "settlement/BattleSettlement/ch0q140.png": {
+      "asset": "BattleSettlement/2",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "5a2f00bf1d378f43daa8abb56f5a43081b4188765bc187b7dff2991f372a9bcb"
+    },
+    "settlement/BattleSettlement/fow93q.png": {
+      "asset": "BattleSettlement/右侧边框效果",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "3838d9247de97d7258b5f9154aa61db44c132ece77fa44d89afdf9aa3039af44"
+    },
+    "settlement/BattleSettlement/gsxh144.png": {
+      "asset": "BattleSettlement/確定按鈕（選人界面）-2",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "41e9431e6ac91d646c3a0c55a6c79bd143a47c0e7b12b98907d17b110d0beff1"
+    },
+    "settlement/BattleSettlement/gsxh145.png": {
+      "asset": "BattleSettlement/確定按鈕（選人界面）-1",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "778b7337290c4ae66c85497f0d367e2defee91041bf9da2fc60db16b56acf2a6"
+    },
+    "settlement/BattleSettlement/l5pc3w.png": {
+      "asset": "BattleSettlement/成就展开",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "ca75d4c0af9a702103284a6a9434de37e61409d6284746a066c16f465904e030"
+    },
+    "settlement/BattleSettlement/qees15.png": {
+      "asset": "BattleSettlement/win",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "84143130cbd0b23605901369ed788a06159338fe4c1ba379bf3779b0ed41b154"
+    },
+    "settlement/BattleSettlement/qees1h.png": {
+      "asset": "BattleSettlement/victory3",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "86e5aafde7c8c0e9146855ad9ddfd953c62ad2834235f5888f8b828048f8e0b1"
+    },
+    "settlement/BattleSettlement/qees1j.png": {
+      "asset": "BattleSettlement/黑",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "62a9b77df43b9f3dd9e2c1e49b0408c6560c8ce90ccd29c71785e1baed36ba9d"
+    },
+    "settlement/BattleSettlement/qees1l.png": {
+      "asset": "BattleSettlement/1C",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "0ed64c09418f984806662d7be4b9293bd99d616216bd8ed89d3f2a98c9de8a8e"
+    },
+    "settlement/BattleSettlement/qees1m.png": {
+      "asset": "BattleSettlement/1I",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "aaf04bdde5506ca84b9ba8311a0ae8ab8a5781ba1d993fcc4a47b4f476c10da7"
+    },
+    "settlement/BattleSettlement/qees1n.png": {
+      "asset": "BattleSettlement/1O",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "2a5dc5489ba188b7bff5bcc932f49f8e4f63479e5ffb6e169278f85b14ad8a82"
+    },
+    "settlement/BattleSettlement/qees1o.png": {
+      "asset": "BattleSettlement/1R",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "056db0b904f36caca2a89bef46f2a60ac12cebefe4c66c7df703706bcc209478"
+    },
+    "settlement/BattleSettlement/qees1p.png": {
+      "asset": "BattleSettlement/1T",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "4ea765e642d73f1bd3d5e49dac84b1c128ab958585126f8d97b6135c899a328e"
+    },
+    "settlement/BattleSettlement/qees1q.png": {
+      "asset": "BattleSettlement/1V",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "681a44845a610d312e89c0ab55df22ee4a252da628cee30b74575c51faa89b61"
+    },
+    "settlement/BattleSettlement/qees1r.png": {
+      "asset": "BattleSettlement/1Y",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "d0652a6af4fbeadcc3a21b42d9272b8f0420f3169a821aa067a857d9fe07971c"
+    },
+    "settlement/BattleSettlement/qees1s.png": {
+      "asset": "BattleSettlement/2C",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "38632ecb4877a15d70b832bfe3c4bdb15c72063d75007a46a521b059645e0ff7"
+    },
+    "settlement/BattleSettlement/qees1t.png": {
+      "asset": "BattleSettlement/2I",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "41c2e1adde8965f1883b1dc99e1e9f6df39171ac0459c5fb2c52a2f402e523d6"
+    },
+    "settlement/BattleSettlement/qees1u.png": {
+      "asset": "BattleSettlement/2O",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "163eee093ba61e10ef9523e64b73983fb096ed19f5927cb701aba58535229b54"
+    },
+    "settlement/BattleSettlement/qees1v.png": {
+      "asset": "BattleSettlement/2R",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "0ef448cf997b33e873f698380940e24f4a693104c7e847228a4e70677ca5f048"
+    },
+    "settlement/BattleSettlement/qees1w.png": {
+      "asset": "BattleSettlement/2T",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "393872b48db2b0cdb64c742248db180aa743fcf4bbd376da2a23fd70a3901280"
+    },
+    "settlement/BattleSettlement/qees1x.png": {
+      "asset": "BattleSettlement/2V",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "f21f4ebba21d9a7637aacdec339e36ffa485caf9a5769f207f33e548ef5030f6"
+    },
+    "settlement/BattleSettlement/qees1y.png": {
+      "asset": "BattleSettlement/2Y",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "2b281bffb2caf1f83d7bbafa3ad835d249d005df1aa27689d5a10dc094f2a039"
+    },
+    "settlement/BattleSettlement/qees27.png": {
+      "asset": "BattleSettlement/shop BG",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "7c08b91bbf6cb2638453dbdc941d406f6bfca211e992fa14eb1e4412762f6f28"
+    },
+    "settlement/BattleSettlement/qees2a.png": {
+      "asset": "BattleSettlement/P",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "704a8e95e6ba5219fd5f9b6713c55917dba93e9b17959bf4c29680a388ecdccb"
+    },
+    "settlement/BattleSettlement/qees2f.png": {
+      "asset": "BattleSettlement/4th",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "3b39bd0c648ad2aee5fad03234463f97f0fdf62ad213a4770cc5250823250407"
+    },
+    "settlement/BattleSettlement/qees2g.png": {
+      "asset": "BattleSettlement/1st",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "0a75dad006b394940cbd4cdc57803a37151e3da833f7b5c26e5e2a94c8eb096a"
+    },
+    "settlement/BattleSettlement/qees2h.png": {
+      "asset": "BattleSettlement/2nd",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "eeee4749187e3511baf509247d33035f165f52fd078be3fadcdeebec93fdd1f4"
+    },
+    "settlement/BattleSettlement/qees2i.png": {
+      "asset": "BattleSettlement/3rd",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "2e500ba272dc1ab60e2422b13d5db666401a9d87eeac549527dc3e9e99fc55da"
+    },
+    "settlement/BattleSettlement/qees2y.png": {
+      "asset": "BattleSettlement/条纹红(1)",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "4689701abae204f3f78674989a615efe57f71ebf21ea00db6d21e2c146ef8dc0"
+    },
+    "settlement/BattleSettlement/qees3.png": {
+      "asset": "BattleSettlement/排名 筹码框",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "29d7ee9efa0b651999138220287695a860ae3bbb13dacb43928470e8e6434d08"
+    },
+    "settlement/BattleSettlement/qees4.png": {
+      "asset": "BattleSettlement/排名筹码框阴影",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "10f60c26c85f4784e66e35d3957a6434c196fcfdb090429d57a035c41b6a1617"
+    },
+    "settlement/BattleSettlement/qees5.png": {
+      "asset": "BattleSettlement/星选",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "3a915d860cbbde217ae07eeb789ebc792cbd08d292f2f055cd51bd8b3e9d1afc"
+    },
+    "settlement/BattleSettlement/qees6.png": {
+      "asset": "BattleSettlement/粉色条",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "dcf441af251487ee879198a99aa42f150c0e60da9a3a583b7ff06cdcb19c7564"
+    },
+    "settlement/BattleSettlement/qees7.png": {
+      "asset": "BattleSettlement/背景条纹",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "320fc2b5f47c8663c697f244af5afd452b314177a3a1f27fc714a1ac2b97b4e6"
+    },
+    "settlement/BattleSettlement/qees8.png": {
+      "asset": "BattleSettlement/背景条纹、背景白阴影",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "3f95a4925f2da031d6dba326bcaa1bfe5c5d116e0f0ae8b3ac723121d085a964"
+    },
+    "settlement/BattleSettlement/qees9.png": {
+      "asset": "BattleSettlement/背景白",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "aa8cbcdc24f34e79c5daf377a50b8f24c3be7a319ce2771ad8f8c36f0108a3c0"
+    },
+    "settlement/BattleSettlement/qeesa.png": {
+      "asset": "BattleSettlement/转账",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "4290ef50ff68152885246b787b62ab3a7343ecae67135348e3f9e4ee4296a30a"
+    },
+    "settlement/BattleSettlement/qeesb.png": {
+      "asset": "BattleSettlement/金币格",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "05cc8e32b041fff2351dea9340a6874941ed20b4084a2dea5b9338661284619d"
+    },
+    "settlement/BattleSettlement/qeese.png": {
+      "asset": "BattleSettlement/地图条 阴影",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "6314b39ffe349b6bf12628e42f75819e68fa6f3c7d35babbc8fadd108b88595c"
+    },
+    "settlement/BattleSettlement/qeesg.png": {
+      "asset": "BattleSettlement/渐变白",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "b327fd98a7fe24ade7e86011c99751d095cb0d71bac3dfb8d3ed73020953dbea"
+    },
+    "settlement/BattleSettlement/qeesi.png": {
+      "asset": "BattleSettlement/完成",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "2c8ef45669fb488887752fff3b05ceec98fd3fb911f5b7e600f1c048ae649c2d"
+    },
+    "settlement/BattleSettlement/qeesj.png": {
+      "asset": "BattleSettlement/添加好友",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "db3037ae161254abc46e2ab3a1a2afa2d0de571b5c1a1b8a222c8e2c522fd1f2"
+    },
+    "settlement/BattleSettlement/qeesk.png": {
+      "asset": "BattleSettlement/点赞",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "98129dc157a0d438d2073d0f832a7608855951cd9664d840a601eb48559d89ed"
+    },
+    "settlement/BattleSettlement/qeesl.png": {
+      "asset": "BattleSettlement/选中",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "dbcb71627aa317706d8bfed967eb22344bb69742478014c8e45577a248d1796a"
+    },
+    "settlement/BattleSettlement/qeesm.png": {
+      "asset": "BattleSettlement/阴影",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "074a7db3b7d081205806f7e42af6ba176d146139e55bce34448a36c533c9213d"
+    },
+    "settlement/BattleSettlement/qeeso.png": {
+      "asset": "BattleSettlement/影子",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "9abd075c57ed5e9b59a69e82b57c5e546915118488cb335e1f522823479d8d6d"
+    },
+    "settlement/BattleSettlement/qeesp.png": {
+      "asset": "BattleSettlement/白",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "4e99ad25e5f569c137d2c69fb9cc5ed268e8b48d48295dd85ad92904d3a69ab8"
+    },
+    "settlement/BattleSettlement/qeesq.png": {
+      "asset": "BattleSettlement/斜杠",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "f15d2617c87394272f0f4f1a2092c89bc0ab283eb7a64f8490358b10e968b391"
+    },
+    "settlement/BattleSettlement/qeesr.png": {
+      "asset": "BattleSettlement/进度条",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "a8606538a8549a213565201ffc70d0aa9434e152197910d8cfc984cc05c2f556"
+    },
+    "settlement/BattleSettlement/qeest.png": {
+      "asset": "BattleSettlement/victory4",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "44e4e0d4461acedae46ab4c7d3b6bab48efb504a6c0106685bc4830a21477f94"
+    },
+    "settlement/BattleSettlement/vbp23t.png": {
+      "asset": "BattleSettlement/完成(1)",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "0fe8c2dbd5e14190f888d64e28906a40d9ad866281fabbfbf964012006e82a3a"
+    },
+    "settlement/BattleSettlement/w0q93f.png": {
+      "asset": "BattleSettlement/已添加好友",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "ecd4a9391d47ef217fdc7b31556ce6584a7885b0f7de536a996bb32adf93be3a"
+    },
+    "settlement/BattleSettlement/w0q93g.png": {
+      "asset": "BattleSettlement/成就展开",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "d299dcbea2b6c77b0860347501c0be8e9777ad6ffffae84443e61aae7025f1c7"
+    },
+    "settlement/BattleSettlement/dqxf3p_0.png": {
+      "asset": "BattleSettlement/dqxf3p_0",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "a00bf43d84f42ddf0d73f9f74b7170d6a4ec8fb8ccc27cb83acef7f9c72b5a1a"
+    },
+    "settlement/BattleSettlement/dqxf3p_1.png": {
+      "asset": "BattleSettlement/dqxf3p_1",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "bca376727d4d8b5a93d565e8b954df24c4747e9707a9d6220070086c8b39adc0"
+    },
+    "settlement/BattleSettlement/dqxf3p_2.png": {
+      "asset": "BattleSettlement/dqxf3p_2",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "29f9b4b45e5c0abf18b0544834e59f194b5e79c254266eee9157075f94025d6f"
+    },
+    "settlement/BattleSettlement/dqxf3p_3.png": {
+      "asset": "BattleSettlement/dqxf3p_3",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "91e2f1c9833735e66bf3d6423fe9876248b51cb3c4989f22f696224fcc37ef3b"
+    },
+    "settlement/BattleSettlement/dqxf3p_11.png": {
+      "asset": "BattleSettlement/dqxf3p_11",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "0bd9fb4a7f5ae4c64e93f48f01b6ea9c890d161c297150f451f425ff541f01b4"
+    },
+    "settlement/BattleSettlement/dqxf3p_4.png": {
+      "asset": "BattleSettlement/dqxf3p_4",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "e9544dff498860b1bcef88f5f8f1ec8c4935158360497aa9d60ff3f736c4e353"
+    },
+    "settlement/BattleSettlement/dqxf3p_5.png": {
+      "asset": "BattleSettlement/dqxf3p_5",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "eaa7d36ab5ec3636f8286c48cd08ab16939c3b60676a3ab4b6b808ee4929a43e"
+    },
+    "settlement/BattleSettlement/dqxf3p_6.png": {
+      "asset": "BattleSettlement/dqxf3p_6",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "51fdbf91feabcd9a3c51978856cc34686bde3a10973cc41c466cb37828b7bb67"
+    },
+    "settlement/BattleSettlement/dqxf3p_7.png": {
+      "asset": "BattleSettlement/dqxf3p_7",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "8d0029b075f6749de49faa15bb00d3f6c46517922aa4b4fc1d5cdbc682e9762c"
+    },
+    "settlement/BattleSettlement/dqxf3p_8.png": {
+      "asset": "BattleSettlement/dqxf3p_8",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "85077e1adea3ecdb4c23889ac1e3094f5b4b88933bc6eb8e182c0450394c8542"
+    },
+    "settlement/BattleSettlement/dqxf3p_9.png": {
+      "asset": "BattleSettlement/dqxf3p_9",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "430a3fec9ee02f92f01e5e9c620e80a3e0fdbdbd9e9ee2e59552379d828f6bfa"
+    },
+    "settlement/BattleSettlement/dqxf3p_10.png": {
+      "asset": "BattleSettlement/dqxf3p_10",
+      "bundle": "e48314266236c2579f702e7399c2c666.bundle",
+      "sha256": "d521f31d43a754de26e3f90c040a0c28747903f9716fd2f111320ee2cbaf2d07"
+    },
+    "settlement/BattleSettlement.json": {
+      "asset": "BattleSettlement_fui",
+      "bundle": "fe560305e85f9bde53f4513386df8538",
+      "sha256": "bc3ad717be5936ac0b3d186e6e27e5adfa742b9cc7ee3b31f2bfef9e28dfa4bd"
+    },
+    "settlement/Common/imo383.png": {
+      "asset": "Common/星星（橙）",
+      "bundle": "95cf4e745bb793f4fa1179e97c638d55",
+      "sha256": "85e04ed8d86d4d5ecbf824729c5c3ca985ffec2aa4321fe619b94c11d887777f"
+    },
+    "settlement/Common/imo385.png": {
+      "asset": "Common/星星（蓝）",
+      "bundle": "95cf4e745bb793f4fa1179e97c638d55",
+      "sha256": "ba57d9e2fc13387e4db83e9fdcc4fd09ecc125a384d6887a4ac7d595e1752a1f"
+    },
+    "settlement/Common/imo387.png": {
+      "asset": "Common/星星（未持有）",
+      "bundle": "95cf4e745bb793f4fa1179e97c638d55",
+      "sha256": "8479f98ee8e983e864c16e430e570b6de677d69ef7636d71c5c55d6856580cde"
+    },
+    "settlement/Common/imo384.png": {
+      "asset": "Common/星星（红）",
+      "bundle": "95cf4e745bb793f4fa1179e97c638d55",
+      "sha256": "429a5a738ba378cd8da5cfd6bb8de5a872218c1bac8f0731100ad89c89386c2f"
+    },
+    "settlement/Common/imo386.png": {
+      "asset": "Common/星星（绿）",
+      "bundle": "95cf4e745bb793f4fa1179e97c638d55",
+      "sha256": "381fc9a6bd0a2aec2b85372515e50be273a69db80d7465d61a11e63e6ef0cd4e"
+    },
+    "settlement/Common/mmmw3x.png": {
+      "asset": "Common/星币",
+      "bundle": "95cf4e745bb793f4fa1179e97c638d55",
+      "sha256": "f0fe0cb6798f382113fb44ef818c1e58968a6a7a5cd89a92d4ab7031f243a838"
+    },
+    "settlement/Common.json": {
+      "asset": "Common_fui",
+      "bundle": "e5f62bbe7ae2c8dd92751e16bf61f578",
+      "sha256": "b4cd41e853c1945f7d490805ab0d241e1d91e218cf8e289e9fdeb9aa2cfaa692"
+    },
+    "settlement/characters/UT_Hero_Card2_101.webp": {
+      "asset": "UT_Hero_Card2_101",
+      "bundle": "d177539a88dc326dc9cf274c1b0f4cea.bundle",
+      "sha256": "28c083371c72996eca8947f50ed4f56976f99034ebedfd4dd9b8d71a2deeaa1e"
+    },
+    "settlement/characters/UT_Hero_Card2_102.webp": {
+      "asset": "UT_Hero_Card2_102",
+      "bundle": "662d47cf51aa1c37e205747b5df1fba1.bundle",
+      "sha256": "b76141de6c88cf605196fea06c12b547d5e2b2a3cf795c168f15fe30d7ce90b3"
+    },
+    "settlement/characters/UT_Hero_Card2_103.webp": {
+      "asset": "UT_Hero_Card2_103",
+      "bundle": "acb13e837d0e2d0bb4037de3060d6e6a.bundle",
+      "sha256": "85a5b6955c47495b945fbb9c6898967749e7e152d2de3c1bd8a524a9a2640a37"
+    },
+    "settlement/characters/UT_Hero_Card2_104.webp": {
+      "asset": "UT_Hero_Card2_104",
+      "bundle": "35cb88817428b817c6c10612bd4cae1a.bundle",
+      "sha256": "6a88cf425ff44aa516329c3ad79bf30836ef6a59f8837f6c6f4193fe361aaaa1"
+    },
+    "settlement/characters/UT_Hero_Card2_105.webp": {
+      "asset": "UT_Hero_Card2_105",
+      "bundle": "894fca137c3e220da3bc2c8fdcdf57b4.bundle",
+      "sha256": "b33381ecb353071ed78799981eb30a4dc456be7dc51b38555378df4640bcaeac"
+    },
+    "settlement/characters/UT_Hero_Card2_106.webp": {
+      "asset": "UT_Hero_Card2_106",
+      "bundle": "a1cd11e2d69efb7cb5d796f461446604.bundle",
+      "sha256": "c79c23e80ddf095bbe0ebf4d71f18f850d2261ca1b4a9b07a53197ae038060be"
+    },
+    "settlement/characters/UT_Hero_Card2_107.webp": {
+      "asset": "UT_Hero_Card2_107",
+      "bundle": "52d78a23ecece446df946676545178f2.bundle",
+      "sha256": "73605b1cef27323dd809152ec6771f0b8ac7a6ffcb9c1e348cb36787bf0ea084"
+    },
+    "settlement/characters/UT_Hero_Card2_108.webp": {
+      "asset": "UT_Hero_Card2_108",
+      "bundle": "cda5e5cc4840b0bff3b1de69ad82dda2",
+      "sha256": "cb8e19460e214b6e553ea48ddb6db3fc773970a8be5c30a1cfd54f9d3b439561"
+    },
+    "settlement/characters/UT_Hero_Card2_109.webp": {
+      "asset": "UT_Hero_Card2_109",
+      "bundle": "795ade09cca53d8ff806fbf9282c0801.bundle",
+      "sha256": "b18a646d1bebc8407c7afe9fecb3f7222228c45bea9bd0cadfd30b7ac8627476"
+    },
+    "settlement/characters/UT_Hero_Card2_110.webp": {
+      "asset": "UT_Hero_Card2_110",
+      "bundle": "b74c0fb1e94f628ccf535d3f5b6a3cdc.bundle",
+      "sha256": "7b7534e0de3888fcdbdeee0289ec9603ba7a9620a492b191dc1980c06d030ae4"
+    },
+    "settlement/characters/UT_Hero_Card2_111.webp": {
+      "asset": "UT_Hero_Card2_111",
+      "bundle": "ba451071af6231938b35736481579aa6.bundle",
+      "sha256": "f1dcf94f1a8b670a99b6f1bf9161b883d59358d75c042f64b0137da72e611155"
+    },
+    "settlement/characters/UT_Hero_Card2_112.webp": {
+      "asset": "UT_Hero_Card2_112",
+      "bundle": "9e25fadcb3afe42ae4fae575d0aecf6e.bundle",
+      "sha256": "e62aa72f6e7719a5e4fb23534adaabbd07dfdf2ce09e93cce39728f4f1bc9270"
+    },
+    "settlement/characters/UT_Hero_Card2_113.webp": {
+      "asset": "UT_Hero_Card2_113",
+      "bundle": "628daf8ee77df277e0b24f44b7c5983d",
+      "sha256": "7e032f31569bd9409088842e46f590551e99022c84ce6f6fac211dead08423eb"
+    },
+    "settlement/characters/UT_Hero_Card2_114.webp": {
+      "asset": "UT_Hero_Card2_114",
+      "bundle": "d817e6623f7c66d4269fb7e871120c3d",
+      "sha256": "dd1377cba27754c154ad1396620f388cf5e1864caf662541dccbe8729c27031e"
+    },
+    "settlement/characters/UT_Hero_Card2_115.webp": {
+      "asset": "UT_Hero_Card2_115",
+      "bundle": "2208d817e67a70d828cf23d1efa1df39.bundle",
+      "sha256": "84795c49f4341ea6b9b544bfd09c60f2536c2fe471d22a8ea7f9cfa17a3a7a83"
+    },
+    "settlement/characters/UT_Hero_Card2_116.webp": {
+      "asset": "UT_Hero_Card2_116",
+      "bundle": "d7c5b6c8d771b94de9a1a3d3fd8162d1.bundle",
+      "sha256": "b347e9cecfbd0529724816b9db8d11a45db85729b6b974d204110e90ef624c5a"
+    },
+    "settlement/characters/UT_Hero_Card2_117.webp": {
+      "asset": "UT_Hero_Card2_117",
+      "bundle": "3ffc602e58c70ee442abc2e1dfe2a17a.bundle",
+      "sha256": "e70da001eb0477ac9cf25a772d38927a881470edd980100c8f94bcb32e1d9bff"
+    },
+    "settlement/characters/UT_Hero_Card2_118.webp": {
+      "asset": "UT_Hero_Card2_118",
+      "bundle": "a9929394d505d266d23b26ce3a127676.bundle",
+      "sha256": "82bd81667ff9afd1ba82260c081d96ae90929451f53daa7b652dcbf7fc7fc985"
+    },
+    "settlement/characters/UT_Hero_Card2_119.webp": {
+      "asset": "UT_Hero_Card2_119",
+      "bundle": "e32ddbfb2b3f3e4600daf52bbee83b5d.bundle",
+      "sha256": "325c47a60cb93c5f136cfa8185fb2ce846ae36a23c7f0ceead93d00df42bcd1b"
+    },
+    "settlement/characters/UT_Hero_Card2_120.webp": {
+      "asset": "UT_Hero_Card2_120",
+      "bundle": "af2af1d24067eb8b639fba4d7911efd8",
+      "sha256": "5db127a3f80f6e1f42b9bbd3cbe58ee50b130878530a2412cbc498486f48e228"
+    },
+    "settlement/characters/UT_Hero_Card2_121.webp": {
+      "asset": "UT_Hero_Card2_121",
+      "bundle": "f5ce00b9aad63e040a28d5b144c279f1.bundle",
+      "sha256": "49089a65506e6d5dec136fb2f12388a40b958d0539d76777f5501c8fd9922167"
+    },
+    "settlement/characters/UT_Hero_Card2_122.webp": {
+      "asset": "UT_Hero_Card2_122",
+      "bundle": "f88848f15c20c5f908314b584fb9910a.bundle",
+      "sha256": "bf2e01e1d7abe3e24b4c851b6d487c8d4ce24afc07377c4506559f9ab3ef42bf"
+    },
+    "settlement/characters/UT_Hero_Card2_123.webp": {
+      "asset": "UT_Hero_Card2_123",
+      "bundle": "11acafe861ff5c5048d24556a15747ee",
+      "sha256": "638e3dbc22a2ac146e56892f127850119c1a96421a8af033074167a52ce7b84a"
+    },
+    "settlement/characters/UT_Hero_Card2_124.webp": {
+      "asset": "UT_Hero_Card2_124",
+      "bundle": "feb8105f49b9cbba3f9492dc5d784768.bundle",
+      "sha256": "65f1aa25c1d31e8f953e8ca7fe066b5d0f1f874f5fa0afe19d690f1c3adc88ae"
+    },
+    "settlement/characters/UT_Hero_Card2_125.webp": {
+      "asset": "UT_Hero_Card2_125",
+      "bundle": "22714c74e711bbc0486c31f0b4436f00.bundle",
+      "sha256": "e5f1496d2ba99b9ace01125085046a43db05ec5c4630c9a8b4c7b8946e96645c"
+    },
+    "settlement/characters/UT_Hero_Card2_126.webp": {
+      "asset": "UT_Hero_Card2_126",
+      "bundle": "c4ed0c2d79362252f516ae37e1465fb6.bundle",
+      "sha256": "ba0b0cd119a636acc3eb390ff1620d57274ecd97cefde41b07b7f668ffa300dc"
+    },
+    "settlement/characters/UT_Hero_Card2_127.webp": {
+      "asset": "UT_Hero_Card2_127",
+      "bundle": "903afa238e06f2bed0908a3c8b4c3fd4",
+      "sha256": "61211003a546a46682f4d82df014d8b0a7e84baaeca5e4fda008ee29a93bd069"
+    },
+    "settlement/characters/UT_Hero_Card2_128.webp": {
+      "asset": "UT_Hero_Card2_128",
+      "bundle": "d78defd5860deaea4c4e2f9026b7ae51.bundle",
+      "sha256": "a9d6b4170087669576fe3a6f635c70f42cadbf13f45811267c4b5d9356561282"
+    },
+    "settlement/characters/UT_Hero_Card2_129.webp": {
+      "asset": "UT_Hero_Card2_129",
+      "bundle": "d9eebe90aade8719d4ad248192d1cf2c",
+      "sha256": "9db87db3ea696ee26bd3cf2f8863f28b59921e850a71fd6bdf5d62af20b19a9a"
+    },
+    "settlement/characters/UT_Hero_Card2_301.webp": {
+      "asset": "UT_Hero_Card2_301",
+      "bundle": "4aabc3e90d68762e8111c8c6aa6dce2a.bundle",
+      "sha256": "71fd617c8d234302379dd11fa678f6185044caa43c94d009b8ce706c07705377"
+    },
+    "settlement/characters/UT_Hero_Card2_302.webp": {
+      "asset": "UT_Hero_Card2_302",
+      "bundle": "5ea86b11af29a910d9a8cd1038d82ddb.bundle",
+      "sha256": "1a6cefe9b1c9e8a734c0547f79eafcdb3af0bc75680065439635017b83d9d8a7"
+    },
+    "settlement/characters/UT_Hero_Card2_303.webp": {
+      "asset": "UT_Hero_Card2_303",
+      "bundle": "995fc38444cbff91ff5b3a899d72be13.bundle",
+      "sha256": "361d02ebcaec8f6ae5bc59bc5c77d525952d724d9a7bd8eaecfda59804ad3a93"
+    },
+    "settlement/characters/UT_Hero_Card2_304.webp": {
+      "asset": "UT_Hero_Card2_304",
+      "bundle": "21a119769809cc33968138810bc666bf.bundle",
+      "sha256": "ac6202dd0c8d6728eac4b1b20538c7650fec13fb853a923521a4a23400e7f22c"
+    },
+    "settlement/characters/UT_Hero_Card2_305.webp": {
+      "asset": "UT_Hero_Card2_305",
+      "bundle": "1f4d6438c4b74267df8325c149561781",
+      "sha256": "1d76421db32bb9846a1dc938dbe3cff57e73399f5061e043af1c790ca385a141"
+    },
+    "settlement/characters/UT_Hero_Card2_306.webp": {
+      "asset": "UT_Hero_Card2_306",
+      "bundle": "04a8b84e38b4067c402ef3d32b7bd28c",
+      "sha256": "da8870e4dce7a12a24d9dd677afe30638bea61b097e00e620558c8182e6e17da"
+    },
+    "settlement/characters/UT_Hero_Card2_1061.webp": {
+      "asset": "UT_Hero_Card2_1061",
+      "bundle": "b7e3899864e7cc15033ed4fab499ce67.bundle",
+      "sha256": "97d859d77bb81c2fc236185c42d9a61d280d67eb067e009783d065189bfa18ed"
+    },
+    "settlement/characters.json": {
+      "asset": "Skin/CharacterReady",
+      "bundle": "01d0016714d048a0469ef498541d6c7a",
+      "sha256": "c559ecabe9eea8950a8731b6268e1d48f6f68183440af7f69fdcee4704c795da"
+    },
+    "settlement/Common/9wy8bt.png": {
+      "asset": "Common/蓝-未选择",
+      "bundle": "95cf4e745bb793f4fa1179e97c638d55",
+      "sha256": "b423d106384ecb8b83b7eeae1301650e614cdc546f15465210758a400a3fc36f"
+    },
+    "settlement/Common/9wy8bu.png": {
+      "asset": "Common/紫-未选择",
+      "bundle": "95cf4e745bb793f4fa1179e97c638d55",
+      "sha256": "a49123025e6387e860f9fd1c65bff470c24aa5a30f6ea7f733efc3a899556e58"
+    },
+    "settlement/Common/9wy8bv.png": {
+      "asset": "Common/黄-未选择",
+      "bundle": "95cf4e745bb793f4fa1179e97c638d55",
+      "sha256": "fe7046f50c9317d05b58d3d6761eb6ae69842be012321ad39d8d3a0080f65947"
+    },
+    "settlement/Common/9wy8bx.png": {
+      "asset": "Common/medal_bg",
+      "bundle": "95cf4e745bb793f4fa1179e97c638d55",
+      "sha256": "5a2cef96b9a7ff608f5022caed1e8947f0324688cc259da18ba21f4a7e3d06a8"
+    },
+    "settlement/Common_Internal.json": {
+      "asset": "Common_Internal_fui",
+      "bundle": "8bb5ab74d40d9378e89c703d73000567",
+      "sha256": "42aec2ab451317ee6a95e29ee886f8cc80a8e629176a85b7d0c5ec303211a539"
+    },
+    "settlement/Background.json": {
+      "asset": "Background_fui",
+      "bundle": "d91b43cebd36ea77789b4af7f9e9ce7f.bundle",
+      "sha256": "008a1b8e57ecc5c32d593071698b4e15eec2a19ce825908a89c333f9d7303784"
+    },
+    "settlement/characters/UT_Hero_Card2_101_Max.webp": {
+      "asset": "UT_Hero_Card2_101_Max",
+      "bundle": "541d247f3f4f48ca3e00857116744757.bundle",
+      "sha256": "914e320e277f06c87c221148c3d100b422c2402a868c1bc1299e77354c0e6a44"
+    },
+    "settlement/characters/UT_Hero_Card2_101_01.webp": {
+      "asset": "UT_Hero_Card2_101_01",
+      "bundle": "4d46d80bbb62964c64a50a9676834b97.bundle",
+      "sha256": "221d51d2cb6a4d9c1a79b14b28f0d25e949fdc8622f1693bf783ae996f51920e"
+    },
+    "settlement/characters/UT_Hero_Card2_101_02.webp": {
+      "asset": "UT_Hero_Card2_101_02",
+      "bundle": "2e7c86ca084285fafbad138813461bf7.bundle",
+      "sha256": "b45fdeef809bdeac10a5532dc53b229b234f8a61be63a7e464f9188dbb6fd199"
+    },
+    "settlement/characters/UT_Hero_Card2_102_Max.webp": {
+      "asset": "UT_Hero_Card2_102_Max",
+      "bundle": "243e2635d5323fa51738bbeebe3a7846.bundle",
+      "sha256": "e75ff2c1fd8a1caf75d1a6ffc45e0caad3134656d6254c41bb5d41823cff9524"
+    },
+    "settlement/characters/UT_Hero_Card2_102_01.webp": {
+      "asset": "UT_Hero_Card2_102_01",
+      "bundle": "6381242084846b4825395731c5be3412.bundle",
+      "sha256": "bdc23afa6cfcd45f6190797ee6046851f08abe247ae82fa15986dc8c8366c211"
+    },
+    "settlement/characters/UT_Hero_Card2_102_02.webp": {
+      "asset": "UT_Hero_Card2_102_02",
+      "bundle": "c56321b0854572f651f239a5ecef721e.bundle",
+      "sha256": "1c9685ccb8c858b497a798e7a5537af061bd7aa4eaaad89cc66913b5ec731a99"
+    },
+    "settlement/characters/UT_Hero_Card2_102_03.webp": {
+      "asset": "UT_Hero_Card2_102_03",
+      "bundle": "4cca4801ba7cb6e1cedcce852bb8e1af.bundle",
+      "sha256": "0724ca40c9b0b0fe1573a29993d77667536640db831ac85960c3fc5b6806d48f"
+    },
+    "settlement/characters/UT_Hero_Card2_102_04.webp": {
+      "asset": "UT_Hero_Card2_102_04",
+      "bundle": "0dc5afa37b05490130918cc65ce80b11.bundle",
+      "sha256": "260d5cc5329c8b0655c22ac10656fc6c0adb5ffcc1fd0e740b31d817ffb1b4cb"
+    },
+    "settlement/characters/UT_Hero_Card2_103_Max.webp": {
+      "asset": "UT_Hero_Card2_103_Max",
+      "bundle": "81e4d612a2a76285e372b34af350d469.bundle",
+      "sha256": "f86c579c98b1c5efd0bcef86b677c5c06289c452cedb6d644e6cd3a873603521"
+    },
+    "settlement/characters/UT_Hero_Card2_103_01.webp": {
+      "asset": "UT_Hero_Card2_103_01",
+      "bundle": "2f509d13e9673ee900b628f2281da200",
+      "sha256": "238d806cdda662b6e1f5612b12a52f218035a05495cdbd6dcd30aa31fc23312c"
+    },
+    "settlement/characters/UT_Hero_Card2_103_02.webp": {
+      "asset": "UT_Hero_Card2_103_02",
+      "bundle": "5b0885100bf44c690dbd2ab235f89d31.bundle",
+      "sha256": "34ffd68751003acca7a54e65083e01b4b4d0f46beeceda049602a1da6c107868"
+    },
+    "settlement/characters/UT_Hero_Card2_103_03.webp": {
+      "asset": "UT_Hero_Card2_103_03",
+      "bundle": "e6639fe70425b0e6dd9dd24af9fc4ea4.bundle",
+      "sha256": "4da2f96adc170a0d549005af097d92fde8a1566dc04d64d3e0588931b426914f"
+    },
+    "settlement/characters/UT_Hero_Card2_104_Max.webp": {
+      "asset": "UT_Hero_Card2_104_Max",
+      "bundle": "37f7db9f3f1a9c044e5f0da0d157c1dc.bundle",
+      "sha256": "91f690c5b661e571ff41f75b7d34d1b8d81b8f2a0a37ef814c021a7d14bfe177"
+    },
+    "settlement/characters/UT_Hero_Card2_104_01.webp": {
+      "asset": "UT_Hero_Card2_104_01",
+      "bundle": "e59c489482ceb072aa34d16ddd3bbb39",
+      "sha256": "582c2cee323cd3ac0e27bc9801c4884f21f2ded5480d1c7fe9f2fd0e9b68f52e"
+    },
+    "settlement/characters/UT_Hero_Card2_104_02.webp": {
+      "asset": "UT_Hero_Card2_104_02",
+      "bundle": "f7e4e331b6de861e2900d63bebb68a27",
+      "sha256": "fc860380b13eb0a5ced16cb5dc2635e14045dc5e0ad19ab165bbfc7fef984d21"
+    },
+    "settlement/characters/UT_Hero_Card2_105_Max.webp": {
+      "asset": "UT_Hero_Card2_105_Max",
+      "bundle": "e75e18006e744c61f6197401dc380332.bundle",
+      "sha256": "4b9c0b6c89d814140ceddca7e30e602f5e3fa5597e3ac263b7821bd29f69418d"
+    },
+    "settlement/characters/UT_Hero_Card2_105_01.webp": {
+      "asset": "UT_Hero_Card2_105_01",
+      "bundle": "d737f20ea2ca7253fb5195176de927af.bundle",
+      "sha256": "d3ead347d478ee1dc1afef3769dfb9dbc5901e8cccaec8f619593e3771879f73"
+    },
+    "settlement/characters/UT_Hero_Card2_106_Max.webp": {
+      "asset": "UT_Hero_Card2_106_Max",
+      "bundle": "d3a25b8cee18cc377c8e51db76800305",
+      "sha256": "29202d23cdfa014747b25b1b23d7734aa342c75170dd7be0131273c85adeea9e"
+    },
+    "settlement/characters/UT_Hero_Card2_106_01.webp": {
+      "asset": "UT_Hero_Card2_106_01",
+      "bundle": "f46d403aa73aca57567dd587576bacf0.bundle",
+      "sha256": "8d9295de36844da1ee6f16e474c775968cb6626bdfc08eefa2991e4e67dc3605"
+    },
+    "settlement/characters/UT_Hero_Card2_106_02.webp": {
+      "asset": "UT_Hero_Card2_106_02",
+      "bundle": "ab3a10a23f755ad91095b1288b4c2a18.bundle",
+      "sha256": "24a806cf084158e6caf974d832e0320702eb2c22afc87a31a7602d6a91ebe5d1"
+    },
+    "settlement/characters/UT_Hero_Card2_107_Max.webp": {
+      "asset": "UT_Hero_Card2_107_Max",
+      "bundle": "1c7872354637643fb7cbdd29fde10482",
+      "sha256": "cd531c2343650044d223c347072b056b3f8092e13ddc258d3005bd6e561edf80"
+    },
+    "settlement/characters/UT_Hero_Card2_107_01.webp": {
+      "asset": "UT_Hero_Card2_107_01",
+      "bundle": "c3eeb420afe4447c583820b45662e858",
+      "sha256": "8ad49f2245efb5843e985378a2eebbb3e0d97ed3eafc92081eee4502798096bf"
+    },
+    "settlement/characters/UT_Hero_Card2_107_02.webp": {
+      "asset": "UT_Hero_Card2_107_02",
+      "bundle": "31a4b45a822172921320c75f025a1858",
+      "sha256": "0ed07c38282a9c23f58261fdc4fbc18022349b70d9f1a988fc37d34a381ce950"
+    },
+    "settlement/characters/UT_Hero_Card2_107_03.webp": {
+      "asset": "UT_Hero_Card2_107_03",
+      "bundle": "4d4635a5e34885ef3c88516f98f8d294",
+      "sha256": "034e7da6a0f91a8ccffa5bbeaf2fcddb04e80acd4b25b23482b9071de00ee145"
+    },
+    "settlement/characters/UT_Hero_Card2_107_04.webp": {
+      "asset": "UT_Hero_Card2_107_04",
+      "bundle": "4213fba382787e9b68713cb92144c9f8.bundle",
+      "sha256": "65b74401de9efff21dc8e3e74dea88efd26ea4e0ef1d9261a37b35df74f8afd8"
+    },
+    "settlement/characters/UT_Hero_Card2_107_05.webp": {
+      "asset": "UT_Hero_Card2_107_05",
+      "bundle": "ad3565e21752cba78ef6475be7e92081.bundle",
+      "sha256": "f105b8e2169f9014ea0bf1bbb29339f6d67e5784d7ebbef3b6634d042634e3b3"
+    },
+    "settlement/characters/UT_Hero_Card2_108_Max.webp": {
+      "asset": "UT_Hero_Card2_108_Max",
+      "bundle": "1234618e1cc8bafbe2ee5330cfa74e90",
+      "sha256": "1144d3afb05a9171247d87be321abd2ce5e193568ce5d4d7ffc536e944e2fba4"
+    },
+    "settlement/characters/UT_Hero_Card2_108_01.webp": {
+      "asset": "UT_Hero_Card2_108_01",
+      "bundle": "6d3387b8be99bf0022cc2da87fc8f640",
+      "sha256": "2f4b4f787cfc8000d82b698136afc0dcf8e5e553b0ee667aaca46a33a57952c1"
+    },
+    "settlement/characters/UT_Hero_Card2_108_02.webp": {
+      "asset": "UT_Hero_Card2_108_02",
+      "bundle": "42914cc1fbaa5f0c26b7663b1e2413e0",
+      "sha256": "72f7835d18aa34c24899f5a4a3399ff96a566cf961c4c850c0906a80e87789dd"
+    },
+    "settlement/characters/UT_Hero_Card2_108_03.webp": {
+      "asset": "UT_Hero_Card2_108_03",
+      "bundle": "4d2106cac1e207b5006539b86eb5c31c",
+      "sha256": "b7b7f420c39f4517619c8a341c51e601cb458d96cb3a3a43f8c8a5d835447267"
+    },
+    "settlement/characters/UT_Hero_Card2_108_04.webp": {
+      "asset": "UT_Hero_Card2_108_04",
+      "bundle": "4b24b3f292e47ad42639c10a7e0e1de4",
+      "sha256": "9cf9eb2c10f4e29a6208478c3449f8b54adb164d02a62235184df6ff71ac6af5"
+    },
+    "settlement/characters/UT_Hero_Card2_109_Max_2.webp": {
+      "asset": "UT_Hero_Card2_109_Max_2",
+      "bundle": "3bba9474b4e4d552f7cc2896f6ba00ec.bundle",
+      "sha256": "2d9004084dbdeda71a4db9e53b8f510027223aca49630da535e968f7c787bfb5"
+    },
+    "settlement/characters/UT_Hero_Card2_109_01.webp": {
+      "asset": "UT_Hero_Card2_109_01",
+      "bundle": "1c72639f435b852227c163b8e5a2bde9.bundle",
+      "sha256": "051e34df7732ddf983cbed9f76d4d4aef1f08848cdaac41b219e8a7e3a4106aa"
+    },
+    "settlement/characters/UT_Hero_Card2_110_Max.webp": {
+      "asset": "UT_Hero_Card2_110_Max",
+      "bundle": "38fb684967d89c55871908f2118af2c9.bundle",
+      "sha256": "759f2ebb3719c51ac5c706578a5975a31e6cd354569a5e561786258589fc7e6b"
+    },
+    "settlement/characters/UT_Hero_Card2_111_Max.webp": {
+      "asset": "UT_Hero_Card2_111_Max",
+      "bundle": "94c434497fc6338185e6588b5c4e5429.bundle",
+      "sha256": "10799260f6e9e4d8121bf0d9397898bd45071829cb3d788bf3f2e38215d5738d"
+    },
+    "settlement/characters/UT_Hero_Card2_112_Max.webp": {
+      "asset": "UT_Hero_Card2_112_Max",
+      "bundle": "cadf21f55768900503e1ce4f8aa92a0d",
+      "sha256": "da8ceff3e819e7cfe8998bb5956c88aba363c8e91d03bc4b9aa6abe7f0792b9c"
+    },
+    "settlement/characters/UT_Hero_Card2_112_01.webp": {
+      "asset": "UT_Hero_Card2_112_01",
+      "bundle": "6143b8adb0947a9f02b6481458826a6e",
+      "sha256": "26014f0c93b05ec2036a289ce4b36a54e78a139d5aabb02178c89292cb49acea"
+    },
+    "settlement/characters/UT_Hero_Card2_112_02.webp": {
+      "asset": "UT_Hero_Card2_112_02",
+      "bundle": "9f37e10a665811919283abbea3ffc7ee",
+      "sha256": "bab3532a086dbc2dd8abdb98bae63b61b98be99a5a4d4e23596d11c3d9e5e627"
+    },
+    "settlement/characters/UT_Hero_Card2_112_03.webp": {
+      "asset": "UT_Hero_Card2_112_03",
+      "bundle": "421c8eb36ef6dfe3352735fb58a26291.bundle",
+      "sha256": "b601b13461664552523bd1673e765021d9ea2c17d8bd16774a4312e8aa73a983"
+    },
+    "settlement/characters/UT_Hero_Card2_113_Max.webp": {
+      "asset": "UT_Hero_Card2_113_Max",
+      "bundle": "c1db834506dd019244e058942a5d4c32",
+      "sha256": "c7c82aaf063e8e16e3800d96231be8c2aaf6b95225f1b49ef0af0475487550ca"
+    },
+    "settlement/characters/UT_Hero_Card2_113_01.webp": {
+      "asset": "UT_Hero_Card2_113_01",
+      "bundle": "9fd4cdd7d11b5b878da3a10a47520e14",
+      "sha256": "82727b85b9ed9c125da6e1ba4385e78d531d06170ee0f37b9f42f8124ecbc7ae"
+    },
+    "settlement/characters/UT_Hero_Card2_113_02.webp": {
+      "asset": "UT_Hero_Card2_113_02",
+      "bundle": "bd926d3cee3c4db53451115e40516c06",
+      "sha256": "c36cc5056c6e1e4361842ffa639bfc26287322e84b754e21e93cb6d98fb720bd"
+    },
+    "settlement/characters/UT_Hero_Card2_113_03.webp": {
+      "asset": "UT_Hero_Card2_113_03",
+      "bundle": "798795d232ef9fbe35f74811efa0eca5.bundle",
+      "sha256": "c60c9558fd9e50b34be15ac41a9796ff1d210bbcbb61752beb932a54a95c2f86"
+    },
+    "settlement/characters/UT_Hero_Card2_114_Max.webp": {
+      "asset": "UT_Hero_Card2_114_Max",
+      "bundle": "ef5c3ff980854adeb71d73569b96fc0b",
+      "sha256": "2a37d98e1e5e68642e9868f721df955c021bcb7cd2e807c9aabbb6b4d4fdded8"
+    },
+    "settlement/characters/UT_Hero_Card2_114_01.webp": {
+      "asset": "UT_Hero_Card2_114_01",
+      "bundle": "ee598756d2f74b02721e1484d1a16214",
+      "sha256": "ef3c9e4876b005cc39cf7caf11177a78585bca0a3220028f98fca6b5e749cbb1"
+    },
+    "settlement/characters/UT_Hero_Card2_114_02.webp": {
+      "asset": "UT_Hero_Card2_114_02",
+      "bundle": "4dc7501258fed7882db11cc4b5aa7bd1",
+      "sha256": "5732e070aa857e301caff774722e056d226f355cb1c964e6413188291acdbe75"
+    },
+    "settlement/characters/UT_Hero_Card2_114_03.webp": {
+      "asset": "UT_Hero_Card2_114_03",
+      "bundle": "0232a5d347eb23e8f91f3658470a4b0c.bundle",
+      "sha256": "1d2ab9c1c6da4642c520c38d7568644953c931802e520652d3b7fa55031b1e09"
+    },
+    "settlement/characters/UT_Hero_Card2_114_04.webp": {
+      "asset": "UT_Hero_Card2_114_04",
+      "bundle": "b846c86c88bc80423735b47d31b74b45.bundle",
+      "sha256": "21ed94cb1c6b648cf3d6ad1571c2016220667e6b92cebd67a4fc71e2379de011"
+    },
+    "settlement/characters/UT_Hero_Card2_115_Max.webp": {
+      "asset": "UT_Hero_Card2_115_Max",
+      "bundle": "30d0ff920ab9495857326d27908071c9",
+      "sha256": "b58c8597f99fa68b90e31b6b59b5f044153773fadd65b8bd56cec811d72b45c8"
+    },
+    "settlement/characters/UT_Hero_Card2_115_01.webp": {
+      "asset": "UT_Hero_Card2_115_01",
+      "bundle": "c369706cf7364cc2239ec69d6d8cb19e.bundle",
+      "sha256": "24fcb97694cffb7c6545e16fa521b7c96717e5f8342a4e23f688ffaeda931325"
+    },
+    "settlement/characters/UT_Hero_Card2_115_02.webp": {
+      "asset": "UT_Hero_Card2_115_02",
+      "bundle": "ff8622dd34efd4dddf34ce2eb1f74032.bundle",
+      "sha256": "b29b6f6508e0f29ecb94af032edd3efa08bd3f52d462038dcaeaa06dab3bace4"
+    },
+    "settlement/characters/UT_Hero_Card2_115_03.webp": {
+      "asset": "UT_Hero_Card2_115_03",
+      "bundle": "8da19dcceb992ba1b87b2f1178be8041.bundle",
+      "sha256": "28d283552118b7603fc9851f5a14111f6923f59d9ae5e9e5560f9b2de8561023"
+    },
+    "settlement/characters/UT_Hero_Card2_115_04.webp": {
+      "asset": "UT_Hero_Card2_115_04",
+      "bundle": "6b2ae9ce1a82ebe187dccd3817710bd7.bundle",
+      "sha256": "ceb2a5cc13e2f7cda84f9f920cb8edcb57932c0c98e8403ac3bc83ea7130444b"
+    },
+    "settlement/characters/UT_Hero_Card2_116_Max.webp": {
+      "asset": "UT_Hero_Card2_116_Max",
+      "bundle": "f994034a1458ef8858c8c5a69a796db9",
+      "sha256": "a07d066119aa3581102133b1c7137c4e7ffaeac75076f7badadaf930987cee67"
+    },
+    "settlement/characters/UT_Hero_Card2_116_01.webp": {
+      "asset": "UT_Hero_Card2_116_01",
+      "bundle": "fde20c220187a81b9e73bf5d9e284857",
+      "sha256": "c59e2ab4f3ad5b7fdba07f6478a3d348eab3dd50f76c8cf31d9ded5fa1b71546"
+    },
+    "settlement/characters/UT_Hero_Card2_116_02.webp": {
+      "asset": "UT_Hero_Card2_116_02",
+      "bundle": "9b2f90c28870ae3ce03765cacaad9120",
+      "sha256": "8bae972a196979e08af3076f588de0e9ab128f4867ff55a6433938e97ccf2206"
+    },
+    "settlement/characters/UT_Hero_Card2_117_Max.webp": {
+      "asset": "UT_Hero_Card2_117_Max",
+      "bundle": "d65665450d187d9b28df4fb131909f9b.bundle",
+      "sha256": "02dcd2d67b6ff266bc0bb28ff2383b2f5c042e3474e0c919b91e8f3c24450dfd"
+    },
+    "settlement/characters/UT_Hero_Card2_117_01.webp": {
+      "asset": "UT_Hero_Card2_117_01",
+      "bundle": "61cc596e31f1d09aba347d63999b2a7c.bundle",
+      "sha256": "54993cb64ea7da56863935611d495795b49e86e498d90b0b8ac917956b6160fe"
+    },
+    "settlement/characters/UT_Hero_Card2_117_02.webp": {
+      "asset": "UT_Hero_Card2_117_02",
+      "bundle": "115c908c74f3732ab4ba3eebb3a58213",
+      "sha256": "b8f57d88b7dbdc0a31a492859d86e19502432b27005781ffb78a1cfa747c2c57"
+    },
+    "settlement/characters/UT_Hero_Card2_117_03.webp": {
+      "asset": "UT_Hero_Card2_117_03",
+      "bundle": "4ecd42184282b25b624edc11b0224bb0.bundle",
+      "sha256": "86603b2eec3b6ccd8c268b1c8e21bb3555406d4725abf6143a502486000a2cfc"
+    },
+    "settlement/characters/UT_Hero_Card2_118_Max.webp": {
+      "asset": "UT_Hero_Card2_118_Max",
+      "bundle": "233087b6d7de5c3345e8f955ca9f8157.bundle",
+      "sha256": "aafbb5db443a469829c54c0fe723bfb22c66f267e92228f0e3a69126fd5c638c"
+    },
+    "settlement/characters/UT_Hero_Card2_118_01.webp": {
+      "asset": "UT_Hero_Card2_118_01",
+      "bundle": "64f71e99afd8658a7f811b5ac8ae65cb.bundle",
+      "sha256": "185ab342afed17ff0c4a33ba766f21a1c2bc747d24687dca8b5f5c979fb03beb"
+    },
+    "settlement/characters/UT_Hero_Card2_119_Max.webp": {
+      "asset": "UT_Hero_Card2_119_Max",
+      "bundle": "d3d570e5979db6db8be18eaced363777",
+      "sha256": "f1870ccb38e48e79f1c9e0aa9c425c08b493b164d90c254366b327cfa6355fad"
+    },
+    "settlement/characters/UT_Hero_Card2_119_01.webp": {
+      "asset": "UT_Hero_Card2_119_01",
+      "bundle": "136ddbf876b75049f10c7df3c8b39d0d.bundle",
+      "sha256": "f0628d137750f9fcfa4dae00daaaa1c436972266ccc53077a57dbda90c047631"
+    },
+    "settlement/characters/UT_Hero_Card2_119_02.webp": {
+      "asset": "UT_Hero_Card2_119_02",
+      "bundle": "80c26283dc50f48feffcf153147c21d2.bundle",
+      "sha256": "32371f369a04833585ffbc860c57e87a713eb87edd3394407bb0832279601378"
+    },
+    "settlement/characters/UT_Hero_Card2_120_Max.webp": {
+      "asset": "UT_Hero_Card2_120_Max",
+      "bundle": "8d224519430e87d7b2b9052c9125d862.bundle",
+      "sha256": "f6921e909a7e79fe1ac128b2f7faca56f9830baa659bae757afc5e8faba1773f"
+    },
+    "settlement/characters/UT_Hero_Card2_120_01.webp": {
+      "asset": "UT_Hero_Card2_120_01",
+      "bundle": "28395ef1a2e6c2d6d44b3433476c5cbf",
+      "sha256": "4064b00cd65e3f8c2f46ba1d0c224f305d0f89f749b01bc0d3dfbf9ff3d9834d"
+    },
+    "settlement/characters/UT_Hero_Card2_120_02.webp": {
+      "asset": "UT_Hero_Card2_120_02",
+      "bundle": "4f0505392a0bd3d369d121dfdab15578",
+      "sha256": "dada97295fd6361c69a7a15c992825a2b03c994faa2883d4e96811fd0a3a67f5"
+    },
+    "settlement/characters/UT_Hero_Card2_120_03.webp": {
+      "asset": "UT_Hero_Card2_120_03",
+      "bundle": "27fb623fe1cd1e1cd617e580d9de1880",
+      "sha256": "3932b5ef1574529b49e9e3c31e9a2f77db2a32fafc28552047f061ea9c123081"
+    },
+    "settlement/characters/UT_Hero_Card2_120_04.webp": {
+      "asset": "UT_Hero_Card2_120_04",
+      "bundle": "55800a3d6a4f42f36820eced4d16b34d",
+      "sha256": "f3d8ec9cdd6bb1834ef8252123eb5e38c7500781b8fb94f0fac51af2fe98c77b"
+    },
+    "settlement/characters/UT_Hero_Card2_121_Max.webp": {
+      "asset": "UT_Hero_Card2_121_Max",
+      "bundle": "0fcebd821500579e148132b0bce90d9d",
+      "sha256": "c8f568ea62fa24e87a452075b3ab1acf5672c9dcf60b7e6c8aacd877ce289482"
+    },
+    "settlement/characters/UT_Hero_Card2_121_01.webp": {
+      "asset": "UT_Hero_Card2_121_01",
+      "bundle": "67043ca67ed4077230605e0786673844",
+      "sha256": "ee33eb8f27e04d5bf70c78f49b3764d79be6c3f633f3608d4b642290ed96c9ff"
+    },
+    "settlement/characters/UT_Hero_Card2_121_02.webp": {
+      "asset": "UT_Hero_Card2_121_02",
+      "bundle": "57cb64c3ef0b68dc7a112dff24eb8362.bundle",
+      "sha256": "7a904ce4f9dba806f5ddfba447d8b4eaac04bd8835570d7ed8f83688476a068f"
+    },
+    "settlement/characters/UT_Hero_Card2_121_03.webp": {
+      "asset": "UT_Hero_Card2_121_03",
+      "bundle": "5435f391fcc712803a0eeaf4da8d0a66.bundle",
+      "sha256": "836c285ab812a199739dd44a594be223d29d1f444204bc693279d45966e4015e"
+    },
+    "settlement/characters/UT_Hero_Card2_122_Max.webp": {
+      "asset": "UT_Hero_Card2_122_Max",
+      "bundle": "12fc42cff6b1aa765e3d2e521d3cbdcf.bundle",
+      "sha256": "1bb7cb702d4cc026a48db5dbec8ef0c9d7921f89f973f569a8b941680f9a381a"
+    },
+    "settlement/characters/UT_Hero_Card2_122_01.webp": {
+      "asset": "UT_Hero_Card2_122_01",
+      "bundle": "ea4eb13a157e374f347592daa1b8f38d",
+      "sha256": "e4f458f1ce02f10def6b04d911af99c7ec1f0965c7352636dc0c5c96d4039e6d"
+    },
+    "settlement/characters/UT_Hero_Card2_122_02.webp": {
+      "asset": "UT_Hero_Card2_122_02",
+      "bundle": "3c118c439ddf98212d7d2d7d5418767b.bundle",
+      "sha256": "c6ba48daef9adc019b78cc20e410be11363277f478a574d21494b7b431093a42"
+    },
+    "settlement/characters/UT_Hero_Card2_123_Max.webp": {
+      "asset": "UT_Hero_Card2_123_Max",
+      "bundle": "eb79f9e06204dd3c822c69486908ea86",
+      "sha256": "cab33f45536bd83f3bed9c8fcb291f6c67377fe8065eecdce5176b5f74bfc464"
+    },
+    "settlement/characters/UT_Hero_Card2_123_01.webp": {
+      "asset": "UT_Hero_Card2_123_01",
+      "bundle": "b94f2c95a125ab84b3c2b529198982ff",
+      "sha256": "547eb0516cba16256332669dba92ee977efd171d176dff9f20ba52f34ff14d2a"
+    },
+    "settlement/characters/UT_Hero_Card2_123_02.webp": {
+      "asset": "UT_Hero_Card2_123_02",
+      "bundle": "e6e0bcdd0baf67fccb295e19404942b4.bundle",
+      "sha256": "07f411030e1667589527bbecb653c09eb3836961e097d269b7d44e255563e338"
+    },
+    "settlement/characters/UT_Hero_Card2_124_Max.webp": {
+      "asset": "UT_Hero_Card2_124_Max",
+      "bundle": "6646c5e102765601ad573c3a39874757.bundle",
+      "sha256": "a9df3d401d70bbc34c934d61341f21f980993fd05b9f400e60a9983bb7dfee31"
+    },
+    "settlement/characters/UT_Hero_Card2_124_01.webp": {
+      "asset": "UT_Hero_Card2_124_01",
+      "bundle": "093b4515ba2212f377b6ca6068b64ec7.bundle",
+      "sha256": "fcdbdae96ef66471bc84ad6836560b5e887014d2e1d28e62f421d8b90bec0286"
+    },
+    "settlement/characters/UT_Hero_Card2_124_02.webp": {
+      "asset": "UT_Hero_Card2_124_02",
+      "bundle": "0aa9d9a838ec6b3ba9e52024d7594cfb.bundle",
+      "sha256": "2bd5bc9164e511411ca912bef1460b36940a04c442ee4199786dd6a112131b4a"
+    },
+    "settlement/characters/UT_Hero_Card2_125_Max.webp": {
+      "asset": "UT_Hero_Card2_125_Max",
+      "bundle": "ef9f12e8d4f0617dc85a9e5265a0c91c.bundle",
+      "sha256": "5365e646be61be1bb9d7707de876cd9562ab4cb3413e3e8519a4ae70560cb25b"
+    },
+    "settlement/characters/UT_Hero_Card2_125_01.webp": {
+      "asset": "UT_Hero_Card2_125_01",
+      "bundle": "c1444adafff1f703830ae4b462db414c.bundle",
+      "sha256": "c8a1e86c240e3714ef5ad540212add30febe4a54d27453807ec737fc7d14bbde"
+    },
+    "settlement/characters/UT_Hero_Card2_126_Max.webp": {
+      "asset": "UT_Hero_Card2_126_Max",
+      "bundle": "15d6e8216ac78b53f2b3985df65c0c41.bundle",
+      "sha256": "5c35ad90411d2506fa2a06bd8a3295ac94fb859f257e8dfe093b35cc5e2c2314"
+    },
+    "settlement/characters/UT_Hero_Card2_126_01.webp": {
+      "asset": "UT_Hero_Card2_126_01",
+      "bundle": "dff5b905c98600c6492899f913c19e47.bundle",
+      "sha256": "7199180da472e15bfdebd376d670376e5eb00b0009b7f65d5ede3637e6fd163b"
+    },
+    "settlement/characters/UT_Hero_Card2_127_Max.webp": {
+      "asset": "UT_Hero_Card2_127_Max",
+      "bundle": "87e6b93aabe66fd4c121a9d7bd8fb8cb",
+      "sha256": "167f2b8d9762efcaaaa7bc4dc8034423fa65df8413e3507e65b0c08da11dc3ce"
+    },
+    "settlement/characters/UT_Hero_Card2_127_01.webp": {
+      "asset": "UT_Hero_Card2_127_01",
+      "bundle": "b8b331f849f6931ed5282a29a63663ac.bundle",
+      "sha256": "d95e3f75b2e6bb8c11fc30d90d18c64506399ee92a85b7911b3fba3b01b692cf"
+    },
+    "settlement/characters/UT_Hero_Card2_127_02.webp": {
+      "asset": "UT_Hero_Card2_127_02",
+      "bundle": "fbe18162cafa989f3b685266e9e6c99f",
+      "sha256": "d32f0a84e74727c94b5de30a0010fb09ba6247d51db45293f6fce21cfae8a6d6"
+    },
+    "settlement/characters/UT_Hero_Card2_128_Max.webp": {
+      "asset": "UT_Hero_Card2_128_Max",
+      "bundle": "7290c8680cb956c8212afc5ea7b04ddf.bundle",
+      "sha256": "bc89a571fb5e18fb6a2a4929692421d459f4b5d78fd8b6159a9b3d94382347f7"
+    },
+    "settlement/characters/UT_Hero_Card2_128_01.webp": {
+      "asset": "UT_Hero_Card2_128_01",
+      "bundle": "125a99eae73a77a148435052d668474b",
+      "sha256": "69ea7bb390b14ec873d0db54aec481dc9c51d98c2cffbe62c72c131ca300a8b2"
+    },
+    "settlement/characters/UT_Hero_Card2_129_Max.webp": {
+      "asset": "UT_Hero_Card2_129_Max",
+      "bundle": "d48ed5f85170bab331a46afe2260ba3b",
+      "sha256": "8e9b418a9a70498db45597b04e941b3674a83017cc292dd0209834847b07509a"
+    },
+    "settlement/characters/UT_Hero_Card2_301_01.webp": {
+      "asset": "UT_Hero_Card2_301_01",
+      "bundle": "c01e2544709de854f4a111b0bcf85a5d.bundle",
+      "sha256": "e84db075af3f4391b76d4adbe59da6e8923122982a40571537ca3c0d95f5bee2"
+    },
+    "settlement/characters/UT_Hero_Card2_302_01.webp": {
+      "asset": "UT_Hero_Card2_302_01",
+      "bundle": "4a0643d4ac2c07ab56b39a63e0c1fc74.bundle",
+      "sha256": "5c3548f9c17745a1bac048327a49516dc3506265daaa7fa1ab5cf7cb2325f5b4"
+    },
+    "settlement/paintings.json": {
+      "asset": "Skin/CharacterReady",
+      "bundle": "01d0016714d048a0469ef498541d6c7a",
+      "sha256": "d01b7e582a831163a7425130ccafbadeee9bfb3a1f778f26838a92ebd5456bed"
+    },
+    "settlement/textures/UT_Relic_Attack.webp": {
+      "asset": "UT_Relic_Attack",
+      "bundle": "1113741e6a11d7a139193c4f607d8c0b.bundle",
+      "sha256": "5ec8eacb4d4dce9e6628584fb0382046f7bb6a61665bae2a20a20b7776610a46"
+    },
+    "settlement/textures/UT_Relic_Speed.webp": {
+      "asset": "UT_Relic_Speed",
+      "bundle": "3215398229f63ddb7eba877440a2e994.bundle",
+      "sha256": "662a4c3166434bab2e8d468e3a26e9f668a60718b2aff8760d028fadd893d6c2"
+    },
+    "settlement/textures/UT_Relic_Hp.webp": {
+      "asset": "UT_Relic_Hp",
+      "bundle": "70a1cf0ee0035c758c7dd685f5745a87.bundle",
+      "sha256": "14de5e6d80be3dd2d02928050ada0b85de624c025e7e0cdb7069ea325d9e1865"
+    },
+    "settlement/textures/UT_Relic_50010.webp": {
+      "asset": "UT_Relic_50010",
+      "bundle": "7d421546ae4e37fa88f41a5f7ac1ba28.bundle",
+      "sha256": "bb2ff6d3444118a9b7fc17b38b065dfd7a9ba000ee9f68a6bbf845cf4ba6f861"
+    },
+    "settlement/textures/UT_Relic_KillReward.webp": {
+      "asset": "UT_Relic_KillReward",
+      "bundle": "96b8d33f7d15314dac381fca2c842934.bundle",
+      "sha256": "f613b4b5b2c13bc9c71bd5c990e3214b9e8ea9a051cbb644f5ca660da1f86fbd"
+    },
+    "settlement/textures/UT_Relic_Gold.webp": {
+      "asset": "UT_Relic_Gold",
+      "bundle": "99e7879ec82e4aa19ef8e7ad654b8769.bundle",
+      "sha256": "ffe2b6ad39193e1ddb2f9652bfc712cb1c75d5a0199f5635f17b223f12c25089"
+    },
+    "settlement/textures/UT_Relic_Defend.webp": {
+      "asset": "UT_Relic_Defend",
+      "bundle": "85aa165d67963475532e25b6f7709825.bundle",
+      "sha256": "a0a23310dd52a70cb36f55419afbeb284e6553166c9b3b59aab3946e0f1d95cb"
+    },
+    "settlement/textures/UT_Relic_Heal.webp": {
+      "asset": "UT_Relic_Heal",
+      "bundle": "5e03fb828f9153f906058111e268744a.bundle",
+      "sha256": "d95382429fa5997a1fd10d00558efdddc3f0c37150ae4a602e627fb22e4864ac"
+    },
+    "settlement/textures/UT_Relic_Enmity.webp": {
+      "asset": "UT_Relic_Enmity",
+      "bundle": "73da09baf1f1b37e1034f430926c5b5f.bundle",
+      "sha256": "57aa714a0cb71806f97a08387c71bc91b58adc2043f15f78c0704dd35160545b"
+    },
+    "settlement/textures/UT_Relic_50025.webp": {
+      "asset": "UT_Relic_50025",
+      "bundle": "d675101809e69ac19a681ca2520052a3.bundle",
+      "sha256": "1bcef16926a65d7f400c9258f5e26d99351011151af02dc4d61097d089813289"
+    },
+    "settlement/textures/UT_Relic_50026.webp": {
+      "asset": "UT_Relic_50026",
+      "bundle": "5e4d74f8f2a6ad6a1ac5a9cadba45818.bundle",
+      "sha256": "919e095c5ca06528bb03759bdbfd6ceab7d15ec046873beb40ae0ca7d702a792"
+    },
+    "settlement/textures/UT_Relic_50027.webp": {
+      "asset": "UT_Relic_50027",
+      "bundle": "fa1467049b601f0f5fa01e116924c218.bundle",
+      "sha256": "7957da3a72ee444e5a13f4c756c086e7e7e36686125a842cdd0d763c279682dc"
+    },
+    "settlement/textures/UT_Relic_50028.webp": {
+      "asset": "UT_Relic_50028",
+      "bundle": "009daee63fcebdb3ce372c8fcdb3e090.bundle",
+      "sha256": "e2fe62c700244195ce8b0fae41c29e6c4cd4135837ac0edfe4365d5b8ee717e1"
+    },
+    "settlement/textures/UT_Relic_50029.webp": {
+      "asset": "UT_Relic_50029",
+      "bundle": "0022e7409eaa08d51123ece55b717d0e.bundle",
+      "sha256": "8b088721274a529af18896424ddec11fc6ade20ea0d0a9ec6c0da07cb1265d41"
+    },
+    "settlement/textures/UT_Relic_50030.webp": {
+      "asset": "UT_Relic_50030",
+      "bundle": "96c73225b42474cd35e147e9f2f70bbf.bundle",
+      "sha256": "84e76c36bf2b086e828f5dbee2abfec2073e7519f392b548a29ed469604af421"
+    },
+    "settlement/textures/UT_Relic_50031.webp": {
+      "asset": "UT_Relic_50031",
+      "bundle": "3739d29f7bd0382d3325fa41118aa585.bundle",
+      "sha256": "bad7a06f27be8c08134dac308227bcace27ab788a72d5ff26f4e6d0761b7f1d1"
+    },
+    "settlement/textures/UT_Relic_50032.webp": {
+      "asset": "UT_Relic_50032",
+      "bundle": "7cd859a67ee5d0ba0cb6b0e21b70544d.bundle",
+      "sha256": "afdc11b132b43cd0d8fe81c048b47ef22cd306b93ba7aee4fa595cc429699a81"
+    },
+    "settlement/textures/UT_Relic_50033.webp": {
+      "asset": "UT_Relic_50033",
+      "bundle": "8a9b1def25bc6cfa1378d3ef5363e876.bundle",
+      "sha256": "e7e23e904d2a22dc2493c4ba910ec4f2aa9d3571cdb306af99d1f43702fed79a"
+    },
+    "settlement/textures/UT_Relic_50034.webp": {
+      "asset": "UT_Relic_50034",
+      "bundle": "aab2e89b2e7ede414f4c574ba1f4cd86.bundle",
+      "sha256": "1222df6987b9bfff10b7ef12705b8fb54e374c45b59e18bc8b35f279db1c14a4"
+    },
+    "settlement/textures/UT_Relic_50035.webp": {
+      "asset": "UT_Relic_50035",
+      "bundle": "25c5c17c8a9ad6134f5c1b4e0fa8aa2a.bundle",
+      "sha256": "43bd2597b585709376c397da85a115e8823c0fa8ecd2a8bfa1afd28a14501d6d"
+    },
+    "settlement/textures/UT_Relic_50036.webp": {
+      "asset": "UT_Relic_50036",
+      "bundle": "ff6ade768964af6131a88926008a66a0.bundle",
+      "sha256": "bce052c5b97f85a6c81ff7952571a82ba02ade4c589fc357e123fd7f48a26563"
+    },
+    "settlement/textures/UT_Relic_50037.webp": {
+      "asset": "UT_Relic_50037",
+      "bundle": "a2137cab3ee085438ae3c6ee467a3419.bundle",
+      "sha256": "a9db99c72537b6576ba5c4e97c3430982337df01006d2be3a3a532f809bbe8b1"
+    },
+    "settlement/textures/UT_Relic_50038.webp": {
+      "asset": "UT_Relic_50038",
+      "bundle": "7d004157f442f06260cacac44142f06e.bundle",
+      "sha256": "003636600da4459ca381f0370015472573c00fb637327395630f4b22bde50ec0"
+    },
+    "settlement/textures/UT_Relic_50039.webp": {
+      "asset": "UT_Relic_50039",
+      "bundle": "ab32f41b8b6fb0287a1a25643ec6393e.bundle",
+      "sha256": "a2d2ed60c0200b33cf60d029ef4cd82f7d7f59f08faef5c2d1e529b5d63ca362"
+    },
+    "settlement/textures/UT_Relic_50040.webp": {
+      "asset": "UT_Relic_50040",
+      "bundle": "f8cb88aa49c97e01a07aeb4551128a16.bundle",
+      "sha256": "7889a906e7124ff412c193b633b9dbe56137189da83bc3eb3dd0bf4b6e8711b4"
+    },
+    "settlement/textures/UT_Relic_50041.webp": {
+      "asset": "UT_Relic_50041",
+      "bundle": "31cbb0cff025577a80ba07225e65dbcf.bundle",
+      "sha256": "3d5e89c0e40f5e12c7f5abcf49ec59e1eb02209ecc65165da3d023c45d0cb43f"
+    },
+    "settlement/textures/UT_Relic_50042.webp": {
+      "asset": "UT_Relic_50042",
+      "bundle": "11872e705c390439bebf24d8db094b63.bundle",
+      "sha256": "b782b92c9a293746ec00e7d5527383558a8bd53078694c002920d196bab7522b"
+    },
+    "settlement/textures/UT_Relic_50043.webp": {
+      "asset": "UT_Relic_50043",
+      "bundle": "9713dcbd102615349c5e941a1af5b137.bundle",
+      "sha256": "21cbf9d454bd37485e4e82cc62fe645f68da1d9b7cca9310f8839615fdc962b7"
+    },
+    "settlement/textures/UT_Relic_50044.webp": {
+      "asset": "UT_Relic_50044",
+      "bundle": "f62c0e1ec39d98b20b5772ab7a004441.bundle",
+      "sha256": "f5d4c2fc5b3e984083a7b12213726c40f6d5afe498945aed1bc6f676dff08d0d"
+    },
+    "settlement/textures/UT_Relic_50045.webp": {
+      "asset": "UT_Relic_50045",
+      "bundle": "b42894e1100191478a2292894cdc7ffc.bundle",
+      "sha256": "ff40af2351ba0735c3f29c16af1f18cacd71145a32eb051a788b0a2de559a9c8"
+    },
+    "settlement/textures/UT_Relic_50046.webp": {
+      "asset": "UT_Relic_50046",
+      "bundle": "387d5f3bb6187cd7e79cfbc94abcd547.bundle",
+      "sha256": "f36edf2494c429fb96fcb16ef8e4f12b89058c552b205185eaf354546ec21d55"
+    },
+    "settlement/textures/UT_Relic_50047.webp": {
+      "asset": "UT_Relic_50047",
+      "bundle": "7d6ee98405c8007df4d2292246cb3134.bundle",
+      "sha256": "d831ef532778076ef15cb2106e9f170f7349d1957675c2d8ee87fc0cf69ce168"
+    },
+    "settlement/textures/UT_Relic_50049.webp": {
+      "asset": "UT_Relic_50049",
+      "bundle": "316e654cfd66e92155999377d424b3f8.bundle",
+      "sha256": "c4d9b6cc3ce3811c2cb9c89631cfcc5b2ab6ddaae199fdac837681acab08791e"
+    },
+    "settlement/textures/UT_Relic_50050.webp": {
+      "asset": "UT_Relic_50050",
+      "bundle": "a8b6b00ba63f9fe16138555e432be6bc.bundle",
+      "sha256": "1f0d9006c41a1e1f1fa3bca57dd4391797c1a2cfdee0e862e94a14ea91112e4b"
+    },
+    "settlement/textures/UT_Relic_50051.webp": {
+      "asset": "UT_Relic_50051",
+      "bundle": "ee27d62411eac2d619600062eca626ac.bundle",
+      "sha256": "9a81310f7872a2ba95cbf2346bd0d57e7255140c9d286ab57d6803a2e6c35766"
+    },
+    "settlement/textures/UT_Relic_50053.webp": {
+      "asset": "UT_Relic_50053",
+      "bundle": "8d95f726604b3d680b53639c8863f639.bundle",
+      "sha256": "294a4e0a2d7e6922a0db88a53fa0f28e224db70fbac5c7e324b99f7c8d3a7110"
+    },
+    "settlement/textures/UT_Relic_50054.webp": {
+      "asset": "UT_Relic_50054",
+      "bundle": "10def7e2d6f899faaee0228972c660af.bundle",
+      "sha256": "e41a065b8815b82df74c30c7da87ac39bd1f28be5ab075ed662be6db42f75af4"
+    },
+    "settlement/textures/UT_Relic_50055.webp": {
+      "asset": "UT_Relic_50055",
+      "bundle": "0c98d7eeaa30378e05177dd8b00cb1db.bundle",
+      "sha256": "4573ba2b812411f6b75982dee279f4c841a6af82f4d1cb0f826a5562b2b2c19e"
+    },
+    "settlement/textures/UT_Relic_50056.webp": {
+      "asset": "UT_Relic_50056",
+      "bundle": "6b2e42efece62fd9f9391bbec6031b8d.bundle",
+      "sha256": "24e8a50ad2e773938f9a349f605d5c42104042b781ce18d365147772944c1b89"
+    },
+    "settlement/textures/UT_Relic_50057.webp": {
+      "asset": "UT_Relic_50057",
+      "bundle": "b22b44cdaa264c1d84088e58e7606320.bundle",
+      "sha256": "692597914aaf6de25e864c6911a1a91d6ed0d9caed76842f791d9b6fc3644e8c"
+    },
+    "settlement/textures/UT_Relic_50058.webp": {
+      "asset": "UT_Relic_50058",
+      "bundle": "58706c31ef757bb4185ae31d895529dd.bundle",
+      "sha256": "0ccecf797aaef4bb850f0f6db6e66aca6c916ddbd29b9ac69af892e397722a01"
+    },
+    "settlement/textures/UT_Relic_50059.webp": {
+      "asset": "UT_Relic_50059",
+      "bundle": "0bb70165ce85298239f0b8931b1ab960.bundle",
+      "sha256": "242c990b53713d559d78e3037174e4841e4f45c797878e6686371a74031903b6"
+    },
+    "settlement/textures/UT_Relic_50060.webp": {
+      "asset": "UT_Relic_50060",
+      "bundle": "9a86edbe53e287beab51c026e53563bc.bundle",
+      "sha256": "d966d036600bd0e724e7127a2663b54c8c90929d3116cb9edcdf623f16eddcce"
+    },
+    "settlement/textures/UT_Relic_50061.webp": {
+      "asset": "UT_Relic_50061",
+      "bundle": "ce5f3ea16c9c72c613d19be57c0e681e.bundle",
+      "sha256": "92995e37c9515677f2c19b08a5c90fa7ed0d1cb31cda3ad539c413c685a606a4"
+    },
+    "settlement/textures/UT_Relic_50062.webp": {
+      "asset": "UT_Relic_50062",
+      "bundle": "2d501adb9d75f343b1a99a417bc13f63.bundle",
+      "sha256": "ecaddfe2b093b92a0d845e7bc1a1448e50a294c9680fba87b2ee638222f1fe52"
+    },
+    "settlement/textures/UT_Relic_50063.webp": {
+      "asset": "UT_Relic_50063",
+      "bundle": "e5f5a9108d5037215b47662991b04e30.bundle",
+      "sha256": "c601aa5a555ecf0b06a0fada89642ea23c06eb74b985f198a90e172b942bc4ad"
+    },
+    "settlement/textures/UT_Relic_50064.webp": {
+      "asset": "UT_Relic_50064",
+      "bundle": "fe50199106192a6de37ec8493d60154c.bundle",
+      "sha256": "b85f3faca1cc74f4992376ff9f3e8ef12dba0df25b8978be847d808fed51c960"
+    },
+    "settlement/textures/UT_Relic_50065.webp": {
+      "asset": "UT_Relic_50065",
+      "bundle": "ebc3d4e1296d8fedd19c3d745566eedf.bundle",
+      "sha256": "7fdb4d30b200dc865305c88490b881ea3cb2d66430a9c5a15b5700aaba20650e"
+    },
+    "settlement/textures/UT_Relic_50066.webp": {
+      "asset": "UT_Relic_50066",
+      "bundle": "bd3e745bfd32b42ada25ec124b591209.bundle",
+      "sha256": "1734e645e244f822ed3c2c373b81235f8c8ea250ec6462600864f7ad598661fd"
+    },
+    "settlement/textures/UT_Relic_50067.webp": {
+      "asset": "UT_Relic_50067",
+      "bundle": "7afbcf4cb5c58a8ea9f5202c279b75b3.bundle",
+      "sha256": "ea82d1b1cc6ee4f0c03d3db8be01ea456829cb03856b7711bfbb79888203bdb8"
+    },
+    "settlement/textures/UT_Relic_50068.webp": {
+      "asset": "UT_Relic_50068",
+      "bundle": "bb4bbfef8c88c6b261e4a7c18ca870d5.bundle",
+      "sha256": "03ef1297494535a1776ad5b730b9b94a2ea48270319551f6fdab6c869d9204da"
+    },
+    "settlement/textures/UT_Relic_50069.webp": {
+      "asset": "UT_Relic_50069",
+      "bundle": "6f9e09002151baa0deeac04030527a5d.bundle",
+      "sha256": "abaf593e1109ac19fea26377e49b026fac2aaa4c85a7ca0cffe7242a64ce4c25"
+    },
+    "settlement/textures/UT_Relic_50070.webp": {
+      "asset": "UT_Relic_50070",
+      "bundle": "54df3511db48104c22145dae6df2813e.bundle",
+      "sha256": "0d4b5b7d031b0a5e830ca34c9c9157712e993a14b5b96a70668d4869d1a131e7"
+    },
+    "settlement/textures/UT_Relic_50071.webp": {
+      "asset": "UT_Relic_50071",
+      "bundle": "b0f80a873fb7df2a2a39859524d6b28b.bundle",
+      "sha256": "a52f598a28839841967cd35dc15c706b1f1acc03b4bd1d49873d0f693dfa2b1b"
+    },
+    "settlement/textures/UT_Relic_50072.webp": {
+      "asset": "UT_Relic_50072",
+      "bundle": "af648dfeab9eb1fa59be689988e999f8",
+      "sha256": "4ff127f8aafa7bdf8ebe81c8eaf0a3b44df980dea8f893466920a09714c339f5"
+    },
+    "settlement/textures/UT_Relic_50073.webp": {
+      "asset": "UT_Relic_50073",
+      "bundle": "5712f3d1b4f462692bf5f1576499382e",
+      "sha256": "04b6c103f18f3b859951e1e194d4e31936aa5222409a0843fd1e6aa64787f008"
+    },
+    "settlement/textures/UT_Relic_50074.webp": {
+      "asset": "UT_Relic_50074",
+      "bundle": "940e3cf8b4384077bf1eda882f990e63",
+      "sha256": "4c379b77e2aac9354381ba50722364c50fbfc8d39c7f11cdb5edaafe156885e7"
+    },
+    "settlement/textures/UT_Relic_50075.webp": {
+      "asset": "UT_Relic_50075",
+      "bundle": "cb76ae6eb7ae36f39d96dd425360bf32",
+      "sha256": "0e5f593523ef5c386d2967fb9c423b7e04ce63082604c4995729623e161e2964"
+    },
+    "settlement/textures/UT_Relic_50076.webp": {
+      "asset": "UT_Relic_50076",
+      "bundle": "ec9ef40d2f5f65efd753c6fb76e4fcec",
+      "sha256": "3752a7cc0143036b17a53ae8a704abdef666364fd013b8672dbefaec175656d4"
+    },
+    "settlement/textures/UT_Relic_50077.webp": {
+      "asset": "UT_Relic_50077",
+      "bundle": "662d35dccc5f031de4ac97724b617d21",
+      "sha256": "5e3be36ad39d673899360dd8a099e9ab59dc26f0d4b1d198592c11f23ed1cf06"
+    },
+    "settlement/textures/UT_Relic_50078.webp": {
+      "asset": "UT_Relic_50078",
+      "bundle": "c5585257e0b602e392bd8426be890f4b",
+      "sha256": "aa4eda45e90676596d6342b68b4b772537c0bfacd8d604f9a698e733b3473b00"
+    },
+    "settlement/textures/UT_Relic_50080.webp": {
+      "asset": "UT_Relic_50080",
+      "bundle": "89d2a3e61177047a7d9c014702c74b1b",
+      "sha256": "93ab18a1e680c5e7a5770a1f8e30571f92f7accd3bd33dcad75c0b3e235af2b7"
+    },
+    "settlement/textures/UT_Relic_50081.webp": {
+      "asset": "UT_Relic_50081",
+      "bundle": "f0f00e59d2fb33399c0c58a033ada556",
+      "sha256": "38989643288ed477b9ff40fa2d217de2ffd40ed1417b8333045c6d3a155a0829"
+    },
+    "settlement/textures/UT_Relic_50082.webp": {
+      "asset": "UT_Relic_50082",
+      "bundle": "b8e28f463ce25c3744f967585d4d0d0e",
+      "sha256": "2c3292a92593959ed5ce2eacf6d7a23fc5eb551287cb68fb872e4caef80f26f1"
+    },
+    "settlement/textures/UT_Relic_50083.webp": {
+      "asset": "UT_Relic_50083",
+      "bundle": "a537e63e7b0421324a8d8c6eec4a5859",
+      "sha256": "1f7225a7353d1da4ddb4d7949e6b3d44a36577c63b246f4434748886d05334c9"
+    },
+    "settlement/textures/UT_Relic_50084.webp": {
+      "asset": "UT_Relic_50084",
+      "bundle": "c0744bb368a54a15706ed29d78f633bc",
+      "sha256": "4b2434c114b6725cf7ff1e48b67055705cd4bd0283e056cd7d39bb78f2e747a8"
+    },
+    "settlement/textures/UT_Relic_50085.webp": {
+      "asset": "UT_Relic_50085",
+      "bundle": "56f63d3da087323897f2637d5b66e26d",
+      "sha256": "eb4977169fc4fe5e44bc18bf0ffa81f5371547a077e224f7ea3678a204ea3e9d"
+    },
+    "settlement/textures/UT_Relic_50086.webp": {
+      "asset": "UT_Relic_50086",
+      "bundle": "00de26947ff2b66ab1c236365bf0d030",
+      "sha256": "4191dbc5ee22f0f588ec7640b4e2e70cf7229ed51c1d9ff95f7289f57d728916"
+    },
+    "settlement/textures/UT_Relic_50087.webp": {
+      "asset": "UT_Relic_50087",
+      "bundle": "75aeff98c50a82cfd5ed5bfae5cf24dd",
+      "sha256": "8e5207701ce1ff1ee5d0fa88878d931c2f1b588a0881b5fc1ddd814ed4ab3dd3"
+    },
+    "settlement/textures/UT_Relic_50088.webp": {
+      "asset": "UT_Relic_50088",
+      "bundle": "c13c1efe038e057d348f0e28e6326d83",
+      "sha256": "9610c2b62b69d6f5992fef7203fa81cdb8c050dfed16f57bb2fc34e936c5593f"
+    },
+    "settlement/textures/UT_Relic_50089.webp": {
+      "asset": "UT_Relic_50089",
+      "bundle": "26813cd66340dc27f263b403d6901e62",
+      "sha256": "3863bd85ce02369f6b2cc3069fe13886e5f08d9e3abde3c3a2100b072a345e53"
+    },
+    "settlement/textures/UT_Relic_50090.webp": {
+      "asset": "UT_Relic_50090",
+      "bundle": "ff71c08a5c7b0b8ff10870ea59b99fdc",
+      "sha256": "64cf39fc7957af7246d08ae748b2b297dcd5ffd55d32175763d7784b3195d4ed"
+    },
+    "settlement/textures/UT_Relic_50091.webp": {
+      "asset": "UT_Relic_50091",
+      "bundle": "52072e1c7bcae2c6664fe60205a2850e",
+      "sha256": "7a5105f03a0591a7acac67f02b5519393aa9bd55164e981496f2023470ff25e5"
+    },
+    "settlement/textures/UT_Relic_50092.webp": {
+      "asset": "UT_Relic_50092",
+      "bundle": "9011ba2a5d65908490165f315f4726c8",
+      "sha256": "ce7159646ff573c8da87289c17af5c741c15510acf6435586269b7fb3e92bb52"
+    },
+    "settlement/textures/UT_Relic_50093.webp": {
+      "asset": "UT_Relic_50093",
+      "bundle": "915cea0e1eaf921878c7cf53e74b1417",
+      "sha256": "1334a88401cffe54053303fc6419025ec14d8d3015150bd9c15305a3339bc30f"
+    },
+    "settlement/relic.json": {
+      "asset": "Relic",
+      "bundle": "01d0016714d048a0469ef498541d6c7a",
+      "sha256": "291c01e89a1c9c66aee39d49bdc4720d65dd4c49bd779a270e81534568e6e6e8"
+    },
+    "settlement/textures/UT_Achieve_1000_Settlement.webp": {
+      "asset": "UT_Achieve_1000_Settlement",
+      "bundle": "9b3d66c543f50e60852f85b3e04e5cbb.bundle",
+      "sha256": "de61b8236c98321f8d2a77853bf3491c474d8f550acd10678c07637fb639e82c"
+    },
+    "settlement/textures/UT_Achieve_1001_Settlement.webp": {
+      "asset": "UT_Achieve_1001_Settlement",
+      "bundle": "500596575c0e8f27632838ddf4633425.bundle",
+      "sha256": "92355e7b46debcc7489f039b0e262e23eb6f424e08d1aeb4558d00b3d662406c"
+    },
+    "settlement/textures/UT_Achieve_1002_Settlement.webp": {
+      "asset": "UT_Achieve_1002_Settlement",
+      "bundle": "d14927ed70853c05e54c0157fa46edba.bundle",
+      "sha256": "c8368917ff230a25a3bea9975adbedcf5f22699a079966665ebe3a0a88b6f401"
+    },
+    "settlement/textures/UT_Achieve_1003_Settlement.webp": {
+      "asset": "UT_Achieve_1003_Settlement",
+      "bundle": "05afab406488ee2dcd9cbeb6da056f93.bundle",
+      "sha256": "be75e09f0514e87e3bff871020bda87d3084261d8a96565204748b0e05ca17a1"
+    },
+    "settlement/textures/UT_Achieve_1004_Settlement.webp": {
+      "asset": "UT_Achieve_1004_Settlement",
+      "bundle": "7d114e639a3a8e2031999bd7f91b9a6f.bundle",
+      "sha256": "dda4d384edc9d34b831f5141307bc10a8d41591d5d542872b209398acd5498bb"
+    },
+    "settlement/textures/UT_Achieve_1005_Settlement.webp": {
+      "asset": "UT_Achieve_1005_Settlement",
+      "bundle": "c9712366ce86bd2c417a843e9a8828bd.bundle",
+      "sha256": "7432ac20007ea1117a36dfeb4af8b5c04125f96091f761e62918898454fdc435"
+    },
+    "settlement/textures/UT_Achieve_1006_Settlement.webp": {
+      "asset": "UT_Achieve_1006_Settlement",
+      "bundle": "71e3d3122a9de13343f6c4d57d515106.bundle",
+      "sha256": "d31d338dca75bc72c4bf1885806df316307bd9c12084cf3dd8279b55129f718d"
+    },
+    "settlement/textures/UT_Achieve_1007_Settlement.webp": {
+      "asset": "UT_Achieve_1007_Settlement",
+      "bundle": "1f634bf06036b5cb06aced6241a8c7f7.bundle",
+      "sha256": "af7bc9f3e6c086ca431e9d9066b7bf2231cfaac70850024c577dae4808f140b3"
+    },
+    "settlement/textures/UT_Achieve_1008_Settlement.webp": {
+      "asset": "UT_Achieve_1008_Settlement",
+      "bundle": "4854464c6d70aaabdb279dafb0ad65ee.bundle",
+      "sha256": "ec25da2b9df96aed97bf177f2c123ce6a4dd0030fddf9b2bdb8054cd60373f1d"
+    },
+    "settlement/textures/UT_Achieve_1009_Settlement.webp": {
+      "asset": "UT_Achieve_1009_Settlement",
+      "bundle": "35fc9ceb5d86f930ec56a8ec4a635f4e.bundle",
+      "sha256": "e3b379cf26b0c1f6efe221e84287a7961e896a4117e1c8436233e92f03322e98"
+    },
+    "settlement/textures/UT_Achieve_1010_Settlement.webp": {
+      "asset": "UT_Achieve_1010_Settlement",
+      "bundle": "9385ae787522fc5fb21bfeeb1bc88a1d.bundle",
+      "sha256": "31923a19a2d05d31a36185d173a76cb222a039de9eb42d3c5c637b173d5f5bba"
+    },
+    "settlement/textures/UT_Achieve_1011_Settlement.webp": {
+      "asset": "UT_Achieve_1011_Settlement",
+      "bundle": "1bfd285e007695c15592429e991b9ddd.bundle",
+      "sha256": "282f0b8be1bbf2e643b4d8ccf42d48dc665bb4bd97e35a40ca18423156737fad"
+    },
+    "settlement/textures/UT_Achieve_1012_Settlement.webp": {
+      "asset": "UT_Achieve_1012_Settlement",
+      "bundle": "77a6f0878fa8ee73c63bf9b7d3a32b96.bundle",
+      "sha256": "028130f8047584c12c611d9d216a8aaf8b3393155e3acd216dd0de256000a636"
+    },
+    "settlement/textures/UT_Achieve_1013_Settlement.webp": {
+      "asset": "UT_Achieve_1013_Settlement",
+      "bundle": "73b638b637a13e1355a450a588262ae4.bundle",
+      "sha256": "d1e2437057861b051178486c9197952dcbca4c5f0b99d3c45f5746e76000e328"
+    },
+    "settlement/achieve.json": {
+      "asset": "Achieve",
+      "bundle": "01d0016714d048a0469ef498541d6c7a",
+      "sha256": "789d29d909fd219fc139a77493af45700d24bee9b9418c2b6c098b944060c798"
+    },
+    "settlement/textures/UT_MapScene_003.webp": {
+      "asset": "UT_MapScene_003",
+      "bundle": "7daceba647d59de03dd44cba96ebb590.bundle",
+      "sha256": "1c264ffda994f0539b40c9772d2a918f2e7a4d1ed2384ea94fdabf3990556288"
+    },
+    "settlement/textures/UT_MapScene_005.webp": {
+      "asset": "UT_MapScene_005",
+      "bundle": "1a7d4e7ee1bcbd2a7a6bbe6af4898451.bundle",
+      "sha256": "b37c7dee8b8a1491b0cb01a7840ced35150c43d7adead2984c632f00b523281e"
+    },
+    "settlement/textures/UT_MapScene_004.webp": {
+      "asset": "UT_MapScene_004",
+      "bundle": "4154e49217733b4cdf584b31f57dfa1e.bundle",
+      "sha256": "628bf2204d318900c1d1d0c557457be568262ed354673f79e5ea6016e0e2d3e3"
+    },
+    "settlement/textures/UT_MapScene_006.webp": {
+      "asset": "UT_MapScene_006",
+      "bundle": "fea4e3cb01fb390975bd94e00a6cbb7f.bundle",
+      "sha256": "e663202abcd099ca05217ea2a4e1cddbefd6a8aaef0afe933eb28268f930ec07"
+    },
+    "settlement/textures/UT_MapScene_021.webp": {
+      "asset": "UT_MapScene_021",
+      "bundle": "5a5fa2959aa9c27eb5384c1677057b4b.bundle",
+      "sha256": "11cff71c9e472d385dee4239bfcf63c0eaf21ede2798fad7686eaf1b496b58c4"
+    },
+    "settlement/textures/UT_MapScene_011.webp": {
+      "asset": "UT_MapScene_011",
+      "bundle": "0081140a160bdf6b5bb8c830599e8583.bundle",
+      "sha256": "5fc350839e76271a1694ba28ba079747f9177fd0f1d4974d733d036cd28917f8"
+    },
+    "settlement/textures/UT_MapScene_009.webp": {
+      "asset": "UT_MapScene_009",
+      "bundle": "ffad4606a8e98b352c86349a13868550.bundle",
+      "sha256": "f62f113a3c49302b5d8db54a98edbba7c7b6f30c315c7ba8a272b326e23fdb0a"
+    },
+    "settlement/textures/UT_MapScene_007.webp": {
+      "asset": "UT_MapScene_007",
+      "bundle": "36584b5a332c69fcba5542c99afd54d3.bundle",
+      "sha256": "9a1258ab8139a748e6071a263f1dbf5c13e0f1378141e9ab4745b743b71d9187"
+    },
+    "settlement/textures/UT_MapScene_008.webp": {
+      "asset": "UT_MapScene_008",
+      "bundle": "348da4551359392483683964d8f08b4f.bundle",
+      "sha256": "d72f6c28216b6ecff082a744474f2c9cbe949784c0fa93b5bf84d43fe9984f98"
+    },
+    "settlement/textures/UT_MapScene_010.webp": {
+      "asset": "UT_MapScene_010",
+      "bundle": "97bce05d5b7705ab5a9d2357666224cd.bundle",
+      "sha256": "d38d7b44ca5360a432a6bda3b799a73adcbd711888017506a92aa38305892446"
+    },
+    "settlement/textures/UT_MapScene_012.webp": {
+      "asset": "UT_MapScene_012",
+      "bundle": "13e072073b82971b1aa8f85e558c7bc5.bundle",
+      "sha256": "dd4fa1809793fbfc192a072e42d17ae656d7f2c05493e2f8b956047804deaee5"
+    },
+    "settlement/textures/UT_MapScene_013.webp": {
+      "asset": "UT_MapScene_013",
+      "bundle": "a149864dc31d385ebd46d7c85997c8f5.bundle",
+      "sha256": "62819721d55ef7b7128b1c659e2c6359244f0df74db88bdc456a8f91e5ba907d"
+    },
+    "settlement/textures/UT_MapScene_014.webp": {
+      "asset": "UT_MapScene_014",
+      "bundle": "0de94b2b68e389088cf3df661f4c9b6d.bundle",
+      "sha256": "3dad9898509e7d9f0983fbded4e82531d830cde38683dcf67a4f66dc01dbc915"
+    },
+    "settlement/textures/UT_MapScene_015.webp": {
+      "asset": "UT_MapScene_015",
+      "bundle": "c3f1fa70ee8b65f78bd1af4746a68ca5.bundle",
+      "sha256": "d95defbcf810774e7bba2a1a3c3f3e8b4b3acc13ca1d8c1aecc4d40bfedf27c5"
+    },
+    "settlement/textures/UT_MapScene_016.webp": {
+      "asset": "UT_MapScene_016",
+      "bundle": "35ad69e4edf97d68d0c7afa5045199dc",
+      "sha256": "68fc3a2d1c83136ef583e47d244f7012460377f738fbe167b88af7ba00c9f04e"
+    },
+    "settlement/textures/UT_MapScene_019.webp": {
+      "asset": "UT_MapScene_019",
+      "bundle": "0d88d11bd700fe2487e03647b3e3fc1c.bundle",
+      "sha256": "bf4e151ef92b8562559f0022ee39293fe9dca2ba4df92e93e03a8df6bb1c4585"
+    },
+    "settlement/textures/UT_MapScene_020.webp": {
+      "asset": "UT_MapScene_020",
+      "bundle": "d474d91e862d3752120f41db60b7810a.bundle",
+      "sha256": "49a7273d195dd777e0898e673bc27a618032cbffbef8b7cae6107db6df76ebf4"
+    },
+    "settlement/map.json": {
+      "asset": "Map",
+      "bundle": "01d0016714d048a0469ef498541d6c7a",
+      "sha256": "5927da7dde98dac70c833dde0cd2a248771727a0ff3f368fb78196145f9bd9fa"
+    },
+    "settlement/difficulty.json": {
+      "asset": "ChoosingTimeLimit",
+      "bundle": "01d0016714d048a0469ef498541d6c7a",
+      "sha256": "f14f6bae9b93d9f3709fdd5f2e64c03381980fd5e693f12aa7f4ab65c90cd274"
+    },
+    "settlement/Common/g1i49l.png": {
+      "asset": "Common/背景斜线 连续",
+      "bundle": "95cf4e745bb793f4fa1179e97c638d55",
+      "sha256": "735d7964086bcb09f3a379dfef878779ba99ab6c7a267b6b0f9c0cf8e8e84128"
+    },
+    "settlement/Common/kn6fq3y.png": {
+      "asset": "Common/bg3",
+      "bundle": "95cf4e745bb793f4fa1179e97c638d55",
+      "sha256": "2d5efb029ce35d33e31b356739f3e085b8a0a386a186c3d58c8791796a532c59"
+    },
+    "settlement/Common_Internal/k1ic8b_0.png": {
+      "asset": "Common_Internal/k1ic8b_0",
+      "bundle": "981fd75431c600e90254db4a62f5818b",
+      "sha256": "838d629ea12c3bbd797a0629819995f31057be5966169e90e0e832217ba0d861"
+    },
+    "settlement/Common/u0xaq3p.png": {
+      "asset": "Common/返回",
+      "bundle": "95cf4e745bb793f4fa1179e97c638d55",
+      "sha256": "ba332f1302215a4fd2167a22f0882de26508aa8d629146fe0abd95861b8a79e1"
+    },
+    "settlement/Common/u0xaq3q.png": {
+      "asset": "Common/返回-底",
+      "bundle": "95cf4e745bb793f4fa1179e97c638d55",
+      "sha256": "36c519342d022d89d7aae7e4b82e5c99625ff6a7ff84a9a807052e69f9d50346"
+    },
+    "settlement/Common/u0xaq3r.png": {
+      "asset": "Common/返回-悬停",
+      "bundle": "95cf4e745bb793f4fa1179e97c638d55",
+      "sha256": "3d3f90c06d759669e7002d7653fdeda991d8f27c31a4c4c0343bcbe50e87a517"
     }
   }
 }

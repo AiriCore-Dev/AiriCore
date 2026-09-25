@@ -200,7 +200,7 @@ class AstralPartyRenderingTests(unittest.TestCase):
         data["details"][0]["name"] = "很长很长的对局玩家名称" * 30
         image, text = self.capture(lambda: self.rendering.render_detail(data))
         self.assertGreater(self.image(image).height, 900)
-        self.assertIn("角色图示", text)
+        self.assertIn("默认立绘", text)
         self.assertNotIn("头像：帕露南", text)
         self.image(self.rendering.render_profile(data))
         self.image(
@@ -208,6 +208,105 @@ class AstralPartyRenderingTests(unittest.TestCase):
                 "很长的标题" * 50, ["说明文字" * 100, "第二段说明"]
             )
         )
+
+    def test_settlement_uses_native_canvas_and_seat_order(self):
+        data = snapshot()
+        first = self.image(self.rendering.render_detail(data))
+        self.assertEqual(first.size, (1920, 1080))
+        data["details"].reverse()
+        second = self.image(self.rendering.render_detail(data))
+        self.assertIsNone(ImageChops.difference(first, second).getbbox())
+
+    def test_settlement_does_not_invent_missing_statistics(self):
+        data = snapshot()
+        data["details"][0]["isGiveUp"] = True
+        _, text = self.capture(lambda: self.rendering.render_detail(data))
+        self.assertIn("已放弃对局", text)
+        self.assertIn("未提供", text)
+        self.assertIn("默认立绘", text)
+        self.assertNotIn("BEST", text)
+        self.assertNotIn("角色图示", text)
+
+    def test_settlement_uses_each_players_historical_cosmetics(self):
+        data = snapshot()
+        first = self.image(self.rendering.render_detail(data))
+        data["details"][2]["headIcon"] = 0
+        data["details"][2]["background"] = 0
+        second = self.image(self.rendering.render_detail(data))
+        bounds = ImageChops.difference(first, second).getbbox()
+        self.assertIsNotNone(bounds)
+        self.assertGreaterEqual(bounds[0], 852)
+        self.assertLessEqual(bounds[2], 1340)
+
+    def test_pve_has_separate_cooperative_results(self):
+        data = snapshot()
+        data["selected"]["mapType"] = 4
+        payload, text = self.capture(lambda: self.rendering.render_detail(data))
+        self.assertIn("协作胜利", text)
+        self.assertIn("遗物记录未提供", text)
+        self.assertIn("累计、转交金币未提供", text)
+        for player in data["details"]:
+            player["rank"] = 99
+            player["lv"] = 0
+        self.assertEqual(payload, self.rendering.render_detail(data))
+        data["selected"]["rank"] = 2
+        _, text = self.capture(lambda: self.rendering.render_detail(data))
+        self.assertIn("协作失败", text)
+        for mode in (6, 9, 10, 12):
+            data["selected"]["mapType"] = mode
+            _, text = self.capture(lambda: self.rendering.render_detail(data))
+            self.assertIn("协作失败", text)
+
+    def test_settlement_gold_does_not_overlap_its_icon(self):
+        settlement = importlib.import_module(f"{PACKAGE}.settlement_rendering")
+        player = snapshot()["details"][0]
+        player["gold"] = 0
+        first = settlement.player_image(player, True).convert("RGB")
+        player["gold"] = 9999
+        second = settlement.player_image(player, True).convert("RGB")
+        bounds = ImageChops.difference(first, second).getbbox()
+        self.assertGreaterEqual(bounds[0], 391)
+
+    def test_replay_statistics_relics_skin_and_footer_replace_placeholders(self):
+        data = snapshot()
+        data['selected']['mapType'] = 4
+        data['settlement'] = {
+            'mapId': 82016, 'round': 11, 'difficulty': 3,
+            'players': {
+                row['playerId']: {
+                    'standingPainting': 100306001, 'winner': True, 'relics': [50013, 50025],
+                    'stats': {'killCount': 11, 'totalDie': 1, 'totalDamage': 261,
+                              'totalInjured': 28, 'treatmentScore': 0, 'totalGold': 166,
+                              'pveTransferGold': 5, 'pkDamageMax': 44},
+                } for row in data['details']
+            },
+        }
+        original = copy.deepcopy(data)
+        _, text = self.capture(lambda: self.rendering.render_detail(data))
+        for value in ('261', '166', '疯狂', '11', '异变图书馆', '0'):
+            self.assertIn(value, text)
+        for value in ('遗物记录未提供', '默认立绘', '历史皮肤未提供', '返回'):
+            self.assertNotIn(value, text)
+        self.assertEqual(data, original)
+        settlement = importlib.import_module(f'{PACKAGE}.settlement_rendering')
+        player = next(iter(data['settlement']['players'].values()))
+        self.assertEqual(settlement.achievements(player, [player], False), [(1, 11), (2, 261), (3, 44)])
+
+    def test_settlement_preserves_unmasked_component_overflow(self):
+        settlement = importlib.import_module(f"{PACKAGE}.settlement_rendering")
+        item = {
+            "width": 10, "height": 10,
+            "children": [{
+                "type": 3, "name": "shape", "x": -10, "y": -5,
+                "width": 30, "height": 30, "visible": True, "shape": 1,
+                "color": [255, 0, 0, 255], "lineColor": [0, 0, 0, 0], "lineSize": 0,
+            }],
+        }
+        with patch.dict(settlement.LAYOUTS["BattleSettlement"]["items"], {"overflow": item}):
+            canvas = Image.new("RGBA", (100, 100))
+            settlement.place(canvas, settlement.component("overflow"), {"x": 40, "y": 40})
+            self.assertEqual(canvas.getpixel((30, 35)), (255, 0, 0, 255))
+            self.assertEqual(canvas.getpixel((59, 64)), (255, 0, 0, 255))
 
     def test_render_does_not_mutate_snapshot_or_cached_images(self):
         data = snapshot()

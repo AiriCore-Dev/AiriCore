@@ -1,0 +1,74 @@
+{
+  "81003": {
+    "path": "settlement/textures/UT_MapScene_003.webp",
+    "name": "游乐园"
+  },
+  "81005": {
+    "path": "settlement/textures/UT_MapScene_005.webp",
+    "name": "樱花小镇"
+  },
+  "81004": {
+    "path": "settlement/textures/UT_MapScene_004.webp",
+    "name": "十字路口站"
+  },
+  "81006": {
+    "path": "settlement/textures/UT_MapScene_006.webp",
+    "name": "魅影都市"
+  },
+  "81007": {
+    "path": "settlement/textures/UT_MapScene_021.webp",
+    "name": "梦想号-上层甲板"
+  },
+  "81011": {
+    "path": "settlement/textures/UT_MapScene_011.webp",
+    "name": "丛林冒险"
+  },
+  "82009": {
+    "path": "settlement/textures/UT_MapScene_009.webp",
+    "name": "礼物广场"
+  },
+  "82007": {
+    "path": "settlement/textures/UT_MapScene_007.webp",
+    "name": "星趴·梦想号"
+  },
+  "82008": {
+    "path": "settlement/textures/UT_MapScene_008.webp",
+    "name": "御魂庆典"
+  },
+  "82010": {
+    "path": "settlement/textures/UT_MapScene_010.webp",
+    "name": "水乡古镇"
+  },
+  "82012": {
+    "path": "settlement/textures/UT_MapScene_012.webp",
+    "name": "魔法学院"
+  },
+  "82013": {
+    "path": "settlement/textures/UT_MapScene_013.webp",
+    "name": "龙宫游乐园"
+  },
+  "82014": {
+    "path": "settlement/textures/UT_MapScene_014.webp",
+    "name": "幽魂暗巷"
+  },
+  "82015": {
+    "path": "settlement/textures/UT_MapScene_015.webp",
+    "name": "园林中庭"
+  },
+  "82016": {
+    "path": "settlement/textures/UT_MapScene_016.webp",
+    "name": "异变图书馆"
+  },
+  "83001": {
+    "path": "settlement/textures/UT_MapScene_019.webp",
+    "name": "海选赛运动场"
+  },
+  "83002": {
+    "path": "settlement/textures/UT_MapScene_019.webp",
+    "name": "淘汰赛运动场"
+  },
+  "83003": {
+    "path": "settlement/textures/UT_MapScene_020.webp",
+    "name": "决赛大赛场"
+  }
+}

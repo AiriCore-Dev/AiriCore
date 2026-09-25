@@ -1,0 +1,192 @@
+{
+  "id": "ud5q04r1",
+  "name": "Background",
+  "version": 6,
+  "dependencies": [
+    {
+      "id": "xuaw6o8j",
+      "name": "Common"
+    }
+  ],
+  "items": {
+    "j6xj3r": {
+      "type": 3,
+      "id": "j6xj3r",
+      "name": "BackgroundPanel",
+      "path": "/",
+      "file": null,
+      "exported": true,
+      "width": 1920,
+      "height": 1080,
+      "objectType": 0,
+      "children": [
+        {
+          "type": 0,
+          "source": "kn6fq3y",
+          "package": "xuaw6o8j",
+          "id": "n93_x2xx",
+          "name": "n93",
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 0,
+              "values": {
+                "pages": [
+                  "0"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n90_nc4b",
+          "name": "loader_BG",
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 0,
+              "values": {
+                "pages": [
+                  "0"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": 4,
+          "source": null,
+          "package": null,
+          "id": "n92_g1i4",
+          "name": "loader_Line",
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080,
+          "alpha": 0.20000000298023224,
+          "rotation": 0.0,
+          "visible": false,
+          "url": "ui://xuaw6o8jg1i49l",
+          "align": 1,
+          "verticalAlign": 1,
+          "fill": 4,
+          "shrinkOnly": false,
+          "autoSize": false,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 0,
+              "values": {
+                "pages": [
+                  "0"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": 4,
+          "source": null,
+          "package": null,
+          "id": "n94_dtry",
+          "name": "loader_SystemBG",
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080,
+          "alpha": 0.20000000298023224,
+          "rotation": 0.0,
+          "visible": false,
+          "url": null,
+          "align": 1,
+          "verticalAlign": 1,
+          "fill": 4,
+          "shrinkOnly": false,
+          "autoSize": false,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 0,
+              "values": {
+                "pages": [
+                  "0"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "mask": -1,
+      "controllers": [
+        {
+          "name": "hide",
+          "pages": [
+            [
+              "0",
+              "false"
+            ],
+            [
+              "1",
+              "true"
+            ]
+          ]
+        }
+      ],
+      "transitions": []
+    }
+  },
+  "strings": [
+    "xuaw6o8j",
+    "Common",
+    "j6xj3r",
+    "BackgroundPanel",
+    "/",
+    "hide",
+    "0",
+    "false",
+    "1",
+    "true",
+    "kn6fq3y",
+    "n93_x2xx",
+    "n93",
+    "n90_nc4b",
+    "loader_BG",
+    "n92_g1i4",
+    "loader_Line",
+    "ui://xuaw6o8jg1i49l",
+    "n94_dtry",
+    "loader_SystemBG"
+  ]
+}

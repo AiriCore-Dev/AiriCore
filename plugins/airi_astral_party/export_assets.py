@@ -63,7 +63,110 @@ class Buffer:
         return b
 
 
-def child(b, start):
+def gear_value(b, kind):
+    formats = {1: "ii", 2: "iiff", 3: "ffBB", 4: "BBBBBBBB"}
+    if kind in formats:
+        return list(b.read(formats[kind]))
+    if kind == 5:
+        return [bool(b.byte()), b.integer()]
+    if kind in (6, 7):
+        return b.ref()
+    if kind == 9:
+        return b.integer()
+    raise ValueError(f"不支持的界面控制器类型：{kind}")
+
+
+def gears(b, start):
+    result = []
+    if not b.seek(start, 2):
+        return result
+    for _ in range(b.short()):
+        length = b.short()
+        end = b.p + length
+        kind, controller, count = b.byte(), b.short(), b.short()
+        values = {}
+        if kind in (0, 8):
+            values["pages"] = [b.ref() for _ in range(count)]
+        else:
+            for _ in range(count):
+                page = b.ref()
+                if page is not None:
+                    values[page] = gear_value(b, kind)
+            if b.byte():
+                values["default"] = gear_value(b, kind)
+        result.append({"kind": kind, "controller": controller, "values": values})
+        b.p = end
+    return result
+
+
+def transition_value(b, kind):
+    if kind in (0, 1, 3):
+        value = [bool(b.byte()), bool(b.byte()), *b.read("ff")]
+        if kind == 0:
+            value.append(bool(b.byte()))
+        return value
+    if kind in (2, 11, 13):
+        return list(b.read("ff"))
+    if kind in (4, 5):
+        return b.read("f")
+    if kind == 6:
+        return list(b.read("BBBB"))
+    if kind == 7:
+        return [bool(b.byte()), b.integer()]
+    if kind == 8:
+        return bool(b.byte())
+    if kind == 9:
+        return [b.ref(), b.read("f")]
+    if kind == 10:
+        return [b.ref(), b.integer()]
+    if kind == 12:
+        return list(b.read("ffff"))
+    if kind in (14, 15):
+        return b.ref()
+    raise ValueError(f"不支持的界面动画类型：{kind}")
+
+
+def component_states(b):
+    controllers, transitions = [], []
+    if b.seek(0, 1):
+        for _ in range(b.short()):
+            length = b.short()
+            start, end = b.p, b.p + length
+            b.seek(start, 0)
+            name = b.ref()
+            b.seek(start, 1)
+            pages = [[b.ref(), b.ref()] for _ in range(b.short())]
+            controllers.append({"name": name, "pages": pages})
+            b.p = end
+    if b.seek(0, 5):
+        for _ in range(b.short()):
+            length = b.short()
+            end = b.p + length
+            transition = {"name": b.ref()}
+            b.p += 13
+            items = []
+            for _ in range(b.short()):
+                length = b.short()
+                start, stop = b.p, b.p + length
+                b.seek(start, 0)
+                kind = b.byte()
+                item = {"kind": kind, "time": b.read("f"), "target": b.read("h")}
+                b.ref()
+                tween = bool(b.byte())
+                if tween:
+                    b.seek(start, 1)
+                    item["duration"] = b.read("f")
+                b.seek(start, 3 if tween else 2)
+                item["value"] = transition_value(b, kind)
+                items.append(item)
+                b.p = stop
+            transition["items"] = items
+            transitions.append(transition)
+            b.p = end
+    return {"controllers": controllers, "transitions": transitions}
+
+
+def child(b, start, include_state=False):
     b.seek(start, 0)
     d = {
         "type": b.byte(),
@@ -133,10 +236,12 @@ def child(b, start):
                 d["points"] = [b.read("f") for _ in range(b.short())]
     if d["type"] == 9 and b.seek(start, 6) and b.byte() == 12:
         d["title"] = b.ref()
+    if include_state:
+        d["gears"] = gears(b, start)
     return d
 
 
-def package(path):
+def package(path, include_state=False):
     b = Buffer(path.read_bytes())
     if b.integer() != 1179080009:
         raise ValueError("不支持的 FairyGUI 素材格式")
@@ -185,7 +290,7 @@ def package(path):
             for _ in range(raw.short()):
                 n = raw.short()
                 p = raw.p
-                children.append(child(raw, p))
+                children.append(child(raw, p, include_state))
                 raw.p = p + n
             d["children"] = children
             if raw.seek(0, 4):
@@ -193,6 +298,8 @@ def package(path):
                 d["mask"] = raw.read("h")
                 if d["mask"] != -1:
                     d["reversedMask"] = bool(raw.byte())
+            if include_state:
+                d.update(component_states(raw))
         items[d["id"]] = d
         b.p = end
     b.seek(start, 2)

@@ -1,0 +1,452 @@
+{
+  "50001": {
+    "path": "settlement/textures/UT_Relic_Attack.webp",
+    "quality": 1,
+    "weight": 1
+  },
+  "50002": {
+    "path": "settlement/textures/UT_Relic_Attack.webp",
+    "quality": 2,
+    "weight": 2
+  },
+  "50003": {
+    "path": "settlement/textures/UT_Relic_Attack.webp",
+    "quality": 3,
+    "weight": 3
+  },
+  "50004": {
+    "path": "settlement/textures/UT_Relic_Speed.webp",
+    "quality": 1,
+    "weight": 4
+  },
+  "50005": {
+    "path": "settlement/textures/UT_Relic_Speed.webp",
+    "quality": 2,
+    "weight": 5
+  },
+  "50006": {
+    "path": "settlement/textures/UT_Relic_Speed.webp",
+    "quality": 3,
+    "weight": 6
+  },
+  "50007": {
+    "path": "settlement/textures/UT_Relic_Hp.webp",
+    "quality": 1,
+    "weight": 7
+  },
+  "50008": {
+    "path": "settlement/textures/UT_Relic_Hp.webp",
+    "quality": 2,
+    "weight": 8
+  },
+  "50009": {
+    "path": "settlement/textures/UT_Relic_Hp.webp",
+    "quality": 3,
+    "weight": 9
+  },
+  "50010": {
+    "path": "settlement/textures/UT_Relic_50010.webp",
+    "quality": 2,
+    "weight": 3001
+  },
+  "50011": {
+    "path": "settlement/textures/UT_Relic_50010.webp",
+    "quality": 3,
+    "weight": 3002
+  },
+  "50013": {
+    "path": "settlement/textures/UT_Relic_KillReward.webp",
+    "quality": 2,
+    "weight": 1001
+  },
+  "50015": {
+    "path": "settlement/textures/UT_Relic_Gold.webp",
+    "quality": 1,
+    "weight": 1003
+  },
+  "50016": {
+    "path": "settlement/textures/UT_Relic_Gold.webp",
+    "quality": 2,
+    "weight": 1004
+  },
+  "50017": {
+    "path": "settlement/textures/UT_Relic_Gold.webp",
+    "quality": 3,
+    "weight": 1005
+  },
+  "50018": {
+    "path": "settlement/textures/UT_Relic_Defend.webp",
+    "quality": 1,
+    "weight": 10
+  },
+  "50019": {
+    "path": "settlement/textures/UT_Relic_Defend.webp",
+    "quality": 2,
+    "weight": 11
+  },
+  "50020": {
+    "path": "settlement/textures/UT_Relic_Defend.webp",
+    "quality": 3,
+    "weight": 12
+  },
+  "50021": {
+    "path": "settlement/textures/UT_Relic_Heal.webp",
+    "quality": 1,
+    "weight": 3003
+  },
+  "50022": {
+    "path": "settlement/textures/UT_Relic_Heal.webp",
+    "quality": 3,
+    "weight": 3004
+  },
+  "50024": {
+    "path": "settlement/textures/UT_Relic_Enmity.webp",
+    "quality": 3,
+    "weight": 14
+  },
+  "50025": {
+    "path": "settlement/textures/UT_Relic_50025.webp",
+    "quality": 2,
+    "weight": 15
+  },
+  "50026": {
+    "path": "settlement/textures/UT_Relic_50026.webp",
+    "quality": 1,
+    "weight": 16
+  },
+  "50027": {
+    "path": "settlement/textures/UT_Relic_50027.webp",
+    "quality": 2,
+    "weight": 3005
+  },
+  "50028": {
+    "path": "settlement/textures/UT_Relic_50028.webp",
+    "quality": 2,
+    "weight": 17
+  },
+  "50029": {
+    "path": "settlement/textures/UT_Relic_50029.webp",
+    "quality": 2,
+    "weight": 18
+  },
+  "50030": {
+    "path": "settlement/textures/UT_Relic_50030.webp",
+    "quality": 1,
+    "weight": 2001
+  },
+  "50031": {
+    "path": "settlement/textures/UT_Relic_50031.webp",
+    "quality": 2,
+    "weight": 19
+  },
+  "50032": {
+    "path": "settlement/textures/UT_Relic_50032.webp",
+    "quality": 1,
+    "weight": 2002
+  },
+  "50033": {
+    "path": "settlement/textures/UT_Relic_50033.webp",
+    "quality": 2,
+    "weight": 3006
+  },
+  "50034": {
+    "path": "settlement/textures/UT_Relic_50034.webp",
+    "quality": 3,
+    "weight": 3007
+  },
+  "50035": {
+    "path": "settlement/textures/UT_Relic_50035.webp",
+    "quality": 1,
+    "weight": 20
+  },
+  "50036": {
+    "path": "settlement/textures/UT_Relic_50036.webp",
+    "quality": 1,
+    "weight": 1006
+  },
+  "50037": {
+    "path": "settlement/textures/UT_Relic_50037.webp",
+    "quality": 1,
+    "weight": 9001
+  },
+  "50038": {
+    "path": "settlement/textures/UT_Relic_50038.webp",
+    "quality": 2,
+    "weight": 9002
+  },
+  "50039": {
+    "path": "settlement/textures/UT_Relic_50039.webp",
+    "quality": 3,
+    "weight": 9003
+  },
+  "50040": {
+    "path": "settlement/textures/UT_Relic_50040.webp",
+    "quality": 1,
+    "weight": 3008
+  },
+  "50041": {
+    "path": "settlement/textures/UT_Relic_50041.webp",
+    "quality": 2,
+    "weight": 3009
+  },
+  "50042": {
+    "path": "settlement/textures/UT_Relic_50042.webp",
+    "quality": 1,
+    "weight": 1007
+  },
+  "50043": {
+    "path": "settlement/textures/UT_Relic_50043.webp",
+    "quality": 3,
+    "weight": 1008
+  },
+  "50044": {
+    "path": "settlement/textures/UT_Relic_50044.webp",
+    "quality": 3,
+    "weight": 2004
+  },
+  "50045": {
+    "path": "settlement/textures/UT_Relic_50045.webp",
+    "quality": 3,
+    "weight": 2005
+  },
+  "50046": {
+    "path": "settlement/textures/UT_Relic_50046.webp",
+    "quality": 1,
+    "weight": 2006
+  },
+  "50047": {
+    "path": "settlement/textures/UT_Relic_50047.webp",
+    "quality": 2,
+    "weight": 2007
+  },
+  "50048": {
+    "path": "settlement/textures/UT_Relic_50030.webp",
+    "quality": 2,
+    "weight": 2008
+  },
+  "50049": {
+    "path": "settlement/textures/UT_Relic_50049.webp",
+    "quality": 1,
+    "weight": 9004
+  },
+  "50050": {
+    "path": "settlement/textures/UT_Relic_50050.webp",
+    "quality": 2,
+    "weight": 9005
+  },
+  "50051": {
+    "path": "settlement/textures/UT_Relic_50051.webp",
+    "quality": 3,
+    "weight": 9006
+  },
+  "50052": {
+    "path": "settlement/textures/UT_Relic_50044.webp",
+    "quality": 2,
+    "weight": 2003
+  },
+  "50053": {
+    "path": "settlement/textures/UT_Relic_50053.webp",
+    "quality": 1,
+    "weight": 9007
+  },
+  "50054": {
+    "path": "settlement/textures/UT_Relic_50054.webp",
+    "quality": 3,
+    "weight": 9009
+  },
+  "50055": {
+    "path": "settlement/textures/UT_Relic_50055.webp",
+    "quality": 2,
+    "weight": 9008
+  },
+  "50056": {
+    "path": "settlement/textures/UT_Relic_50056.webp",
+    "quality": 1,
+    "weight": 9010
+  },
+  "50057": {
+    "path": "settlement/textures/UT_Relic_50057.webp",
+    "quality": 1,
+    "weight": 9011
+  },
+  "50058": {
+    "path": "settlement/textures/UT_Relic_50058.webp",
+    "quality": 3,
+    "weight": 9012
+  },
+  "50059": {
+    "path": "settlement/textures/UT_Relic_50059.webp",
+    "quality": 3,
+    "weight": 9013
+  },
+  "50060": {
+    "path": "settlement/textures/UT_Relic_50060.webp",
+    "quality": 2,
+    "weight": 9014
+  },
+  "50061": {
+    "path": "settlement/textures/UT_Relic_50061.webp",
+    "quality": 2,
+    "weight": 9015
+  },
+  "50062": {
+    "path": "settlement/textures/UT_Relic_50062.webp",
+    "quality": 1,
+    "weight": 9016
+  },
+  "50063": {
+    "path": "settlement/textures/UT_Relic_50063.webp",
+    "quality": 2,
+    "weight": 9017
+  },
+  "50064": {
+    "path": "settlement/textures/UT_Relic_50064.webp",
+    "quality": 3,
+    "weight": 9018
+  },
+  "50065": {
+    "path": "settlement/textures/UT_Relic_50065.webp",
+    "quality": 1,
+    "weight": 21
+  },
+  "50066": {
+    "path": "settlement/textures/UT_Relic_50066.webp",
+    "quality": 3,
+    "weight": 22
+  },
+  "50067": {
+    "path": "settlement/textures/UT_Relic_50067.webp",
+    "quality": 3,
+    "weight": 9019
+  },
+  "50068": {
+    "path": "settlement/textures/UT_Relic_50068.webp",
+    "quality": 2,
+    "weight": 9020
+  },
+  "50069": {
+    "path": "settlement/textures/UT_Relic_50069.webp",
+    "quality": 2,
+    "weight": 9021
+  },
+  "50070": {
+    "path": "settlement/textures/UT_Relic_50070.webp",
+    "quality": 1,
+    "weight": 9022
+  },
+  "50071": {
+    "path": "settlement/textures/UT_Relic_50071.webp",
+    "quality": 3,
+    "weight": 9023
+  },
+  "50072": {
+    "path": "settlement/textures/UT_Relic_50072.webp",
+    "quality": 2,
+    "weight": 9024
+  },
+  "50073": {
+    "path": "settlement/textures/UT_Relic_50073.webp",
+    "quality": 2,
+    "weight": 9025
+  },
+  "50074": {
+    "path": "settlement/textures/UT_Relic_50074.webp",
+    "quality": 3,
+    "weight": 9026
+  },
+  "50075": {
+    "path": "settlement/textures/UT_Relic_50075.webp",
+    "quality": 1,
+    "weight": 9028
+  },
+  "50076": {
+    "path": "settlement/textures/UT_Relic_50076.webp",
+    "quality": 2,
+    "weight": 9029
+  },
+  "50077": {
+    "path": "settlement/textures/UT_Relic_50077.webp",
+    "quality": 3,
+    "weight": 9030
+  },
+  "50078": {
+    "path": "settlement/textures/UT_Relic_50078.webp",
+    "quality": 2,
+    "weight": 1009
+  },
+  "50079": {
+    "path": "settlement/textures/UT_Relic_50078.webp",
+    "quality": 3,
+    "weight": 1010
+  },
+  "50080": {
+    "path": "settlement/textures/UT_Relic_50080.webp",
+    "quality": 3,
+    "weight": 9027
+  },
+  "50081": {
+    "path": "settlement/textures/UT_Relic_50081.webp",
+    "quality": 1,
+    "weight": 23
+  },
+  "50082": {
+    "path": "settlement/textures/UT_Relic_50082.webp",
+    "quality": 2,
+    "weight": 13
+  },
+  "50083": {
+    "path": "settlement/textures/UT_Relic_50083.webp",
+    "quality": 1,
+    "weight": 24
+  },
+  "50084": {
+    "path": "settlement/textures/UT_Relic_50084.webp",
+    "quality": 1,
+    "weight": 4001
+  },
+  "50085": {
+    "path": "settlement/textures/UT_Relic_50085.webp",
+    "quality": 1,
+    "weight": 4002
+  },
+  "50086": {
+    "path": "settlement/textures/UT_Relic_50086.webp",
+    "quality": 2,
+    "weight": 4005
+  },
+  "50087": {
+    "path": "settlement/textures/UT_Relic_50087.webp",
+    "quality": 2,
+    "weight": 4004
+  },
+  "50088": {
+    "path": "settlement/textures/UT_Relic_50088.webp",
+    "quality": 1,
+    "weight": 4003
+  },
+  "50089": {
+    "path": "settlement/textures/UT_Relic_50089.webp",
+    "quality": 2,
+    "weight": 4006
+  },
+  "50090": {
+    "path": "settlement/textures/UT_Relic_50090.webp",
+    "quality": 3,
+    "weight": 4007
+  },
+  "50091": {
+    "path": "settlement/textures/UT_Relic_50091.webp",
+    "quality": 3,
+    "weight": 4008
+  },
+  "50092": {
+    "path": "settlement/textures/UT_Relic_50092.webp",
+    "quality": 2,
+    "weight": 9031
+  },
+  "50093": {
+    "path": "settlement/textures/UT_Relic_50093.webp",
+    "quality": 3,
+    "weight": 9032
+  }
+}

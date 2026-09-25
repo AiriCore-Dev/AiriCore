@@ -10,6 +10,7 @@ from PIL import Image, ImageDraw
 from utils.cache import get_font, get_image
 
 from .service import PAGE_SIZE
+from .settlement_rendering import render_settlement
 from .profile_rendering import (
     paint_achievements,
     paint_character,
@@ -285,84 +286,10 @@ def render_detail(snapshot):
     details = snapshot.get("details") or []
     if not details:
         return render_message("对局详情", ["暂无该对局的公开详情"])
-    details = details[:16]
-    rows = math.ceil(len(details) / 4)
-    width, height = 1600, 280 + rows * 530
-    canvas = _background((width, height))
-    _header(canvas, "对局详情", snapshot, width)
     selected = snapshot.get("selected") or {}
-    _text(
-        canvas,
-        f"{_time(selected.get('time'))}  ·  {_mode(selected.get('mapType'))}",
-        (100, 193, 1400, 45),
-        27,
-        "white",
-        align="center",
+    canvas = render_settlement(
+        snapshot, _mode(selected.get("mapType")), _time(selected.get("time"))
     )
-    for index, player in enumerate(details):
-        x, y = 66 + index % 4 * 372, 257 + index // 4 * 530
-        _paste(canvas, _sprite("it6m2r"), (x, y), (350, 497))
-        rank = _number(player.get("rank"))
-        if 1 <= rank <= 4:
-            _paste(
-                canvas,
-                _sprite(("zhztq", "zhztr", "zhzts", "zhztt")[rank - 1]),
-                (x + 68, y + 10),
-                (135, 110),
-            )
-        else:
-            _text(
-                canvas,
-                f"第 {rank} 名" if rank else "名次未提供",
-                (x + 15, y + 28, 238, 72),
-                30,
-                "white",
-                align="center",
-            )
-        _text(
-            canvas,
-            player.get("name") or "未提供昵称",
-            (x + 15, y + 119, 238, 46),
-            29,
-            align="center",
-        )
-        hero_id = str(_number(player.get("heroId")))
-        portrait = ASSETS / "portraits" / f"UT_Hero_ProfilePhoto_{hero_id}.png"
-        if hero_id in NAMES["heroes"] and portrait.is_file():
-            _paste(canvas, get_image(portrait).copy(), (x + 84, y + 183), (100, 100))
-        else:
-            _paste(canvas, _sprite("m1i721"), (x + 84, y + 183), (100, 100))
-            _text(
-                canvas, "？", (x + 84, y + 183, 100, 100), 45, "white", align="center"
-            )
-        _text(
-            canvas,
-            "角色图示",
-            (x + 15, y + 288, 238, 26),
-            18,
-            "#7b7483",
-            align="center",
-        )
-        _text(
-            canvas,
-            _hero(player.get("heroId")),
-            (x + 15, y + 323, 238, 38),
-            25,
-            align="center",
-        )
-        _text(
-            canvas,
-            f"星级 {_number(player.get('lv'))}  ·  金币 {_number(player.get('gold'))}",
-            (x + 15, y + 377, 238, 37),
-            24,
-            align="center",
-        )
-        status = (
-            "已放弃对局"
-            if player.get("isGiveUp")
-            else f"玩家等级 {_number(player.get('playerLevel'))}"
-        )
-        _text(canvas, status, (x + 15, y + 438, 238, 32), 21, "white", align="center")
     return _png(canvas)
 
 

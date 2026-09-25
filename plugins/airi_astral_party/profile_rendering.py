@@ -55,9 +55,12 @@ def sprite(child, package="Common"):
     item = LAYOUTS[package][child["source"]]
     image = get_image(ASSETS / f"ui/{package}/{item['id']}.png").copy()
     size = (child.get("width", image.width), child.get("height", image.height))
+    return resize_sprite(image, size, item.get("scale9Grid"))
+
+
+def resize_sprite(image, size, grid=None):
     if size == image.size:
         return image
-    grid = item.get("scale9Grid")
     if not grid:
         return image.resize(size, RESAMPLE)
     x, y, width, height = grid
@@ -182,8 +185,7 @@ def paint_character(canvas, snapshot):
     return None
 
 
-def paint_label(canvas, snapshot):
-    info = snapshot.get("info") or {}
+def label_image(info):
     label = blank((760, 180))
     background = blank(label.size)
     row = cosmetic("backgrounds", info.get("background"))
@@ -236,7 +238,12 @@ def paint_label(canvas, snapshot):
         put(label, text_image(value, child, fit=key == "txt_lv"), child)
     border = node("z1wk0", "n85")
     put(label, sprite(border), border)
-    put(canvas, mask(label, "z1wk0"), node("x20l20", "com_Label", "AccountInfo"))
+    return mask(label, "z1wk0"), available
+
+
+def paint_label(canvas, snapshot):
+    label, available = label_image(snapshot.get("info") or {})
+    put(canvas, label, node("x20l20", "com_Label", "AccountInfo"))
     origin = node("x20l20", "btn_UID", "AccountInfo")
     child = dict(node("p5xi2j", "txt_UID", "AccountInfo"))
     child["height"] = min(

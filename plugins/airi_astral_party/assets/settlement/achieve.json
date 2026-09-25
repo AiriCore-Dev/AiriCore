@@ -1,0 +1,58 @@
+{
+  "7": {
+    "path": "settlement/textures/UT_Achieve_1000_Settlement.webp",
+    "weight": 100
+  },
+  "1": {
+    "path": "settlement/textures/UT_Achieve_1001_Settlement.webp",
+    "weight": 99
+  },
+  "2": {
+    "path": "settlement/textures/UT_Achieve_1002_Settlement.webp",
+    "weight": 98
+  },
+  "3": {
+    "path": "settlement/textures/UT_Achieve_1003_Settlement.webp",
+    "weight": 97
+  },
+  "4": {
+    "path": "settlement/textures/UT_Achieve_1004_Settlement.webp",
+    "weight": 49
+  },
+  "5": {
+    "path": "settlement/textures/UT_Achieve_1005_Settlement.webp",
+    "weight": 50
+  },
+  "6": {
+    "path": "settlement/textures/UT_Achieve_1006_Settlement.webp",
+    "weight": 48
+  },
+  "11": {
+    "path": "settlement/textures/UT_Achieve_1007_Settlement.webp",
+    "weight": 95
+  },
+  "12": {
+    "path": "settlement/textures/UT_Achieve_1008_Settlement.webp",
+    "weight": 94
+  },
+  "13": {
+    "path": "settlement/textures/UT_Achieve_1009_Settlement.webp",
+    "weight": 96
+  },
+  "14": {
+    "path": "settlement/textures/UT_Achieve_1010_Settlement.webp",
+    "weight": 90
+  },
+  "15": {
+    "path": "settlement/textures/UT_Achieve_1011_Settlement.webp",
+    "weight": 47
+  },
+  "16": {
+    "path": "settlement/textures/UT_Achieve_1012_Settlement.webp",
+    "weight": 93
+  },
+  "17": {
+    "path": "settlement/textures/UT_Achieve_1013_Settlement.webp",
+    "weight": 92
+  }
+}

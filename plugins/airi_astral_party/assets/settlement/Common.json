@@ -1,0 +1,1985 @@
+{
+  "id": "xuaw6o8j",
+  "name": "Common",
+  "version": 6,
+  "dependencies": [
+    {
+      "id": "mzuc5vkb",
+      "name": "Font"
+    }
+  ],
+  "items": {
+    "9wy8bt": {
+      "type": 0,
+      "id": "9wy8bt",
+      "name": "蓝-未选择",
+      "path": "/Components/Relic/Images/",
+      "file": null,
+      "exported": false,
+      "width": 88,
+      "height": 88,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1618,
+          1608,
+          88,
+          88
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          88,
+          88
+        ]
+      }
+    },
+    "9wy8bu": {
+      "type": 0,
+      "id": "9wy8bu",
+      "name": "紫-未选择",
+      "path": "/Components/Relic/Images/",
+      "file": null,
+      "exported": false,
+      "width": 88,
+      "height": 88,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          798,
+          1086,
+          88,
+          88
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          88,
+          88
+        ]
+      }
+    },
+    "9wy8bv": {
+      "type": 0,
+      "id": "9wy8bv",
+      "name": "黄-未选择",
+      "path": "/Components/Relic/Images/",
+      "file": null,
+      "exported": false,
+      "width": 88,
+      "height": 88,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1534,
+          1266,
+          88,
+          88
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          88,
+          88
+        ]
+      }
+    },
+    "9wy8bx": {
+      "type": 0,
+      "id": "9wy8bx",
+      "name": "medal_bg",
+      "path": "/Components/Relic/Images/",
+      "file": null,
+      "exported": false,
+      "width": 88,
+      "height": 88,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1316,
+          1465,
+          88,
+          88
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          88,
+          88
+        ]
+      }
+    },
+    "imo383": {
+      "type": 0,
+      "id": "imo383",
+      "name": "星星（橙）",
+      "path": "/Components/PlayerLabel/PlayLevel/",
+      "file": null,
+      "exported": false,
+      "width": 40,
+      "height": 40,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1637,
+          1521,
+          36,
+          35
+        ],
+        "rotated": false,
+        "offset": [
+          3,
+          3
+        ],
+        "originalSize": [
+          40,
+          40
+        ]
+      }
+    },
+    "imo385": {
+      "type": 0,
+      "id": "imo385",
+      "name": "星星（蓝）",
+      "path": "/Components/PlayerLabel/PlayLevel/",
+      "file": null,
+      "exported": false,
+      "width": 40,
+      "height": 40,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1637,
+          1558,
+          36,
+          35
+        ],
+        "rotated": false,
+        "offset": [
+          3,
+          3
+        ],
+        "originalSize": [
+          40,
+          40
+        ]
+      }
+    },
+    "imo387": {
+      "type": 0,
+      "id": "imo387",
+      "name": "星星（未持有）",
+      "path": "/Components/PlayerLabel/PlayLevel/",
+      "file": null,
+      "exported": false,
+      "width": 40,
+      "height": 40,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1618,
+          1698,
+          36,
+          35
+        ],
+        "rotated": false,
+        "offset": [
+          3,
+          3
+        ],
+        "originalSize": [
+          40,
+          40
+        ]
+      }
+    },
+    "9wy8bw": {
+      "type": 3,
+      "id": "9wy8bw",
+      "name": "Com_Relic_Quality",
+      "path": "/Components/Relic/",
+      "file": null,
+      "exported": true,
+      "width": 90,
+      "height": 90,
+      "objectType": 0,
+      "children": [
+        {
+          "type": 0,
+          "source": "9wy8bv",
+          "package": null,
+          "id": "n0_9wy8",
+          "name": "n0",
+          "x": 1,
+          "y": 1,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 0,
+              "values": {
+                "pages": [
+                  "2"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": 0,
+          "source": "9wy8bt",
+          "package": null,
+          "id": "n1_9wy8",
+          "name": "n1",
+          "x": 1,
+          "y": 1,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 0,
+              "values": {
+                "pages": [
+                  "0"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": 0,
+          "source": "9wy8bu",
+          "package": null,
+          "id": "n2_9wy8",
+          "name": "n2",
+          "x": 1,
+          "y": 1,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 0,
+              "values": {
+                "pages": [
+                  "1"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": 0,
+          "source": "9wy8bx",
+          "package": null,
+          "id": "n3_9wy8",
+          "name": "n3",
+          "x": 1,
+          "y": 1,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 0,
+              "values": {
+                "pages": [
+                  "4"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "mask": -1,
+      "controllers": [
+        {
+          "name": "quality",
+          "pages": [
+            [
+              "4",
+              "none"
+            ],
+            [
+              "0",
+              "蓝"
+            ],
+            [
+              "1",
+              "紫"
+            ],
+            [
+              "2",
+              "金"
+            ]
+          ]
+        }
+      ],
+      "transitions": []
+    },
+    "imo37v": {
+      "type": 3,
+      "id": "imo37v",
+      "name": "Com_PlayerLevel",
+      "path": "/Components/PlayerLabel/PlayLevel/",
+      "file": null,
+      "exported": true,
+      "width": 40,
+      "height": 40,
+      "objectType": 0,
+      "children": [
+        {
+          "type": 0,
+          "source": "imo387",
+          "package": null,
+          "id": "n12_i1xv",
+          "name": "n12",
+          "x": 0,
+          "y": 0,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 0,
+              "values": {
+                "pages": [
+                  "0"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": 0,
+          "source": "imo384",
+          "package": null,
+          "id": "n13_ns45",
+          "name": "n13",
+          "x": 0,
+          "y": 0,
+          "pivot": [
+            0.5,
+            0.5,
+            0
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 0,
+              "values": {
+                "pages": [
+                  "1"
+                ]
+              }
+            },
+            {
+              "kind": 8,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "0"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": 0,
+          "source": "imo386",
+          "package": null,
+          "id": "n15_imo3",
+          "name": "n15",
+          "x": 0,
+          "y": 0,
+          "pivot": [
+            0.5,
+            0.5,
+            0
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 0,
+              "values": {
+                "pages": [
+                  "1"
+                ]
+              }
+            },
+            {
+              "kind": 8,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "1"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": 0,
+          "source": "imo385",
+          "package": null,
+          "id": "n14_imo3",
+          "name": "n14",
+          "x": 0,
+          "y": 0,
+          "pivot": [
+            0.5,
+            0.5,
+            0
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 0,
+              "values": {
+                "pages": [
+                  "1"
+                ]
+              }
+            },
+            {
+              "kind": 8,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "2"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": 0,
+          "source": "imo383",
+          "package": null,
+          "id": "n16_imo3",
+          "name": "n16",
+          "x": 0,
+          "y": 0,
+          "pivot": [
+            0.5,
+            0.5,
+            0
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 0,
+              "values": {
+                "pages": [
+                  "1"
+                ]
+              }
+            },
+            {
+              "kind": 8,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "3"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n17_capz",
+          "name": "graph_Effect",
+          "x": 21,
+          "y": 20,
+          "width": 6,
+          "height": 6,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": false,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "gears": []
+        }
+      ],
+      "mask": -1,
+      "controllers": [
+        {
+          "name": "avtiveLevel",
+          "pages": [
+            [
+              "0",
+              "未激活"
+            ],
+            [
+              "1",
+              "激活"
+            ]
+          ]
+        },
+        {
+          "name": "slot",
+          "pages": [
+            [
+              "0",
+              "P1"
+            ],
+            [
+              "1",
+              "P2"
+            ],
+            [
+              "2",
+              "P3"
+            ],
+            [
+              "3",
+              "P4"
+            ]
+          ]
+        }
+      ],
+      "transitions": [
+        {
+          "name": "Cut in",
+          "items": [
+            {
+              "kind": 2,
+              "time": 0.0,
+              "target": 1,
+              "duration": 0.20000001788139343,
+              "value": [
+                1.0,
+                1.0
+              ]
+            },
+            {
+              "kind": 2,
+              "time": 0.0,
+              "target": 3,
+              "duration": 0.20000001788139343,
+              "value": [
+                1.0,
+                1.0
+              ]
+            },
+            {
+              "kind": 2,
+              "time": 0.0,
+              "target": 2,
+              "duration": 0.20000001788139343,
+              "value": [
+                1.0,
+                1.0
+              ]
+            },
+            {
+              "kind": 2,
+              "time": 0.0,
+              "target": 4,
+              "duration": 0.20000001788139343,
+              "value": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "mmmw3y": {
+      "type": 3,
+      "id": "mmmw3y",
+      "name": "Com_Icon_Gold",
+      "path": "/Components/Com_Attr/",
+      "file": null,
+      "exported": true,
+      "width": 150,
+      "height": 150,
+      "objectType": 0,
+      "children": [
+        {
+          "type": 0,
+          "source": "mmmw3x",
+          "package": null,
+          "id": "n0_mmmw",
+          "name": "gold",
+          "x": 0,
+          "y": 0,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": []
+        }
+      ],
+      "mask": -1,
+      "controllers": [],
+      "transitions": []
+    },
+    "ozsk8w": {
+      "type": 3,
+      "id": "ozsk8w",
+      "name": "Button_Back_Small",
+      "path": "/Components/Button/",
+      "file": null,
+      "exported": true,
+      "width": 200,
+      "height": 106,
+      "objectType": 12,
+      "children": [
+        {
+          "type": 0,
+          "source": "u0xaq3q",
+          "package": null,
+          "id": "n48_u0xa",
+          "name": "n48",
+          "x": 0,
+          "y": 0,
+          "width": 200,
+          "height": 111,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": []
+        },
+        {
+          "type": 0,
+          "source": "u0xaq3p",
+          "package": null,
+          "id": "n47_u0xa",
+          "name": "n47",
+          "x": 16,
+          "y": 18,
+          "width": 157,
+          "height": 68,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 0,
+              "values": {
+                "pages": [
+                  "0"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": 0,
+          "source": "u0xaq3r",
+          "package": null,
+          "id": "n49_u0xa",
+          "name": "n49",
+          "x": 16,
+          "y": 18,
+          "width": 157,
+          "height": 68,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 0,
+              "values": {
+                "pages": [
+                  "1",
+                  "2",
+                  "3"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n46_debj",
+          "name": "title",
+          "x": 113,
+          "y": 51,
+          "width": 116,
+          "height": 66,
+          "pivot": [
+            0.5,
+            0.5,
+            1
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei",
+          "fontSize": 46,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "outline": 2.0,
+          "text": "返回",
+          "gears": []
+        }
+      ],
+      "mask": -1,
+      "controllers": [
+        {
+          "name": "button",
+          "pages": [
+            [
+              "0",
+              "up"
+            ],
+            [
+              "1",
+              "down"
+            ],
+            [
+              "2",
+              "over"
+            ],
+            [
+              "3",
+              "selectedOver"
+            ]
+          ]
+        }
+      ],
+      "transitions": []
+    },
+    "g1i49l": {
+      "type": 0,
+      "id": "g1i49l",
+      "name": "背景斜线 连续",
+      "path": "/Images/",
+      "file": null,
+      "exported": true,
+      "width": 115,
+      "height": 115,
+      "scaleOption": 2,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1062,
+          1370,
+          115,
+          115
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          115,
+          115
+        ]
+      }
+    },
+    "imo384": {
+      "type": 0,
+      "id": "imo384",
+      "name": "星星（红）",
+      "path": "/Components/PlayerLabel/PlayLevel/",
+      "file": null,
+      "exported": true,
+      "width": 40,
+      "height": 40,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1725,
+          1150,
+          36,
+          35
+        ],
+        "rotated": false,
+        "offset": [
+          3,
+          3
+        ],
+        "originalSize": [
+          40,
+          40
+        ]
+      }
+    },
+    "imo386": {
+      "type": 0,
+      "id": "imo386",
+      "name": "星星（绿）",
+      "path": "/Components/PlayerLabel/PlayLevel/",
+      "file": null,
+      "exported": true,
+      "width": 40,
+      "height": 40,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1725,
+          1187,
+          36,
+          35
+        ],
+        "rotated": false,
+        "offset": [
+          3,
+          3
+        ],
+        "originalSize": [
+          40,
+          40
+        ]
+      }
+    },
+    "kn6fq3y": {
+      "type": 0,
+      "id": "kn6fq3y",
+      "name": "bg3",
+      "path": "/Images/",
+      "file": null,
+      "exported": true,
+      "width": 240,
+      "height": 135,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1,
+          1477,
+          240,
+          135
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          240,
+          135
+        ]
+      }
+    },
+    "mmmw3x": {
+      "type": 0,
+      "id": "mmmw3x",
+      "name": "星币",
+      "path": "/Components/Com_Attr/AttrIcon/",
+      "file": null,
+      "exported": true,
+      "width": 150,
+      "height": 150,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1196,
+          1553,
+          118,
+          120
+        ],
+        "rotated": false,
+        "offset": [
+          16,
+          14
+        ],
+        "originalSize": [
+          150,
+          150
+        ]
+      }
+    },
+    "u0xaq3p": {
+      "type": 0,
+      "id": "u0xaq3p",
+      "name": "返回",
+      "path": "/Images/",
+      "file": null,
+      "exported": true,
+      "width": 155,
+      "height": 68,
+      "scaleOption": 1,
+      "scale9Grid": [
+        55,
+        17,
+        38,
+        34
+      ],
+      "tileGridIndice": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1739,
+          810,
+          155,
+          68
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          155,
+          68
+        ]
+      }
+    },
+    "u0xaq3q": {
+      "type": 0,
+      "id": "u0xaq3q",
+      "name": "返回-底",
+      "path": "/Images/",
+      "file": null,
+      "exported": true,
+      "width": 198,
+      "height": 111,
+      "scaleOption": 1,
+      "scale9Grid": [
+        79,
+        27,
+        46,
+        54
+      ],
+      "tileGridIndice": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1,
+          1784,
+          198,
+          111
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          198,
+          111
+        ]
+      }
+    },
+    "u0xaq3r": {
+      "type": 0,
+      "id": "u0xaq3r",
+      "name": "返回-悬停",
+      "path": "/Images/",
+      "file": null,
+      "exported": true,
+      "width": 155,
+      "height": 68,
+      "scaleOption": 1,
+      "scale9Grid": [
+        60,
+        17,
+        43,
+        34
+      ],
+      "tileGridIndice": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          727,
+          1817,
+          155,
+          68
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          155,
+          68
+        ]
+      }
+    }
+  },
+  "strings": [
+    "mzuc5vkb",
+    "Font",
+    "bczmq3t",
+    "Com_BuffInfoItem",
+    "/Components/Com_Info/",
+    "n23_ec7w",
+    "loader_Buff",
+    "n24_ec7w",
+    "txt_Title",
+    "n25_ec7w",
+    "txt_Desc",
+    "gj393l",
+    "Com_Card_Icon",
+    "/Components/Com_Card/",
+    "Cost",
+    "0",
+    "None",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "CardType",
+    "7",
+    "none",
+    "Attack",
+    "Defend",
+    "Effect",
+    "Counter",
+    "Event",
+    "Luck",
+    "Jnix",
+    "11",
+    "Curse",
+    "n45_9wtj",
+    "CpTyper",
+    "n46_9wtj",
+    "n47_9wtj",
+    "n48_qdz3",
+    "n49_qdz3",
+    "n50_qdz3",
+    "TargetType",
+    "9",
+    "Land",
+    "Target",
+    "Self",
+    "xmq430",
+    "n36_xmq4",
+    "n36",
+    "xmq42n",
+    "n37_xmq4",
+    "n37",
+    "xmq431",
+    "n38_xmq4",
+    "n38",
+    "xmq432",
+    "n39_xmq4",
+    "n39",
+    "xmq437",
+    "n40_xmq4",
+    "n40",
+    "xmq42t",
+    "n24_xmq4",
+    "n24",
+    "g3zr3i",
+    "n44_g3zr",
+    "n44",
+    "odf7q47",
+    "n51_odf7",
+    "n51",
+    "xmq434",
+    "n41_xmq4",
+    "n41",
+    "xmq435",
+    "n42_xmq4",
+    "n42",
+    "xmq436",
+    "n43_xmq4",
+    "n43",
+    "9wtj8h",
+    "n45",
+    "n46",
+    "n47",
+    "n48",
+    "n49",
+    "n50",
+    "gj393m",
+    "Com_Card_Name",
+    "8",
+    "Jinx",
+    "10",
+    "ru20q2u",
+    "n30_ru20",
+    "n30",
+    "ru20q2v",
+    "n31_ru20",
+    "n31",
+    "n32_ru20",
+    "n32",
+    "n33_ru20",
+    "n33",
+    "n34_ru20",
+    "n34",
+    "heh5a5",
+    "Com_Loader_PlayerLabel",
+    "/Components/PlayerLabel/",
+    "type",
+    "image",
+    "video",
+    "n81_msij",
+    "loader_Image",
+    "n82_ne5m",
+    "loader_Video",
+    "mouys8q",
+    "Com_PlayerName",
+    "n76_msij",
+    "txt_PlayerName",
+    "SIMHEI",
+    "pj0zq45",
+    "Com_LibraryFileContent",
+    "/Components/Com_CharacterFile/",
+    "n117_91ym",
+    "n117",
+    "n118_91ym",
+    "n118",
+    "游戏机制",
+    "n119_91ym",
+    "txt_Mechanism",
+    "JingNanBoBoHei",
+    "n120_91ym",
+    "group_Mechanism",
+    "n121_zbf7",
+    "list_Skills",
+    "ui://xuaw6o8jpj0zq46",
+    "n113_rz1o",
+    "n113",
+    "n114_rz1o",
+    "n114",
+    "人物传记",
+    "n115_rz1o",
+    "txt_Stroy",
+    "n116_rz1o",
+    "group_Story",
+    "OPEN",
+    "pj0zq46",
+    "Com_LibrarySkillContent",
+    "skillType",
+    "Active",
+    "Passive",
+    "n111_rz1o",
+    "n111",
+    "n97_rigr",
+    "txt_SkillName",
+    "主动技能:{skillName=}",
+    "被动技能:{skillName=}",
+    "主动技能:{skillName=}",
+    "n98_rigr",
+    "txt_SkillDesc",
+    "g1i49m",
+    "n112_jzys",
+    "n112",
+    "n113_jzys",
+    "txt_CD",
+    "SHOWG_TMP",
+    "n114_jzys",
+    "px78j9k",
+    "Com_FileContent",
+    "n91_rigr",
+    "txt_CharacterName",
+    "JingNanBoBoHei_TMP",
+    "n92_rigr",
+    "txt_CharacterNick",
+    "mmmw3z",
+    "n93_rigr",
+    "n93",
+    "n94_rigr",
+    "txt_ATK",
+    "mmmw40",
+    "n95_rigr",
+    "n95",
+    "n96_rigr",
+    "txt_DEF",
+    "mmmw42",
+    "n110_ug0b",
+    "n110",
+    "n109_ug0b",
+    "txt_HP",
+    "mmmw3y",
+    "n122_htop",
+    "com_Gold",
+    "n123_htop",
+    "txt_Gold",
+    "游戏机制",
+    "ui://xuaw6o8jpx78j9l",
+    "人物传记",
+    "px78j9l",
+    "Com_SkillContent",
+    "主动技能:{skillName=}",
+    "被动技能:{skillName=}",
+    "主动技能:{skillName=}",
+    "z1wk2",
+    "Com_PlayIcon",
+    "heh5a4",
+    "n82_tlsf",
+    "n82",
+    "n72_msij",
+    "loader_PlayerPhoto",
+    "n80_msij",
+    "n80",
+    "5o9ms8i",
+    "回归图标【无字星】",
+    "/Components/PlayerLabel/RewardUp/",
+    "5o9ms8j",
+    "合体无字",
+    "9e84q3g",
+    "萌新豆芽UP箭頭圖標（無字）（160x160）",
+    "9wtj8e",
+    "COST 防御",
+    "/Components/Com_Card/Images/Icon/",
+    "9wtj8f",
+    "COST 格子",
+    "9wtj8g",
+    "COST 攻击",
+    "9wy8bt",
+    "蓝-未选择",
+    "/Components/Relic/Images/",
+    "9wy8bu",
+    "紫-未选择",
+    "9wy8bv",
+    "黄-未选择",
+    "9wy8bx",
+    "medal_bg",
+    "ays2s8f",
+    "卡牌异画-框",
+    "/Components/Com_Card/Images/Frame/",
+    "bfwlq2s",
+    "反击",
+    "/Components/Com_Attr/AttrIcon/",
+    "fu2tq3k",
+    "圆200-200",
+    "fu2tq3l",
+    "yuan bei jing2",
+    "fu2tq3n",
+    "ASTRAL PARTY BATTLE TOKEN -180",
+    "反",
+    "头像蒙版",
+    "/Components/PlayerLabel/PlayerLabel/",
+    "i1yzq3d",
+    "下方提示（可按）",
+    "/Images/",
+    "imo383",
+    "星星（橙）",
+    "/Components/PlayerLabel/PlayLevel/",
+    "imo385",
+    "星星（蓝）",
+    "imo387",
+    "星星（未持有）",
+    "krvoq4g",
+    "卡面阴影-合并版",
+    "miods8n",
+    "文字底框2",
+    "/Components/Com_Card/Images/404x612/",
+    "mmmw3s",
+    "血",
+    "mmmw3t",
+    "移动",
+    "mmmw3u",
+    "防",
+    "mmmw3v",
+    "攻",
+    "mmmw3w",
+    "卡",
+    "nc4bag",
+    "加入按钮",
+    "/Components/Button/Button/",
+    "nc4bah",
+    "刷新按钮",
+    "o11dj9j",
+    "astral party",
+    "o11dj9k",
+    "加号",
+    "o11dj9l",
+    "右下角的星星",
+    "o11dj9o",
+    "卡图周围的阴影2",
+    "o812av",
+    "按钮 详情",
+    "o812ax",
+    "预览按钮",
+    "咒",
+    "ot0wba",
+    "主界面背景鼠鼠A-1",
+    "/Components/Bottom/",
+    "pj0zq43",
+    "怪物-背景阴影",
+    "pj0zq44",
+    "怪物-说明框",
+    "ru20q2t",
+    "名片黑框(修改)",
+    "反击标题底(修改)",
+    "/Components/Com_Card/Images/CardType/",
+    "反击标题底(星星)",
+    "vlgjn",
+    "主界面打叉(1)",
+    "吉",
+    "守",
+    "闻",
+    "效",
+    "效果子类 目标地块",
+    "效果子类 目标目标",
+    "效果子类 目标自身",
+    "凶",
+    "z1wk4",
+    "玩家名字底（最短）",
+    "Com_CostPoint",
+    "Empty",
+    "n27_9wtj",
+    "n27",
+    "n28_9wtj",
+    "n28",
+    "n29_9wtj",
+    "n29",
+    "n31_sfrg",
+    "graph_Effect",
+    "9wy8bw",
+    "Com_Relic_Quality",
+    "/Components/Relic/",
+    "quality",
+    "蓝",
+    "紫",
+    "金",
+    "n0_9wy8",
+    "n0",
+    "n1_9wy8",
+    "n1",
+    "n2_9wy8",
+    "n2",
+    "n3_9wy8",
+    "n3",
+    "aepoa6",
+    "Com_PlayerLabel_Loader",
+    "com_Loader",
+    "n83_aepo",
+    "n83",
+    "ak421h",
+    "Com_HeroSkin",
+    "/Components/Skin/",
+    "n10_o97f",
+    "loader_Skin_Image",
+    "n11_ak42",
+    "loader_Skin_Video",
+    "ays2s8g",
+    "Com_Flag_AltArt",
+    "n0_ays2",
+    "n1_ays2",
+    "有新异画解锁",
+    "bczmq3s",
+    "Com_BuffInfo",
+    "n21_gd4d",
+    "di",
+    "n26_ec7w",
+    "list_Buff",
+    "ui://xuaw6o8jbczmq3t",
+    "bfwlq2r",
+    "Com_Icon_Counter",
+    "/Components/Com_Attr/",
+    "n0_mmmw",
+    "atk",
+    "ui://xuaw6o8jbfwlq2s",
+    "booc3v",
+    "Com_Backgroup",
+    "showLine",
+    "show",
+    "hide",
+    "kn6fq3y",
+    "n93_x2xx",
+    "n90_nc4b",
+    "loader_BG",
+    "n92_g1i4",
+    "loader_Line",
+    "ui://xuaw6o8jg1i49l",
+    "n94_dtry",
+    "loader_SystemBG",
+    "ejjwq49",
+    "Button_Terms",
+    "/Components/Button/",
+    "ejjwq4a",
+    "n0_ejjw",
+    "bg",
+    "ejjwq4f",
+    "n1_ejjw",
+    "Com_Trems_Bg",
+    "/Components/Bottom/TremsBg/",
+    "ejjwq4b",
+    "n2_ejjw",
+    "ejjwq4e",
+    "Com_Trems_BgMask",
+    "ejjwq4c",
+    "ejjwq4d",
+    "fu2tq3e",
+    "Com_RelicQuality_Large",
+    "qualityType",
+    "Blue",
+    "Purple",
+    "Orange",
+    "n1_fu2t",
+    "n8_fu2t",
+    "n8",
+    "n3_fu2t",
+    "n0_fu2t",
+    "n4_fu2t",
+    "n4",
+    "n6_fu2t",
+    "n6",
+    "n7_fu2t",
+    "n7",
+    "h334q3o",
+    "Com_CardBack",
+    "n17_lmo0",
+    "loader_CardBack",
+    "n18_h334",
+    "i1yzq2w",
+    "Button_Next2",
+    "button",
+    "up",
+    "down",
+    "over",
+    "selectedOver",
+    "n0_xq4k",
+    "icon",
+    "Loop",
+    "imo37v",
+    "Com_PlayerLevel",
+    "avtiveLevel",
+    "未激活",
+    "激活",
+    "slot",
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "n12_i1xv",
+    "n12",
+    "imo384",
+    "n13_ns45",
+    "n13",
+    "imo386",
+    "n15_imo3",
+    "n15",
+    "n14_imo3",
+    "n14",
+    "n16_imo3",
+    "n16",
+    "n17_capz",
+    "Cut in",
+    "m48iv",
+    "Com_PopUpWindow_Bottom",
+    "btnsState",
+    "隐藏按钮",
+    "取消确认",
+    "单确认",
+    "n0_rle7",
+    "ui://xuaw6o8jrle7p",
+    "n3_rle7",
+    "title",
+    "兑换星盘",
+    "vlgjm",
+    "n25_m48i",
+    "closeButton",
+    "ozsk8z",
+    "n6_rle7",
+    "btn_Sure",
+    "n26_m48i",
+    "btn_Sure_Only",
+    "ofnra2",
+    "n7_rle7",
+    "btn_Cancel",
+    "取消",
+    "m48iw",
+    "Com_PopUpWindow_MohuBg",
+    "mohu",
+    "micc2g",
+    "Com_Card",
+    "showFront",
+    "false",
+    "isVideo",
+    "true",
+    "redPoint",
+    "frontState",
+    "普通卡牌",
+    "异画卡牌-1",
+    "异画卡牌-2",
+    "hideTitle",
+    "不隐藏标题",
+    "隐藏标题",
+    "n27_g6uw",
+    "loader_CardFrame",
+    "n14_qgrb",
+    "loader_FrontCard",
+    "n57_q4dr",
+    "video_FrontCard",
+    "n62_miod",
+    "loader_FullCard",
+    "n66_j58e",
+    "video_FullCard",
+    "n61_okfe",
+    "loader_CardFront",
+    "n65_j58e",
+    "bg_txt",
+    "n55_o11d",
+    "n55",
+    "n28_o11d",
+    "n29_o11d",
+    "n30_o11d",
+    "n31_o11d",
+    "n32_o11d",
+    "n33_o11d",
+    "n34_o11d",
+    "n35_o11d",
+    "n35",
+    "n36_o11d",
+    "n37_o11d",
+    "n38_o11d",
+    "n39_o11d",
+    "n40_o11d",
+    "n41_o11d",
+    "n42_o11d",
+    "n43_o11d",
+    "n44_o11d",
+    "n45_o11d",
+    "n46_o11d",
+    "n47_o11d",
+    "n48_o11d",
+    "n49_o11d",
+    "n50_o11d",
+    "n51_o11d",
+    "n52_o11d",
+    "n52",
+    "n54_o11d",
+    "n54",
+    "n19_xmq4",
+    "com_CardName",
+    "com_CardIcon",
+    "n25_xmq4",
+    "txt_CardIndex",
+    "n64_j58e",
+    "txt_CardIndex_2",
+    "n26_xmq4",
+    "txt_CardTips",
+    "n16_qgrb",
+    "txt_Content",
+    "n56_bjve",
+    "txt_Name",
+    "com_CardBack",
+    "n59_ays2",
+    "n59",
+    "n60_vkgo",
+    "graph_Hover",
+    "Cut  In",
+    "Cut out",
+    "HideDescState",
+    "ShowDescState",
+    "Com_Icon_Gold",
+    "mmmw3x",
+    "gold",
+    "Com_Icon_Atk",
+    "Com_Icon_Def",
+    "def",
+    "mmmw41",
+    "Com_Icon_Card",
+    "card",
+    "Com_Icon_Hp",
+    "hp",
+    "mmmw43",
+    "Com_Icon_Mov",
+    "move",
+    "nc4bac",
+    "Button_ConfirmRounded",
+    "s2pwn",
+    "n10_micc",
+    "n10",
+    "s2pwd",
+    "n38_gvfm",
+    "n11_micc",
+    "确定",
+    "nc4bad",
+    "Button_Confirm_SmallRounded",
+    "n42_kjte",
+    "n49_nc4b",
+    "n46_debj",
+    "确定",
+    "nc4baj",
+    "Button_Confirm_SmallRoundedOrange",
+    "确定",
+    "nc4bak",
+    "Button_ReturnRounded",
+    "s2pwe",
+    "n48_gvfm",
+    "返回",
+    "13",
+    "o812a",
+    "Com_RelicKeyword",
+    "n12_o812",
+    "n13_o812",
+    "loader_Icon",
+    "n14_o812",
+    "n15_o812",
+    "o812au",
+    "Button_DetailInfo",
+    "n31_n9cw",
+    "n32_n9cw",
+    "详情",
+    "o812aw",
+    "Button_PreviewSkin",
+    "n32_gbr1",
+    "n33_gbr1",
+    "ofnra1",
+    "Button_Confirm_Small",
+    "n47_s2pw",
+    "n48_s2pw",
+    "确定",
+    "Button_Return",
+    "返回",
+    "ot0wam",
+    "Button_Custom",
+    "n36_ot0w",
+    "n37_ot0w",
+    "确定",
+    "ot0wbb",
+    "Com_GachaResult",
+    "n193_ot0w",
+    "n193",
+    "n196_ot0w",
+    "n196",
+    "ui://xuaw6o8jot0wba",
+    "g1i49l",
+    "n195_ot0w",
+    "n195",
+    "ozsk8w",
+    "Button_Back_Small",
+    "u0xaq3q",
+    "n48_u0xa",
+    "u0xaq3p",
+    "n47_u0xa",
+    "u0xaq3r",
+    "n49_u0xa",
+    "返回",
+    "Button_Confirm",
+    "n36_s2pw",
+    "n37_s2pw",
+    "确定",
+    "pj0z2",
+    "Com_LandCard",
+    "n65_pj0z",
+    "n65",
+    "n62_cih7",
+    "n39_vagh",
+    "n64_cih7",
+    "pj0zq42",
+    "Com_LibraryCharacterFile",
+    "monsterType",
+    "common",
+    "Boss",
+    "Elite",
+    "n3_odf7",
+    "n1_px78",
+    "n2_pj0z",
+    "com_LibraryFile",
+    "n4_u6bm",
+    "x2xxax",
+    "n18_ejjw",
+    "n18",
+    "ejjws8d",
+    "n16_ejjw",
+    "n5_u6bm",
+    "n17_ejjw",
+    "n17",
+    "n7_u6bm",
+    "n8_u6bm",
+    "n9_u6bm",
+    "n9",
+    "n10_u6bm",
+    "n11_u6bm",
+    "n11",
+    "n12_u6bm",
+    "n13_u6bm",
+    "n14_u6bm",
+    "px78b3",
+    "Button_Next",
+    "ArrowColor",
+    "black",
+    "yellow",
+    "px78b4",
+    "px78j9m",
+    "Com_CharacterFile",
+    "gzrrap",
+    "n0_px78",
+    "com_File",
+    "r1ee9i",
+    "Button_Switch_1",
+    "r1ee9h",
+    "n3_r1ee",
+    "n4_bnng",
+    "rct9q3d",
+    "RoomPlayer_Button_RewardUp",
+    "state",
+    "新手",
+    "回归",
+    "新手+回归",
+    "n89_5o9m",
+    "n89",
+    "ui://xuaw6o8j9e84q3g",
+    "ui://xuaw6o8j5o9ms8i",
+    "ui://xuaw6o8j5o9ms8j",
+    "n88_9e84",
+    "SHOWG",
+    "UP",
+    "th3ls8e",
+    "GlobalModalWaiting",
+    "/Components/ModalWait/",
+    "n0_th3l",
+    "u43ct",
+    "Com_Expression",
+    "/Components/Expression/",
+    "Image",
+    "Video",
+    "n1_nrib",
+    "loader_Expression_Image",
+    "n2_reb6",
+    "loader_Expression_Video",
+    "n3_u43c",
+    "Button_Quit",
+    "n0_qb3s",
+    "n1_qb3s",
+    "n2_qb3s",
+    "z1wk0",
+    "Com_PlayerLabel",
+    "showLevel",
+    "hideLevel",
+    "n84_tlsf",
+    "n84",
+    "loader_Label",
+    "com_PlayerPhoto",
+    "n86_mouy",
+    "image_Icon",
+    "n75_msij",
+    "com_Name",
+    "n77_msij",
+    "n77",
+    "LV.",
+    "n78_msij",
+    "txt_lv",
+    "n85_ru20",
+    "n85",
+    "zy9e0",
+    "Button_Return_Small",
+    "返回",
+    "e4d2q3z",
+    "繁荣",
+    "/Components/Com_Attr/SinglePlayer/",
+    "e4d2q40",
+    "晋升",
+    "e4d2q41",
+    "运气",
+    "局内背景-白底",
+    "/Components/Bottom/TremsBg/Image/",
+    "局内背景-花纹",
+    "局内背景-只有边沿",
+    "词条按钮 NEW",
+    "精英图标",
+    "背景斜线 连续",
+    "时间",
+    "gd4d1",
+    "对勾",
+    "gfn1ao",
+    "gqyw1",
+    "底",
+    "gzrraq",
+    "进度条箭头",
+    "gzrrar",
+    "↑",
+    "hzcuq48",
+    "复制",
+    "i01u8",
+    "词条框",
+    "星星（红）",
+    "星星（绿）",
+    "iorlas",
+    "重新随机",
+    "jno3u",
+    "任务 成就 左侧页签（已选择该标签）(修改)",
+    "jno3w",
+    "任务 成就 左侧页签（悬停）(修改)",
+    "jno3x",
+    "设置 左侧页签（未选择）(修改)",
+    "bg3",
+    "krvoq4i",
+    "红队星",
+    "/Images/LuckyStar/",
+    "krvoq4j",
+    "青队星",
+    "kva0ay",
+    "UT_Buff_10150101",
+    "kva0az",
+    "UT_Buff_10131101",
+    "kva0b0",
+    "UT_Buff_Heal",
+    "kva0b1",
+    "UT_Buff_Lock",
+    "kva0b2",
+    "UT_Buff_StarLight",
+    "lwm1k",
+    "任务底",
+    "m2bx1w",
+    "发送语句对话框-机器",
+    "m49i3",
+    "选择",
+    "m49i8",
+    "打勾（大）",
+    "星币",
+    "nc4b14",
+    "红色",
+    "/Images/OK/",
+    "nc4b15",
+    "黄色",
+    "nc4b16",
+    "蓝色",
+    "nc4b17",
+    "绿色",
+    "nc4baf",
+    "按钮 长",
+    "ns7xat",
+    "难度警告",
+    "ofnra0",
+    "按钮-底（粉色）",
+    "ofnra3",
+    "按钮-底（蓝色长）",
+    "ozsk8x",
+    "按钮-底(蓝色)",
+    "ozsk8y",
+    "按钮-底（蓝色）",
+    "ozsk90",
+    "按钮-底（粉色长）",
+    "ozsk91",
+    "按钮-底(绿色长)",
+    "pmckq3u",
+    "btn_medal_enter",
+    "px784",
+    "右三角",
+    "/Images/Com_RoomSetting/",
+    "选择房间翻页按钮",
+    "q6a57",
+    "像素白色",
+    "q6a58",
+    "ingame_bg2_s",
+    "q93cq2q",
+    "普通底",
+    "qnk0q3v",
+    "粉条",
+    "qnk0q3w",
+    "三角形",
+    "切换按钮",
+    "rigr1",
+    "角色头像7",
+    "rle7p",
+    "窗口2",
+    "按钮-绿",
+    "按钮-蓝",
+    "s2pwg",
+    "按钮-灰",
+    "按钮-红",
+    "sxcp2j",
+    "奖励已领取打勾",
+    "返回",
+    "返回-底",
+    "返回-悬停",
+    "wwpj2",
+    "胜利小图标1",
+    "/Images/ExplainWindow/",
+    "wwpj3",
+    "胜利小图标2",
+    "BOSS图标",
+    "xyg8q4h",
+    "海盗",
+    "y4hks8r",
+    "UT_Buff_Charge",
+    "q18cj9i",
+    "loading",
+    "/Animations/",
+    "q18cj9i_0",
+    "q18cj9i_1",
+    "atlas0",
+    "atlas0.png"
+  ]
+}

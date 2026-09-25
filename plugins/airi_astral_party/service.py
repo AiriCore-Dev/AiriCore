@@ -14,6 +14,7 @@ from .client import GameClient
 from .protocol import QueryError
 from .settings import DATA_DIR, load_settings
 from .renewal import authorization_status
+from .replay import enrich_snapshot
 
 
 PAGE_SIZE = 6
@@ -151,6 +152,8 @@ class QueryService:
             client = GameClient(settings)
             self._next_query = time.monotonic() + settings.cooldown
             snapshot = await client.fetch(uid, detail=command.number if command.action == '对局' else None)
+            if command.action == '对局':
+                snapshot = await self.run_sync(enrich_snapshot, snapshot)
             if command.action == '战绩' and (command.number - 1) * PAGE_SIZE >= max(1, len(snapshot['show']['record'])):
                 raise QueryError('该战绩页不存在，请从第 1 页开始查看')
             return {'kind': {'资料': 'profile', '战绩': 'records', '对局': 'detail'}[command.action],

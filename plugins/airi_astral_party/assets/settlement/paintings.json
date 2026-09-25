@@ -1,0 +1,522 @@
+{
+  "100101001": {
+    "asset": "UT_Hero_Card2_101",
+    "path": "settlement/characters/UT_Hero_Card2_101.webp"
+  },
+  "100101002": {
+    "asset": "UT_Hero_Card2_101_Max",
+    "path": "settlement/characters/UT_Hero_Card2_101_Max.webp"
+  },
+  "100101003": {
+    "asset": "UT_Hero_Card2_101_01",
+    "path": "settlement/characters/UT_Hero_Card2_101_01.webp"
+  },
+  "100101004": {
+    "asset": "UT_Hero_Card2_101_02",
+    "path": "settlement/characters/UT_Hero_Card2_101_02.webp"
+  },
+  "100102001": {
+    "asset": "UT_Hero_Card2_102",
+    "path": "settlement/characters/UT_Hero_Card2_102.webp"
+  },
+  "100102002": {
+    "asset": "UT_Hero_Card2_102_Max",
+    "path": "settlement/characters/UT_Hero_Card2_102_Max.webp"
+  },
+  "100102003": {
+    "asset": "UT_Hero_Card2_102_01",
+    "path": "settlement/characters/UT_Hero_Card2_102_01.webp"
+  },
+  "100102004": {
+    "asset": "UT_Hero_Card2_102_02",
+    "path": "settlement/characters/UT_Hero_Card2_102_02.webp"
+  },
+  "100102005": {
+    "asset": "UT_Hero_Card2_102_03",
+    "path": "settlement/characters/UT_Hero_Card2_102_03.webp"
+  },
+  "100102006": {
+    "asset": "UT_Hero_Card2_102_04",
+    "path": "settlement/characters/UT_Hero_Card2_102_04.webp"
+  },
+  "100103001": {
+    "asset": "UT_Hero_Card2_103",
+    "path": "settlement/characters/UT_Hero_Card2_103.webp"
+  },
+  "100103002": {
+    "asset": "UT_Hero_Card2_103_Max",
+    "path": "settlement/characters/UT_Hero_Card2_103_Max.webp"
+  },
+  "100103003": {
+    "asset": "UT_Hero_Card2_103_01",
+    "path": "settlement/characters/UT_Hero_Card2_103_01.webp"
+  },
+  "100103004": {
+    "asset": "UT_Hero_Card2_103_02",
+    "path": "settlement/characters/UT_Hero_Card2_103_02.webp"
+  },
+  "100103005": {
+    "asset": "UT_Hero_Card2_103_03",
+    "path": "settlement/characters/UT_Hero_Card2_103_03.webp"
+  },
+  "100104001": {
+    "asset": "UT_Hero_Card2_104",
+    "path": "settlement/characters/UT_Hero_Card2_104.webp"
+  },
+  "100104002": {
+    "asset": "UT_Hero_Card2_104_Max",
+    "path": "settlement/characters/UT_Hero_Card2_104_Max.webp"
+  },
+  "100104003": {
+    "asset": "UT_Hero_Card2_104_01",
+    "path": "settlement/characters/UT_Hero_Card2_104_01.webp"
+  },
+  "100104004": {
+    "asset": "UT_Hero_Card2_104_02",
+    "path": "settlement/characters/UT_Hero_Card2_104_02.webp"
+  },
+  "100105001": {
+    "asset": "UT_Hero_Card2_105",
+    "path": "settlement/characters/UT_Hero_Card2_105.webp"
+  },
+  "100105002": {
+    "asset": "UT_Hero_Card2_105_Max",
+    "path": "settlement/characters/UT_Hero_Card2_105_Max.webp"
+  },
+  "100105003": {
+    "asset": "UT_Hero_Card2_105_01",
+    "path": "settlement/characters/UT_Hero_Card2_105_01.webp"
+  },
+  "100106001": {
+    "asset": "UT_Hero_Card2_106",
+    "path": "settlement/characters/UT_Hero_Card2_106.webp"
+  },
+  "100106002": {
+    "asset": "UT_Hero_Card2_106_Max",
+    "path": "settlement/characters/UT_Hero_Card2_106_Max.webp"
+  },
+  "100106003": {
+    "asset": "UT_Hero_Card2_106_01",
+    "path": "settlement/characters/UT_Hero_Card2_106_01.webp"
+  },
+  "100106004": {
+    "asset": "UT_Hero_Card2_106_02",
+    "path": "settlement/characters/UT_Hero_Card2_106_02.webp"
+  },
+  "100107001": {
+    "asset": "UT_Hero_Card2_107",
+    "path": "settlement/characters/UT_Hero_Card2_107.webp"
+  },
+  "100107002": {
+    "asset": "UT_Hero_Card2_107_Max",
+    "path": "settlement/characters/UT_Hero_Card2_107_Max.webp"
+  },
+  "100107003": {
+    "asset": "UT_Hero_Card2_107_01",
+    "path": "settlement/characters/UT_Hero_Card2_107_01.webp"
+  },
+  "100107004": {
+    "asset": "UT_Hero_Card2_107_02",
+    "path": "settlement/characters/UT_Hero_Card2_107_02.webp"
+  },
+  "100107005": {
+    "asset": "UT_Hero_Card2_107_03",
+    "path": "settlement/characters/UT_Hero_Card2_107_03.webp"
+  },
+  "100107006": {
+    "asset": "UT_Hero_Card2_107_04",
+    "path": "settlement/characters/UT_Hero_Card2_107_04.webp"
+  },
+  "100107007": {
+    "asset": "UT_Hero_Card2_107_05",
+    "path": "settlement/characters/UT_Hero_Card2_107_05.webp"
+  },
+  "100108001": {
+    "asset": "UT_Hero_Card2_108",
+    "path": "settlement/characters/UT_Hero_Card2_108.webp"
+  },
+  "100108002": {
+    "asset": "UT_Hero_Card2_108_Max",
+    "path": "settlement/characters/UT_Hero_Card2_108_Max.webp"
+  },
+  "100108003": {
+    "asset": "UT_Hero_Card2_108_01",
+    "path": "settlement/characters/UT_Hero_Card2_108_01.webp"
+  },
+  "100108004": {
+    "asset": "UT_Hero_Card2_108_02",
+    "path": "settlement/characters/UT_Hero_Card2_108_02.webp"
+  },
+  "100108005": {
+    "asset": "UT_Hero_Card2_108_03",
+    "path": "settlement/characters/UT_Hero_Card2_108_03.webp"
+  },
+  "100108006": {
+    "asset": "UT_Hero_Card2_108_04",
+    "path": "settlement/characters/UT_Hero_Card2_108_04.webp"
+  },
+  "100109001": {
+    "asset": "UT_Hero_Card2_109",
+    "path": "settlement/characters/UT_Hero_Card2_109.webp"
+  },
+  "100109002": {
+    "asset": "UT_Hero_Card2_109_Max_2",
+    "path": "settlement/characters/UT_Hero_Card2_109_Max_2.webp"
+  },
+  "100109003": {
+    "asset": "UT_Hero_Card2_109_01",
+    "path": "settlement/characters/UT_Hero_Card2_109_01.webp"
+  },
+  "100110001": {
+    "asset": "UT_Hero_Card2_110",
+    "path": "settlement/characters/UT_Hero_Card2_110.webp"
+  },
+  "100110002": {
+    "asset": "UT_Hero_Card2_110_Max",
+    "path": "settlement/characters/UT_Hero_Card2_110_Max.webp"
+  },
+  "100111001": {
+    "asset": "UT_Hero_Card2_111",
+    "path": "settlement/characters/UT_Hero_Card2_111.webp"
+  },
+  "100111002": {
+    "asset": "UT_Hero_Card2_111_Max",
+    "path": "settlement/characters/UT_Hero_Card2_111_Max.webp"
+  },
+  "100112001": {
+    "asset": "UT_Hero_Card2_112",
+    "path": "settlement/characters/UT_Hero_Card2_112.webp"
+  },
+  "100112002": {
+    "asset": "UT_Hero_Card2_112_Max",
+    "path": "settlement/characters/UT_Hero_Card2_112_Max.webp"
+  },
+  "100112003": {
+    "asset": "UT_Hero_Card2_112_01",
+    "path": "settlement/characters/UT_Hero_Card2_112_01.webp"
+  },
+  "100112004": {
+    "asset": "UT_Hero_Card2_112_02",
+    "path": "settlement/characters/UT_Hero_Card2_112_02.webp"
+  },
+  "100112005": {
+    "asset": "UT_Hero_Card2_112_03",
+    "path": "settlement/characters/UT_Hero_Card2_112_03.webp"
+  },
+  "100113001": {
+    "asset": "UT_Hero_Card2_113",
+    "path": "settlement/characters/UT_Hero_Card2_113.webp"
+  },
+  "100113002": {
+    "asset": "UT_Hero_Card2_113_Max",
+    "path": "settlement/characters/UT_Hero_Card2_113_Max.webp"
+  },
+  "100113003": {
+    "asset": "UT_Hero_Card2_113_01",
+    "path": "settlement/characters/UT_Hero_Card2_113_01.webp"
+  },
+  "100113004": {
+    "asset": "UT_Hero_Card2_113_02",
+    "path": "settlement/characters/UT_Hero_Card2_113_02.webp"
+  },
+  "100113005": {
+    "asset": "UT_Hero_Card2_113_03",
+    "path": "settlement/characters/UT_Hero_Card2_113_03.webp"
+  },
+  "100114001": {
+    "asset": "UT_Hero_Card2_114",
+    "path": "settlement/characters/UT_Hero_Card2_114.webp"
+  },
+  "100114002": {
+    "asset": "UT_Hero_Card2_114_Max",
+    "path": "settlement/characters/UT_Hero_Card2_114_Max.webp"
+  },
+  "100114003": {
+    "asset": "UT_Hero_Card2_114_01",
+    "path": "settlement/characters/UT_Hero_Card2_114_01.webp"
+  },
+  "100114004": {
+    "asset": "UT_Hero_Card2_114_02",
+    "path": "settlement/characters/UT_Hero_Card2_114_02.webp"
+  },
+  "100114005": {
+    "asset": "UT_Hero_Card2_114_03",
+    "path": "settlement/characters/UT_Hero_Card2_114_03.webp"
+  },
+  "100114006": {
+    "asset": "UT_Hero_Card2_114_04",
+    "path": "settlement/characters/UT_Hero_Card2_114_04.webp"
+  },
+  "100115001": {
+    "asset": "UT_Hero_Card2_115",
+    "path": "settlement/characters/UT_Hero_Card2_115.webp"
+  },
+  "100115002": {
+    "asset": "UT_Hero_Card2_115_Max",
+    "path": "settlement/characters/UT_Hero_Card2_115_Max.webp"
+  },
+  "100115003": {
+    "asset": "UT_Hero_Card2_115_01",
+    "path": "settlement/characters/UT_Hero_Card2_115_01.webp"
+  },
+  "100115004": {
+    "asset": "UT_Hero_Card2_115_02",
+    "path": "settlement/characters/UT_Hero_Card2_115_02.webp"
+  },
+  "100115005": {
+    "asset": "UT_Hero_Card2_115_03",
+    "path": "settlement/characters/UT_Hero_Card2_115_03.webp"
+  },
+  "100115006": {
+    "asset": "UT_Hero_Card2_115_04",
+    "path": "settlement/characters/UT_Hero_Card2_115_04.webp"
+  },
+  "100116001": {
+    "asset": "UT_Hero_Card2_116",
+    "path": "settlement/characters/UT_Hero_Card2_116.webp"
+  },
+  "100116002": {
+    "asset": "UT_Hero_Card2_116_Max",
+    "path": "settlement/characters/UT_Hero_Card2_116_Max.webp"
+  },
+  "100116003": {
+    "asset": "UT_Hero_Card2_116_01",
+    "path": "settlement/characters/UT_Hero_Card2_116_01.webp"
+  },
+  "100116004": {
+    "asset": "UT_Hero_Card2_116_02",
+    "path": "settlement/characters/UT_Hero_Card2_116_02.webp"
+  },
+  "100117001": {
+    "asset": "UT_Hero_Card2_117",
+    "path": "settlement/characters/UT_Hero_Card2_117.webp"
+  },
+  "100117002": {
+    "asset": "UT_Hero_Card2_117_Max",
+    "path": "settlement/characters/UT_Hero_Card2_117_Max.webp"
+  },
+  "100117003": {
+    "asset": "UT_Hero_Card2_117_01",
+    "path": "settlement/characters/UT_Hero_Card2_117_01.webp"
+  },
+  "100117004": {
+    "asset": "UT_Hero_Card2_117_02",
+    "path": "settlement/characters/UT_Hero_Card2_117_02.webp"
+  },
+  "100117005": {
+    "asset": "UT_Hero_Card2_117_03",
+    "path": "settlement/characters/UT_Hero_Card2_117_03.webp"
+  },
+  "100118001": {
+    "asset": "UT_Hero_Card2_118",
+    "path": "settlement/characters/UT_Hero_Card2_118.webp"
+  },
+  "100118002": {
+    "asset": "UT_Hero_Card2_118_Max",
+    "path": "settlement/characters/UT_Hero_Card2_118_Max.webp"
+  },
+  "100118003": {
+    "asset": "UT_Hero_Card2_118_01",
+    "path": "settlement/characters/UT_Hero_Card2_118_01.webp"
+  },
+  "100119001": {
+    "asset": "UT_Hero_Card2_119",
+    "path": "settlement/characters/UT_Hero_Card2_119.webp"
+  },
+  "100119002": {
+    "asset": "UT_Hero_Card2_119_Max",
+    "path": "settlement/characters/UT_Hero_Card2_119_Max.webp"
+  },
+  "100119003": {
+    "asset": "UT_Hero_Card2_119_01",
+    "path": "settlement/characters/UT_Hero_Card2_119_01.webp"
+  },
+  "100119004": {
+    "asset": "UT_Hero_Card2_119_02",
+    "path": "settlement/characters/UT_Hero_Card2_119_02.webp"
+  },
+  "100120001": {
+    "asset": "UT_Hero_Card2_120",
+    "path": "settlement/characters/UT_Hero_Card2_120.webp"
+  },
+  "100120002": {
+    "asset": "UT_Hero_Card2_120_Max",
+    "path": "settlement/characters/UT_Hero_Card2_120_Max.webp"
+  },
+  "100120003": {
+    "asset": "UT_Hero_Card2_120_01",
+    "path": "settlement/characters/UT_Hero_Card2_120_01.webp"
+  },
+  "100120004": {
+    "asset": "UT_Hero_Card2_120_02",
+    "path": "settlement/characters/UT_Hero_Card2_120_02.webp"
+  },
+  "100120005": {
+    "asset": "UT_Hero_Card2_120_03",
+    "path": "settlement/characters/UT_Hero_Card2_120_03.webp"
+  },
+  "100120006": {
+    "asset": "UT_Hero_Card2_120_04",
+    "path": "settlement/characters/UT_Hero_Card2_120_04.webp"
+  },
+  "100121001": {
+    "asset": "UT_Hero_Card2_121",
+    "path": "settlement/characters/UT_Hero_Card2_121.webp"
+  },
+  "100121002": {
+    "asset": "UT_Hero_Card2_121_Max",
+    "path": "settlement/characters/UT_Hero_Card2_121_Max.webp"
+  },
+  "100121003": {
+    "asset": "UT_Hero_Card2_121_01",
+    "path": "settlement/characters/UT_Hero_Card2_121_01.webp"
+  },
+  "100121004": {
+    "asset": "UT_Hero_Card2_121_02",
+    "path": "settlement/characters/UT_Hero_Card2_121_02.webp"
+  },
+  "100121005": {
+    "asset": "UT_Hero_Card2_121_03",
+    "path": "settlement/characters/UT_Hero_Card2_121_03.webp"
+  },
+  "100122001": {
+    "asset": "UT_Hero_Card2_122",
+    "path": "settlement/characters/UT_Hero_Card2_122.webp"
+  },
+  "100122002": {
+    "asset": "UT_Hero_Card2_122_Max",
+    "path": "settlement/characters/UT_Hero_Card2_122_Max.webp"
+  },
+  "100122003": {
+    "asset": "UT_Hero_Card2_122_01",
+    "path": "settlement/characters/UT_Hero_Card2_122_01.webp"
+  },
+  "100122004": {
+    "asset": "UT_Hero_Card2_122_02",
+    "path": "settlement/characters/UT_Hero_Card2_122_02.webp"
+  },
+  "100123001": {
+    "asset": "UT_Hero_Card2_123",
+    "path": "settlement/characters/UT_Hero_Card2_123.webp"
+  },
+  "100123002": {
+    "asset": "UT_Hero_Card2_123_Max",
+    "path": "settlement/characters/UT_Hero_Card2_123_Max.webp"
+  },
+  "100123003": {
+    "asset": "UT_Hero_Card2_123_01",
+    "path": "settlement/characters/UT_Hero_Card2_123_01.webp"
+  },
+  "100123004": {
+    "asset": "UT_Hero_Card2_123_02",
+    "path": "settlement/characters/UT_Hero_Card2_123_02.webp"
+  },
+  "100124001": {
+    "asset": "UT_Hero_Card2_124",
+    "path": "settlement/characters/UT_Hero_Card2_124.webp"
+  },
+  "100124002": {
+    "asset": "UT_Hero_Card2_124_Max",
+    "path": "settlement/characters/UT_Hero_Card2_124_Max.webp"
+  },
+  "100124003": {
+    "asset": "UT_Hero_Card2_124_01",
+    "path": "settlement/characters/UT_Hero_Card2_124_01.webp"
+  },
+  "100124004": {
+    "asset": "UT_Hero_Card2_124_02",
+    "path": "settlement/characters/UT_Hero_Card2_124_02.webp"
+  },
+  "100125001": {
+    "asset": "UT_Hero_Card2_125",
+    "path": "settlement/characters/UT_Hero_Card2_125.webp"
+  },
+  "100125002": {
+    "asset": "UT_Hero_Card2_125_Max",
+    "path": "settlement/characters/UT_Hero_Card2_125_Max.webp"
+  },
+  "100125003": {
+    "asset": "UT_Hero_Card2_125_01",
+    "path": "settlement/characters/UT_Hero_Card2_125_01.webp"
+  },
+  "100126001": {
+    "asset": "UT_Hero_Card2_126",
+    "path": "settlement/characters/UT_Hero_Card2_126.webp"
+  },
+  "100126002": {
+    "asset": "UT_Hero_Card2_126_Max",
+    "path": "settlement/characters/UT_Hero_Card2_126_Max.webp"
+  },
+  "100126003": {
+    "asset": "UT_Hero_Card2_126_01",
+    "path": "settlement/characters/UT_Hero_Card2_126_01.webp"
+  },
+  "100127001": {
+    "asset": "UT_Hero_Card2_127",
+    "path": "settlement/characters/UT_Hero_Card2_127.webp"
+  },
+  "100127002": {
+    "asset": "UT_Hero_Card2_127_Max",
+    "path": "settlement/characters/UT_Hero_Card2_127_Max.webp"
+  },
+  "100127003": {
+    "asset": "UT_Hero_Card2_127_01",
+    "path": "settlement/characters/UT_Hero_Card2_127_01.webp"
+  },
+  "100127004": {
+    "asset": "UT_Hero_Card2_127_02",
+    "path": "settlement/characters/UT_Hero_Card2_127_02.webp"
+  },
+  "100128001": {
+    "asset": "UT_Hero_Card2_128",
+    "path": "settlement/characters/UT_Hero_Card2_128.webp"
+  },
+  "100128002": {
+    "asset": "UT_Hero_Card2_128_Max",
+    "path": "settlement/characters/UT_Hero_Card2_128_Max.webp"
+  },
+  "100128003": {
+    "asset": "UT_Hero_Card2_128_01",
+    "path": "settlement/characters/UT_Hero_Card2_128_01.webp"
+  },
+  "100129001": {
+    "asset": "UT_Hero_Card2_129",
+    "path": "settlement/characters/UT_Hero_Card2_129.webp"
+  },
+  "100129002": {
+    "asset": "UT_Hero_Card2_129_Max",
+    "path": "settlement/characters/UT_Hero_Card2_129_Max.webp"
+  },
+  "100301001": {
+    "asset": "UT_Hero_Card2_301",
+    "path": "settlement/characters/UT_Hero_Card2_301.webp"
+  },
+  "100301003": {
+    "asset": "UT_Hero_Card2_301_01",
+    "path": "settlement/characters/UT_Hero_Card2_301_01.webp"
+  },
+  "100301002": {
+    "asset": "UT_Hero_Card2_302",
+    "path": "settlement/characters/UT_Hero_Card2_302.webp"
+  },
+  "100301004": {
+    "asset": "UT_Hero_Card2_302_01",
+    "path": "settlement/characters/UT_Hero_Card2_302_01.webp"
+  },
+  "100303001": {
+    "asset": "UT_Hero_Card2_303",
+    "path": "settlement/characters/UT_Hero_Card2_303.webp"
+  },
+  "100304001": {
+    "asset": "UT_Hero_Card2_304",
+    "path": "settlement/characters/UT_Hero_Card2_304.webp"
+  },
+  "100305001": {
+    "asset": "UT_Hero_Card2_305",
+    "path": "settlement/characters/UT_Hero_Card2_305.webp"
+  },
+  "100306001": {
+    "asset": "UT_Hero_Card2_306",
+    "path": "settlement/characters/UT_Hero_Card2_306.webp"
+  }
+}
