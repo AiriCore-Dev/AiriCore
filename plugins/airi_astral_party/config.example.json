@@ -9,5 +9,6 @@
   "extra": "",
   "device_id": "",
   "timeout": 15,
-  "cooldown": 10
+  "cooldown": 10,
+  "renewal": {}
 }

@@ -35,7 +35,7 @@
 conda run --no-capture-output -n airidev python plugins/airi_astral_party/account_tool.py
 ```
 
-工具用于获取你已登录的专用账号的查询凭据，不自动注册游戏账号。它读取当前用户的 `AppData/LocalLow/feimo/吉星派对/Player.log`，从游戏原有日志提取最新登录的游戏、渠道、应用、设备标识及 `sid`、`extra`，再从 `吉星派对.exe` 的已建立 TCP 连接识别服务器。工具不启动 Bot，也不连接游戏服务器；开发测试只使用合成日志，实际登录凭据仍需首次运行验证。
+工具用于获取你已登录的专用账号的查询凭据，不自动注册游戏账号。默认导出模式读取当前用户的 `AppData/LocalLow/feimo/吉星派对/Player.log`，从游戏原有日志提取最新登录的游戏、渠道、应用、设备标识及 `sid`、`extra`，再从 `吉星派对.exe` 的已建立 TCP 连接识别服务器。导出模式不联网；`--login` 和 `--refresh` 会连接官方授权服务。工具不启动 Bot。开发测试只使用合成数据，实际授权仍需首次运行验证。
 
 终端仅显示脱敏摘要，不显示会话与设备标识。确认后原子写入配置；更新已有配置会保留 `timeout` 和 `cooldown`，坏档不覆盖。Windows 文件权限限制为当前用户与系统；其他系统使用 `0600`。未修改的游戏日志本身由官方客户端管理。
 
@@ -51,6 +51,10 @@ conda run --no-capture-output -n airidev python plugins/airi_astral_party/accoun
 | `--output 路径` | 指定配置输出位置，默认指向该仓库的 `data/astral_party/config.json` |
 | `--yes` | 已登录正确的专用账号，跳过交互确认并写入或更新配置 |
 | `--dry-run` | 只检查并显示脱敏摘要，不写入配置 |
+| `--login` | 使用已有服务器配置，私密输入飞魔账号手机号和密码；需要联网 |
+| `--refresh` | 读取飞魔自动登录凭据，达到六小时间隔后重新登录并获取游戏 sid；需要联网 |
+| `--check` | 离线检查已有配置与续期状态，不读取游戏日志或访问网络 |
+| `--sdk-channel 标识` | 仅用于飞魔登录：飞魔安装渠道，对应游戏目录或上级目录 `SetupInfo.ini` 的 `[Setup] fileName`，没有该文件时使用客户端默认值 `test_junhai`；不同于 `channel_id` |
 
 只检查本次登录参数：
 
@@ -73,7 +77,48 @@ conda run --no-capture-output -n airidev python plugins/airi_astral_party/accoun
 | `timeout` | 每次连接/请求超时秒数，默认 15，上限 30 |
 | `cooldown` | 全插件查询间隔秒数，默认 10 |
 
-这些参数对应官方客户端 `LoginServiceHelper.RequestConnectWithBnSdk(gameID, channelID, appID, sid, extra, deviceid)`。需由专用账号的授权登录流程取得，不能拿玩家 UID、TapTap 网页 Cookie 或平台 access_token 直接替代 `sid`。本插件不实现 SDK 自动登录或凭据自动续期；凭据失效时重新登录专用账号并运行工具更新配置，下一次查询自动重读。服务器地址对应当前渠道官方引导返回的 `serverUrl`；安装包中的引导路径为 `/api/hotaddressServer/get?route=CN_TAPTAP&version=...`，服务地址/版本以实际客户端为准。
+这些参数对应官方客户端 `LoginServiceHelper.RequestConnectWithBnSdk(gameID, channelID, appID, sid, extra, deviceid)`。需由专用账号的授权登录流程取得，不能拿玩家 UID、TapTap 网页 Cookie 或平台 access_token 直接替代 `sid`。`renewal` 是工具生成的可选续期材料，禁止手动填入网页 Cookie。只完成默认导出时仍是临时会话；重新导出会清除旧续期材料，防止更换账号后旧授权覆盖新账号。下一次查询自动重读配置。服务器地址对应当前渠道官方引导返回的 `serverUrl`；安装包中的引导路径为 `/api/hotaddressServer/get?route=CN_TAPTAP&version=...`，服务地址/版本以实际客户端为准。
+
+### 飞魔账号与 Linux 持续运行
+
+自动登录只使用飞魔账号的手机号和密码，对应客户端 `TYPE_TELPWD=19`、`tel_num` / `password`。不使用 TapTap 扫码、Cookie 或令牌。请先在官方客户端完成专用飞魔账号的注册、设置密码和必要验证；本工具不会注册账号。
+
+实现依据本机 3.2.1 客户端中的飞魔 SDK 静态还原，已通过离线测试，尚未使用真实专用账号验证。六小时是工具的刷新间隔，不是服务端承诺的有效期。客户端在 SDK 登录满十二小时后重连会重新登录；迁移临时 sid 本身无法长期使用。
+
+Windows 完成上面的本机导出并正常关闭游戏后，在交互式终端执行：
+
+```powershell
+conda run --no-capture-output -n airidev python plugins/airi_astral_party/account_tool.py --login
+conda run --no-capture-output -n airidev python plugins/airi_astral_party/account_tool.py --check
+```
+
+工具提示输入飞魔手机号和密码，均不回显，不提供密码命令行参数。登录成功后保存手机号、飞魔账号标识、密码派生值和游戏会话；不保存原始密码。派生值为官方 SDK 使用的 `md5(password + md5(password))`，具有密码等价权限，必须作为密码保管，不能公开、提交 Git 或发送给 Bot。Windows 写入时设置用户专用 ACL，Linux 写入时设置权限 600；使用文件锁、临时文件、原子替换和文件/目录同步保存。
+
+`app_id` 与签名参数必须配套：当前适配客户端默认飞魔配置 `110001950`，以及已解析安装渠道配置 `110001958`。二者均走飞魔手机号密码接口；安装渠道标识不等同于账号类型。工具按现有 `app_id` 选择配套签名，不会只改签名或擅自改写 `game_id`、`channel_id`、`app_id`。若服务端不接受当前渠道的飞魔账号，应从可正常登录该账号的官方客户端重新导出对应配置；跨渠道角色互通尚未验证。
+
+将最新的 `data/astral_party/config.json` 通过 SSH/SCP 传到生产机，以运行 Airi 的用户保存。以下假设部署目录为 `/opt/AiriCore`，Python 为 `/opt/AiriCore/.venv/bin/python`，请替换为实际路径：
+
+```sh
+cd /opt/AiriCore
+chmod 700 data/astral_party
+chmod 600 data/astral_party/config.json
+/opt/AiriCore/.venv/bin/python plugins/airi_astral_party/account_tool.py --check
+/opt/AiriCore/.venv/bin/python plugins/airi_astral_party/account_tool.py --refresh
+```
+
+生产机使用已安装 AiriCore 依赖的 Python 环境，无需 Windows、图形界面、游戏客户端或 Miniconda。配置不绑定 Windows DPAPI、注册表或密钥链。迁移后保留配置中的设备标识和 SDK 协议设备字段；`os=windows` 是所还原客户端协议字段，不是生产机平台检测结果。
+
+用运行 Airi 的用户执行 `crontab -e`，每小时检查一次：
+
+```cron
+17 * * * * cd /opt/AiriCore && /opt/AiriCore/.venv/bin/python plugins/airi_astral_party/account_tool.py --refresh >> /opt/AiriCore/logs/astral-account.log 2>&1
+```
+
+预先创建可写的 `logs` 目录并配置日志轮转。`--refresh` 未到六小时直接退出，到期后调用飞魔 `/account/authorize` 重新登录，校验返回的飞魔账号标识一致后原子更新 sid。请求失败或保存失败不会丢失原有密码派生凭据，下一次可重新登录。Bot 下次查询会重读配置，无需重启；`astral status` 仅显示本地配置状态，不主动验证服务端授权。
+
+失败退出码为 1，请纳入生产机现有监控。只在生产机启用定时任务，避免两台机器重复登录；迁移后关闭开发机游戏。密码修改、账号限制、身份验证或协议升级仍可能要求在官方客户端处理后重新执行 `--login`，Linux 交互式终端同样支持该命令。凭据可重复登录的设计不代表服务端承诺永久有效。
+
+首次部署需实际验证玩家查询、跨越十二小时的多次定时登录、停机重启后的恢复。当前仅在 Windows 的 airidev 环境完成离线协议和文件持久化测试，没有真实 Linux 运行环境或账号联调结果。
 
 每次查询建立短连接，完成官方登录和读取后关闭；多人请求串行，繁忙时提示稍后重试。账号应专用于查询，避免与正在游玩的同一账号竞争登录。配置与绑定目录已从 Git 排除，错误与日志不输出凭据。
 

@@ -13,6 +13,7 @@ from filelock import FileLock, Timeout
 from .client import GameClient
 from .protocol import QueryError
 from .settings import DATA_DIR, load_settings
+from .renewal import authorization_status
 
 
 PAGE_SIZE = 6
@@ -138,6 +139,7 @@ class QueryService:
         if command.action == '状态':
             settings = await self.run_sync(load_settings, self.directory / 'config.json')
             return _notice('查询状态', ['查询账号已配置' if settings.sid else '尚未配置专用查询账号',
+                                       authorization_status(settings),
                                        f'默认 UID：{uid}' if uid else '尚未绑定默认 UID',
                                        '绑定不会登录或修改该玩家账号'])
         if uid is None:

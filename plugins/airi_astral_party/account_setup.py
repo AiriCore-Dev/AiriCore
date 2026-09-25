@@ -4,6 +4,7 @@ import json
 import os
 import re
 import subprocess
+import sys
 import tempfile
 from dataclasses import asdict, fields, replace
 from pathlib import Path
@@ -12,7 +13,7 @@ import psutil
 from filelock import FileLock, Timeout
 
 from .protocol import QueryError
-from .settings import Settings
+from .settings import Settings, load_settings
 
 
 MAX_LOG_BYTES = 16 * 1024 * 1024
@@ -132,12 +133,46 @@ def protect_file(path):
         else:
             os.chmod(path, 0o600)
     except (OSError, ValueError, StopIteration, subprocess.SubprocessError):
-        raise QueryError('无法限制配置文件访问权限，已停止保存；请在当前 Windows 用户的本地目录运行工具') from None
+        raise QueryError('无法限制配置文件访问权限，已停止保存；请检查当前用户的目录权限') from None
+
+
+def sync_directory(path):
+    if sys.platform == 'win32':
+        return
+    descriptor = os.open(path, os.O_RDONLY | getattr(os, 'O_DIRECTORY', 0))
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+
+
+def write_settings(path, settings):
+    path = Path(path)
+    settings.validate()
+    encoded = json.dumps(asdict(settings), ensure_ascii=False, indent=2).encode('utf-8')
+    if len(encoded) > 65536:
+        raise QueryError('账号配置超过大小限制，原文件未变更')
+    temporary = None
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+        with tempfile.NamedTemporaryFile(dir=path.parent, suffix='.tmp', delete=False) as handle:
+            temporary = Path(handle.name)
+        protect_file(temporary)
+        with temporary.open('wb') as handle:
+            handle.write(encoded)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+        sync_directory(path.parent)
+    except OSError:
+        raise QueryError('账号配置保存失败，请检查目录权限；停止后续授权操作') from None
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
 
 
 def save_config(path, capture, host, port, client_version):
     path = Path(path)
-    temporary = None
     try:
         path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
         with FileLock(str(path) + '.lock', timeout=3):
@@ -154,28 +189,15 @@ def save_config(path, capture, host, port, client_version):
             values = asdict(Settings()) | existing
             values.update({key: getattr(capture, key) for key in LOGIN_FIELDS})
             values.update(host=host, port=port, client_version=client_version)
+            values['renewal'] = {}
             settings = Settings(**values)
-            settings.validate()
-            encoded = json.dumps(asdict(settings), ensure_ascii=False, indent=2).encode('utf-8')
-            if len(encoded) > 65536:
-                raise QueryError('账号配置超过大小限制，原文件未变更')
-            with tempfile.NamedTemporaryFile(dir=path.parent, suffix='.tmp', delete=False) as handle:
-                temporary = Path(handle.name)
-            protect_file(temporary)
-            with temporary.open('wb') as handle:
-                handle.write(encoded)
-                handle.flush()
-                os.fsync(handle.fileno())
-            os.replace(temporary, path)
+            write_settings(path, settings)
     except (OSError, Timeout):
         raise QueryError('账号配置保存失败，原文件未变更，请检查目录权限或稍后重试') from None
-    finally:
-        if temporary is not None:
-            temporary.unlink(missing_ok=True)
 
 
 def main(argv=None):
-    parser = ArgumentParser(description='从官方客户端本次登录日志生成吉星派对专用查询账号配置', add_help=False)
+    parser = ArgumentParser(description='吉星派对飞魔专用账号配置、登录与会话更新工具', add_help=False)
     parser.add_argument('-h', '--help', action='help', help='显示帮助并退出')
     parser.add_argument('--log-file', type=Path,
                         default=Path.home() / 'AppData/LocalLow/feimo/吉星派对/Player.log', help='本次登录的游戏日志路径')
@@ -186,11 +208,32 @@ def main(argv=None):
     parser.add_argument('--client-version', default='3.2.1', help='游戏应用版本，默认 3.2.1')
     parser.add_argument('--yes', action='store_true', help='已完成专用账号登录，直接读取并确认写入或更新配置')
     parser.add_argument('--dry-run', action='store_true', help='只显示脱敏检查结果，不写入配置')
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument('--login', action='store_true', help='私密输入飞魔手机号和密码，生成可迁移到 Linux 的自动登录配置')
+    mode.add_argument('--refresh', action='store_true', help='使用已有授权联网续期；适用于 Linux 定时任务')
+    mode.add_argument('--check', action='store_true', help='离线检查已有配置及续期状态，不读取游戏日志')
+    parser.add_argument('--sdk-channel', default='test_junhai', help='飞魔 SDK 安装渠道标识；无 SetupInfo.ini 时沿用客户端默认值')
     args = parser.parse_args(argv)
     try:
         if not 1 <= args.port <= 65535 or (args.pid is not None and args.pid <= 0):
             raise QueryError('端口或进程编号无效')
         print('吉星派对 · 专用查询账号配置工具')
+        if args.login or args.refresh or args.check:
+            from .renewal import authorization_status, login, refresh
+            if args.dry_run and not args.check:
+                raise QueryError('联网授权与续期不支持 --dry-run；请使用 --check 离线检查')
+            if args.check:
+                settings = load_settings(args.output)
+                settings.validate()
+                print(authorization_status(settings))
+                print('仅检查本地配置，未验证服务器是否接受授权。')
+            elif args.login:
+                login(args.output, sdk_channel=args.sdk_channel)
+                print('飞魔自动登录凭据与 SDK 会话已保存，可迁移到 Linux；请再验证实际玩家查询。')
+            else:
+                changed = refresh(args.output)
+                print('飞魔 SDK 会话已更新。' if changed else '尚未到续期间隔，本次未联网。')
+            return 0
         if not args.yes:
             print('请在官方客户端使用自行注册的专用账号登录，并保持游戏大厅打开。')
             print('工具将读取所选游戏日志中的最新 SDK 登录结果，并生成本机查询配置。')
@@ -210,7 +253,7 @@ def main(argv=None):
             return 0
         save_config(args.output, capture, host, port, args.client_version)
         print('配置已安全保存。请正常关闭游戏，再向 Airi 发送 astral status 和 astral UID 验证查询。')
-        print('会话失效时，用专用账号重新登录并再次运行本工具。')
+        print('当前只保存临时会话。Linux 长期运行前，请再执行本工具 --login 配置飞魔专用账号。')
         return 0
     except QueryError as error:
         print(f'操作未完成：{error}')

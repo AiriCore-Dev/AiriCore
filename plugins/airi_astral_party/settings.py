@@ -21,6 +21,7 @@ class Settings:
     device_id: str = field(default='', repr=False)
     timeout: float = 15.0
     cooldown: float = 10.0
+    renewal: dict = field(default_factory=dict, repr=False)
 
     def validate(self):
         if not all(isinstance(getattr(self, key), str) and getattr(self, key).strip()
@@ -37,6 +38,8 @@ class Settings:
             raise QueryError('吉星派对配置字段格式无效')
         if not self.client_version.strip() or len(self.host) > 253 or any(c in self.host for c in '/\\@\r\n '):
             raise QueryError('吉星派对配置中的服务器地址或版本无效')
+        from .renewal import validate_authorization
+        validate_authorization(self.renewal)
 
 
 def load_settings(path=None):
