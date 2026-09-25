@@ -67,9 +67,12 @@ $ 直营姬：10积分 / 次
 $ 10积分 / 次
 
 - Airi-Astral-Party:
-吉星派对查询 By AiriCore Dev.
+吉星派对综合查询 By AiriCore Dev.
 * 发送 astral help 查看图片帮助
-$ 10积分 / 次查询（帮助、绑定与账号管理免费）
+* 需要群白名单才可使用
+* astral watch 观战码 设置本群 PVE 对局；astral card 查看本群手牌
+* astral unwatch 停止当前群观战
+$ 10积分 / 次
 
 - Airi-Manosaba-Memes:
 魔裁DIY工具 By AiriCore dev., zhaomaoniu

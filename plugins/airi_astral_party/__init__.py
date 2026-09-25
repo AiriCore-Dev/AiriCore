@@ -18,12 +18,13 @@ from .credential_events import install, scrub_event
 from .protocol import QueryError
 from .runtime import run_operation, run_sync, shutdown, start_maintenance
 from .service import QueryService, parse_command
+from .whitelist import GroupWhitelist, group_id
 
 
 __plugin_meta__ = PluginMetadata(
     name='吉星派对',
     description='以游戏原版素材查询玩家公开资料与对局',
-    usage='发送“astral help”查看图片帮助；astral bind UID、astral me、astral UID recent、astral UID battle 序号',
+    usage='发送“astral help”查看图片帮助；群内发送 astral watch 观战码 设置对局，astral card 查看手牌，astral unwatch 停止观战',
     type='application',
     supported_adapters={'~onebot.v11'},
 )
@@ -31,6 +32,7 @@ __plugin_meta__ = PluginMetadata(
 logger = get_logger('吉星派对')
 service = QueryService(run_sync=run_sync)
 accounts = AccountAdmin(service.directory / 'config.json', service._lock, run_sync)
+group_whitelist = GroupWhitelist(service.directory / 'group_whitelist.json')
 matcher = on_command('astral', force_whitespace=True, block=True)
 install()
 get_driver().on_shutdown(shutdown)
@@ -54,9 +56,27 @@ async def prepare_account(text, private, verified, credentials, recall_failed=Fa
     return await run_sync(rendering.render_notice, view['title'], view['lines'])
 
 
-async def prepare(text, user, *, raise_errors=False):
+async def prepare_whitelist(text, verified):
     try:
-        view = await service.handle(text, user)
+        if not verified:
+            raise QueryError('需要超级用户权限及当前双重验证码：astral 验证码 whitelist 群号')
+        parts = text.split()
+        if len(parts) != 1:
+            raise QueryError('指令格式：astral 验证码 whitelist 群号')
+        group = group_id(parts[0])
+        added = await run_sync(group_whitelist.add, group)
+        lines = [f'已将群 {group} 加入吉星派对白名单' if added else f'群 {group} 已在吉星派对白名单中']
+    except QueryError as error:
+        lines = [str(error)]
+    except Exception as error:
+        logger.error(f'群白名单管理未完成（{type(error).__name__}），请检查数据文件与目录权限')
+        lines = ['群白名单操作未完成，请稍后重试或检查数据文件']
+    return await run_sync(rendering.render_notice, '群白名单管理', lines)
+
+
+async def prepare(text, user, *, group=None, raise_errors=False):
+    try:
+        view = await service.handle(text, user, group=group)
     except QueryError as error:
         if raise_errors:
             raise
@@ -75,6 +95,8 @@ async def prepare(text, user, *, raise_errors=False):
         return await run_sync(rendering.render_profile, view['snapshot'])
     if kind == 'records':
         return await run_sync(rendering.render_records, view['snapshot'], view['page'])
+    if kind == 'hands':
+        return await run_sync(rendering.render_hands, view['snapshot'])
     return await run_sync(rendering.render_detail, view['snapshot'])
 
 
@@ -98,9 +120,12 @@ async def query_and_send(bot, event, text):
     try:
         try:
             command = parse_command(text)
-            if command.action in {'资料', '战绩', '对局'}:
+            group = event.group_id if isinstance(event, GroupMessageEvent) else None
+            if command.action in {'观战', '手牌', '停止观战'} and group is None:
+                raise QueryError('watch、card 和 unwatch 仅支持群聊，请在需要观战的群内使用')
+            if command.action in {'资料', '战绩', '对局', '手牌'}:
                 receipt = await credit.charge(event.get_user_id(), credit.ASTRAL_PARTY_QUERY_COST)
-            payload = await prepare(text, 'qq:' + event.get_user_id(), raise_errors=True)
+            payload = await prepare(text, 'qq:' + event.get_user_id(), group=group, raise_errors=True)
             succeeded = True
         except (QueryError, credit.ChargeRejected) as error:
             payload = await run_sync(rendering.render_notice, '查询提示', [str(error)])
@@ -116,10 +141,23 @@ async def query_and_send(bot, event, text):
 
 @matcher.handle()
 async def handle(bot: Bot, event: MessageEvent, command: tuple = Command(), args: Message = CommandArg()):
+    if isinstance(event, GroupMessageEvent):
+        try:
+            if not await run_operation(run_sync(group_whitelist.allows, event.group_id)):
+                return
+        except QueryError as error:
+            logger.warning(str(error))
+            return
+        except Exception as error:
+            logger.error(f'群白名单检查失败（{type(error).__name__}），已停止处理群聊指令')
+            return
     text = command[-1] + ' ' + args.extract_plain_text()
     try:
         account = args.extract_plain_text().split(maxsplit=1)
-        if account and account[0] == 'account':
+        if account and account[0] == 'whitelist':
+            action = account[1] if len(account) > 1 else ''
+            payload = await run_operation(prepare_whitelist(action, is_verified_superuser(event)))
+        elif account and account[0] == 'account':
             scrub_event(event)
             credentials = getattr(event, '_astral_credentials', None)
             event._astral_credentials = None

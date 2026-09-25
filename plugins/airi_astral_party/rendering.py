@@ -10,7 +10,8 @@ from PIL import Image, ImageDraw
 from utils.cache import get_font, get_image
 
 from .service import PAGE_SIZE
-from .settlement_rendering import render_settlement
+from .protocol import QueryError
+from .settlement_rendering import positioned, render_settlement
 from .profile_rendering import (
     paint_achievements,
     paint_character,
@@ -21,6 +22,8 @@ from .profile_rendering import (
 
 ASSETS = Path(__file__).parent / "assets"
 NAMES = json.loads((ASSETS / "names.json").read_text(encoding="utf-8"))
+CARDS = json.loads((ASSETS / "cards.json").read_text(encoding="utf-8"))
+PORTRAITS = json.loads((ASSETS / 'cards/portraits.json').read_text(encoding='utf-8'))
 LOCAL_TIME = timezone(timedelta(hours=8))
 RESAMPLE = Image.Resampling.LANCZOS
 INK = "#24232b"
@@ -297,6 +300,68 @@ def render_notice(title, lines):
     return render_message(title, lines)
 
 
+def render_hands(snapshot):
+    from .card_rendering import group_cards, render_card
+    players = snapshot['players']
+    columns, card_w, card_h, row_h = 5, 200, 293, 316
+    sections = []
+    for player in players:
+        groups = group_cards(player['cards'], player, snapshot.get('map_type', 4))
+        sections.append((player, groups, 100 + (math.ceil(len(groups) / columns) * row_h if groups else 88)))
+    height = 230 + sum(size + 20 for _, _, size in sections)
+    if height > 4800:
+        raise QueryError('本次手牌数量超过图片展示上限，请稍后重试或联系管理员')
+    canvas = _sprite('kn6fq3y', 'Common').resize((1280, height), RESAMPLE)
+    canvas = Image.alpha_composite(canvas, Image.new('RGBA', canvas.size, (13, 16, 29, 220)))
+    draw = ImageDraw.Draw(canvas)
+    _text(canvas, f'玩家手牌预览 · 观战码 {snapshot.get("watch_code") or "未提供"}', (54, 32, 1170, 58), 38, '#f5f3ff')
+    _text(canvas, f'{_mode(snapshot["map_type"])} · 第 {snapshot["round"]} 回合', (54, 94, 800, 36), 25, '#d2c8ef')
+    captured = datetime.fromtimestamp(snapshot['captured_at'], LOCAL_TIME).strftime('%Y-%m-%d %H:%M:%S')
+    _text(canvas, f'快照 {captured}', (835, 94, 390, 36), 21, '#c4bdd7', align='center')
+    y = 154
+    accents = ('#bca4ff', '#80d7ee', '#f3b383', '#a6d59d')
+    for player, groups, section_height in sections:
+        draw.rounded_rectangle((34, y, 1246, y + section_height), radius=20, fill='#25283b', outline='#43465e', width=1)
+        draw.rounded_rectangle((54, y + 22, 60, y + 59), radius=3, fill=accents[player['slot'] % 4])
+        rank_key = ('qees2g', 'qees2h', 'qees2i', 'qees2f')[player['slot']]
+        rank = _image(f'settlement/BattleSettlement/{rank_key}.png')
+        rank = rank.crop(rank.getbbox())
+        rank.thumbnail((66, 50), RESAMPLE)
+        _paste(canvas, rank, (74, y + 11 + (50 - rank.height) // 2))
+        portrait_path = PORTRAITS.get(str(player['hero_id']))
+        if portrait_path:
+            portrait = _image(portrait_path)
+            portrait = portrait.crop(portrait.getbbox())
+            portrait.thumbnail((60, 60), RESAMPLE)
+            _paste(canvas, portrait, (151 + (60 - portrait.width) // 2, y + 7 + (60 - portrait.height) // 2))
+        _text(canvas, f'{player["name"]} · {_hero(player["hero_id"])}', (229, y + 16, 687, 46), 28, '#f7f6fc')
+        hidden = sum(card.get('id') is None for card in player['cards'])
+        unknown = sum(card.get('id') is not None and str(card['id']) not in CARDS for card in player['cards'])
+        summary = f'手牌 {len(player["cards"])} 张'
+        if hidden:
+            summary += f' · 不可见 {hidden}'
+        if unknown:
+            summary += f' · 未收录 {unknown}'
+        _text(canvas, summary, (934, y + 21, 286, 36), 22, '#d2cde3', align='center')
+        draw.line((56, y + 70, 1224, y + 70), fill='#45475e', width=1)
+        for index, (card, count) in enumerate(groups):
+            image = render_card(card, player, snapshot['map_type'])
+            x, top = 62 + index % columns * 234, y + 88 + index // columns * row_h
+            scaled, xy = positioned(image, {'x': x, 'y': top, 'scale': (card_w / 440, card_h / 644)})
+            canvas.alpha_composite(scaled, xy)
+            if count > 1:
+                label = f'x{count}'
+                font = get_font(ASSETS / 'Impact.ttf', 54)
+                bounds = draw.textbbox((0, 0), label, font=font, stroke_width=4)
+                draw.text((x + card_w + 24 - bounds[2], top + card_h - bounds[3]), label,
+                          font=font, fill='#ffffff', stroke_width=4, stroke_fill='#000000')
+        if not player['cards']:
+            _text(canvas, '当前没有手牌', (62, y + 92, 1156, 60), 28, '#c4bdd7', align='center')
+        y += section_height + 20
+    _text(canvas, 'PVE 观战快照 · 隐藏及未收录牌面显示为卡背', (54, height - 62, 1156, 34), 20, '#c4bdd7', align='center')
+    return _png(canvas)
+
+
 def render_help():
     return render_message(
         "AiriCore 星趴查询 · 帮助",
@@ -311,9 +376,10 @@ def render_help():
             "astral UID recent  ·  指定玩家的近期战绩（加页码同上）",
             "astral me battle 序号  ·  你第N号对局的对局详情",
             "astral UID battle 序号  ·  指定玩家的对局详情",
+            "astral watch 观战码  ·  设置当前群的观战对局（仅群聊）",
+            "astral card  ·  查看本群对局当前可见手牌（仅群聊）",
+            "astral unwatch  ·  停止当前群观战（仅群聊）",
             "astral status  ·  查看绑定与查询账号配置状态",
-            "资料、战绩每页、对局详情：每次 10 积分；失败退回",
-            "帮助、绑定、解绑、状态及账号管理免费",
             "* UID、页码和序号请替换为实际数字",
         ],
     )

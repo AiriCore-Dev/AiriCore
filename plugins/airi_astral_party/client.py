@@ -98,6 +98,15 @@ class _Connection:
                 if response.command != response_command:
                     raise ProtocolError('游戏返回的查询类型不匹配')
                 if response.error:
+                    if command in (5191, 5193, 5195):
+                        watch_errors = {
+                            11001: '观战房间不存在，请确认对局仍在进行并重新复制观战码',
+                            11080: '观战对局已结束，请重新设置正在进行中的观战码',
+                            11081: '观战码无效或当前不可用，请从游戏内重新复制',
+                            11082: '该对局观战人数已满，请稍后重试',
+                        }
+                        if response.error in watch_errors:
+                            raise QueryError(f'{watch_errors[response.error]}（{response.error}）')
                     if response.error == 12013:
                         raise QueryError('玩家资料暂未就绪，请稍后重试（12013）')
                     if response.error == 12014:

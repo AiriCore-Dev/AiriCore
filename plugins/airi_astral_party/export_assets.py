@@ -136,7 +136,22 @@ def component_states(b):
             name = b.ref()
             b.seek(start, 1)
             pages = [[b.ref(), b.ref()] for _ in range(b.short())]
-            controllers.append({"name": name, "pages": pages})
+            controller = {"name": name, "pages": pages}
+            if b.seek(start, 2):
+                actions = []
+                for _ in range(b.short()):
+                    size = b.short()
+                    stop = b.p + size
+                    kind = b.byte()
+                    from_pages = [b.ref() for _ in range(b.short())]
+                    to_pages = [b.ref() for _ in range(b.short())]
+                    if kind == 1:
+                        actions.append({'kind': kind, 'from': from_pages, 'to': to_pages,
+                                        'target': b.ref(), 'controller': b.ref(), 'page': b.ref()})
+                    b.p = stop
+                if actions:
+                    controller['actions'] = actions
+            controllers.append(controller)
             b.p = end
     if b.seek(0, 5):
         for _ in range(b.short()):
@@ -238,6 +253,9 @@ def child(b, start, include_state=False):
         d["title"] = b.ref()
     if include_state:
         d["gears"] = gears(b, start)
+        if b.seek(start, 1):
+            b.ref()
+            d["group"] = b.read("h")
     return d
 
 

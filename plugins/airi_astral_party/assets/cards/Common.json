@@ -1,0 +1,5015 @@
+{
+  "id": "xuaw6o8j",
+  "name": "Common",
+  "version": 6,
+  "dependencies": [
+    {
+      "id": "mzuc5vkb",
+      "name": "Font"
+    }
+  ],
+  "items": {
+    "gj393l": {
+      "type": 3,
+      "id": "gj393l",
+      "name": "Com_Card_Icon",
+      "path": "/Components/Com_Card/",
+      "file": null,
+      "exported": false,
+      "width": 67,
+      "height": 348,
+      "objectType": 0,
+      "children": [
+        {
+          "type": 0,
+          "source": "xmq430",
+          "package": null,
+          "id": "n36_xmq4",
+          "name": "n36",
+          "x": 0,
+          "y": 0,
+          "width": 67,
+          "height": 67,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "1"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 0,
+          "source": "xmq42n",
+          "package": null,
+          "id": "n37_xmq4",
+          "name": "n37",
+          "x": 0,
+          "y": 0,
+          "width": 67,
+          "height": 67,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "4"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 0,
+          "source": "xmq431",
+          "package": null,
+          "id": "n38_xmq4",
+          "name": "n38",
+          "x": 0,
+          "y": 0,
+          "width": 67,
+          "height": 67,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "3"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 0,
+          "source": "xmq432",
+          "package": null,
+          "id": "n39_xmq4",
+          "name": "n39",
+          "x": 0,
+          "y": 0,
+          "width": 67,
+          "height": 67,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "2"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 0,
+          "source": "xmq437",
+          "package": null,
+          "id": "n40_xmq4",
+          "name": "n40",
+          "x": 0,
+          "y": 0,
+          "width": 67,
+          "height": 67,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "5",
+                  "11"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 0,
+          "source": "xmq42t",
+          "package": null,
+          "id": "n24_xmq4",
+          "name": "n24",
+          "x": 0,
+          "y": 0,
+          "width": 67,
+          "height": 67,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "0"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 0,
+          "source": "g3zr3i",
+          "package": null,
+          "id": "n44_g3zr",
+          "name": "n44",
+          "x": 0,
+          "y": 0,
+          "width": 67,
+          "height": 67,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "6"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 0,
+          "source": "odf7q47",
+          "package": null,
+          "id": "n51_odf7",
+          "name": "n51",
+          "x": 0,
+          "y": 0,
+          "width": 67,
+          "height": 67,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "11"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 0,
+          "source": "xmq434",
+          "package": null,
+          "id": "n41_xmq4",
+          "name": "n41",
+          "x": 6,
+          "y": 60,
+          "width": 53,
+          "height": 27,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "2"
+                ]
+              }
+            },
+            {
+              "kind": 8,
+              "controller": 2,
+              "values": {
+                "pages": [
+                  "0"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 0,
+          "source": "xmq435",
+          "package": null,
+          "id": "n42_xmq4",
+          "name": "n42",
+          "x": 6,
+          "y": 60,
+          "width": 53,
+          "height": 27,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "2"
+                ]
+              }
+            },
+            {
+              "kind": 8,
+              "controller": 2,
+              "values": {
+                "pages": [
+                  "1"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 0,
+          "source": "xmq436",
+          "package": null,
+          "id": "n43_xmq4",
+          "name": "n43",
+          "x": 6,
+          "y": 60,
+          "width": 53,
+          "height": 27,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "2"
+                ]
+              }
+            },
+            {
+              "kind": 8,
+              "controller": 2,
+              "values": {
+                "pages": [
+                  "2"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 9,
+          "source": "9wtj8h",
+          "package": null,
+          "id": "n45_9wtj",
+          "name": "n45",
+          "x": 8,
+          "y": 70,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 0,
+              "values": {
+                "pages": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5",
+                  "6"
+                ]
+              }
+            },
+            {
+              "kind": 8,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "0",
+                  "1"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 9,
+          "source": "9wtj8h",
+          "package": null,
+          "id": "n46_9wtj",
+          "name": "n46",
+          "x": 8,
+          "y": 115,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 0,
+              "values": {
+                "pages": [
+                  "2",
+                  "3",
+                  "4",
+                  "5",
+                  "6"
+                ]
+              }
+            },
+            {
+              "kind": 8,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "0",
+                  "1"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 9,
+          "source": "9wtj8h",
+          "package": null,
+          "id": "n47_9wtj",
+          "name": "n47",
+          "x": 8,
+          "y": 160,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 0,
+              "values": {
+                "pages": [
+                  "3",
+                  "4",
+                  "5",
+                  "6"
+                ]
+              }
+            },
+            {
+              "kind": 8,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "0",
+                  "1"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 9,
+          "source": "9wtj8h",
+          "package": null,
+          "id": "n48_qdz3",
+          "name": "n48",
+          "x": 8,
+          "y": 205,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 0,
+              "values": {
+                "pages": [
+                  "4",
+                  "5",
+                  "6"
+                ]
+              }
+            },
+            {
+              "kind": 8,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "0",
+                  "1"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 9,
+          "source": "9wtj8h",
+          "package": null,
+          "id": "n49_qdz3",
+          "name": "n49",
+          "x": 8,
+          "y": 250,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 0,
+              "values": {
+                "pages": [
+                  "5",
+                  "6"
+                ]
+              }
+            },
+            {
+              "kind": 8,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "0",
+                  "1"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 9,
+          "source": "9wtj8h",
+          "package": null,
+          "id": "n50_qdz3",
+          "name": "n50",
+          "x": 8,
+          "y": 295,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 0,
+              "values": {
+                "pages": [
+                  "6"
+                ]
+              }
+            },
+            {
+              "kind": 8,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "0",
+                  "1"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        }
+      ],
+      "mask": -1,
+      "controllers": [
+        {
+          "name": "Cost",
+          "pages": [
+            [
+              "0",
+              "None"
+            ],
+            [
+              "1",
+              "1"
+            ],
+            [
+              "2",
+              "2"
+            ],
+            [
+              "3",
+              "3"
+            ],
+            [
+              "4",
+              "4"
+            ],
+            [
+              "5",
+              "5"
+            ],
+            [
+              "6",
+              "6"
+            ]
+          ]
+        },
+        {
+          "name": "CardType",
+          "pages": [
+            [
+              "7",
+              "none"
+            ],
+            [
+              "0",
+              "Attack"
+            ],
+            [
+              "1",
+              "Defend"
+            ],
+            [
+              "2",
+              "Effect"
+            ],
+            [
+              "6",
+              "Counter"
+            ],
+            [
+              "3",
+              "Event"
+            ],
+            [
+              "4",
+              "Luck"
+            ],
+            [
+              "5",
+              "Jnix"
+            ],
+            [
+              "11",
+              "Curse"
+            ]
+          ],
+          "actions": [
+            {
+              "kind": 1,
+              "from": [],
+              "to": [
+                "0"
+              ],
+              "target": "n45_9wtj",
+              "controller": "CpTyper",
+              "page": "1"
+            },
+            {
+              "kind": 1,
+              "from": [],
+              "to": [
+                "0"
+              ],
+              "target": "n46_9wtj",
+              "controller": "CpTyper",
+              "page": "1"
+            },
+            {
+              "kind": 1,
+              "from": [],
+              "to": [
+                "0"
+              ],
+              "target": "n47_9wtj",
+              "controller": "CpTyper",
+              "page": "1"
+            },
+            {
+              "kind": 1,
+              "from": [],
+              "to": [
+                "1"
+              ],
+              "target": "n45_9wtj",
+              "controller": "CpTyper",
+              "page": "2"
+            },
+            {
+              "kind": 1,
+              "from": [],
+              "to": [
+                "1"
+              ],
+              "target": "n47_9wtj",
+              "controller": "CpTyper",
+              "page": "2"
+            },
+            {
+              "kind": 1,
+              "from": [],
+              "to": [
+                "1"
+              ],
+              "target": "n46_9wtj",
+              "controller": "CpTyper",
+              "page": "2"
+            },
+            {
+              "kind": 1,
+              "from": [],
+              "to": [
+                "0"
+              ],
+              "target": "n48_qdz3",
+              "controller": "CpTyper",
+              "page": "1"
+            },
+            {
+              "kind": 1,
+              "from": [],
+              "to": [
+                "0"
+              ],
+              "target": "n49_qdz3",
+              "controller": "CpTyper",
+              "page": "1"
+            },
+            {
+              "kind": 1,
+              "from": [],
+              "to": [
+                "0"
+              ],
+              "target": "n50_qdz3",
+              "controller": "CpTyper",
+              "page": "1"
+            },
+            {
+              "kind": 1,
+              "from": [],
+              "to": [
+                "1"
+              ],
+              "target": "n48_qdz3",
+              "controller": "CpTyper",
+              "page": "2"
+            },
+            {
+              "kind": 1,
+              "from": [],
+              "to": [
+                "1"
+              ],
+              "target": "n49_qdz3",
+              "controller": "CpTyper",
+              "page": "2"
+            },
+            {
+              "kind": 1,
+              "from": [],
+              "to": [
+                "1"
+              ],
+              "target": "n50_qdz3",
+              "controller": "CpTyper",
+              "page": "2"
+            }
+          ]
+        },
+        {
+          "name": "TargetType",
+          "pages": [
+            [
+              "9",
+              "None"
+            ],
+            [
+              "0",
+              "Land"
+            ],
+            [
+              "1",
+              "Target"
+            ],
+            [
+              "2",
+              "Self"
+            ]
+          ]
+        }
+      ],
+      "transitions": []
+    },
+    "gj393m": {
+      "type": 3,
+      "id": "gj393m",
+      "name": "Com_Card_Name",
+      "path": "/Components/Com_Card/",
+      "file": null,
+      "exported": false,
+      "width": 533,
+      "height": 132,
+      "objectType": 0,
+      "children": [
+        {
+          "type": 0,
+          "source": "ru20q2u",
+          "package": null,
+          "id": "n30_ru20",
+          "name": "n30",
+          "x": 122,
+          "y": 30,
+          "width": 512,
+          "height": 128,
+          "scale": [
+            0.5600000023841858,
+            0.5600000023841858
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "color": [
+            0,
+            186,
+            162,
+            255
+          ],
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 4,
+              "controller": 0,
+              "values": {
+                "0": [
+                  255,
+                  0,
+                  0,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "1": [
+                  0,
+                  254,
+                  255,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "2": [
+                  202,
+                  241,
+                  22,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "9": [
+                  255,
+                  0,
+                  234,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "3": [
+                  255,
+                  222,
+                  0,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "4": [
+                  255,
+                  120,
+                  0,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "5": [
+                  8,
+                  42,
+                  191,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "10": [
+                  0,
+                  186,
+                  162,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "default": [
+                  255,
+                  255,
+                  255,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 0,
+          "source": "ru20q2v",
+          "package": null,
+          "id": "n31_ru20",
+          "name": "n31",
+          "x": 133,
+          "y": 62,
+          "scale": [
+            0.5600000023841858,
+            0.5600000023841858
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 4,
+              "controller": 0,
+              "values": {
+                "0": [
+                  255,
+                  87,
+                  169,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "1": [
+                  87,
+                  189,
+                  255,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "2": [
+                  165,
+                  222,
+                  186,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "9": [
+                  179,
+                  169,
+                  250,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "3": [
+                  179,
+                  179,
+                  191,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "4": [
+                  255,
+                  193,
+                  0,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "5": [
+                  2,
+                  11,
+                  48,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "10": [
+                  0,
+                  0,
+                  0,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "default": [
+                  255,
+                  255,
+                  255,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 0,
+          "source": "ru20q2v",
+          "package": null,
+          "id": "n32_ru20",
+          "name": "n32",
+          "x": 144,
+          "y": 77,
+          "scale": [
+            0.30000001192092896,
+            0.30000001192092896
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 4,
+              "controller": 0,
+              "values": {
+                "0": [
+                  255,
+                  87,
+                  169,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "1": [
+                  87,
+                  189,
+                  255,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "2": [
+                  165,
+                  222,
+                  186,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "9": [
+                  179,
+                  169,
+                  250,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "3": [
+                  179,
+                  179,
+                  191,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "4": [
+                  255,
+                  193,
+                  0,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "5": [
+                  2,
+                  11,
+                  48,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "10": [
+                  0,
+                  0,
+                  0,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "default": [
+                  255,
+                  255,
+                  255,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 0,
+          "source": "ru20q2v",
+          "package": null,
+          "id": "n33_ru20",
+          "name": "n33",
+          "x": 374,
+          "y": 43,
+          "scale": [
+            0.5600000023841858,
+            0.5600000023841858
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 4,
+              "controller": 0,
+              "values": {
+                "0": [
+                  255,
+                  87,
+                  169,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "1": [
+                  87,
+                  189,
+                  255,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "2": [
+                  165,
+                  222,
+                  186,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "9": [
+                  179,
+                  169,
+                  250,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "3": [
+                  179,
+                  179,
+                  191,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "4": [
+                  255,
+                  193,
+                  0,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "5": [
+                  2,
+                  11,
+                  48,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "10": [
+                  0,
+                  0,
+                  0,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "default": [
+                  255,
+                  255,
+                  255,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 0,
+          "source": "ru20q2v",
+          "package": null,
+          "id": "n34_ru20",
+          "name": "n34",
+          "x": 385,
+          "y": 58,
+          "scale": [
+            0.30000001192092896,
+            0.30000001192092896
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 4,
+              "controller": 0,
+              "values": {
+                "0": [
+                  255,
+                  87,
+                  169,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "1": [
+                  87,
+                  189,
+                  255,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "2": [
+                  165,
+                  222,
+                  186,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "9": [
+                  179,
+                  169,
+                  250,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "3": [
+                  179,
+                  179,
+                  191,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "4": [
+                  255,
+                  193,
+                  0,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "5": [
+                  2,
+                  11,
+                  48,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "10": [
+                  0,
+                  0,
+                  0,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ],
+                "default": [
+                  255,
+                  255,
+                  255,
+                  255,
+                  0,
+                  0,
+                  0,
+                  255
+                ]
+              }
+            }
+          ],
+          "group": -1
+        }
+      ],
+      "mask": -1,
+      "controllers": [
+        {
+          "name": "CardType",
+          "pages": [
+            [
+              "8",
+              "None"
+            ],
+            [
+              "0",
+              "Attack"
+            ],
+            [
+              "1",
+              "Defend"
+            ],
+            [
+              "2",
+              "Effect"
+            ],
+            [
+              "9",
+              "Counter"
+            ],
+            [
+              "3",
+              "Event"
+            ],
+            [
+              "4",
+              "Luck"
+            ],
+            [
+              "5",
+              "Jinx"
+            ],
+            [
+              "10",
+              "Curse"
+            ]
+          ]
+        }
+      ],
+      "transitions": []
+    },
+    "9wtj8e": {
+      "type": 0,
+      "id": "9wtj8e",
+      "name": "COST 防御",
+      "path": "/Components/Com_Card/Images/Icon/",
+      "file": null,
+      "exported": false,
+      "width": 80,
+      "height": 80,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1865,
+          1876,
+          42,
+          42
+        ],
+        "rotated": false,
+        "offset": [
+          19,
+          16
+        ],
+        "originalSize": [
+          80,
+          80
+        ]
+      }
+    },
+    "9wtj8f": {
+      "type": 0,
+      "id": "9wtj8f",
+      "name": "COST 格子",
+      "path": "/Components/Com_Card/Images/Icon/",
+      "file": null,
+      "exported": false,
+      "width": 80,
+      "height": 80,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1371,
+          1023,
+          73,
+          75
+        ],
+        "rotated": false,
+        "offset": [
+          3,
+          2
+        ],
+        "originalSize": [
+          80,
+          80
+        ]
+      }
+    },
+    "9wtj8g": {
+      "type": 0,
+      "id": "9wtj8g",
+      "name": "COST 攻击",
+      "path": "/Components/Com_Card/Images/Icon/",
+      "file": null,
+      "exported": false,
+      "width": 80,
+      "height": 80,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          661,
+          1873,
+          41,
+          42
+        ],
+        "rotated": false,
+        "offset": [
+          19,
+          16
+        ],
+        "originalSize": [
+          80,
+          80
+        ]
+      }
+    },
+    "ays2s8f": {
+      "type": 0,
+      "id": "ays2s8f",
+      "name": "卡牌异画-框",
+      "path": "/Components/Com_Card/Images/Frame/",
+      "file": null,
+      "exported": false,
+      "width": 244,
+      "height": 73,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1587,
+          405,
+          244,
+          73
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          244,
+          73
+        ]
+      }
+    },
+    "g3zr3i": {
+      "type": 0,
+      "id": "g3zr3i",
+      "name": "反",
+      "path": "/Components/Com_Card/Images/Icon/",
+      "file": null,
+      "exported": false,
+      "width": 120,
+      "height": 120,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1525,
+          1023,
+          114,
+          114
+        ],
+        "rotated": false,
+        "offset": [
+          3,
+          3
+        ],
+        "originalSize": [
+          120,
+          120
+        ]
+      }
+    },
+    "miods8n": {
+      "type": 0,
+      "id": "miods8n",
+      "name": "文字底框2",
+      "path": "/Components/Com_Card/Images/404x612/",
+      "file": null,
+      "exported": false,
+      "width": 485,
+      "height": 734,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          977,
+          491,
+          395,
+          195
+        ],
+        "rotated": false,
+        "offset": [
+          44,
+          460
+        ],
+        "originalSize": [
+          485,
+          734
+        ]
+      }
+    },
+    "o11dj9j": {
+      "type": 0,
+      "id": "o11dj9j",
+      "name": "astral party",
+      "path": "/Components/Com_Card/Images/Frame/",
+      "file": null,
+      "exported": false,
+      "width": 67,
+      "height": 15,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1316,
+          1555,
+          67,
+          15
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          67,
+          15
+        ]
+      }
+    },
+    "o11dj9k": {
+      "type": 0,
+      "id": "o11dj9k",
+      "name": "加号",
+      "path": "/Components/Com_Card/Images/Frame/",
+      "file": null,
+      "exported": false,
+      "width": 7,
+      "height": 8,
+      "scaleOption": 2,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1395,
+          1565,
+          7,
+          8
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          7,
+          8
+        ]
+      }
+    },
+    "o11dj9l": {
+      "type": 0,
+      "id": "o11dj9l",
+      "name": "右下角的星星",
+      "path": "/Components/Com_Card/Images/Frame/",
+      "file": null,
+      "exported": false,
+      "width": 42,
+      "height": 47,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1474,
+          1698,
+          42,
+          47
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          42,
+          47
+        ]
+      }
+    },
+    "o11dj9o": {
+      "type": 0,
+      "id": "o11dj9o",
+      "name": "卡图周围的阴影2",
+      "path": "/Components/Com_Card/Images/Frame/",
+      "file": null,
+      "exported": false,
+      "width": 86,
+      "height": 105,
+      "scaleOption": 1,
+      "scale9Grid": [
+        41,
+        45,
+        4,
+        9
+      ],
+      "tileGridIndice": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1624,
+          1266,
+          86,
+          105
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          86,
+          105
+        ]
+      }
+    },
+    "odf7q47": {
+      "type": 0,
+      "id": "odf7q47",
+      "name": "咒",
+      "path": "/Components/Com_Card/Images/Icon/",
+      "file": null,
+      "exported": false,
+      "width": 120,
+      "height": 120,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1409,
+          1108,
+          114,
+          114
+        ],
+        "rotated": false,
+        "offset": [
+          3,
+          3
+        ],
+        "originalSize": [
+          120,
+          120
+        ]
+      }
+    },
+    "ru20q2u": {
+      "type": 0,
+      "id": "ru20q2u",
+      "name": "反击标题底(修改)",
+      "path": "/Components/Com_Card/Images/CardType/",
+      "file": null,
+      "exported": false,
+      "width": 150,
+      "height": 128,
+      "scaleOption": 1,
+      "scale9Grid": [
+        66,
+        32,
+        11,
+        64
+      ],
+      "tileGridIndice": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1044,
+          1626,
+          150,
+          128
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          150,
+          128
+        ]
+      }
+    },
+    "ru20q2v": {
+      "type": 0,
+      "id": "ru20q2v",
+      "name": "反击标题底(星星)",
+      "path": "/Components/Com_Card/Images/CardType/",
+      "file": null,
+      "exported": false,
+      "width": 42,
+      "height": 42,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          850,
+          1492,
+          42,
+          42
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          42,
+          42
+        ]
+      }
+    },
+    "xmq42n": {
+      "type": 0,
+      "id": "xmq42n",
+      "name": "吉",
+      "path": "/Components/Com_Card/Images/Icon/",
+      "file": null,
+      "exported": false,
+      "width": 120,
+      "height": 120,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1293,
+          1108,
+          114,
+          114
+        ],
+        "rotated": false,
+        "offset": [
+          3,
+          3
+        ],
+        "originalSize": [
+          120,
+          120
+        ]
+      }
+    },
+    "xmq42t": {
+      "type": 0,
+      "id": "xmq42t",
+      "name": "攻",
+      "path": "/Components/Com_Card/Images/Icon/",
+      "file": null,
+      "exported": false,
+      "width": 120,
+      "height": 120,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1302,
+          1349,
+          114,
+          114
+        ],
+        "rotated": false,
+        "offset": [
+          3,
+          3
+        ],
+        "originalSize": [
+          120,
+          120
+        ]
+      }
+    },
+    "xmq430": {
+      "type": 0,
+      "id": "xmq430",
+      "name": "守",
+      "path": "/Components/Com_Card/Images/Icon/",
+      "file": null,
+      "exported": false,
+      "width": 120,
+      "height": 120,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1526,
+          1150,
+          114,
+          114
+        ],
+        "rotated": false,
+        "offset": [
+          3,
+          3
+        ],
+        "originalSize": [
+          120,
+          120
+        ]
+      }
+    },
+    "xmq431": {
+      "type": 0,
+      "id": "xmq431",
+      "name": "闻",
+      "path": "/Components/Com_Card/Images/Icon/",
+      "file": null,
+      "exported": false,
+      "width": 120,
+      "height": 120,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1409,
+          1465,
+          114,
+          114
+        ],
+        "rotated": false,
+        "offset": [
+          3,
+          3
+        ],
+        "originalSize": [
+          120,
+          120
+        ]
+      }
+    },
+    "xmq432": {
+      "type": 0,
+      "id": "xmq432",
+      "name": "效",
+      "path": "/Components/Com_Card/Images/Icon/",
+      "file": null,
+      "exported": false,
+      "width": 120,
+      "height": 120,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1418,
+          1342,
+          114,
+          114
+        ],
+        "rotated": false,
+        "offset": [
+          3,
+          3
+        ],
+        "originalSize": [
+          120,
+          120
+        ]
+      }
+    },
+    "xmq434": {
+      "type": 0,
+      "id": "xmq434",
+      "name": "效果子类 目标地块",
+      "path": "/Components/Com_Card/Images/Icon/",
+      "file": null,
+      "exported": false,
+      "width": 100,
+      "height": 52,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          754,
+          1492,
+          94,
+          41
+        ],
+        "rotated": false,
+        "offset": [
+          3,
+          5
+        ],
+        "originalSize": [
+          100,
+          52
+        ]
+      }
+    },
+    "xmq435": {
+      "type": 0,
+      "id": "xmq435",
+      "name": "效果子类 目标目标",
+      "path": "/Components/Com_Card/Images/Icon/",
+      "file": null,
+      "exported": false,
+      "width": 100,
+      "height": 52,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1769,
+          1876,
+          94,
+          41
+        ],
+        "rotated": false,
+        "offset": [
+          3,
+          5
+        ],
+        "originalSize": [
+          100,
+          52
+        ]
+      }
+    },
+    "xmq436": {
+      "type": 0,
+      "id": "xmq436",
+      "name": "效果子类 目标自身",
+      "path": "/Components/Com_Card/Images/Icon/",
+      "file": null,
+      "exported": false,
+      "width": 100,
+      "height": 52,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          565,
+          1873,
+          94,
+          41
+        ],
+        "rotated": false,
+        "offset": [
+          3,
+          5
+        ],
+        "originalSize": [
+          100,
+          52
+        ]
+      }
+    },
+    "xmq437": {
+      "type": 0,
+      "id": "xmq437",
+      "name": "凶",
+      "path": "/Components/Com_Card/Images/Icon/",
+      "file": null,
+      "exported": false,
+      "width": 120,
+      "height": 120,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1641,
+          1034,
+          114,
+          114
+        ],
+        "rotated": false,
+        "offset": [
+          3,
+          3
+        ],
+        "originalSize": [
+          120,
+          120
+        ]
+      }
+    },
+    "9wtj8h": {
+      "type": 3,
+      "id": "9wtj8h",
+      "name": "Com_CostPoint",
+      "path": "/Components/Com_Card/",
+      "file": null,
+      "exported": true,
+      "width": 50,
+      "height": 50,
+      "objectType": 0,
+      "children": [
+        {
+          "type": 0,
+          "source": "9wtj8f",
+          "package": null,
+          "id": "n27_9wtj",
+          "name": "n27",
+          "x": 0,
+          "y": 2,
+          "width": 50,
+          "height": 50,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [],
+          "group": -1
+        },
+        {
+          "type": 0,
+          "source": "9wtj8g",
+          "package": null,
+          "id": "n28_9wtj",
+          "name": "n28",
+          "x": 0,
+          "y": 2,
+          "width": 50,
+          "height": 50,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 0,
+              "values": {
+                "pages": [
+                  "1"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 0,
+          "source": "9wtj8e",
+          "package": null,
+          "id": "n29_9wtj",
+          "name": "n29",
+          "x": 0,
+          "y": 2,
+          "width": 50,
+          "height": 50,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 0,
+              "values": {
+                "pages": [
+                  "2"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n31_sfrg",
+          "name": "graph_Effect",
+          "x": 24,
+          "y": 25,
+          "width": 20,
+          "height": 20,
+          "pivot": [
+            0.5,
+            0.5,
+            1
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": false,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "gears": [],
+          "group": -1
+        }
+      ],
+      "mask": -1,
+      "controllers": [
+        {
+          "name": "CpTyper",
+          "pages": [
+            [
+              "0",
+              "Empty"
+            ],
+            [
+              "1",
+              "Attack"
+            ],
+            [
+              "2",
+              "Defend"
+            ]
+          ]
+        }
+      ],
+      "transitions": []
+    },
+    "ays2s8g": {
+      "type": 3,
+      "id": "ays2s8g",
+      "name": "Com_Flag_AltArt",
+      "path": "/Components/Com_Card/",
+      "file": null,
+      "exported": true,
+      "width": 244,
+      "height": 73,
+      "objectType": 0,
+      "children": [
+        {
+          "type": 0,
+          "source": "ays2s8f",
+          "package": null,
+          "id": "n0_ays2",
+          "name": "n0",
+          "x": 0,
+          "y": 0,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [],
+          "group": -1
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n1_ays2",
+          "name": "n1",
+          "x": 30,
+          "y": 11,
+          "width": 182,
+          "height": 41,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei_TMP",
+          "fontSize": 29,
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": false,
+          "outlineColor": [
+            172,
+            127,
+            225,
+            255
+          ],
+          "outline": 1.0,
+          "text": "有新异画解锁",
+          "gears": [],
+          "group": -1
+        }
+      ],
+      "mask": -1,
+      "controllers": [],
+      "transitions": []
+    },
+    "h334q3o": {
+      "type": 3,
+      "id": "h334q3o",
+      "name": "Com_CardBack",
+      "path": "/Components/Com_Card/",
+      "file": null,
+      "exported": true,
+      "width": 440,
+      "height": 640,
+      "objectType": 0,
+      "children": [
+        {
+          "type": 4,
+          "source": null,
+          "package": null,
+          "id": "n17_lmo0",
+          "name": "loader_CardBack",
+          "x": 0,
+          "y": 0,
+          "width": 440,
+          "height": 640,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "url": null,
+          "align": 1,
+          "verticalAlign": 1,
+          "fill": 5,
+          "shrinkOnly": false,
+          "autoSize": false,
+          "gears": [],
+          "group": -1
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n18_h334",
+          "name": "graph_Effect",
+          "x": 0,
+          "y": 0,
+          "width": 100,
+          "height": 100,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": false,
+          "shape": 1,
+          "lineSize": 1,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "gears": [],
+          "group": -1
+        }
+      ],
+      "mask": -1,
+      "controllers": [],
+      "transitions": []
+    },
+    "micc2g": {
+      "type": 3,
+      "id": "micc2g",
+      "name": "Com_Card",
+      "path": "/Components/Com_Card/",
+      "file": null,
+      "exported": true,
+      "width": 440,
+      "height": 644,
+      "objectType": 12,
+      "children": [
+        {
+          "type": 4,
+          "source": null,
+          "package": null,
+          "id": "n27_g6uw",
+          "name": "loader_CardFrame",
+          "x": 0,
+          "y": 0,
+          "width": 440,
+          "height": 644,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "url": null,
+          "align": 1,
+          "verticalAlign": 1,
+          "fill": 5,
+          "shrinkOnly": false,
+          "autoSize": false,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 3,
+              "values": {
+                "pages": [
+                  "0"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 4,
+          "source": null,
+          "package": null,
+          "id": "n14_qgrb",
+          "name": "loader_FrontCard",
+          "x": 18,
+          "y": 19,
+          "width": 404,
+          "height": 400,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "url": null,
+          "align": 1,
+          "verticalAlign": 1,
+          "fill": 1,
+          "shrinkOnly": false,
+          "autoSize": false,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "0"
+                ]
+              }
+            },
+            {
+              "kind": 8,
+              "controller": 3,
+              "values": {
+                "pages": [
+                  "0",
+                  "1"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n57_q4dr",
+          "name": "video_FrontCard",
+          "x": 18,
+          "y": 19,
+          "width": 404,
+          "height": 400,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "shape": 1,
+          "lineSize": 1,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "1"
+                ]
+              }
+            },
+            {
+              "kind": 8,
+              "controller": 3,
+              "values": {
+                "pages": [
+                  "1"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 4,
+          "source": null,
+          "package": null,
+          "id": "n62_miod",
+          "name": "loader_FullCard",
+          "x": 18,
+          "y": 19,
+          "width": 404,
+          "height": 612,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "url": null,
+          "align": 1,
+          "verticalAlign": 1,
+          "fill": 1,
+          "shrinkOnly": false,
+          "autoSize": false,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "0"
+                ]
+              }
+            },
+            {
+              "kind": 8,
+              "controller": 3,
+              "values": {
+                "pages": [
+                  "2"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n66_j58e",
+          "name": "video_FullCard",
+          "x": 18,
+          "y": 19,
+          "width": 404,
+          "height": 612,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "shape": 1,
+          "lineSize": 1,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 1,
+              "values": {
+                "pages": [
+                  "1"
+                ]
+              }
+            },
+            {
+              "kind": 8,
+              "controller": 3,
+              "values": {
+                "pages": [
+                  "2"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 4,
+          "source": null,
+          "package": null,
+          "id": "n61_okfe",
+          "name": "loader_CardFront",
+          "x": 220,
+          "y": 325,
+          "width": 512,
+          "height": 1024,
+          "pivot": [
+            0.5,
+            0.5,
+            1
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "url": null,
+          "align": 1,
+          "verticalAlign": 1,
+          "fill": 0,
+          "shrinkOnly": false,
+          "autoSize": false,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 3,
+              "values": {
+                "pages": [
+                  "1",
+                  "2"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 0,
+          "source": "miods8n",
+          "package": null,
+          "id": "n65_j58e",
+          "name": "bg_txt",
+          "x": -27,
+          "y": -38,
+          "width": 494,
+          "height": 734,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 3,
+              "values": {
+                "pages": [
+                  "2"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 0,
+          "source": "o11dj9o",
+          "package": null,
+          "id": "n55_o11d",
+          "name": "n55",
+          "x": 15,
+          "y": 4,
+          "width": 410,
+          "height": 423,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 3,
+              "values": {
+                "pages": [
+                  "0"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 0,
+          "source": "o11dj9j",
+          "package": null,
+          "id": "n28_o11d",
+          "name": "n28",
+          "x": 39,
+          "y": 612,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 3,
+              "values": {
+                "pages": [
+                  "0",
+                  "1"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 0,
+          "source": "o11dj9k",
+          "package": null,
+          "id": "n29_o11d",
+          "name": "n29",
+          "x": 38,
+          "y": 447,
+          "width": 7,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [],
+          "group": 16
+        },
+        {
+          "type": 0,
+          "source": "o11dj9k",
+          "package": null,
+          "id": "n30_o11d",
+          "name": "n30",
+          "x": 100,
+          "y": 447,
+          "width": 7,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [],
+          "group": 16
+        },
+        {
+          "type": 0,
+          "source": "o11dj9k",
+          "package": null,
+          "id": "n31_o11d",
+          "name": "n31",
+          "x": 156,
+          "y": 447,
+          "width": 7,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [],
+          "group": 16
+        },
+        {
+          "type": 0,
+          "source": "o11dj9k",
+          "package": null,
+          "id": "n32_o11d",
+          "name": "n32",
+          "x": 218,
+          "y": 447,
+          "width": 7,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [],
+          "group": 16
+        },
+        {
+          "type": 0,
+          "source": "o11dj9k",
+          "package": null,
+          "id": "n33_o11d",
+          "name": "n33",
+          "x": 279,
+          "y": 447,
+          "width": 7,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [],
+          "group": 16
+        },
+        {
+          "type": 0,
+          "source": "o11dj9k",
+          "package": null,
+          "id": "n34_o11d",
+          "name": "n34",
+          "x": 335,
+          "y": 447,
+          "width": 7,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [],
+          "group": 16
+        },
+        {
+          "type": 0,
+          "source": "o11dj9k",
+          "package": null,
+          "id": "n35_o11d",
+          "name": "n35",
+          "x": 396,
+          "y": 447,
+          "width": 7,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [],
+          "group": 16
+        },
+        {
+          "type": 5,
+          "source": null,
+          "package": null,
+          "id": "n36_o11d",
+          "name": "n36",
+          "x": 38,
+          "y": 447,
+          "width": 365,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 3,
+              "values": {
+                "pages": [
+                  "0"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 0,
+          "source": "o11dj9k",
+          "package": null,
+          "id": "n37_o11d",
+          "name": "n37",
+          "x": 38,
+          "y": 521,
+          "width": 7,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [],
+          "group": 24
+        },
+        {
+          "type": 0,
+          "source": "o11dj9k",
+          "package": null,
+          "id": "n38_o11d",
+          "name": "n38",
+          "x": 100,
+          "y": 521,
+          "width": 7,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [],
+          "group": 24
+        },
+        {
+          "type": 0,
+          "source": "o11dj9k",
+          "package": null,
+          "id": "n39_o11d",
+          "name": "n39",
+          "x": 156,
+          "y": 521,
+          "width": 7,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [],
+          "group": 24
+        },
+        {
+          "type": 0,
+          "source": "o11dj9k",
+          "package": null,
+          "id": "n40_o11d",
+          "name": "n40",
+          "x": 218,
+          "y": 521,
+          "width": 7,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [],
+          "group": 24
+        },
+        {
+          "type": 0,
+          "source": "o11dj9k",
+          "package": null,
+          "id": "n41_o11d",
+          "name": "n41",
+          "x": 279,
+          "y": 521,
+          "width": 7,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [],
+          "group": 24
+        },
+        {
+          "type": 0,
+          "source": "o11dj9k",
+          "package": null,
+          "id": "n42_o11d",
+          "name": "n42",
+          "x": 335,
+          "y": 521,
+          "width": 7,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [],
+          "group": 24
+        },
+        {
+          "type": 0,
+          "source": "o11dj9k",
+          "package": null,
+          "id": "n43_o11d",
+          "name": "n43",
+          "x": 396,
+          "y": 521,
+          "width": 7,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [],
+          "group": 24
+        },
+        {
+          "type": 5,
+          "source": null,
+          "package": null,
+          "id": "n44_o11d",
+          "name": "n44",
+          "x": 38,
+          "y": 521,
+          "width": 365,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 3,
+              "values": {
+                "pages": [
+                  "0"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 0,
+          "source": "o11dj9k",
+          "package": null,
+          "id": "n45_o11d",
+          "name": "n45",
+          "x": 38,
+          "y": 595,
+          "width": 7,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [],
+          "group": 32
+        },
+        {
+          "type": 0,
+          "source": "o11dj9k",
+          "package": null,
+          "id": "n46_o11d",
+          "name": "n46",
+          "x": 100,
+          "y": 595,
+          "width": 7,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [],
+          "group": 32
+        },
+        {
+          "type": 0,
+          "source": "o11dj9k",
+          "package": null,
+          "id": "n47_o11d",
+          "name": "n47",
+          "x": 156,
+          "y": 595,
+          "width": 7,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [],
+          "group": 32
+        },
+        {
+          "type": 0,
+          "source": "o11dj9k",
+          "package": null,
+          "id": "n48_o11d",
+          "name": "n48",
+          "x": 218,
+          "y": 595,
+          "width": 7,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [],
+          "group": 32
+        },
+        {
+          "type": 0,
+          "source": "o11dj9k",
+          "package": null,
+          "id": "n49_o11d",
+          "name": "n49",
+          "x": 279,
+          "y": 595,
+          "width": 7,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [],
+          "group": 32
+        },
+        {
+          "type": 0,
+          "source": "o11dj9k",
+          "package": null,
+          "id": "n50_o11d",
+          "name": "n50",
+          "x": 335,
+          "y": 595,
+          "width": 7,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [],
+          "group": 32
+        },
+        {
+          "type": 0,
+          "source": "o11dj9k",
+          "package": null,
+          "id": "n51_o11d",
+          "name": "n51",
+          "x": 396,
+          "y": 595,
+          "width": 7,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [],
+          "group": 32
+        },
+        {
+          "type": 5,
+          "source": null,
+          "package": null,
+          "id": "n52_o11d",
+          "name": "n52",
+          "x": 38,
+          "y": 595,
+          "width": 365,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 3,
+              "values": {
+                "pages": [
+                  "0"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 0,
+          "source": "o11dj9l",
+          "package": null,
+          "id": "n54_o11d",
+          "name": "n54",
+          "x": 366,
+          "y": 564,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0,
+          "gears": [],
+          "group": -1
+        },
+        {
+          "type": 9,
+          "source": "gj393m",
+          "package": null,
+          "id": "n19_xmq4",
+          "name": "com_CardName",
+          "x": -46,
+          "y": 347,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 4,
+              "values": {
+                "pages": [
+                  "0"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 9,
+          "source": "gj393l",
+          "package": null,
+          "id": "n24_xmq4",
+          "name": "com_CardIcon",
+          "x": 19,
+          "y": 17,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "gears": [],
+          "group": -1
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n25_xmq4",
+          "name": "txt_CardIndex",
+          "x": 108,
+          "y": 610,
+          "width": 262,
+          "height": 39,
+          "scale": [
+            0.5,
+            0.5
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": null,
+          "fontSize": 28,
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "align": 0,
+          "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 0,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "text": null,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 3,
+              "values": {
+                "pages": [
+                  "0",
+                  "1"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n64_j58e",
+          "name": "txt_CardIndex_2",
+          "x": 287,
+          "y": 602,
+          "width": 262,
+          "height": 39,
+          "scale": [
+            0.5,
+            0.5
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": null,
+          "fontSize": 28,
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "align": 0,
+          "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 0,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "text": null,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 3,
+              "values": {
+                "pages": [
+                  "2"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n26_xmq4",
+          "name": "txt_CardTips",
+          "x": 241,
+          "y": 611,
+          "width": 330,
+          "height": 39,
+          "scale": [
+            0.5,
+            0.5
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": null,
+          "fontSize": 28,
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "align": 2,
+          "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "text": null,
+          "gears": [],
+          "group": -1
+        },
+        {
+          "type": 7,
+          "source": null,
+          "package": null,
+          "id": "n16_qgrb",
+          "name": "txt_Content",
+          "x": -313,
+          "y": 304,
+          "width": 1074,
+          "height": 451,
+          "scale": [
+            0.3400000035762787,
+            0.3400000035762787
+          ],
+          "pivot": [
+            0.5,
+            0.5,
+            0
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei",
+          "fontSize": 88,
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "align": 0,
+          "verticalAlign": 0,
+          "lineSpacing": 0,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": false,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
+          "text": null,
+          "gears": [],
+          "group": -1
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n56_bjve",
+          "name": "txt_Name",
+          "x": -46,
+          "y": 347,
+          "width": 533,
+          "height": 132,
+          "scale": [
+            0.5,
+            0.5
+          ],
+          "pivot": [
+            0.5,
+            0.5,
+            0
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei_TMP",
+          "fontSize": 65,
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "lineSpacing": 0,
+          "letterSpacing": 2,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": true,
+          "singleLine": true,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
+          "text": null,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 4,
+              "values": {
+                "pages": [
+                  "0"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 9,
+          "source": "h334q3o",
+          "package": null,
+          "id": "n17_lmo0",
+          "name": "com_CardBack",
+          "x": 0,
+          "y": 2,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 0,
+              "values": {
+                "pages": [
+                  "1"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 9,
+          "source": "ays2s8g",
+          "package": null,
+          "id": "n59_ays2",
+          "name": "n59",
+          "x": 204,
+          "y": -3,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "gears": [
+            {
+              "kind": 0,
+              "controller": 2,
+              "values": {
+                "pages": [
+                  "1"
+                ]
+              }
+            }
+          ],
+          "group": -1
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n60_vkgo",
+          "name": "graph_Hover",
+          "x": 200,
+          "y": 320,
+          "width": 40,
+          "height": 4,
+          "pivot": [
+            0.5,
+            0.5,
+            0
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": false,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "gears": [],
+          "group": -1
+        }
+      ],
+      "mask": -1,
+      "controllers": [
+        {
+          "name": "showFront",
+          "pages": [
+            [
+              "0",
+              "show"
+            ],
+            [
+              "1",
+              "false"
+            ]
+          ]
+        },
+        {
+          "name": "isVideo",
+          "pages": [
+            [
+              "0",
+              "false"
+            ],
+            [
+              "1",
+              "true"
+            ]
+          ]
+        },
+        {
+          "name": "redPoint",
+          "pages": [
+            [
+              "0",
+              "false"
+            ],
+            [
+              "1",
+              "true"
+            ]
+          ]
+        },
+        {
+          "name": "frontState",
+          "pages": [
+            [
+              "0",
+              "普通卡牌"
+            ],
+            [
+              "1",
+              "异画卡牌-1"
+            ],
+            [
+              "2",
+              "异画卡牌-2"
+            ]
+          ]
+        },
+        {
+          "name": "hideTitle",
+          "pages": [
+            [
+              "0",
+              "不隐藏标题"
+            ],
+            [
+              "1",
+              "隐藏标题"
+            ]
+          ]
+        }
+      ],
+      "transitions": [
+        {
+          "name": "Cut  In",
+          "items": [
+            {
+              "kind": 3,
+              "time": 0.0,
+              "target": 6,
+              "value": [
+                true,
+                true,
+                0.5,
+                1.0
+              ]
+            },
+            {
+              "kind": 4,
+              "time": 0.0,
+              "target": 39,
+              "duration": 0.5,
+              "value": 1.0
+            },
+            {
+              "kind": 4,
+              "time": 0.0,
+              "target": 34,
+              "duration": 0.5,
+              "value": 1.0
+            },
+            {
+              "kind": 4,
+              "time": 0.0,
+              "target": 40,
+              "duration": 0.5,
+              "value": 1.0
+            },
+            {
+              "kind": 4,
+              "time": 0.0,
+              "target": 6,
+              "duration": 0.5,
+              "value": 1.0
+            },
+            {
+              "kind": 2,
+              "time": 0.0,
+              "target": 6,
+              "duration": 0.5,
+              "value": [
+                1.0,
+                1.0
+              ]
+            },
+            {
+              "kind": 1,
+              "time": 0.0,
+              "target": 39,
+              "value": [
+                true,
+                true,
+                1074.0,
+                451.0
+              ]
+            },
+            {
+              "kind": 0,
+              "time": 0.0,
+              "target": 39,
+              "duration": 0.5,
+              "value": [
+                true,
+                true,
+                -313.0,
+                304.0,
+                false
+              ]
+            },
+            {
+              "kind": 0,
+              "time": 0.0,
+              "target": 34,
+              "duration": 0.5,
+              "value": [
+                true,
+                true,
+                -46.0,
+                347.0,
+                false
+              ]
+            },
+            {
+              "kind": 0,
+              "time": 0.0,
+              "target": 40,
+              "duration": 0.5,
+              "value": [
+                true,
+                true,
+                -46.0,
+                347.0,
+                false
+              ]
+            },
+            {
+              "kind": 0,
+              "time": 0.0,
+              "target": 6,
+              "duration": 0.5,
+              "value": [
+                true,
+                true,
+                -27.0,
+                -38.0,
+                false
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Cut out",
+          "items": [
+            {
+              "kind": 3,
+              "time": 0.0,
+              "target": 6,
+              "value": [
+                true,
+                true,
+                0.5,
+                1.0
+              ]
+            },
+            {
+              "kind": 4,
+              "time": 0.0,
+              "target": 39,
+              "duration": 0.5,
+              "value": 0.009999999776482582
+            },
+            {
+              "kind": 4,
+              "time": 0.0,
+              "target": 34,
+              "duration": 0.5,
+              "value": 0.0
+            },
+            {
+              "kind": 4,
+              "time": 0.0,
+              "target": 40,
+              "duration": 0.5,
+              "value": 0.0
+            },
+            {
+              "kind": 4,
+              "time": 0.0,
+              "target": 6,
+              "duration": 0.5,
+              "value": 0.0
+            },
+            {
+              "kind": 2,
+              "time": 0.0,
+              "target": 6,
+              "duration": 0.5,
+              "value": [
+                1.0,
+                0.5
+              ]
+            },
+            {
+              "kind": 0,
+              "time": 0.0,
+              "target": 39,
+              "duration": 0.5,
+              "value": [
+                true,
+                true,
+                -313.0,
+                319.0,
+                false
+              ]
+            },
+            {
+              "kind": 0,
+              "time": 0.0,
+              "target": 34,
+              "duration": 0.5,
+              "value": [
+                true,
+                true,
+                -46.0,
+                409.0,
+                false
+              ]
+            },
+            {
+              "kind": 0,
+              "time": 0.0,
+              "target": 40,
+              "duration": 0.5,
+              "value": [
+                true,
+                true,
+                -46.0,
+                409.0,
+                false
+              ]
+            },
+            {
+              "kind": 0,
+              "time": 0.0,
+              "target": 6,
+              "duration": 0.5,
+              "value": [
+                true,
+                true,
+                -27.0,
+                -117.0,
+                false
+              ]
+            }
+          ]
+        },
+        {
+          "name": "HideDescState",
+          "items": [
+            {
+              "kind": 3,
+              "time": 0.0,
+              "target": 6,
+              "value": [
+                true,
+                true,
+                0.5,
+                1.0
+              ]
+            },
+            {
+              "kind": 4,
+              "time": 0.0,
+              "target": 39,
+              "value": 0.009999999776482582
+            },
+            {
+              "kind": 4,
+              "time": 0.0,
+              "target": 34,
+              "value": 0.0
+            },
+            {
+              "kind": 4,
+              "time": 0.0,
+              "target": 40,
+              "value": 0.0
+            },
+            {
+              "kind": 4,
+              "time": 0.0,
+              "target": 6,
+              "value": 0.0
+            },
+            {
+              "kind": 2,
+              "time": 0.0,
+              "target": 6,
+              "value": [
+                1.0,
+                0.5
+              ]
+            },
+            {
+              "kind": 1,
+              "time": 0.0,
+              "target": 39,
+              "value": [
+                true,
+                true,
+                1074.0,
+                451.0
+              ]
+            },
+            {
+              "kind": 0,
+              "time": 0.0,
+              "target": 39,
+              "value": [
+                true,
+                true,
+                -313.0,
+                319.0,
+                false
+              ]
+            },
+            {
+              "kind": 0,
+              "time": 0.0,
+              "target": 34,
+              "value": [
+                true,
+                true,
+                -46.0,
+                409.0,
+                false
+              ]
+            },
+            {
+              "kind": 0,
+              "time": 0.0,
+              "target": 40,
+              "value": [
+                true,
+                true,
+                -46.0,
+                409.0,
+                false
+              ]
+            },
+            {
+              "kind": 0,
+              "time": 0.0,
+              "target": 6,
+              "value": [
+                true,
+                true,
+                -27.0,
+                -117.0,
+                false
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ShowDescState",
+          "items": [
+            {
+              "kind": 3,
+              "time": 0.0,
+              "target": 6,
+              "value": [
+                true,
+                true,
+                0.5,
+                1.0
+              ]
+            },
+            {
+              "kind": 4,
+              "time": 0.0,
+              "target": 39,
+              "value": 1.0
+            },
+            {
+              "kind": 4,
+              "time": 0.0,
+              "target": 34,
+              "value": 1.0
+            },
+            {
+              "kind": 4,
+              "time": 0.0,
+              "target": 40,
+              "value": 1.0
+            },
+            {
+              "kind": 4,
+              "time": 0.0,
+              "target": 6,
+              "value": 1.0
+            },
+            {
+              "kind": 2,
+              "time": 0.0,
+              "target": 6,
+              "value": [
+                1.0,
+                1.0
+              ]
+            },
+            {
+              "kind": 0,
+              "time": 0.0,
+              "target": 39,
+              "value": [
+                true,
+                true,
+                -313.0,
+                304.0,
+                false
+              ]
+            },
+            {
+              "kind": 0,
+              "time": 0.0,
+              "target": 34,
+              "value": [
+                true,
+                true,
+                -46.0,
+                347.0,
+                false
+              ]
+            },
+            {
+              "kind": 0,
+              "time": 0.0,
+              "target": 40,
+              "value": [
+                true,
+                true,
+                -46.0,
+                347.0,
+                false
+              ]
+            },
+            {
+              "kind": 0,
+              "time": 0.0,
+              "target": 6,
+              "value": [
+                true,
+                true,
+                -27.0,
+                -38.0,
+                false
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "kva0ay": {
+      "type": 0,
+      "id": "kva0ay",
+      "name": "UT_Buff_10150101",
+      "path": "/Images/",
+      "file": null,
+      "exported": true,
+      "width": 160,
+      "height": 160,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1481,
+          1756,
+          142,
+          142
+        ],
+        "rotated": false,
+        "offset": [
+          9,
+          7
+        ],
+        "originalSize": [
+          160,
+          160
+        ]
+      }
+    },
+    "kva0az": {
+      "type": 0,
+      "id": "kva0az",
+      "name": "UT_Buff_10131101",
+      "path": "/Images/",
+      "file": null,
+      "exported": true,
+      "width": 160,
+      "height": 160,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1337,
+          1756,
+          142,
+          142
+        ],
+        "rotated": false,
+        "offset": [
+          9,
+          7
+        ],
+        "originalSize": [
+          160,
+          160
+        ]
+      }
+    }
+  },
+  "strings": [
+    "mzuc5vkb",
+    "Font",
+    "bczmq3t",
+    "Com_BuffInfoItem",
+    "/Components/Com_Info/",
+    "n23_ec7w",
+    "loader_Buff",
+    "n24_ec7w",
+    "txt_Title",
+    "n25_ec7w",
+    "txt_Desc",
+    "gj393l",
+    "Com_Card_Icon",
+    "/Components/Com_Card/",
+    "Cost",
+    "0",
+    "None",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "CardType",
+    "7",
+    "none",
+    "Attack",
+    "Defend",
+    "Effect",
+    "Counter",
+    "Event",
+    "Luck",
+    "Jnix",
+    "11",
+    "Curse",
+    "n45_9wtj",
+    "CpTyper",
+    "n46_9wtj",
+    "n47_9wtj",
+    "n48_qdz3",
+    "n49_qdz3",
+    "n50_qdz3",
+    "TargetType",
+    "9",
+    "Land",
+    "Target",
+    "Self",
+    "xmq430",
+    "n36_xmq4",
+    "n36",
+    "xmq42n",
+    "n37_xmq4",
+    "n37",
+    "xmq431",
+    "n38_xmq4",
+    "n38",
+    "xmq432",
+    "n39_xmq4",
+    "n39",
+    "xmq437",
+    "n40_xmq4",
+    "n40",
+    "xmq42t",
+    "n24_xmq4",
+    "n24",
+    "g3zr3i",
+    "n44_g3zr",
+    "n44",
+    "odf7q47",
+    "n51_odf7",
+    "n51",
+    "xmq434",
+    "n41_xmq4",
+    "n41",
+    "xmq435",
+    "n42_xmq4",
+    "n42",
+    "xmq436",
+    "n43_xmq4",
+    "n43",
+    "9wtj8h",
+    "n45",
+    "n46",
+    "n47",
+    "n48",
+    "n49",
+    "n50",
+    "gj393m",
+    "Com_Card_Name",
+    "8",
+    "Jinx",
+    "10",
+    "ru20q2u",
+    "n30_ru20",
+    "n30",
+    "ru20q2v",
+    "n31_ru20",
+    "n31",
+    "n32_ru20",
+    "n32",
+    "n33_ru20",
+    "n33",
+    "n34_ru20",
+    "n34",
+    "heh5a5",
+    "Com_Loader_PlayerLabel",
+    "/Components/PlayerLabel/",
+    "type",
+    "image",
+    "video",
+    "n81_msij",
+    "loader_Image",
+    "n82_ne5m",
+    "loader_Video",
+    "mouys8q",
+    "Com_PlayerName",
+    "n76_msij",
+    "txt_PlayerName",
+    "SIMHEI",
+    "pj0zq45",
+    "Com_LibraryFileContent",
+    "/Components/Com_CharacterFile/",
+    "n117_91ym",
+    "n117",
+    "n118_91ym",
+    "n118",
+    "游戏机制",
+    "n119_91ym",
+    "txt_Mechanism",
+    "JingNanBoBoHei",
+    "n120_91ym",
+    "group_Mechanism",
+    "n121_zbf7",
+    "list_Skills",
+    "ui://xuaw6o8jpj0zq46",
+    "n113_rz1o",
+    "n113",
+    "n114_rz1o",
+    "n114",
+    "人物传记",
+    "n115_rz1o",
+    "txt_Stroy",
+    "n116_rz1o",
+    "group_Story",
+    "OPEN",
+    "pj0zq46",
+    "Com_LibrarySkillContent",
+    "skillType",
+    "Active",
+    "Passive",
+    "n111_rz1o",
+    "n111",
+    "n97_rigr",
+    "txt_SkillName",
+    "主动技能:{skillName=}",
+    "被动技能:{skillName=}",
+    "主动技能:{skillName=}",
+    "n98_rigr",
+    "txt_SkillDesc",
+    "g1i49m",
+    "n112_jzys",
+    "n112",
+    "n113_jzys",
+    "txt_CD",
+    "SHOWG_TMP",
+    "n114_jzys",
+    "px78j9k",
+    "Com_FileContent",
+    "n91_rigr",
+    "txt_CharacterName",
+    "JingNanBoBoHei_TMP",
+    "n92_rigr",
+    "txt_CharacterNick",
+    "mmmw3z",
+    "n93_rigr",
+    "n93",
+    "n94_rigr",
+    "txt_ATK",
+    "mmmw40",
+    "n95_rigr",
+    "n95",
+    "n96_rigr",
+    "txt_DEF",
+    "mmmw42",
+    "n110_ug0b",
+    "n110",
+    "n109_ug0b",
+    "txt_HP",
+    "mmmw3y",
+    "n122_htop",
+    "com_Gold",
+    "n123_htop",
+    "txt_Gold",
+    "游戏机制",
+    "ui://xuaw6o8jpx78j9l",
+    "人物传记",
+    "px78j9l",
+    "Com_SkillContent",
+    "主动技能:{skillName=}",
+    "被动技能:{skillName=}",
+    "主动技能:{skillName=}",
+    "z1wk2",
+    "Com_PlayIcon",
+    "heh5a4",
+    "n82_tlsf",
+    "n82",
+    "n72_msij",
+    "loader_PlayerPhoto",
+    "n80_msij",
+    "n80",
+    "5o9ms8i",
+    "回归图标【无字星】",
+    "/Components/PlayerLabel/RewardUp/",
+    "5o9ms8j",
+    "合体无字",
+    "9e84q3g",
+    "萌新豆芽UP箭頭圖標（無字）（160x160）",
+    "9wtj8e",
+    "COST 防御",
+    "/Components/Com_Card/Images/Icon/",
+    "9wtj8f",
+    "COST 格子",
+    "9wtj8g",
+    "COST 攻击",
+    "9wy8bt",
+    "蓝-未选择",
+    "/Components/Relic/Images/",
+    "9wy8bu",
+    "紫-未选择",
+    "9wy8bv",
+    "黄-未选择",
+    "9wy8bx",
+    "medal_bg",
+    "ays2s8f",
+    "卡牌异画-框",
+    "/Components/Com_Card/Images/Frame/",
+    "bfwlq2s",
+    "反击",
+    "/Components/Com_Attr/AttrIcon/",
+    "fu2tq3k",
+    "圆200-200",
+    "fu2tq3l",
+    "yuan bei jing2",
+    "fu2tq3n",
+    "ASTRAL PARTY BATTLE TOKEN -180",
+    "反",
+    "头像蒙版",
+    "/Components/PlayerLabel/PlayerLabel/",
+    "i1yzq3d",
+    "下方提示（可按）",
+    "/Images/",
+    "imo383",
+    "星星（橙）",
+    "/Components/PlayerLabel/PlayLevel/",
+    "imo385",
+    "星星（蓝）",
+    "imo387",
+    "星星（未持有）",
+    "krvoq4g",
+    "卡面阴影-合并版",
+    "miods8n",
+    "文字底框2",
+    "/Components/Com_Card/Images/404x612/",
+    "mmmw3s",
+    "血",
+    "mmmw3t",
+    "移动",
+    "mmmw3u",
+    "防",
+    "mmmw3v",
+    "攻",
+    "mmmw3w",
+    "卡",
+    "nc4bag",
+    "加入按钮",
+    "/Components/Button/Button/",
+    "nc4bah",
+    "刷新按钮",
+    "o11dj9j",
+    "astral party",
+    "o11dj9k",
+    "加号",
+    "o11dj9l",
+    "右下角的星星",
+    "o11dj9o",
+    "卡图周围的阴影2",
+    "o812av",
+    "按钮 详情",
+    "o812ax",
+    "预览按钮",
+    "咒",
+    "ot0wba",
+    "主界面背景鼠鼠A-1",
+    "/Components/Bottom/",
+    "pj0zq43",
+    "怪物-背景阴影",
+    "pj0zq44",
+    "怪物-说明框",
+    "ru20q2t",
+    "名片黑框(修改)",
+    "反击标题底(修改)",
+    "/Components/Com_Card/Images/CardType/",
+    "反击标题底(星星)",
+    "vlgjn",
+    "主界面打叉(1)",
+    "吉",
+    "守",
+    "闻",
+    "效",
+    "效果子类 目标地块",
+    "效果子类 目标目标",
+    "效果子类 目标自身",
+    "凶",
+    "z1wk4",
+    "玩家名字底（最短）",
+    "Com_CostPoint",
+    "Empty",
+    "n27_9wtj",
+    "n27",
+    "n28_9wtj",
+    "n28",
+    "n29_9wtj",
+    "n29",
+    "n31_sfrg",
+    "graph_Effect",
+    "9wy8bw",
+    "Com_Relic_Quality",
+    "/Components/Relic/",
+    "quality",
+    "蓝",
+    "紫",
+    "金",
+    "n0_9wy8",
+    "n0",
+    "n1_9wy8",
+    "n1",
+    "n2_9wy8",
+    "n2",
+    "n3_9wy8",
+    "n3",
+    "aepoa6",
+    "Com_PlayerLabel_Loader",
+    "com_Loader",
+    "n83_aepo",
+    "n83",
+    "ak421h",
+    "Com_HeroSkin",
+    "/Components/Skin/",
+    "n10_o97f",
+    "loader_Skin_Image",
+    "n11_ak42",
+    "loader_Skin_Video",
+    "ays2s8g",
+    "Com_Flag_AltArt",
+    "n0_ays2",
+    "n1_ays2",
+    "有新异画解锁",
+    "bczmq3s",
+    "Com_BuffInfo",
+    "n21_gd4d",
+    "di",
+    "n26_ec7w",
+    "list_Buff",
+    "ui://xuaw6o8jbczmq3t",
+    "bfwlq2r",
+    "Com_Icon_Counter",
+    "/Components/Com_Attr/",
+    "n0_mmmw",
+    "atk",
+    "ui://xuaw6o8jbfwlq2s",
+    "booc3v",
+    "Com_Backgroup",
+    "showLine",
+    "show",
+    "hide",
+    "kn6fq3y",
+    "n93_x2xx",
+    "n90_nc4b",
+    "loader_BG",
+    "n92_g1i4",
+    "loader_Line",
+    "ui://xuaw6o8jg1i49l",
+    "n94_dtry",
+    "loader_SystemBG",
+    "ejjwq49",
+    "Button_Terms",
+    "/Components/Button/",
+    "ejjwq4a",
+    "n0_ejjw",
+    "bg",
+    "ejjwq4f",
+    "n1_ejjw",
+    "Com_Trems_Bg",
+    "/Components/Bottom/TremsBg/",
+    "ejjwq4b",
+    "n2_ejjw",
+    "ejjwq4e",
+    "Com_Trems_BgMask",
+    "ejjwq4c",
+    "ejjwq4d",
+    "fu2tq3e",
+    "Com_RelicQuality_Large",
+    "qualityType",
+    "Blue",
+    "Purple",
+    "Orange",
+    "n1_fu2t",
+    "n8_fu2t",
+    "n8",
+    "n3_fu2t",
+    "n0_fu2t",
+    "n4_fu2t",
+    "n4",
+    "n6_fu2t",
+    "n6",
+    "n7_fu2t",
+    "n7",
+    "h334q3o",
+    "Com_CardBack",
+    "n17_lmo0",
+    "loader_CardBack",
+    "n18_h334",
+    "i1yzq2w",
+    "Button_Next2",
+    "button",
+    "up",
+    "down",
+    "over",
+    "selectedOver",
+    "n0_xq4k",
+    "icon",
+    "Loop",
+    "imo37v",
+    "Com_PlayerLevel",
+    "avtiveLevel",
+    "未激活",
+    "激活",
+    "slot",
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "n12_i1xv",
+    "n12",
+    "imo384",
+    "n13_ns45",
+    "n13",
+    "imo386",
+    "n15_imo3",
+    "n15",
+    "n14_imo3",
+    "n14",
+    "n16_imo3",
+    "n16",
+    "n17_capz",
+    "Cut in",
+    "m48iv",
+    "Com_PopUpWindow_Bottom",
+    "btnsState",
+    "隐藏按钮",
+    "取消确认",
+    "单确认",
+    "n0_rle7",
+    "ui://xuaw6o8jrle7p",
+    "n3_rle7",
+    "title",
+    "兑换星盘",
+    "vlgjm",
+    "n25_m48i",
+    "closeButton",
+    "ozsk8z",
+    "n6_rle7",
+    "btn_Sure",
+    "n26_m48i",
+    "btn_Sure_Only",
+    "ofnra2",
+    "n7_rle7",
+    "btn_Cancel",
+    "取消",
+    "m48iw",
+    "Com_PopUpWindow_MohuBg",
+    "mohu",
+    "micc2g",
+    "Com_Card",
+    "showFront",
+    "false",
+    "isVideo",
+    "true",
+    "redPoint",
+    "frontState",
+    "普通卡牌",
+    "异画卡牌-1",
+    "异画卡牌-2",
+    "hideTitle",
+    "不隐藏标题",
+    "隐藏标题",
+    "n27_g6uw",
+    "loader_CardFrame",
+    "n14_qgrb",
+    "loader_FrontCard",
+    "n57_q4dr",
+    "video_FrontCard",
+    "n62_miod",
+    "loader_FullCard",
+    "n66_j58e",
+    "video_FullCard",
+    "n61_okfe",
+    "loader_CardFront",
+    "n65_j58e",
+    "bg_txt",
+    "n55_o11d",
+    "n55",
+    "n28_o11d",
+    "n29_o11d",
+    "n30_o11d",
+    "n31_o11d",
+    "n32_o11d",
+    "n33_o11d",
+    "n34_o11d",
+    "n35_o11d",
+    "n35",
+    "n36_o11d",
+    "n37_o11d",
+    "n38_o11d",
+    "n39_o11d",
+    "n40_o11d",
+    "n41_o11d",
+    "n42_o11d",
+    "n43_o11d",
+    "n44_o11d",
+    "n45_o11d",
+    "n46_o11d",
+    "n47_o11d",
+    "n48_o11d",
+    "n49_o11d",
+    "n50_o11d",
+    "n51_o11d",
+    "n52_o11d",
+    "n52",
+    "n54_o11d",
+    "n54",
+    "n19_xmq4",
+    "com_CardName",
+    "com_CardIcon",
+    "n25_xmq4",
+    "txt_CardIndex",
+    "n64_j58e",
+    "txt_CardIndex_2",
+    "n26_xmq4",
+    "txt_CardTips",
+    "n16_qgrb",
+    "txt_Content",
+    "n56_bjve",
+    "txt_Name",
+    "com_CardBack",
+    "n59_ays2",
+    "n59",
+    "n60_vkgo",
+    "graph_Hover",
+    "Cut  In",
+    "Cut out",
+    "HideDescState",
+    "ShowDescState",
+    "Com_Icon_Gold",
+    "mmmw3x",
+    "gold",
+    "Com_Icon_Atk",
+    "Com_Icon_Def",
+    "def",
+    "mmmw41",
+    "Com_Icon_Card",
+    "card",
+    "Com_Icon_Hp",
+    "hp",
+    "mmmw43",
+    "Com_Icon_Mov",
+    "move",
+    "nc4bac",
+    "Button_ConfirmRounded",
+    "s2pwn",
+    "n10_micc",
+    "n10",
+    "s2pwd",
+    "n38_gvfm",
+    "n11_micc",
+    "确定",
+    "nc4bad",
+    "Button_Confirm_SmallRounded",
+    "n42_kjte",
+    "n49_nc4b",
+    "n46_debj",
+    "确定",
+    "nc4baj",
+    "Button_Confirm_SmallRoundedOrange",
+    "确定",
+    "nc4bak",
+    "Button_ReturnRounded",
+    "s2pwe",
+    "n48_gvfm",
+    "返回",
+    "13",
+    "o812a",
+    "Com_RelicKeyword",
+    "n12_o812",
+    "n13_o812",
+    "loader_Icon",
+    "n14_o812",
+    "n15_o812",
+    "o812au",
+    "Button_DetailInfo",
+    "n31_n9cw",
+    "n32_n9cw",
+    "详情",
+    "o812aw",
+    "Button_PreviewSkin",
+    "n32_gbr1",
+    "n33_gbr1",
+    "ofnra1",
+    "Button_Confirm_Small",
+    "n47_s2pw",
+    "n48_s2pw",
+    "确定",
+    "Button_Return",
+    "返回",
+    "ot0wam",
+    "Button_Custom",
+    "n36_ot0w",
+    "n37_ot0w",
+    "确定",
+    "ot0wbb",
+    "Com_GachaResult",
+    "n193_ot0w",
+    "n193",
+    "n196_ot0w",
+    "n196",
+    "ui://xuaw6o8jot0wba",
+    "g1i49l",
+    "n195_ot0w",
+    "n195",
+    "ozsk8w",
+    "Button_Back_Small",
+    "u0xaq3q",
+    "n48_u0xa",
+    "u0xaq3p",
+    "n47_u0xa",
+    "u0xaq3r",
+    "n49_u0xa",
+    "返回",
+    "Button_Confirm",
+    "n36_s2pw",
+    "n37_s2pw",
+    "确定",
+    "pj0z2",
+    "Com_LandCard",
+    "n65_pj0z",
+    "n65",
+    "n62_cih7",
+    "n39_vagh",
+    "n64_cih7",
+    "pj0zq42",
+    "Com_LibraryCharacterFile",
+    "monsterType",
+    "common",
+    "Boss",
+    "Elite",
+    "n3_odf7",
+    "n1_px78",
+    "n2_pj0z",
+    "com_LibraryFile",
+    "n4_u6bm",
+    "x2xxax",
+    "n18_ejjw",
+    "n18",
+    "ejjws8d",
+    "n16_ejjw",
+    "n5_u6bm",
+    "n17_ejjw",
+    "n17",
+    "n7_u6bm",
+    "n8_u6bm",
+    "n9_u6bm",
+    "n9",
+    "n10_u6bm",
+    "n11_u6bm",
+    "n11",
+    "n12_u6bm",
+    "n13_u6bm",
+    "n14_u6bm",
+    "px78b3",
+    "Button_Next",
+    "ArrowColor",
+    "black",
+    "yellow",
+    "px78b4",
+    "px78j9m",
+    "Com_CharacterFile",
+    "gzrrap",
+    "n0_px78",
+    "com_File",
+    "r1ee9i",
+    "Button_Switch_1",
+    "r1ee9h",
+    "n3_r1ee",
+    "n4_bnng",
+    "rct9q3d",
+    "RoomPlayer_Button_RewardUp",
+    "state",
+    "新手",
+    "回归",
+    "新手+回归",
+    "n89_5o9m",
+    "n89",
+    "ui://xuaw6o8j9e84q3g",
+    "ui://xuaw6o8j5o9ms8i",
+    "ui://xuaw6o8j5o9ms8j",
+    "n88_9e84",
+    "SHOWG",
+    "UP",
+    "th3ls8e",
+    "GlobalModalWaiting",
+    "/Components/ModalWait/",
+    "n0_th3l",
+    "u43ct",
+    "Com_Expression",
+    "/Components/Expression/",
+    "Image",
+    "Video",
+    "n1_nrib",
+    "loader_Expression_Image",
+    "n2_reb6",
+    "loader_Expression_Video",
+    "n3_u43c",
+    "Button_Quit",
+    "n0_qb3s",
+    "n1_qb3s",
+    "n2_qb3s",
+    "z1wk0",
+    "Com_PlayerLabel",
+    "showLevel",
+    "hideLevel",
+    "n84_tlsf",
+    "n84",
+    "loader_Label",
+    "com_PlayerPhoto",
+    "n86_mouy",
+    "image_Icon",
+    "n75_msij",
+    "com_Name",
+    "n77_msij",
+    "n77",
+    "LV.",
+    "n78_msij",
+    "txt_lv",
+    "n85_ru20",
+    "n85",
+    "zy9e0",
+    "Button_Return_Small",
+    "返回",
+    "e4d2q3z",
+    "繁荣",
+    "/Components/Com_Attr/SinglePlayer/",
+    "e4d2q40",
+    "晋升",
+    "e4d2q41",
+    "运气",
+    "局内背景-白底",
+    "/Components/Bottom/TremsBg/Image/",
+    "局内背景-花纹",
+    "局内背景-只有边沿",
+    "词条按钮 NEW",
+    "精英图标",
+    "背景斜线 连续",
+    "时间",
+    "gd4d1",
+    "对勾",
+    "gfn1ao",
+    "gqyw1",
+    "底",
+    "gzrraq",
+    "进度条箭头",
+    "gzrrar",
+    "↑",
+    "hzcuq48",
+    "复制",
+    "i01u8",
+    "词条框",
+    "星星（红）",
+    "星星（绿）",
+    "iorlas",
+    "重新随机",
+    "jno3u",
+    "任务 成就 左侧页签（已选择该标签）(修改)",
+    "jno3w",
+    "任务 成就 左侧页签（悬停）(修改)",
+    "jno3x",
+    "设置 左侧页签（未选择）(修改)",
+    "bg3",
+    "krvoq4i",
+    "红队星",
+    "/Images/LuckyStar/",
+    "krvoq4j",
+    "青队星",
+    "kva0ay",
+    "UT_Buff_10150101",
+    "kva0az",
+    "UT_Buff_10131101",
+    "kva0b0",
+    "UT_Buff_Heal",
+    "kva0b1",
+    "UT_Buff_Lock",
+    "kva0b2",
+    "UT_Buff_StarLight",
+    "lwm1k",
+    "任务底",
+    "m2bx1w",
+    "发送语句对话框-机器",
+    "m49i3",
+    "选择",
+    "m49i8",
+    "打勾（大）",
+    "星币",
+    "nc4b14",
+    "红色",
+    "/Images/OK/",
+    "nc4b15",
+    "黄色",
+    "nc4b16",
+    "蓝色",
+    "nc4b17",
+    "绿色",
+    "nc4baf",
+    "按钮 长",
+    "ns7xat",
+    "难度警告",
+    "ofnra0",
+    "按钮-底（粉色）",
+    "ofnra3",
+    "按钮-底（蓝色长）",
+    "ozsk8x",
+    "按钮-底(蓝色)",
+    "ozsk8y",
+    "按钮-底（蓝色）",
+    "ozsk90",
+    "按钮-底（粉色长）",
+    "ozsk91",
+    "按钮-底(绿色长)",
+    "pmckq3u",
+    "btn_medal_enter",
+    "px784",
+    "右三角",
+    "/Images/Com_RoomSetting/",
+    "选择房间翻页按钮",
+    "q6a57",
+    "像素白色",
+    "q6a58",
+    "ingame_bg2_s",
+    "q93cq2q",
+    "普通底",
+    "qnk0q3v",
+    "粉条",
+    "qnk0q3w",
+    "三角形",
+    "切换按钮",
+    "rigr1",
+    "角色头像7",
+    "rle7p",
+    "窗口2",
+    "按钮-绿",
+    "按钮-蓝",
+    "s2pwg",
+    "按钮-灰",
+    "按钮-红",
+    "sxcp2j",
+    "奖励已领取打勾",
+    "返回",
+    "返回-底",
+    "返回-悬停",
+    "wwpj2",
+    "胜利小图标1",
+    "/Images/ExplainWindow/",
+    "wwpj3",
+    "胜利小图标2",
+    "BOSS图标",
+    "xyg8q4h",
+    "海盗",
+    "y4hks8r",
+    "UT_Buff_Charge",
+    "q18cj9i",
+    "loading",
+    "/Animations/",
+    "q18cj9i_0",
+    "q18cj9i_1",
+    "atlas0",
+    "atlas0.png"
+  ]
+}

@@ -10,6 +10,119 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class AstralPartyIntegrationTests(unittest.TestCase):
+    def test_group_whitelist_requires_verified_superuser_and_blocks_before_charging(self):
+        program = r'''
+import asyncio
+import base64
+import io
+import json
+from pathlib import Path
+from unittest.mock import AsyncMock, patch
+
+import nonebot
+from nonebot.adapters.onebot.v11 import Adapter, Message
+from PIL import Image
+
+nonebot.init(_env_file=None, driver='~fastapi', command_start={'', '/'}, superusers={'1'}, _2fa_key='JBSWY3DPEHPK3PXP')
+nonebot.get_driver().register_adapter(Adapter)
+plugin = nonebot.load_plugin('plugins.airi_astral_party')
+assert plugin is not None
+app = plugin.module
+from plugins.airi_astral_party import runtime
+from utils import credit
+from utils.messaging import SendResult
+from utils.superuser_2fa import superuser_2fa_preprocessor
+
+def event(raw, user=1, group=None):
+    data = dict(time=1, self_id=2, post_type='message', message_id=3, user_id=user,
+                message=[{'type': 'text', 'data': {'text': raw}}], raw_message=raw, font=0,
+                sender={'user_id': user, 'nickname': '测试'},
+                message_type='group' if group else 'private', sub_type='normal' if group else 'friend')
+    if group:
+        data['group_id'] = group
+    return Adapter.json_to_event(data)
+
+async def main():
+    bot = AsyncMock()
+    path = Path('data/astral_party/group_whitelist.json')
+    await credit.credit('1', 30)
+    notices = []
+    render_notice = app.rendering.render_notice
+    def capture_notice(title, lines):
+        notices.append((title, lines))
+        return render_notice(title, lines)
+    async def invoke(args, user=1, group=None):
+        current = event('astral ' + args, user, group)
+        await superuser_2fa_preprocessor(current)
+        parts = current.get_plaintext().split(maxsplit=1)
+        await app.handle(bot, current, ('astral',), Message(parts[1] if len(parts) > 1 else ''))
+    with patch('utils.superuser_2fa.totp_verify', side_effect=lambda secret, code: code == '123456'), \
+         patch.object(app.rendering, 'render_notice', side_effect=capture_notice), \
+         patch.object(app, 'send_group_with_fallback', new_callable=AsyncMock, return_value=SendResult(True, '2', None)) as send_group, \
+         patch.object(app.credit, 'charge', wraps=app.credit.charge) as charge:
+        for user in (1, 2):
+            for args in ('', 'help', 'bind 123', 'unbind', 'status', 'me', '123',
+                         'me recent', '123 recent 2', 'me battle 1', '123 battle 1',
+                         '123456 whitelist 4', '123456 account help', '123456 account check',
+                         '123456 account setup', '123456 account refresh',
+                         '123456 account clear confirm', '123456 account login 13800000000 test'):
+                await invoke(args, user, group=4)
+        assert app.service.store.get('qq:1') is None, '未授权群不能绑定玩家'
+        assert not path.exists(), '未授权群中的超管不能修改白名单'
+        assert not notices, '未授权群不能生成帮助或提示图片'
+        assert send_group.call_count == 0 and bot.send.call_count == 0, '未授权群不应收到插件回复'
+        assert bot.delete_msg.call_count == 0, '未授权群不应执行账号管理撤回操作'
+        assert charge.call_count == 0, '白名单拒绝必须发生在扣积分之前'
+        assert await credit.get_balance('1') == 30
+        await invoke('bind 123')
+        assert app.service.store.get('qq:1') == 123, '群白名单不能限制私聊'
+        for args, user in (('whitelist 4', 1), ('654321 whitelist 4', 1), ('123456 whitelist 4', 2)):
+            await invoke(args, user)
+            assert not path.exists(), '未验证的用户不能修改白名单'
+        for args in ('123456 whitelist', '123456 whitelist 0', '123456 whitelist -4',
+                     '123456 whitelist abc', '123456 whitelist 4 5'):
+            await invoke(args)
+            assert not path.exists(), '错误参数不能写入白名单'
+        await invoke('123456 whitelist 4')
+        assert json.loads(path.read_text(encoding='utf-8')) == ['4'], '超管应通过私聊添加群'
+        await invoke('bind 321', group=4)
+        assert app.service.store.get('qq:1') == 321, '添加白名单后应立即放行'
+        await invoke('bind 999', group=5)
+        assert app.service.store.get('qq:1') == 321, '不能放行其他群'
+        await invoke('123456 whitelist 4')
+        assert json.loads(path.read_text(encoding='utf-8')) == ['4'], '重复添加不能删除群或产生重复项'
+        assert '已在' in str(notices[-1])
+        path.write_text('{坏档', encoding='utf-8')
+        sent_before = send_group.call_count
+        await invoke('bind 999', group=4)
+        assert app.service.store.get('qq:1') == 321, '坏档不能放行群聊'
+        assert send_group.call_count == sent_before, '坏档时群聊同样不响应'
+        await invoke('123456 whitelist 5')
+        assert path.read_text(encoding='utf-8') == '{坏档', '不能覆盖损坏的白名单'
+        path.write_text('["4"]', encoding='utf-8')
+        await invoke('123456 whitelist 5')
+        assert json.loads(path.read_text(encoding='utf-8')) == ['4', '5']
+        assert charge.call_count == 0, '白名单管理和绑定操作不扣积分'
+        for segment in (bot.send.call_args.args[1], send_group.call_args.args[0]):
+            payload = segment.data['file']
+            assert payload.startswith('base64://')
+            picture = Image.open(io.BytesIO(base64.b64decode(payload[9:])))
+            picture.load()
+            assert picture.format == 'PNG'
+    await runtime.shutdown()
+    print('群白名单权限、即时生效、坏档保护与扣费前拦截验证通过')
+
+asyncio.run(main())
+'''
+        with tempfile.TemporaryDirectory() as directory:
+            environment = os.environ.copy()
+            environment['PYTHONPATH'] = str(ROOT)
+            environment['PYTHONIOENCODING'] = 'utf-8'
+            result = subprocess.run([sys.executable, '-c', program], cwd=directory,
+                                    env=environment, capture_output=True, text=True, encoding='utf-8', timeout=90)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn('白名单', result.stdout)
+
     def test_bot_account_entry_scrubs_credentials_and_enforces_private_2fa(self):
         program = r'''
 import asyncio
@@ -204,6 +317,7 @@ async def main():
                           sender={"user_id": 1, "nickname": "测试"})
         private = PrivateMessageEvent(**event_data, message_type="private", sub_type="friend")
         group = GroupMessageEvent(**event_data, message_type="group", sub_type="normal", group_id=4)
+        app.group_whitelist.add(4)
         bot = AsyncMock()
         for raw, expected in (
             ("astral", True), ("astral help", True), ("/astral me", True),

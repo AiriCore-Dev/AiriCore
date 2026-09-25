@@ -1,0 +1,1005 @@
+{
+  "10001": {
+    "name": "攻击(中)",
+    "index": "CARD-001",
+    "description": "战斗中攻击方可用\n攻击力+1~3",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_10001.webp",
+    "type": 1,
+    "target": 0,
+    "cost": 1,
+    "params": [
+      1,
+      3
+    ]
+  },
+  "10002": {
+    "name": "防御(中)",
+    "index": "CARD-004",
+    "description": "战斗中防御方可用\n防御力+1~3",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_10002.webp",
+    "type": 2,
+    "target": 0,
+    "cost": 1,
+    "params": [
+      1,
+      3
+    ]
+  },
+  "10003": {
+    "name": "攻击(大)",
+    "index": "CARD-002",
+    "description": "战斗中攻击方可用\n攻击力+1~6",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_10003.webp",
+    "type": 1,
+    "target": 0,
+    "cost": 2,
+    "params": [
+      1,
+      6
+    ]
+  },
+  "10004": {
+    "name": "防御(大)",
+    "index": "CARD-005",
+    "description": "战斗中防御方可用\n防御力+1~6",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_10004.webp",
+    "type": 2,
+    "target": 0,
+    "cost": 2,
+    "params": [
+      1,
+      6
+    ]
+  },
+  "10005": {
+    "name": "攻击(特大)",
+    "index": "CARD-003",
+    "description": "战斗中攻击方可用\n攻击力+1~10",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_10005.webp",
+    "type": 1,
+    "target": 0,
+    "cost": 3,
+    "params": [
+      1,
+      10
+    ]
+  },
+  "10006": {
+    "name": "防御(特大)",
+    "index": "CARD-006",
+    "description": "战斗中防御方可用\n防御力+1~10",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_10006.webp",
+    "type": 2,
+    "target": 0,
+    "cost": 3,
+    "params": [
+      1,
+      10
+    ]
+  },
+  "10007": {
+    "name": "名刀：嘎呜切",
+    "index": "",
+    "description": "战斗中攻击方可用\n 攻击力+1~20",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_10007.webp",
+    "type": 1,
+    "target": 0,
+    "cost": 4,
+    "params": [
+      1,
+      20
+    ]
+  },
+  "10008": {
+    "name": "暗影突袭",
+    "index": "",
+    "description": "战斗中攻击方可用\n 攻击力+3，本次攻击无法被反击",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_10008.webp",
+    "type": 1,
+    "target": 0,
+    "cost": 2,
+    "params": [
+      3,
+      3,
+      1
+    ]
+  },
+  "10009": {
+    "name": "蓄力",
+    "index": "",
+    "description": "攻击力+5，添加一张全力攻击到手牌中",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_10009.webp",
+    "type": 1,
+    "target": 0,
+    "cost": 5,
+    "params": [
+      5,
+      5,
+      10010
+    ]
+  },
+  "10010": {
+    "name": "全力攻击",
+    "index": "",
+    "description": "攻击力+6，本次攻击的最终攻击力+50%",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_10010.webp",
+    "type": 1,
+    "target": 0,
+    "cost": 3,
+    "params": [
+      6,
+      6,
+      50
+    ]
+  },
+  "10011": {
+    "name": "毒牙",
+    "index": "",
+    "description": "移除目标2层【金鳞】，本次攻击无法被反击",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_10011.webp",
+    "type": 1,
+    "target": 0,
+    "cost": 2,
+    "params": [
+      0,
+      0,
+      1,
+      10271101,
+      2
+    ]
+  },
+  "10012": {
+    "name": "撕咬",
+    "index": "",
+    "description": "获得1层【觉醒】，本回合根据【觉醒】层数最多增加4点攻击力\n本次攻击无法被反击",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_10012.webp",
+    "type": 1,
+    "target": 0,
+    "cost": 2,
+    "params": [
+      0,
+      0,
+      1,
+      1261201,
+      1,
+      1261202,
+      4
+    ]
+  },
+  "10013": {
+    "name": "龙之咆哮",
+    "index": "",
+    "description": "攻击力+3，本次攻击无法被反击，并使得目标防御力-3，移动速度-9，持续1回合",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_10013.webp",
+    "type": 1,
+    "target": 0,
+    "cost": 3,
+    "params": [
+      3,
+      3,
+      1,
+      1261203,
+      -9,
+      -3
+    ]
+  },
+  "20001": {
+    "name": "激光",
+    "index": "CARD-007",
+    "description": "指定{range=6}格内的敌方角色，造成{damage=3}点伤害",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20001.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      6,
+      1,
+      -3
+    ]
+  },
+  "20002": {
+    "name": "巧克力蛋糕",
+    "index": "CARD-010",
+    "description": "恢复自身2点生命值",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20002.webp",
+    "type": 3,
+    "target": 1,
+    "cost": 0,
+    "params": [
+      2
+    ]
+  },
+  "20003": {
+    "name": "保护屏障",
+    "index": "CARD-025",
+    "description": "被效果牌指定时可以使用，无效该效果",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20003.webp",
+    "type": 4,
+    "target": 0,
+    "cost": 0,
+    "params": []
+  },
+  "20004": {
+    "name": "钓鱼执法",
+    "index": "CARD-012",
+    "description": "指定{range=3}格内的地块放置，\n停留的角色支付给放置者5星币",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20004.webp",
+    "type": 3,
+    "target": 3,
+    "cost": 0,
+    "params": [
+      3,
+      1,
+      2001
+    ]
+  },
+  "20005": {
+    "name": "遥控骰子",
+    "index": "CARD-018",
+    "description": "在1-6中选择一个数字，作为下次移动的最终点数",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20005.webp",
+    "type": 3,
+    "target": 1,
+    "cost": 0,
+    "params": [
+      6
+    ]
+  },
+  "20006": {
+    "name": "以毒攻毒",
+    "index": "CARD-019",
+    "description": "自身立刻失去2点生命\n回合开始恢复3点生命值，持续2回合",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20006.webp",
+    "type": 3,
+    "target": 1,
+    "cost": 0,
+    "params": [
+      -2,
+      3
+    ]
+  },
+  "20007": {
+    "name": "灵魂链接",
+    "index": "CARD-022",
+    "description": "指定两个角色，其中一个角色受到伤害时另一个角色承受同等伤害，持续3轮",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20007.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      2
+    ]
+  },
+  "20008": {
+    "name": "狂暴",
+    "index": "CARD-015",
+    "description": "指定{range=10}格内的角色使用，攻击力+3，受到伤害+1，持续2回合",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20008.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      10,
+      1,
+      3,
+      1
+    ]
+  },
+  "20009": {
+    "name": "自爆",
+    "index": "CARD-017",
+    "description": "对自身造成3点伤害，对5格内的敌对角色造成5点伤害",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20009.webp",
+    "type": 3,
+    "target": 1,
+    "cost": 0,
+    "params": [
+      -3,
+      5,
+      -5
+    ]
+  },
+  "20010": {
+    "name": "路障",
+    "index": "CARD-014",
+    "description": "指定{range=10}格内的地块放置，经过的角色会停止移动",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20010.webp",
+    "type": 3,
+    "target": 3,
+    "cost": 0,
+    "params": [
+      10,
+      1,
+      2100
+    ]
+  },
+  "20011": {
+    "name": "方向抉择",
+    "index": "CARD-026",
+    "description": "自由选择移动方向",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20011.webp",
+    "type": 3,
+    "target": 1,
+    "cost": 0,
+    "params": []
+  },
+  "20012": {
+    "name": "皮筋弹弓",
+    "index": "CARD-008",
+    "description": "指定{range=10}格内的敌方角色，造成{damage=2}点伤害",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20012.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      10,
+      1,
+      -2
+    ]
+  },
+  "20013": {
+    "name": "板砖",
+    "index": "CARD-009",
+    "description": "指定{range=3}格内的敌方角色，造成{damage=5}点伤害",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20013.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      3,
+      1,
+      -5
+    ]
+  },
+  "20014": {
+    "name": "汉堡",
+    "index": "CARD-011",
+    "description": "恢复自身4点生命值",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20014.webp",
+    "type": 3,
+    "target": 1,
+    "cost": 0,
+    "params": [
+      4
+    ]
+  },
+  "20015": {
+    "name": "以牙还牙",
+    "index": "CARD-023",
+    "description": "被效果牌指定时可以使用，反弹该效果",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20015.webp",
+    "type": 4,
+    "target": 0,
+    "cost": 0,
+    "params": []
+  },
+  "20017": {
+    "name": "错误的目标",
+    "index": "CARD-024",
+    "description": "被效果牌指定时可以使用，将效果随机转移给其他敌对角色",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20017.webp",
+    "type": 4,
+    "target": 0,
+    "cost": 0,
+    "params": []
+  },
+  "20018": {
+    "name": "爆破专家",
+    "index": "CARD-013",
+    "description": "指定{range=3}格内的地块放置，停留的角色受到3点伤害",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20018.webp",
+    "type": 3,
+    "target": 3,
+    "cost": 0,
+    "params": [
+      3,
+      1,
+      2002
+    ]
+  },
+  "20019": {
+    "name": "过期便当",
+    "index": "CARD-016",
+    "description": "指定{range=6}格内的角色，造成2点伤害。目标回合开始时，受到2点伤害，持续2回合\n效果移除后在目标所在的地块放置陷阱，停留时造成3点伤害",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20019.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      6,
+      1,
+      -2,
+      -2,
+      2005
+    ]
+  },
+  "20020": {
+    "name": "丧心病狂",
+    "index": "CARD-021",
+    "description": "自身攻击力+5，持续1次攻击\n下次战斗时敌方角色无法选择闪避，如果没有击倒敌方角色，则自己被击倒",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20020.webp",
+    "type": 3,
+    "target": 1,
+    "cost": 0,
+    "params": [
+      5
+    ]
+  },
+  "20021": {
+    "name": "传递炸弹",
+    "index": "CARD-020",
+    "description": "给下一位角色放置炸弹，回合开始时进行判定。\n1点：受到99点伤害\n2-6点：传递给下一位角色",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20021.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      2006
+    ]
+  },
+  "20022": {
+    "name": "抢夺",
+    "index": "",
+    "description": "指定一名敌方角色，夺取5星币",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20022.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      5
+    ]
+  },
+  "20023": {
+    "name": "拾荒",
+    "index": "",
+    "description": "捡起3格内地块上掉落的星币",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20023.webp",
+    "type": 3,
+    "target": 1,
+    "cost": 0,
+    "params": [
+      3
+    ]
+  },
+  "20024": {
+    "name": "随机传送门",
+    "index": "",
+    "description": "传送到随机【传送】地块上",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20024.webp",
+    "type": 3,
+    "target": 0,
+    "cost": 0,
+    "params": [
+      3
+    ]
+  },
+  "20025": {
+    "name": "雪球攻击",
+    "index": "",
+    "description": "指定{range=9}格内的一个敌方角色，造成{damage=1}点伤害，且目标移动速度-4，持续1回合",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20025.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      9,
+      1,
+      -1,
+      -4
+    ]
+  },
+  "20026": {
+    "name": "定向加速",
+    "index": "",
+    "description": "自由选择移动方向。移动速度+3，持续1轮",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20026.webp",
+    "type": 3,
+    "target": 1,
+    "cost": 0,
+    "params": [
+      3
+    ]
+  },
+  "20027": {
+    "name": "符卡-福",
+    "index": "",
+    "description": "指定一个友方角色，恢复2点生命值\n本回合自身出牌数+1",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20027.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      2,
+      1,
+      113
+    ]
+  },
+  "20028": {
+    "name": "符卡-祸",
+    "index": "",
+    "description": "指定{range=10}格内的一个敌方角色，造成{damage=1}点伤害，回合结束时，如果在手牌中，使自身受到1点伤害",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20028.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      10,
+      1,
+      -1,
+      -1
+    ]
+  },
+  "20029": {
+    "name": "符卡-祸",
+    "index": "",
+    "description": "指定{range=10}格内的一个怪物，造成{damage=1}点伤害，回合结束时，如果在手牌中，使自身受到1点伤害",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20028.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      10,
+      1,
+      -1,
+      -1
+    ]
+  },
+  "20030": {
+    "name": "活体书页",
+    "index": "",
+    "description": "指定{range=5}格内的一个敌方角色，造成{damage=2}点伤害，并施加1层【标记】。无法被反制牌反制",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20030.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      5,
+      1,
+      -2,
+      1
+    ]
+  },
+  "20031": {
+    "name": "活体书页",
+    "index": "",
+    "description": "指定{range=5}格内的一个怪物，造成{damage=2}点伤害，并施加1层【标记】。如果目标的【标记】层数大于等于3，本回合出牌数+1",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20030.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      5,
+      1,
+      -2,
+      1,
+      3,
+      1
+    ]
+  },
+  "20032": {
+    "name": "命运的指引",
+    "index": "",
+    "description": "在1-6中选择一个数字，作为下次移动的最终点数\n主动技能冷却时间-1，本回合出牌数+1",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20032.webp",
+    "type": 3,
+    "target": 1,
+    "cost": 0,
+    "params": [
+      6,
+      -1,
+      1
+    ]
+  },
+  "20033": {
+    "name": "强化拒止",
+    "index": "",
+    "description": "指定{range=10}格内的地块放置，经过的角色会停止移动，该角色下次移动时移动速度+2。",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20033.webp",
+    "type": 3,
+    "target": 3,
+    "cost": 0,
+    "params": [
+      10,
+      1,
+      2101
+    ]
+  },
+  "21001": {
+    "name": "轨道炮",
+    "index": "",
+    "description": "指定{range=5}格内的一个怪物，造成{damage=6}点伤害",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_21001.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      5,
+      1,
+      -6
+    ]
+  },
+  "21002": {
+    "name": "你有我有",
+    "index": "",
+    "description": "指定一个友方角色，自身和目标各获得1张卡牌",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_21002.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      1,
+      1
+    ]
+  },
+  "21003": {
+    "name": "加急加快",
+    "index": "",
+    "description": "指定一个友方角色，目标移动时投掷2枚骰子，生效一次",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_21003.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": []
+  },
+  "21004": {
+    "name": "王之力",
+    "index": "",
+    "description": "受到4点伤害，攻击力+5，持续3回合",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_21004.webp",
+    "type": 3,
+    "target": 1,
+    "cost": 0,
+    "params": [
+      -4,
+      5
+    ]
+  },
+  "21005": {
+    "name": "岿然不动",
+    "index": "",
+    "description": "防御力+6，持续2轮",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_21005.webp",
+    "type": 3,
+    "target": 1,
+    "cost": 0,
+    "params": [
+      6
+    ]
+  },
+  "21006": {
+    "name": "奢华大餐",
+    "index": "",
+    "description": "指定一个友方角色，对目标及附近3格内的所有友方角色恢复3点生命值",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_21006.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      3,
+      3
+    ]
+  },
+  "21007": {
+    "name": "定向爆破",
+    "index": "",
+    "description": "指定{range=6}格内的一个怪物，对目标及附近2格内的所有怪物造成{damage=4}点伤害",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_21007.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      6,
+      2,
+      -4
+    ]
+  },
+  "21008": {
+    "name": "支援",
+    "index": "",
+    "description": "指定一个其他角色，传送到目标当前的位置",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_21008.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": []
+  },
+  "21009": {
+    "name": "高升炮",
+    "index": "",
+    "description": "指定{range=10}格内的一个怪物，造成{damage=3}点伤害，移除目标<img src='ui://xuaw6o8jkva0ay' width='140' height='140'/> <img src='ui://xuaw6o8jkva0az' width='140' height='140'/>且本轮目标无法反击",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_21009.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      10,
+      1,
+      -3,
+      10150101
+    ]
+  },
+  "21010": {
+    "name": "是他干的",
+    "index": "",
+    "description": "选择一个友方角色，造成1点伤害并施加【问题学生】，随后自身获得3星币。回合结束时如果本卡在手牌中，则自身受到1点伤害",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_21010.webp",
+    "type": 8,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      1,
+      -1,
+      3,
+      -1
+    ]
+  },
+  "21012": {
+    "name": "对怪激光",
+    "index": "",
+    "description": "指定{range=6}格内的一个怪物，造成{damage=3}点伤害",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20001.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      6,
+      1,
+      -3
+    ]
+  },
+  "21013": {
+    "name": "对怪板砖",
+    "index": "",
+    "description": "指定{range=3}格内的一个怪物，造成{damage=5}点伤害",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_20013.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      3,
+      1,
+      -5
+    ]
+  },
+  "21014": {
+    "name": "支援口香糖",
+    "index": "",
+    "description": "指定一个角色，恢复2点生命值，并移除【改造】\n自身本回合出牌数+1",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_21014.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      2,
+      1
+    ]
+  },
+  "21015": {
+    "name": "能量补充棒",
+    "index": "",
+    "description": "指定一个拥有【改造】的角色，攻击力+3，移动速度+2，持续2回合。随后对目标施加2层【改造】",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_21015.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      3,
+      2,
+      2
+    ]
+  },
+  "21016": {
+    "name": "大聪明软糖",
+    "index": "",
+    "description": "指定一个角色获得3张卡牌，并移除【改造】",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_21016.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      3
+    ]
+  },
+  "21017": {
+    "name": "古怪的附灵物",
+    "index": "",
+    "description": "抉择： 释放青魂；释放赤魂",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_21017.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      21018,
+      21019,
+      0
+    ]
+  },
+  "21018": {
+    "name": "释放青魂",
+    "index": "",
+    "description": "指定一个怪物对自身发起攻击，随后对该怪物进行反击。本次交战中，怪物攻击力-3，防御力-3",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_21018.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      -3,
+      -3,
+      2101802,
+      10010
+    ]
+  },
+  "21019": {
+    "name": "释放赤魂",
+    "index": "",
+    "description": "受到1点伤害，指定{range=6}格内的一个怪物，造成{damage=3}点伤害。 移除自身的【青之诅咒】与【赤红之毒】，每移除一个，额外造成一次伤害",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_21019.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      -1,
+      -3,
+      10081102,
+      10091202,
+      6
+    ]
+  },
+  "21020": {
+    "name": "彩羽",
+    "index": "",
+    "description": "传送到5格内的地块，并恢复自身3点生命值",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_21020.webp",
+    "type": 3,
+    "target": 3,
+    "cost": 0,
+    "params": [
+      5,
+      3,
+      1053,
+      10531201
+    ]
+  },
+  "21021": {
+    "name": "振作起来",
+    "index": "",
+    "description": "来自大家的鼓励！",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_21021.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      1,
+      1050
+    ]
+  },
+  "21022": {
+    "name": "灰烬之羽",
+    "index": "",
+    "description": "不能被使用。回合开始时，获得1层【温焰】\n移除{stack=4}层【温焰】：此卡转变为【彩羽】",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_21022.webp",
+    "type": 8,
+    "target": 1,
+    "cost": 0,
+    "params": [
+      10490101,
+      1,
+      104901,
+      4,
+      21020
+    ]
+  },
+  "21023": {
+    "name": "吉星高照",
+    "index": "",
+    "description": "本回合出牌数+8，获得888星币、88层星光，攻击力永久+8。所有角色回复88点生命值。",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_21023.webp",
+    "type": 3,
+    "target": 1,
+    "cost": 0,
+    "params": [
+      8,
+      888,
+      88,
+      8,
+      88
+    ]
+  },
+  "21024": {
+    "name": "人机交融",
+    "index": "",
+    "description": "指定一个角色，使目标获得1层【心智】\n自身本回合出牌数+1",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_21024.webp",
+    "type": 3,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      1,
+      1
+    ]
+  },
+  "21025": {
+    "name": "罪证嫌疑",
+    "index": "",
+    "description": "指定一个友方角色，使目标获得1张【罪证嫌疑】\n回合结束时，如果在手牌中，消耗本卡牌，使自身获得1层【罪证】",
+    "tips": "",
+    "image": "cards/textures/UT_HandCard_21025.webp",
+    "type": 8,
+    "target": 2,
+    "cost": 0,
+    "params": [
+      21025,
+      1,
+      1,
+      1
+    ]
+  }
+}

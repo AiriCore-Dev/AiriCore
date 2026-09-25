@@ -38,8 +38,8 @@ def integer(value, default=0):
         return default
 
 
-def nodes(key, package="BattleSettlement", state=None, transition=None):
-    item = LAYOUTS[package]["items"][key]
+def nodes(key, package="BattleSettlement", state=None, transition=None, layouts=None):
+    item = (LAYOUTS if layouts is None else layouts)[package]["items"][key]
     result = copy.deepcopy(item.get("children", []))
     state = state or {}
     pages = []

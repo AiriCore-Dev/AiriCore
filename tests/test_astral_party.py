@@ -17,6 +17,60 @@ package.__path__ = [str(ROOT / 'plugins/airi_astral_party')]
 sys.modules[PACKAGE] = package
 
 
+class GroupWhitelistTests(unittest.TestCase):
+    def setUp(self):
+        self.module = importlib.import_module(f'{PACKAGE}.whitelist')
+        self.error = importlib.import_module(f'{PACKAGE}.protocol').QueryError
+        self.directory = tempfile.TemporaryDirectory()
+        self.addCleanup(self.directory.cleanup)
+        self.path = Path(self.directory.name) / 'group_whitelist.json'
+        self.store = self.module.GroupWhitelist(self.path)
+
+    def test_empty_whitelist_denies_and_add_survives_reload(self):
+        self.assertFalse(self.store.allows(12345))
+        self.assertTrue(self.store.add('0012345'))
+        self.assertFalse(self.store.add(12345))
+        restarted = self.module.GroupWhitelist(self.path)
+        self.assertTrue(restarted.allows('12345'))
+        self.assertFalse(restarted.allows('54321'))
+        self.assertEqual(json.loads(self.path.read_text(encoding='utf-8')), ['12345'])
+
+    def test_invalid_group_ids_never_create_file(self):
+        for value in ('', '0', '-1', '1.2', 'abc', '１２３', '1 2', True, None, str(2**63), '1' * 1000):
+            with self.subTest(value=value), self.assertRaises(self.error):
+                self.store.add(value)
+            self.assertFalse(self.path.exists())
+
+    def test_corrupt_whitelist_never_grants_access_or_gets_overwritten(self):
+        for original in ('{坏档', '{}', 'null', '[true]', '[0]', '["abc"]', '["12345", null]'):
+            with self.subTest(original=original):
+                self.path.write_text(original, encoding='utf-8')
+                with self.assertRaises(self.error):
+                    self.store.allows(12345)
+                with self.assertRaises(self.error):
+                    self.store.add(54321)
+                self.assertEqual(self.path.read_text(encoding='utf-8'), original)
+
+    def test_failed_atomic_write_preserves_whitelist_and_cleans_temporary(self):
+        self.store.add(12345)
+        original = self.path.read_bytes()
+        with patch.object(self.module.os, 'replace', side_effect=OSError('测试写入失败')):
+            with self.assertRaises(self.error):
+                self.store.add(54321)
+        self.assertEqual(self.path.read_bytes(), original)
+        self.assertFalse(self.store.allows(54321))
+        self.assertEqual(list(self.path.parent.glob('*.tmp')), [])
+
+    def test_concurrent_store_instances_preserve_all_groups(self):
+        from concurrent.futures import ThreadPoolExecutor
+        def add(group):
+            return self.module.GroupWhitelist(self.path).add(group)
+        with ThreadPoolExecutor(max_workers=4) as pool:
+            self.assertTrue(all(pool.map(add, range(100, 110))))
+        self.assertEqual(set(json.loads(self.path.read_text(encoding='utf-8'))),
+                         {'100', '101', '102', '103', '104', '105', '106', '107', '108', '109'})
+
+
 class ProtocolTests(unittest.IsolatedAsyncioTestCase):
     def setUp(self):
         self.p = importlib.import_module(f'{PACKAGE}.protocol')

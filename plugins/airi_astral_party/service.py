@@ -15,6 +15,9 @@ from .protocol import QueryError
 from .settings import DATA_DIR, load_settings
 from .renewal import authorization_status
 from .replay import enrich_snapshot
+from .watch import WatchClient
+from .watch_store import GroupWatchStore, watch_code
+from .whitelist import group_id
 
 
 PAGE_SIZE = 6
@@ -25,6 +28,7 @@ class Command:
     action: str
     uid: int | None = None
     number: int = 1
+    watch_code: str | None = None
 
 
 def player_id(value):
@@ -42,11 +46,13 @@ def parse_command(text):
     if not parts:
         return Command('帮助')
     action, *args = parts
-    actions = {'help': '帮助', 'unbind': '解绑', 'status': '状态'}
+    actions = {'help': '帮助', 'unbind': '解绑', 'status': '状态', 'card': '手牌', 'unwatch': '停止观战'}
     if action in actions and not args:
         return Command(actions[action])
     if action == 'bind' and len(args) == 1:
         return Command('绑定', player_id(args[0]))
+    if action == 'watch' and len(args) == 1:
+        return Command('观战', watch_code=watch_code(args[0]))
     if action == 'me' or re.fullmatch(r'[0-9]+', action):
         uid = None if action == 'me' else player_id(action)
         if not args:
@@ -122,12 +128,15 @@ class QueryService:
     def __init__(self, directory=DATA_DIR, run_sync=asyncio.to_thread):
         self.directory = Path(directory)
         self.store = BindingStore(self.directory / 'bindings.json')
+        self.watch_store = GroupWatchStore(self.directory / 'group_watch.json')
         self.run_sync = run_sync
         self._lock = asyncio.Lock()
         self._next_query = 0.0
 
-    async def handle(self, text, user):
+    async def handle(self, text, user, group=None):
         command = parse_command(text)
+        if command.action in {'观战', '手牌', '停止观战'}:
+            return await self.handle_watch(command, group)
         if command.action == '帮助':
             return {'kind': 'help'}
         if command.action == '绑定':
@@ -158,6 +167,33 @@ class QueryService:
                 raise QueryError('该战绩页不存在，请从第 1 页开始查看')
             return {'kind': {'资料': 'profile', '战绩': 'records', '对局': 'detail'}[command.action],
                     'snapshot': snapshot, 'page': command.number}
+
+    async def handle_watch(self, command, group):
+        if group is None:
+            raise QueryError('watch、card 和 unwatch 仅支持群聊，请在需要观战的群内使用')
+        group = group_id(group)
+        if command.action == '停止观战':
+            async with self._lock:
+                removed = await self.run_sync(self.watch_store.delete, group)
+            return _notice('本群观战已停止' if removed else '本群尚未观战',
+                           ['已清除当前群的观战对局，其他群不受影响' if removed else '当前群没有已设置的观战对局'])
+        if self._lock.locked() or time.monotonic() < self._next_query:
+            raise QueryError('吉星派对查询较频繁，请稍后重试')
+        async with self._lock:
+            target = await self.run_sync(self.watch_store.get, group)
+            if command.action == '手牌' and target is None:
+                raise QueryError('本群尚未设置观战对局，请先发送 astral watch 观战码')
+            settings = await self.run_sync(load_settings, self.directory / 'config.json')
+            self._next_query = time.monotonic() + settings.cooldown
+            code = command.watch_code if command.action == '观战' else target['code']
+            expected = None if command.action == '观战' else target['room_id']
+            result = await WatchClient(settings).fetch(code, expected_room=expected)
+            if command.action == '观战':
+                await self.run_sync(self.watch_store.set, group, code, result['room_id'])
+                return _notice('本群观战已设置', ['当前群的观战对局已更新，其他群不受影响',
+                    f'对局回合：{result["round"]}', '发送 astral card 查询当前可见手牌',
+                    '每次查询获取一次快照，隐藏牌面显示为不可见'])
+            return {'kind': 'hands', 'snapshot': {**result, 'watch_code': code}}
 
 
 def _notice(title, lines):
