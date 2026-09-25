@@ -372,21 +372,19 @@ def render_notice(title, lines):
 
 def render_help():
     return render_message(
-        "吉星派对 · 查询帮助",
+        "AiriCore 星趴查询 · 帮助",
         [
             "astral help  ·  查看本帮助",
-            "astral bind UID  ·  设置默认查询玩家",
-            "astral unbind  ·  移除默认查询玩家",
-            "astral me  ·  查看已绑定玩家的公开资料",
+            "astral bind UID  ·  绑定账号",
+            "astral unbind  ·  解绑账号",
+            "astral me  ·  查看你的公开资料",
             "astral UID  ·  查看指定玩家的公开资料",
-            "astral me recent  ·  已绑定玩家的近期战绩，每页六场",
-            "astral me recent 页码  ·  翻看已绑定玩家的战绩",
-            "astral UID recent  ·  指定玩家的近期战绩，可追加页码",
-            "astral me battle 序号  ·  已绑定玩家的对局详情",
+            "astral me recent  ·  你的近期战绩",
+            "astral me recent 页码  ·  查看你的近期战绩第N页",
+            "astral UID recent  ·  指定玩家的近期战绩（加页码同上）",
+            "astral me battle 序号  ·  你第N号对局的对局详情",
             "astral UID battle 序号  ·  指定玩家的对局详情",
             "astral status  ·  查看绑定与查询账号配置状态",
-            "astral 验证码 account help  ·  超级用户私聊管理飞魔查询账号",
-            "me 仅限已绑定后使用；绑定仅用于快捷查询，不代表账号认证。",
-            "UID、页码和序号请替换为实际数字；资料和对局按公开范围展示。",
+            "* UID、页码和序号请替换为实际数字",
         ],
     )
