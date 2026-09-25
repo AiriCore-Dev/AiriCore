@@ -22,6 +22,7 @@ from unittest.mock import AsyncMock, patch
 import nonebot
 from PIL import Image
 from nonebot.adapters.onebot.v11 import Adapter, GroupMessageEvent, Message, PrivateMessageEvent
+from nonebot.rule import TrieRule
 
 nonebot.init(_env_file=None, driver="~fastapi", command_start={"", "/"})
 nonebot.get_driver().register_adapter(Adapter)
@@ -81,31 +82,45 @@ async def main():
         assert segment.data["file"].startswith("base64://")
         assert base64.b64decode(segment.data["file"][9:]) == payload
 
-    for text in ("吉星帮助", "吉星绑定 123", "吉星状态", "吉星资料", "吉星无效"):
+    for text in ("astral help", "astral bind 123", "astral status", "astral me", "astral unknown"):
         verify(await app.prepare(text, "qq:1"))
     server = await asyncio.start_server(serve, "127.0.0.1", 0)
     config = dict(host="127.0.0.1", port=server.sockets[0].getsockname()[1], game_id="test",
                   channel_id="test", app_id="test", sid="offline-test", device_id="test", cooldown=0)
     Path("data/astral_party/config.json").write_text(json.dumps(config), encoding="utf-8")
     try:
-        for text in ("吉星资料", "吉星战绩", "吉星对局 1"):
+        for text in ("astral me", "astral me recent", "astral me battle 1"):
             app.service._next_query = 0
             verify(await app.prepare(text, "qq:1"))
         assert calls == [5001, 5185, 5153] * 2 + [5001, 5185, 5153, 5155], calls
         event_data = dict(time=1, self_id=2, post_type="message", message_id=3, user_id=1,
-                          message=Message("吉星帮助"), original_message=Message("吉星帮助"), raw_message="吉星帮助", font=0,
+                          message=Message("astral help"), original_message=Message("astral help"), raw_message="astral help", font=0,
                           sender={"user_id": 1, "nickname": "测试"})
         private = PrivateMessageEvent(**event_data, message_type="private", sub_type="friend")
         group = GroupMessageEvent(**event_data, message_type="group", sub_type="normal", group_id=4)
         bot = AsyncMock()
+        for raw, expected in (
+            ("astral", True), ("astral help", True), ("/astral me", True),
+            ("astral 123 recent", True), ("astral me recent 2", True),
+            ("astral me battle 1", True), ("astral 123 battle 1", True),
+            ("astral status", True), ("astral bind 123", True), ("astral unbind", True),
+            ("astralhelp", False), ("astral123", False), ("吉星帮助", False), ("吉星资料 123", False),
+        ):
+            candidate = PrivateMessageEvent(
+                **{**event_data, "message": Message(raw), "original_message": Message(raw), "raw_message": raw},
+                message_type="private", sub_type="friend",
+            )
+            state = {}
+            TrieRule.get_value(bot, candidate, state)
+            assert await app.matcher.rule(bot, candidate, state) == expected, raw
         with patch.object(app, "send_group_with_fallback", new_callable=AsyncMock) as send_group:
-            await app.handle(bot, private, ("吉星帮助",), Message())
-            await app.handle(bot, group, ("吉星帮助",), Message())
+            await app.handle(bot, private, ("astral",), Message("help"))
+            await app.handle(bot, group, ("astral",), Message("help"))
             bot.send.assert_awaited_once()
             send_group.assert_awaited_once()
             assert send_group.call_args.kwargs["group_id"] == 4
             assert send_group.call_args.args[0].data["file"].startswith("base64://")
-        verify(await app.prepare("吉星解绑", "qq:1"))
+        verify(await app.prepare("astral unbind", "qq:1"))
     finally:
         server.close()
         await server.wait_closed()

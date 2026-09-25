@@ -19,15 +19,14 @@ from .service import QueryService
 __plugin_meta__ = PluginMetadata(
     name='吉星派对',
     description='以游戏原版素材查询玩家公开资料与对局',
-    usage='发送“吉星帮助”查看图片帮助；吉星绑定 UID、吉星资料、吉星战绩、吉星对局 序号',
+    usage='发送“astral help”查看图片帮助；astral bind UID、astral me、astral UID recent、astral UID battle 序号',
     type='application',
     supported_adapters={'~onebot.v11'},
 )
 
 logger = get_logger('吉星派对')
 service = QueryService(run_sync=run_sync)
-matcher = on_command('吉星', aliases={'吉星派对', '吉星帮助', '吉星绑定', '吉星解绑',
-                                    '吉星资料', '吉星战绩', '吉星对局', '吉星状态'}, block=True)
+matcher = on_command('astral', force_whitespace=True, block=True)
 get_driver().on_shutdown(shutdown)
 
 

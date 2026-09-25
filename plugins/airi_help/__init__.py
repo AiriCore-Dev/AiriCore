@@ -68,8 +68,8 @@ $ 10积分 / 次
 
 - Airi-Astral-Party:
 吉星派对玩家资料与对局查询
-* 发送 吉星帮助 查看图片帮助
-* 发送 吉星绑定 UID 设置默认查询玩家
+* 发送 astral help 查看图片帮助
+* 发送 astral bind UID 设置默认查询玩家
 
 - Airi-Manosaba-Memes:
 魔裁DIY工具 By AiriCore dev., zhaomaoniu

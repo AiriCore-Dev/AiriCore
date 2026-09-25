@@ -33,35 +33,27 @@ def player_id(value):
 
 def parse_command(text):
     if len(text) > 160:
-        raise QueryError('指令过长，请发送“吉星帮助”查看用法')
-    text = re.sub(r'^吉星(?:派对)?\s*', '', text.strip(), count=1)
+        raise QueryError('指令过长，请发送“astral help”查看用法')
     parts = text.split()
+    if not parts or parts.pop(0) != 'astral':
+        raise QueryError('指令应以 astral 开头，请发送“astral help”查看用法')
     if not parts:
         return Command('帮助')
     action, *args = parts
-    if action in ('帮助', '解绑', '状态') and not args:
-        return Command(action)
-    if action == '绑定' and len(args) == 1:
-        return Command(action, player_id(args[0]))
-    if action == '资料' and len(args) <= 1:
-        return Command(action, player_id(args[0]) if args else None)
-    if action == '战绩' and len(args) <= 2:
-        uid, number = None, 1
-        if args and re.fullmatch(r'第[0-9]{1,2}页', args[0]):
-            if len(args) != 1:
-                raise QueryError('使用“吉星战绩 UID 页码”或“吉星战绩 第2页”')
-            number = int(args[0][1:-1])
-        else:
-            uid = player_id(args[0]) if args else None
-            if len(args) == 2:
-                number = _number(args[1], 20, '页码')
-        if not 1 <= number <= 20:
-            raise QueryError('战绩页码应为 1 至 20')
-        return Command(action, uid, number)
-    if action == '对局' and len(args) in (1, 2):
-        return Command(action, player_id(args[0]) if len(args) == 2 else None,
-                       _number(args[-1], 100, '对局序号'))
-    raise QueryError('指令格式不正确，请发送“吉星帮助”查看用法')
+    actions = {'help': '帮助', 'unbind': '解绑', 'status': '状态'}
+    if action in actions and not args:
+        return Command(actions[action])
+    if action == 'bind' and len(args) == 1:
+        return Command('绑定', player_id(args[0]))
+    if action == 'me' or re.fullmatch(r'[0-9]+', action):
+        uid = None if action == 'me' else player_id(action)
+        if not args:
+            return Command('资料', uid)
+        if args[0] == 'recent' and len(args) in (1, 2):
+            return Command('战绩', uid, _number(args[1], 20, '页码') if len(args) == 2 else 1)
+        if args[0] == 'battle' and len(args) == 2:
+            return Command('对局', uid, _number(args[1], 100, '对局序号'))
+    raise QueryError('指令格式不正确，请发送“astral help”查看用法')
 
 
 def _number(value, maximum, label):
@@ -138,7 +130,7 @@ class QueryService:
             return {'kind': 'help'}
         if command.action == '绑定':
             await self.run_sync(self.store.set, user, command.uid)
-            return _notice('绑定成功', [f'查询默认 UID：{command.uid}', '绑定仅用于快捷查询，不代表账号认证', '发送“吉星资料”查看玩家资料'])
+            return _notice('绑定成功', [f'查询默认 UID：{command.uid}', '绑定仅用于快捷查询，不代表账号认证', '发送“astral me”查看玩家资料'])
         if command.action == '解绑':
             await self.run_sync(self.store.set, user, None)
             return _notice('解绑完成', ['已移除你的默认查询 UID'])
@@ -149,7 +141,7 @@ class QueryService:
                                        f'默认 UID：{uid}' if uid else '尚未绑定默认 UID',
                                        '绑定不会登录或修改该玩家账号'])
         if uid is None:
-            raise QueryError('请先发送“吉星绑定 UID”，或在查询指令后填写玩家 UID')
+            raise QueryError('使用 me 前请先发送“astral bind UID”绑定玩家；也可用“astral UID”直接查询')
         if self._lock.locked() or time.monotonic() < self._next_query:
             raise QueryError('吉星派对查询较频繁，请稍后重试')
         async with self._lock:

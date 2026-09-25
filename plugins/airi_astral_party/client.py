@@ -57,7 +57,7 @@ class GameClient:
                         if not show['isShowFight']:
                             raise QueryError('该玩家未公开对局记录')
                         if detail > len(show['record']):
-                            raise QueryError('该对局序号不存在，请先查询吉星战绩')
+                            raise QueryError('该对局序号不存在，请先用“astral me recent”或“astral UID recent”查询战绩')
                         selected = show['record'][detail - 1]
                         response = await rpc.call('GetPlayerFightRecord', player_id=uid, index=selected['index'])
                         result['details'] = sorted(as_dict(response)['recordData'], key=lambda row: (row['rank'], row['slot']))

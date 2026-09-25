@@ -187,21 +187,35 @@ class CommandAndStorageTests(unittest.TestCase):
     def setUp(self):
         self.s = importlib.import_module(f'{PACKAGE}.service')
 
-    def test_compact_and_spaced_commands(self):
-        for text in ('吉星资料 123456789', '吉星 资料 123456789', '吉星派对 资料 123456789'):
-            command = self.s.parse_command(text)
-            self.assertEqual((command.action, command.uid), ('资料', 123456789))
-        command = self.s.parse_command('吉星对局 3')
-        self.assertEqual((command.uid, command.number), (None, 3))
-        command = self.s.parse_command('吉星对局 123456789 3')
-        self.assertEqual((command.uid, command.number), (123456789, 3))
-        command = self.s.parse_command('吉星战绩 第2页')
-        self.assertEqual((command.uid, command.number), (None, 2))
+    def test_astral_command_forms(self):
+        cases = {
+            'astral': ('帮助', None, 1),
+            'astral help': ('帮助', None, 1),
+            'astral bind 123456789': ('绑定', 123456789, 1),
+            'astral unbind': ('解绑', None, 1),
+            'astral status': ('状态', None, 1),
+            'astral me': ('资料', None, 1),
+            'astral 123456789': ('资料', 123456789, 1),
+            'astral me recent': ('战绩', None, 1),
+            'astral me recent 2': ('战绩', None, 2),
+            'astral 123456789 recent': ('战绩', 123456789, 1),
+            'astral 123456789 recent 2': ('战绩', 123456789, 2),
+            'astral me battle 3': ('对局', None, 3),
+            'astral 123456789 battle 3': ('对局', 123456789, 3),
+            ' astral   me\trecent  2 ': ('战绩', None, 2),
+        }
+        for text, expected in cases.items():
+            with self.subTest(text=text):
+                command = self.s.parse_command(text)
+                self.assertEqual((command.action, command.uid, command.number), expected)
 
     def test_invalid_parameters(self):
-        for text in ('吉星绑定 -1', '吉星资料 0', '吉星资料 9223372036854775808',
-                     '吉星对局', '吉星解绑 123', '吉星战绩 123456789 0', '吉星资料 abc',
-                     '吉星绑定 1 2', '吉星删除', '吉星资料 ' + '9' * 1000):
+        for text in ('astral bind -1', 'astral 0', 'astral 9223372036854775808',
+                     'astral me battle', 'astral unbind 123', 'astral 123 recent 0',
+                     'astral bind 1 2', 'astral me recent 21', 'astral me battle 101',
+                     'astral recent', 'astral battle 1', 'astral help 1', 'astral status 1',
+                     'astral me 2', 'astral me recent 第2页', 'astral123', 'me', '',
+                     '吉星资料 123', '吉星帮助', 'astral me recent 2 3', 'astral ' + '9' * 1000):
             with self.subTest(text=text[:50]), self.assertRaises(ValueError):
                 self.s.parse_command(text)
 
@@ -231,6 +245,28 @@ class CommandAndStorageTests(unittest.TestCase):
 
 
 class ServiceTests(unittest.IsolatedAsyncioTestCase):
+    async def test_me_requires_binding_and_explicit_uid_does_not(self):
+        service = importlib.import_module(f'{PACKAGE}.service')
+        settings = importlib.import_module(f'{PACKAGE}.settings')
+        with tempfile.TemporaryDirectory() as directory:
+            app = service.QueryService(Path(directory))
+            fake = AsyncMock()
+            fake.fetch.return_value = {'show': {'record': [{}]}}
+            with patch(f'{PACKAGE}.service.load_settings', return_value=settings.Settings(cooldown=0)), \
+                 patch(f'{PACKAGE}.service.GameClient', return_value=fake):
+                for command in ('astral me', 'astral me recent', 'astral me battle 1'):
+                    with self.assertRaisesRegex(ValueError, 'astral bind UID'):
+                        await app.handle(command, 'qq:1')
+                fake.fetch.assert_not_awaited()
+                await app.handle('astral 123', 'qq:1')
+                fake.fetch.assert_awaited_once_with(123, detail=None)
+                await app.handle('astral bind 456', 'qq:1')
+                await app.handle('astral me battle 1', 'qq:1')
+                fake.fetch.assert_awaited_with(456, detail=1)
+                await app.handle('astral unbind', 'qq:1')
+                with self.assertRaisesRegex(ValueError, 'astral bind UID'):
+                    await app.handle('astral me', 'qq:1')
+
     async def test_page_boundaries(self):
         service = importlib.import_module(f'{PACKAGE}.service')
         settings = importlib.import_module(f'{PACKAGE}.settings')
@@ -243,25 +279,25 @@ class ServiceTests(unittest.IsolatedAsyncioTestCase):
                     with patch(f'{PACKAGE}.service.load_settings', return_value=settings.Settings(cooldown=0)), \
                          patch(f'{PACKAGE}.service.GameClient', return_value=fake):
                         if (page - 1) * 6 < max(1, count):
-                            result = await app.handle(f'吉星战绩 123 {page}', 'qq:1')
+                            result = await app.handle(f'astral 123 recent {page}', 'qq:1')
                             self.assertEqual(result['page'], page)
                         else:
                             with self.assertRaisesRegex(ValueError, '该战绩页不存在'):
-                                await app.handle(f'吉星战绩 123 {page}', 'qq:1')
+                                await app.handle(f'astral 123 recent {page}', 'qq:1')
 
     async def test_binding_help_and_missing_configuration(self):
         service = importlib.import_module(f'{PACKAGE}.service')
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             app = service.QueryService(root)
-            result = await app.handle('吉星帮助', 'qq:1')
+            result = await app.handle('astral help', 'qq:1')
             self.assertEqual(result['kind'], 'help')
-            result = await app.handle('吉星绑定 123456789', 'qq:1')
+            result = await app.handle('astral bind 123456789', 'qq:1')
             self.assertEqual(result['kind'], 'notice')
             with self.assertRaisesRegex(ValueError, '配置'):
-                await app.handle('吉星资料', 'qq:1')
+                await app.handle('astral me', 'qq:1')
             with self.assertRaisesRegex(ValueError, '绑定'):
-                await app.handle('吉星资料', 'qq:2')
+                await app.handle('astral me', 'qq:2')
 
     async def test_command_to_snapshot_and_global_cooldown(self):
         service = importlib.import_module(f'{PACKAGE}.service')
@@ -273,11 +309,11 @@ class ServiceTests(unittest.IsolatedAsyncioTestCase):
             fake.fetch.return_value = snapshot
             with patch(f'{PACKAGE}.service.load_settings', return_value=settings.Settings(cooldown=10)), \
                  patch(f'{PACKAGE}.service.GameClient', return_value=fake):
-                result = await app.handle('吉星资料 123', 'qq:1')
+                result = await app.handle('astral 123', 'qq:1')
                 self.assertEqual(result['kind'], 'profile')
                 self.assertEqual(result['snapshot'], snapshot)
                 with self.assertRaisesRegex(ValueError, '稍后'):
-                    await app.handle('吉星资料 456', 'qq:2')
+                    await app.handle('astral 456', 'qq:2')
                 fake.fetch.assert_awaited_once_with(123, detail=None)
 
 
