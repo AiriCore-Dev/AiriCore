@@ -23,9 +23,44 @@
 ## 配置专用查询账号
 
 1. 在 AiriCore 工作目录执行 `conda run -n airidev python -m pip install -r requirements.txt`，新增依赖为 `protobuf==6.33.6`。
-2. 创建 `data/astral_party/`，将本插件 `config.example.json` 复制为该目录的 `config.json`。
-3. 使用专用国服游戏账号正常完成官方登录，将该会话的服务器地址及 SDK 登录参数填入本机配置。
+2. 在官方客户端自行注册或选择专用国服账号，登录并进入游戏大厅。
+3. 运行下方本机配置工具，按提示从此次游戏日志提取 SDK 参数，并生成 `data/astral_party/config.json`。保持大厅打开直到保存完成，然后正常关闭游戏。
 4. 启动或重启 Airi，发送 `astral status`，再用一个已知 UID 验证资料、战绩与单场详情。
+
+### 本机账号配置工具
+
+在 AiriCore 目录运行：
+
+```powershell
+conda run --no-capture-output -n airidev python plugins/airi_astral_party/account_tool.py
+```
+
+工具用于获取你已登录的专用账号的查询凭据，不自动注册游戏账号。它读取当前用户的 `AppData/LocalLow/feimo/吉星派对/Player.log`，从游戏原有日志提取最新登录的游戏、渠道、应用、设备标识及 `sid`、`extra`，再从 `吉星派对.exe` 的已建立 TCP 连接识别服务器。工具不启动 Bot，也不连接游戏服务器；开发测试只使用合成日志，实际登录凭据仍需首次运行验证。
+
+终端仅显示脱敏摘要，不显示会话与设备标识。确认后原子写入配置；更新已有配置会保留 `timeout` 和 `cooldown`，坏档不覆盖。Windows 文件权限限制为当前用户与系统；其他系统使用 `0600`。未修改的游戏日志本身由官方客户端管理。
+
+常用参数：
+
+| 参数 | 用途 |
+|---|---|
+| `--log-file 路径` | 指定本次专用账号登录的 UTF-8 日志；读取末尾最多 16 MiB |
+| `--host 地址` | 无法自动识别时，手动指定游戏 TCP 服务器地址 |
+| `--port 8800` | 指定实际游戏端口，默认 8800 |
+| `--pid 进程号` | 限定用于识别服务器的游戏进程 |
+| `--client-version 3.2.1` | 指定客户端应用版本，与实际安装版本一致 |
+| `--output 路径` | 指定配置输出位置，默认指向该仓库的 `data/astral_party/config.json` |
+| `--yes` | 已登录正确的专用账号，跳过交互确认并写入或更新配置 |
+| `--dry-run` | 只检查并显示脱敏摘要，不写入配置 |
+
+只检查本次登录参数：
+
+```powershell
+conda run --no-capture-output -n airidev python plugins/airi_astral_party/account_tool.py --yes --dry-run
+```
+
+找不到完整登录记录时，重新启动官方客户端，用专用账号登录进入大厅后重试；请勿在提取前点击“注销账号”。日志中最后一次登录已退出、失败或重新初始化时，工具不会退回使用更早的凭据。工具不会改变日志，也不会替你切换账号；读取的账号以你在官方客户端实际登录的账号为准。
+
+也可将 `config.example.json` 复制为 `data/astral_party/config.json`，按下表手动填写。
 
 | 配置字段 | 说明 |
 |---|---|
@@ -38,7 +73,7 @@
 | `timeout` | 每次连接/请求超时秒数，默认 15，上限 30 |
 | `cooldown` | 全插件查询间隔秒数，默认 10 |
 
-这些参数对应官方客户端 `LoginServiceHelper.RequestConnectWithBnSdk(gameID, channelID, appID, sid, extra, deviceid)`。需由专用账号的授权登录流程取得，不能拿玩家 UID、TapTap 网页 Cookie 或平台 access_token 直接替代 `sid`。本插件不实现 SDK 自动登录或凭据自动续期；凭据失效时更新配置，下一次查询自动重读。服务器地址应取当前渠道官方引导返回的 `serverUrl`；安装包中的引导路径为 `/api/hotaddressServer/get?route=CN_TAPTAP&version=...`，服务地址/版本以实际客户端为准。
+这些参数对应官方客户端 `LoginServiceHelper.RequestConnectWithBnSdk(gameID, channelID, appID, sid, extra, deviceid)`。需由专用账号的授权登录流程取得，不能拿玩家 UID、TapTap 网页 Cookie 或平台 access_token 直接替代 `sid`。本插件不实现 SDK 自动登录或凭据自动续期；凭据失效时重新登录专用账号并运行工具更新配置，下一次查询自动重读。服务器地址对应当前渠道官方引导返回的 `serverUrl`；安装包中的引导路径为 `/api/hotaddressServer/get?route=CN_TAPTAP&version=...`，服务地址/版本以实际客户端为准。
 
 每次查询建立短连接，完成官方登录和读取后关闭；多人请求串行，繁忙时提示稍后重试。账号应专用于查询，避免与正在游玩的同一账号竞争登录。配置与绑定目录已从 Git 排除，错误与日志不输出凭据。
 
