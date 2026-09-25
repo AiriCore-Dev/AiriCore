@@ -20,107 +20,49 @@
 
 所有指令均以 `astral` 开头，参数间使用空格；不再注册原中文指令。指令前缀遵循 Airi 的 `COMMAND_START` 配置。`me` 及其 `recent`、`battle` 子指令仅在已绑定时可用；UID、页码和序号应替换为实际数字。绑定不验证账号所有权。对局序号按照查询时的最新战绩从新到旧排列，新对局产生后序号可能改变。
 
-## 配置专用查询账号
+## 在 Bot 中管理飞魔查询账号
 
-1. 在 AiriCore 工作目录执行 `conda run -n airidev python -m pip install -r requirements.txt`，新增依赖为 `protobuf==6.33.6`。
-2. 在官方客户端自行注册或选择专用国服账号，登录并进入游戏大厅。
-3. 运行下方本机配置工具，按提示从此次游戏日志提取 SDK 参数，并生成 `data/astral_party/config.json`。保持大厅打开直到保存完成，然后正常关闭游戏。
-4. 启动或重启 Airi，发送 `astral status`，再用一个已知 UID 验证资料、战绩与单场详情。
+所有凭据管理操作均可在 Bot 中完成。生产机只需运行 AiriCore 并安装项目依赖，无需游戏客户端、Windows、日志提取、命令行账号工具或 cron。只使用已注册的飞魔手机号密码账号；游戏账号注册、实名验证或密码找回不属于本地凭据管理，工具不代办、不绕过这些步骤。
 
-### 本机账号配置工具
+使用已配置为 Airi 超级用户的 QQ 私聊 Bot，每次指令携带项目现有双重验证码。`验证码` 替换为当前六位动态码，不是短信验证码。指令前缀仍遵循 Airi 的 `COMMAND_START` 配置。
 
-在 AiriCore 目录运行：
-
-```powershell
-conda run --no-capture-output -n airidev python plugins/airi_astral_party/account_tool.py
-```
-
-工具用于获取你已登录的专用账号的查询凭据，不自动注册游戏账号。默认导出模式读取当前用户的 `AppData/LocalLow/feimo/吉星派对/Player.log`，从游戏原有日志提取最新登录的游戏、渠道、应用、设备标识及 `sid`、`extra`，再从 `吉星派对.exe` 的已建立 TCP 连接识别服务器。导出模式不联网；`--login` 和 `--refresh` 会连接官方授权服务。工具不启动 Bot。开发测试只使用合成数据，实际授权仍需首次运行验证。
-
-终端仅显示脱敏摘要，不显示会话与设备标识。确认后原子写入配置；更新已有配置会保留 `timeout` 和 `cooldown`，坏档不覆盖。Windows 文件权限限制为当前用户与系统；其他系统使用 `0600`。未修改的游戏日志本身由官方客户端管理。
-
-常用参数：
-
-| 参数 | 用途 |
+| 私聊指令 | 操作 |
 |---|---|
-| `--log-file 路径` | 指定本次专用账号登录的 UTF-8 日志；读取末尾最多 16 MiB |
-| `--host 地址` | 无法自动识别时，手动指定游戏 TCP 服务器地址 |
-| `--port 8800` | 指定实际游戏端口，默认 8800 |
-| `--pid 进程号` | 限定用于识别服务器的游戏进程 |
-| `--client-version 3.2.1` | 指定客户端应用版本，与实际安装版本一致 |
-| `--output 路径` | 指定配置输出位置，默认指向该仓库的 `data/astral_party/config.json` |
-| `--yes` | 已登录正确的专用账号，跳过交互确认并写入或更新配置 |
-| `--dry-run` | 只检查并显示脱敏摘要，不写入配置 |
-| `--login` | 使用已有服务器配置，私密输入飞魔账号手机号和密码；需要联网 |
-| `--refresh` | 读取飞魔自动登录凭据，达到六小时间隔后重新登录并获取游戏 sid；需要联网 |
-| `--check` | 离线检查已有配置与续期状态，不读取游戏日志或访问网络 |
-| `--sdk-channel 标识` | 仅用于飞魔登录：飞魔安装渠道，对应游戏目录或上级目录 `SetupInfo.ini` 的 `[Setup] fileName`，没有该文件时使用客户端默认值 `test_junhai`；不同于 `channel_id` |
+| `astral 验证码 account help` | 查看账号管理图片帮助 |
+| `astral 验证码 account login 手机号 密码` | 首次登录、重新登录、更新本地保存的密码或更换专用飞魔账号；没有配置时自动获取服务器并生成设备标识 |
+| `astral 验证码 account setup` | 从官方引导重新获取当前应用的服务器地址，不清除已有凭据 |
+| `astral 验证码 account setup 应用ID` | 选择已适配的应用配置；已有登录凭据时，切换应用必须先清除凭据 |
+| `astral 验证码 account refresh` | 立即重新登录并更新 sid，不等待自动更新间隔 |
+| `astral 验证码 account check` | 只检查本地服务器配置和登录状态，不展示账号、密码、派生值或 sid |
+| `astral 验证码 account clear confirm` | 清除本地 sid、手机号与密码派生凭据并停止自动登录；保留服务器配置和玩家 UID 绑定 |
 
-只检查本次登录参数：
+最快流程：私聊 `astral 验证码 account login 手机号 密码`，收到登录成功图片后，发送 `astral UID` 验证实际查询。更换密码或账号时再次使用 `login`；失败不会覆盖原配置。`clear confirm` 清除的是此 Bot 的本地凭据，不注销飞魔账号、不撤销平台上的其他会话。
 
-```powershell
-conda run --no-capture-output -n airidev python plugins/airi_astral_party/account_tool.py --yes --dry-run
-```
+密码取手机号之后的剩余文本，支持中间空格，不支持换行及首尾空白。正常 OneBot 消息解析时，输入会在日志和其他插件处理前转换为隐藏的内存凭据，消息正文、原消息及 raw_message 不保留手机号密码；处理结束丢弃内存凭据。Airi 不将原始密码写入配置、日志、图片或 LLM 上下文，并尝试撤回登录消息。**QQ 和 OneBot 上游仍可能保存发送记录，撤回不能保证删除上游记录。** 请仅私聊发送专用账号凭据。
 
-找不到完整登录记录时，重新启动官方客户端，用专用账号登录进入大厅后重试；请勿在提取前点击“注销账号”。日志中最后一次登录已退出、失败或重新初始化时，工具不会退回使用更早的凭据。工具不会改变日志，也不会替你切换账号；读取的账号以你在官方客户端实际登录的账号为准。
+配置保存于 `data/astral_party/config.json`。保存的密码派生值为飞魔 SDK 使用的 `md5(password + md5(password))`，具有密码等价权限，不能公开或提交 Git。Windows 设置用户专用 ACL；Linux 文件权限为 600，首次创建目录为 700。更新使用文件锁、临时文件、原子替换和文件/目录同步。原配置损坏时保留文件并停止，不用新值覆盖坏档。
 
-也可将 `config.example.json` 复制为 `data/astral_party/config.json`，按下表手动填写。
+### 自动更新与 Linux 迁移
 
-| 配置字段 | 说明 |
-|---|---|
-| `host`、`port` | 游戏 TCP 服务器地址与端口；必填地址，不是官网、CDN 或 TapTap 网页地址 |
-| `client_version` | 客户端应用版本，当前解析安装包为 `3.2.1`；热更新资源版本与此值不同 |
-| `game_id`、`channel_id`、`app_id` | 官方 SDK 登录回调对应的三项标识，均必填 |
-| `sid` | 专用账号当前有效的 SDK 会话凭据，必填；不会通过聊天接收 |
-| `extra` | 官方 SDK 回调附加参数，若无则留空 |
-| `device_id` | 对应登录会话的设备标识，必填 |
-| `timeout` | 每次连接/请求超时秒数，默认 15，上限 30 |
-| `cooldown` | 全插件查询间隔秒数，默认 10 |
+Bot 启动时及每小时检查一次，距上次登录达到六小时便使用保存的飞魔凭据重新登录。定时登录、手动凭据操作和玩家查询串行，避免更新会话时发起旧会话查询。后台任务接入项目协调器，关闭时等待正在写入的操作完成。服务器拒绝登录时保留旧凭据，写入脱敏错误日志，下次检查再尝试；管理员可通过 `account refresh` 立即重试或 `account login` 更新凭据。
 
-这些参数对应官方客户端 `LoginServiceHelper.RequestConnectWithBnSdk(gameID, channelID, appID, sid, extra, deviceid)`。需由专用账号的授权登录流程取得，不能拿玩家 UID、TapTap 网页 Cookie 或平台 access_token 直接替代 `sid`。`renewal` 是工具生成的可选续期材料，禁止手动填入网页 Cookie。只完成默认导出时仍是临时会话；重新导出会清除旧续期材料，防止更换账号后旧授权覆盖新账号。下一次查询自动重读配置。服务器地址对应当前渠道官方引导返回的 `serverUrl`；安装包中的引导路径为 `/api/hotaddressServer/get?route=CN_TAPTAP&version=...`，服务地址/版本以实际客户端为准。
+已有配置直接迁移到 Linux 的同一数据路径即可。以运行 Airi 的用户保存，执行一次 `chmod 700 data/astral_party` 和 `chmod 600 data/astral_party/config.json`；也可在生产机运行的 Bot 中重新私聊登录，完全不迁移凭据。配置不依赖 Windows DPAPI、注册表或游戏缓存。迁移后仅运行一个 Airi 实例，停用旧 cron，避免多台机器反复登录同一账号。Bot 不在线期间不会定时更新，重启后自动检查补更。
 
-### 飞魔账号与 Linux 持续运行
+`astral status` 和 `account check` 显示本地状态，不证明服务端授权仍有效。六小时是工具的更新间隔；客户端超过十二小时重连会重新登录，但这不代表服务端承诺的精确有效期。密码修改、账号限制或协议更新可能中断长期使用，应通过 Bot 更新凭据或完成平台要求的验证。
 
-自动登录只使用飞魔账号的手机号和密码，对应客户端 `TYPE_TELPWD=19`、`tel_num` / `password`。不使用 TapTap 扫码、Cookie 或令牌。请先在官方客户端完成专用飞魔账号的注册、设置密码和必要验证；本工具不会注册账号。
+### 首次配置的协议来源
 
-实现依据本机 3.2.1 客户端中的飞魔 SDK 静态还原，已通过离线测试，尚未使用真实专用账号验证。六小时是工具的刷新间隔，不是服务端承诺的有效期。客户端在 SDK 登录满十二小时后重连会重新登录；迁移临时 sid 本身无法长期使用。
+已解析客户端的游戏标识为 `120000182`，飞魔 SDK 默认渠道标识为 `2`。应用标识与签名成对支持 `110001958`（默认、所解析安装渠道）及 `110001950`（SDK 默认分支）。两者都只使用飞魔手机号密码接口 `TYPE_TELPWD=19`；应用标识不代表本工具使用第三方账号登录。
 
-Windows 完成上面的本机导出并正常关闭游戏后，在交互式终端执行：
+服务器从官方 HTTPS 引导 `https://se-web-cn.feimogames.com:7878/api/hotaddressServer/get?route=应用ID&version=3.2.1` 获取。原生调用会将 `route` 替换为 SDK 应用 ID。2026-09-25 的公开无凭据请求确认 `110001958` 返回 `se-jump-cn-01.feimogames.com:8800`；`110001950` 返回空配置，当前不可通过它初始化。工具验证应用、版本、官方域名与端口，不将空配置当成成功，不向非官方目标发送游戏会话。
 
-```powershell
-conda run --no-capture-output -n airidev python plugins/airi_astral_party/account_tool.py --login
-conda run --no-capture-output -n airidev python plugins/airi_astral_party/account_tool.py --check
-```
+新账号在没有本地配置时自动获取引导并生成稳定设备标识；后续登录继续使用它。已有旧配置仍可读取；仅含临时 sid 的配置需要在 Bot 中执行一次 `account login` 才能启用自动登录。`setup` 只更新连接配置，不自动登录。
 
-工具提示输入飞魔手机号和密码，均不回显，不提供密码命令行参数。登录成功后保存手机号、飞魔账号标识、密码派生值和游戏会话；不保存原始密码。派生值为官方 SDK 使用的 `md5(password + md5(password))`，具有密码等价权限，必须作为密码保管，不能公开、提交 Git 或发送给 Bot。Windows 写入时设置用户专用 ACL，Linux 写入时设置权限 600；使用文件锁、临时文件、原子替换和文件/目录同步保存。
+### 可选的本机维护工具
 
-`app_id` 与签名参数必须配套：当前适配客户端默认飞魔配置 `110001950`，以及已解析安装渠道配置 `110001958`。二者均走飞魔手机号密码接口；安装渠道标识不等同于账号类型。工具按现有 `app_id` 选择配套签名，不会只改签名或擅自改写 `game_id`、`channel_id`、`app_id`。若服务端不接受当前渠道的飞魔账号，应从可正常登录该账号的官方客户端重新导出对应配置；跨渠道角色互通尚未验证。
+保留 `account_tool.py --check / --login / --refresh` 供运维使用。默认无参数模式仍可从 Windows 官方日志导出临时会话，但 Bot 首次配置不依赖这条路径。重新导出会清除旧续期材料，之后需要重新登录。
 
-将最新的 `data/astral_party/config.json` 通过 SSH/SCP 传到生产机，以运行 Airi 的用户保存。以下假设部署目录为 `/opt/AiriCore`，Python 为 `/opt/AiriCore/.venv/bin/python`，请替换为实际路径：
-
-```sh
-cd /opt/AiriCore
-chmod 700 data/astral_party
-chmod 600 data/astral_party/config.json
-/opt/AiriCore/.venv/bin/python plugins/airi_astral_party/account_tool.py --check
-/opt/AiriCore/.venv/bin/python plugins/airi_astral_party/account_tool.py --refresh
-```
-
-生产机使用已安装 AiriCore 依赖的 Python 环境，无需 Windows、图形界面、游戏客户端或 Miniconda。配置不绑定 Windows DPAPI、注册表或密钥链。迁移后保留配置中的设备标识和 SDK 协议设备字段；`os=windows` 是所还原客户端协议字段，不是生产机平台检测结果。
-
-用运行 Airi 的用户执行 `crontab -e`，每小时检查一次：
-
-```cron
-17 * * * * cd /opt/AiriCore && /opt/AiriCore/.venv/bin/python plugins/airi_astral_party/account_tool.py --refresh >> /opt/AiriCore/logs/astral-account.log 2>&1
-```
-
-预先创建可写的 `logs` 目录并配置日志轮转。`--refresh` 未到六小时直接退出，到期后调用飞魔 `/account/authorize` 重新登录，校验返回的飞魔账号标识一致后原子更新 sid。请求失败或保存失败不会丢失原有密码派生凭据，下一次可重新登录。Bot 下次查询会重读配置，无需重启；`astral status` 仅显示本地配置状态，不主动验证服务端授权。
-
-失败退出码为 1，请纳入生产机现有监控。只在生产机启用定时任务，避免两台机器重复登录；迁移后关闭开发机游戏。密码修改、账号限制、身份验证或协议升级仍可能要求在官方客户端处理后重新执行 `--login`，Linux 交互式终端同样支持该命令。凭据可重复登录的设计不代表服务端承诺永久有效。
-
-首次部署需实际验证玩家查询、跨越十二小时的多次定时登录、停机重启后的恢复。当前仅在 Windows 的 airidev 环境完成离线协议和文件持久化测试，没有真实 Linux 运行环境或账号联调结果。
-
-每次查询建立短连接，完成官方登录和读取后关闭；多人请求串行，繁忙时提示稍后重试。账号应专用于查询，避免与正在游玩的同一账号竞争登录。配置与绑定目录已从 Git 排除，错误与日志不输出凭据。
+每次玩家查询建立短连接，完成读取后关闭。查询账号应专用，避免与同账号游玩竞争登录。数据目录已从 Git 排除。
 
 ## 数据范围与界面
 
@@ -142,6 +84,6 @@ conda run -n airidev python plugins/airi_astral_party/export_assets.py --game-di
 
 导出脚本不读取账号凭据、不访问网络，也不重建通信描述符；协议更新需要重新检查当前版本程序集中的反射描述符与 RPC 调用。
 
-按本次开发要求，完成离线验证后再配置专用账号。当前已验证本地 TCP 模拟服务、真实协议序列化、隐私处理、绑定存储、图片合成和插件加载；尚未使用真实账号联调。在线权限、服务端数据完整性、实际凭据寿命和未来版本兼容性待首次部署验证，不应把静态协议还原视为在线查询成功。
+按本次开发要求，完成离线验证后再配置专用账号。当前已验证本地 TCP 模拟服务、真实协议序列化、隐私处理、绑定存储、图片合成、Bot 凭据管理及插件加载；公开服务器引导已无凭据读取验证，尚未使用真实账号联调，也未在 Linux 实机运行。在线权限、服务端数据完整性、实际凭据寿命和未来版本兼容性待首次部署验证，不应把静态协议还原视为在线查询成功。
 
 开发验证：`conda run -n airidev python -m unittest discover -s tests -p "test_astral_party*.py" -v`。测试不连接游戏服务器，也不会读取本机游戏账号凭据。

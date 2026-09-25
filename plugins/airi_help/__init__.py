@@ -307,7 +307,9 @@ pending_bottle、pending_comment、pending_jb""",
     ),
     make_node(
         "其他插件管理",
-        """刷新/重置今日老婆（及自定义别名）
+        """astral 验证码 account help（仅私聊：飞魔账号登录、续期与清除）
+
+刷新/重置今日老婆（及自定义别名）
 设置换老婆次数、开启换老婆、关闭换老婆
 强娶、换老婆、hlp
 

@@ -381,6 +381,7 @@ def render_help():
             "astral me battle 序号  ·  已绑定玩家的对局详情",
             "astral UID battle 序号  ·  指定玩家的对局详情",
             "astral status  ·  查看绑定与查询账号配置状态",
+            "astral 验证码 account help  ·  超级用户私聊管理飞魔查询账号",
             "me 仅限已绑定后使用；绑定仅用于快捷查询，不代表账号认证。",
             "UID、页码和序号请替换为实际数字；资料和对局按公开范围展示。",
         ],

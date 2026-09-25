@@ -23,9 +23,10 @@ class Settings:
     cooldown: float = 10.0
     renewal: dict = field(default_factory=dict, repr=False)
 
-    def validate(self):
+    def validate(self, require_session=True):
         if not all(isinstance(getattr(self, key), str) and getattr(self, key).strip()
-                   for key in ('host', 'game_id', 'channel_id', 'app_id', 'sid', 'device_id')):
+                   for key in ('host', 'game_id', 'channel_id', 'app_id', 'device_id')) or (
+                       require_session and (not isinstance(self.sid, str) or not self.sid.strip())):
             raise QueryError('尚未配置吉星派对查询账号，请联系管理员配置专用账号')
         if not isinstance(self.port, int) or isinstance(self.port, bool) or not 1 <= self.port <= 65535:
             raise QueryError('吉星派对配置中的端口无效')
@@ -53,7 +54,7 @@ def load_settings(path=None):
         if not isinstance(data, dict) or set(data) - {f.name for f in fields(Settings)}:
             raise ValueError
         settings = Settings(**data)
-        settings.validate()
+        settings.validate(require_session=False)
         return settings
     except (OSError, ValueError, TypeError):
         raise QueryError('吉星派对账号配置无效，请管理员检查本机配置文件') from None

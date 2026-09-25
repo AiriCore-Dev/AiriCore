@@ -148,7 +148,7 @@ def sync_directory(path):
 
 def write_settings(path, settings):
     path = Path(path)
-    settings.validate()
+    settings.validate(require_session=False)
     encoded = json.dumps(asdict(settings), ensure_ascii=False, indent=2).encode('utf-8')
     if len(encoded) > 65536:
         raise QueryError('账号配置超过大小限制，原文件未变更')
@@ -224,7 +224,7 @@ def main(argv=None):
                 raise QueryError('联网授权与续期不支持 --dry-run；请使用 --check 离线检查')
             if args.check:
                 settings = load_settings(args.output)
-                settings.validate()
+                settings.validate(require_session=False)
                 print(authorization_status(settings))
                 print('仅检查本地配置，未验证服务器是否接受授权。')
             elif args.login:

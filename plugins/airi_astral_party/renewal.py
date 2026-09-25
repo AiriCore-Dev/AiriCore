@@ -40,11 +40,11 @@ def validate_authorization(auth):
     if not auth:
         return
     if set(auth) != AUTH_KEYS or auth['provider'] != 'feimo':
-        raise QueryError('续期配置不是受支持的飞魔账号配置，请执行 --login 重新配置')
+        raise QueryError('续期配置不是受支持的飞魔账号配置，请管理员检查本地配置')
     if not isinstance(auth['phone'], str) or not re.fullmatch(r'1[0-9]{10}', auth['phone']):
         raise QueryError('飞魔账号手机号格式无效')
     if not isinstance(auth['password_digest'], str) or not re.fullmatch(r'[0-9a-f]{32}', auth['password_digest']):
-        raise QueryError('飞魔账号凭据格式无效，请执行 --login 重新配置')
+        raise QueryError('飞魔账号凭据格式无效，请管理员检查本地配置')
     for key in ('sdk_channel', 'device_name', 'os_version', 'user_id'):
         if not _text(auth[key], 512, empty=key == 'user_id'):
             raise QueryError('续期配置中的设备或账号字段无效')
@@ -52,7 +52,7 @@ def validate_authorization(auth):
     if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or value < 0:
         raise QueryError('续期配置中的时间无效')
     if value and not auth['user_id']:
-        raise QueryError('续期配置缺少飞魔账号标识，请执行 --login 重新配置')
+        raise QueryError('续期配置缺少飞魔账号标识，请管理员检查本地配置')
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -104,7 +104,7 @@ def sdk_sign(values, app_id):
 
 
 def _check_settings(settings):
-    settings.validate()
+    settings.validate(require_session=False)
     if settings.extra != 'bn' or settings.client_version != '3.2.1':
         raise QueryError('飞魔自动登录目前仅适配已解析的 3.2.1 飞魔 SDK，请核对客户端版本')
     sdk_sign({}, settings.app_id)
@@ -133,24 +133,24 @@ def _game_session(settings, auth, now):
     if not _text(sid) or not _text(user_id, 512):
         raise QueryError('飞魔未返回完整会话和账号标识，原配置已保留')
     if auth['user_id'] and auth['user_id'] != user_id:
-        raise QueryError('飞魔返回了不同账号，已停止更新；请核对专用账号后重新 --login')
+        raise QueryError('飞魔返回了不同账号，已停止更新；请核对专用账号后私聊 astral 验证码 account login 手机号 密码')
     return sid, user_id
 
 
-def refresh(path, now=None):
+def refresh(path, now=None, force=False):
     from .account_setup import write_settings
     path = Path(path)
     if not path.is_file():
-        raise QueryError('未找到账号配置，请先导出服务器配置并执行 --login')
+        raise QueryError('未找到账号配置，请管理员私聊 astral 验证码 account login 手机号 密码')
     try:
         with FileLock(str(path) + '.lock', timeout=3):
             settings = load_settings(path)
             _check_settings(settings)
             if not settings.renewal:
-                raise QueryError('只有临时 sid，无法自动续期；请执行 --login 配置飞魔专用账号')
+                raise QueryError('尚未配置自动登录，请管理员私聊 astral 验证码 account login 手机号 密码')
             now = time.time() if now is None else now
             auth = copy.deepcopy(settings.renewal)
-            if auth['session_at'] and 0 <= now - auth['session_at'] < REFRESH_SECONDS:
+            if not force and auth['session_at'] and 0 <= now - auth['session_at'] < REFRESH_SECONDS:
                 return False
             sid, user_id = _game_session(settings, auth, now)
             auth.update(user_id=user_id, session_at=now)
@@ -161,10 +161,9 @@ def refresh(path, now=None):
 
 
 def login(path, sdk_channel='test_junhai'):
-    from .account_setup import write_settings
     path = Path(path)
     if not path.is_file():
-        raise QueryError('请先导出或手动填写服务器配置，再执行 --login')
+        raise QueryError('尚无服务器配置；可在 Bot 私聊使用 astral 验证码 account login 手机号 密码 完成首次配置')
     if not _text(sdk_channel, 512):
         raise QueryError('SDK 安装渠道标识无效')
     try:
@@ -179,14 +178,46 @@ def login(path, sdk_channel='test_junhai'):
                     digest = password_digest(getpass.getpass('飞魔账号密码：'))
             except getpass.GetPassWarning:
                 raise QueryError('当前终端无法隐藏输入，请在交互式终端运行；不会使用明文输入回退') from None
-            auth = {'provider': 'feimo', 'phone': phone, 'password_digest': digest,
-                    'sdk_channel': sdk_channel, 'device_name': platform.node() or 'AiriCore',
-                    'os_version': platform.platform(), 'user_id': '', 'session_at': 0}
-            validate_authorization(auth)
-            now = time.time()
-            sid, user_id = _game_session(settings, auth, now)
-            auth.update(user_id=user_id, session_at=now)
-            write_settings(path, replace(settings, sid=sid, extra='bn', renewal=auth))
+            _save_login(path, settings, phone, digest, sdk_channel)
+    except Timeout:
+        raise QueryError('其他进程正在更新授权，请稍后重试') from None
+
+
+def _save_login(path, settings, phone, digest, sdk_channel):
+    from .account_setup import write_settings
+    _check_settings(settings)
+    auth = {'provider': 'feimo', 'phone': phone, 'password_digest': digest,
+            'sdk_channel': sdk_channel, 'device_name': platform.node() or 'AiriCore',
+            'os_version': platform.platform(), 'user_id': '', 'session_at': 0}
+    validate_authorization(auth)
+    now = time.time()
+    sid, user_id = _game_session(settings, auth, now)
+    auth.update(user_id=user_id, session_at=now)
+    write_settings(path, replace(settings, sid=sid, extra='bn', renewal=auth))
+
+
+def login_credentials(path, phone, digest):
+    from .bootstrap import initial_settings
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+    try:
+        with FileLock(str(path) + '.lock', timeout=3):
+            settings = load_settings(path) if path.exists() else initial_settings()
+            sdk_channel = settings.renewal.get('sdk_channel', 'test_junhai')
+            _save_login(path, settings, phone, digest, sdk_channel)
+    except Timeout:
+        raise QueryError('其他进程正在更新授权，请稍后重试') from None
+
+
+def clear_credentials(path):
+    from .account_setup import write_settings
+    path = Path(path)
+    if not path.is_file():
+        return
+    try:
+        with FileLock(str(path) + '.lock', timeout=3):
+            settings = load_settings(path)
+            write_settings(path, replace(settings, sid='', renewal={}))
     except Timeout:
         raise QueryError('其他进程正在更新授权，请稍后重试') from None
 
@@ -194,12 +225,12 @@ def login(path, sdk_channel='test_junhai'):
 def authorization_status(settings):
     auth = settings.renewal
     if not auth:
-        return '仅配置临时会话，未启用飞魔自动登录'
+        return '尚未配置飞魔自动登录，请管理员私聊 astral 验证码 account help'
     if not auth['session_at']:
-        return '飞魔游戏会话待更新；请运行 --refresh'
+        return '飞魔游戏会话待更新，请管理员私聊 astral 验证码 account refresh'
     age = time.time() - auth['session_at']
     if age < 0:
         return '续期时间异常，请检查系统时间'
     if age >= REFRESH_SECONDS:
-        return '已到飞魔会话更新间隔，请检查 Linux 定时任务'
-    return '已配置飞魔自动登录，需由 Linux 定时任务持续更新'
+        return '已到会话更新间隔；若持续未更新，请管理员检查账号'
+    return '已配置飞魔自动登录，由 Bot 持续更新会话'

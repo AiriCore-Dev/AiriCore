@@ -10,6 +10,110 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class AstralPartyIntegrationTests(unittest.TestCase):
+    def test_bot_account_entry_scrubs_credentials_and_enforces_private_2fa(self):
+        program = r'''
+import asyncio
+import base64
+import io
+import json
+from pathlib import Path
+from unittest.mock import AsyncMock, patch
+
+import nonebot
+from nonebot.adapters.onebot.v11 import Adapter, Message
+from PIL import Image
+
+nonebot.init(_env_file=None, driver='~fastapi', command_start={'', '/'}, nickname={'Airi', '小 Airi'}, superusers={'1'}, _2fa_key='JBSWY3DPEHPK3PXP')
+nonebot.get_driver().register_adapter(Adapter)
+plugin = nonebot.load_plugin('plugins.airi_astral_party')
+assert plugin is not None
+app = plugin.module
+assert hasattr(app, 'accounts'), 'Bot 还未接入账号管理'
+from plugins.airi_astral_party import bootstrap, renewal, runtime
+from utils.superuser_2fa import superuser_2fa_preprocessor
+from utils.observability import redact_astral_account_log
+
+def event(raw, user=1, group=False):
+    data = dict(time=1, self_id=2, post_type='message', message_id=3, user_id=user,
+                message=[{'type': 'text', 'data': {'text': raw}}], raw_message=raw, font=0,
+                sender={'user_id': user, 'nickname': '测试'},
+                message_type='group' if group else 'private', sub_type='normal' if group else 'friend')
+    if group:
+        data['group_id'] = 4
+    return Adapter.json_to_event(data)
+
+async def main():
+    bot = AsyncMock()
+    for prefix in ('Airi ', 'Airi，', '小 Airi '):
+        nick_event = event(prefix + '/astral 123456 account login 13800000000 private password&<文本>')
+        assert '13800000000' not in nick_event.json(), '昵称前缀绕过了脱敏'
+        assert nick_event._astral_credentials is not None
+        assert nick_event._astral_credentials.digest == renewal.password_digest('private password&<文本>')
+    for space in ('\r\n', '\u00a0', '\u3000', '\t'):
+        for raw in (f'astral{space}123456 account{space}login 13800000000 private',
+                    f'astral 123456 account{space}login{space}13800000000 private'):
+            whitespace_event = event(raw)
+            assert '13800000000' not in whitespace_event.model_dump_json(), '空白字符绕过脱敏'
+            assert '13800000000' not in whitespace_event.get_plaintext()
+    server = {'version': '3.2.1', 'route': '110001958', 'noticeUrl': '', 'serverUrl': 'se-jump-cn-01.feimogames.com:8800'}
+    responses = []
+    def transport(method, url, data=None):
+        assert data['login_type'] == '19'
+        assert data['tel_num'] == '13800000000'
+        assert data['password'] == renewal.password_digest('private password&<文本>')
+        responses.append(data['password'])
+        return {'ret': 1, 'content': {'authorize_code': 'private-session', 'user_id': 'opaque-id'}}
+    with patch.object(bootstrap, 'request_server', return_value=server), patch.object(renewal, 'request_json', side_effect=transport), patch('utils.superuser_2fa.totp_verify', side_effect=lambda secret, code: code == '123456'):
+        for user, group, code in ((2, False, '123456'), (1, True, '123456'), (1, False, '654321'), (1, False, '123456')):
+            current = event(f'/astral {code} account login 13800000000 private password&<文本>', user, group)
+            assert current is not None
+            for surface in (str(current), repr(current), current.json(), current.get_log_string(), str(current.original_message), current.raw_message):
+                assert '13800000000' not in surface, surface
+                assert 'private password' not in surface, surface
+            await superuser_2fa_preprocessor(current)
+            await app.handle(bot, current, ('astral',), Message('account login'))
+            if user == 1 and not group and code == '123456':
+                assert Path('data/astral_party/config.json').is_file()
+            else:
+                assert not Path('data/astral_party/config.json').exists()
+        assert len(responses) == 1
+        assert current._astral_credentials is None
+        payload = bot.send.call_args.args[1].data['file']
+        assert payload.startswith('base64://')
+        picture = Image.open(io.BytesIO(base64.b64decode(payload[9:])))
+        picture.load()
+        assert picture.format == 'PNG'
+        assert 'private password' not in Path('data/astral_party/config.json').read_text()
+        assert bot.delete_msg.call_count >= 1
+        for action in ('check', 'refresh', 'clear confirm'):
+            current = event('astral 123456 account ' + action)
+            await superuser_2fa_preprocessor(current)
+            await app.handle(bot, current, ('astral',), Message('account ' + action))
+        saved = json.loads(Path('data/astral_party/config.json').read_text())
+        assert saved['sid'] == '' and saved['renewal'] == {}
+        assert len(responses) == 2
+    for message in ('收到 /astral 123456 account login 13800000000 private', '解析失败 astral account login\n13800000000\nprivate'):
+        record = {'message': message, 'exception': RuntimeError('private')}
+        redact_astral_account_log(record)
+        assert 'private' not in record['message'] and '13800000000' not in record['message']
+        assert record['exception'] is None
+    harmless = {'message': 'astral 123 recent', 'exception': None}
+    redact_astral_account_log(harmless)
+    assert harmless['message'] == 'astral 123 recent'
+    await runtime.shutdown()
+    print('Bot 飞魔登录、权限、脱敏和清除验证通过')
+
+asyncio.run(main())
+'''
+        with tempfile.TemporaryDirectory() as directory:
+            environment = os.environ.copy()
+            environment['PYTHONPATH'] = str(ROOT)
+            environment['PYTHONIOENCODING'] = 'utf-8'
+            result = subprocess.run([sys.executable, '-c', program], cwd=directory,
+                                    env=environment, capture_output=True, text=True, encoding='utf-8', timeout=90)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn('权限', result.stdout)
+
     def test_isolated_nonebot_load_commands_tcp_and_base64(self):
         program = r'''
 import asyncio

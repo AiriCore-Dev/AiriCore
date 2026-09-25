@@ -1,9 +1,17 @@
 import asyncio
+import re
 import threading
 import time
 
 from nonebot import logger as _logger
 from nonebot.adapters.onebot.v11.exception import ActionFailed, NetworkError
+
+
+def redact_astral_account_log(record):
+    message = str(record.get('message', ''))
+    if re.search(r'\bastral\s+(?:[0-9]{6}\s+)?account\b', message, re.IGNORECASE):
+        record['message'] = '吉星派对账号管理消息：内容已隐藏'
+        record['exception'] = None
 
 
 def compact_api_timeout_traceback(record) -> bool:

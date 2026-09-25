@@ -323,6 +323,33 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
         self.runtime._closing = False
         self.runtime._render_lock = asyncio.Lock()
 
+    async def test_maintenance_starts_once_and_shutdown_drains_inflight_write(self):
+        import threading
+        loop = asyncio.get_running_loop()
+        started, release = asyncio.Event(), threading.Event()
+        completed = threading.Event()
+
+        def write():
+            loop.call_soon_threadsafe(started.set)
+            release.wait(timeout=3)
+            completed.set()
+
+        async def maintain():
+            await self.runtime.run_sync(write)
+
+        first = self.runtime.start_maintenance(maintain)
+        self.assertIs(first, self.runtime.start_maintenance(maintain))
+        await asyncio.wait_for(started.wait(), 2)
+        closing = asyncio.create_task(self.runtime.shutdown())
+        try:
+            await asyncio.sleep(0)
+            self.assertFalse(closing.done())
+        finally:
+            release.set()
+        await asyncio.wait_for(closing, 3)
+        self.assertTrue(completed.is_set())
+        self.assertTrue(first.done())
+
     async def test_shutdown_drains_operation_and_rejects_new_work(self):
         started, release = asyncio.Event(), asyncio.Event()
 
