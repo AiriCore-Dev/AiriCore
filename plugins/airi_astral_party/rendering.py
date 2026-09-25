@@ -10,6 +10,12 @@ from PIL import Image, ImageDraw
 from utils.cache import get_font, get_image
 
 from .service import PAGE_SIZE
+from .profile_rendering import (
+    paint_achievements,
+    paint_character,
+    paint_label,
+    paint_tabs,
+)
 
 
 ASSETS = Path(__file__).parent / "assets"
@@ -170,10 +176,9 @@ def render_message(title, lines):
 def render_profile(snapshot):
     canvas = _sprite("kn6fq3y", "Common").resize((1920, 1080), RESAMPLE)
     _paste(canvas, _sprite("f3tl12"), (390, 98))
-    _paste(canvas, _image("art/UT_Hero_Card_101.png"), (413, 122), (654, 826))
+    painting_notice = paint_character(canvas, snapshot)
     _paste(canvas, _sprite("f3tl1c"), (964, 108))
-    _paste(canvas, _sprite("it6m2u"), (1063, 175))
-    _text(canvas, "统计资料", (1090, 117, 365, 46), 30, align="center")
+    paint_tabs(canvas)
     show = snapshot.get("show") or {}
     statistics = show.get("statistics") or {}
     if not show.get("isShowData"):
@@ -181,6 +186,7 @@ def render_profile(snapshot):
     elif not statistics:
         _text(canvas, "暂无统计资料", (1085, 318, 365, 60), 30, align="center")
     else:
+        _paste(canvas, _sprite("it6m2u"), (1063, 175))
         fields = (
             ("累计参与局数", "fightCount"),
             ("累计胜利局数", "winFightCount"),
@@ -198,25 +204,23 @@ def render_profile(snapshot):
                 if value is None
                 else str(value)
             )
-            _text(canvas, f"{label}：{value}", (1085, 181 + index * 66, 345, 44), 29)
+            _text(
+                canvas,
+                f"{label}：{value}",
+                (1085, (181, 248, 315, 380, 447, 509)[index], 346, 44),
+                30,
+                "black",
+            )
     _paste(canvas, _sprite("m1i721"), (1015, 574), (48, 48))
     _paste(canvas, _sprite("m1i722"), (1015, 574), (48, 48))
-    _text(canvas, str(show.get("praiseNum", "—")), (1073, 574, 270, 49), 34)
-    _paste(canvas, _sprite("f3tl16"), (872, 659), (740, 278))
-    name, level, uid = _identity(snapshot)
-    _text(canvas, name, (919, 679, 634, 62), 40)
-    _text(
-        canvas, f"等级 {level if level is not None else '—'}", (922, 752, 260, 42), 28
-    )
-    _text(canvas, f"UID：{uid}", (922, 804, 634, 44), 28)
-    _text(
-        canvas,
-        "战绩已公开" if show.get("isShowFight") else "战绩未公开",
-        (922, 868, 630, 37),
-        25,
-        "#66636f",
-    )
-    _text(canvas, "固定主题 · 帕露南", (460, 904, 370, 40), 22, "white", align="center")
+    _text(canvas, str(show.get("praiseNum", "—")), (1064, 574, 174, 49), 36, "black")
+    _paste(canvas, _sprite("f3tl16"), (872, 721))
+    label_notice = paint_label(canvas, snapshot)
+    paint_achievements(canvas, snapshot)
+    if painting_notice:
+        _text(canvas, painting_notice, (450, 460, 500, 50), 28, "white", align="center")
+    if label_notice:
+        _text(canvas, label_notice, (1200, 685, 300, 32), 22, "#66636f")
     return _png(canvas.crop((360, 75, 1642, 967)))
 
 

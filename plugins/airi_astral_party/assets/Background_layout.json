@@ -47,7 +47,21 @@
           "height": 1080,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            0
+          ]
         },
         {
           "type": 4,
@@ -61,7 +75,13 @@
           "height": 1080,
           "alpha": 0.20000000298023224,
           "rotation": 0.0,
-          "visible": false
+          "visible": false,
+          "url": "ui://xuaw6o8jg1i49l",
+          "align": 1,
+          "verticalAlign": 1,
+          "fill": 4,
+          "shrinkOnly": false,
+          "autoSize": false
         },
         {
           "type": 4,
@@ -75,9 +95,16 @@
           "height": 1080,
           "alpha": 0.20000000298023224,
           "rotation": 0.0,
-          "visible": false
+          "visible": false,
+          "url": null,
+          "align": 1,
+          "verticalAlign": 1,
+          "fill": 4,
+          "shrinkOnly": false,
+          "autoSize": false
         }
-      ]
+      ],
+      "mask": -1
     }
   },
   "strings": [

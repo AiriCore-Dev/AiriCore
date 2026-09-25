@@ -79,9 +79,25 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": false,
+          "outlineColor": [
+            147,
+            161,
+            121,
+            255
+          ],
+          "outline": 1.0,
           "text": null
         }
-      ]
+      ],
+      "mask": -1
     },
     "7h6s24": {
       "type": 3,
@@ -169,9 +185,25 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "outline": 2.0,
           "text": "确定"
         }
-      ]
+      ],
+      "mask": -1
     },
     "f3tl14": {
       "type": 3,
@@ -197,7 +229,8 @@
           "visible": true,
           "flip": 0
         }
-      ]
+      ],
+      "mask": -1
     },
     "f3tl19": {
       "type": 3,
@@ -222,7 +255,13 @@
           "height": 132,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "url": null,
+          "align": 1,
+          "verticalAlign": 0,
+          "fill": 1,
+          "shrinkOnly": false,
+          "autoSize": false
         },
         {
           "type": 3,
@@ -236,9 +275,31 @@
           "height": 128,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "cornerRadius": [
+            20.0,
+            20.0,
+            20.0,
+            20.0
+          ]
         }
-      ]
+      ],
+      "mask": 1,
+      "reversedMask": false
     },
     "f3tl1j": {
       "type": 3,
@@ -263,7 +324,21 @@
           "height": 324,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            25,
+            28,
+            33,
+            178
+          ]
         },
         {
           "type": 3,
@@ -277,7 +352,8 @@
           "height": 324,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 0
         },
         {
           "type": 9,
@@ -321,7 +397,8 @@
           "rotation": 0.0,
           "visible": true
         }
-      ]
+      ],
+      "mask": -1
     },
     "f3tl1k": {
       "type": 3,
@@ -358,7 +435,8 @@
           ],
           "flip": 0
         }
-      ]
+      ],
+      "mask": -1
     },
     "f3tl1m": {
       "type": 3,
@@ -395,7 +473,8 @@
           ],
           "flip": 0
         }
-      ]
+      ],
+      "mask": -1
     },
     "f3tl1n": {
       "type": 3,
@@ -420,9 +499,24 @@
           "height": 6,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ]
         }
-      ]
+      ],
+      "mask": -1
     },
     "f3tl1r": {
       "type": 3,
@@ -447,7 +541,21 @@
           "height": 324,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            25,
+            28,
+            33,
+            178
+          ]
         },
         {
           "type": 3,
@@ -461,7 +569,8 @@
           "height": 324,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 0
         },
         {
           "type": 9,
@@ -505,7 +614,8 @@
           "rotation": 0.0,
           "visible": true
         }
-      ]
+      ],
+      "mask": -1
     },
     "f3tl1y": {
       "type": 3,
@@ -546,9 +656,31 @@
           "height": 828,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 1,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "cornerRadius": [
+            20.0,
+            20.0,
+            20.0,
+            20.0
+          ]
         }
-      ]
+      ],
+      "mask": 1,
+      "reversedMask": false
     },
     "f3tl1z": {
       "type": 3,
@@ -573,7 +705,21 @@
           "height": 8,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            51,
+            51,
+            51,
+            255
+          ]
         },
         {
           "type": 3,
@@ -587,7 +733,21 @@
           "height": 8,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            0,
+            255,
+            242,
+            255
+          ]
         },
         {
           "type": 6,
@@ -612,9 +772,18 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 0,
+          "underline": false,
+          "italic": false,
+          "bold": true,
+          "singleLine": true,
           "text": "50000/50000"
         }
-      ]
+      ],
+      "mask": -1
     },
     "hni02": {
       "type": 3,
@@ -639,7 +808,21 @@
           "height": 1080,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 1,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            0,
+            0,
+            0,
+            204
+          ]
         },
         {
           "type": 4,
@@ -653,7 +836,13 @@
           "height": 594,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "url": "ui://iepldke7f3tl12",
+          "align": 0,
+          "verticalAlign": 0,
+          "fill": 4,
+          "shrinkOnly": false,
+          "autoSize": false
         },
         {
           "type": 10,
@@ -696,9 +885,11 @@
           ],
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "title": "确定"
         }
-      ]
+      ],
+      "mask": -1
     },
     "hni04": {
       "type": 3,
@@ -728,7 +919,27 @@
           ],
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            162,
+            255,
+            23,
+            255
+          ],
+          "cornerRadius": [
+            46.0,
+            46.0,
+            46.0,
+            46.0
+          ]
         },
         {
           "type": 0,
@@ -787,7 +998,27 @@
           ],
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "cornerRadius": [
+            40.0,
+            40.0,
+            40.0,
+            40.0
+          ]
         },
         {
           "type": 9,
@@ -829,6 +1060,14 @@
           ],
           "align": 1,
           "verticalAlign": 0,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": false,
           "text": null
         },
         {
@@ -847,7 +1086,8 @@
           "rotation": 0.0,
           "visible": false
         }
-      ]
+      ],
+      "mask": -1
     },
     "hni07": {
       "type": 3,
@@ -872,7 +1112,13 @@
           "height": 264,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "url": null,
+          "align": 1,
+          "verticalAlign": 1,
+          "fill": 5,
+          "shrinkOnly": false,
+          "autoSize": false
         },
         {
           "type": 3,
@@ -886,9 +1132,31 @@
           "height": 226,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "cornerRadius": [
+            40.0,
+            40.0,
+            40.0,
+            40.0
+          ]
         }
-      ]
+      ],
+      "mask": 1,
+      "reversedMask": false
     },
     "it6m2w": {
       "type": 3,
@@ -914,7 +1182,8 @@
           "visible": true,
           "flip": 0
         }
-      ]
+      ],
+      "mask": -1
     },
     "it6m2x": {
       "type": 3,
@@ -1041,6 +1310,21 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "outline": 1.0,
           "text": "保存"
         },
         {
@@ -1066,6 +1350,21 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "outline": 1.0,
           "text": "播放"
         },
         {
@@ -1091,6 +1390,21 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "outline": 1.0,
           "text": "删除"
         },
         {
@@ -1116,9 +1430,25 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "outline": 1.0,
           "text": "保存完成"
         }
-      ]
+      ],
+      "mask": -1
     },
     "it6m32": {
       "type": 3,
@@ -1206,9 +1536,25 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "outline": 1.0,
           "text": "保存中"
         }
-      ]
+      ],
+      "mask": -1
     },
     "jgmz2e": {
       "type": 3,
@@ -1257,9 +1603,25 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "outline": 1.0,
           "text": "拉黑"
         }
-      ]
+      ],
+      "mask": -1
     },
     "p5xi2j": {
       "type": 3,
@@ -1295,6 +1657,14 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": null
         },
         {
@@ -1310,7 +1680,8 @@
           "visible": true,
           "flip": 0
         }
-      ]
+      ],
+      "mask": -1
     },
     "rrd628": {
       "type": 3,
@@ -1359,9 +1730,25 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "outline": 1.0,
           "text": "举报"
         }
-      ]
+      ],
+      "mask": -1
     },
     "x20l20": {
       "type": 3,
@@ -1386,7 +1773,21 @@
           "height": 860,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            0
+          ]
         },
         {
           "type": 9,
@@ -1398,7 +1799,8 @@
           "y": 815,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "title": "角色更换"
         },
         {
           "type": 0,
@@ -1596,7 +1998,8 @@
           ],
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "title": "数据"
         },
         {
           "type": 9,
@@ -1619,7 +2022,8 @@
           ],
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "title": "对局"
         },
         {
           "type": 9,
@@ -1642,7 +2046,8 @@
           ],
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "title": "回放"
         },
         {
           "type": 9,
@@ -1656,7 +2061,8 @@
           "height": 36,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "title": "不公开"
         },
         {
           "type": 9,
@@ -1670,7 +2076,8 @@
           "height": 36,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "title": "不公开"
         },
         {
           "type": 6,
@@ -1695,6 +2102,14 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": false,
           "text": null
         },
         {
@@ -1720,6 +2135,14 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": null
         },
         {
@@ -1758,6 +2181,14 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": "累计参与局数：{data=0}"
         },
         {
@@ -1783,6 +2214,14 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": "累计胜利局数：{data=0}"
         },
         {
@@ -1808,6 +2247,14 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": "拥有角色数量：{data=0}"
         },
         {
@@ -1833,6 +2280,14 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": "最常用角色：{data=0}"
         },
         {
@@ -1858,6 +2313,14 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": "拥有装扮数量：{data=0}"
         },
         {
@@ -1883,6 +2346,14 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": "拥有皮肤数量：{data=0}"
         },
         {
@@ -1922,6 +2393,14 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": null
         },
         {
@@ -2084,6 +2563,14 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": false,
           "text": "111"
         },
         {
@@ -2112,7 +2599,8 @@
           "rotation": 0.0,
           "visible": true
         }
-      ]
+      ],
+      "mask": -1
     },
     "zhzta": {
       "type": 3,
@@ -2137,7 +2625,27 @@
           "height": 131,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            139,
+            139,
+            139,
+            255
+          ],
+          "cornerRadius": [
+            20.0,
+            20.0,
+            20.0,
+            20.0
+          ]
         },
         {
           "type": 3,
@@ -2151,7 +2659,27 @@
           "height": 131,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            175,
+            175,
+            175,
+            255
+          ],
+          "cornerRadius": [
+            20.0,
+            20.0,
+            20.0,
+            20.0
+          ]
         },
         {
           "type": 6,
@@ -2176,6 +2704,14 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": true,
+          "singleLine": true,
           "text": "EMPTY"
         },
         {
@@ -2204,7 +2740,8 @@
           "rotation": 0.0,
           "visible": true
         }
-      ]
+      ],
+      "mask": -1
     },
     "zhztb": {
       "type": 3,
@@ -2229,7 +2766,21 @@
           "height": 1080,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 1,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            0,
+            0,
+            0,
+            204
+          ]
         },
         {
           "type": 3,
@@ -2243,7 +2794,21 @@
           "height": 636,
           "alpha": 0.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 1,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ]
         },
         {
           "type": 0,
@@ -2283,6 +2848,14 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": "还未达成任何成就"
         },
         {
@@ -2297,7 +2870,27 @@
           "height": 604,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            175,
+            175,
+            175,
+            255
+          ],
+          "cornerRadius": [
+            40.0,
+            40.0,
+            40.0,
+            40.0
+          ]
         },
         {
           "type": 5,
@@ -2356,7 +2949,8 @@
           ],
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "title": "确定"
         },
         {
           "type": 6,
@@ -2381,6 +2975,14 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 1,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": null
         },
         {
@@ -2397,7 +2999,8 @@
           "rotation": 0.0,
           "visible": true
         }
-      ]
+      ],
+      "mask": -1
     },
     "zhztc": {
       "type": 3,
@@ -2422,7 +3025,27 @@
           "height": 264,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            136,
+            136,
+            136,
+            255
+          ],
+          "cornerRadius": [
+            25.0,
+            25.0,
+            25.0,
+            25.0
+          ]
         },
         {
           "type": 3,
@@ -2436,7 +3059,27 @@
           "height": 268,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "cornerRadius": [
+            25.0,
+            25.0,
+            25.0,
+            25.0
+          ]
         },
         {
           "type": 3,
@@ -2450,7 +3093,27 @@
           "height": 264,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            175,
+            175,
+            175,
+            255
+          ],
+          "cornerRadius": [
+            25.0,
+            25.0,
+            25.0,
+            25.0
+          ]
         },
         {
           "type": 3,
@@ -2464,7 +3127,27 @@
           "height": 274,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            162,
+            255,
+            23,
+            255
+          ],
+          "cornerRadius": [
+            30.0,
+            30.0,
+            30.0,
+            30.0
+          ]
         },
         {
           "type": 6,
@@ -2489,6 +3172,21 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
           "text": null
         },
         {
@@ -2517,7 +3215,21 @@
           "height": 29,
           "alpha": 1.0,
           "rotation": -30.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            0,
+            102,
+            255
+          ]
         },
         {
           "type": 6,
@@ -2542,6 +3254,14 @@
           ],
           "align": 1,
           "verticalAlign": 0,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 1,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": "已展示"
         },
         {
@@ -2558,7 +3278,8 @@
           "rotation": 0.0,
           "visible": true
         }
-      ]
+      ],
+      "mask": -1
     },
     "zhztd": {
       "type": 3,
@@ -2583,7 +3304,27 @@
           "height": 87,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            145,
+            146,
+            153,
+            255
+          ],
+          "cornerRadius": [
+            14.0,
+            14.0,
+            14.0,
+            14.0
+          ]
         },
         {
           "type": 3,
@@ -2597,7 +3338,27 @@
           "height": 87,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            180,
+            255,
+            23,
+            255
+          ],
+          "cornerRadius": [
+            14.0,
+            14.0,
+            14.0,
+            14.0
+          ]
         },
         {
           "type": 6,
@@ -2622,6 +3383,14 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": false,
           "text": null
         },
         {
@@ -2636,9 +3405,25 @@
           "height": 70,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ]
         }
-      ]
+      ],
+      "mask": 3,
+      "reversedMask": false
     },
     "zhztg": {
       "type": 3,
@@ -2709,9 +3494,18 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": -2,
+          "ubb": true,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": null
         }
-      ]
+      ],
+      "mask": -1
     },
     "zhzth": {
       "type": 3,
@@ -2760,6 +3554,14 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": null
         },
         {
@@ -2785,6 +3587,14 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": null
         },
         {
@@ -2810,6 +3620,14 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": null
         },
         {
@@ -2841,7 +3659,8 @@
           "rotation": 0.0,
           "visible": true
         }
-      ]
+      ],
+      "mask": -1
     },
     "zhzti": {
       "type": 3,
@@ -2864,7 +3683,8 @@
           "y": 580,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": false
+          "visible": false,
+          "title": "保存"
         },
         {
           "type": 9,
@@ -2902,7 +3722,21 @@
           "height": 568,
           "alpha": 0.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 1,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ]
         },
         {
           "type": 0,
@@ -3016,6 +3850,14 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": -1,
+          "ubb": true,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": null
         },
         {
@@ -3079,6 +3921,14 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": -1,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": null
         },
         {
@@ -3095,7 +3945,8 @@
           "rotation": 0.0,
           "visible": true
         }
-      ]
+      ],
+      "mask": -1
     },
     "zhztj": {
       "type": 3,
@@ -3163,6 +4014,21 @@
           ],
           "align": 0,
           "verticalAlign": 0,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 1,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
           "text": null
         },
         {
@@ -3255,7 +4121,8 @@
           "rotation": 0.0,
           "visible": true
         }
-      ]
+      ],
+      "mask": -1
     },
     "zhztk": {
       "type": 3,
@@ -3345,9 +4212,24 @@
           "height": 6,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": false
+          "visible": false,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            0
+          ]
         }
-      ]
+      ],
+      "mask": -1
     },
     "zhztv": {
       "type": 3,
@@ -3412,6 +4294,14 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": null
         },
         {
@@ -3437,6 +4327,14 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": null
         },
         {
@@ -3462,6 +4360,14 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": "-WIN-"
         },
         {
@@ -3487,6 +4393,14 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": "-LOSE-"
         },
         {
@@ -3518,7 +4432,8 @@
           "visible": true,
           "flip": 0
         }
-      ]
+      ],
+      "mask": -1
     },
     "6rkw2a": {
       "type": 0,
@@ -4674,7 +5589,21 @@
           "height": 1080,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            0,
+            0,
+            0,
+            204
+          ]
         },
         {
           "type": 9,
@@ -4731,7 +5660,8 @@
           "rotation": 0.0,
           "visible": true
         }
-      ]
+      ],
+      "mask": -1
     },
     "atlas0": {
       "type": 4,

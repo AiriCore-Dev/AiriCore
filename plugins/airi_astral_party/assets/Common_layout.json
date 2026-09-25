@@ -32,7 +32,13 @@
           "height": 50,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "url": null,
+          "align": 1,
+          "verticalAlign": 1,
+          "fill": 5,
+          "shrinkOnly": false,
+          "autoSize": false
         },
         {
           "type": 6,
@@ -57,6 +63,14 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 0,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": null
         },
         {
@@ -82,9 +96,18 @@
           ],
           "align": 0,
           "verticalAlign": 0,
+          "lineSpacing": 2,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 2,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": false,
           "text": null
         }
-      ]
+      ],
+      "mask": -1
     },
     "gj393l": {
       "type": 3,
@@ -334,7 +357,8 @@
           "rotation": 0.0,
           "visible": true
         }
-      ]
+      ],
+      "mask": -1
     },
     "gj393m": {
       "type": 3,
@@ -464,7 +488,8 @@
           ],
           "flip": 0
         }
-      ]
+      ],
+      "mask": -1
     },
     "heh5a5": {
       "type": 3,
@@ -489,7 +514,13 @@
           "height": 148,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "url": null,
+          "align": 1,
+          "verticalAlign": 1,
+          "fill": 0,
+          "shrinkOnly": false,
+          "autoSize": false
         },
         {
           "type": 3,
@@ -503,9 +534,30 @@
           "height": 145,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "cornerRadius": [
+            50.0,
+            50.0,
+            50.0,
+            50.0
+          ]
         }
-      ]
+      ],
+      "mask": -1
     },
     "mouys8q": {
       "type": 3,
@@ -546,9 +598,18 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 1,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": null
         }
-      ]
+      ],
+      "mask": -1
     },
     "pj0zq45": {
       "type": 3,
@@ -573,7 +634,21 @@
           "height": 40,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ]
         },
         {
           "type": 6,
@@ -598,6 +673,14 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": true,
+          "singleLine": true,
           "text": "游戏机制"
         },
         {
@@ -623,6 +706,14 @@
           ],
           "align": 0,
           "verticalAlign": 0,
+          "lineSpacing": 10,
+          "letterSpacing": 1,
+          "ubb": true,
+          "autoSize": 2,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": false,
           "text": null
         },
         {
@@ -665,7 +756,21 @@
           "height": 40,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ]
         },
         {
           "type": 6,
@@ -690,6 +795,14 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 0,
+          "underline": false,
+          "italic": false,
+          "bold": true,
+          "singleLine": true,
           "text": "人物传记"
         },
         {
@@ -715,6 +828,14 @@
           ],
           "align": 0,
           "verticalAlign": 0,
+          "lineSpacing": 10,
+          "letterSpacing": 1,
+          "ubb": true,
+          "autoSize": 2,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": false,
           "text": null
         },
         {
@@ -731,7 +852,8 @@
           "rotation": 0.0,
           "visible": true
         }
-      ]
+      ],
+      "mask": -1
     },
     "pj0zq46": {
       "type": 3,
@@ -756,7 +878,21 @@
           "height": 40,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ]
         },
         {
           "type": 6,
@@ -781,6 +917,14 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 0,
+          "underline": false,
+          "italic": false,
+          "bold": true,
+          "singleLine": true,
           "text": "主动技能:{skillName=}"
         },
         {
@@ -806,6 +950,14 @@
           ],
           "align": 0,
           "verticalAlign": 0,
+          "lineSpacing": 10,
+          "letterSpacing": 1,
+          "ubb": true,
+          "autoSize": 2,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": false,
           "text": null
         },
         {
@@ -850,6 +1002,21 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": false,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
           "text": null
         },
         {
@@ -866,7 +1033,8 @@
           "rotation": 0.0,
           "visible": true
         }
-      ]
+      ],
+      "mask": -1
     },
     "px78j9k": {
       "type": 3,
@@ -902,6 +1070,21 @@
           ],
           "align": 0,
           "verticalAlign": 0,
+          "lineSpacing": 3,
+          "letterSpacing": -2,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
           "text": null
         },
         {
@@ -927,6 +1110,21 @@
           ],
           "align": 0,
           "verticalAlign": 0,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
           "text": null
         },
         {
@@ -966,6 +1164,21 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
           "text": null
         },
         {
@@ -1005,6 +1218,21 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
           "text": null
         },
         {
@@ -1044,6 +1272,21 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
           "text": null
         },
         {
@@ -1083,6 +1326,21 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
           "text": null
         },
         {
@@ -1097,7 +1355,21 @@
           "height": 40,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ]
         },
         {
           "type": 6,
@@ -1122,6 +1394,14 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": true,
+          "singleLine": true,
           "text": "游戏机制"
         },
         {
@@ -1147,6 +1427,14 @@
           ],
           "align": 0,
           "verticalAlign": 0,
+          "lineSpacing": 10,
+          "letterSpacing": 1,
+          "ubb": true,
+          "autoSize": 2,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": false,
           "text": null
         },
         {
@@ -1189,7 +1477,21 @@
           "height": 40,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ]
         },
         {
           "type": 6,
@@ -1214,6 +1516,14 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 0,
+          "underline": false,
+          "italic": false,
+          "bold": true,
+          "singleLine": true,
           "text": "人物传记"
         },
         {
@@ -1239,6 +1549,14 @@
           ],
           "align": 0,
           "verticalAlign": 0,
+          "lineSpacing": 10,
+          "letterSpacing": 1,
+          "ubb": true,
+          "autoSize": 2,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": false,
           "text": null
         },
         {
@@ -1255,7 +1573,8 @@
           "rotation": 0.0,
           "visible": true
         }
-      ]
+      ],
+      "mask": -1
     },
     "px78j9l": {
       "type": 3,
@@ -1280,7 +1599,21 @@
           "height": 40,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ]
         },
         {
           "type": 6,
@@ -1305,6 +1638,14 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 0,
+          "underline": false,
+          "italic": false,
+          "bold": true,
+          "singleLine": true,
           "text": "主动技能:{skillName=}"
         },
         {
@@ -1330,6 +1671,14 @@
           ],
           "align": 0,
           "verticalAlign": 0,
+          "lineSpacing": 10,
+          "letterSpacing": 1,
+          "ubb": true,
+          "autoSize": 2,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": false,
           "text": null
         },
         {
@@ -1374,6 +1723,21 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": false,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
           "text": null
         },
         {
@@ -1390,7 +1754,8 @@
           "rotation": 0.0,
           "visible": true
         }
-      ]
+      ],
+      "mask": -1
     },
     "z1wk2": {
       "type": 3,
@@ -1428,7 +1793,13 @@
           "height": 156,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "url": null,
+          "align": 1,
+          "verticalAlign": 1,
+          "fill": 0,
+          "shrinkOnly": false,
+          "autoSize": false
         },
         {
           "type": 0,
@@ -1443,7 +1814,9 @@
           "visible": true,
           "flip": 0
         }
-      ]
+      ],
+      "mask": 2,
+      "reversedMask": false
     },
     "5o9ms8i": {
       "type": 0,
@@ -3126,9 +3499,24 @@
           ],
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": false
+          "visible": false,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            0
+          ]
         }
-      ]
+      ],
+      "mask": -1
     },
     "9wy8bw": {
       "type": 3,
@@ -3193,7 +3581,8 @@
           "visible": true,
           "flip": 0
         }
-      ]
+      ],
+      "mask": -1
     },
     "aepoa6": {
       "type": 3,
@@ -3230,9 +3619,31 @@
           "height": 143,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "cornerRadius": [
+            50.0,
+            50.0,
+            50.0,
+            50.0
+          ]
         }
-      ]
+      ],
+      "mask": 1,
+      "reversedMask": false
     },
     "ak421h": {
       "type": 3,
@@ -3257,7 +3668,13 @@
           "height": 1080,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "url": null,
+          "align": 0,
+          "verticalAlign": 2,
+          "fill": 0,
+          "shrinkOnly": false,
+          "autoSize": false
         },
         {
           "type": 3,
@@ -3271,9 +3688,24 @@
           "height": 1080,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            0
+          ]
         }
-      ]
+      ],
+      "mask": -1
     },
     "ays2s8g": {
       "type": 3,
@@ -3322,9 +3754,25 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": false,
+          "outlineColor": [
+            172,
+            127,
+            225,
+            255
+          ],
+          "outline": 1.0,
           "text": "有新异画解锁"
         }
-      ]
+      ],
+      "mask": -1
     },
     "bczmq3s": {
       "type": 3,
@@ -3349,7 +3797,27 @@
           "height": 515,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            51,
+            51,
+            51,
+            255
+          ],
+          "cornerRadius": [
+            10.0,
+            10.0,
+            10.0,
+            10.0
+          ]
         },
         {
           "type": 10,
@@ -3365,7 +3833,8 @@
           "rotation": 0.0,
           "visible": true
         }
-      ]
+      ],
+      "mask": -1
     },
     "bfwlq2r": {
       "type": 3,
@@ -3399,9 +3868,16 @@
           ],
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "url": "ui://xuaw6o8jbfwlq2s",
+          "align": 0,
+          "verticalAlign": 0,
+          "fill": 4,
+          "shrinkOnly": false,
+          "autoSize": false
         }
-      ]
+      ],
+      "mask": -1
     },
     "booc3v": {
       "type": 3,
@@ -3450,7 +3926,21 @@
           "height": 1080,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            0
+          ]
         },
         {
           "type": 4,
@@ -3464,7 +3954,13 @@
           "height": 1080,
           "alpha": 0.20000000298023224,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "url": "ui://xuaw6o8jg1i49l",
+          "align": 1,
+          "verticalAlign": 1,
+          "fill": 4,
+          "shrinkOnly": false,
+          "autoSize": false
         },
         {
           "type": 4,
@@ -3478,9 +3974,16 @@
           "height": 1080,
           "alpha": 0.20000000298023224,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "url": null,
+          "align": 1,
+          "verticalAlign": 1,
+          "fill": 4,
+          "shrinkOnly": false,
+          "autoSize": false
         }
-      ]
+      ],
+      "mask": -1
     },
     "ejjwq49": {
       "type": 3,
@@ -3520,7 +4023,8 @@
           "visible": true,
           "flip": 0
         }
-      ]
+      ],
+      "mask": -1
     },
     "ejjwq4a": {
       "type": 3,
@@ -3560,7 +4064,8 @@
           "visible": true,
           "flip": 0
         }
-      ]
+      ],
+      "mask": -1
     },
     "ejjwq4b": {
       "type": 3,
@@ -3603,7 +4108,9 @@
           "visible": true,
           "flip": 0
         }
-      ]
+      ],
+      "mask": 0,
+      "reversedMask": false
     },
     "fu2tq3e": {
       "type": 3,
@@ -3763,7 +4270,8 @@
           "visible": true,
           "flip": 0
         }
-      ]
+      ],
+      "mask": -1
     },
     "h334q3o": {
       "type": 3,
@@ -3788,7 +4296,13 @@
           "height": 640,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "url": null,
+          "align": 1,
+          "verticalAlign": 1,
+          "fill": 5,
+          "shrinkOnly": false,
+          "autoSize": false
         },
         {
           "type": 3,
@@ -3802,9 +4316,24 @@
           "height": 100,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": false
+          "visible": false,
+          "shape": 1,
+          "lineSize": 1,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ]
         }
-      ]
+      ],
+      "mask": -1
     },
     "i1yzq2w": {
       "type": 3,
@@ -3835,7 +4364,8 @@
           "visible": true,
           "flip": 0
         }
-      ]
+      ],
+      "mask": -1
     },
     "imo37v": {
       "type": 3,
@@ -3945,9 +4475,24 @@
           "height": 6,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": false
+          "visible": false,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            0
+          ]
         }
-      ]
+      ],
+      "mask": -1
     },
     "m48iv": {
       "type": 3,
@@ -3972,7 +4517,13 @@
           "height": 621,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "url": "ui://xuaw6o8jrle7p",
+          "align": 0,
+          "verticalAlign": 0,
+          "fill": 4,
+          "shrinkOnly": false,
+          "autoSize": false
         },
         {
           "type": 6,
@@ -3997,6 +4548,14 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": -2,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": "兑换星盘"
         },
         {
@@ -4047,9 +4606,11 @@
           "y": 484,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "title": "取消"
         }
-      ]
+      ],
+      "mask": -1
     },
     "m48iw": {
       "type": 3,
@@ -4074,9 +4635,24 @@
           "height": 1080,
           "alpha": 0.699999988079071,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 1,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ]
         }
-      ]
+      ],
+      "mask": -1
     },
     "micc2g": {
       "type": 3,
@@ -4101,7 +4677,13 @@
           "height": 644,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "url": null,
+          "align": 1,
+          "verticalAlign": 1,
+          "fill": 5,
+          "shrinkOnly": false,
+          "autoSize": false
         },
         {
           "type": 4,
@@ -4115,7 +4697,13 @@
           "height": 400,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "url": null,
+          "align": 1,
+          "verticalAlign": 1,
+          "fill": 1,
+          "shrinkOnly": false,
+          "autoSize": false
         },
         {
           "type": 3,
@@ -4129,7 +4717,21 @@
           "height": 400,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 1,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ]
         },
         {
           "type": 4,
@@ -4143,7 +4745,13 @@
           "height": 612,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "url": null,
+          "align": 1,
+          "verticalAlign": 1,
+          "fill": 1,
+          "shrinkOnly": false,
+          "autoSize": false
         },
         {
           "type": 3,
@@ -4157,7 +4765,21 @@
           "height": 612,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 1,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ]
         },
         {
           "type": 4,
@@ -4176,7 +4798,13 @@
           ],
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "url": null,
+          "align": 1,
+          "verticalAlign": 1,
+          "fill": 0,
+          "shrinkOnly": false,
+          "autoSize": false
         },
         {
           "type": 0,
@@ -4642,6 +5270,14 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 0,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": null
         },
         {
@@ -4671,6 +5307,14 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 0,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": null
         },
         {
@@ -4700,6 +5344,14 @@
           ],
           "align": 2,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": null
         },
         {
@@ -4734,6 +5386,21 @@
           ],
           "align": 0,
           "verticalAlign": 0,
+          "lineSpacing": 0,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": false,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
           "text": null
         },
         {
@@ -4768,6 +5435,21 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 0,
+          "letterSpacing": 2,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": true,
+          "singleLine": true,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
           "text": null
         },
         {
@@ -4811,9 +5493,24 @@
           ],
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": false
+          "visible": false,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ]
         }
-      ]
+      ],
+      "mask": -1
     },
     "mmmw3y": {
       "type": 3,
@@ -4839,7 +5536,8 @@
           "visible": true,
           "flip": 0
         }
-      ]
+      ],
+      "mask": -1
     },
     "mmmw3z": {
       "type": 3,
@@ -4865,7 +5563,8 @@
           "visible": true,
           "flip": 0
         }
-      ]
+      ],
+      "mask": -1
     },
     "mmmw40": {
       "type": 3,
@@ -4891,7 +5590,8 @@
           "visible": true,
           "flip": 0
         }
-      ]
+      ],
+      "mask": -1
     },
     "mmmw41": {
       "type": 3,
@@ -4917,7 +5617,8 @@
           "visible": true,
           "flip": 0
         }
-      ]
+      ],
+      "mask": -1
     },
     "mmmw42": {
       "type": 3,
@@ -4943,7 +5644,8 @@
           "visible": true,
           "flip": 0
         }
-      ]
+      ],
+      "mask": -1
     },
     "mmmw43": {
       "type": 3,
@@ -4969,7 +5671,8 @@
           "visible": true,
           "flip": 0
         }
-      ]
+      ],
+      "mask": -1
     },
     "nc4bac": {
       "type": 3,
@@ -5035,9 +5738,25 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "outline": 2.0,
           "text": "确定"
         }
-      ]
+      ],
+      "mask": -1
     },
     "nc4bad": {
       "type": 3,
@@ -5075,7 +5794,27 @@
           "height": 83,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            157,
+            255,
+            55,
+            255
+          ],
+          "cornerRadius": [
+            50.0,
+            50.0,
+            50.0,
+            50.0
+          ]
         },
         {
           "type": 6,
@@ -5105,9 +5844,25 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "outline": 2.0,
           "text": "确定"
         }
-      ]
+      ],
+      "mask": -1
     },
     "nc4baj": {
       "type": 3,
@@ -5147,7 +5902,27 @@
           "height": 83,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            157,
+            255,
+            55,
+            255
+          ],
+          "cornerRadius": [
+            50.0,
+            50.0,
+            50.0,
+            50.0
+          ]
         },
         {
           "type": 6,
@@ -5177,9 +5952,25 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "outline": 2.0,
           "text": "确定"
         }
-      ]
+      ],
+      "mask": -1
     },
     "nc4bak": {
       "type": 3,
@@ -5250,9 +6041,25 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "outline": 2.0,
           "text": "返回"
         }
-      ]
+      ],
+      "mask": -1
     },
     "o812a": {
       "type": 3,
@@ -5277,7 +6084,27 @@
           "height": 122,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            76,
+            76,
+            76,
+            255
+          ],
+          "cornerRadius": [
+            15.0,
+            15.0,
+            15.0,
+            15.0
+          ]
         },
         {
           "type": 4,
@@ -5291,7 +6118,13 @@
           "height": 50,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "url": null,
+          "align": 1,
+          "verticalAlign": 1,
+          "fill": 1,
+          "shrinkOnly": false,
+          "autoSize": false
         },
         {
           "type": 6,
@@ -5316,6 +6149,14 @@
           ],
           "align": 0,
           "verticalAlign": 0,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": null
         },
         {
@@ -5341,9 +6182,18 @@
           ],
           "align": 0,
           "verticalAlign": 0,
+          "lineSpacing": 0,
+          "letterSpacing": 0,
+          "ubb": true,
+          "autoSize": 2,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": false,
           "text": null
         }
-      ]
+      ],
+      "mask": -1
     },
     "o812au": {
       "type": 3,
@@ -5392,9 +6242,18 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": "详情"
         }
-      ]
+      ],
+      "mask": -1
     },
     "o812aw": {
       "type": 3,
@@ -5443,9 +6302,25 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": false,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
           "text": null
         }
-      ]
+      ],
+      "mask": -1
     },
     "ofnra1": {
       "type": 3,
@@ -5516,9 +6391,25 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "outline": 2.0,
           "text": "确定"
         }
-      ]
+      ],
+      "mask": -1
     },
     "ofnra2": {
       "type": 3,
@@ -5589,9 +6480,25 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "outline": 2.0,
           "text": "返回"
         }
-      ]
+      ],
+      "mask": -1
     },
     "ot0wam": {
       "type": 3,
@@ -5616,7 +6523,27 @@
           "height": 86,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 5,
+          "lineColor": [
+            122,
+            122,
+            122,
+            255
+          ],
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "cornerRadius": [
+            50.0,
+            50.0,
+            50.0,
+            50.0
+          ]
         },
         {
           "type": 3,
@@ -5630,7 +6557,27 @@
           "height": 66,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            187,
+            0,
+            255
+          ],
+          "cornerRadius": [
+            50.0,
+            50.0,
+            50.0,
+            50.0
+          ]
         },
         {
           "type": 6,
@@ -5655,9 +6602,25 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "outline": 2.0,
           "text": "确定"
         }
-      ]
+      ],
+      "mask": -1
     },
     "ot0wbb": {
       "type": 3,
@@ -5682,7 +6645,21 @@
           "height": 1080,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 1,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            50,
+            48,
+            55,
+            255
+          ]
         },
         {
           "type": 4,
@@ -5701,7 +6678,13 @@
           ],
           "alpha": 0.4000000059604645,
           "rotation": 30.0,
-          "visible": true
+          "visible": true,
+          "url": "ui://xuaw6o8jot0wba",
+          "align": 0,
+          "verticalAlign": 0,
+          "fill": 4,
+          "shrinkOnly": false,
+          "autoSize": false
         },
         {
           "type": 0,
@@ -5718,7 +6701,8 @@
           "visible": true,
           "flip": 0
         }
-      ]
+      ],
+      "mask": -1
     },
     "ozsk8w": {
       "type": 3,
@@ -5804,9 +6788,25 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "outline": 2.0,
           "text": "返回"
         }
-      ]
+      ],
+      "mask": -1
     },
     "ozsk8z": {
       "type": 3,
@@ -5868,9 +6868,25 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "outline": 2.0,
           "text": "确定"
         }
-      ]
+      ],
+      "mask": -1
     },
     "pj0z2": {
       "type": 3,
@@ -5913,7 +6929,13 @@
           "height": 230,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "url": null,
+          "align": 0,
+          "verticalAlign": 0,
+          "fill": 1,
+          "shrinkOnly": false,
+          "autoSize": false
         },
         {
           "type": 6,
@@ -5938,6 +6960,21 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
           "text": null
         },
         {
@@ -5972,9 +7009,25 @@
           ],
           "align": 0,
           "verticalAlign": 0,
+          "lineSpacing": 0,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": false,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
           "text": null
         }
-      ]
+      ],
+      "mask": -1
     },
     "pj0zq42": {
       "type": 3,
@@ -6054,6 +7107,21 @@
           ],
           "align": 0,
           "verticalAlign": 0,
+          "lineSpacing": 3,
+          "letterSpacing": -2,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
           "text": null
         },
         {
@@ -6109,6 +7177,21 @@
           ],
           "align": 0,
           "verticalAlign": 0,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
           "text": null
         },
         {
@@ -6162,6 +7245,21 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
           "text": null
         },
         {
@@ -6201,6 +7299,21 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
           "text": null
         },
         {
@@ -6240,6 +7353,21 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
           "text": null
         },
         {
@@ -6279,9 +7407,25 @@
           ],
           "align": 0,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
           "text": null
         }
-      ]
+      ],
+      "mask": -1
     },
     "px78b3": {
       "type": 3,
@@ -6315,7 +7459,8 @@
           ],
           "flip": 0
         }
-      ]
+      ],
+      "mask": -1
     },
     "px78j9m": {
       "type": 3,
@@ -6355,7 +7500,8 @@
           "rotation": 0.0,
           "visible": true
         }
-      ]
+      ],
+      "mask": -1
     },
     "r1ee9i": {
       "type": 3,
@@ -6404,9 +7550,25 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": false,
+          "outlineColor": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "outline": 1.0,
           "text": null
         }
-      ]
+      ],
+      "mask": -1
     },
     "rct9q3d": {
       "type": 3,
@@ -6431,7 +7593,13 @@
           "height": 160,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "url": "ui://xuaw6o8j5o9ms8j",
+          "align": 0,
+          "verticalAlign": 0,
+          "fill": 0,
+          "shrinkOnly": false,
+          "autoSize": false
         },
         {
           "type": 6,
@@ -6456,9 +7624,18 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
           "text": "UP"
         }
-      ]
+      ],
+      "mask": -1
     },
     "th3ls8e": {
       "type": 3,
@@ -6483,9 +7660,16 @@
           "height": 1080,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "url": null,
+          "align": 1,
+          "verticalAlign": 1,
+          "fill": 4,
+          "shrinkOnly": false,
+          "autoSize": false
         }
-      ]
+      ],
+      "mask": -1
     },
     "u43ct": {
       "type": 3,
@@ -6515,7 +7699,13 @@
           ],
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "url": null,
+          "align": 1,
+          "verticalAlign": 2,
+          "fill": 3,
+          "shrinkOnly": false,
+          "autoSize": false
         },
         {
           "type": 3,
@@ -6534,7 +7724,27 @@
           ],
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            0
+          ],
+          "cornerRadius": [
+            25.0,
+            25.0,
+            25.0,
+            25.0
+          ]
         },
         {
           "type": 3,
@@ -6548,9 +7758,31 @@
           "height": 248,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "cornerRadius": [
+            25.0,
+            25.0,
+            25.0,
+            25.0
+          ]
         }
-      ]
+      ],
+      "mask": 2,
+      "reversedMask": false
     },
     "vlgjm": {
       "type": 3,
@@ -6614,7 +7846,8 @@
           "visible": true,
           "flip": 0
         }
-      ]
+      ],
+      "mask": -1
     },
     "z1wk0": {
       "type": 3,
@@ -6639,7 +7872,27 @@
           "height": 151,
           "alpha": 1.0,
           "rotation": 0.0,
-          "visible": true
+          "visible": true,
+          "shape": 1,
+          "lineSize": 0,
+          "lineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "cornerRadius": [
+            48.0,
+            48.0,
+            48.0,
+            48.0
+          ]
         },
         {
           "type": 9,
@@ -6719,6 +7972,21 @@
           ],
           "align": 0,
           "verticalAlign": 0,
+          "lineSpacing": 3,
+          "letterSpacing": -1,
+          "ubb": false,
+          "autoSize": 1,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
           "text": "LV."
         },
         {
@@ -6744,6 +8012,21 @@
           ],
           "align": 0,
           "verticalAlign": 0,
+          "lineSpacing": 3,
+          "letterSpacing": -1,
+          "ubb": false,
+          "autoSize": 0,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outline": 1.0,
           "text": null
         },
         {
@@ -6761,7 +8044,9 @@
           "visible": true,
           "flip": 0
         }
-      ]
+      ],
+      "mask": 0,
+      "reversedMask": false
     },
     "zy9e0": {
       "type": 3,
@@ -6832,9 +8117,25 @@
           ],
           "align": 1,
           "verticalAlign": 1,
+          "lineSpacing": 3,
+          "letterSpacing": 0,
+          "ubb": false,
+          "autoSize": 3,
+          "underline": false,
+          "italic": false,
+          "bold": false,
+          "singleLine": true,
+          "outlineColor": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "outline": 2.0,
           "text": "返回"
         }
-      ]
+      ],
+      "mask": -1
     },
     "e4d2q3z": {
       "type": 0,

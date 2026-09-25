@@ -4,6 +4,7 @@ import hashlib
 import json
 import struct
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
 import UnityPy
 from PIL import Image
@@ -93,12 +94,45 @@ def child(b, start):
             align=b.byte(),
             verticalAlign=b.byte(),
         )
+        d.update(
+            lineSpacing=b.read("h"),
+            letterSpacing=b.read("h"),
+            ubb=bool(b.byte()),
+            autoSize=b.byte(),
+        )
+        d.update(
+            underline=bool(b.byte()),
+            italic=bool(b.byte()),
+            bold=bool(b.byte()),
+            singleLine=bool(b.byte()),
+        )
+        if b.byte():
+            d.update(outlineColor=list(b.read("BBBB")), outline=b.read("f"))
+        if b.byte():
+            d.update(shadowColor=list(b.read("BBBB")), shadowOffset=list(b.read("ff")))
         b.seek(start, 6)
         d["text"] = b.ref()
     if d["type"] == 0 and b.seek(start, 5):
         if b.byte():
             d["color"] = list(b.read("BBBB"))
         d["flip"] = b.byte()
+    if d["type"] == 4 and b.seek(start, 5):
+        d.update(url=b.ref(), align=b.byte(), verticalAlign=b.byte(), fill=b.byte())
+        d.update(shrinkOnly=bool(b.byte()), autoSize=bool(b.byte()))
+    if d["type"] == 3 and b.seek(start, 5):
+        d["shape"] = b.byte()
+        if d["shape"]:
+            d.update(
+                lineSize=b.integer(),
+                lineColor=list(b.read("BBBB")),
+                color=list(b.read("BBBB")),
+            )
+            if b.byte():
+                d["cornerRadius"] = list(b.read("ffff"))
+            if d["shape"] == 3:
+                d["points"] = [b.read("f") for _ in range(b.short())]
+    if d["type"] == 9 and b.seek(start, 6) and b.byte() == 12:
+        d["title"] = b.ref()
     return d
 
 
@@ -154,6 +188,11 @@ def package(path):
                 children.append(child(raw, p))
                 raw.p = p + n
             d["children"] = children
+            if raw.seek(0, 4):
+                raw.p += 3
+                d["mask"] = raw.read("h")
+                if d["mask"] != -1:
+                    d["reversedMask"] = bool(raw.byte())
         items[d["id"]] = d
         b.p = end
     b.seek(start, 2)
@@ -299,6 +338,17 @@ def export(args):
                     return value, path
         raise ValueError("资源包中未找到：" + name)
 
+    def read_movie(name):
+        for path in source(name):
+            for obj in UnityPy.load(str(path)).objects:
+                if obj.type.name != "MonoBehaviour" or obj.read().m_Name != name:
+                    continue
+                tree = obj.read_typetree()
+                for reference in tree["references"]["RefIds"]:
+                    if reference["type"]["class"] == "CriSerializedBytesAssetImpl":
+                        return bytes(reference["data"]["data"]), path
+        raise ValueError("资源包中未找到名片动画：" + name)
+
     for name in ("AccountInfo", "Common", "Background"):
         value, origin = read_asset(name + "_fui")
         raw = out / (name + "_fui.bytes")
@@ -308,7 +358,9 @@ def export(args):
         packages[name] = layout
         path = out / (name + "_layout.json")
         path.write_text(
-            json.dumps(layout, ensure_ascii=False, indent=2), encoding="utf8", newline="\n"
+            json.dumps(layout, ensure_ascii=False, indent=2),
+            encoding="utf8",
+            newline="\n",
         )
         save(path, origin, name + "_fui")
     for name in ("AccountInfo", "Common"):
@@ -317,7 +369,7 @@ def export(args):
         ids = (
             [i for i, d in packages[name]["items"].items() if "sprite" in d]
             if name == "AccountInfo"
-            else ["kn6fq3y", "z1wk4", "ru20q2t", "mmmw3x"]
+            else ["kn6fq3y", "z1wk4", "ru20q2t", "mmmw3x", "heh5a4"]
         )
         folder = out / "ui" / name
         folder.mkdir(parents=True, exist_ok=True)
@@ -337,7 +389,7 @@ def export(args):
         if obj.type.name != "Font":
             continue
         value = obj.read()
-        if value.m_Name not in ("JingNanBoBoHei", "Impact", "SHOWG"):
+        if value.m_Name not in ("JingNanBoBoHei", "Impact", "SHOWG", "SIMHEI"):
             continue
         path = out / (value.m_Name + ".ttf")
         path.write_bytes(bytes(value.m_FontData))
@@ -348,6 +400,16 @@ def export(args):
                 continue
             value = obj.read()
             if value.m_Name in (
+                "Skin",
+                "Fashion",
+                "Item",
+                "Achieve",
+                "ImageLocalization",
+            ):
+                tables[value.m_Name] = fields(
+                    value.m_Script.encode("utf8", "surrogateescape")
+                )
+            elif value.m_Name in (
                 "Character",
                 "STRCharacter",
                 "Map",
@@ -374,7 +436,9 @@ def export(args):
         }
     path = out / "names.json"
     path.write_text(
-        json.dumps(names_out, ensure_ascii=False, indent=2), encoding="utf8", newline="\n"
+        json.dumps(names_out, ensure_ascii=False, indent=2),
+        encoding="utf8",
+        newline="\n",
     )
     save(path, source("GameData_CN")[0], "GameData_CN")
     selections = [
@@ -390,15 +454,133 @@ def export(args):
         path = folder / (name + ".png")
         value.image.save(path, optimize=True)
         save(path, origin, name)
+    export_profile(out, tables, read_asset, save, source("GameData_CN")[0], read_movie)
     manifest = {
         "来源": "本机《吉星派对》安装资源与已下载更新缓存",
         "说明": "资源版权归游戏权利人；该清单仅记录本机离线导出来源。界面坐标为1920×1080设计坐标，组件控制器状态由调用方选择。",
         "files": sources,
     }
     (out / "manifest.json").write_text(
-        json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf8", newline="\n"
+        json.dumps(manifest, ensure_ascii=False, indent=2),
+        encoding="utf8",
+        newline="\n",
     )
     print("已导出", len(sources), "项素材至", out)
+
+
+def movie_first_frame(payload):
+    import cv2
+
+    stream = bytearray()
+    position = 0
+    while position + 32 <= len(payload):
+        size = int.from_bytes(payload[position + 4 : position + 8], "big")
+        end = position + 8 + size
+        if size < 24 or end > len(payload):
+            raise ValueError("名片动画数据块损坏")
+        if payload[position : position + 4] == b"@SFV" and payload[position + 15] == 0:
+            start = position + 8 + payload[position + 9]
+            padding = int.from_bytes(payload[position + 10 : position + 12], "big")
+            if start > end - padding:
+                raise ValueError("名片动画数据块边界无效")
+            stream.extend(payload[start : end - padding])
+        position = end
+    if not stream:
+        raise ValueError("名片动画中没有可解码的视频流")
+    with TemporaryDirectory(prefix="astral-profile-") as directory:
+        path = Path(directory) / "background.m2v"
+        path.write_bytes(stream)
+        capture = cv2.VideoCapture(str(path))
+        try:
+            success, frame = capture.read()
+        finally:
+            capture.release()
+        if not success:
+            raise ValueError("无法解码名片动画首帧")
+        return Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA))
+
+
+def export_profile(out, tables, read_asset, save, table_origin, read_movie):
+    def value(row, key, default=0):
+        return row.get(key, [default])[0]
+
+    def string(row, key):
+        return value(row, key, b"").decode("utf8")
+
+    offsets = {}
+    for raw in tables["Skin"].get(3, []):
+        row = fields(raw)
+        offsets[string(row, 2)] = [
+            struct.unpack("<f", struct.pack("<i", value(row, key)))[0] for key in (3, 4)
+        ]
+    profile = {"paintings": {}, "backgrounds": {}, "headshots": {}, "achievements": {}}
+    for raw in tables["Skin"][1]:
+        for item in fields(raw).get(2, []):
+            row = fields(item)
+            asset = string(row, 7)
+            profile["paintings"][str(value(row, 3))] = {
+                "asset": asset,
+                "offset": offsets.get(asset, [0, 0]),
+            }
+    items = {value(row, 1): row for row in map(fields, tables["Item"][1])}
+    for section, key in (("headshots", 1), ("backgrounds", 3)):
+        fashion = {value(row, 1): row for row in map(fields, tables["Fashion"][key])}
+        for item_id, item in items.items():
+            if value(item, 2) != (9 if section == "headshots" else 10):
+                continue
+            row = fashion.get(value(item, 3))
+            if row is not None:
+                profile[section][str(item_id)] = {"asset": string(row, 2)}
+                if section == "backgrounds" and string(row, 4):
+                    profile[section][str(item_id)]["video"] = string(row, 4)
+        profile[section]["0"] = {"asset": string(fields(tables["Fashion"][key][0]), 2)}
+    localized = {
+        value(row, 1): string(row, 2)
+        for row in map(fields, tables["ImageLocalization"][1])
+    }
+    for raw in tables["Achieve"].get(3, []):
+        row = fields(raw)
+        profile["achievements"][str(value(row, 1))] = {
+            "asset": localized.get(value(row, 5), "")
+        }
+    folder = out / "profile"
+    folder.mkdir(exist_ok=True)
+    exported = {}
+    for section in profile.values():
+        for row in section.values():
+            name = row["asset"]
+            if name not in exported:
+                try:
+                    texture, origin = read_asset(name)
+                except (KeyError, FileNotFoundError, ValueError):
+                    exported[name] = None
+                else:
+                    path = folder / (name + ".webp")
+                    texture.image.save(path, lossless=True, method=4)
+                    save(path, origin, name)
+                    exported[name] = str(path.relative_to(out)).replace("\\", "/")
+            row["path"] = exported[name]
+            if row["path"] is None and row.get("video"):
+                payload, origin = read_movie(row["video"])
+                path = folder / (row["video"] + "_frame0.webp")
+                movie_first_frame(payload).save(path, lossless=True, method=4)
+                save(path, origin, row["video"])
+                row.update(path=str(path.relative_to(out)).replace("\\", "/"), frame=0)
+    path = out / "profile.json"
+    path.write_text(
+        json.dumps(profile, ensure_ascii=False, indent=2), encoding="utf8", newline="\n"
+    )
+    save(path, table_origin, "Skin/Fashion/Item/Achieve")
+    print(
+        "个人资料资源：",
+        len(exported),
+        "项，缺失：",
+        sum(
+            row["path"] is None
+            for section in profile.values()
+            for row in section.values()
+        ),
+    )
 
 
 if __name__ == "__main__":
