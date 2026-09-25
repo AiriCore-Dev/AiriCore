@@ -1,0 +1,5291 @@
+{
+  "id": "iepldke7",
+  "name": "AccountInfo",
+  "version": 6,
+  "dependencies": [
+    {
+      "id": "xuaw6o8j",
+      "name": "Common"
+    },
+    {
+      "id": "m6sn3r22",
+      "name": "Common_External"
+    },
+    {
+      "id": "mzuc5vkb",
+      "name": "Font"
+    }
+  ],
+  "items": {
+    "6rkw2d": {
+      "type": 3,
+      "id": "6rkw2d",
+      "name": "AccountInfo_Button_ChangeName",
+      "path": "/Components/Data/",
+      "file": null,
+      "exported": false,
+      "width": 121,
+      "height": 88,
+      "objectType": 12,
+      "children": [
+        {
+          "type": 0,
+          "source": "it6m2o",
+          "package": null,
+          "id": "n6_mdt4",
+          "name": "n6",
+          "x": 0,
+          "y": 0,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 0,
+          "source": "6rkw2a",
+          "package": null,
+          "id": "n4_6rkw",
+          "name": "n4",
+          "x": 8,
+          "y": 15,
+          "width": 44,
+          "height": 41,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n5_6rkw",
+          "name": "title",
+          "x": 43,
+          "y": 1,
+          "width": 75,
+          "height": 71,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei_TMP",
+          "fontSize": 26,
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": null
+        }
+      ]
+    },
+    "7h6s24": {
+      "type": 3,
+      "id": "7h6s24",
+      "name": "Account_Button_Operator",
+      "path": "/Components/Operator/",
+      "file": null,
+      "exported": false,
+      "width": 301,
+      "height": 97,
+      "objectType": 12,
+      "children": [
+        {
+          "type": 0,
+          "source": "7h6s1a",
+          "package": null,
+          "id": "n64_7h6s",
+          "name": "n64",
+          "x": 0,
+          "y": 0,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 0,
+          "source": "7h6s19",
+          "package": null,
+          "id": "n67_tiv3",
+          "name": "n67",
+          "x": 0,
+          "y": 0,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 0,
+          "source": "7h6s18",
+          "package": null,
+          "id": "n68_tiv3",
+          "name": "n68",
+          "x": 0,
+          "y": 0,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 0,
+          "source": "krvo2k",
+          "package": null,
+          "id": "n69_krvo",
+          "name": "n69",
+          "x": 0,
+          "y": 0,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n66_7h6s",
+          "name": "title",
+          "x": 63,
+          "y": 7,
+          "width": 236,
+          "height": 82,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei",
+          "fontSize": 46,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": "确定"
+        }
+      ]
+    },
+    "f3tl14": {
+      "type": 3,
+      "id": "f3tl14",
+      "name": "AccountInfo_Button_RefreshSkin",
+      "path": "/Components/HeroSkin/",
+      "file": null,
+      "exported": false,
+      "width": 184,
+      "height": 100,
+      "objectType": 12,
+      "children": [
+        {
+          "type": 0,
+          "source": "it6m2v",
+          "package": null,
+          "id": "n45_mdt4",
+          "name": "n45",
+          "x": 0,
+          "y": 1,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        }
+      ]
+    },
+    "f3tl19": {
+      "type": 3,
+      "id": "f3tl19",
+      "name": "AccountInfo_Com_AchieveLoader",
+      "path": "/Components/Achieve/",
+      "file": null,
+      "exported": false,
+      "width": 132,
+      "height": 132,
+      "objectType": 0,
+      "children": [
+        {
+          "type": 4,
+          "source": null,
+          "package": null,
+          "id": "n18_f3tl",
+          "name": "loader_Achieve",
+          "x": 0,
+          "y": 0,
+          "width": 132,
+          "height": 132,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n20_f3tl",
+          "name": "n20",
+          "x": 2,
+          "y": 1,
+          "width": 129,
+          "height": 128,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        }
+      ]
+    },
+    "f3tl1j": {
+      "type": 3,
+      "id": "f3tl1j",
+      "name": "AccountInfo_ScrollBar_VT_1",
+      "path": "/Components/Sliders/",
+      "file": null,
+      "exported": false,
+      "width": 10,
+      "height": 329,
+      "objectType": 16,
+      "children": [
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n6_g6uw",
+          "name": "n6",
+          "x": 0,
+          "y": 5,
+          "width": 10,
+          "height": 324,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n5",
+          "name": "bar",
+          "x": 0,
+          "y": 5,
+          "width": 10,
+          "height": 324,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "f3tl1k",
+          "package": null,
+          "id": "n7_byo3",
+          "name": "arrow1",
+          "x": -1,
+          "y": -8,
+          "width": 12,
+          "height": 12,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "f3tl1m",
+          "package": null,
+          "id": "n8_byo3",
+          "name": "arrow2",
+          "x": -1,
+          "y": 328,
+          "width": 12,
+          "height": 12,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "f3tl1n",
+          "package": null,
+          "id": "n4",
+          "name": "grip",
+          "x": 0,
+          "y": 5,
+          "width": 10,
+          "height": 6,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        }
+      ]
+    },
+    "f3tl1k": {
+      "type": 3,
+      "id": "f3tl1k",
+      "name": "AccountInfo_ScrollBar1_arrow1",
+      "path": "/Components/Sliders/",
+      "file": null,
+      "exported": false,
+      "width": 17,
+      "height": 20,
+      "objectType": 12,
+      "children": [
+        {
+          "type": 0,
+          "source": "f3tl1l",
+          "package": null,
+          "id": "n3_byo3",
+          "name": "n3",
+          "x": 1,
+          "y": 2,
+          "pivot": [
+            0.5,
+            0.5,
+            0
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "color": [
+            153,
+            153,
+            153,
+            255
+          ],
+          "flip": 0
+        }
+      ]
+    },
+    "f3tl1m": {
+      "type": 3,
+      "id": "f3tl1m",
+      "name": "AccountInfo_ScrollBar1_arrow2",
+      "path": "/Components/Sliders/",
+      "file": null,
+      "exported": false,
+      "width": 17,
+      "height": 20,
+      "objectType": 12,
+      "children": [
+        {
+          "type": 0,
+          "source": "f3tl1l",
+          "package": null,
+          "id": "n3_byo3",
+          "name": "n3",
+          "x": 1,
+          "y": 2,
+          "pivot": [
+            0.5,
+            0.5,
+            0
+          ],
+          "alpha": 1.0,
+          "rotation": 180.0,
+          "visible": true,
+          "color": [
+            153,
+            153,
+            153,
+            255
+          ],
+          "flip": 0
+        }
+      ]
+    },
+    "f3tl1n": {
+      "type": 3,
+      "id": "f3tl1n",
+      "name": "AccountInfo_Button_Grip",
+      "path": "/Components/Sliders/",
+      "file": null,
+      "exported": false,
+      "width": 4,
+      "height": 6,
+      "objectType": 12,
+      "children": [
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n9_byo3",
+          "name": "grip",
+          "x": 0,
+          "y": 0,
+          "width": 4,
+          "height": 6,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        }
+      ]
+    },
+    "f3tl1r": {
+      "type": 3,
+      "id": "f3tl1r",
+      "name": "AccountInfo_ScrollBar_VT_2",
+      "path": "/Components/Sliders/",
+      "file": null,
+      "exported": false,
+      "width": 10,
+      "height": 428,
+      "objectType": 16,
+      "children": [
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n6_g6uw",
+          "name": "n6",
+          "x": 0,
+          "y": 99,
+          "width": 10,
+          "height": 324,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n5",
+          "name": "bar",
+          "x": 0,
+          "y": 99,
+          "width": 10,
+          "height": 324,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "f3tl1k",
+          "package": null,
+          "id": "n7_byo3",
+          "name": "arrow1",
+          "x": -1,
+          "y": 86,
+          "width": 12,
+          "height": 12,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "f3tl1m",
+          "package": null,
+          "id": "n8_byo3",
+          "name": "arrow2",
+          "x": -1,
+          "y": 422,
+          "width": 12,
+          "height": 12,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "f3tl1n",
+          "package": null,
+          "id": "n4",
+          "name": "grip",
+          "x": 0,
+          "y": 99,
+          "width": 10,
+          "height": 6,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        }
+      ]
+    },
+    "f3tl1y": {
+      "type": 3,
+      "id": "f3tl1y",
+      "name": "AccountInfo_Com_Skin",
+      "path": "/Components/HeroSkin/",
+      "file": null,
+      "exported": false,
+      "width": 708,
+      "height": 828,
+      "objectType": 0,
+      "children": [
+        {
+          "type": 9,
+          "source": "ak421h",
+          "package": "xuaw6o8j",
+          "id": "n2_m2t8",
+          "name": "com_Skin",
+          "x": -80,
+          "y": 1,
+          "scale": [
+            0.7699999809265137,
+            0.7699999809265137
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n4_sstg",
+          "name": "n4",
+          "x": 0,
+          "y": 0,
+          "width": 836,
+          "height": 828,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        }
+      ]
+    },
+    "f3tl1z": {
+      "type": 3,
+      "id": "f3tl1z",
+      "name": "AccountInfo_Slider_Exp",
+      "path": "/Components/",
+      "file": null,
+      "exported": false,
+      "width": 114,
+      "height": 8,
+      "objectType": 14,
+      "children": [
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n3_g6ne",
+          "name": "n3",
+          "x": 0,
+          "y": 0,
+          "width": 114,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n2_fpzs",
+          "name": "bar",
+          "x": 0,
+          "y": 0,
+          "width": 114,
+          "height": 8,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n4_g6ne",
+          "name": "title",
+          "x": -2,
+          "y": -39,
+          "width": 193,
+          "height": 29,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": null,
+          "fontSize": 20,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "align": 0,
+          "verticalAlign": 1,
+          "text": "50000/50000"
+        }
+      ]
+    },
+    "hni02": {
+      "type": 3,
+      "id": "hni02",
+      "name": "AccountInfo_Com_Hero",
+      "path": "/Components/HeroSkin/",
+      "file": null,
+      "exported": false,
+      "width": 1920,
+      "height": 1080,
+      "objectType": 0,
+      "children": [
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n5_hni0",
+          "name": "mohu",
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 4,
+          "source": null,
+          "package": null,
+          "id": "n0_hni0",
+          "name": "n0",
+          "x": 519,
+          "y": 230,
+          "width": 969,
+          "height": 594,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 10,
+          "source": null,
+          "package": null,
+          "id": "n1_hni0",
+          "name": "list_Hero",
+          "x": 554,
+          "y": 269,
+          "width": 892,
+          "height": 481,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 0,
+          "source": "f3tl1s",
+          "package": null,
+          "id": "n8_f3tl",
+          "name": "n8",
+          "x": 534,
+          "y": 744,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 9,
+          "source": "nc4bac",
+          "package": "xuaw6o8j",
+          "id": "n9_f3tl",
+          "name": "btn_Sure",
+          "x": 1157,
+          "y": 735,
+          "scale": [
+            0.699999988079071,
+            0.699999988079071
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        }
+      ]
+    },
+    "hni04": {
+      "type": 3,
+      "id": "hni04",
+      "name": "AccountInfo_Button_Hero",
+      "path": "/Components/HeroSkin/",
+      "file": null,
+      "exported": false,
+      "width": 212,
+      "height": 264,
+      "objectType": 12,
+      "children": [
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n32_o97f",
+          "name": "n32",
+          "x": 0,
+          "y": 0,
+          "width": 212,
+          "height": 264,
+          "pivot": [
+            0.5,
+            0.5,
+            0
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 0,
+          "source": "gd4dax",
+          "package": "m6sn3r22",
+          "id": "n33_f3tl",
+          "name": "n33",
+          "x": -5,
+          "y": -4,
+          "width": 226,
+          "height": 275,
+          "pivot": [
+            0.5,
+            0.5,
+            0
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 0,
+          "source": "hni05",
+          "package": null,
+          "id": "n27_jbxb",
+          "name": "n27",
+          "x": 7,
+          "y": 6,
+          "width": 198,
+          "height": 250,
+          "pivot": [
+            0.5,
+            0.5,
+            0
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n28_jbxb",
+          "name": "n28",
+          "x": 7,
+          "y": 6,
+          "width": 198,
+          "height": 250,
+          "pivot": [
+            0.5,
+            0.5,
+            0
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "hni07",
+          "package": null,
+          "id": "n3_fjwp",
+          "name": "loader_Character",
+          "x": 0,
+          "y": 0,
+          "pivot": [
+            0.5,
+            0.5,
+            0
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n31_jbxb",
+          "name": "txt_chrname",
+          "x": 38,
+          "y": 227,
+          "width": 135,
+          "height": 32,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei",
+          "fontSize": 22,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 0,
+          "text": null
+        },
+        {
+          "type": 9,
+          "source": "w8cnq37",
+          "package": "m6sn3r22",
+          "id": "n34_w8cn",
+          "name": "btn_Collect",
+          "x": -5,
+          "y": -7,
+          "scale": [
+            0.4000000059604645,
+            0.4000000059604645
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": false
+        }
+      ]
+    },
+    "hni07": {
+      "type": 3,
+      "id": "hni07",
+      "name": "AccountInfo_Loader_Hero",
+      "path": "/Components/HeroSkin/",
+      "file": null,
+      "exported": false,
+      "width": 212,
+      "height": 264,
+      "objectType": 0,
+      "children": [
+        {
+          "type": 4,
+          "source": null,
+          "package": null,
+          "id": "n3_fjwp",
+          "name": "loader_Character",
+          "x": 0,
+          "y": 0,
+          "width": 212,
+          "height": 264,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n4_f3tl",
+          "name": "n4",
+          "x": 7,
+          "y": 6,
+          "width": 198,
+          "height": 226,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        }
+      ]
+    },
+    "it6m2w": {
+      "type": 3,
+      "id": "it6m2w",
+      "name": "Account_Button_CopyReplayId",
+      "path": "/Components/Data/",
+      "file": null,
+      "exported": false,
+      "width": 37,
+      "height": 40,
+      "objectType": 12,
+      "children": [
+        {
+          "type": 0,
+          "source": "it6m2p",
+          "package": null,
+          "id": "n27_it6m",
+          "name": "n27",
+          "x": 0,
+          "y": 0,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        }
+      ]
+    },
+    "it6m2x": {
+      "type": 3,
+      "id": "it6m2x",
+      "name": "AccountInfo_Button_Replay",
+      "path": "/Components/Data/",
+      "file": null,
+      "exported": false,
+      "width": 162,
+      "height": 79,
+      "objectType": 12,
+      "children": [
+        {
+          "type": 0,
+          "source": "it6m2z",
+          "package": null,
+          "id": "n22_it6m",
+          "name": "n22",
+          "x": -7,
+          "y": -9,
+          "width": 184,
+          "height": 102,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 0,
+          "source": "it6m2y",
+          "package": null,
+          "id": "n21_it6m",
+          "name": "n21",
+          "x": 0,
+          "y": 2,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "color": [
+            255,
+            187,
+            36,
+            255
+          ],
+          "flip": 0
+        },
+        {
+          "type": 0,
+          "source": "it6m2y",
+          "package": null,
+          "id": "n23_it6m",
+          "name": "n23",
+          "x": 0,
+          "y": 2,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "color": [
+            255,
+            187,
+            36,
+            255
+          ],
+          "flip": 0
+        },
+        {
+          "type": 0,
+          "source": "it6m2y",
+          "package": null,
+          "id": "n24_it6m",
+          "name": "n24",
+          "x": 0,
+          "y": 2,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "color": [
+            22,
+            178,
+            219,
+            255
+          ],
+          "flip": 0
+        },
+        {
+          "type": 0,
+          "source": "it6m2y",
+          "package": null,
+          "id": "n25_it6m",
+          "name": "n25",
+          "x": 0,
+          "y": 2,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "color": [
+            134,
+            133,
+            130,
+            255
+          ],
+          "flip": 0
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n20_rrd6",
+          "name": "txt_Save",
+          "x": 1,
+          "y": 8,
+          "width": 161,
+          "height": 69,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei_TMP",
+          "fontSize": 36,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": "保存"
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n28_it6m",
+          "name": "txt_Play",
+          "x": 1,
+          "y": 8,
+          "width": 161,
+          "height": 69,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei_TMP",
+          "fontSize": 36,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": "播放"
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n30_it6m",
+          "name": "txt_Delete",
+          "x": 1,
+          "y": 8,
+          "width": 161,
+          "height": 69,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei_TMP",
+          "fontSize": 36,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": "删除"
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n29_it6m",
+          "name": "txt_Saved",
+          "x": 1,
+          "y": 8,
+          "width": 161,
+          "height": 69,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei_TMP",
+          "fontSize": 36,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": "保存完成"
+        }
+      ]
+    },
+    "it6m32": {
+      "type": 3,
+      "id": "it6m32",
+      "name": "AccountInfo_Button_ReplaySaving",
+      "path": "/Components/Data/",
+      "file": null,
+      "exported": false,
+      "width": 162,
+      "height": 79,
+      "objectType": 12,
+      "children": [
+        {
+          "type": 0,
+          "source": "it6m2z",
+          "package": null,
+          "id": "n22_it6m",
+          "name": "n22",
+          "x": -7,
+          "y": -9,
+          "width": 184,
+          "height": 102,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 0,
+          "source": "it6m2y",
+          "package": null,
+          "id": "n21_it6m",
+          "name": "n21",
+          "x": 0,
+          "y": 2,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "color": [
+            166,
+            255,
+            0,
+            255
+          ],
+          "flip": 0
+        },
+        {
+          "type": 0,
+          "source": "it6m30",
+          "package": null,
+          "id": "n26_mdt4",
+          "name": "n26",
+          "x": -1,
+          "y": 16,
+          "pivot": [
+            0.5,
+            0.5,
+            0
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n20_rrd6",
+          "name": "title",
+          "x": 38,
+          "y": 2,
+          "width": 124,
+          "height": 74,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei_TMP",
+          "fontSize": 36,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": "保存中"
+        }
+      ]
+    },
+    "jgmz2e": {
+      "type": 3,
+      "id": "jgmz2e",
+      "name": "AccountInfo_Button_Block",
+      "path": "/Components/Data/",
+      "file": null,
+      "exported": false,
+      "width": 104,
+      "height": 64,
+      "objectType": 12,
+      "children": [
+        {
+          "type": 0,
+          "source": "jgmz2f",
+          "package": null,
+          "id": "n19_rrd6",
+          "name": "n19",
+          "x": -8,
+          "y": -6,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n20_rrd6",
+          "name": "title",
+          "x": 9,
+          "y": 7,
+          "width": 84,
+          "height": 49,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei_TMP",
+          "fontSize": 36,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": "拉黑"
+        }
+      ]
+    },
+    "p5xi2j": {
+      "type": 3,
+      "id": "p5xi2j",
+      "name": "AccountInfo_Button_UID",
+      "path": "/Components/",
+      "file": null,
+      "exported": false,
+      "width": 296,
+      "height": 46,
+      "objectType": 12,
+      "children": [
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n71_mdt4",
+          "name": "txt_UID",
+          "x": 2,
+          "y": -8,
+          "width": 255,
+          "height": 63,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "Impact_TMP",
+          "fontSize": 47,
+          "color": [
+            238,
+            35,
+            116,
+            255
+          ],
+          "align": 0,
+          "verticalAlign": 1,
+          "text": null
+        },
+        {
+          "type": 0,
+          "source": "it6m2p",
+          "package": null,
+          "id": "n72_mdt4",
+          "name": "n72",
+          "x": 257,
+          "y": 3,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        }
+      ]
+    },
+    "rrd628": {
+      "type": 3,
+      "id": "rrd628",
+      "name": "AccountInfo_Button_Accuse",
+      "path": "/Components/Data/",
+      "file": null,
+      "exported": false,
+      "width": 104,
+      "height": 64,
+      "objectType": 12,
+      "children": [
+        {
+          "type": 0,
+          "source": "rrd627",
+          "package": null,
+          "id": "n19_rrd6",
+          "name": "n19",
+          "x": -8,
+          "y": -6,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n20_rrd6",
+          "name": "title",
+          "x": 9,
+          "y": 7,
+          "width": 84,
+          "height": 49,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei_TMP",
+          "fontSize": 36,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": "举报"
+        }
+      ]
+    },
+    "x20l20": {
+      "type": 3,
+      "id": "x20l20",
+      "name": "AccountInfo_Com_Main",
+      "path": "/Components/",
+      "file": null,
+      "exported": false,
+      "width": 1920,
+      "height": 1080,
+      "objectType": 0,
+      "children": [
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n60_f3tl",
+          "name": "n60",
+          "x": 390,
+          "y": 98,
+          "width": 1232,
+          "height": 860,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "f3tl14",
+          "package": null,
+          "id": "n71_mdt4",
+          "name": "btn_RefreshSkin",
+          "x": 284,
+          "y": 815,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 0,
+          "source": "f3tl12",
+          "package": null,
+          "id": "n5_m2t8",
+          "name": "n5",
+          "x": 390,
+          "y": 98,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 9,
+          "source": "f3tl1y",
+          "package": null,
+          "id": "n2_m2t8",
+          "name": "com_Skin",
+          "x": 408,
+          "y": 112,
+          "width": 708,
+          "height": 828,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "6rkw2d",
+          "package": null,
+          "id": "n69_ppwd",
+          "name": "btn_changeName",
+          "x": 1454,
+          "y": 654,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 0,
+          "source": "f3tl16",
+          "package": null,
+          "id": "n21_zhzt",
+          "name": "n21",
+          "x": 872,
+          "y": 721,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 9,
+          "source": "zhzta",
+          "package": null,
+          "id": "n11_zhzt",
+          "name": "btn_Achieve_0",
+          "x": 928,
+          "y": 791,
+          "scale": [
+            0.699999988079071,
+            0.699999988079071
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "zhzta",
+          "package": null,
+          "id": "n15_zhzt",
+          "name": "btn_Achieve_1",
+          "x": 1038,
+          "y": 791,
+          "scale": [
+            0.699999988079071,
+            0.699999988079071
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "zhzta",
+          "package": null,
+          "id": "n16_zhzt",
+          "name": "btn_Achieve_2",
+          "x": 1148,
+          "y": 791,
+          "scale": [
+            0.699999988079071,
+            0.699999988079071
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "zhzta",
+          "package": null,
+          "id": "n17_zhzt",
+          "name": "btn_Achieve_3",
+          "x": 1258,
+          "y": 791,
+          "scale": [
+            0.699999988079071,
+            0.699999988079071
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "zhzta",
+          "package": null,
+          "id": "n70_mdt4",
+          "name": "btn_Achieve_4",
+          "x": 1369,
+          "y": 791,
+          "scale": [
+            0.699999988079071,
+            0.699999988079071
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "zhzta",
+          "package": null,
+          "id": "n18_zhzt",
+          "name": "btn_Achieve_5",
+          "x": 1477,
+          "y": 791,
+          "scale": [
+            0.699999988079071,
+            0.699999988079071
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 5,
+          "source": null,
+          "package": null,
+          "id": "n19_zhzt",
+          "name": "n19",
+          "x": 872,
+          "y": 654,
+          "width": 740,
+          "height": 283,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 0,
+          "source": "f3tl1c",
+          "package": null,
+          "id": "n26_zhzt",
+          "name": "n26",
+          "x": 964,
+          "y": 108,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 9,
+          "source": "zhztd",
+          "package": null,
+          "id": "n23_zhzt",
+          "name": "btn_Data",
+          "x": 1113,
+          "y": 111,
+          "width": 155,
+          "height": 72,
+          "scale": [
+            0.800000011920929,
+            0.800000011920929
+          ],
+          "pivot": [
+            0.5,
+            0.0,
+            0
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "zhztd",
+          "package": null,
+          "id": "n24_zhzt",
+          "name": "btn_Battle",
+          "x": 1243,
+          "y": 111,
+          "width": 155,
+          "height": 72,
+          "scale": [
+            0.800000011920929,
+            0.800000011920929
+          ],
+          "pivot": [
+            0.5,
+            0.0,
+            0
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "zhztd",
+          "package": null,
+          "id": "n68_cisx",
+          "name": "btn_Replay",
+          "x": 1372,
+          "y": 111,
+          "width": 155,
+          "height": 72,
+          "scale": [
+            0.800000011920929,
+            0.800000011920929
+          ],
+          "pivot": [
+            0.5,
+            0.0,
+            0
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "zhztg",
+          "package": null,
+          "id": "n27_zhzt",
+          "name": "btn_ShowDataToggle",
+          "x": 1389,
+          "y": 577,
+          "width": 118,
+          "height": 36,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "zhztg",
+          "package": null,
+          "id": "n28_zhzt",
+          "name": "btn_ShowFightToggle",
+          "x": 1389,
+          "y": 577,
+          "width": 118,
+          "height": 36,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n72_mdt4",
+          "name": "txt_ReplayTip",
+          "x": 1136,
+          "y": 293,
+          "width": 348,
+          "height": 135,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": false,
+          "font": "JingNanBoBoHei",
+          "fontSize": 50,
+          "color": [
+            175,
+            175,
+            175,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": null
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n61_sstg",
+          "name": "txt_StatisticalTip",
+          "x": 1122,
+          "y": 313,
+          "width": 369,
+          "height": 66,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": false,
+          "font": "JingNanBoBoHei",
+          "fontSize": 45,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": null
+        },
+        {
+          "type": 0,
+          "source": "it6m2u",
+          "package": null,
+          "id": "n52_f3tl",
+          "name": "n52",
+          "x": 1063,
+          "y": 175,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n30_zhzt",
+          "name": "txt_FightCount",
+          "x": 1085,
+          "y": 181,
+          "width": 346,
+          "height": 44,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei",
+          "fontSize": 30,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "align": 0,
+          "verticalAlign": 1,
+          "text": "累计参与局数：{data=0}"
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n31_zhzt",
+          "name": "txt_WinCount",
+          "x": 1085,
+          "y": 248,
+          "width": 346,
+          "height": 44,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei",
+          "fontSize": 30,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "align": 0,
+          "verticalAlign": 1,
+          "text": "累计胜利局数：{data=0}"
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n32_zhzt",
+          "name": "txt_HeroCardCount",
+          "x": 1085,
+          "y": 315,
+          "width": 346,
+          "height": 44,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei",
+          "fontSize": 30,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "align": 0,
+          "verticalAlign": 1,
+          "text": "拥有角色数量：{data=0}"
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n33_zhzt",
+          "name": "txt_Hero",
+          "x": 1085,
+          "y": 380,
+          "width": 346,
+          "height": 44,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei",
+          "fontSize": 30,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "align": 0,
+          "verticalAlign": 1,
+          "text": "最常用角色：{data=0}"
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n34_zhzt",
+          "name": "txt_AdornCount",
+          "x": 1085,
+          "y": 447,
+          "width": 346,
+          "height": 44,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei",
+          "fontSize": 30,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "align": 0,
+          "verticalAlign": 1,
+          "text": "拥有装扮数量：{data=0}"
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n73_g04j",
+          "name": "txt_SkinCount",
+          "x": 1085,
+          "y": 509,
+          "width": 346,
+          "height": 44,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei",
+          "fontSize": 30,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "align": 0,
+          "verticalAlign": 1,
+          "text": "拥有皮肤数量：{data=0}"
+        },
+        {
+          "type": 5,
+          "source": null,
+          "package": null,
+          "id": "n35_zhzt",
+          "name": "group_Statistical",
+          "x": 1063,
+          "y": 175,
+          "width": 439,
+          "height": 404,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n62_sstg",
+          "name": "txt_FightDataTip",
+          "x": 1122,
+          "y": 313,
+          "width": 369,
+          "height": 66,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": false,
+          "font": "JingNanBoBoHei",
+          "fontSize": 45,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": null
+        },
+        {
+          "type": 10,
+          "source": null,
+          "package": null,
+          "id": "n41_zhzt",
+          "name": "list_FightData",
+          "x": 1014,
+          "y": 178,
+          "width": 490,
+          "height": 386,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 5,
+          "source": null,
+          "package": null,
+          "id": "n58_f3tl",
+          "name": "n58",
+          "x": 1014,
+          "y": 178,
+          "width": 490,
+          "height": 386,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 5,
+          "source": null,
+          "package": null,
+          "id": "n25_zhzt",
+          "name": "n25",
+          "x": 964,
+          "y": 108,
+          "width": 572,
+          "height": 532,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "z1wk0",
+          "package": "xuaw6o8j",
+          "id": "n4_m2t8",
+          "name": "com_Label",
+          "x": 935,
+          "y": 642,
+          "scale": [
+            0.6700000166893005,
+            0.6700000166893005
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "p5xi2j",
+          "package": null,
+          "id": "n6_m2t8",
+          "name": "btn_UID",
+          "x": 948,
+          "y": 759,
+          "pivot": [
+            0.0,
+            0.5,
+            0
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "f3tl1z",
+          "package": null,
+          "id": "n59_f3tl",
+          "name": "progress_Exp",
+          "x": 1276,
+          "y": 776,
+          "width": 300,
+          "height": 16,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 5,
+          "source": null,
+          "package": null,
+          "id": "n8_m2t8",
+          "name": "n8",
+          "x": 935,
+          "y": 642,
+          "width": 760,
+          "height": 180,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 0,
+          "source": "m1i721",
+          "package": null,
+          "id": "n65_m1i7",
+          "name": "n65",
+          "x": 1015,
+          "y": 574,
+          "scale": [
+            0.4000000059604645,
+            0.4000000059604645
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 0,
+          "source": "m1i722",
+          "package": null,
+          "id": "n66_m1i7",
+          "name": "n66",
+          "x": 1015,
+          "y": 574,
+          "scale": [
+            0.4000000059604645,
+            0.4000000059604645
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n64_r2u9",
+          "name": "txt_PraiseNum",
+          "x": 1064,
+          "y": 574,
+          "width": 174,
+          "height": 49,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei",
+          "fontSize": 36,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "align": 0,
+          "verticalAlign": 1,
+          "text": "111"
+        },
+        {
+          "type": 5,
+          "source": null,
+          "package": null,
+          "id": "n67_m1i7",
+          "name": "n67",
+          "x": 1015,
+          "y": 574,
+          "width": 223,
+          "height": 120,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "zhzti",
+          "package": null,
+          "id": "n42_zhzt",
+          "name": "com_Fight",
+          "x": 449,
+          "y": 155,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        }
+      ]
+    },
+    "zhzta": {
+      "type": 3,
+      "id": "zhzta",
+      "name": "AccountInfo_Button_ShowAchieve",
+      "path": "/Components/Achieve/",
+      "file": null,
+      "exported": false,
+      "width": 132,
+      "height": 133,
+      "objectType": 12,
+      "children": [
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n19_gd4d",
+          "name": "n19",
+          "x": 0,
+          "y": 0,
+          "width": 130,
+          "height": 131,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n20_gd4d",
+          "name": "n20",
+          "x": 2,
+          "y": 2,
+          "width": 130,
+          "height": 131,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n21_gd4d",
+          "name": "n21",
+          "x": 10,
+          "y": 50,
+          "width": 114,
+          "height": 42,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": null,
+          "fontSize": 26,
+          "color": [
+            139,
+            139,
+            139,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": "EMPTY"
+        },
+        {
+          "type": 5,
+          "source": null,
+          "package": null,
+          "id": "n17_zhzt",
+          "name": "n17",
+          "x": 0,
+          "y": 0,
+          "width": 132,
+          "height": 133,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "f3tl19",
+          "package": null,
+          "id": "n18_f3tl",
+          "name": "com_AchieveLoader",
+          "x": 1,
+          "y": 2,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        }
+      ]
+    },
+    "zhztb": {
+      "type": 3,
+      "id": "zhztb",
+      "name": "AccountInfo_Com_Achieve",
+      "path": "/Components/Achieve/",
+      "file": null,
+      "exported": false,
+      "width": 1920,
+      "height": 1080,
+      "objectType": 0,
+      "children": [
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n5_hni0",
+          "name": "mohu",
+          "x": 3,
+          "y": 0,
+          "width": 1920,
+          "height": 1080,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n6_hni0",
+          "name": "n6",
+          "x": 519,
+          "y": 213,
+          "width": 980,
+          "height": 636,
+          "alpha": 0.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 0,
+          "source": "gd4dax",
+          "package": "m6sn3r22",
+          "id": "n17_f3tl",
+          "name": "n17",
+          "x": 520,
+          "y": 214,
+          "width": 979,
+          "height": 639,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n15_zhzt",
+          "name": "n15",
+          "x": 727,
+          "y": 475,
+          "width": 581,
+          "height": 123,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei",
+          "fontSize": 58,
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": "还未达成任何成就"
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n16_f3tl",
+          "name": "n16",
+          "x": 534,
+          "y": 226,
+          "width": 944,
+          "height": 604,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 5,
+          "source": null,
+          "package": null,
+          "id": "n9_zhzt",
+          "name": "n9",
+          "x": 519,
+          "y": 213,
+          "width": 980,
+          "height": 640,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 10,
+          "source": null,
+          "package": null,
+          "id": "n1_hni0",
+          "name": "list_Achieve",
+          "x": 572,
+          "y": 259,
+          "width": 874,
+          "height": 478,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 0,
+          "source": "f3tl1v",
+          "package": null,
+          "id": "n18_f3tl",
+          "name": "n18",
+          "x": 534,
+          "y": 737,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 9,
+          "source": "nc4bac",
+          "package": "xuaw6o8j",
+          "id": "n19_f3tl",
+          "name": "btn_Sure",
+          "x": 1161,
+          "y": 736,
+          "width": 298,
+          "height": 101,
+          "scale": [
+            0.699999988079071,
+            0.699999988079071
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n20_f3tl",
+          "name": "n20",
+          "x": 629,
+          "y": 748,
+          "width": 489,
+          "height": 72,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei",
+          "fontSize": 54,
+          "color": [
+            175,
+            175,
+            175,
+            255
+          ],
+          "align": 0,
+          "verticalAlign": 1,
+          "text": null
+        },
+        {
+          "type": 5,
+          "source": null,
+          "package": null,
+          "id": "n21_f3tl",
+          "name": "n21",
+          "x": 534,
+          "y": 736,
+          "width": 944,
+          "height": 101,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        }
+      ]
+    },
+    "zhztc": {
+      "type": 3,
+      "id": "zhztc",
+      "name": "AccountInfo_Button_SelectAchieve",
+      "path": "/Components/Achieve/",
+      "file": null,
+      "exported": false,
+      "width": 244,
+      "height": 276,
+      "objectType": 12,
+      "children": [
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n24_gd4d",
+          "name": "n24",
+          "x": 2,
+          "y": 1,
+          "width": 233,
+          "height": 264,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n25_gd4d",
+          "name": "n25",
+          "x": 7,
+          "y": 8,
+          "width": 235,
+          "height": 268,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n26_gd4d",
+          "name": "n26",
+          "x": 5,
+          "y": 8,
+          "width": 233,
+          "height": 264,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n21_zhzt",
+          "name": "n21",
+          "x": 2,
+          "y": 2,
+          "width": 241,
+          "height": 274,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n16_zhzt",
+          "name": "txt_Achieve",
+          "x": 12,
+          "y": 232,
+          "width": 220,
+          "height": 42,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei",
+          "fontSize": 30,
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": null
+        },
+        {
+          "type": 9,
+          "source": "f3tl19",
+          "package": null,
+          "id": "n23_f3tl",
+          "name": "com_AchieveLoader",
+          "x": 5,
+          "y": 8,
+          "width": 232,
+          "height": 232,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n17_zhzt",
+          "name": "n17",
+          "x": 1,
+          "y": 32,
+          "width": 65,
+          "height": 29,
+          "alpha": 1.0,
+          "rotation": -30.0,
+          "visible": true
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n18_zhzt",
+          "name": "n18",
+          "x": 2,
+          "y": 31,
+          "width": 64,
+          "height": 29,
+          "alpha": 1.0,
+          "rotation": -30.0,
+          "visible": true,
+          "font": "JingNanBoBoHei",
+          "fontSize": 20,
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 0,
+          "text": "已展示"
+        },
+        {
+          "type": 5,
+          "source": null,
+          "package": null,
+          "id": "n19_zhzt",
+          "name": "n19",
+          "x": 1,
+          "y": 31,
+          "width": 65,
+          "height": 29,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        }
+      ]
+    },
+    "zhztd": {
+      "type": 3,
+      "id": "zhztd",
+      "name": "AccountInfo_Button_ShowData",
+      "path": "/Components/Data/",
+      "file": null,
+      "exported": false,
+      "width": 92,
+      "height": 73,
+      "objectType": 12,
+      "children": [
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n7_f3tl",
+          "name": "n7",
+          "x": 0,
+          "y": -17,
+          "width": 92,
+          "height": 87,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n8_f3tl",
+          "name": "n8",
+          "x": 0,
+          "y": -17,
+          "width": 92,
+          "height": 87,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n3_qb3s",
+          "name": "title",
+          "x": 0,
+          "y": 14,
+          "width": 92,
+          "height": 44,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei",
+          "fontSize": 25,
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": null
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n9_f3tl",
+          "name": "n9",
+          "x": 0,
+          "y": 0,
+          "width": 92,
+          "height": 70,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        }
+      ]
+    },
+    "zhztg": {
+      "type": 3,
+      "id": "zhztg",
+      "name": "AccountInfo_Button_Toggle",
+      "path": "/Components/Data/",
+      "file": null,
+      "exported": false,
+      "width": 253,
+      "height": 36,
+      "objectType": 12,
+      "children": [
+        {
+          "type": 0,
+          "source": "it6m2s",
+          "package": null,
+          "id": "n3_pl4x",
+          "name": "di_0",
+          "x": -7,
+          "y": 2,
+          "width": 35,
+          "height": 35,
+          "pivot": [
+            0.5,
+            0.5,
+            0
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 0,
+          "source": "it6m2t",
+          "package": null,
+          "id": "n4_pl4x",
+          "name": "di_1",
+          "x": 0,
+          "y": 10,
+          "width": 19,
+          "height": 19,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n5_pl4x",
+          "name": "title",
+          "x": 20,
+          "y": -4,
+          "width": 177,
+          "height": 48,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei",
+          "fontSize": 30,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "align": 0,
+          "verticalAlign": 1,
+          "text": null
+        }
+      ]
+    },
+    "zhzth": {
+      "type": 3,
+      "id": "zhzth",
+      "name": "Account_Button_FightData",
+      "path": "/Components/Data/",
+      "file": null,
+      "exported": false,
+      "width": 460,
+      "height": 58,
+      "objectType": 12,
+      "children": [
+        {
+          "type": 0,
+          "source": "f3tl1i",
+          "package": null,
+          "id": "n40_f3tl",
+          "name": "n40",
+          "x": 44,
+          "y": 0,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n37_zhzt",
+          "name": "txt_MapMode",
+          "x": 63,
+          "y": 8,
+          "width": 205,
+          "height": 42,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei",
+          "fontSize": 24,
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": null
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n38_zhzt",
+          "name": "txt_Rank",
+          "x": 269,
+          "y": 0,
+          "width": 65,
+          "height": 58,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei",
+          "fontSize": 18,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": null
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n39_zhzt",
+          "name": "txt_HeroName",
+          "x": 335,
+          "y": 8,
+          "width": 111,
+          "height": 42,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei",
+          "fontSize": 20,
+          "color": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": null
+        },
+        {
+          "type": 0,
+          "source": "jgmz2i",
+          "package": null,
+          "id": "n42_jgmz",
+          "name": "n42",
+          "x": 276,
+          "y": 11,
+          "width": 51,
+          "height": 38,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 5,
+          "source": null,
+          "package": null,
+          "id": "n41_f3tl",
+          "name": "n41",
+          "x": 44,
+          "y": 0,
+          "width": 416,
+          "height": 68,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        }
+      ]
+    },
+    "zhzti": {
+      "type": 3,
+      "id": "zhzti",
+      "name": "AccountInfo_Com_FightInfo",
+      "path": "/Components/Data/",
+      "file": null,
+      "exported": false,
+      "width": 504,
+      "height": 596,
+      "objectType": 0,
+      "children": [
+        {
+          "type": 9,
+          "source": "it6m2x",
+          "package": null,
+          "id": "n23_lw7s",
+          "name": "btn_ReplaySave",
+          "x": 11,
+          "y": 580,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": false
+        },
+        {
+          "type": 9,
+          "source": "it6m32",
+          "package": null,
+          "id": "n28_mdt4",
+          "name": "btn_ReplaySaving",
+          "x": 11,
+          "y": 580,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": false
+        },
+        {
+          "type": 9,
+          "source": "it6m2x",
+          "package": null,
+          "id": "n24_lw7s",
+          "name": "btn_ReplayPlay",
+          "x": 212,
+          "y": 580,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": false
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n6_hni0",
+          "name": "n6",
+          "x": 0,
+          "y": 0,
+          "width": 504,
+          "height": 568,
+          "alpha": 0.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 0,
+          "source": "it6m2r",
+          "package": null,
+          "id": "n0_hni0",
+          "name": "n0",
+          "x": 0,
+          "y": 0,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 5,
+          "source": null,
+          "package": null,
+          "id": "n7_hni0",
+          "name": "n7",
+          "x": 0,
+          "y": 0,
+          "width": 504,
+          "height": 604,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "zhztv",
+          "package": null,
+          "id": "n8_zhzt",
+          "name": "com_FirstLabel",
+          "x": 16,
+          "y": 90,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "zhztv",
+          "package": null,
+          "id": "n9_zhzt",
+          "name": "com_SecondLabel",
+          "x": 16,
+          "y": 201,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "zhztv",
+          "package": null,
+          "id": "n10_zhzt",
+          "name": "com_ThirdLabel",
+          "x": 16,
+          "y": 312,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "zhztv",
+          "package": null,
+          "id": "n11_zhzt",
+          "name": "com_ForthLabel",
+          "x": 16,
+          "y": 423,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 5,
+          "source": null,
+          "package": null,
+          "id": "n17_zhzt",
+          "name": "n17",
+          "x": 16,
+          "y": 90,
+          "width": 368,
+          "height": 449,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n18_zhzt",
+          "name": "txt_Time",
+          "x": 7,
+          "y": 540,
+          "width": 371,
+          "height": 40,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei",
+          "fontSize": 25,
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": null
+        },
+        {
+          "type": 9,
+          "source": "rrd628",
+          "package": null,
+          "id": "n19_rrd6",
+          "name": "btn_Accuse",
+          "x": -107,
+          "y": 205,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": false
+        },
+        {
+          "type": 9,
+          "source": "jgmz2e",
+          "package": null,
+          "id": "n21_jgmz",
+          "name": "btn_Block",
+          "x": -107,
+          "y": 269,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": false
+        },
+        {
+          "type": 5,
+          "source": null,
+          "package": null,
+          "id": "n22_jgmz",
+          "name": "group_Operation",
+          "x": -107,
+          "y": 205,
+          "width": 104,
+          "height": 128,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n26_it6m",
+          "name": "txt_ReplayId",
+          "x": 3,
+          "y": 4,
+          "width": 334,
+          "height": 63,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "Impact",
+          "fontSize": 34,
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": null
+        },
+        {
+          "type": 9,
+          "source": "it6m2w",
+          "package": null,
+          "id": "n27_it6m",
+          "name": "btn_CopyReplayId",
+          "x": 309,
+          "y": -5,
+          "width": 79,
+          "height": 80,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        }
+      ]
+    },
+    "zhztj": {
+      "type": 3,
+      "id": "zhztj",
+      "name": "AccountInfo_Com_Rank",
+      "path": "/Components/Data/Rank/",
+      "file": null,
+      "exported": false,
+      "width": 315,
+      "height": 134,
+      "objectType": 0,
+      "children": [
+        {
+          "type": 10,
+          "source": null,
+          "package": null,
+          "id": "n99_hoc6",
+          "name": "list_Level",
+          "x": 170,
+          "y": 35,
+          "width": 91,
+          "height": 41,
+          "scale": [
+            1.5,
+            1.5
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "mmmw3y",
+          "package": "xuaw6o8j",
+          "id": "n100_hoc6",
+          "name": "n100",
+          "x": 198,
+          "y": 112,
+          "width": 44,
+          "height": 44,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n101_hoc6",
+          "name": "txt_Gold",
+          "x": 219,
+          "y": 86,
+          "width": 45,
+          "height": 49,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei_TMP",
+          "fontSize": 36,
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "align": 0,
+          "verticalAlign": 0,
+          "text": null
+        },
+        {
+          "type": 0,
+          "source": "zhztq",
+          "package": null,
+          "id": "n103_ef7v",
+          "name": "image_First",
+          "x": -20,
+          "y": -21,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "color": [
+            70,
+            153,
+            255,
+            255
+          ],
+          "flip": 0
+        },
+        {
+          "type": 0,
+          "source": "zhztr",
+          "package": null,
+          "id": "n104_ef7v",
+          "name": "image_Second",
+          "x": -20,
+          "y": -21,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "color": [
+            255,
+            70,
+            70,
+            255
+          ],
+          "flip": 0
+        },
+        {
+          "type": 0,
+          "source": "zhzts",
+          "package": null,
+          "id": "n105_ef7v",
+          "name": "image_Third",
+          "x": -20,
+          "y": -21,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "color": [
+            161,
+            255,
+            70,
+            255
+          ],
+          "flip": 0
+        },
+        {
+          "type": 0,
+          "source": "zhztt",
+          "package": null,
+          "id": "n106_ef7v",
+          "name": "image_Forth",
+          "x": -20,
+          "y": -21,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "color": [
+            255,
+            216,
+            2,
+            255
+          ],
+          "flip": 0
+        },
+        {
+          "type": 5,
+          "source": null,
+          "package": null,
+          "id": "n107_ef7v",
+          "name": "n107",
+          "x": -20,
+          "y": -21,
+          "width": 210,
+          "height": 172,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        }
+      ]
+    },
+    "zhztk": {
+      "type": 3,
+      "id": "zhztk",
+      "name": "AccountInfoo_Com_PlayerLevel",
+      "path": "/Components/Data/Rank/",
+      "file": null,
+      "exported": false,
+      "width": 40,
+      "height": 40,
+      "objectType": 0,
+      "children": [
+        {
+          "type": 0,
+          "source": "zhztl",
+          "package": null,
+          "id": "n12_i1xv",
+          "name": "n12",
+          "x": 0,
+          "y": 0,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 0,
+          "source": "zhztm",
+          "package": null,
+          "id": "n13_ns45",
+          "name": "n13",
+          "x": 0,
+          "y": 0,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 0,
+          "source": "zhztn",
+          "package": null,
+          "id": "n15_imo3",
+          "name": "n15",
+          "x": 0,
+          "y": 0,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 0,
+          "source": "zhzto",
+          "package": null,
+          "id": "n14_imo3",
+          "name": "n14",
+          "x": 0,
+          "y": 0,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 0,
+          "source": "zhztp",
+          "package": null,
+          "id": "n16_imo3",
+          "name": "n16",
+          "x": 0,
+          "y": 0,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n17_capz",
+          "name": "graph_Effect",
+          "x": 21,
+          "y": 20,
+          "width": 6,
+          "height": 6,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": false
+        }
+      ]
+    },
+    "zhztv": {
+      "type": 3,
+      "id": "zhztv",
+      "name": "AccountInfo_Button_RankInfo",
+      "path": "/Components/Data/Rank/",
+      "file": null,
+      "exported": false,
+      "width": 368,
+      "height": 116,
+      "objectType": 12,
+      "children": [
+        {
+          "type": 0,
+          "source": "f3tl1p",
+          "package": null,
+          "id": "n15_f3tl",
+          "name": "n15",
+          "x": 0,
+          "y": 0,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        },
+        {
+          "type": 9,
+          "source": "zhztj",
+          "package": null,
+          "id": "n8_zhzt",
+          "name": "com_Rank",
+          "x": 6,
+          "y": 5,
+          "scale": [
+            0.6200000047683716,
+            0.6200000047683716
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n13_zhzt",
+          "name": "txt_PlayerNick",
+          "x": 204,
+          "y": 57,
+          "width": 147,
+          "height": 37,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "SIMHEI",
+          "fontSize": 26,
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": null
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n14_zhzt",
+          "name": "txt_HeroNick",
+          "x": 217,
+          "y": 21,
+          "width": 126,
+          "height": 35,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "JingNanBoBoHei",
+          "fontSize": 20,
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": null
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n21_mdt4",
+          "name": "n21",
+          "x": 14,
+          "y": 0,
+          "width": 180,
+          "height": 96,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "Impact_TMP",
+          "fontSize": 74,
+          "color": [
+            242,
+            90,
+            175,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": "-WIN-"
+        },
+        {
+          "type": 6,
+          "source": null,
+          "package": null,
+          "id": "n22_mdt4",
+          "name": "n22",
+          "x": 14,
+          "y": 0,
+          "width": 180,
+          "height": 96,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "font": "Impact_TMP",
+          "fontSize": 74,
+          "color": [
+            90,
+            158,
+            242,
+            255
+          ],
+          "align": 1,
+          "verticalAlign": 1,
+          "text": "-LOSE-"
+        },
+        {
+          "type": 5,
+          "source": null,
+          "package": null,
+          "id": "n18_mo3e",
+          "name": "n18",
+          "x": 14,
+          "y": 0,
+          "width": 180,
+          "height": 96,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 0,
+          "source": "jgmz2h",
+          "package": null,
+          "id": "n20_mr12",
+          "name": "n20",
+          "x": 13,
+          "y": 12,
+          "width": 181,
+          "height": 71,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true,
+          "flip": 0
+        }
+      ]
+    },
+    "6rkw2a": {
+      "type": 0,
+      "id": "6rkw2a",
+      "name": "修改昵称图标",
+      "path": "/Images/",
+      "file": null,
+      "exported": false,
+      "width": 33,
+      "height": 31,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1207,
+          1249,
+          33,
+          31
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          33,
+          31
+        ]
+      }
+    },
+    "7h6s18": {
+      "type": 0,
+      "id": "7h6s18",
+      "name": "个人信息标签3",
+      "path": "/Images/Operate/",
+      "file": null,
+      "exported": false,
+      "width": 301,
+      "height": 97,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1015,
+          1051,
+          301,
+          97
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          301,
+          97
+        ]
+      }
+    },
+    "7h6s19": {
+      "type": 0,
+      "id": "7h6s19",
+      "name": "个人信息标签2",
+      "path": "/Images/Operate/",
+      "file": null,
+      "exported": false,
+      "width": 301,
+      "height": 97,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1015,
+          952,
+          301,
+          97
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          301,
+          97
+        ]
+      }
+    },
+    "7h6s1a": {
+      "type": 0,
+      "id": "7h6s1a",
+      "name": "个人信息标签1",
+      "path": "/Images/Operate/",
+      "file": null,
+      "exported": false,
+      "width": 301,
+      "height": 97,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          574,
+          1432,
+          301,
+          97
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          301,
+          97
+        ]
+      }
+    },
+    "f3tl12": {
+      "type": 0,
+      "id": "f3tl12",
+      "name": "背景",
+      "path": "/Images/Skin/",
+      "file": null,
+      "exported": false,
+      "width": 1232,
+      "height": 860,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          0,
+          0,
+          1230,
+          858
+        ],
+        "rotated": false,
+        "offset": [
+          1,
+          1
+        ],
+        "originalSize": [
+          1232,
+          860
+        ]
+      }
+    },
+    "f3tl16": {
+      "type": 0,
+      "id": "f3tl16",
+      "name": "成就列表-底层",
+      "path": "/Images/Achieve/",
+      "file": null,
+      "exported": false,
+      "width": 740,
+      "height": 216,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1232,
+          0,
+          740,
+          215
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          1
+        ],
+        "originalSize": [
+          740,
+          216
+        ]
+      }
+    },
+    "f3tl1c": {
+      "type": 0,
+      "id": "f3tl1c",
+      "name": "数据战绩-底层",
+      "path": "/Images/Data/",
+      "file": null,
+      "exported": false,
+      "width": 572,
+      "height": 532,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          0,
+          956,
+          572,
+          529
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          2
+        ],
+        "originalSize": [
+          572,
+          532
+        ]
+      }
+    },
+    "f3tl1i": {
+      "type": 0,
+      "id": "f3tl1i",
+      "name": "战绩-底层",
+      "path": "/Images/Data/",
+      "file": null,
+      "exported": false,
+      "width": 416,
+      "height": 68,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          574,
+          1362,
+          414,
+          68
+        ],
+        "rotated": false,
+        "offset": [
+          1,
+          0
+        ],
+        "originalSize": [
+          416,
+          68
+        ]
+      }
+    },
+    "f3tl1l": {
+      "type": 0,
+      "id": "f3tl1l",
+      "name": "进度条箭头",
+      "path": "/Images/",
+      "file": null,
+      "exported": false,
+      "width": 16,
+      "height": 16,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1242,
+          1270,
+          15,
+          8
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          4
+        ],
+        "originalSize": [
+          16,
+          16
+        ]
+      }
+    },
+    "f3tl1p": {
+      "type": 0,
+      "id": "f3tl1p",
+      "name": "战绩-详细框内容框",
+      "path": "/Images/Data/",
+      "file": null,
+      "exported": false,
+      "width": 368,
+      "height": 116,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          990,
+          1362,
+          367,
+          116
+        ],
+        "rotated": false,
+        "offset": [
+          1,
+          0
+        ],
+        "originalSize": [
+          368,
+          116
+        ]
+      }
+    },
+    "f3tl1s": {
+      "type": 0,
+      "id": "f3tl1s",
+      "name": "小窗口-自定义上层",
+      "path": "/Images/Skin/",
+      "file": null,
+      "exported": false,
+      "width": 944,
+      "height": 92,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          946,
+          860,
+          944,
+          90
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          1
+        ],
+        "originalSize": [
+          944,
+          92
+        ]
+      }
+    },
+    "f3tl1v": {
+      "type": 0,
+      "id": "f3tl1v",
+      "name": "小窗口-成就上层",
+      "path": "/Images/Achieve/",
+      "file": null,
+      "exported": false,
+      "width": 944,
+      "height": 96,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          0,
+          860,
+          944,
+          94
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          1
+        ],
+        "originalSize": [
+          944,
+          96
+        ]
+      }
+    },
+    "hni05": {
+      "type": 0,
+      "id": "hni05",
+      "name": "Chr_突破底",
+      "path": "/Images/",
+      "file": null,
+      "exported": false,
+      "width": 262,
+      "height": 331,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1318,
+          952,
+          262,
+          331
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          262,
+          331
+        ]
+      }
+    },
+    "it6m2o": {
+      "type": 0,
+      "id": "it6m2o",
+      "name": "修改昵称",
+      "path": "/Images/修改/新拆分/",
+      "file": null,
+      "exported": false,
+      "width": 121,
+      "height": 88,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1735,
+          770,
+          121,
+          88
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          121,
+          88
+        ]
+      }
+    },
+    "it6m2p": {
+      "type": 0,
+      "id": "it6m2p",
+      "name": "复制",
+      "path": "/Images/修改/新拆分/",
+      "file": null,
+      "exported": false,
+      "width": 37,
+      "height": 40,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          46,
+          1487,
+          37,
+          40
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          37,
+          40
+        ]
+      }
+    },
+    "it6m2r": {
+      "type": 0,
+      "id": "it6m2r",
+      "name": "战绩-详细框",
+      "path": "/Images/修改/新拆分/",
+      "file": null,
+      "exported": false,
+      "width": 501,
+      "height": 604,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1232,
+          217,
+          501,
+          604
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          501,
+          604
+        ]
+      }
+    },
+    "it6m2s": {
+      "type": 0,
+      "id": "it6m2s",
+      "name": "按钮白低",
+      "path": "/Images/修改/新拆分/",
+      "file": null,
+      "exported": false,
+      "width": 35,
+      "height": 35,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1422,
+          823,
+          35,
+          35
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          35,
+          35
+        ]
+      }
+    },
+    "it6m2t": {
+      "type": 0,
+      "id": "it6m2t",
+      "name": "按钮红",
+      "path": "/Images/修改/新拆分/",
+      "file": null,
+      "exported": false,
+      "width": 19,
+      "height": 19,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1242,
+          1249,
+          19,
+          19
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          19,
+          19
+        ]
+      }
+    },
+    "it6m2u": {
+      "type": 0,
+      "id": "it6m2u",
+      "name": "数据-底层",
+      "path": "/Images/修改/新拆分/",
+      "file": null,
+      "exported": false,
+      "width": 439,
+      "height": 404,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          574,
+          956,
+          439,
+          404
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          439,
+          404
+        ]
+      }
+    },
+    "it6m2v": {
+      "type": 0,
+      "id": "it6m2v",
+      "name": "自定义按钮",
+      "path": "/Images/修改/新拆分/",
+      "file": null,
+      "exported": false,
+      "width": 183,
+      "height": 97,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1735,
+          217,
+          183,
+          97
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          183,
+          97
+        ]
+      }
+    },
+    "it6m2y": {
+      "type": 0,
+      "id": "it6m2y",
+      "name": "bai",
+      "path": "/Images/修改/新拆分/",
+      "file": null,
+      "exported": false,
+      "width": 162,
+      "height": 75,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1735,
+          316,
+          162,
+          75
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          162,
+          75
+        ]
+      }
+    },
+    "it6m2z": {
+      "type": 0,
+      "id": "it6m2z",
+      "name": "阴影",
+      "path": "/Images/修改/新拆分/",
+      "file": null,
+      "exported": false,
+      "width": 190,
+      "height": 105,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1015,
+          1249,
+          190,
+          105
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          190,
+          105
+        ]
+      }
+    },
+    "it6m30": {
+      "type": 0,
+      "id": "it6m30",
+      "name": "星星",
+      "path": "/Images/修改/新拆分/",
+      "file": null,
+      "exported": false,
+      "width": 44,
+      "height": 44,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          0,
+          1487,
+          44,
+          44
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          44,
+          44
+        ]
+      }
+    },
+    "jgmz2f": {
+      "type": 0,
+      "id": "jgmz2f",
+      "name": "拉黑",
+      "path": "/Images/Data/",
+      "file": null,
+      "exported": false,
+      "width": 140,
+      "height": 76,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1386,
+          1285,
+          126,
+          63
+        ],
+        "rotated": false,
+        "offset": [
+          8,
+          6
+        ],
+        "originalSize": [
+          140,
+          76
+        ]
+      }
+    },
+    "jgmz2h": {
+      "type": 0,
+      "id": "jgmz2h",
+      "name": "玩家掉线",
+      "path": "/Images/",
+      "file": null,
+      "exported": false,
+      "width": 181,
+      "height": 71,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1207,
+          1285,
+          177,
+          67
+        ],
+        "rotated": false,
+        "offset": [
+          2,
+          1
+        ],
+        "originalSize": [
+          181,
+          71
+        ]
+      }
+    },
+    "jgmz2i": {
+      "type": 0,
+      "id": "jgmz2i",
+      "name": "玩家掉线mini",
+      "path": "/Images/",
+      "file": null,
+      "exported": false,
+      "width": 95,
+      "height": 71,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1892,
+          517,
+          90,
+          63
+        ],
+        "rotated": false,
+        "offset": [
+          2,
+          5
+        ],
+        "originalSize": [
+          95,
+          71
+        ]
+      }
+    },
+    "krvo2k": {
+      "type": 0,
+      "id": "krvo2k",
+      "name": "个人信息标签4",
+      "path": "/Images/Operate/",
+      "file": null,
+      "exported": false,
+      "width": 301,
+      "height": 97,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1015,
+          1150,
+          301,
+          97
+        ],
+        "rotated": false,
+        "offset": [
+          0,
+          0
+        ],
+        "originalSize": [
+          301,
+          97
+        ]
+      }
+    },
+    "m1i721": {
+      "type": 0,
+      "id": "m1i721",
+      "name": "点赞底",
+      "path": "/Images/",
+      "file": null,
+      "exported": false,
+      "width": 120,
+      "height": 120,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1524,
+          1350,
+          114,
+          114
+        ],
+        "rotated": false,
+        "offset": [
+          3,
+          3
+        ],
+        "originalSize": [
+          120,
+          120
+        ]
+      }
+    },
+    "m1i722": {
+      "type": 0,
+      "id": "m1i722",
+      "name": "点赞点击",
+      "path": "/Images/",
+      "file": null,
+      "exported": false,
+      "width": 120,
+      "height": 120,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1899,
+          316,
+          78,
+          72
+        ],
+        "rotated": false,
+        "offset": [
+          21,
+          16
+        ],
+        "originalSize": [
+          120,
+          120
+        ]
+      }
+    },
+    "rrd627": {
+      "type": 0,
+      "id": "rrd627",
+      "name": "举报",
+      "path": "/Images/Data/",
+      "file": null,
+      "exported": false,
+      "width": 140,
+      "height": 76,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1514,
+          1285,
+          126,
+          63
+        ],
+        "rotated": false,
+        "offset": [
+          8,
+          6
+        ],
+        "originalSize": [
+          140,
+          76
+        ]
+      }
+    },
+    "zhztl": {
+      "type": 0,
+      "id": "zhztl",
+      "name": "星星（未持有）",
+      "path": "/Images/Rank/",
+      "file": null,
+      "exported": false,
+      "width": 40,
+      "height": 40,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1232,
+          823,
+          36,
+          35
+        ],
+        "rotated": false,
+        "offset": [
+          3,
+          3
+        ],
+        "originalSize": [
+          40,
+          40
+        ]
+      }
+    },
+    "zhztm": {
+      "type": 0,
+      "id": "zhztm",
+      "name": "星星（红）",
+      "path": "/Images/Rank/",
+      "file": null,
+      "exported": false,
+      "width": 40,
+      "height": 40,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1270,
+          823,
+          36,
+          35
+        ],
+        "rotated": false,
+        "offset": [
+          3,
+          3
+        ],
+        "originalSize": [
+          40,
+          40
+        ]
+      }
+    },
+    "zhztn": {
+      "type": 0,
+      "id": "zhztn",
+      "name": "星星（绿）",
+      "path": "/Images/Rank/",
+      "file": null,
+      "exported": false,
+      "width": 40,
+      "height": 40,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1308,
+          823,
+          36,
+          35
+        ],
+        "rotated": false,
+        "offset": [
+          3,
+          3
+        ],
+        "originalSize": [
+          40,
+          40
+        ]
+      }
+    },
+    "zhzto": {
+      "type": 0,
+      "id": "zhzto",
+      "name": "星星（蓝）",
+      "path": "/Images/Rank/",
+      "file": null,
+      "exported": false,
+      "width": 40,
+      "height": 40,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1384,
+          823,
+          36,
+          35
+        ],
+        "rotated": false,
+        "offset": [
+          3,
+          3
+        ],
+        "originalSize": [
+          40,
+          40
+        ]
+      }
+    },
+    "zhztp": {
+      "type": 0,
+      "id": "zhztp",
+      "name": "星星（橙）",
+      "path": "/Images/Rank/",
+      "file": null,
+      "exported": false,
+      "width": 40,
+      "height": 40,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1346,
+          823,
+          36,
+          35
+        ],
+        "rotated": false,
+        "offset": [
+          3,
+          3
+        ],
+        "originalSize": [
+          40,
+          40
+        ]
+      }
+    },
+    "zhztq": {
+      "type": 0,
+      "id": "zhztq",
+      "name": "1st",
+      "path": "/Images/Rank/",
+      "file": null,
+      "exported": false,
+      "width": 210,
+      "height": 172,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1735,
+          645,
+          141,
+          123
+        ],
+        "rotated": false,
+        "offset": [
+          33,
+          24
+        ],
+        "originalSize": [
+          210,
+          172
+        ]
+      }
+    },
+    "zhztr": {
+      "type": 0,
+      "id": "zhztr",
+      "name": "2nd",
+      "path": "/Images/Rank/",
+      "file": null,
+      "exported": false,
+      "width": 210,
+      "height": 172,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1359,
+          1354,
+          163,
+          125
+        ],
+        "rotated": false,
+        "offset": [
+          29,
+          22
+        ],
+        "originalSize": [
+          210,
+          172
+        ]
+      }
+    },
+    "zhzts": {
+      "type": 0,
+      "id": "zhzts",
+      "name": "3rd",
+      "path": "/Images/Rank/",
+      "file": null,
+      "exported": false,
+      "width": 210,
+      "height": 172,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1735,
+          517,
+          155,
+          126
+        ],
+        "rotated": false,
+        "offset": [
+          34,
+          22
+        ],
+        "originalSize": [
+          210,
+          172
+        ]
+      }
+    },
+    "zhztt": {
+      "type": 0,
+      "id": "zhztt",
+      "name": "4th",
+      "path": "/Images/Rank/",
+      "file": null,
+      "exported": false,
+      "width": 210,
+      "height": 172,
+      "scaleOption": 0,
+      "sprite": {
+        "atlas": "atlas0",
+        "rect": [
+          1735,
+          393,
+          158,
+          122
+        ],
+        "rotated": false,
+        "offset": [
+          30,
+          24
+        ],
+        "originalSize": [
+          210,
+          172
+        ]
+      }
+    },
+    "m2t80": {
+      "type": 3,
+      "id": "m2t80",
+      "name": "AccountInfoWindow",
+      "path": "/",
+      "file": null,
+      "exported": true,
+      "width": 1920,
+      "height": 1080,
+      "objectType": 0,
+      "children": [
+        {
+          "type": 3,
+          "source": null,
+          "package": null,
+          "id": "n0_m2t8",
+          "name": "mohu",
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "x20l20",
+          "package": null,
+          "id": "n60_f3tl",
+          "name": "com_Main",
+          "x": 0,
+          "y": 0,
+          "pivot": [
+            0.0,
+            1.0,
+            0
+          ],
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "hni02",
+          "package": null,
+          "id": "n61_11biq",
+          "name": "com_Hero",
+          "x": 0,
+          "y": 0,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 9,
+          "source": "zhztb",
+          "package": null,
+          "id": "n62_11biq",
+          "name": "com_Achieve",
+          "x": 0,
+          "y": 0,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        },
+        {
+          "type": 10,
+          "source": null,
+          "package": null,
+          "id": "n63_7h6s",
+          "name": "list_Operate",
+          "x": 1554,
+          "y": 230,
+          "width": 307,
+          "height": 527,
+          "alpha": 1.0,
+          "rotation": 0.0,
+          "visible": true
+        }
+      ]
+    },
+    "atlas0": {
+      "type": 4,
+      "id": "atlas0",
+      "name": null,
+      "path": null,
+      "file": "atlas0.png",
+      "exported": false,
+      "width": 1984,
+      "height": 1536
+    }
+  },
+  "strings": [
+    "xuaw6o8j",
+    "Common",
+    "m6sn3r22",
+    "Common_External",
+    "mzuc5vkb",
+    "Font",
+    "6rkw2d",
+    "AccountInfo_Button_ChangeName",
+    "/Components/Data/",
+    "button",
+    "0",
+    "up",
+    "1",
+    "down",
+    "2",
+    "over",
+    "3",
+    "selectedOver",
+    "it6m2o",
+    "n6_mdt4",
+    "n6",
+    "6rkw2a",
+    "n4_6rkw",
+    "n4",
+    "n5_6rkw",
+    "title",
+    "JingNanBoBoHei_TMP",
+    "7h6s24",
+    "Account_Button_Operator",
+    "/Components/Operator/",
+    "type",
+    "7h6s1a",
+    "n64_7h6s",
+    "n64",
+    "7h6s19",
+    "n67_tiv3",
+    "n67",
+    "7h6s18",
+    "n68_tiv3",
+    "n68",
+    "krvo2k",
+    "n69_krvo",
+    "n69",
+    "n66_7h6s",
+    "JingNanBoBoHei",
+    "确定",
+    "f3tl14",
+    "AccountInfo_Button_RefreshSkin",
+    "/Components/HeroSkin/",
+    "it6m2v",
+    "n45_mdt4",
+    "n45",
+    "f3tl19",
+    "AccountInfo_Com_AchieveLoader",
+    "/Components/Achieve/",
+    "n18_f3tl",
+    "loader_Achieve",
+    "n20_f3tl",
+    "n20",
+    "f3tl1j",
+    "AccountInfo_ScrollBar_VT_1",
+    "/Components/Sliders/",
+    "n6_g6uw",
+    "n5",
+    "bar",
+    "f3tl1k",
+    "n7_byo3",
+    "arrow1",
+    "f3tl1m",
+    "n8_byo3",
+    "arrow2",
+    "f3tl1n",
+    "grip",
+    "AccountInfo_ScrollBar1_arrow1",
+    "f3tl1l",
+    "n3_byo3",
+    "n3",
+    "AccountInfo_ScrollBar1_arrow2",
+    "AccountInfo_Button_Grip",
+    "n9_byo3",
+    "f3tl1r",
+    "AccountInfo_ScrollBar_VT_2",
+    "f3tl1y",
+    "AccountInfo_Com_Skin",
+    "ak421h",
+    "n2_m2t8",
+    "com_Skin",
+    "n4_sstg",
+    "f3tl1z",
+    "AccountInfo_Slider_Exp",
+    "/Components/",
+    "n3_g6ne",
+    "n2_fpzs",
+    "n4_g6ne",
+    "50000/50000",
+    "hni02",
+    "AccountInfo_Com_Hero",
+    "n5_hni0",
+    "mohu",
+    "n0_hni0",
+    "n0",
+    "ui://iepldke7f3tl12",
+    "n1_hni0",
+    "list_Hero",
+    "ui://iepldke7f3tl1r",
+    "ui://iepldke7hni04",
+    "f3tl1s",
+    "n8_f3tl",
+    "n8",
+    "nc4bac",
+    "n9_f3tl",
+    "btn_Sure",
+    "确定",
+    "Cut in",
+    "hni04",
+    "AccountInfo_Button_Hero",
+    "breakthrough",
+    "no",
+    "yes",
+    "n32_o97f",
+    "n32",
+    "gd4dax",
+    "n33_f3tl",
+    "n33",
+    "hni05",
+    "n27_jbxb",
+    "n27",
+    "n28_jbxb",
+    "n28",
+    "hni07",
+    "n3_fjwp",
+    "loader_Character",
+    "n31_jbxb",
+    "txt_chrname",
+    "w8cnq37",
+    "n34_w8cn",
+    "btn_Collect",
+    "AccountInfo_Loader_Hero",
+    "n4_f3tl",
+    "it6m2w",
+    "Account_Button_CopyReplayId",
+    "it6m2p",
+    "n27_it6m",
+    "it6m2x",
+    "AccountInfo_Button_Replay",
+    "保存",
+    "播放",
+    "删除",
+    "保存完成",
+    "it6m2z",
+    "n22_it6m",
+    "n22",
+    "it6m2y",
+    "n21_it6m",
+    "n21",
+    "n23_it6m",
+    "n23",
+    "n24_it6m",
+    "n24",
+    "n25_it6m",
+    "n25",
+    "n20_rrd6",
+    "txt_Save",
+    "保存",
+    "n28_it6m",
+    "txt_Play",
+    "播放",
+    "n30_it6m",
+    "txt_Delete",
+    "删除",
+    "n29_it6m",
+    "txt_Saved",
+    "保存完成",
+    "it6m32",
+    "AccountInfo_Button_ReplaySaving",
+    "it6m30",
+    "n26_mdt4",
+    "n26",
+    "保存中",
+    "loop",
+    "jgmz2e",
+    "AccountInfo_Button_Block",
+    "jgmz2f",
+    "n19_rrd6",
+    "n19",
+    "拉黑",
+    "p5xi2j",
+    "AccountInfo_Button_UID",
+    "n71_mdt4",
+    "txt_UID",
+    "Impact_TMP",
+    "n72_mdt4",
+    "n72",
+    "rrd628",
+    "AccountInfo_Button_Accuse",
+    "rrd627",
+    "举报",
+    "x20l20",
+    "AccountInfo_Com_Main",
+    "dataType",
+    "数据统计",
+    "对局",
+    "回放",
+    "showFight",
+    "hide",
+    "show",
+    "n60_f3tl",
+    "n60",
+    "btn_RefreshSkin",
+    "角色更换",
+    "f3tl12",
+    "n5_m2t8",
+    "n69_ppwd",
+    "btn_changeName",
+    "f3tl16",
+    "n21_zhzt",
+    "zhzta",
+    "n11_zhzt",
+    "btn_Achieve_0",
+    "n15_zhzt",
+    "btn_Achieve_1",
+    "n16_zhzt",
+    "btn_Achieve_2",
+    "n17_zhzt",
+    "btn_Achieve_3",
+    "n70_mdt4",
+    "btn_Achieve_4",
+    "n18_zhzt",
+    "btn_Achieve_5",
+    "n19_zhzt",
+    "f3tl1c",
+    "n26_zhzt",
+    "zhztd",
+    "n23_zhzt",
+    "btn_Data",
+    "数据",
+    "n24_zhzt",
+    "btn_Battle",
+    "对局",
+    "n68_cisx",
+    "btn_Replay",
+    "回放",
+    "zhztg",
+    "n27_zhzt",
+    "btn_ShowDataToggle",
+    "不公开",
+    "n28_zhzt",
+    "btn_ShowFightToggle",
+    "不公开",
+    "txt_ReplayTip",
+    "n61_sstg",
+    "txt_StatisticalTip",
+    "it6m2u",
+    "n52_f3tl",
+    "n52",
+    "n30_zhzt",
+    "txt_FightCount",
+    "累计参与局数：{data=0}",
+    "n31_zhzt",
+    "txt_WinCount",
+    "累计胜利局数：{data=0}",
+    "n32_zhzt",
+    "txt_HeroCardCount",
+    "拥有角色数量：{data=0}",
+    "n33_zhzt",
+    "txt_Hero",
+    "最常用角色：{data=0}",
+    "n34_zhzt",
+    "txt_AdornCount",
+    "拥有装扮数量：{data=0}",
+    "n73_g04j",
+    "txt_SkinCount",
+    "拥有皮肤数量：{data=0}",
+    "n35_zhzt",
+    "group_Statistical",
+    "n62_sstg",
+    "txt_FightDataTip",
+    "n41_zhzt",
+    "list_FightData",
+    "ui://iepldke7f3tl1j",
+    "ui://iepldke7zhzth",
+    "n58_f3tl",
+    "n58",
+    "n25_zhzt",
+    "z1wk0",
+    "n4_m2t8",
+    "com_Label",
+    "n6_m2t8",
+    "btn_UID",
+    "n59_f3tl",
+    "progress_Exp",
+    "n8_m2t8",
+    "m1i721",
+    "n65_m1i7",
+    "n65",
+    "m1i722",
+    "n66_m1i7",
+    "n66",
+    "n64_r2u9",
+    "txt_PraiseNum",
+    "111",
+    "n67_m1i7",
+    "zhzti",
+    "n42_zhzt",
+    "com_Fight",
+    "AccountInfo_Button_ShowAchieve",
+    "isLoaded",
+    "false",
+    "true",
+    "n19_gd4d",
+    "n20_gd4d",
+    "n21_gd4d",
+    "EMPTY",
+    "n17",
+    "com_AchieveLoader",
+    "zhztb",
+    "AccountInfo_Com_Achieve",
+    "hasAchieveData",
+    "n6_hni0",
+    "n17_f3tl",
+    "n15",
+    "还未达成任何成就",
+    "n16_f3tl",
+    "n16",
+    "n9_zhzt",
+    "n9",
+    "list_Achieve",
+    "ui://iepldke7zhztc",
+    "f3tl1v",
+    "n18",
+    "n19_f3tl",
+    "确定",
+    "n21_f3tl",
+    "zhztc",
+    "AccountInfo_Button_SelectAchieve",
+    "isShow",
+    "hasSelected",
+    "n24_gd4d",
+    "n25_gd4d",
+    "n26_gd4d",
+    "txt_Achieve",
+    "n23_f3tl",
+    "已展示",
+    "AccountInfo_Button_ShowData",
+    "n7_f3tl",
+    "n7",
+    "n3_qb3s",
+    "AccountInfo_Button_Toggle",
+    "it6m2s",
+    "n3_pl4x",
+    "di_0",
+    "it6m2t",
+    "n4_pl4x",
+    "di_1",
+    "n5_pl4x",
+    "zhzth",
+    "Account_Button_FightData",
+    "status",
+    "normal",
+    "giveUp",
+    "f3tl1i",
+    "n40_f3tl",
+    "n40",
+    "n37_zhzt",
+    "txt_MapMode",
+    "n38_zhzt",
+    "txt_Rank",
+    "n39_zhzt",
+    "txt_HeroName",
+    "jgmz2i",
+    "n42_jgmz",
+    "n42",
+    "n41_f3tl",
+    "n41",
+    "AccountInfo_Com_FightInfo",
+    "n23_lw7s",
+    "btn_ReplaySave",
+    "保存",
+    "n28_mdt4",
+    "btn_ReplaySaving",
+    "n24_lw7s",
+    "btn_ReplayPlay",
+    "it6m2r",
+    "n7_hni0",
+    "zhztv",
+    "n8_zhzt",
+    "com_FirstLabel",
+    "com_SecondLabel",
+    "n10_zhzt",
+    "com_ThirdLabel",
+    "com_ForthLabel",
+    "txt_Time",
+    "btn_Accuse",
+    "n21_jgmz",
+    "btn_Block",
+    "n22_jgmz",
+    "group_Operation",
+    "n26_it6m",
+    "txt_ReplayId",
+    "Impact",
+    "btn_CopyReplayId",
+    "zhztj",
+    "AccountInfo_Com_Rank",
+    "/Components/Data/Rank/",
+    "rand",
+    "第一位",
+    "第二位",
+    "第三位",
+    "第四位",
+    "n99_hoc6",
+    "list_Level",
+    "ui://iepldke7zhztk",
+    "mmmw3y",
+    "n100_hoc6",
+    "n100",
+    "n101_hoc6",
+    "txt_Gold",
+    "zhztq",
+    "n103_ef7v",
+    "image_First",
+    "zhztr",
+    "n104_ef7v",
+    "image_Second",
+    "zhzts",
+    "n105_ef7v",
+    "image_Third",
+    "zhztt",
+    "n106_ef7v",
+    "image_Forth",
+    "n107_ef7v",
+    "n107",
+    "zhztk",
+    "AccountInfoo_Com_PlayerLevel",
+    "avtiveLevel",
+    "未激活",
+    "激活",
+    "slot",
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "zhztl",
+    "n12_i1xv",
+    "n12",
+    "zhztm",
+    "n13_ns45",
+    "n13",
+    "zhztn",
+    "n15_imo3",
+    "zhzto",
+    "n14_imo3",
+    "n14",
+    "zhztp",
+    "n16_imo3",
+    "n17_capz",
+    "graph_Effect",
+    "AccountInfo_Button_RankInfo",
+    "GameMode",
+    "PVP",
+    "PVE",
+    "PVEResult",
+    "win",
+    "lose",
+    "GiveUp",
+    "f3tl1p",
+    "n15_f3tl",
+    "com_Rank",
+    "n13_zhzt",
+    "txt_PlayerNick",
+    "SIMHEI",
+    "n14_zhzt",
+    "txt_HeroNick",
+    "n21_mdt4",
+    "-WIN-",
+    "n22_mdt4",
+    "-LOSE-",
+    "n18_mo3e",
+    "jgmz2h",
+    "n20_mr12",
+    "修改昵称图标",
+    "/Images/",
+    "个人信息标签3",
+    "/Images/Operate/",
+    "个人信息标签2",
+    "个人信息标签1",
+    "背景",
+    "/Images/Skin/",
+    "成就列表-底层",
+    "/Images/Achieve/",
+    "数据战绩-底层",
+    "/Images/Data/",
+    "战绩-底层",
+    "进度条箭头",
+    "战绩-详细框内容框",
+    "小窗口-自定义上层",
+    "小窗口-成就上层",
+    "Chr_突破底",
+    "修改昵称",
+    "/Images/修改/新拆分/",
+    "复制",
+    "战绩-详细框",
+    "按钮白低",
+    "按钮红",
+    "数据-底层",
+    "自定义按钮",
+    "bai",
+    "阴影",
+    "星星",
+    "拉黑",
+    "玩家掉线",
+    "玩家掉线mini",
+    "个人信息标签4",
+    "点赞底",
+    "点赞点击",
+    "举报",
+    "星星（未持有）",
+    "/Images/Rank/",
+    "星星（红）",
+    "星星（绿）",
+    "星星（蓝）",
+    "星星（橙）",
+    "1st",
+    "2nd",
+    "3rd",
+    "4th",
+    "m2t80",
+    "AccountInfoWindow",
+    "/",
+    "showHero",
+    "showAchieve",
+    "n0_m2t8",
+    "com_Main",
+    "n61_11biq",
+    "com_Hero",
+    "n62_11biq",
+    "com_Achieve",
+    "n63_7h6s",
+    "list_Operate",
+    "ui://iepldke77h6s24",
+    "t1",
+    "atlas0",
+    "atlas0.png"
+  ]
+}

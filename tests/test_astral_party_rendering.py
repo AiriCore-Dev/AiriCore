@@ -1,0 +1,200 @@
+import copy
+import hashlib
+import importlib
+import io
+import sys
+import types
+import unittest
+from pathlib import Path
+from unittest.mock import patch
+
+from PIL import Image, ImageDraw
+
+
+ROOT = Path(__file__).resolve().parents[1]
+PACKAGE = "_astral_party_render_tests"
+package = types.ModuleType(PACKAGE)
+package.__path__ = [str(ROOT / "plugins/airi_astral_party")]
+sys.modules[PACKAGE] = package
+
+
+def snapshot():
+    return {
+        "uid": 100000001,
+        "info": {"name": "离线排版样例", "lv": 12, "headIcon": 999999},
+        "show": {
+            "isShowData": True,
+            "isShowFight": True,
+            "praiseNum": 25,
+            "statistics": {
+                "fightCount": 100,
+                "winFightCount": 20,
+                "roleCardCount": 8,
+                "useHero": 101,
+                "adornCount": 3,
+                "skinCount": 4,
+            },
+            "record": [
+                {
+                    "time": str(1750000000 - i * 3600),
+                    "rank": i % 4 + 1,
+                    "heroId": 101 + i,
+                    "index": 200 - i,
+                    "mapType": 1,
+                }
+                for i in range(8)
+            ],
+        },
+        "selected": {"time": "1750000000", "rank": 1, "mapType": 1},
+        "details": [
+            {
+                "name": f"离线玩家{i}",
+                "heroId": 101 + i,
+                "rank": i + 1,
+                "lv": 5,
+                "gold": 30,
+                "playerLevel": 12,
+                "slot": i,
+                "headIcon": 999999,
+                "playerId": str(100000001 + i),
+            }
+            for i in range(4)
+        ],
+    }
+
+
+class AstralPartyRenderingTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.rendering = importlib.import_module(f"{PACKAGE}.rendering")
+
+    def test_asset_manifest_matches_shipped_bytes(self):
+        manifest = self.rendering.json.loads(
+            (self.rendering.ASSETS / "manifest.json").read_text(encoding="utf-8")
+        )
+        for name, source in manifest["files"].items():
+            with self.subTest(asset=name):
+                data = (self.rendering.ASSETS / name).read_bytes()
+                self.assertEqual(hashlib.sha256(data).hexdigest(), source["sha256"])
+
+    def image(self, data):
+        self.assertIsInstance(data, bytes)
+        self.assertTrue(data.startswith(b"\x89PNG\r\n\x1a\n"))
+        image = Image.open(io.BytesIO(data))
+        self.assertEqual(image.format, "PNG")
+        image.load()
+        self.assertGreaterEqual(image.width, 1000)
+        self.assertGreaterEqual(image.height, 400)
+        return image
+
+    def capture(self, callback):
+        values = []
+        original = ImageDraw.ImageDraw.text
+
+        def track(draw, xy, text, *args, **kwargs):
+            values.append(str(text))
+            return original(draw, xy, text, *args, **kwargs)
+
+        with patch.object(ImageDraw.ImageDraw, "text", track):
+            result = callback()
+        return result, "\n".join(values)
+
+    def test_help_and_notice_match_public_commands(self):
+        image, text = self.capture(self.rendering.render_help)
+        self.image(image)
+        for command in (
+            "吉星绑定",
+            "吉星资料",
+            "吉星战绩",
+            "吉星对局",
+            "吉星解绑",
+            "吉星状态",
+        ):
+            self.assertIn(command, text)
+        self.assertNotIn("吉星详情", text)
+        self.image(self.rendering.render_notice("查询提示", ["该玩家未公开对局记录"]))
+
+    def test_all_outputs_are_real_png(self):
+        data = snapshot()
+        for render in (
+            lambda: self.rendering.render_message(
+                "吉星派对", ["请输入玩家 UID", "资料与对局均按公开范围展示"]
+            ),
+            lambda: self.rendering.render_profile(data),
+            lambda: self.rendering.render_records(data),
+            lambda: self.rendering.render_detail(data),
+        ):
+            self.image(render())
+
+    def test_private_values_cannot_change_rendered_output(self):
+        data = snapshot()
+        data["show"]["isShowData"] = False
+        data["show"]["isShowFight"] = False
+        changed = copy.deepcopy(data)
+        changed["show"]["statistics"]["fightCount"] = 987654321
+        changed["show"]["record"][0]["heroId"] = 129
+        changed["details"][0]["name"] = "不应展示的私人信息"
+        for render in (
+            self.rendering.render_profile,
+            self.rendering.render_records,
+            self.rendering.render_detail,
+        ):
+            self.assertEqual(render(data), render(changed))
+        _, text = self.capture(lambda: self.rendering.render_profile(data))
+        self.assertIn("未公开", text)
+        self.assertNotIn("987654321", text)
+
+    def test_pagination_preserves_snapshot_order(self):
+        data = snapshot()
+        _, text = self.capture(lambda: self.rendering.render_records(data, page=2))
+        self.assertIn("07", text)
+        self.assertIn("08", text)
+        self.assertIn("恋", text)
+        self.assertIn("米米", text)
+        self.assertNotIn("芬妮", text)
+        self.assertIn("第 2 / 2 页", text)
+        for page in (0, 3, True, "2"):
+            with self.subTest(page=page), self.assertRaises(ValueError):
+                self.rendering.render_records(data, page)
+
+    def test_long_names_unknown_portraits_and_multiple_detail_rows(self):
+        data = snapshot()
+        data["info"]["name"] = "非常长的中文玩家名称" * 30
+        data["details"] *= 2
+        data["details"][0]["name"] = "很长很长的对局玩家名称" * 30
+        image, text = self.capture(lambda: self.rendering.render_detail(data))
+        self.assertGreater(self.image(image).height, 900)
+        self.assertIn("角色图示", text)
+        self.assertNotIn("头像：帕露南", text)
+        self.image(self.rendering.render_profile(data))
+        self.image(
+            self.rendering.render_message(
+                "很长的标题" * 50, ["说明文字" * 100, "第二段说明"]
+            )
+        )
+
+    def test_render_does_not_mutate_snapshot_or_cached_images(self):
+        data = snapshot()
+        original = copy.deepcopy(data)
+        asset = self.rendering.get_image(
+            self.rendering.ASSETS / "ui/AccountInfo/f3tl12.png"
+        )
+        before = asset.tobytes()
+        self.rendering.render_profile(data)
+        self.rendering.render_records(data)
+        self.rendering.render_detail(data)
+        self.assertEqual(data, original)
+        self.assertEqual(asset.tobytes(), before)
+
+    def test_missing_statistics_and_empty_history_are_not_fabricated(self):
+        data = snapshot()
+        data["show"].pop("statistics")
+        data["show"]["record"] = []
+        _, text = self.capture(lambda: self.rendering.render_profile(data))
+        self.assertIn("暂无统计资料", text)
+        _, text = self.capture(lambda: self.rendering.render_records(data))
+        self.assertIn("暂无公开对局记录", text)
+
+
+if __name__ == "__main__":
+    unittest.main()

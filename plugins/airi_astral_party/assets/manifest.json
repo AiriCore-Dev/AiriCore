@@ -1,0 +1,441 @@
+{
+  "来源": "本机《吉星派对》安装资源与已下载更新缓存",
+  "说明": "资源版权归游戏权利人；该清单仅记录本机离线导出来源。界面坐标为1920×1080设计坐标，组件控制器状态由调用方选择。",
+  "files": {
+    "AccountInfo_layout.json": {
+      "asset": "AccountInfo_fui",
+      "bundle": "364036a7d6603853dcb0c531c3c7ed82",
+      "sha256": "79cbbe9cb528ea62e519fed10d602ab0400f9f24fec1c30598409184e4cbbc78"
+    },
+    "Common_layout.json": {
+      "asset": "Common_fui",
+      "bundle": "e5f62bbe7ae2c8dd92751e16bf61f578",
+      "sha256": "b98893c89d5b3a21f4af3b2831dfc2e60a4fa308c62c82609429fb82b8795f6f"
+    },
+    "Background_layout.json": {
+      "asset": "Background_fui",
+      "bundle": "d91b43cebd36ea77789b4af7f9e9ce7f.bundle",
+      "sha256": "9b27c035794d2b7460f15676fcab8f6e9c2ebb007f19a0593640ad5cf0b09fd7"
+    },
+    "ui/AccountInfo/6rkw2a.png": {
+      "asset": "AccountInfo/修改昵称图标",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "ee3798eaa14cb204920da3b78a2313310c1573f71561a49c1e695f692bb10013"
+    },
+    "ui/AccountInfo/7h6s18.png": {
+      "asset": "AccountInfo/个人信息标签3",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "e4f313a02ad15abfc85e5a7cb9803a956c5f6ed476808ee85aface7a65bfb439"
+    },
+    "ui/AccountInfo/7h6s19.png": {
+      "asset": "AccountInfo/个人信息标签2",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "965498d9c7861d27e1fba5e4fe35e6b337ceeabff5b7a799042be9f8e6b93560"
+    },
+    "ui/AccountInfo/7h6s1a.png": {
+      "asset": "AccountInfo/个人信息标签1",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "e76363a31984560edbe2e670a8083a3852056228c610fa6824581ceee2a1a2c7"
+    },
+    "ui/AccountInfo/f3tl12.png": {
+      "asset": "AccountInfo/背景",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "9a9d6a9fe409876ebd95162f30e0acca37b1277e80d884d19705c41351cbe79b"
+    },
+    "ui/AccountInfo/f3tl16.png": {
+      "asset": "AccountInfo/成就列表-底层",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "1afcc1a989eaad2499f41cdd5128118e7d38170d895b3afa1f4f30a68870d7df"
+    },
+    "ui/AccountInfo/f3tl1c.png": {
+      "asset": "AccountInfo/数据战绩-底层",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "cf8450a963aa0d5d464b15773d9320bba3522fa270d8b95373db17b3f72d34d3"
+    },
+    "ui/AccountInfo/f3tl1i.png": {
+      "asset": "AccountInfo/战绩-底层",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "a036d14a9ba3836c3836205f94958656c905f3df4c439689ef57c0e766bfa9af"
+    },
+    "ui/AccountInfo/f3tl1l.png": {
+      "asset": "AccountInfo/进度条箭头",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "4bfe92dc7077cf7734b2f5823baf0ef8e8864781c7999182c9e6d9bb62e6b445"
+    },
+    "ui/AccountInfo/f3tl1p.png": {
+      "asset": "AccountInfo/战绩-详细框内容框",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "a7ff716bcb94a4c4cfaea1d81f372afe0bdca6efd67c76e9c832f909a9622b2e"
+    },
+    "ui/AccountInfo/f3tl1s.png": {
+      "asset": "AccountInfo/小窗口-自定义上层",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "1de2fd9f881a1b8086ec8cc9c2a97d33f779007b4730a9c6b2db39e41f349135"
+    },
+    "ui/AccountInfo/f3tl1v.png": {
+      "asset": "AccountInfo/小窗口-成就上层",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "a7472ecb13db498988b97e2b64f48e489b9e38217b3030804bb46f3bc0ebe0c5"
+    },
+    "ui/AccountInfo/hni05.png": {
+      "asset": "AccountInfo/Chr_突破底",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "66a82a2fd8e40345f351e4be4c1593a35c89b57994dc00ecfc248bf200c5c58d"
+    },
+    "ui/AccountInfo/it6m2o.png": {
+      "asset": "AccountInfo/修改昵称",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "24913738f967c94f5273ee1909efbba2ed3960a43e0e81e9d57afdf28a899d0a"
+    },
+    "ui/AccountInfo/it6m2p.png": {
+      "asset": "AccountInfo/复制",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "cfa4baec6f460cc015431b51aca6d59c2fb3c46e8b05f7e1b0bd625c875f78aa"
+    },
+    "ui/AccountInfo/it6m2r.png": {
+      "asset": "AccountInfo/战绩-详细框",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "1f6acb09ece5d5cad5f1255d3f13d97b3db1b19accf2dee96430955bd1d6df11"
+    },
+    "ui/AccountInfo/it6m2s.png": {
+      "asset": "AccountInfo/按钮白低",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "0155832f6827acef4fa07617c9b105ca473d98e19534220892a3a3f684864513"
+    },
+    "ui/AccountInfo/it6m2t.png": {
+      "asset": "AccountInfo/按钮红",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "33285906b5a806edc35a506f9b0257941f3145f04cdd450eeeee7bf20ad4cc80"
+    },
+    "ui/AccountInfo/it6m2u.png": {
+      "asset": "AccountInfo/数据-底层",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "63878e71a5a33b9588420b5ea1f9055fe79c5bcb7a64bb7ab3fffdc58395e768"
+    },
+    "ui/AccountInfo/it6m2v.png": {
+      "asset": "AccountInfo/自定义按钮",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "f05c983bae504f9389ba9a094af8b453ed5a43183f882170452ca80a73ee4a66"
+    },
+    "ui/AccountInfo/it6m2y.png": {
+      "asset": "AccountInfo/bai",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "6e5f4675b75e3d15fcd21c237735dced7fb339504a018323a62b764655e73451"
+    },
+    "ui/AccountInfo/it6m2z.png": {
+      "asset": "AccountInfo/阴影",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "2498ff532047da625edd4af302571fa282e341a0e53566ba7d34548af3bf479d"
+    },
+    "ui/AccountInfo/it6m30.png": {
+      "asset": "AccountInfo/星星",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "c14d18b8189b2fbb42c2baffeaddd7ff4a2d4df941b383886d35b5fd317d409a"
+    },
+    "ui/AccountInfo/jgmz2f.png": {
+      "asset": "AccountInfo/拉黑",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "08c610a1c2b7d5e33dec86fac61a32f325beb2170b061ab9b9a0795ac77ec6a9"
+    },
+    "ui/AccountInfo/jgmz2h.png": {
+      "asset": "AccountInfo/玩家掉线",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "f81839f6068d71d54eeb8e63217c48ff48f1b44620e22f734c7efacc0f2bed81"
+    },
+    "ui/AccountInfo/jgmz2i.png": {
+      "asset": "AccountInfo/玩家掉线mini",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "9ac81d5a604ca5fc2ff16f6abb753f187eff58b3fc5ee4bcfa520e377d183530"
+    },
+    "ui/AccountInfo/krvo2k.png": {
+      "asset": "AccountInfo/个人信息标签4",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "da6aa56270c12c08933026ffbfec0382eda33304e87b9db1d4f3c3779f29b81f"
+    },
+    "ui/AccountInfo/m1i721.png": {
+      "asset": "AccountInfo/点赞底",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "fde7df154e63f68fa780f55a4bde63b163b6c8d793d776fad622b064bd2cc882"
+    },
+    "ui/AccountInfo/m1i722.png": {
+      "asset": "AccountInfo/点赞点击",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "86e018129df72d354e075890e12252ff774c5120cf13fbfdc45bf3277e114822"
+    },
+    "ui/AccountInfo/rrd627.png": {
+      "asset": "AccountInfo/举报",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "733459049ea86623314db97a29d121533786d4e015920abe88a7c4d96a0ddc53"
+    },
+    "ui/AccountInfo/zhztl.png": {
+      "asset": "AccountInfo/星星（未持有）",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "fa27c370317730bfa351f529f6e88c826bf1b08fae4f5cd832d274268d86fa27"
+    },
+    "ui/AccountInfo/zhztm.png": {
+      "asset": "AccountInfo/星星（红）",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "23518d3886fc10bb6c1104c00ffd936bac4877bfbf7c841fd5cdfc7f53efbea4"
+    },
+    "ui/AccountInfo/zhztn.png": {
+      "asset": "AccountInfo/星星（绿）",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "e24701a1667c81220452e48f1c5cdd8366469aa9d996877366b2e8525330117c"
+    },
+    "ui/AccountInfo/zhzto.png": {
+      "asset": "AccountInfo/星星（蓝）",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "56057e77794d254fd6b92b9b7c92202a7f9467b5e63b490dd2332d9a2b7812d8"
+    },
+    "ui/AccountInfo/zhztp.png": {
+      "asset": "AccountInfo/星星（橙）",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "b320866ef6d7d7a340be8142a5d5fd9ae021cfbc042da6512b025589987c67de"
+    },
+    "ui/AccountInfo/zhztq.png": {
+      "asset": "AccountInfo/1st",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "9706802ece638187dbef7f5089b019d4f8e1e4eae46db6364b9914b2feb41896"
+    },
+    "ui/AccountInfo/zhztr.png": {
+      "asset": "AccountInfo/2nd",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "04e50786b31b07f91a4d5f18b0b72a23eb1524348843bbf2258a21ece021e724"
+    },
+    "ui/AccountInfo/zhzts.png": {
+      "asset": "AccountInfo/3rd",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "6bd5325c831ff8cc2a5d1c47c38f2c0c192a044c30dcb13111b6796852261384"
+    },
+    "ui/AccountInfo/zhztt.png": {
+      "asset": "AccountInfo/4th",
+      "bundle": "88d64e89639b35e7043bfd4b4c6f73a9",
+      "sha256": "c85a5e1049572b32170a3dd3e132b9af0a4d774be594facac5f3f4e405268c38"
+    },
+    "ui/Common/kn6fq3y.png": {
+      "asset": "Common/bg3",
+      "bundle": "95cf4e745bb793f4fa1179e97c638d55",
+      "sha256": "2d5efb029ce35d33e31b356739f3e085b8a0a386a186c3d58c8791796a532c59"
+    },
+    "ui/Common/z1wk4.png": {
+      "asset": "Common/玩家名字底（最短）",
+      "bundle": "95cf4e745bb793f4fa1179e97c638d55",
+      "sha256": "b7a49dce567141bcc6b46d9c1c7f7063e9671267489d1d346c22bd9a1b3f5b86"
+    },
+    "ui/Common/ru20q2t.png": {
+      "asset": "Common/名片黑框(修改)",
+      "bundle": "95cf4e745bb793f4fa1179e97c638d55",
+      "sha256": "b77379d82a95ea225aaa35d702686de0abff90819240319c1d0734a0d77dba74"
+    },
+    "ui/Common/mmmw3x.png": {
+      "asset": "Common/星币",
+      "bundle": "95cf4e745bb793f4fa1179e97c638d55",
+      "sha256": "f0fe0cb6798f382113fb44ef818c1e58968a6a7a5cd89a92d4ab7031f243a838"
+    },
+    "JingNanBoBoHei.ttf": {
+      "asset": "JingNanBoBoHei",
+      "bundle": "data.unity3d",
+      "sha256": "87daf80f027e89a78eb726b98157ca58933f57e09aa1362ace7dee1e82aebf0a"
+    },
+    "Impact.ttf": {
+      "asset": "Impact",
+      "bundle": "data.unity3d",
+      "sha256": "57e95627fd36fe2740e5ee8a91ff1ae74fb216df9580bd23e30d6772814727be"
+    },
+    "SHOWG.ttf": {
+      "asset": "SHOWG",
+      "bundle": "data.unity3d",
+      "sha256": "80cd2486979c2c18f9dd59277c0fd800959afa1ce23820dcf7bce31f208647af"
+    },
+    "names.json": {
+      "asset": "GameData_CN",
+      "bundle": "f510912b5e8a5fb9484981f0276479a7",
+      "sha256": "4c78fb5d91f24e942a0d799053cc53cff7e80c95e93a617a8d9c48c086333cc1"
+    },
+    "portraits/UT_Hero_ProfilePhoto_101.png": {
+      "asset": "UT_Hero_ProfilePhoto_101",
+      "bundle": "7326697b505dadea9d58204ceed4cd54.bundle",
+      "sha256": "3122f9f8cf92bfa0fd18eba18b71724eacda8ab7a43e8a644b2b6ffbec4dbb73"
+    },
+    "portraits/UT_Hero_ProfilePhoto_102.png": {
+      "asset": "UT_Hero_ProfilePhoto_102",
+      "bundle": "c632969899afd57d152e84245f373322.bundle",
+      "sha256": "aa3d645e1830f66104381ae1f47c95b7637044eb4ae10bde564fc5caa77b1b0f"
+    },
+    "portraits/UT_Hero_ProfilePhoto_103.png": {
+      "asset": "UT_Hero_ProfilePhoto_103",
+      "bundle": "d96882917b01650d4d064edb52c136b5.bundle",
+      "sha256": "6554cc8f7796dcd68b602513c219737954ddc51a72bfac7cf54dc4a11651e1e2"
+    },
+    "portraits/UT_Hero_ProfilePhoto_104.png": {
+      "asset": "UT_Hero_ProfilePhoto_104",
+      "bundle": "68ec23b8cd61547bd83f34c5fe0afb1b.bundle",
+      "sha256": "ed078793f7372b06d64acb9e0afe1b4757b716d79507b4470b8b9f761f0bc07d"
+    },
+    "portraits/UT_Hero_ProfilePhoto_105.png": {
+      "asset": "UT_Hero_ProfilePhoto_105",
+      "bundle": "201525f54a78f704d82782f884a6f385.bundle",
+      "sha256": "856fab293ef34befe6eb97509c54e2629d4b7356134a72342df3b148deb988c5"
+    },
+    "portraits/UT_Hero_ProfilePhoto_106.png": {
+      "asset": "UT_Hero_ProfilePhoto_106",
+      "bundle": "4564392c2931de619e868a1d199cb220.bundle",
+      "sha256": "a98c325e69be3abfa03dca5d201b6f175009d6f12339e542f9dbaddd0260196a"
+    },
+    "portraits/UT_Hero_ProfilePhoto_107.png": {
+      "asset": "UT_Hero_ProfilePhoto_107",
+      "bundle": "1af6ecdd6580b4870dda377ea926b89d.bundle",
+      "sha256": "fa7cf8e103ceeb769d5046a876fa31c8b940bd6db8622bec798a57da6623e67b"
+    },
+    "portraits/UT_Hero_ProfilePhoto_108.png": {
+      "asset": "UT_Hero_ProfilePhoto_108",
+      "bundle": "25ce15d99a46990f493fe9868a2f9b63.bundle",
+      "sha256": "02fc38c08aa50b6e5150c8ed32d80b95b712bb2e421bb768808d3da48be49927"
+    },
+    "portraits/UT_Hero_ProfilePhoto_109.png": {
+      "asset": "UT_Hero_ProfilePhoto_109",
+      "bundle": "78403e3f0754be7ad4e7ddcadfd8542e.bundle",
+      "sha256": "d68caebbacfdffc1ab62c04ace7b470b98c25f7e5fb39b1fad07ca084edc1259"
+    },
+    "portraits/UT_Hero_ProfilePhoto_110.png": {
+      "asset": "UT_Hero_ProfilePhoto_110",
+      "bundle": "aad1951cce1b0af823a309daa74803b5.bundle",
+      "sha256": "50b5bae92446469e69d26b053fbb1696bf1b96c51c3f8046bcb4513d42112a95"
+    },
+    "portraits/UT_Hero_ProfilePhoto_111.png": {
+      "asset": "UT_Hero_ProfilePhoto_111",
+      "bundle": "5695d044c67f38f79d72a06d7391e436.bundle",
+      "sha256": "e2d472a8ad2eae0112d9e857544ea1ab14691c8b78a9270eb002ba1619a95cd3"
+    },
+    "portraits/UT_Hero_ProfilePhoto_112.png": {
+      "asset": "UT_Hero_ProfilePhoto_112",
+      "bundle": "4b388cafd9e4059ccc01bae971115da3.bundle",
+      "sha256": "81280f08afe75fe8341046574acc5c39c6e79f2f0c1d7515a310d715fe17f4f2"
+    },
+    "portraits/UT_Hero_ProfilePhoto_113.png": {
+      "asset": "UT_Hero_ProfilePhoto_113",
+      "bundle": "790e3191f0c12278a586a004ffeacc72.bundle",
+      "sha256": "86552d424da24eac51047e6b3e6b0c230cdcb9a3e5ae19007fc9943e5c297c75"
+    },
+    "portraits/UT_Hero_ProfilePhoto_114.png": {
+      "asset": "UT_Hero_ProfilePhoto_114",
+      "bundle": "88c8d5d5e731de144891824742cbd0e0.bundle",
+      "sha256": "1a50521233299c2cf72f047616210f66048e4fa57108cf3ed44dca681ac6cd7d"
+    },
+    "portraits/UT_Hero_ProfilePhoto_115.png": {
+      "asset": "UT_Hero_ProfilePhoto_115",
+      "bundle": "d163fdca438bb6e5cb69a48ac9154430.bundle",
+      "sha256": "6cdceed62177cd5f2371be770b1ee287a1ed74d0278e6610d5c9ff49d08d026c"
+    },
+    "portraits/UT_Hero_ProfilePhoto_116.png": {
+      "asset": "UT_Hero_ProfilePhoto_116",
+      "bundle": "58fd96a5fd21c7935b368588a33356e5.bundle",
+      "sha256": "3f901cb0327bd1e566e7ea21d039d028ba97025b4f92781892c01900185bf2b0"
+    },
+    "portraits/UT_Hero_ProfilePhoto_117.png": {
+      "asset": "UT_Hero_ProfilePhoto_117",
+      "bundle": "58f6d9bea8604cb847cf5ea056a73a23.bundle",
+      "sha256": "0e7868712b5f3e4dd91cd40218f6fa29326e79813a1dc5440ac133acae90324b"
+    },
+    "portraits/UT_Hero_ProfilePhoto_118.png": {
+      "asset": "UT_Hero_ProfilePhoto_118",
+      "bundle": "67083c6298a78f0f316c9d2544ae43e9.bundle",
+      "sha256": "9244b32f67e9ebf9da0bc54de5cc6411e8d3401b0be8a8c84ffb4d27faa09e66"
+    },
+    "portraits/UT_Hero_ProfilePhoto_119.png": {
+      "asset": "UT_Hero_ProfilePhoto_119",
+      "bundle": "1dcbe73f04a23f3493f734517011c1f6.bundle",
+      "sha256": "5d8eb0b2d2bf41cdaa42b4104c586d7791352a2fdbb96cab22f22bab69bd07db"
+    },
+    "portraits/UT_Hero_ProfilePhoto_120.png": {
+      "asset": "UT_Hero_ProfilePhoto_120",
+      "bundle": "afecc6433ee86d43f7090c8428ea5f85.bundle",
+      "sha256": "d5c377beb2c1947c7224a2ac66b503e471b849272b66487b9db339ca2cd7f8ce"
+    },
+    "portraits/UT_Hero_ProfilePhoto_121.png": {
+      "asset": "UT_Hero_ProfilePhoto_121",
+      "bundle": "823c46a9f7584547fe4743dcd9f9fae9.bundle",
+      "sha256": "630f364256625668a70c072ff164d0a7af35a283f0b51beb2e41a682798f3b25"
+    },
+    "portraits/UT_Hero_ProfilePhoto_122.png": {
+      "asset": "UT_Hero_ProfilePhoto_122",
+      "bundle": "1fa799590771d129d7cc186be5760c5d.bundle",
+      "sha256": "a79cbe87fc2592aae501e80adcb166afc5de8c10703e3d1fa47d1900b159b448"
+    },
+    "portraits/UT_Hero_ProfilePhoto_123.png": {
+      "asset": "UT_Hero_ProfilePhoto_123",
+      "bundle": "b36827e6b000b2ee8b80def91e162847.bundle",
+      "sha256": "754f730fa3ef349f92ea0e7bb6fbe782443c147778f4f1504ebf56440936e9e8"
+    },
+    "portraits/UT_Hero_ProfilePhoto_124.png": {
+      "asset": "UT_Hero_ProfilePhoto_124",
+      "bundle": "090ac6db99771706b9a8b1664a919175.bundle",
+      "sha256": "b166d6e028e4e8e2557cec3ce8e70a476de30cbb0d2bbbe074f86eeb04d98228"
+    },
+    "portraits/UT_Hero_ProfilePhoto_125.png": {
+      "asset": "UT_Hero_ProfilePhoto_125",
+      "bundle": "22b5df431dcd6ad69d97b54a4850186f.bundle",
+      "sha256": "92670fe0e3d845716ae9f9712d251f93018874456d356e3e75478dddd6a2865e"
+    },
+    "portraits/UT_Hero_ProfilePhoto_126.png": {
+      "asset": "UT_Hero_ProfilePhoto_126",
+      "bundle": "af0a7bb5a5d36937947a4166dddd5035.bundle",
+      "sha256": "765fbf9941c0132f4ddc8cb215c0cfad953a03c18fea6cbdb930c0a98be5ea46"
+    },
+    "portraits/UT_Hero_ProfilePhoto_127.png": {
+      "asset": "UT_Hero_ProfilePhoto_127",
+      "bundle": "aac43a88f3566bad448580fbbe3f70d3.bundle",
+      "sha256": "379ecf1cfca44f61c2b89ed9b0ca9428756ad77995e34d1015524495f05227f4"
+    },
+    "portraits/UT_Hero_ProfilePhoto_128.png": {
+      "asset": "UT_Hero_ProfilePhoto_128",
+      "bundle": "eea727e858413ba8cc48f40dc28944c5.bundle",
+      "sha256": "1b4218f8680759789a886f17f8b73e1ec3ae85ae20d176ca3f2ecc23c3d33693"
+    },
+    "portraits/UT_Hero_ProfilePhoto_129.png": {
+      "asset": "UT_Hero_ProfilePhoto_129",
+      "bundle": "193b01fbf9be11cfb163354f64457b26",
+      "sha256": "b148ba3670b40e832ad05005300e7ecadea66cc4cb483a1c67c654606712851b"
+    },
+    "portraits/UT_Hero_ProfilePhoto_301.png": {
+      "asset": "UT_Hero_ProfilePhoto_301",
+      "bundle": "19bea8669e1d4426077bd691b4584a43.bundle",
+      "sha256": "51bedd9dab839ff3c3faf361fbde06941991f46a949d59c4b4a2ab07b907f0d4"
+    },
+    "portraits/UT_Hero_ProfilePhoto_302.png": {
+      "asset": "UT_Hero_ProfilePhoto_302",
+      "bundle": "c13de485f221a05457047d04f17bab31.bundle",
+      "sha256": "2666084a9a613f69da2b350835ebe4f5ead520ba0e579b793a7c414501610e8f"
+    },
+    "portraits/UT_Hero_ProfilePhoto_303.png": {
+      "asset": "UT_Hero_ProfilePhoto_303",
+      "bundle": "1adfb642b7a62380aff975c024971e08.bundle",
+      "sha256": "ad9d04f310ad250ff277a16e0d5a46a68424c3116b89e832567ec89aae5bccda"
+    },
+    "portraits/UT_Hero_ProfilePhoto_304.png": {
+      "asset": "UT_Hero_ProfilePhoto_304",
+      "bundle": "30d1c3662ec6da655e22d347d50f09e7.bundle",
+      "sha256": "b6a71c7c845b09c4623a726417a40e86b8fc4dcb4b6650a88586f9fbb4636eb3"
+    },
+    "portraits/UT_Hero_ProfilePhoto_305.png": {
+      "asset": "UT_Hero_ProfilePhoto_305",
+      "bundle": "56fd5f09405c29f49cd0bf6edaa490d0",
+      "sha256": "de2604477135d42c02a8cf9d4dca4ebe7102300e4b517c6ccfb5bab1e8e16093"
+    },
+    "portraits/UT_Hero_ProfilePhoto_306.png": {
+      "asset": "UT_Hero_ProfilePhoto_306",
+      "bundle": "5b338bbe5d929301cd90fb3292f06272",
+      "sha256": "a0a09d2620cf721371ed92c9c87d862d357331db096604eaf4b94845e31de9fb"
+    },
+    "art/UT_AccountBackground_101_01.png": {
+      "asset": "UT_AccountBackground_101_01",
+      "bundle": "6d65bcf58224cbc4a27a54932db5aeb8.bundle",
+      "sha256": "653adf988c72acd071056107d8491c4a8e8321a2f2ccc3067b08d988986cd2c4"
+    },
+    "art/UT_Hero_Card_101.png": {
+      "asset": "UT_Hero_Card_101",
+      "bundle": "6742535f9ab004a873cb45690ea78aac.bundle",
+      "sha256": "a51046d9b2388ce1666c9da853950ce4205749e4bd78f08213fb08bc74272995"
+    }
+  }
+}

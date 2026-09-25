@@ -20,6 +20,7 @@ output/
 /plugins/airi_royal_road/
 data/LLM/default.conf
 data/LLM/active
+/data/astral_party/
 
 # Django/Database
 *.pk

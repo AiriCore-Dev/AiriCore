@@ -1,0 +1,65 @@
+# 吉星派对查询
+
+通过国服客户端的 TCP / Protobuf 协议查询玩家公开资料，以游戏内 UI 切图、角色图示和字体合成图片。
+
+## 指令
+
+| 指令 | 用途 |
+|---|---|
+| `吉星帮助` | 图片帮助 |
+| `吉星绑定 UID` | 设置自己的默认查询玩家，仅为查询偏好 |
+| `吉星解绑` | 删除默认查询玩家 |
+| `吉星资料 [UID]` | 昵称、等级、点赞数及公开生涯统计 |
+| `吉星战绩 [UID] [页码]` | 最近对局，每页六场；默认第一页 |
+| `吉星战绩 第2页` | 默认玩家的第二页 |
+| `吉星对局 序号` | 默认玩家的某一场对局 |
+| `吉星对局 UID 序号` | 指定玩家的某一场对局 |
+| `吉星状态` | 配置与绑定状态 |
+
+也支持 `吉星 资料 UID`、`吉星派对 资料 UID` 等空格形式。指令前缀遵循 Airi 的 `COMMAND_START` 配置。资料与战绩指令省略 UID 时使用绑定值；绑定不验证账号所有权。对局序号按照查询时的最新战绩从新到旧排列，新对局产生后序号可能改变。
+
+## 配置专用查询账号
+
+1. 在 AiriCore 工作目录执行 `conda run -n airidev python -m pip install -r requirements.txt`，新增依赖为 `protobuf==6.33.6`。
+2. 创建 `data/astral_party/`，将本插件 `config.example.json` 复制为该目录的 `config.json`。
+3. 使用专用国服游戏账号正常完成官方登录，将该会话的服务器地址及 SDK 登录参数填入本机配置。
+4. 启动或重启 Airi，发送 `吉星状态`，再用一个已知 UID 验证资料、战绩与单场详情。
+
+| 配置字段 | 说明 |
+|---|---|
+| `host`、`port` | 游戏 TCP 服务器地址与端口；必填地址，不是官网、CDN 或 TapTap 网页地址 |
+| `client_version` | 客户端应用版本，当前解析安装包为 `3.2.1`；热更新资源版本与此值不同 |
+| `game_id`、`channel_id`、`app_id` | 官方 SDK 登录回调对应的三项标识，均必填 |
+| `sid` | 专用账号当前有效的 SDK 会话凭据，必填；不会通过聊天接收 |
+| `extra` | 官方 SDK 回调附加参数，若无则留空 |
+| `device_id` | 对应登录会话的设备标识，必填 |
+| `timeout` | 每次连接/请求超时秒数，默认 15，上限 30 |
+| `cooldown` | 全插件查询间隔秒数，默认 10 |
+
+这些参数对应官方客户端 `LoginServiceHelper.RequestConnectWithBnSdk(gameID, channelID, appID, sid, extra, deviceid)`。需由专用账号的授权登录流程取得，不能拿玩家 UID、TapTap 网页 Cookie 或平台 access_token 直接替代 `sid`。本插件不实现 SDK 自动登录或凭据自动续期；凭据失效时更新配置，下一次查询自动重读。服务器地址应取当前渠道官方引导返回的 `serverUrl`；安装包中的引导路径为 `/api/hotaddressServer/get?route=CN_TAPTAP&version=...`，服务地址/版本以实际客户端为准。
+
+每次查询建立短连接，完成官方登录和读取后关闭；多人请求串行，繁忙时提示稍后重试。账号应专用于查询，避免与正在游玩的同一账号竞争登录。配置与绑定目录已从 Git 排除，错误与日志不输出凭据。
+
+## 数据范围与界面
+
+实际调用 `SearchPlayer 5185→5186`、`GetShowPlayer 5153→5154`、`GetPlayerFightRecord 5155→5156`。仅开放以 UID 查询的展示资料；不会查询、发送或修改登录账号的邮件、私聊、背包、抽卡、商城、房间或公会状态。`isShowData`、`isShowFight` 关闭时，即使服务器仍返回字段，也不会展示或进一步查询详情。
+
+生涯统计包括累计参与局数、胜利局数、拥有角色数、最常用角色、装扮数、皮肤数。详情包含各参赛者昵称、使用角色、名次、星级、金币、玩家等级及放弃标记。记录数量以服务器实际返回为准，最多处理最近 100 场；并非完整历史库。未发现独立玩家排行榜或生涯伤害、击杀查询接口。
+
+个人卡片沿用游戏账号界面的布局与切图，使用固定帕露南主题并在图片标明；不把主题立绘当作玩家设置。对局角色图示来自游戏角色头像，未知角色显示问号，不冒充玩家自定义头像。图片中不使用外部插画、生成式图片或网页素材。所有帮助、成功和错误提示也以图片发送；OneBot 图片使用 Base64。
+
+## 解析来源与验证边界
+
+来源为本机 CN_TAPTAP V3.2.1 安装文件及已下载的 Addressables 更新缓存。`assets/manifest.json` 记录素材原始资源名、包名与导出文件 SHA-256；`assets/protocol.desc` 保存从客户端反射信息还原的 Protobuf 描述符，保留 `sfixed64` / `sfixed32`、枚举、map 等精确语义。UI 坐标取自 FairyGUI 二进制。
+
+素材已经随插件附带，正常查询无需安装游戏或 UnityPy。更新素材时可在安装 UnityPy 与 Pillow 的离线维护环境执行下列导出命令；`--cache-dir` 指向 Addressables 缓存中的 `AssetBundles`，`--catalog` 使用同版本资源目录文件，`--output` 建议先指向新建目录，核对后再替换插件素材：
+
+```powershell
+conda run -n airidev python plugins/airi_astral_party/export_assets.py --game-dir "游戏安装目录" --cache-dir "缓存目录/AssetBundles" --catalog "catalog_3.2.1.json" --output "导出目录"
+```
+
+导出脚本不读取账号凭据、不访问网络，也不重建通信描述符；协议更新需要重新检查当前版本程序集中的反射描述符与 RPC 调用。
+
+按本次开发要求，完成离线验证后再配置专用账号。当前已验证本地 TCP 模拟服务、真实协议序列化、隐私处理、绑定存储、图片合成和插件加载；尚未使用真实账号联调。在线权限、服务端数据完整性、实际凭据寿命和未来版本兼容性待首次部署验证，不应把静态协议还原视为在线查询成功。
+
+开发验证：`conda run -n airidev python -m unittest discover -s tests -p "test_astral_party*.py" -v`。测试不连接游戏服务器，也不会读取本机游戏账号凭据。

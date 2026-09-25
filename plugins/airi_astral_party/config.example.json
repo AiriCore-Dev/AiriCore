@@ -1,0 +1,13 @@
+{
+  "host": "",
+  "port": 8800,
+  "client_version": "3.2.1",
+  "game_id": "",
+  "channel_id": "",
+  "app_id": "",
+  "sid": "",
+  "extra": "",
+  "device_id": "",
+  "timeout": 15,
+  "cooldown": 10
+}
