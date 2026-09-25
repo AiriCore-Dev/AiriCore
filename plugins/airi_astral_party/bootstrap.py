@@ -12,7 +12,7 @@ from filelock import FileLock, Timeout
 
 from .protocol import QueryError
 from .renewal import APP_SIGN_KEYS, NoRedirect
-from .settings import Settings, load_settings
+from .settings import CLIENT_VERSION, Settings, load_settings
 
 
 DEFAULT_APP_ID = '110001958'
@@ -58,7 +58,7 @@ def discover(app_id):
 def initial_settings(app_id=DEFAULT_APP_ID):
     host, port = discover(app_id)
     return Settings(host=host, port=port, game_id='120000182', channel_id='2', app_id=app_id,
-                    extra='bn', device_id=secrets.token_hex(16), client_version=VERSION)
+                    extra='bn', device_id=secrets.token_hex(16), client_version=CLIENT_VERSION)
 
 
 def setup(path, app_id=None):

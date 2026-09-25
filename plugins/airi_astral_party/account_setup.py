@@ -13,7 +13,7 @@ import psutil
 from filelock import FileLock, Timeout
 
 from .protocol import QueryError
-from .settings import Settings, load_settings
+from .settings import CLIENT_VERSION, Settings, load_settings
 
 
 MAX_LOG_BYTES = 16 * 1024 * 1024
@@ -205,7 +205,7 @@ def main(argv=None):
     parser.add_argument('--host', help='手动指定游戏 TCP 服务器地址；留空则读取游戏进程连接')
     parser.add_argument('--port', type=int, default=8800, help='游戏 TCP 端口，默认 8800')
     parser.add_argument('--pid', type=int, help='仅检查指定的吉星派对游戏进程')
-    parser.add_argument('--client-version', default='3.2.1', help='游戏应用版本，默认 3.2.1')
+    parser.add_argument('--client-version', default=CLIENT_VERSION, help='游戏登录版本，默认 3.2.0，来自资源配置表')
     parser.add_argument('--yes', action='store_true', help='已完成专用账号登录，直接读取并确认写入或更新配置')
     parser.add_argument('--dry-run', action='store_true', help='只显示脱敏检查结果，不写入配置')
     mode = parser.add_mutually_exclusive_group()

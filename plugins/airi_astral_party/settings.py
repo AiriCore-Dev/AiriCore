@@ -6,13 +6,14 @@ from .protocol import QueryError
 
 
 DATA_DIR = Path('data/astral_party')
+CLIENT_VERSION = '3.2.0'
 
 
 @dataclass(frozen=True)
 class Settings:
     host: str = ''
     port: int = 8800
-    client_version: str = '3.2.1'
+    client_version: str = CLIENT_VERSION
     game_id: str = ''
     channel_id: str = ''
     app_id: str = ''
@@ -53,6 +54,8 @@ def load_settings(path=None):
         data = json.loads(path.read_text(encoding='utf-8-sig'))
         if not isinstance(data, dict) or set(data) - {f.name for f in fields(Settings)}:
             raise ValueError
+        if data.get('client_version') == '3.2.1':
+            data['client_version'] = CLIENT_VERSION
         settings = Settings(**data)
         settings.validate(require_session=False)
         return settings

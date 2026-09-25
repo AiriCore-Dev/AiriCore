@@ -79,6 +79,15 @@ class RenewalTests(unittest.TestCase):
             self.assertEqual(self.settings.load_settings(path).renewal['provider'], 'feimo')
             self.assertNotIn('13800000000', str(output.call_args_list))
 
+    def test_live_string_success_code_accepts_session_and_rejects_other_types(self):
+        for code in ('1', 1):
+            with self.subTest(code=code), patch.object(self.renewal, 'request_json', return_value=dict(self.reply, ret=code)):
+                self.assertEqual(self.renewal._game_session(self.capture, self.auth, 100000), ('new-session', 'account-id'))
+        for code in (True, 1.0, '01', '1.0', ' 1', '0', None):
+            with self.subTest(code=code), patch.object(self.renewal, 'request_json', return_value=dict(self.reply, ret=code)):
+                with self.assertRaises(ValueError):
+                    self.renewal._game_session(self.capture, self.auth, 100000)
+
     def test_denial_mismatch_and_missing_fields_preserve_old_config(self):
         for reply in ({'ret': 0, 'message': 'private'},
                       {'ret': 1, 'content': {'authorize_code': 'new', 'user_id': 'different'}},

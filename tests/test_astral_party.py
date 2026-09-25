@@ -53,6 +53,17 @@ class ProtocolTests(unittest.IsolatedAsyncioTestCase):
         with self.assertRaises(self.p.ProtocolError):
             await self.p.read_frame(reader)
 
+    async def test_server_resource_version_is_distinct_from_outgoing_header(self):
+        reader = asyncio.StreamReader()
+        reader.feed_data(struct.pack('>iqHBBBqqH', 0, 0, 5002, 2, 0, 0, 101, 0, 10012))
+        frame = await self.p.read_frame(reader)
+        self.assertEqual((frame.version, frame.error), ((2, 0, 0), 10012))
+        for version in ((3, 0, 0), (2, 1, 0), (1, 1, 0)):
+            reader = asyncio.StreamReader()
+            reader.feed_data(struct.pack('>iqHBBBqqH', 0, 0, 5002, *version, 101, 0, 0))
+            with self.assertRaises(self.p.ProtocolError):
+                await self.p.read_frame(reader)
+
     def test_unknown_fields_and_malformed_protobuf(self):
         data = self.p.message('GetShowPlayerS2C')
         data.showData.player_id = 123
@@ -68,7 +79,7 @@ class ClientTests(unittest.IsolatedAsyncioTestCase):
         self.c = importlib.import_module(f'{PACKAGE}.client')
         self.settings = importlib.import_module(f'{PACKAGE}.settings')
         self.commands = []
-        self.fail = 0
+        self.rpc_error = 0
         self.hidden = False
         self.wrong_sequence = False
         self.handlers = set()
@@ -94,6 +105,7 @@ class ClientTests(unittest.IsolatedAsyncioTestCase):
                     login = self.p.decode('ConnectC2S', frame.payload)
                     self.assertEqual(login.auth, 4)
                     self.assertEqual(login.china.sid, 'offline-test')
+                    self.assertEqual(login.clientVer, '3.2.0')
                     response = self.p.message('ConnectS2C', sessionId=900)
                     response.account.SetInParent()
                 elif frame.command == 5185:
@@ -121,7 +133,7 @@ class ClientTests(unittest.IsolatedAsyncioTestCase):
                     return
                 push = self.p.encode_frame(self.p.Frame(5004, 900, 0, b''))
                 payload = self.p.encode_frame(self.p.Frame(frame.command + 1, 900,
-                    frame.sequence + (1 if self.wrong_sequence else 0), response.SerializeToString(), self.fail))
+                    frame.sequence + (1 if self.wrong_sequence else 0), response.SerializeToString(), self.rpc_error, version=(2, 0, 0)))
                 writer.write(push + payload[:8])
                 await writer.drain()
                 await asyncio.sleep(0)
@@ -151,7 +163,7 @@ class ClientTests(unittest.IsolatedAsyncioTestCase):
         self.assertNotIn(5155, self.commands)
 
     async def test_login_error_stops_before_query(self):
-        self.fail = 10003
+        self.rpc_error = 10003
         with self.assertRaisesRegex(self.p.QueryError, '10003'):
             await self.c.GameClient(self.config).fetch(123456789)
         self.assertEqual(self.commands, [5001])
@@ -168,6 +180,16 @@ class ClientTests(unittest.IsolatedAsyncioTestCase):
 
 
 class SettingsTests(unittest.TestCase):
+    def test_legacy_install_version_loads_as_game_login_version(self):
+        settings = importlib.import_module(f'{PACKAGE}.settings')
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'config.json'
+            path.write_text(json.dumps({'host': '127.0.0.1', 'game_id': 'g', 'channel_id': 'c', 'app_id': 'a',
+                                        'sid': 'private', 'device_id': 'd', 'client_version': '3.2.1'}))
+            before = path.read_bytes()
+            self.assertEqual(settings.load_settings(path).client_version, '3.2.0')
+            self.assertEqual(path.read_bytes(), before)
+
     def setUp(self):
         self.s = importlib.import_module(f'{PACKAGE}.settings')
 

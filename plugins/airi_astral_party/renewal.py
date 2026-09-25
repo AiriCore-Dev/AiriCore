@@ -17,7 +17,7 @@ from pathlib import Path
 from filelock import FileLock, Timeout
 
 from .protocol import QueryError
-from .settings import load_settings
+from .settings import CLIENT_VERSION, load_settings
 
 
 AUTHORIZE_URL = 'https://m-sdk.feimogames.com/account/authorize'
@@ -105,7 +105,7 @@ def sdk_sign(values, app_id):
 
 def _check_settings(settings):
     settings.validate(require_session=False)
-    if settings.extra != 'bn' or settings.client_version != '3.2.1':
+    if settings.extra != 'bn' or settings.client_version != CLIENT_VERSION:
         raise QueryError('飞魔自动登录目前仅适配已解析的 3.2.1 飞魔 SDK，请核对客户端版本')
     sdk_sign({}, settings.app_id)
 
@@ -125,7 +125,8 @@ def _game_session(settings, auth, now):
             content = json.loads(content)
         except ValueError:
             content = None
-    if type(result.get('ret')) is not int or result['ret'] != 1 or not isinstance(content, dict):
+    ret = result.get('ret')
+    if not (type(ret) is int and ret == 1 or type(ret) is str and ret == '1') or not isinstance(content, dict):
         raise QueryError('飞魔账号登录未成功，请检查手机号、密码、应用渠道与版本；需要验证时请使用官方客户端')
     sid, user_id = content.get('authorize_code'), content.get('user_id')
     if type(user_id) is int:

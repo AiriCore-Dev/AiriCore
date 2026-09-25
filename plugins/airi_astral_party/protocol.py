@@ -8,6 +8,7 @@ from google.protobuf.message import DecodeError
 
 
 MAX_PAYLOAD = 4 * 1024 * 1024
+RESOURCE_VERSION = (2, 0, 0)
 HEADER = struct.Struct('>iqHBBBqqH')
 _pool = descriptor_pool.DescriptorPool()
 _files = descriptor_pb2.FileDescriptorSet.FromString(
@@ -69,6 +70,6 @@ async def read_frame(reader):
         payload = await reader.readexactly(size)
     except asyncio.IncompleteReadError:
         raise ProtocolError('游戏连接已断开，请稍后重试') from None
-    if (a, b) > (1, 0):
-        raise ProtocolError('游戏通信协议已更新，请联系管理员更新插件')
+    if a > RESOURCE_VERSION[0] or b > RESOURCE_VERSION[1]:
+        raise ProtocolError('游戏资源版本已更新，请联系管理员更新插件')
     return Frame(command, session, sequence, payload, error, (a, b, c), down)
