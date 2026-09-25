@@ -7,6 +7,7 @@ from nonebot.plugin import PluginMetadata
 
 require('nonebot_plugin_alconna')
 
+from utils import credit
 from utils.messaging import send_group_with_fallback
 from utils.observability import get_logger
 from utils.superuser_2fa import is_verified_superuser
@@ -16,7 +17,7 @@ from .account_admin import AccountAdmin
 from .credential_events import install, scrub_event
 from .protocol import QueryError
 from .runtime import run_operation, run_sync, shutdown, start_maintenance
-from .service import QueryService
+from .service import QueryService, parse_command
 
 
 __plugin_meta__ = PluginMetadata(
@@ -53,12 +54,16 @@ async def prepare_account(text, private, verified, credentials, recall_failed=Fa
     return await run_sync(rendering.render_notice, view['title'], view['lines'])
 
 
-async def prepare(text, user):
+async def prepare(text, user, *, raise_errors=False):
     try:
         view = await service.handle(text, user)
     except QueryError as error:
+        if raise_errors:
+            raise
         view = {'kind': 'notice', 'title': '查询提示', 'lines': [str(error)]}
     except Exception as error:
+        if raise_errors:
+            raise
         logger.error(f'查询处理失败（{type(error).__name__}），请检查插件配置与资源')
         view = {'kind': 'notice', 'title': '查询提示', 'lines': ['查询暂时无法完成，请稍后重试或联系管理员']}
     kind = view['kind']
@@ -75,6 +80,38 @@ async def prepare(text, user):
 
 def image_message(payload):
     return MessageSegment.image('base64://' + base64.b64encode(payload).decode('ascii'))
+
+
+async def send_image(bot, event, payload):
+    message = image_message(payload)
+    if isinstance(event, GroupMessageEvent):
+        result = await send_group_with_fallback(message, group_id=event.group_id, preferred=bot, tag='吉星派对图片')
+        return result.sent
+    await bot.send(event, message)
+    return True
+
+
+async def query_and_send(bot, event, text):
+    receipt = None
+    delivered = False
+    succeeded = False
+    try:
+        try:
+            command = parse_command(text)
+            if command.action in {'资料', '战绩', '对局'}:
+                receipt = await credit.charge(event.get_user_id(), credit.ASTRAL_PARTY_QUERY_COST)
+            payload = await prepare(text, 'qq:' + event.get_user_id(), raise_errors=True)
+            succeeded = True
+        except (QueryError, credit.ChargeRejected) as error:
+            payload = await run_sync(rendering.render_notice, '查询提示', [str(error)])
+        except Exception as error:
+            logger.error(f'查询处理失败（{type(error).__name__}），请检查插件配置与资源')
+            payload = await run_sync(rendering.render_notice, '查询提示', ['查询暂时无法完成，请稍后重试或联系管理员'])
+        sent = await send_image(bot, event, payload)
+        delivered = succeeded and sent
+    finally:
+        if not delivered:
+            await credit.refund(receipt)
 
 
 @matcher.handle()
@@ -98,11 +135,8 @@ async def handle(bot: Bot, event: MessageEvent, command: tuple = Command(), args
                                                           is_verified_superuser(event), credentials, recall_failed))
             credentials = None
         else:
-            payload = await run_operation(prepare(text, 'qq:' + event.get_user_id()))
+            await run_operation(query_and_send(bot, event, text))
+            return
     except QueryError:
         return
-    message = image_message(payload)
-    if isinstance(event, GroupMessageEvent):
-        await send_group_with_fallback(message, group_id=event.group_id, preferred=bot, tag='吉星派对图片')
-    else:
-        await bot.send(event, message)
+    await send_image(bot, event, payload)

@@ -134,6 +134,8 @@ plugin = nonebot.load_plugin("plugins.airi_astral_party")
 assert plugin is not None
 app = plugin.module
 from plugins.airi_astral_party import protocol as p, runtime
+from utils import credit
+from utils.messaging import SendResult
 
 async def main():
     calls = []
@@ -224,6 +226,63 @@ async def main():
             send_group.assert_awaited_once()
             assert send_group.call_args.kwargs["group_id"] == 4
             assert send_group.call_args.args[0].data["file"].startswith("base64://")
+        assert not await credit.has_account('1')
+        await credit.credit('1', 35)
+        for index, command in enumerate(('123', 'me recent', '123 battle 1')):
+            app.service._next_query = 0
+            await app.handle(bot, private, ('astral',), Message(command))
+            assert await credit.get_balance('1') == 35 - (index + 1) * 10, '每次查询应扣除 10 积分'
+        previous_calls = len(calls)
+        app.service._next_query = 0
+        await app.handle(bot, private, ('astral',), Message('123'))
+        assert len(calls) == previous_calls, '余额不足不应发起查询'
+        assert await credit.get_balance('1') == 5
+        await credit.credit('1', 25)
+        for command in ('help', 'bind 123', 'status', 'unknown', '123 recent 99', 'unbind', 'me'):
+            await app.handle(bot, private, ('astral',), Message(command))
+            assert await credit.get_balance('1') == 30, command
+        for command in ('123 recent 2', '123 battle 2'):
+            app.service._next_query = 0
+            await app.handle(bot, private, ('astral',), Message(command))
+            assert await credit.get_balance('1') == 30, '查询失败应退款'
+        app.service._next_query = float('inf')
+        await app.handle(bot, private, ('astral',), Message('123'))
+        assert await credit.get_balance('1') == 30, '冷却拒绝应退款'
+        app.service._next_query = 0
+        with patch.object(app.rendering, 'render_profile', side_effect=RuntimeError('测试出图失败')):
+            await app.handle(bot, private, ('astral',), Message('123'))
+        assert await credit.get_balance('1') == 30, '出图失败应退款'
+        app.service._next_query = 0
+        bot.send.side_effect = RuntimeError('测试发送失败')
+        try:
+            await app.handle(bot, private, ('astral',), Message('123'))
+        except RuntimeError:
+            pass
+        bot.send.side_effect = None
+        assert await credit.get_balance('1') == 30, '私聊发送失败应退款'
+        for success in (False, True):
+            app.service._next_query = 0
+            with patch.object(app, 'send_group_with_fallback', new_callable=AsyncMock,
+                              return_value=SendResult(success, '2', None)):
+                await app.handle(bot, group, ('astral',), Message('123'))
+            assert await credit.get_balance('1') == (20 if success else 30), '按群消息实际发送结果计费'
+        started, release = asyncio.Event(), asyncio.Event()
+        async def delayed_send(*args):
+            started.set()
+            await release.wait()
+        bot.send.side_effect = delayed_send
+        app.service._next_query = 0
+        operation = asyncio.create_task(app.handle(bot, private, ('astral',), Message('123')))
+        await asyncio.wait_for(started.wait(), 10)
+        operation.cancel()
+        release.set()
+        try:
+            await operation
+        except asyncio.CancelledError:
+            pass
+        assert await credit.get_balance('1') == 10, '取消等待后仍成功送达的查询只能扣费一次'
+        await credit.reset_for_tests()
+        assert await credit.get_balance('1') == 10, '扣费结果应持久保存'
         verify(await app.prepare("astral unbind", "qq:1"))
     finally:
         server.close()
