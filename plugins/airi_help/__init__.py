@@ -70,8 +70,6 @@ $ 10积分 / 次
 吉星派对综合查询 By AiriCore Dev.
 * 发送 astral help 查看图片帮助
 * 需要群白名单才可使用
-* astral watch 观战码 设置本群 PVE 对局；astral card 查看本群手牌
-* astral unwatch 停止当前群观战
 $ 10积分 / 次
 
 - Airi-Manosaba-Memes:
